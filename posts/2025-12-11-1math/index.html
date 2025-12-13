@@ -56,6 +56,7 @@
     <meta property="article:tag" content="Series">
     <meta property="article:tag" content="Proof">
     <meta property="og:image" content="https://dtwant.github.io/posts/2025-12-11-1math/featured.png">
+      <meta property="og:see_also" content="https://dtwant.github.io/posts/2025-12-14-math3/">
       <meta property="og:see_also" content="https://dtwant.github.io/posts/2025-12-14-math2/">
       <meta property="og:see_also" content="https://dtwant.github.io/posts/2025-12-14-math/">
       <meta property="og:see_also" content="https://dtwant.github.io/posts/2025-12-10-math5/">
@@ -232,7 +233,7 @@
     "keywords": ["math","series","proof"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "301"
+    "wordCount": "283"
   }]
   </script>
 
@@ -799,7 +800,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2025-12-11T00:50:00&#43;09:00">11 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>301 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">2 mins</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="2025-12-11T00:50:00&#43;09:00">11 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>283 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">2 mins</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -980,155 +981,6 @@
       
       
       
-        <div class="order-first lg:ml-auto px-0 lg:order-last lg:ps-8 lg:max-w-2xs">
-          <div class="toc ps-5 print:hidden lg:sticky lg:top-[140px]">
-            
-              <details
-  open
-  id="TOCView"
-  class="toc-right mt-0 overflow-y-auto overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg -ms-5 ps-5 pe-2 hidden lg:block">
-  <summary
-    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 -ms-5 ps-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
-    Table of Contents
-  </summary>
-  <div
-    class="min-w-[220px] py-2 border-dotted border-s-1 -ms-5 ps-5 dark:border-neutral-600">
-    <nav id="TableOfContents">
-  <ul>
-    <li><a href="#1-ゼータ関数の積分表示と階乗の整理">1. ゼータ関数の積分表示と階乗の整理</a></li>
-    <li><a href="#2-総和と積分の順序交換">2. 総和と積分の順序交換</a></li>
-    <li><a href="#3-積分の分解">3. 積分の分解</a></li>
-    <li><a href="#4-第一項の積分計算">4. 第一項の積分計算</a></li>
-    <li><a href="#5-結論">5. 結論</a></li>
-  </ul>
-</nav>
-  </div>
-</details>
-<details class="toc-inside mt-0 overflow-hidden rounded-lg -ms-5 ps-5 lg:hidden">
-  <summary
-    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 -ms-5 ps-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
-    Table of Contents
-  </summary>
-  <div
-    class="py-2 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
-    <nav id="TableOfContents">
-  <ul>
-    <li><a href="#1-ゼータ関数の積分表示と階乗の整理">1. ゼータ関数の積分表示と階乗の整理</a></li>
-    <li><a href="#2-総和と積分の順序交換">2. 総和と積分の順序交換</a></li>
-    <li><a href="#3-積分の分解">3. 積分の分解</a></li>
-    <li><a href="#4-第一項の積分計算">4. 第一項の積分計算</a></li>
-    <li><a href="#5-結論">5. 結論</a></li>
-  </ul>
-</nav>
-  </div>
-</details>
-
-
-<script>
-  (function () {
-    'use strict'
-
-    const SCROLL_OFFSET_RATIO = 0.33
-    const TOC_SELECTOR = '#TableOfContents'
-    const ANCHOR_SELECTOR = '.anchor'
-    const TOC_LINK_SELECTOR = 'a[href^="#"]'
-    const NESTED_LIST_SELECTOR = 'li ul'
-    const ACTIVE_CLASS = 'active'
-    let isJumpingToAnchor = false
-
-    function getActiveAnchorId(anchors, offsetRatio) {
-      const threshold = window.scrollY + window.innerHeight * offsetRatio
-      const tocLinks = [...document.querySelectorAll('#TableOfContents a[href^="#"]')]
-      const tocIds = new Set(tocLinks.map(link => link.getAttribute('href').substring(1)))
-
-      if (isJumpingToAnchor) {
-        for (let i = 0; i < anchors.length; i++) {
-          const anchor = anchors[i]
-          if (!tocIds.has(anchor.id)) continue
-          const top = anchor.getBoundingClientRect().top + window.scrollY
-          if (Math.abs(window.scrollY - top) < 100) {
-            return anchor.id
-          }
-        }
-      }
-
-      for (let i = anchors.length - 1; i >= 0; i--) {
-        const top = anchors[i].getBoundingClientRect().top + window.scrollY
-        if (top <= threshold && tocIds.has(anchors[i].id)) {
-          return anchors[i].id
-        }
-      }
-      return anchors.find(anchor => tocIds.has(anchor.id))?.id || ''
-    }
-
-    function updateTOC({ toc, anchors, links, scrollOffset, collapseInactive }) {
-      const activeId = getActiveAnchorId(anchors, scrollOffset)
-      if (!activeId) return
-
-      links.forEach(link => {
-        const isActive = link.getAttribute('href') === `#${activeId}`
-        link.classList.toggle(ACTIVE_CLASS, isActive)
-
-        if (collapseInactive) {
-          const ul = link.closest('li')?.querySelector('ul')
-          if (ul) ul.style.display = isActive ? '' : 'none'
-        }
-      })
-
-      if (collapseInactive) {
-        const activeLink = toc.querySelector(`a[href="#${CSS.escape(activeId)}"]`)
-        let el = activeLink
-        while (el && el !== toc) {
-          if (el.tagName === 'UL') el.style.display = ''
-          if (el.tagName === 'LI') el.querySelector('ul')?.style.setProperty('display', '')
-          el = el.parentElement
-        }
-      }
-    }
-
-    function initTOC() {
-      const toc = document.querySelector(TOC_SELECTOR)
-      if (!toc) return
-
-      const collapseInactive = false
-      const anchors = [...document.querySelectorAll(ANCHOR_SELECTOR)]
-      const links = [...toc.querySelectorAll(TOC_LINK_SELECTOR)]
-
-      if (collapseInactive) {
-        toc.querySelectorAll(NESTED_LIST_SELECTOR).forEach(ul => ul.style.display = 'none')
-      }
-
-      links.forEach(link => {
-        link.addEventListener('click', () => {
-          isJumpingToAnchor = true
-        })
-      })
-
-      const config = {
-        toc,
-        anchors,
-        links,
-        scrollOffset: SCROLL_OFFSET_RATIO,
-        collapseInactive
-      }
-
-      window.addEventListener('scroll', () => updateTOC(config), { passive: true })
-      window.addEventListener('hashchange', () => updateTOC(config), { passive: true })
-
-      updateTOC(config)
-    }
-
-    document.readyState === 'loading'
-      ? document.addEventListener('DOMContentLoaded', initTOC)
-      : initTOC()
-  })()
-</script>
-
-
-            
-          </div>
-        </div>
-      
 
 
       <div class="min-w-0 min-h-0 max-w-fit">
@@ -1143,6 +995,16 @@
     This article is part of a series.
   </summary>
   
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/2025-12-14-math3/">
+          Part :
+          Proof#6
+        </a>
+      </div>
+    
   
     
       <div
@@ -1202,16 +1064,6 @@
 <blockquote>
 $$S = \sum_{n=0}^{\infty}\frac{(-1)^n(n+2)(n+3)\zeta(n+4)}{2^n}$$</blockquote>
 <p>この級数は, ゼータ関数の積分表示を利用し, マクローリン展開の逆適用を行うことで, 具体的な値（$\zeta(3)$ を含む形式）に帰着できる.</p>
-
-<h2 class="relative group">1. ゼータ関数の積分表示と階乗の整理
-    <div id="1-ゼータ関数の積分表示と階乗の整理" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#1-%e3%82%bc%e3%83%bc%e3%82%bf%e9%96%a2%e6%95%b0%e3%81%ae%e7%a9%8d%e5%88%86%e8%a1%a8%e7%a4%ba%e3%81%a8%e9%9a%8e%e4%b9%97%e3%81%ae%e6%95%b4%e7%90%86" aria-label="Anchor">#</a>
-    </span>
-    
-</h2>
 <p>まず, $\zeta(s)$ の積分表示を利用する.</p>
 $$
 \zeta(s) = \frac{1}{\Gamma(s)}\int_{0}^{\infty}\frac{t^{s-1}}{e^t-1}\,dt
@@ -1224,17 +1076,7 @@ $$
 $$<p>これを用いると, $S$ は次のように簡潔になる.</p>
 $$
 S = \sum_{n=0}^{\infty}\frac{(-1)^n}{2^n(n+1)!}\int_{0}^{\infty}\frac{t^{n+3}}{e^t-1}\,dt
-$$
-<h2 class="relative group">2. 総和と積分の順序交換
-    <div id="2-総和と積分の順序交換" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#2-%e7%b7%8f%e5%92%8c%e3%81%a8%e7%a9%8d%e5%88%86%e3%81%ae%e9%a0%86%e5%ba%8f%e4%ba%a4%e6%8f%9b" aria-label="Anchor">#</a>
-    </span>
-    
-</h2>
-<p>積分と総和の順序を入れ替え, $t^2$ を積分の外に出して級数部分をまとめる.</p>
+$$<p>積分と総和の順序を入れ替え, $t^2$ を積分の外に出して級数部分をまとめる.</p>
 $$
 \begin{aligned}
 S &= \int_{0}^{\infty}\frac{t^2}{e^t-1} \sum_{n=0}^{\infty} \frac{(-1)^n t^{n+1}}{2^n(n+1)!} \,dt \\
@@ -1245,17 +1087,7 @@ $$
 \begin{aligned}
 S &= -2 \int_{0}^{\infty} \frac{t^2}{e^t-1} \left( e^{-\frac{t}{2}} - 1 \right) \,dt
 \end{aligned}
-$$
-<h2 class="relative group">3. 積分の分解
-    <div id="3-積分の分解" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#3-%e7%a9%8d%e5%88%86%e3%81%ae%e5%88%86%e8%a7%a3" aria-label="Anchor">#</a>
-    </span>
-    
-</h2>
-<p>被積分関数を展開し, 2つの積分に分ける. 後ろの項はゼータ関数の積分表示そのものであることに注意する.</p>
+$$<p>被積分関数を展開し, 2つの積分に分ける. 後ろの項はゼータ関数の積分表示そのものであることに注意する.</p>
 $$
 \begin{aligned}
 S &= -2 \left( \int_{0}^{\infty} \frac{t^2 e^{-\frac{t}{2}}}{e^t-1} \,dt - \int_{0}^{\infty} \frac{t^2}{e^t-1} \,dt \right) \\
@@ -1263,16 +1095,6 @@ S &= -2 \left( \int_{0}^{\infty} \frac{t^2 e^{-\frac{t}{2}}}{e^t-1} \,dt - \int_
   &= -2 \left( I - 2\zeta(3) \right)
 \end{aligned}
 $$<p>ここで, 第一項の積分を $I$ と置いた.</p>
-
-<h2 class="relative group">4. 第一項の積分計算
-    <div id="4-第一項の積分計算" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#4-%e7%ac%ac%e4%b8%80%e9%a0%85%e3%81%ae%e7%a9%8d%e5%88%86%e8%a8%88%e7%ae%97" aria-label="Anchor">#</a>
-    </span>
-    
-</h2>
 <p>積分 $I = \int_{0}^{\infty} \frac{t^2 e^{-\frac{t}{2}}}{e^t-1} ,dt$ を計算する. $\frac{1}{e^t-1}$ を等比級数として展開する.</p>
 $$
 \begin{aligned}
@@ -1304,17 +1126,7 @@ $$
 I &= 16 \left( \frac{7}{8}\zeta(3) - 1 \right) \\
   &= 14\zeta(3) - 16
 \end{aligned}
-$$
-<h2 class="relative group">5. 結論
-    <div id="5-結論" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#5-%e7%b5%90%e8%ab%96" aria-label="Anchor">#</a>
-    </span>
-    
-</h2>
-<p>求めた $I$ を元の式に戻して $S$ を確定させる.</p>
+$$<p>求めた $I$ を元の式に戻して $S$ を確定させる.</p>
 $$
 \begin{aligned}
 S &= -2 ( I - 2\zeta(3) ) \\
@@ -1338,6 +1150,16 @@ $$<p>以上より, 求める値は $32 - 24\zeta(3)$ である.</p>
     This article is part of a series.
   </summary>
   
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/2025-12-14-math3/">
+          Part :
+          Proof#6
+        </a>
+      </div>
+    
   
     
       <div

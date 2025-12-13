@@ -56,6 +56,7 @@
     <meta property="article:tag" content="Series">
     <meta property="article:tag" content="Proof">
     <meta property="og:image" content="https://dtwant.github.io/posts/2025-12-14-math2/featured.png">
+      <meta property="og:see_also" content="https://dtwant.github.io/posts/2025-12-14-math3/">
       <meta property="og:see_also" content="https://dtwant.github.io/posts/2025-12-14-math/">
       <meta property="og:see_also" content="https://dtwant.github.io/posts/2025-12-11-1math/">
       <meta property="og:see_also" content="https://dtwant.github.io/posts/2025-12-10-math5/">
@@ -232,7 +233,7 @@
     "keywords": ["math","series","proof"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "182"
+    "wordCount": "171"
   }]
   </script>
 
@@ -799,7 +800,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2025-12-14T01:01:00&#43;09:00">14 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>182 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="2025-12-14T01:01:00&#43;09:00">14 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>171 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -980,151 +981,6 @@
       
       
       
-        <div class="order-first lg:ml-auto px-0 lg:order-last lg:ps-8 lg:max-w-2xs">
-          <div class="toc ps-5 print:hidden lg:sticky lg:top-[140px]">
-            
-              <details
-  open
-  id="TOCView"
-  class="toc-right mt-0 overflow-y-auto overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg -ms-5 ps-5 pe-2 hidden lg:block">
-  <summary
-    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 -ms-5 ps-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
-    Table of Contents
-  </summary>
-  <div
-    class="min-w-[220px] py-2 border-dotted border-s-1 -ms-5 ps-5 dark:border-neutral-600">
-    <nav id="TableOfContents">
-  <ul>
-    <li><a href="#1-ゼータ関数の級数表示">1. ゼータ関数の級数表示</a></li>
-    <li><a href="#2-和の順序変更">2. 和の順序変更</a></li>
-    <li><a href="#3-余接関数の部分分数展開">3. 余接関数の部分分数展開</a></li>
-  </ul>
-</nav>
-  </div>
-</details>
-<details class="toc-inside mt-0 overflow-hidden rounded-lg -ms-5 ps-5 lg:hidden">
-  <summary
-    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 -ms-5 ps-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
-    Table of Contents
-  </summary>
-  <div
-    class="py-2 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
-    <nav id="TableOfContents">
-  <ul>
-    <li><a href="#1-ゼータ関数の級数表示">1. ゼータ関数の級数表示</a></li>
-    <li><a href="#2-和の順序変更">2. 和の順序変更</a></li>
-    <li><a href="#3-余接関数の部分分数展開">3. 余接関数の部分分数展開</a></li>
-  </ul>
-</nav>
-  </div>
-</details>
-
-
-<script>
-  (function () {
-    'use strict'
-
-    const SCROLL_OFFSET_RATIO = 0.33
-    const TOC_SELECTOR = '#TableOfContents'
-    const ANCHOR_SELECTOR = '.anchor'
-    const TOC_LINK_SELECTOR = 'a[href^="#"]'
-    const NESTED_LIST_SELECTOR = 'li ul'
-    const ACTIVE_CLASS = 'active'
-    let isJumpingToAnchor = false
-
-    function getActiveAnchorId(anchors, offsetRatio) {
-      const threshold = window.scrollY + window.innerHeight * offsetRatio
-      const tocLinks = [...document.querySelectorAll('#TableOfContents a[href^="#"]')]
-      const tocIds = new Set(tocLinks.map(link => link.getAttribute('href').substring(1)))
-
-      if (isJumpingToAnchor) {
-        for (let i = 0; i < anchors.length; i++) {
-          const anchor = anchors[i]
-          if (!tocIds.has(anchor.id)) continue
-          const top = anchor.getBoundingClientRect().top + window.scrollY
-          if (Math.abs(window.scrollY - top) < 100) {
-            return anchor.id
-          }
-        }
-      }
-
-      for (let i = anchors.length - 1; i >= 0; i--) {
-        const top = anchors[i].getBoundingClientRect().top + window.scrollY
-        if (top <= threshold && tocIds.has(anchors[i].id)) {
-          return anchors[i].id
-        }
-      }
-      return anchors.find(anchor => tocIds.has(anchor.id))?.id || ''
-    }
-
-    function updateTOC({ toc, anchors, links, scrollOffset, collapseInactive }) {
-      const activeId = getActiveAnchorId(anchors, scrollOffset)
-      if (!activeId) return
-
-      links.forEach(link => {
-        const isActive = link.getAttribute('href') === `#${activeId}`
-        link.classList.toggle(ACTIVE_CLASS, isActive)
-
-        if (collapseInactive) {
-          const ul = link.closest('li')?.querySelector('ul')
-          if (ul) ul.style.display = isActive ? '' : 'none'
-        }
-      })
-
-      if (collapseInactive) {
-        const activeLink = toc.querySelector(`a[href="#${CSS.escape(activeId)}"]`)
-        let el = activeLink
-        while (el && el !== toc) {
-          if (el.tagName === 'UL') el.style.display = ''
-          if (el.tagName === 'LI') el.querySelector('ul')?.style.setProperty('display', '')
-          el = el.parentElement
-        }
-      }
-    }
-
-    function initTOC() {
-      const toc = document.querySelector(TOC_SELECTOR)
-      if (!toc) return
-
-      const collapseInactive = false
-      const anchors = [...document.querySelectorAll(ANCHOR_SELECTOR)]
-      const links = [...toc.querySelectorAll(TOC_LINK_SELECTOR)]
-
-      if (collapseInactive) {
-        toc.querySelectorAll(NESTED_LIST_SELECTOR).forEach(ul => ul.style.display = 'none')
-      }
-
-      links.forEach(link => {
-        link.addEventListener('click', () => {
-          isJumpingToAnchor = true
-        })
-      })
-
-      const config = {
-        toc,
-        anchors,
-        links,
-        scrollOffset: SCROLL_OFFSET_RATIO,
-        collapseInactive
-      }
-
-      window.addEventListener('scroll', () => updateTOC(config), { passive: true })
-      window.addEventListener('hashchange', () => updateTOC(config), { passive: true })
-
-      updateTOC(config)
-    }
-
-    document.readyState === 'loading'
-      ? document.addEventListener('DOMContentLoaded', initTOC)
-      : initTOC()
-  })()
-</script>
-
-
-            
-          </div>
-        </div>
-      
 
 
       <div class="min-w-0 min-h-0 max-w-fit">
@@ -1139,6 +995,16 @@
     This article is part of a series.
   </summary>
   
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/2025-12-14-math3/">
+          Part :
+          Proof#6
+        </a>
+      </div>
+    
   
     
       <div
@@ -1198,30 +1064,10 @@
 <blockquote>
 $$\sum_{n=0}^{\infty} x^{2n} \zeta(2+2n) = \frac{1 - \pi x \cot(\pi x)}{2x^2} \quad (|x| < 1)$$</blockquote>
 <hr>
-
-<h2 class="relative group">1. ゼータ関数の級数表示
-    <div id="1-ゼータ関数の級数表示" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#1-%e3%82%bc%e3%83%bc%e3%82%bf%e9%96%a2%e6%95%b0%e3%81%ae%e7%b4%9a%e6%95%b0%e8%a1%a8%e7%a4%ba" aria-label="Anchor">#</a>
-    </span>
-    
-</h2>
 <p>$\zeta(s)$ の定義式 $\zeta(s) = \sum_{k=1}^{\infty} k^{-s}$ を左辺 $S$ に適用し, 二重級数として表す.</p>
 $$
 S = \sum_{n=0}^{\infty} x^{2n} \sum_{k=1}^{\infty} k^{-(2n+2)} = \sum_{n=0}^{\infty} \sum_{k=1}^{\infty} \frac{x^{2n}}{k^{2n+2}}
-$$
-<h2 class="relative group">2. 和の順序変更
-    <div id="2-和の順序変更" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#2-%e5%92%8c%e3%81%ae%e9%a0%86%e5%ba%8f%e5%a4%89%e6%9b%b4" aria-label="Anchor">#</a>
-    </span>
-    
-</h2>
-<p>$|x| &lt; 1$ において，示す級数は絶対収束するため, コーシーの定理により和の順序変更が正当化される.</p>
+$$<p>$|x| &lt; 1$ において，示す級数は絶対収束するため, コーシーの定理により和の順序変更が正当化される.</p>
 $$
 S = \sum_{k=1}^{\infty} \frac{1}{k^2} \sum_{n=0}^{\infty} \left( \frac{x}{k} \right)^{2n}
 $$<p>内側の和は公比 $(x/k)^2$ の等比級数である. $|x| &lt; 1$ および $k \ge 1$ より公比の絶対値は $1$ 未満となり, 級数は収束する.</p>
@@ -1230,17 +1076,7 @@ $$
 $$<p>これを $S$ に代入し整理すると, 次式を得る.</p>
 $$
 S = \sum_{k=1}^{\infty} \frac{1}{k^2} \cdot \frac{k^2}{k^2 - x^2} = \sum_{k=1}^{\infty} \frac{1}{k^2 - x^2} \quad \cdots (1)
-$$
-<h2 class="relative group">3. 余接関数の部分分数展開
-    <div id="3-余接関数の部分分数展開" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#3-%e4%bd%99%e6%8e%a5%e9%96%a2%e6%95%b0%e3%81%ae%e9%83%a8%e5%88%86%e5%88%86%e6%95%b0%e5%b1%95%e9%96%8b" aria-label="Anchor">#</a>
-    </span>
-    
-</h2>
-<p>一方, $\cot(\pi x)$ の部分分数展開は次式で与えられる.</p>
+$$<p>一方, $\cot(\pi x)$ の部分分数展開は次式で与えられる.</p>
 $$
 \pi \cot(\pi x) = \frac{1}{x} + \sum_{k=1}^{\infty} \left( \frac{1}{x+k} + \frac{1}{x-k} \right)
 $$<p>右辺の級数項を通分し変形する.</p>
@@ -1270,6 +1106,16 @@ $$
     This article is part of a series.
   </summary>
   
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/2025-12-14-math3/">
+          Part :
+          Proof#6
+        </a>
+      </div>
+    
   
     
       <div
@@ -1375,6 +1221,19 @@ $$
           
         </span>
         <span class="flex flex-col items-end">
+          
+            <a
+              class="flex text-right text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+              href="/posts/2025-12-14-math3/">
+              <span class="leading-6">
+                Proof#6&ensp;<span class="inline-block rtl:rotate-180">&rarr;</span>
+              </span>
+            </a>
+            
+              <span class="me-6 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                <time datetime="2025-12-14T01:02:00&#43;09:00">14 December 2025</time>
+              </span>
+            
           
         </span>
       </div>
