@@ -226,7 +226,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "42"
+    "wordCount": "57"
   }]
   </script>
 
@@ -862,7 +862,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2025-12-15T00:00:00&#43;00:00">15 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>42 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="2025-12-15T00:00:00&#43;00:00">15 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>57 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1168,7 +1168,37 @@
     </span>
     
 </h2>
-<p>ここに数式を入力すると、リアルタイムでプレビューされます。</p>
+<p>ここに数式を入力すると、リアルタイムでプレビューされます。
+
+  
+  
+  
+  
+
+
+
+<div
+  
+    class="flex px-4 py-3 rounded-md bg-primary-100 dark:bg-primary-900"
+  
+  >
+  <span
+    
+      class="text-primary-400 pe-3 flex items-center"
+    
+    >
+    <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+</span>
+  </span>
+
+  <span
+    
+      class="dark:text-neutral-300"
+    
+    >slide = $x$ * {128 * 59}<br>
+thumb = $x$ * {16 * 9}</span>
+</div>
+</p>
 <script>
   MathJax = {
     
@@ -1211,7 +1241,8 @@
     padding: 10px; background-color: #e0e0e0; 
     border: 1px dashed #aaa; min-height: 80px; 
     display: flex; justify-content: center; align-items: center;
-    overflow: hidden;">
+    overflow: hidden;
+    position: relative;">
     
     <div id="latex-preview" style="
       padding: 30px 30px; 
@@ -1219,10 +1250,25 @@
       display: inline-block;
       color: #000;
       font-size: 1.5em;
-      /* 縮小用設定 */
       transform-origin: center center;
       transition: transform 0.2s ease;">
       $$ \sum_{n=0}^{\infty} x^{2n} \zeta(2+2n) = \frac{1 - \pi x \cot(\pi x)}{2x^2} \quad (|x| &lt; 1) $$
+    </div>
+
+    <div id="resolution-badge" style="
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      font-size: 12px;
+      font-family: monospace;
+      padding: 4px 8px;
+      border-radius: 4px;
+      pointer-events: none;
+      user-select: none;
+      z-index: 10;">
+      Computing...
     </div>
   </div>
 </div>
@@ -1237,6 +1283,33 @@
     const sliderY = document.getElementById('slider-y');
     const valX = document.getElementById('val-x');
     const valY = document.getElementById('val-y');
+    const badge = document.getElementById('resolution-badge');
+
+    
+    const OUTPUT_SCALE = 3;
+
+    
+    const updateResolution = () => {
+      const svgElement = preview.querySelector('svg');
+      if (!svgElement) {
+        badge.textContent = '- x - px';
+        return;
+      }
+      
+      const rect = svgElement.getBoundingClientRect();
+      const currentScale = preview.getBoundingClientRect().width / preview.offsetWidth || 1;
+      const svgW = rect.width / currentScale;
+      const svgH = rect.height / currentScale;
+
+      const padX = parseInt(sliderX.value);
+      const padY = parseInt(sliderY.value);
+
+      
+      const finalW = Math.round((svgW + padX * 2) * OUTPUT_SCALE);
+      const finalH = Math.round((svgH + padY * 2) * OUTPUT_SCALE);
+
+      badge.textContent = `${finalW} x ${finalH} px`;
+    };
 
     
     const fitToContainer = () => {
@@ -1248,6 +1321,8 @@
       } else {
         preview.style.transform = 'scale(1)';
       }
+      
+      updateResolution();
     };
 
     const updateMath = () => {
@@ -1258,6 +1333,7 @@
     };
 
     input.addEventListener('input', updateMath);
+    
     if(window.MathJax) MathJax.typesetPromise([preview]).then(() => fitToContainer());
     window.addEventListener('resize', fitToContainer);
 
@@ -1271,51 +1347,41 @@
       preview.style.paddingBottom = y + "px";
       preview.style.paddingLeft = x + "px";
       preview.style.paddingRight = x + "px";
-      fitToContainer();
+      fitToContainer(); 
     };
     sliderX.addEventListener('input', updatePadding);
     sliderY.addEventListener('input', updatePadding);
 
     
     saveBtn.addEventListener('click', () => {
-      
       const svgElement = preview.querySelector('svg');
       if (!svgElement) {
         alert("数式が描画されていません");
         return;
       }
 
-      
-      
       const rect = svgElement.getBoundingClientRect();
-      
-      
-      
       const padX = parseInt(sliderX.value);
       const padY = parseInt(sliderY.value);
-      const scale = 3; 
+      const scale = OUTPUT_SCALE; 
 
       
-      const svgW = rect.width / (preview.getBoundingClientRect().width / preview.offsetWidth); 
-      const svgH = rect.height / (preview.getBoundingClientRect().width / preview.offsetWidth);
-      
+      const currentScale = preview.getBoundingClientRect().width / preview.offsetWidth || 1;
+      const svgW = rect.width / currentScale;
+      const svgH = rect.height / currentScale;
       
       const canvas = document.createElement('canvas');
       canvas.width = (svgW + padX * 2) * scale;
       canvas.height = (svgH + padY * 2) * scale;
       const ctx = canvas.getContext('2d');
 
-      
       ctx.fillStyle = '#FFFFFF';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      
       const serializer = new XMLSerializer();
-      
       const clonedSvg = svgElement.cloneNode(true);
       clonedSvg.setAttribute('width', svgW + "px");
       clonedSvg.setAttribute('height', svgH + "px");
-      
       clonedSvg.style.color = "#000000";
       
       const svgString = serializer.serializeToString(clonedSvg);
@@ -1324,16 +1390,13 @@
 
       const img = new Image();
       img.onload = function() {
-        
         ctx.drawImage(img, padX * scale, padY * scale, svgW * scale, svgH * scale);
-        
         
         try {
           const pngUrl = canvas.toDataURL("image/png");
           const downloadLink = document.createElement("a");
           downloadLink.href = pngUrl;
           downloadLink.download = "latex_formula.png";
-          
           
           document.body.appendChild(downloadLink);
           downloadLink.click();
@@ -1342,7 +1405,6 @@
           URL.revokeObjectURL(url);
         } catch (e) {
           alert("保存に失敗しました。長押しで保存してください。");
-          
           window.open(canvas.toDataURL("image/png"));
         }
       };
