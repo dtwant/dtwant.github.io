@@ -238,7 +238,7 @@
     "keywords": ["math","series","proof"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "203"
+    "wordCount": "205"
   }]
   </script>
 
@@ -883,7 +883,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2025-12-18T01:00:00&#43;09:00">18 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>203 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="2025-12-18T01:00:00&#43;09:00">18 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>205 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1079,14 +1079,13 @@
     class="min-w-[220px] py-2 border-dotted border-s-1 -ms-5 ps-5 dark:border-neutral-600">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#等式の証明">等式の証明</a>
-      <ul>
-        <li><a href="#1-被積分関数の変形">1. 被積分関数の変形</a></li>
-        <li><a href="#2-項別積分の実行">2. 項別積分の実行</a></li>
-        <li><a href="#3-定積分-int_01-xm-ln-xn-dx-の計算">3. 定積分 $\int_{0}^{1} x^m (\ln x)^n dx$ の計算</a></li>
-        <li><a href="#4-級数の整理">4. 級数の整理</a></li>
-      </ul>
-    </li>
+    <li><a href="#series-proofs">title: &ldquo;Proof#5&rdquo;
+date: 2025-12-18T13:00:00+09:00
+draft: false
+tags: [&ldquo;math&rdquo;, &ldquo;calculus&rdquo;, &ldquo;series-expansion&rdquo;, &ldquo;proof&rdquo;]
+series: [&ldquo;proofs&rdquo;]</a></li>
+    <li><a href="#2-項別積分とガンマ関数の適用">2. 項別積分とガンマ関数の適用</a></li>
+    <li><a href="#3-級数の整理と最終形">3. 級数の整理と最終形</a></li>
   </ul>
 </nav>
   </div>
@@ -1100,14 +1099,13 @@
     class="py-2 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#等式の証明">等式の証明</a>
-      <ul>
-        <li><a href="#1-被積分関数の変形">1. 被積分関数の変形</a></li>
-        <li><a href="#2-項別積分の実行">2. 項別積分の実行</a></li>
-        <li><a href="#3-定積分-int_01-xm-ln-xn-dx-の計算">3. 定積分 $\int_{0}^{1} x^m (\ln x)^n dx$ の計算</a></li>
-        <li><a href="#4-級数の整理">4. 級数の整理</a></li>
-      </ul>
-    </li>
+    <li><a href="#series-proofs">title: &ldquo;Proof#5&rdquo;
+date: 2025-12-18T13:00:00+09:00
+draft: false
+tags: [&ldquo;math&rdquo;, &ldquo;calculus&rdquo;, &ldquo;series-expansion&rdquo;, &ldquo;proof&rdquo;]
+series: [&ldquo;proofs&rdquo;]</a></li>
+    <li><a href="#2-項別積分とガンマ関数の適用">2. 項別積分とガンマ関数の適用</a></li>
+    <li><a href="#3-級数の整理と最終形">3. 級数の整理と最終形</a></li>
   </ul>
 </nav>
   </div>
@@ -1308,76 +1306,78 @@
 
 
         <div class="article-content max-w-prose mb-20">
-          
-<h2 class="relative group">等式の証明
-    <div id="等式の証明" class="anchor"></div>
+          <hr>
+
+<h2 class="relative group">title: &ldquo;Proof#5&rdquo;
+date: 2025-12-18T13:00:00+09:00
+draft: false
+tags: [&ldquo;math&rdquo;, &ldquo;calculus&rdquo;, &ldquo;series-expansion&rdquo;, &ldquo;proof&rdquo;]
+series: [&ldquo;proofs&rdquo;]
+    <div id="series-proofs" class="anchor"></div>
     
     <span
         class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e7%ad%89%e5%bc%8f%e3%81%ae%e8%a8%bc%e6%98%8e" aria-label="Anchor">#</a>
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#series-proofs" aria-label="Anchor">#</a>
     </span>
     
 </h2>
-<p>次の等式を厳密に証明する。</p>
-$$\int_{0}^{1} x^{a-bx} dx = \sum_{n=1}^{\infty} \frac{b^{n-1}}{(n+a)^n}$$
-<h3 class="relative group">1. 被積分関数の変形
-    <div id="1-被積分関数の変形" class="anchor"></div>
+<p>以下の等式を証明する.</p>
+<blockquote>
+$$\int_{0}^{1} x^{a-bx} dx = \sum_{n=1}^{\infty} \frac{b^{n-1}}{(n+a)^n}$$</blockquote>
+<hr>
+<p>被積分関数 $x^{a-bx}$ を指数関数と対数関数を用いて変形する. 指数関数のマクローリン展開 $e^u = \sum_{n=0}^{\infty} \frac{u^n}{n!}$ を利用すると, 次の展開式を得る.</p>
+$$
+\begin{aligned}
+x^{a-bx} &= x^a \cdot e^{-bx \ln x} \\
+&= x^a \sum_{n=0}^{\infty} \frac{(-bx \ln x)^n}{n!} \\
+&= \sum_{n=0}^{\infty} \frac{(-b)^n}{n!} x^{n+a} (\ln x)^n
+\end{aligned}
+$$
+<h2 class="relative group">2. 項別積分とガンマ関数の適用
+    <div id="2-項別積分とガンマ関数の適用" class="anchor"></div>
     
     <span
         class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#1-%e8%a2%ab%e7%a9%8d%e5%88%86%e9%96%a2%e6%95%b0%e3%81%ae%e5%a4%89%e5%bd%a2" aria-label="Anchor">#</a>
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#2-%e9%a0%85%e5%88%a5%e7%a9%8d%e5%88%86%e3%81%a8%e3%82%ac%e3%83%b3%e3%83%9e%e9%96%a2%e6%95%b0%e3%81%ae%e9%81%a9%e7%94%a8" aria-label="Anchor">#</a>
     </span>
     
-</h3>
-<p>まず、被積分関数 $x^{a-bx}$ を指数関数と対数関数を用いて変形する。</p>
-<p>$x^{a-bx} = x^a \cdot x^{-bx} = x^a \cdot e^{-bx \ln x}$</p>
-<p>ここで、指数関数 $e^u$ のマクローリン展開 $e^u = \sum_{n=0}^{\infty} \frac{u^n}{n!}$ を用いる。$u = -bx \ln x$ と置くと、次のように展開できる。</p>
-<p>$x^a e^{-bx \ln x} = x^a \sum_{n=0}^{\infty} \frac{(-bx \ln x)^n}{n!} = \sum_{n=0}^{\infty} \frac{(-b)^n}{n!} x^{n+a} (\ln x)^n$</p>
-
-<h3 class="relative group">2. 項別積分の実行
-    <div id="2-項別積分の実行" class="anchor"></div>
+</h2>
+<p>得られた級数表示を $0$ から $1$ まで積分する. 項別積分が可能であると仮定し, 積分と無限和を入れ替える.</p>
+$$
+\int_{0}^{1} x^{a-bx} dx = \sum_{n=0}^{\infty} \frac{(-b)^n}{n!} \int_{0}^{1} x^{n+a} (\ln x)^n dx
+$$<p>ここで, 定積分 $J_n = \int_{0}^{1} x^m (\ln x)^n dx$ を計算する. 変数変換 $t = -\ln x$ を行うと, $x = e^{-t}$ および $dx = -e^{-t} dt$ となり, 積分範囲は $\infty$ から $0$ に変換される.</p>
+$$
+\begin{aligned}
+J_n &= \int_{\infty}^{0} (e^{-t})^m (-t)^n (-e^{-t} dt) \\
+&= (-1)^n \int_{0}^{\infty} t^n e^{-(m+1)t} dt
+\end{aligned}
+$$<p>さらに $u = (m+1)t$ と置換し, ガンマ関数の定義 $\Gamma(n+1) = \int_{0}^{\infty} u^n e^{-u} du = n!$ を適用する.</p>
+$$
+\begin{aligned}
+J_n &= \frac{(-1)^n}{(m+1)^{n+1}} \int_{0}^{\infty} u^n e^{-u} du \\
+&= \frac{(-1)^n n!}{(m+1)^{n+1}}
+\end{aligned}
+$$
+<h2 class="relative group">3. 級数の整理と最終形
+    <div id="3-級数の整理と最終形" class="anchor"></div>
     
     <span
         class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#2-%e9%a0%85%e5%88%a5%e7%a9%8d%e5%88%86%e3%81%ae%e5%ae%9f%e8%a1%8c" aria-label="Anchor">#</a>
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#3-%e7%b4%9a%e6%95%b0%e3%81%ae%e6%95%b4%e7%90%86%e3%81%a8%e6%9c%80%e7%b5%82%e5%bd%a2" aria-label="Anchor">#</a>
     </span>
     
-</h3>
-<p>得られた級数を $0$ から $1$ まで積分する。ここでは、優収束定理または項別積分に関する収束性を仮定する（適当な $a, b$ の範囲において）。</p>
-<p>$\int_{0}^{1} x^{a-bx} dx = \int_{0}^{1} \sum_{n=0}^{\infty} \frac{(-b)^n}{n!} x^{n+a} (\ln x)^n dx = \sum_{n=0}^{\infty} \frac{(-b)^n}{n!} \int_{0}^{1} x^{n+a} (\ln x)^n dx$</p>
-
-<h3 class="relative group">3. 定積分 $\int_{0}^{1} x^m (\ln x)^n dx$ の計算
-    <div id="3-定積分-int_01-xm-ln-xn-dx-の計算" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#3-%e5%ae%9a%e7%a9%8d%e5%88%86-int_01-xm-ln-xn-dx-%e3%81%ae%e8%a8%88%e7%ae%97" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-<p>右辺の積分を計算するため、$t = -\ln x$ と置換する。このとき $x = e^{-t}$ であり、$dx = -e^{-t} dt$ となる。積分範囲は $x: 0 \to 1$ のとき $t: \infty \to 0$ である。</p>
-<p>$\int_{0}^{1} x^{n+a} (\ln x)^n dx = \int_{\infty}^{0} (e^{-t})^{n+a} (-t)^n (-e^{-t}) dt$
-$= \int_{0}^{\infty} e^{-(n+a)t} (-1)^n t^n e^{-t} dt = (-1)^n \int_{0}^{\infty} t^n e^{-(n+a+1)t} dt$</p>
-<p>さらに $u = (n+a+1)t$ と置換すると、$dt = \frac{du}{n+a+1}$ となり、ガンマ関数の定義 $\Gamma(z) = \int_{0}^{\infty} u^{z-1} e^{-u} du$ を利用できる。</p>
-<p>$(-1)^n \int_{0}^{\infty} \left( \frac{u}{n+a+1} \right)^n e^{-u} \frac{du}{n+a+1} = \frac{(-1)^n}{(n+a+1)^{n+1}} \int_{0}^{\infty} u^n e^{-u} du$
-$= \frac{(-1)^n n!}{(n+a+1)^{n+1}}$</p>
-
-<h3 class="relative group">4. 級数の整理
-    <div id="4-級数の整理" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#4-%e7%b4%9a%e6%95%b0%e3%81%ae%e6%95%b4%e7%90%86" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-<p>この結果を項別積分の式に代入する。</p>
-<p>$\int_{0}^{1} x^{a-bx} dx = \sum_{n=0}^{\infty} \frac{(-b)^n}{n!} \cdot \frac{(-1)^n n!}{(n+a+1)^{n+1}}$
-$= \sum_{n=0}^{\infty} \frac{(-1)^{2n} b^n}{(n+a+1)^{n+1}} = \sum_{n=0}^{\infty} \frac{b^n}{(n+a+1)^{n+1}}$</p>
-<p>最後に、添字を $k = n+1$ と置き換える。$n=0$ のとき $k=1$ である。</p>
-<p>$\sum_{k=1}^{\infty} \frac{b^{k-1}}{(k+a)^k}$</p>
-<p>これにより、題意は示された。</p>
-
+</h2>
+<p>$m = n+a$ として, 得られた $J_n$ を級数の式に代入する.</p>
+$$
+\begin{aligned}
+\int_{0}^{1} x^{a-bx} dx &= \sum_{n=0}^{\infty} \frac{(-b)^n}{n!} \cdot \frac{(-1)^n n!}{(n+a+1)^{n+1}} \\
+&= \sum_{n=0}^{\infty} \frac{(-1)^{2n} b^n}{(n+a+1)^{n+1}} \\
+&= \sum_{n=0}^{\infty} \frac{b^n}{(n+a+1)^{n+1}}
+\end{aligned}
+$$<p>最後に, 添字を $k = n+1$ に置き換えると, $n=0$ のとき $k=1$ であり, 求めるべき等式が得られる.</p>
+$$
+\int_{0}^{1} x^{a-bx} dx = \sum_{k=1}^{\infty} \frac{b^{k-1}}{(k+a)^k}
+$$
           
           
           
