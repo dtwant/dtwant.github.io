@@ -235,7 +235,7 @@
     "keywords": ["math","series","proof"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "240"
+    "wordCount": "179"
   }]
   </script>
 
@@ -874,7 +874,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2025-12-10T14:00:00&#43;09:00">10 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>240 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">2 mins</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="2025-12-10T14:00:00&#43;09:00">10 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>179 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1168,50 +1168,46 @@
 <blockquote>
 $$\sum_{k=1}^{\infty}\frac{(3^k-1)\zeta(k+1)}{4^k} = \pi$$</blockquote>
 <hr>
-<p>まず, $\zeta(s)$ の積分表示を利用する. ガンマ関数 $\Gamma(s)$ を用いると, ゼータ関数は以下のように表される.</p>
+<p>以下の$\zeta(s)$ の積分表示</p>
+<blockquote>
 $$
 \zeta(s) = \frac{1}{\Gamma(s)}\int_{0}^{\infty}\frac{t^{s-1}}{e^t-1}\,dt
-$$<p>ここで $s=k+1$ とすると, $\Gamma(k+1)=k!$ であるため, 次の式が得られる.</p>
+$$</blockquote>
+<p>において $s=k+1$ とすると, $\Gamma(k+1)=k!$ であるため,</p>
 $$
 \zeta(k+1) = \frac{1}{k!}\int_{0}^{\infty}\frac{t^k}{e^t-1}\,dt
-$$<p>これを元の級数 $S$ に代入する.</p>
+$$<p>よって元の級数は</p>
 $$
 S = \sum_{k=1}^{\infty}\frac{3^k-1}{4^k}\cdot\frac{1}{k!}\int_{0}^{\infty}\frac{t^k}{e^t-1}\,dt
-$$<p>級数と積分の順序を入れ替え, 被積分関数内の級数を整理する.</p>
+$$<p>従って</p>
 $$
 \begin{aligned}
 S &= \int_{0}^{\infty} \frac{1}{e^t-1} \sum_{k=1}^{\infty} \frac{(3t)^k - t^k}{4^k \cdot k!} \,dt \\
   &= \int_{0}^{\infty} \frac{1}{e^t-1} \left\{ \sum_{k=1}^{\infty} \frac{1}{k!}\left(\frac{3t}{4}\right)^k - \sum_{k=1}^{\infty} \frac{1}{k!}\left(\frac{t}{4}\right)^k \right\} \,dt
 \end{aligned}
-$$<p>ここで, 指数関数 $e^x$ のマクローリン展開 $e^x = \sum_{k=0}^{\infty} \frac{x^k}{k!} = 1 + \sum_{k=1}^{\infty} \frac{x^k}{k!}$ より, $\sum_{k=1}^{\infty} \frac{x^k}{k!} = e^x - 1$ である. これを適用すると, 被積分関数は次のように変形できる.</p>
+$$<p>ここで, 指数関数 $e^x$ のマクローリン展開から</p>
+<blockquote>
+$$
+\begin{aligned}
+e^x = \sum_{k=0}^{\infty} \frac{x^k}{k!} &= 1 + \sum_{k=1}^{\infty} \frac{x^k}{k!} \\
+\sum_{k=1}^{\infty} \frac{x^k}{k!} &= e^x - 1
+\end{aligned}
+$$</blockquote>
+<p>である. これを適用すると</p>
 $$
 \begin{aligned}
 S &= \int_{0}^{\infty} \frac{(e^{\frac{3}{4}t} - 1) - (e^{\frac{1}{4}t} - 1)}{e^t-1} \,dt \\
-  &= \int_{0}^{\infty} \frac{e^{\frac{3}{4}t} - e^{\frac{1}{4}t}}{e^t-1} \,dt
+  &= \int_{0}^{\infty} \frac{e^{\frac{3}{4}t} - e^{\frac{1}{4}t}}{e^t-1} \,dt \\
+  &= \int_{0}^{\infty} \frac{e^{\frac{1}{4}t}}{e^{\frac{t}{2}} + 1} \,dt
 \end{aligned}
-$$<p>分子を $e^{\frac{1}{4}t}$ で括り, 因数分解を行う. また, 分母については $e^t - 1 = (e^{\frac{t}{2}} - 1)(e^{\frac{t}{2}} + 1)$ と因数分解できることに注意する.</p>
-$$
-\begin{aligned}
-\frac{e^{\frac{3}{4}t} - e^{\frac{1}{4}t}}{e^t-1} &= \frac{e^{\frac{1}{4}t}(e^{\frac{t}{2}} - 1)}{(e^{\frac{t}{2}} - 1)(e^{\frac{t}{2}} + 1)} \\
-&= \frac{e^{\frac{1}{4}t}}{e^{\frac{t}{2}} + 1}
-\end{aligned}
-$$<p>したがって, 求める積分は以下のようになる.</p>
-$$
-S = \int_{0}^{\infty} \frac{e^{\frac{1}{4}t}}{e^{\frac{t}{2}} + 1} \,dt
-$$<p>ここで, $x = e^{\frac{1}{4}t}$ と置換する.
-各変数の対応は以下の通りである.</p>
-<ul>
-<li>$t: 0 \to \infty$ のとき, $x: 1 \to \infty$</li>
-<li>$t = 4\ln x$ より, $dt = \frac{4}{x},dx$</li>
-<li>分母の $e^{\frac{t}{2}}$ は $x^2$ となる</li>
-</ul>
-<p>これらを積分式に代入する.</p>
+$$<p>ここで, $x = e^{\frac{1}{4}t}$ とおくと$t = 4\ln x$ より $dt = \frac{4}{x}\ dx$<br>
+よって</p>
 $$
 \begin{aligned}
 S &= \int_{1}^{\infty} \frac{x}{x^2+1} \cdot \frac{4}{x} \,dx \\
   &= \int_{1}^{\infty} \frac{4}{x^2+1} \,dx
 \end{aligned}
-$$<p>これは逆正接関数 $\arctan x$ の積分形である.</p>
+$$<p>これは $\arctan x$ の積分であるから</p>
 $$
 \begin{aligned}
 S &= 4 \left[ \arctan x \right]_{1}^{\infty} \\
@@ -1220,8 +1216,7 @@ S &= 4 \left[ \arctan x \right]_{1}^{\infty} \\
   &= 4 \cdot \frac{\pi}{4} \\
   &= \pi
 \end{aligned}
-$$<p>以上より, 求める値は $\pi$ である.</p>
-
+$$
           
           
           
