@@ -229,7 +229,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "122"
+    "wordCount": "126"
   }]
   </script>
 
@@ -870,7 +870,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>122 words</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <span>126 words</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -969,190 +969,278 @@
         <div class="article-content max-w-prose mb-20">
           <p>Pythonの数式処理ライブラリ <strong>SymPy</strong> をブラウザ上で動作させている.
 有理関数の部分分数分解を行う.</p>
+
+
+
 <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 
 <style>
-    .solver-container {
-        background-color: #ffffff !important;
-        color: #333333 !important;
-        border: 1px solid #ccc;
-        padding: 20px;
-        border-radius: 8px;
-        margin-top: 20px;
-        font-family: 'Segoe UI', sans-serif;
-    }
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-    .solver-container h3,
-    .solver-container p,
-    .solver-container li,
-    .solver-container span {
-        color: #333333 !important;
-    }
-    
-    .status-bar {
-        font-size: 0.9em;
-        margin-bottom: 10px;
-        padding: 5px 10px;
-        border-radius: 4px;
-        background-color: #e9ecef;
-        color: #666 !important;
-        display: inline-block;
-    }
-    
-    .status-ready {
-        background-color: #d4edda !important;
-        color: #155724 !important;
-    }
+  .cp-solver-container {
+    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
+    max-width: 800px;
+    margin: 2rem auto;
+    background-color: #09090b;
+    background-image: 
+      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
+    background-size: 20px 20px;
+    padding: 2rem;
+    border: 1px solid #333;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    color: #e2e8f0;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .cp-solver-container * { box-sizing: border-box; }
 
-    .status-loading {
-        background-color: #fff3cd !important;
-        color: #856404 !important;
-    }
+   
+  .cp-solver-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #d946ef, #22d3ee, #d946ef);
+    background-size: 200% 100%;
+    animation: scanline 4s linear infinite;
+    pointer-events: none;
+    z-index: 10;
+  }
+  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
-    .solver-input-group {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
-    }
+   
+  .cp-header {
+    border-bottom: 1px solid #333;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cp-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #d946ef;  
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 8px rgba(217, 70, 239, 0.4);
+  }
+  .cp-subtitle {
+    font-size: 0.7rem;
+    color: #64748b;
+  }
 
-    .solver-input {
-        flex: 1;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-family: monospace;
-        font-size: 1.1em;
-        background-color: #fff !important;
-        color: #333 !important;
-    }
+   
+  .cp-status-bar {
+    font-size: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px dashed #333;
+    background: rgba(0, 0, 0, 0.5);
+    color: #94a3b8;
+    display: block;
+    transition: all 0.3s;
+  }
+  
+  .status-ready {
+    border-color: #22c55e;
+    color: #22c55e;  
+    background: rgba(34, 197, 94, 0.05);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
+  }
 
-    .solver-btn {
-        padding: 10px 20px;
-        background-color: #6f42c1;
-        color: white !important;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
-    }
+  .status-loading {
+    border-color: #eab308;
+    color: #eab308;  
+    animation: pulse-text 1.5s infinite;
+  }
+  @keyframes pulse-text { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-    .solver-btn:disabled {
-        background-color: #ccc !important;
-        cursor: not-allowed;
-    }
+   
+  .cp-input-group {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
 
-    .result-area {
-        min-height: 80px;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        background-color: #f8f9fa !important;
-        color: #333 !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2em;
-        overflow-x: auto;
-    }
+  .cp-input {
+    background: #000;
+    border: 1px solid #444;
+    color: #22d3ee;  
+    padding: 0.8rem;
+    font-family: inherit;
+    font-size: 1rem;
+    border-radius: 2px;
+    width: 100%;
+  }
+  .cp-input::placeholder { color: #334155; }
+  .cp-input:focus {
+    outline: none;
+    border-color: #22d3ee;
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+  }
+  .cp-input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .cp-btn {
+    padding: 0 1.5rem;
+    background: transparent;
+    color: #22d3ee;
+    border: 1px solid #22d3ee;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .cp-btn:hover:not(:disabled) {
+    background: #22d3ee;
+    color: #000;
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.5);
+  }
+  .cp-btn:disabled {
+    border-color: #444;
+    color: #444;
+    cursor: not-allowed;
+  }
+
+   
+  .cp-result-area {
+    min-height: 100px;
+    padding: 1.5rem;
+    border: 1px solid #333;
+    background: #0e0e11;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    overflow-x: auto;
+    position: relative;
+  }
+  
+   
+  .cp-result-area::after {
+    content: 'OUTPUT_TERMINAL';
+    position: absolute;
+    bottom: 5px; right: 8px;
+    font-size: 0.6rem;
+    color: #333;
+  }
+
+   
+  .katex { color: #e2e8f0 !important; }
+  .MathJax { color: #e2e8f0 !important; outline: none; }
 </style>
 
-<div class="solver-container">
-    <h3>∫ 部分分数分解ソルバー (SymPy)</h3>
-    <p style="font-size:0.9em;">Pythonの数式処理ライブラリをブラウザ上で実行する.</p>
-    
-    <div id="pyStatus" class="status-bar status-loading">
-        ⏳ Pythonエンジンを起動中... (初回は時間がかかります)
-    </div>
+<div class="cp-solver-container">
+  <div class="cp-header">
+    <div class="cp-title">∫PARTIAL_FRACTION_SOLVER∑</div>
+    <div class="cp-subtitle">SYM_PY ENGINE INTEGRATED</div>
+  </div>
+  
+  <div id="pyStatus" class="cp-status-bar status-loading">
+    >> INITIALIZING PYTHON KERNEL...
+  </div>
 
-    <div class="solver-input-group">
-        <input type="text" id="mathInput" class="solver-input" placeholder="例: 1/(x^2 - 1)  または  (3*x + 2)/(x*(x+1)^2)" disabled>
-        <button id="solveBtn" class="solver-btn" onclick="runSolver()" disabled>実行</button>
-    </div>
+  <div class="cp-input-group">
+    <input type="text" id="mathInput" class="cp-input" placeholder="INPUT_EXPRESSION (e.g., 1/(x^2 - 1))" disabled>
+    <button id="solveBtn" class="cp-btn" onclick="runSolver()" disabled>EXECUTE</button>
+  </div>
 
-    <div id="mathResult" class="result-area">
-        ここに結果が表示されます
-    </div>
+  <div id="mathResult" class="cp-result-area">
+    <span style="color:#444; font-size:0.9rem;">// WAITING FOR INPUT...</span>
+  </div>
 </div>
 
 <script>
-    let pyodide = null;
-    let sympyLoaded = false;
-    const statusDiv = document.getElementById('pyStatus');
-    const inputField = document.getElementById('mathInput');
-    const solveBtn = document.getElementById('solveBtn');
-    const resultDiv = document.getElementById('mathResult');
+  let pyodide = null;
+  let sympyLoaded = false;
+  const statusDiv = document.getElementById('pyStatus');
+  const inputField = document.getElementById('mathInput');
+  const solveBtn = document.getElementById('solveBtn');
+  const resultDiv = document.getElementById('mathResult');
 
-    async function main() {
-        try {
-            pyodide = await loadPyodide();
-            statusDiv.textContent = "📦 数学ライブラリ(SymPy)をインストール中...";
-            
-            await pyodide.loadPackage("micropip");
-            const micropip = pyodide.pyimport("micropip");
-            await micropip.install("sympy");
-            
-            sympyLoaded = true;
-            statusDiv.textContent = "✔ 準備完了 (Ready)";
-            statusDiv.className = "status-bar status-ready";
-            inputField.disabled = false;
-            solveBtn.disabled = false;
-            
-            
-            pyodide.runPython(`
-                import sympy
-                from sympy import symbols, apart, latex, sympify
-                
-                def decompose_fraction(expr_str):
-                    try:
-                        x = symbols('x')
-                        expr_str = expr_str.replace('^', '**')
-                        
-                        # 数式化 (aなどの未知の変数も自動でシンボル化される)
-                        expr = sympify(expr_str)
-                        
-                        # ★修正: 第2引数に x を指定して、「xについて」分解させる
-                        result = apart(expr, x)
-                        
-                        return latex(result)
-                    except Exception as e:
-                        return "Error: " + str(e)
-            `);
-
-        } catch (err) {
-            statusDiv.textContent = "❌ エラー: Pythonの起動に失敗しました";
-            console.error(err);
-        }
-    }
-
-    async function runSolver() {
-        if (!sympyLoaded) return;
+  async function main() {
+    try {
+      pyodide = await loadPyodide();
+      statusDiv.innerHTML = ">> INSTALLING MODULE: SYMPY...";
+      
+      await pyodide.loadPackage("micropip");
+      const micropip = pyodide.pyimport("micropip");
+      await micropip.install("sympy");
+      
+      sympyLoaded = true;
+      statusDiv.innerHTML = ">> SYSTEM READY. ENGINE ONLINE.";
+      statusDiv.className = "cp-status-bar status-ready";
+      inputField.disabled = false;
+      solveBtn.disabled = false;
+      
+      
+      pyodide.runPython(`
+        import sympy
+        from sympy import symbols, apart, latex, sympify
         
-        const expression = inputField.value;
-        if (!expression.trim()) return;
+        def decompose_fraction(expr_str):
+          try:
+            x = symbols('x')
+            expr_str = expr_str.replace('^', '**')
+            
+            # 数式化
+            expr = sympify(expr_str)
+            
+            # xについて分解
+            result = apart(expr, x)
+            
+            return latex(result)
+          except Exception as e:
+            return "Error: " + str(e)
+      `);
 
-        resultDiv.innerHTML = '<span style="color:#666;">計算中...</span>';
-
-        try {
-            const decompose = pyodide.globals.get('decompose_fraction');
-            const latexResult = decompose(expression);
-
-            if (latexResult.startsWith("Error")) {
-                resultDiv.innerHTML = `<span style="color:red;">${latexResult}</span>`;
-            } else {
-                resultDiv.innerHTML = `$$ ${latexResult} $$`;
-                if (window.renderMathInElement) {
-                    renderMathInElement(resultDiv, {
-                        delimiters: [{left: '$$', right: '$$', display: true}]
-                    });
-                }
-            }
-        } catch (e) {
-            resultDiv.innerHTML = "エラーが発生しました";
-            console.error(e);
-        }
+    } catch (err) {
+      statusDiv.innerHTML = ">> SYSTEM ERROR: KERNEL FAILURE";
+      statusDiv.style.borderColor = "#ef4444";
+      statusDiv.style.color = "#ef4444";
+      console.error(err);
     }
+  }
 
-    main();
+  async function runSolver() {
+    if (!sympyLoaded) return;
+    
+    const expression = inputField.value;
+    if (!expression.trim()) return;
+
+    resultDiv.innerHTML = '<span style="color:#eab308; font-size:0.9rem;">>> PROCESSING...</span>';
+
+    try {
+      const decompose = pyodide.globals.get('decompose_fraction');
+      const latexResult = decompose(expression);
+
+      if (latexResult.startsWith("Error")) {
+        resultDiv.innerHTML = `<span style="color:#ef4444; font-size:0.9rem;">>> ${latexResult}</span>`;
+      } else {
+        resultDiv.innerHTML = `$$ ${latexResult} $$`;
+        
+        if (window.renderMathInElement) {
+          renderMathInElement(resultDiv, {
+            delimiters: [{left: '$$', right: '$$', display: true}]
+          });
+        } else if (window.MathJax) {
+          window.MathJax.typesetPromise([resultDiv]);
+        }
+      }
+    } catch (e) {
+      resultDiv.innerHTML = '<span style="color:#ef4444;">>> RUNTIME ERROR</span>';
+      console.error(e);
+    }
+  }
+
+  main();
 </script>
 <hr>
 
@@ -1276,7 +1364,7 @@ $$- \frac{1}{2 a (x + a)} + \frac{1}{2 a (x - a)}$$
         
         class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
         <h2>
-          Attendance Guardian
+          Attendance Monitor
           
         </h2>
       </a>
@@ -1324,7 +1412,7 @@ $$- \frac{1}{2 a (x + a)} + \frac{1}{2 a (x - a)}$$
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>44 words</span>
+      <span>43 words</span>
     
 
     
@@ -1477,7 +1565,7 @@ $$- \frac{1}{2 a (x + a)} + \frac{1}{2 a (x - a)}$$
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>91 words</span>
+      <span>93 words</span>
     
 
     

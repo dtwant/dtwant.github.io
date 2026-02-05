@@ -229,7 +229,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "91"
+    "wordCount": "93"
   }]
   </script>
 
@@ -870,7 +870,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>91 words</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <span>93 words</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -967,7 +967,7 @@
         
 
         <div class="article-content max-w-prose mb-20">
-          <p>古典暗号と現代の公開鍵暗号、符号化を実験するページ.</p>
+          <p>古典暗号と現代の公開鍵暗号，符号化を実験するページ.</p>
 
 <h2 class="relative group">1. RSA暗号 (Visualizer)
     <div id="1-rsa暗号-visualizer" class="anchor"></div>
@@ -978,224 +978,400 @@
     </span>
     
 </h2>
-<p>RSA暗号の仕組みを、小さな数を使って計算・可視化する.<br>
+<p>RSA暗号の仕組みを，小さな数を使って計算・可視化する.<br>
 「素数」「オイラー関数 $\phi(n)$」「合同式」を用いる.</p>
+
+
+
 <style>
-     
-    .rsa-container {
-        background-color: #ffffff !important;  
-        color: #333333 !important;        
-        border: 1px solid #ccc;
-        padding: 20px;
-        border-radius: 8px;
-        margin-top: 20px;
-        font-family: 'Segoe UI', sans-serif;
-    }
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-     
-    .rsa-container h3,
-    .rsa-container h4,
-    .rsa-container p,
-    .rsa-container div,
-    .rsa-container span,
-    .rsa-container label,
-    .rsa-container li {
-        color: #333333 !important;
-    }
+   
+  .cp-rsa-container {
+    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
+    max-width: 800px;
+    margin: 2rem auto;
+    background-color: #09090b;
+    background-image: 
+      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
+    background-size: 20px 20px;
+    padding: 2rem;
+    border: 1px solid #333;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
+    color: #e2e8f0;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+  .cp-rsa-container * { box-sizing: border-box; }
 
-    .rsa-input-group {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 10px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
+   
+   
+  .cp-rsa-container p,
+  .cp-rsa-container span,
+  .cp-rsa-container label,
+  .cp-rsa-container div,
+  .cp-rsa-container h3,
+  .cp-rsa-container h4,
+  .cp-rsa-container a {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: inherit;
+  }
 
-     
-    .rsa-container input[type="number"] {
-        background-color: #fff !important;
-        color: #333 !important;
-        border: 1px solid #ccc !important;
-        border-radius: 4px;
-        padding: 5px;
-    }
+   
+  .cp-rsa-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #d946ef, #8b5cf6, #d946ef);
+    background-size: 200% 100%;
+    animation: scanline 4s linear infinite;
+    pointer-events: none;
+    z-index: 10;
+  }
+  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
-    .rsa-box {
-        background: #f8f9fa !important;
-        border: 1px solid #ddd;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 15px;
-    }
+   
+  .cp-header {
+    border-bottom: 1px solid #333 !important;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cp-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #d946ef !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 8px rgba(217, 70, 239, 0.4);
+  }
+  .cp-subtitle {
+    font-size: 0.75rem;
+    color: #64748b !important;
+  }
 
-    .rsa-step {
-        margin: 5px 0;
-        font-family: monospace;
-    }
+   
+  .cp-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid #333 !important;
+    border-left: 2px solid #333 !important;
+    transition: border-color 0.3s;
+  }
+  .cp-section:hover {
+    border-left-color: #d946ef !important;
+  }
 
-    .rsa-highlight {
-        color: #d63384 !important;  
-        font-weight: bold;
-    }
+  .cp-sec-title {
+    font-size: 0.9rem;
+    color: #94a3b8 !important;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .cp-sec-title::before { content: '>>'; color: #d946ef; }
 
-    .rsa-btn {
-        padding: 5px 15px;
-        background: #007bff;
-        color: white !important;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
+   
+  .cp-input-group {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .cp-field {
+    flex: 1;
+    min-width: 100px;
+  }
+  .cp-label {
+    display: block;
+    font-size: 0.7rem;
+    color: #64748b !important;
+    margin-bottom: 0.4rem;
+    font-weight: bold;
+  }
+  
+  .cp-input {
+    width: 100%;
+    background: #000 !important;
+    border: 1px solid #444 !important;  
+    color: #e2e8f0 !important;
+    padding: 0.6rem;
+    font-family: inherit;
+    font-size: 1rem;
+    border-radius: 2px;
+    transition: all 0.2s;
+    box-shadow: none !important;
+  }
+  .cp-input:focus {
+    outline: none;
+    border-color: #d946ef !important;
+    box-shadow: 0 0 8px rgba(217, 70, 239, 0.3) !important;
+  }
+
+   
+  .cp-btn {
+    background: transparent !important;
+    border: 1px solid #d946ef !important;
+    color: #d946ef !important;
+    padding: 0.6rem 1.2rem;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    height: 42px;
+    box-shadow: none !important;
+  }
+  .cp-btn:hover {
+    background: #d946ef !important;
+    color: #000 !important;
+    box-shadow: 0 0 10px rgba(217, 70, 239, 0.5) !important;
+  }
+
+   
+  .cp-result-box {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #0e0e11 !important;
+    border: 1px dashed #444 !important;
+    font-size: 0.9rem;
+    display: none;
+  }
+  
+  .cp-step {
+    margin-bottom: 0.5rem;
+    font-family: monospace;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .cp-var { color: #64748b !important; }
+  .cp-val { color: #22d3ee !important; font-weight: bold; }
+  .cp-highlight { color: #d946ef !important; font-weight: bold; text-shadow: 0 0 5px rgba(217, 70, 239, 0.3); }
+
+  .cp-key-display {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #333 !important;
+    font-size: 0.8rem;
+    color: #94a3b8 !important;
+  }
+
+  .cp-error {
+    color: #ef4444 !important;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    display: none;
+  }
+
+  .cp-math { font-family: "JetBrains Mono", monospace; }
+
 </style>
 
-<div class="rsa-container">
-    <h3>🗝 RSA Cipher Visualizer</h3>
-    <p>小さな素数でRSA暗号の仕組みを実験します。</p>
+<div class="cp-rsa-container">
+  <div class="cp-header">
+    <div class="cp-title">RSA_CRYPTO_SYSTEM</div>
+    <div class="cp-subtitle">公開鍵暗号プロトコル</div>
+  </div>
 
-    <div class="rsa-box">
-        <h4>1. 鍵の生成 (Key Generation)</h4>
-        <div class="rsa-input-group">
-            <label>素数 p: <input type="number" id="rsa-p" value="11" style="width: 50px;"></label>
-            <label>素数 q: <input type="number" id="rsa-q" value="3" style="width: 50px;"></label>
-            <button class="rsa-btn" onclick="generateKeys()">鍵を生成</button>
-        </div>
-        <div id="rsa-key-result" style="display:none;">
-            <div class="rsa-step">n (p×q) = <span id="val-n" class="rsa-highlight"></span></div>
-            <div class="rsa-step">φ(n) ((p-1)(q-1)) = <span id="val-phi"></span></div>
-            <div class="rsa-step">e (公開鍵) = <span id="val-e" class="rsa-highlight"></span></div>
-            <div class="rsa-step">d (秘密鍵) = <span id="val-d" class="rsa-highlight"></span></div>
-            <p style="font-size:0.9em; margin-top: 10px;">
-                🔑 公開鍵: (<span id="pub-e"></span>, <span id="pub-n"></span>) <br>
-                🗝 秘密鍵: (<span id="priv-d"></span>, <span id="priv-n"></span>)
-            </p>
-        </div>
-        <div id="rsa-error" style="color:red !important; display:none;"></div>
+  
+  <div class="cp-section">
+    <div class="cp-sec-title">SEQUENCE_01: KEY_GENERATION [鍵生成]</div>
+    
+    <div class="cp-input-group">
+      <div class="cp-field">
+        <label class="cp-label">PRIME_P [素数P]</label>
+        <input type="number" id="rsa-p" class="cp-input" value="11">
+      </div>
+      <div class="cp-field">
+        <label class="cp-label">PRIME_Q [素数Q]</label>
+        <input type="number" id="rsa-q" class="cp-input" value="3">
+      </div>
+      <button class="cp-btn" onclick="generateKeys()">INITIALIZE</button>
     </div>
 
-    <div class="rsa-box" id="rsa-calc-box" style="display:none; opacity: 0.5; pointer-events: none;">
-        <h4>2. 暗号化 & 復号 (Test)</h4>
-        <div class="rsa-input-group">
-            <label>数値 (Message): <input type="number" id="rsa-msg" value="9" style="width: 60px;"></label>
-            <button class="rsa-btn" onclick="runEncryption()">実行</button>
-        </div>
-        <div id="rsa-calc-result" style="display:none;">
-            <div class="rsa-step">暗号化: <span id="msg-m"></span>^<span id="msg-e"></span> mod <span id="msg-n"></span> = <span id="res-c" class="rsa-highlight"></span> (暗号文)</div>
-            <div class="rsa-step">復号化: <span id="res-c2"></span>^<span id="msg-d"></span> mod <span id="msg-n2"></span> = <span id="res-m" class="rsa-highlight"></span> (元の値)</div>
-        </div>
+    <div id="rsa-error" class="cp-error">>> ERROR: INPUT_INVALID</div>
+
+    <div id="rsa-key-result" class="cp-result-box">
+      <div class="cp-step">
+        <span class="cp-var">n (p×q) =</span>
+        <span id="val-n" class="cp-highlight"></span>
+      </div>
+      <div class="cp-step">
+        <span class="cp-var">φ(n) =</span>
+        <span id="val-phi" class="cp-val"></span>
+      </div>
+      <div class="cp-step">
+        <span class="cp-var">e (Public) =</span>
+        <span id="val-e" class="cp-highlight"></span>
+      </div>
+      <div class="cp-step">
+        <span class="cp-var">d (Private) =</span>
+        <span id="val-d" class="cp-highlight"></span>
+      </div>
+      
+      <div class="cp-key-display">
+        <div>🔑 PUBLIC_KEY: (<span id="pub-e" class="cp-val"></span>, <span id="pub-n" class="cp-val"></span>)</div>
+        <div style="margin-top:4px">🗝 PRIVATE_KEY: (<span id="priv-d" class="cp-val"></span>, <span id="priv-n" class="cp-val"></span>)</div>
+      </div>
     </div>
+  </div>
+
+  
+  <div id="rsa-calc-box" class="cp-section" style="opacity: 0.5; pointer-events: none;">
+    <div class="cp-sec-title">SEQUENCE_02: TRANSMISSION_TEST [暗号化]</div>
+    
+    <div class="cp-input-group">
+      <div class="cp-field">
+        <label class="cp-label">MESSAGE_INT [数値]</label>
+        <input type="number" id="rsa-msg" class="cp-input" value="9">
+      </div>
+      <button class="cp-btn" onclick="runEncryption()">EXECUTE</button>
+    </div>
+
+    <div id="rsa-calc-result" class="cp-result-box">
+      <div class="cp-step">
+        <span class="cp-var">ENCRYPT:</span>
+        <span class="cp-math">
+          <span id="msg-m" class="cp-val"></span>^<span id="msg-e"></span> mod <span id="msg-n"></span> = 
+          <span id="res-c" class="cp-highlight"></span>
+        </span>
+      </div>
+      <div class="cp-step">
+        <span class="cp-var">DECRYPT:</span>
+        <span class="cp-math">
+          <span id="res-c2" class="cp-val"></span>^<span id="msg-d"></span> mod <span id="msg-n2"></span> = 
+          <span id="res-m" class="cp-highlight"></span>
+        </span>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
+  function modInverse(a, m) {
+    let m0 = m, y = 0, x = 1;
+    if (m == 1) return 0;
+    while (a > 1) {
+      let q = Math.floor(a / m);
+      let t = m;
+      m = a % m, a = t;
+      t = y;
+      y = x - q * y;
+      x = t;
+    }
+    if (x < 0) x += m0;
+    return x;
+  }
+
+  function gcd(a, b) {
+    if (!b) return a;
+    return gcd(b, a % b);
+  }
+
+  function powerMod(base, exp, mod) {
+    let res = 1n;
+    base = BigInt(base) % BigInt(mod);
+    exp = BigInt(exp);
+    mod = BigInt(mod);
     
-    function modInverse(a, m) {
-        let m0 = m, y = 0, x = 1;
-        if (m == 1) return 0;
-        while (a > 1) {
-            let q = Math.floor(a / m);
-            let t = m;
-            m = a % m, a = t;
-            t = y;
-            y = x - q * y;
-            x = t;
-        }
-        if (x < 0) x += m0;
-        return x;
+    while (exp > 0n) {
+      if (exp % 2n === 1n) res = (res * base) % mod;
+      base = (base * base) % mod;
+      exp /= 2n;
     }
+    return Number(res);
+  }
 
+  let keys = {};
+
+  function generateKeys() {
+    const p = parseInt(document.getElementById('rsa-p').value);
+    const q = parseInt(document.getElementById('rsa-q').value);
+    const err = document.getElementById('rsa-error');
+    const resBox = document.getElementById('rsa-key-result');
+    const calcBox = document.getElementById('rsa-calc-box');
+
+    err.style.display = 'none';
+    resBox.style.display = 'none';
     
-    function gcd(a, b) {
-        if (!b) return a;
-        return gcd(b, a % b);
+    if (isNaN(p) || isNaN(q)) return;
+    if (p === q) {
+      err.textContent = ">> ERROR: P AND Q MUST BE DISTINCT";
+      err.style.display = 'block';
+      return;
     }
 
+    const n = p * q;
+    const phi = (p - 1) * (q - 1);
     
-    function powerMod(base, exp, mod) {
-        let res = 1n;
-        base = BigInt(base) % BigInt(mod);
-        exp = BigInt(exp);
-        mod = BigInt(mod);
-        
-        while (exp > 0n) {
-            if (exp % 2n === 1n) res = (res * base) % mod;
-            base = (base * base) % mod;
-            exp /= 2n;
-        }
-        return Number(res);
+    let e = 3;
+    while (e < phi) {
+      if (gcd(e, phi) === 1) break;
+      e += 2;
     }
 
-    let keys = {};
+    const d = modInverse(e, phi);
 
-    function generateKeys() {
-        const p = parseInt(document.getElementById('rsa-p').value);
-        const q = parseInt(document.getElementById('rsa-q').value);
-        const err = document.getElementById('rsa-error');
-        const resBox = document.getElementById('rsa-key-result');
-        const calcBox = document.getElementById('rsa-calc-box');
+    keys = { n, phi, e, d };
+    
+    document.getElementById('val-n').textContent = n;
+    document.getElementById('val-phi').textContent = phi;
+    document.getElementById('val-e').textContent = e;
+    document.getElementById('val-d').textContent = d;
+    
+    document.getElementById('pub-e').textContent = e;
+    document.getElementById('pub-n').textContent = n;
+    document.getElementById('priv-d').textContent = d;
+    document.getElementById('priv-n').textContent = n;
 
-        err.style.display = 'none';
-        resBox.style.display = 'none';
-        
-        
-        if (p === q) {
-            err.textContent = "pとqは異なる数にしてください";
-            err.style.display = 'block';
-            return;
-        }
+    resBox.style.display = 'block';
+    calcBox.style.opacity = '1';
+    calcBox.style.pointerEvents = 'auto';
+  }
 
-        const n = p * q;
-        const phi = (p - 1) * (q - 1);
-        
-        
-        let e = 3;
-        while (e < phi) {
-            if (gcd(e, phi) === 1) break;
-            e += 2;
-        }
-
-        const d = modInverse(e, phi);
-
-        
-        keys = { n, phi, e, d };
-        
-        document.getElementById('val-n').textContent = n;
-        document.getElementById('val-phi').textContent = phi;
-        document.getElementById('val-e').textContent = e;
-        document.getElementById('val-d').textContent = d;
-        
-        document.getElementById('pub-e').textContent = e;
-        document.getElementById('pub-n').textContent = n;
-        document.getElementById('priv-d').textContent = d;
-        document.getElementById('priv-n').textContent = n;
-
-        resBox.style.display = 'block';
-        calcBox.style.display = 'block';
-        calcBox.style.opacity = '1';
-        calcBox.style.pointerEvents = 'auto';
+  function runEncryption() {
+    const m = parseInt(document.getElementById('rsa-msg').value);
+    
+    if (m >= keys.n) {
+      alert(`>> ERROR: MESSAGE MUST BE < N (${keys.n})`);
+      return;
     }
 
-    function runEncryption() {
-        const m = parseInt(document.getElementById('rsa-msg').value);
-        
-        if (m >= keys.n) {
-            alert("メッセージは n (" + keys.n + ") より小さい数にしてください");
-            return;
-        }
+    const c = powerMod(m, keys.e, keys.n);
+    const decrypted = powerMod(c, keys.d, keys.n);
 
-        const c = powerMod(m, keys.e, keys.n);
-        const decrypted = powerMod(c, keys.d, keys.n);
+    const resBox = document.getElementById('rsa-calc-result');
+    resBox.style.display = 'block';
+    
+    document.getElementById('msg-m').textContent = m;
+    document.getElementById('msg-e').textContent = keys.e;
+    document.getElementById('msg-n').textContent = keys.n;
+    document.getElementById('res-c').textContent = c;
 
-        document.getElementById('rsa-calc-result').style.display = 'block';
-        
-        document.getElementById('msg-m').textContent = m;
-        document.getElementById('msg-e').textContent = keys.e;
-        document.getElementById('msg-n').textContent = keys.n;
-        document.getElementById('res-c').textContent = c;
-
-        document.getElementById('res-c2').textContent = c;
-        document.getElementById('msg-d').textContent = keys.d;
-        document.getElementById('msg-n2').textContent = keys.n;
-        document.getElementById('res-m').textContent = decrypted;
-    }
+    document.getElementById('res-c2').textContent = c;
+    document.getElementById('msg-d').textContent = keys.d;
+    document.getElementById('msg-n2').textContent = keys.n;
+    document.getElementById('res-m').textContent = decrypted;
+  }
 </script>
 <hr>
 
@@ -1208,198 +1384,404 @@
     </span>
     
 </h2>
-<p>シーザー暗号（古典）と、バイナリ/Hex（基数変換）のツール.<br>
+<p>シーザー暗号（古典）と，バイナリ/Hex（基数変換）のツール.<br>
 タブで切り替えて使用できる.</p>
+
+
+
 <style>
-    .cipher-container {
-        background-color: #ffffff !important;
-        color: #333333 !important;
-        border: 1px solid #ccc;
-        padding: 20px;
-        border-radius: 8px;
-        margin-top: 20px;
-        font-family: 'Segoe UI', sans-serif;
-    }
-    .cipher-tab {
-        display: flex;
-        border-bottom: 1px solid #ddd;
-        margin-bottom: 15px;
-    }
-    .cipher-tab button {
-        background: none;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        font-weight: bold;
-        color: #666;
-        border-bottom: 2px solid transparent;
-    }
-    .cipher-tab button.active {
-        color: #007bff;
-        border-bottom: 2px solid #007bff;
-    }
-    .cipher-content {
-        display: none;
-    }
-    .cipher-content.active {
-        display: block;
-    }
-    .input-area {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-family: monospace;
-        margin-bottom: 10px;
-    }
-    .slider-container {
-        margin: 15px 0;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+   
+  .cp-cipher-container {
+    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
+    max-width: 800px;
+    margin: 2rem auto;
+    background-color: #09090b;
+    background-image: 
+      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
+    background-size: 20px 20px;
+    padding: 2rem;
+    border: 1px solid #333;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;  
+    color: #e2e8f0;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+  .cp-cipher-container * { box-sizing: border-box; }
+
+   
+  .cp-cipher-container p,
+  .cp-cipher-container span,
+  .cp-cipher-container label,
+  .cp-cipher-container div,
+  .cp-cipher-container h2,
+  .cp-cipher-container h3,
+  .cp-cipher-container button,
+  .cp-cipher-container a {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    background-image: none !important;  
+    box-shadow: none !important;        
+    color: inherit;  
+  }
+
+   
+  .cp-cipher-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #d946ef, #8b5cf6, #d946ef);
+    background-size: 200% 100%;
+    animation: scanline 4s linear infinite;
+    pointer-events: none;
+    z-index: 10;
+  }
+  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+   
+  .cp-header {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #333 !important;  
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cp-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #d946ef !important;
+    text-shadow: 0 0 8px rgba(217, 70, 239, 0.4);
+    letter-spacing: 0.1em;
+  }
+  .cp-subtitle {
+    font-size: 0.7rem;
+    color: #64748b !important;
+  }
+
+   
+  .cp-tabs {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 1.5rem;
+    background: #18181b;
+    border: 1px solid #333 !important;
+    padding: 4px;
+  }
+  .cp-tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none !important;
+    color: #64748b !important;
+    padding: 10px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+  .cp-tab-btn:hover { color: #e2e8f0 !important; background: rgba(255,255,255,0.05) !important; }
+  .cp-tab-btn.active {
+    background: #09090b !important;
+    color: #22d3ee !important;
+    box-shadow: inset 0 0 10px rgba(34, 211, 238, 0.1) !important;  
+    border: 1px solid #333 !important;
+    text-shadow: 0 0 5px rgba(34, 211, 238, 0.3);
+  }
+
+   
+  .cp-content { display: none; animation: fadeIn 0.3s ease; }
+  .cp-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  .cp-desc {
+    color: #64748b !important;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    border-left: 2px solid #333 !important;
+    padding-left: 10px;
+  }
+
+   
+  .cp-label {
+    display: block;
+    color: #22d3ee !important;
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+  }
+  .cp-textarea {
+    width: 100%;
+    background: #000 !important;
+    border: 1px solid #444 !important;
+    color: #e2e8f0 !important;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    border-radius: 2px;
+    resize: vertical;
+    transition: all 0.2s;
+    box-shadow: none !important;
+  }
+  .cp-textarea:focus {
+    outline: none;
+    border-color: #d946ef !important;
+    box-shadow: 0 0 10px rgba(217, 70, 239, 0.2) !important;
+  }
+
+   
+  .cp-slider-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 1.5rem 0;
+    background: rgba(255,255,255,0.03) !important;
+    padding: 10px;
+    border: 1px solid #333 !important;
+  }
+  .cp-range {
+    flex: 1;
+    height: 4px;
+    background: #333 !important;
+    appearance: none;
+    border-radius: 2px;
+    border: none !important;
+  }
+  .cp-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px; height: 16px;
+    background: #d946ef;
+    border-radius: 0;
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(217, 70, 239, 0.5) !important;
+    border: 1px solid #fff !important;
+  }
+  .cp-val-display {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #d946ef !important;
+    width: 40px;
+    text-align: center;
+  }
+  .cp-action-btn {
+    background: transparent !important;
+    border: 1px solid #d946ef !important;
+    color: #d946ef !important;
+    padding: 5px 12px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .cp-action-btn:hover {
+    background: #d946ef !important;
+    color: #000 !important;
+    box-shadow: 0 0 10px rgba(217, 70, 239, 0.4) !important;
+  }
+
+   
+  .cp-result-box {
+    background: #0e0e11 !important;
+    border: 1px solid #333 !important;
+    padding: 1rem;
+    position: relative;
+    min-height: 3rem;
+    margin-top: 1rem;
+  }
+  .cp-result-label {
+    position: absolute;
+    top: -10px; left: 10px;
+    background: #09090b !important;
+    padding: 0 5px;
+    color: #10b981 !important;  
+    font-size: 0.7rem;
+    font-weight: bold;
+  }
+  .cp-result-content {
+    color: #10b981 !important;
+    word-break: break-all;
+    line-height: 1.4;
+    font-family: monospace;
+  }
+
+   
+  .cp-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
 </style>
 
-<div class="cipher-container">
-    <div class="cipher-tab">
-        <button class="active" onclick="showTab('caesar')">🏛 Caesar Cipher</button>
-        <button onclick="showTab('base')">💻 Base Converter</button>
+<div class="cp-cipher-container">
+  <div class="cp-header">
+    <div class="cp-title">ENCRYPTION_MODULE</div>
+    <div class="cp-subtitle">暗号化・データ変換</div>
+  </div>
+
+  <div class="cp-tabs">
+    <button class="cp-tab-btn active" onclick="showTab('caesar')">CAESAR_CIPHER</button>
+    <button class="cp-tab-btn" onclick="showTab('base')">BASE_CONVERTER</button>
+  </div>
+
+  
+  <div id="tab-caesar" class="cp-content active">
+    <div class="cp-desc">
+      >> シーザー暗号: 指定したキー（数）だけアルファベットをずらして置換します。<br>
+      (例: A + 1 = B)
+    </div>
+    
+    <label class="cp-label">INPUT_TEXT [平文]</label>
+    <textarea id="caesar-input" class="cp-textarea" rows="3" placeholder="HELLO WORLD"></textarea>
+    
+    <div class="cp-slider-group">
+      <label class="cp-label" style="margin:0; min-width:80px;">SHIFT_KEY</label>
+      <input type="range" id="caesar-shift" class="cp-range" min="0" max="25" value="13" oninput="updateCaesar()">
+      <span id="shift-val" class="cp-val-display">13</span>
+      <button onclick="setRot13()" class="cp-action-btn">ROT13</button>
     </div>
 
-    <div id="tab-caesar" class="cipher-content active">
-        <p>指定した数だけ文字をずらす (A → C など).</p>
-        
-        <textarea id="caesar-input" class="input-area" rows="3" placeholder="ここに文字を入力 (例: Hello World)"></textarea>
-        
-        <div class="slider-container">
-            <label>Shift Key:</label>
-            <input type="range" id="caesar-shift" min="0" max="25" value="13" oninput="updateCaesar()">
-            <span id="shift-val" style="font-weight:bold; width: 30px;">13</span>
-            <button onclick="setRot13()" style="padding:4px 8px; cursor:pointer;">ROT13</button>
-        </div>
-
-        <div style="background:#f0f0f0; padding:10px; border-radius:4px;">
-            <strong>Result:</strong>
-            <div id="caesar-output" style="font-family:monospace; margin-top:5px; word-break:break-all;"></div>
-        </div>
+    <div class="cp-result-box">
+      <span class="cp-result-label">OUTPUT_RESULT [暗号文]</span>
+      <div id="caesar-output" class="cp-result-content">URYYB JBEYQ</div>
     </div>
+  </div>
 
-    <div id="tab-base" class="cipher-content">
-        <p>テキスト、16進数、2進数を相互変換します。</p>
-        
-        <label>Text (ASCII/UTF-8)</label>
-        <textarea id="base-text" class="input-area" rows="2" placeholder="Hello"></textarea>
-
-        <label>Hex (16進数)</label>
-        <textarea id="base-hex" class="input-area" rows="2" placeholder="48 65 6c 6c 6f"></textarea>
-
-        <label>Binary (2進数)</label>
-        <textarea id="base-bin" class="input-area" rows="2" placeholder="01001000 ..."></textarea>
+  
+  <div id="tab-base" class="cp-content">
+    <div class="cp-desc">
+      >> データ変換: テキスト、16進数(Hex)、2進数(Binary)を相互にリアルタイム変換します。
     </div>
+    
+    <div class="cp-grid">
+      <div>
+        <label class="cp-label">TEXT [ASCII/UTF-8]</label>
+        <textarea id="base-text" class="cp-textarea" rows="2" placeholder="Hello"></textarea>
+      </div>
+
+      <div>
+        <label class="cp-label">HEX [16進数]</label>
+        <textarea id="base-hex" class="cp-textarea" rows="2" placeholder="48 65 6c 6c 6f"></textarea>
+      </div>
+
+      <div>
+        <label class="cp-label">BINARY [2進数]</label>
+        <textarea id="base-bin" class="cp-textarea" rows="2" placeholder="01001000 ..."></textarea>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-     
-    function showTab(name) {
-        document.querySelectorAll('.cipher-content').forEach(d => d.classList.remove('active'));
-        document.querySelectorAll('.cipher-tab button').forEach(b => b.classList.remove('active'));
-        document.getElementById('tab-' + name).classList.add('active');
-        event.target.classList.add('active');
-    }
+   
+  function showTab(name) {
+    document.querySelectorAll('.cp-content').forEach(d => d.classList.remove('active'));
+    document.querySelectorAll('.cp-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
 
-     
-    const cInput = document.getElementById('caesar-input');
-    const cShift = document.getElementById('caesar-shift');
-    const cVal = document.getElementById('shift-val');
-    const cOutput = document.getElementById('caesar-output');
+   
+  const cInput = document.getElementById('caesar-input');
+  const cShift = document.getElementById('caesar-shift');
+  const cVal = document.getElementById('shift-val');
+  const cOutput = document.getElementById('caesar-output');
 
-    function updateCaesar() {
-        const text = cInput.value;
-        const shift = parseInt(cShift.value);
-        cVal.textContent = shift;
+  function updateCaesar() {
+    const text = cInput.value;
+    const shift = parseInt(cShift.value);
+    cVal.textContent = shift;
 
-        let result = "";
-        for (let i = 0; i < text.length; i++) {
-            let char = text[i];
-            if (char.match(/[a-z]/i)) {
-                const code = text.charCodeAt(i);
-                
-                if (code >= 65 && code <= 90) {
-                    char = String.fromCharCode(((code - 65 + shift) % 26) + 65);
-                } else if (code >= 97 && code <= 122) {
-                    char = String.fromCharCode(((code - 97 + shift) % 26) + 97);
-                }
-            }
-            result += char;
+    let result = "";
+    for (let i = 0; i < text.length; i++) {
+      let char = text[i];
+      if (char.match(/[a-z]/i)) {
+        const code = text.charCodeAt(i);
+        
+        if (code >= 65 && code <= 90) {
+          char = String.fromCharCode(((code - 65 + shift) % 26) + 65);
+        } else if (code >= 97 && code <= 122) {
+          char = String.fromCharCode(((code - 97 + shift) % 26) + 97);
         }
-        cOutput.textContent = result;
+      }
+      result += char;
     }
+    cOutput.textContent = result;
+  }
 
-    function setRot13() {
-        cShift.value = 13;
-        updateCaesar();
-    }
-
-    cInput.addEventListener('input', updateCaesar);
-    
+  function setRot13() {
+    cShift.value = 13;
     updateCaesar();
+  }
+
+  cInput.addEventListener('input', updateCaesar);
+  
+  if(cInput.value === "") cInput.value = "HELLO WORLD";
+  updateCaesar();
 
 
-     
-    const bText = document.getElementById('base-text');
-    const bHex = document.getElementById('base-hex');
-    const bBin = document.getElementById('base-bin');
+   
+  const bText = document.getElementById('base-text');
+  const bHex = document.getElementById('base-hex');
+  const bBin = document.getElementById('base-bin');
 
-    function textToHex(str) {
-        let hex = '';
-        for(let i=0;i<str.length;i++) {
-            hex += ''+str.charCodeAt(i).toString(16).padStart(2, '0') + ' ';
-        }
-        return hex.trim();
+  function textToHex(str) {
+    let hex = '';
+    for(let i=0;i<str.length;i++) {
+      hex += ''+str.charCodeAt(i).toString(16).padStart(2, '0') + ' ';
     }
-    function textToBin(str) {
-        let bin = '';
-        for(let i=0;i<str.length;i++) {
-            bin += ''+str.charCodeAt(i).toString(2).padStart(8, '0') + ' ';
-        }
-        return bin.trim();
+    return hex.trim();
+  }
+  function textToBin(str) {
+    let bin = '';
+    for(let i=0;i<str.length;i++) {
+      bin += ''+str.charCodeAt(i).toString(2).padStart(8, '0') + ' ';
     }
+    return bin.trim();
+  }
 
-    
-    bText.addEventListener('input', () => {
-        const val = bText.value;
-        bHex.value = textToHex(val);
-        bBin.value = textToBin(val);
-    });
+  
+  bText.addEventListener('input', () => {
+    const val = bText.value;
+    bHex.value = textToHex(val);
+    bBin.value = textToBin(val);
+  });
 
-    
-    bHex.addEventListener('input', () => {
-        const val = bHex.value.replace(/\s+/g, '');
-        let str = '';
-        let bin = '';
-        if (val.match(/^[0-9a-fA-F]*$/)) {
-            for (let i = 0; i < val.length; i += 2) {
-                const code = parseInt(val.substr(i, 2), 16);
-                if (!isNaN(code)) str += String.fromCharCode(code);
-            }
-            bText.value = str;
-            bBin.value = textToBin(str);
-        }
-    });
+  
+  bHex.addEventListener('input', () => {
+    const val = bHex.value.replace(/\s+/g, '');
+    let str = '';
+    let bin = '';
+    if (val.match(/^[0-9a-fA-F]*$/)) {
+      for (let i = 0; i < val.length; i += 2) {
+        const code = parseInt(val.substr(i, 2), 16);
+        if (!isNaN(code)) str += String.fromCharCode(code);
+      }
+      bText.value = str;
+      bBin.value = textToBin(str);
+    }
+  });
 
-    
-    bBin.addEventListener('input', () => {
-        const val = bBin.value.replace(/\s+/g, '');
-        let str = '';
-        if (val.match(/^[01]*$/)) {
-            for (let i = 0; i < val.length; i += 8) {
-                const code = parseInt(val.substr(i, 8), 2);
-                if (!isNaN(code)) str += String.fromCharCode(code);
-            }
-            bText.value = str;
-            bHex.value = textToHex(str);
-        }
-    });
+  
+  bBin.addEventListener('input', () => {
+    const val = bBin.value.replace(/\s+/g, '');
+    let str = '';
+    if (val.match(/^[01]*$/)) {
+      for (let i = 0; i < val.length; i += 8) {
+        const code = parseInt(val.substr(i, 8), 2);
+        if (!isNaN(code)) str += String.fromCharCode(code);
+      }
+      bText.value = str;
+      bHex.value = textToHex(str);
+    }
+  });
 </script>
 
           
@@ -1464,7 +1846,7 @@
         
         class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
         <h2>
-          Attendance Guardian
+          Attendance Monitor
           
         </h2>
       </a>
@@ -1512,7 +1894,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>44 words</span>
+      <span>43 words</span>
     
 
     
@@ -1928,7 +2310,7 @@
               class="flex text-right text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
               href="/lab/attendance/">
               <span class="leading-6">
-                Attendance Guardian&ensp;<span class="inline-block rtl:rotate-180">&rarr;</span>
+                Attendance Monitor&ensp;<span class="inline-block rtl:rotate-180">&rarr;</span>
               </span>
             </a>
             
