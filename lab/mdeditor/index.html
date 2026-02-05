@@ -225,7 +225,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "16"
+    "wordCount": "25"
   }]
   </script>
 
@@ -761,9 +761,8 @@
   html body .ne-container {
     font-family: "JetBrains Mono", monospace;
     width: 100%;
-     
-    height: 85vh; 
-    min-height: 600px;
+    height: 90vh; 
+    min-height: 700px;
     background-color: #09090b;
     border: 1px solid #333;
     display: flex;
@@ -779,7 +778,8 @@
   html body .ne-container p, 
   html body .ne-container div, 
   html body .ne-container span, 
-  html body .ne-container button {
+  html body .ne-container button,
+  html body .ne-container select {
     text-decoration: none !important;
     border-bottom: none !important;
     background-image: none !important;
@@ -789,44 +789,59 @@
 
    
   .ne-header {
-    height: 50px;
+    height: auto;
+    min-height: 50px;
     background: #18181b;
     border-bottom: 1px solid #333 !important;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem;
+    padding: 0.5rem 1rem;
+    gap: 10px;
     flex-shrink: 0;
+  }
+
+  .ne-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
   }
 
   .ne-title {
     font-weight: bold;
     color: #22d3ee;  
     letter-spacing: 0.1em;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .ne-status {
-    font-size: 0.75rem;
-    color: #64748b;
   }
 
-  .ne-actions {
+   
+  .ne-toolbar {
     display: flex;
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .ne-separator {
+    width: 1px;
+    height: 20px;
+    background: #444;
+    margin: 0 4px;
   }
 
   html body .ne-container button.ne-btn {
     background: transparent !important;
-    border: 1px solid #444 !important;  
+    border: 1px solid #444 !important;
     color: #a1a1aa !important;
-    padding: 4px 12px;
-    font-family: inherit;
+    padding: 4px 10px;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.75rem;
     cursor: pointer;
     transition: all 0.2s;
     box-shadow: none !important;
+    border-radius: 2px;
+    height: 28px;
+    white-space: nowrap;
   }
   html body .ne-container button.ne-btn:hover {
     border-color: #22d3ee !important;
@@ -836,6 +851,7 @@
   html body .ne-container button.ne-btn-primary {
     border-color: #22d3ee !important;
     color: #22d3ee !important;
+    font-weight: bold;
   }
   html body .ne-container button.ne-btn-danger {
     border-color: #ef4444 !important;
@@ -843,6 +859,24 @@
   }
   html body .ne-container button.ne-btn-danger:hover {
     background: rgba(239, 68, 68, 0.1) !important;
+  }
+
+   
+  html body .ne-container select.ne-select {
+    background: #000 !important;
+    border: 1px solid #444 !important;
+    color: #22d3ee !important;
+    padding: 0 8px;
+    font-family: inherit;
+    font-size: 0.75rem;
+    height: 28px;
+    border-radius: 2px;
+    cursor: pointer;
+    box-shadow: none !important;
+  }
+  html body .ne-container select.ne-select:focus {
+    outline: none;
+    border-color: #22d3ee !important;
   }
 
    
@@ -859,6 +893,7 @@
     display: flex;
     flex-direction: column;
     background: #0c0c0e;
+    position: relative;
   }
   
   html body .ne-container textarea.ne-textarea {
@@ -883,28 +918,41 @@
    
   .ne-preview-pane {
     flex: 1;
-    background: #ffffff !important;  
+    background-color: #ffffff !important;
     color: #000000 !important;
     overflow-y: auto;
     padding: 2rem 3rem;
     font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
     line-height: 1.7;
+
+     
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent calc(297mm - 2px),
+      rgba(255, 0, 0, 0.4) calc(297mm - 2px),
+      rgba(255, 0, 0, 0.4) 297mm
+    ) !important;
+    
+    background-attachment: local !important;
+    background-repeat: repeat-y !important;
   }
 
    
-  .ne-preview-content h1 { font-size: 2em; border-bottom: 2px solid #000 !important; padding-bottom: 0.5rem; margin-bottom: 1.5rem; color: #000 !important; }
-  .ne-preview-content h2 { font-size: 1.5em; border-left: 5px solid #000 !important; padding-left: 10px; margin-top: 2rem; margin-bottom: 1rem; color: #000 !important; }
+  .ne-preview-content h1 { font-size: 2em; border-bottom: 2px solid #000 !important; padding-bottom: 0.5rem; margin-bottom: 1.5rem; color: #000 !important; line-height: 1.3; }
+  .ne-preview-content h2 { font-size: 1.5em; border-left: 5px solid #000 !important; padding-left: 10px; margin-top: 2rem; margin-bottom: 1rem; color: #000 !important; line-height: 1.3; }
   .ne-preview-content h3 { font-size: 1.2em; font-weight: bold; margin-top: 1.5rem; color: #000 !important; }
   .ne-preview-content p { margin-bottom: 1em; text-align: justify; color: #000 !important; }
   .ne-preview-content ul, .ne-preview-content ol { margin-bottom: 1em; padding-left: 2em; color: #000 !important; }
   .ne-preview-content li { margin-bottom: 0.5em; color: #000 !important; }
-  .ne-preview-content pre { background: #f4f4f5 !important; padding: 1em; border-radius: 4px; overflow-x: auto; margin-bottom: 1em; color: #333 !important; }
+  .ne-preview-content pre { background: #f4f4f5 !important; padding: 1em; border-radius: 4px; overflow-x: auto; margin-bottom: 1em; color: #333 !important; border: 1px solid #ddd; }
   .ne-preview-content code { font-family: "JetBrains Mono", monospace; background: #f4f4f5 !important; padding: 0.2em 0.4em; border-radius: 3px; font-size: 0.9em; color: #d63384 !important; }
-  .ne-preview-content blockquote { border-left: 4px solid #ccc !important; padding-left: 1em; color: #555 !important; margin: 1em 0; }
+  .ne-preview-content blockquote { border-left: 4px solid #ccc !important; padding-left: 1em; color: #555 !important; margin: 1em 0; background: #fafafa; }
   .ne-preview-content table { border-collapse: collapse; width: 100%; margin-bottom: 1.5em; color: #000 !important; }
   .ne-preview-content th, .ne-preview-content td { border: 1px solid #ddd !important; padding: 8px; text-align: left; }
   .ne-preview-content th { background: #f9fafb !important; font-weight: bold; }
-  .ne-preview-content img { max-width: 100%; height: auto; display: block; margin: 1em auto; }
+  .ne-preview-content img { max-width: 100%; height: auto; display: block; margin: 1em auto; border: 1px solid #eee; }
+  .ne-preview-content hr { border: none; border-top: 2px solid #000; margin: 2rem 0; }
 
    
   .ne-footer {
@@ -919,14 +967,31 @@
     color: #64748b;
     flex-shrink: 0;
   }
+  
+  .ne-toast {
+    position: absolute;
+    bottom: 40px;
+    right: 20px;
+    background: #10b981;
+    color: #000;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .ne-toast.show { opacity: 1; }
 
    
   @media (max-width: 768px) {
-    .ne-container { height: 90vh; }
+    html body .ne-container { height: 90vh; }
     .ne-workspace { flex-direction: column; }
     .ne-input-pane { border-right: none !important; border-bottom: 1px solid #333 !important; flex: 1; }
     .ne-preview-pane { flex: 1; padding: 1rem; }
-    .ne-btn span { display: none; }  
+    .ne-header { gap: 10px; justify-content: flex-start; overflow-x: auto; }
+    .ne-toolbar { flex-wrap: nowrap; }
   }
 
    
@@ -942,6 +1007,7 @@
       padding: 0;
       margin: 0;
       background: white !important;
+      background-image: none !important;  
       color: black !important;
     }
   }
@@ -949,23 +1015,43 @@
 
 <div class="ne-container">
   <div class="ne-header">
-    <div class="ne-title">
-      <span>NEURAL_EDITOR</span>
+    <div class="ne-brand">
+      <div class="ne-title">NEURAL_EDITOR</div>
+      <select id="ne-template" class="ne-select" onchange="loadTemplate(this.value)">
+        <option value="">+ TEMPLATES</option>
+        <option value="report">実験レポート</option>
+        <option value="paper">論文・論文要旨</option>
+        <option value="memo">技術メモ</option>
+      </select>
     </div>
-    <div class="ne-actions">
-      <button class="ne-btn" onclick="insertText('**', '**')">B</button>
-      <button class="ne-btn" onclick="insertText('*', '*')">I</button>
-      <button class="ne-btn" onclick="insertText('# ', '')">H1</button>
+    
+    <div class="ne-toolbar">
+      
+      <button class="ne-btn" onclick="insertText('**', '**')" title="Bold (Ctrl+B)">B</button>
+      <button class="ne-btn" onclick="insertText('*', '*')" title="Italic (Ctrl+I)">I</button>
+      <button class="ne-btn" onclick="insertText('# ', '')" title="Header">H1</button>
       <button class="ne-btn" onclick="insertText('## ', '')">H2</button>
-      <button class="ne-btn" onclick="insertText('$ ', ' $')">MATH</button>
-      <button class="ne-btn ne-btn-primary" onclick="window.print()">PRINT / PDF</button>
-      <button class="ne-btn ne-btn-danger" onclick="clearEditor()">CLEAR</button>
+      <div class="ne-separator"></div>
+      
+      
+      <button class="ne-btn" onclick="insertText('- ', '')" title="List">LIST</button>
+      <button class="ne-btn" onclick="insertText('\n```\n', '\n```\n')" title="Code Block">CODE</button>
+      <button class="ne-btn" onclick="insertTable()" title="Table">TBL</button>
+      <button class="ne-btn" onclick="insertText('$ ', ' $')" title="Inline Math">MATH</button>
+      <button class="ne-btn" onclick="insertText('\n$$ \n', '\n$$ \n')" title="Block Math">EQ</button>
+      <div class="ne-separator"></div>
+
+      
+      <button class="ne-btn ne-btn-primary" onclick="downloadFile()" title="Download .md">SAVE_MD</button>
+      <button class="ne-btn" onclick="window.print()" title="Print to PDF">PRINT</button>
+      <button class="ne-btn ne-btn-danger" onclick="clearEditor()" title="Clear All">RESET</button>
     </div>
   </div>
 
   <div class="ne-workspace">
     <div class="ne-input-pane">
-      <textarea id="ne-input" class="ne-textarea" placeholder="WRITE_SOURCE_CODE_HERE..." spellcheck="false"></textarea>
+      <textarea id="ne-input" class="ne-textarea" placeholder="// WRITE_SOURCE_CODE_HERE..." spellcheck="false"></textarea>
+      <div id="ne-toast" class="ne-toast">SAVED</div>
     </div>
     <div class="ne-preview-pane">
       <div id="ne-preview" class="ne-preview-content"></div>
@@ -984,49 +1070,80 @@
     const preview = document.getElementById('ne-preview');
     const status = document.getElementById('ne-save-status');
     const wordCount = document.getElementById('ne-word-count');
+    const toast = document.getElementById('ne-toast');
+    const templateSelect = document.getElementById('ne-template');
     const STORAGE_KEY = 'dt_neural_editor_content';
 
     
-    const DEFAULT_TEXT = `# 実験報告書
+    const TEMPLATES = {
+      report: `# 実験報告書
 
-**氏名:** **学籍番号:** **実験日:** 2026-xx-xx
-
-## 1. 目的
-ここに実験の目的を記述する。数式も使える。
-$$ E = mc^2 $$
+**科目名:** **実験日:** 202X-XX-XX
+**学籍番号:** **氏名:** ## 1. 目的
+本実験の目的は...
 
 ## 2. 原理
-Markdown記法で記述できる。
-- リスト項目1
-- リスト項目2
+理論式は以下の通りである。
+$$ E = mc^2 $$
 
-## 3. 結果
-| 項目 | 値 |
-|---|---|
-| 電圧 | 5.0 V |
-| 電流 | 0.2 A |
+## 3. 実験方法
+1. 手順1
+2. 手順2
 
-`;
+## 4. 結果
+| 項目 | 値 | 単位 |
+|:---|:---:|:---|
+| 電圧 | 5.0 | V |
+| 電流 | 0.2 | A |
+
+## 5. 考察
+結果より...
+
+## 6. 結論
+`,
+      paper: `# 研究題目
+
+**概要**
+ここに概要を記述する。
+
+## 1. 緒言
+背景について...
+
+## 2. 提案手法
+$$ f(x) = \int_{-\infty}^{\infty} e^{-x^2} dx $$
+
+## 3. 実験
+## 4. 結言
+`,
+      memo: `# 技術メモ
+**Date:** 202X-XX-XX
+
+## Todo
+- [ ] タスク1
+- [ ] タスク2
+
+## Code Snippet
+\`\`\`python
+print("Hello World")
+\`\`\`
+`
+    };
 
     
     const saved = localStorage.getItem(STORAGE_KEY);
-    input.value = saved ? saved : DEFAULT_TEXT;
+    input.value = saved ? saved : TEMPLATES.report;
 
     
     const renderMarkdown = () => {
       const text = input.value;
       
-      
-      
       let html = marked.parse(text);
       preview.innerHTML = html;
 
-      
       if (window.MathJax && window.MathJax.typesetPromise) {
         window.MathJax.typesetPromise([preview]).catch(err => console.log(err));
       }
 
-      
       const chars = text.length;
       const lines = text.split(/\r\n|\r|\n/).length;
       wordCount.innerText = `CHARS: ${chars} | LINES: ${lines}`;
@@ -1035,8 +1152,15 @@ Markdown記法で記述できる。
     
     const saveContent = () => {
       localStorage.setItem(STORAGE_KEY, input.value);
-      status.innerText = "SAVED: " + new Date().toLocaleTimeString();
+      status.innerText = "AUTOSAVE: " + new Date().toLocaleTimeString();
       setTimeout(() => { status.innerText = "ONLINE"; }, 2000);
+    };
+
+    
+    const showToast = (msg) => {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
     };
 
     
@@ -1046,7 +1170,7 @@ Markdown記法で記述できる。
       timeoutId = setTimeout(() => {
         renderMarkdown();
         saveContent();
-      }, 300); 
+      }, 300);
     });
 
     
@@ -1065,7 +1189,11 @@ Markdown記法で記述できる。
       saveContent();
     };
 
-    
+    window.insertTable = () => {
+      const tableMd = `\n| Header1 | Header2 |\n|---|---|\n| Data1 | Data2 |\n`;
+      insertText(tableMd, '');
+    };
+
     window.clearEditor = () => {
       if(confirm('ALL DATA WILL BE DELETED. PROCEED?')) {
         input.value = '';
@@ -1073,6 +1201,50 @@ Markdown記法で記述できる。
         saveContent();
       }
     };
+
+    window.loadTemplate = (type) => {
+      if (!type) return;
+      if (input.value.trim().length > 0 && !confirm('CURRENT CONTENT WILL BE REPLACED. OK?')) {
+        templateSelect.value = "";
+        return;
+      }
+      input.value = TEMPLATES[type];
+      renderMarkdown();
+      saveContent();
+      templateSelect.value = "";
+    };
+
+    window.downloadFile = () => {
+      const blob = new Blob([input.value], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'document.md';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("DOWNLOADED");
+    };
+
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === 's') {
+          e.preventDefault();
+          saveContent();
+          showToast("SAVED (CTRL+S)");
+        }
+        if (e.key === 'b') {
+          e.preventDefault();
+          insertText('**', '**');
+        }
+        if (e.key === 'i') {
+          e.preventDefault();
+          insertText('*', '*');
+        }
+      }
+    });
 
     
     renderMarkdown();
