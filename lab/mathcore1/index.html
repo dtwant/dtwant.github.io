@@ -741,7 +741,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CYBER_MATH_CORE // v2.9</title>
+    <title>CYBER_MATH_CORE // v2.11</title>
     
     
     <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
@@ -749,8 +749,15 @@
     
     <script>
     window.MathJax = {
-        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-        svg: { fontCache: 'global', scale: 1.1 },
+        tex: { 
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: { 
+            fontCache: 'global', 
+            scale: 1.0, 
+            displayAlign: 'center' 
+        },
         startup: { typeset: false }
     };
     </script>
@@ -769,7 +776,7 @@
             --neon-green: #00ff41;
             --neon-yellow: #fcee0a;
             --bg-dark: #050505;
-            --panel-bg: rgba(10, 14, 18, 0.85);
+            --panel-bg: rgba(10, 14, 18, 0.90);
         }
 
         body {
@@ -879,6 +886,15 @@
             border-color: var(--neon-green);
             box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
+         
+        .input-area {
+            font-size: 1.125rem;  
+        }
+        @media (min-width: 768px) {
+            .input-area {
+                font-size: 1.25rem;  
+            }
+        }
 
         .execute-btn {
             background: linear-gradient(90deg, transparent 0%, rgba(0, 255, 65, 0.1) 50%, transparent 100%);
@@ -914,7 +930,22 @@
 
         .math-display {
             overflow-x: auto;
+            overflow-y: hidden;
             -webkit-overflow-scrolling: touch;
+             
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 100%;
+        }
+        
+         
+        .math-display mjx-container {
+            margin: 0 auto !important;
+            text-align: center !important;
+            display: inline-flex !important;
+            justify-content: center;
         }
         
         @media (max-width: 640px) {
@@ -922,7 +953,12 @@
             .mode-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
             .mode-grid button:last-child { grid-column: span 2; }
             .cyber-panel { padding: 1rem; }
-            #math-input { font-size: 1rem; }
+            
+             
+            #result-label {
+                left: 10px !important;
+                font-size: 0.7rem !important;
+            }
         }
     </style>
 </head>
@@ -933,7 +969,7 @@
     <div class="w-full max-w-4xl relative z-10 mt-2 md:mt-8 mb-8">
         
         <div class="flex justify-between items-end mb-2 px-2 opacity-80">
-            <div class="text-[10px] md:text-xs text-cyan-500 font-mono tracking-widest">SYS.VER.2.9 // MANUAL-INTEGRATION-PATCH</div>
+            <div class="text-[10px] md:text-xs text-cyan-500 font-mono tracking-widest">SYS.VER.2.11 // UI-PATCH</div>
             <div id="kernel-status" class="text-[10px] md:text-xs text-yellow-500 font-mono flex items-center gap-2 bg-black/50 px-3 py-1 rounded border border-yellow-900/50">
                 <span class="animate-pulse">●</span> INITIALIZING KERNEL...
             </div>
@@ -966,16 +1002,19 @@
                 </div>
             </div>
 
+            
             <div class="mb-8 relative">
+                
                 <div class="input-wrapper clip-corner-top p-1 pl-4 pr-2 flex items-center bg-black">
                     <span class="text-pink-500 font-bold text-lg mr-2 font-mono animate-pulse">>></span>
+                    
                     <input type="text" id="math-input" 
-                           class="input-area w-full bg-transparent border-none text-green-400 py-3 md:py-4 focus:outline-none font-mono text-base md:text-lg placeholder-gray-700"
+                           class="input-area w-full bg-transparent border-none text-green-400 py-4 md:py-5 focus:outline-none font-mono placeholder-gray-700"
                            placeholder="\int_{0}^{\pi} \sin(x) \, dx" 
                            autocomplete="off" disabled
                            onkeydown="if(event.key === 'Enter') runSolver()">
-                    <button onclick="runSolver()" id="mobile-solve-btn" class="md:hidden text-cyan-500 p-2 border border-cyan-900 bg-cyan-900/20 rounded ml-2" disabled>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <button onclick="runSolver()" id="mobile-solve-btn" class="md:hidden text-cyan-500 p-3 border border-cyan-900 bg-cyan-900/20 rounded ml-2" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                         </svg>
                     </button>
@@ -990,14 +1029,16 @@
                 INITIALIZE COMPUTATION
             </button>
 
+            
             <div class="mb-6 relative">
-                <div class="absolute -top-3 left-0 bg-var(--bg-dark) px-2 text-xs text-cyan-500 font-bold uppercase tracking-wider bg-black/80 backdrop-blur border border-cyan-900/50 transform skew-x-12 ml-4">
+                
+                <div id="result-label" class="absolute -top-4 left-4 bg-var(--bg-dark) px-2 text-xs text-cyan-500 font-bold uppercase tracking-wider bg-black/90 backdrop-blur border border-cyan-900/50 transform skew-x-12 z-20">
                     Result Output
                 </div>
-                <div id="output-container" class="border border-gray-800 bg-black/40 p-4 md:p-8 min-h-[140px] flex items-center justify-center relative rounded-sm">
-                    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#333 1px, transparent 1px); background-size: 10px 10px;"></div>
+                <div id="output-container" class="border border-gray-800 bg-black/40 p-6 md:p-8 min-h-[160px] flex flex-col items-center justify-center relative rounded-sm w-full">
+                    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#333 1px, transparent 1px); background-size: 10px 10px; pointer-events: none;"></div>
                     
-                    <div id="math-output" class="math-display w-full text-center relative z-10 text-gray-300 text-lg md:text-2xl">
+                    <div id="math-output" class="math-display w-full text-center relative z-10 text-gray-300 text-lg md:text-2xl flex justify-center items-center">
                         <span class="text-gray-600 text-xs md:text-sm font-mono flex flex-col items-center gap-2">
                             <span>WAITING FOR INPUT STREAM...</span>
                             <span class="h-px w-20 bg-gray-800"></span>
@@ -1090,7 +1131,7 @@
                 inputEl.disabled = false;
                 solveBtn.disabled = false;
                 mobileSolveBtn.disabled = false;
-                log("SymPy Engine upgraded (Integral Fallback Added).", "success");
+                log("SymPy Engine ready.", "success");
                 
             } catch (err) {
                 console.error(err);
@@ -1285,11 +1326,10 @@ def process_math_request(mode, input_str):
                 if result.has(Integral):
                      try:
                         result_manual = integrate(expr, (x, l_val, u_val), manual=True)
-                        # Check if manual integration succeeded (didn't return Integral)
                         if not result_manual.has(Integral):
                             result = result_manual
                      except:
-                        pass # Keep original result if manual fails
+                        pass 
 
             else:
                 result = integrate(expr, x)
