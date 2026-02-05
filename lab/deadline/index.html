@@ -15,8 +15,8 @@
 
   
   
-    <title>LaTeX Editor &middot; dt&#39;s world</title>
-    <meta name="title" content="LaTeX Editor &middot; dt&#39;s world">
+    <title>Deadline Manager &middot; dt&#39;s world</title>
+    <meta name="title" content="Deadline Manager &middot; dt&#39;s world">
   
 
   
@@ -24,7 +24,7 @@
   
   
   
-  <link rel="canonical" href="https://dtwant.github.io/lab/latex/">
+  <link rel="canonical" href="https://dtwant.github.io/lab/deadline/">
   
 
   
@@ -42,16 +42,16 @@
   
 
   
-  <meta property="og:url" content="https://dtwant.github.io/lab/latex/">
+  <meta property="og:url" content="https://dtwant.github.io/lab/deadline/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="LaTeX Editor">
+  <meta property="og:title" content="Deadline Manager">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="lab">
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="LaTeX Editor">
+  <meta name="twitter:title" content="Deadline Manager">
 
   
   
@@ -206,12 +206,12 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "articleSection": "Labs",
-    "name": "LaTeX Editor",
-    "headline": "LaTeX Editor",
+    "name": "Deadline Manager",
+    "headline": "Deadline Manager",
     
     
     "inLanguage": "en",
-    "url" : "https:\/\/dtwant.github.io\/lab\/latex\/",
+    "url" : "https:\/\/dtwant.github.io\/lab\/deadline\/",
     "author" : {
       "@type": "Person",
       "name": "dt"
@@ -225,7 +225,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "57"
+    "wordCount": "46"
   }]
   </script>
 
@@ -752,7 +752,7 @@
     <img
       id="background-image"
       src="/IMG_2489_hu_5bc91c8119125056.JPG"
-      alt="LaTeX Editor"
+      alt="Deadline Manager"
       loading="eager"
       decoding="async"
       fetchpriority="high"
@@ -806,8 +806,8 @@
 
   
   <li class="hidden">
-    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/latex/"
-      >LaTeX Editor</a
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/deadline/"
+      >Deadline Manager</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -816,7 +816,7 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        LaTeX Editor
+        Deadline Manager
       </h1>
       <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
         
@@ -866,7 +866,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>57 words</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <span>46 words</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -963,265 +963,467 @@
         
 
         <div class="article-content max-w-prose mb-20">
-          
-<h2 class="relative group">LaTeX Editor
-    <div id="latex-editor" class="anchor"></div>
+          <p>提出期限と推定所要時間を入力し，締め切りまでの時間を管理する.</p>
+
+
+
+<style>
+   
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+  .dm-container {
+     
+    font-family: "JetBrains Mono", "Consolas", "Monaco", "Courier New", monospace;
+    max-width: 800px;
+    margin: 2rem auto;
+    background-color: #09090b;  
+    background-image: 
+      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
+    background-size: 20px 20px;  
+    padding: 2rem;
+    border: 1px solid #333;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    color: #e2e8f0;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .dm-container * { box-sizing: border-box; }
+
+   
+  .dm-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #06b6d4, #d946ef, #06b6d4);
+    background-size: 200% 100%;
+    animation: scanline 4s linear infinite;
+  }
+
+  @keyframes scanline {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+  }
+
+  .dm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 1rem;
+  }
+
+  .dm-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #22d3ee;  
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .dm-clock-display {
+    font-size: 0.9rem;
+    color: #d946ef;  
+    text-shadow: 0 0 5px rgba(217, 70, 239, 0.4);
+    letter-spacing: 0.05em;
+  }
+
+   
+  .dm-form { 
+    display: grid; 
+    grid-template-columns: 2fr 1.2fr 1fr 0.8fr auto; 
+    gap: 10px; 
+    margin-bottom: 2.5rem; 
+    padding: 1rem; 
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #333;
+  }
+  @media (max-width: 768px) { .dm-form { grid-template-columns: 1fr; } }
+
+  .dm-input, .dm-select {
+    width: 100%;
+    min-width: 0;
+    background: #000;
+    border: 1px solid #444;
+    color: #22d3ee;
+    padding: 0.6rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .dm-input::placeholder { color: #4b5563; }
+  
+  .dm-input:focus, .dm-select:focus {
+    outline: none;
+    border-color: #22d3ee;
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+  }
+
+  .dm-btn-add {
+    background: transparent;
+    color: #22d3ee;
+    border: 1px solid #22d3ee;
+    padding: 0 1.5rem;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    white-space: nowrap; 
+  }
+  .dm-btn-add:hover {
+    background: #22d3ee;
+    color: #000;
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.6);
+  }
+
+   
+  .dm-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  
+  .dm-task { 
+    display: grid; 
+    grid-template-columns: 1fr auto; 
+    gap: 1rem; 
+    align-items: center;
+    padding: 1rem 1.25rem; 
+    background: #0e0e11;
+    border: 1px solid #333;
+    border-left-width: 4px;  
+    position: relative;
+    transition: transform 0.2s;
+  }
+  .dm-task:hover {
+    border-color: #555;
+    transform: translateX(4px);
+  }
+
+   
+  .status-safe { border-left-color: #22c55e; }  
+  .status-safe .dm-countdown { color: #22c55e; }
+
+  .status-warn { border-left-color: #facc15; }  
+  .status-warn .dm-countdown { color: #facc15; }
+
+  .status-danger { 
+    border-left-color: #f97316;  
+    box-shadow: inset 10px 0 20px -10px rgba(249, 115, 22, 0.1);
+  } 
+  .status-danger .dm-countdown { color: #f97316; }
+
+  .status-critical { 
+    border-left-color: #ef4444;  
+    box-shadow: inset 10px 0 20px -10px rgba(239, 68, 68, 0.2);
+    animation: border-pulse 2s infinite;
+  } 
+  .status-critical .dm-countdown { 
+    color: #ef4444; 
+    text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+  }
+  
+  .status-over { border-left-color: #64748b; opacity: 0.7; }
+
+  @keyframes border-pulse {
+    0% { border-left-color: #ef4444; }
+    50% { border-left-color: #7f1d1d; }
+    100% { border-left-color: #ef4444; }
+  }
+
+   
+  .dm-info { display: flex; flex-direction: column; gap: 0.25rem; }
+  .dm-task-title { 
+    font-weight: 700; 
+    font-size: 1rem; 
+    color: #f1f5f9;
+    letter-spacing: 0.02em;
+  }
+  .dm-meta { 
+    font-size: 0.75rem; 
+    color: #94a3b8; 
+    display: flex; 
+    gap: 1rem; 
+  }
+  .dm-meta span { display: flex; align-items: center; gap: 0.3rem; }
+
+  .dm-right-col { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+  
+  .dm-time-label { 
+    font-size: 0.65rem; 
+    text-transform: uppercase; 
+    color: #64748b; 
+    letter-spacing: 1px;
+  }
+  .dm-countdown { 
+    font-size: 1.4rem; 
+    font-weight: 700; 
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+   
+  .dm-actions { display: flex; gap: 0.5rem; opacity: 0.6; transition: opacity 0.2s; }
+  .dm-task:hover .dm-actions { opacity: 1; }
+
+  .dm-btn-icon {
+    background: #18181b;
+    border: 1px solid #333;
+    color: #a1a1aa;
+    width: 2rem; height: 2rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+    border-radius: 2px;
+  }
+  .dm-btn-icon:hover {
+    border-color: #fff;
+    color: #fff;
+  }
+  .dm-btn-check:hover { border-color: #22c55e; color: #22c55e; }
+  .dm-btn-del:hover { border-color: #ef4444; color: #ef4444; }
+
+  .dm-empty { 
+    text-align: center; 
+    color: #4b5563; 
+    padding: 3rem; 
+    border: 1px dashed #333; 
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+</style>
+
+<div class="dm-container">
+  <header class="dm-header">
+    <div class="dm-title">
+      <span>_DEADLINE_SURVIVAL</span>
+    </div>
+    <div class="dm-clock-display">
+      SYSTEM_TIME: <span id="dm-clock">--:--</span>
+    </div>
+  </header>
+
+  <form id="dm-form" class="dm-form">
+    <input type="text" id="task-title" class="dm-input" placeholder="TASK_NAME" required>
+    
+    <input type="date" id="task-date" class="dm-input" required>
+    
+    <select id="task-period" class="dm-select" required>
+      <option value="1">1限 (08:50)</option>
+      <option value="2">2限 (10:30)</option>
+      <option value="3">3限 (13:00)</option>
+      <option value="4">4限 (14:40)</option>
+      <option value="end">指定なし (23:59)</option>
+    </select>
+    
+    <input type="number" id="task-est" class="dm-input" placeholder="EST(MIN)" min="10" step="10" required>
+    <button type="submit" class="dm-btn-add">ADD</button>
+  </form>
+
+  <div id="dm-list" class="dm-list">
+    
+  </div>
+</div>
+
+<script>
+  (function() {
+    const STORAGE_KEY = 'dt_deadline_v2';
+    let tasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+    const PERIOD_TIMES = {
+      1: "08:50",
+      2: "10:30",
+      3: "13:00",
+      4: "14:40",
+      "end": "23:59"
+    };
+
+    const listEl = document.getElementById('dm-list');
+    const formEl = document.getElementById('dm-form');
+    const clockEl = document.getElementById('dm-clock');
+
+    
+    const formatTime = (ms) => {
+      if (ms < 0) return "TIME_OVER";
+      
+      const d = Math.floor(ms / (1000 * 60 * 60 * 24));
+      const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+      
+      
+      const hh = String(h).padStart(2, '0');
+      const mm = String(m).padStart(2, '0');
+      
+      if (d > 0) return `${d}d ${hh}h`;
+      return `${hh}:${mm}`;
+    };
+
+    const getDeadlineDate = (dateStr, period) => {
+      const timeStr = PERIOD_TIMES[period] || "23:59";
+      return new Date(`${dateStr}T${timeStr}`);
+    };
+
+    const getStatusClass = (deadlineDate, estMinutes) => {
+      const now = new Date().getTime();
+      const dueDate = deadlineDate.getTime();
+      const estMs = estMinutes * 60 * 1000;
+      
+      const remaining = dueDate - now;
+      const margin = remaining - estMs;
+
+      if (remaining < 0) return 'status-over';
+      if (margin < 0) return 'status-critical'; 
+      if (margin < 1000 * 60 * 60 * 3) return 'status-danger';
+      if (margin < 1000 * 60 * 60 * 24) return 'status-warn';
+      return 'status-safe';
+    };
+
+    const save = () => {
+      tasks.sort((a, b) => {
+        const dateA = getDeadlineDate(a.date, a.period);
+        const dateB = getDeadlineDate(b.date, b.period);
+        return dateA - dateB;
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+      render();
+    };
+
+    const render = () => {
+      listEl.innerHTML = '';
+      if (tasks.length === 0) {
+        listEl.innerHTML = '<div class="dm-empty">NO ACTIVE TASKS DETECTED<br>// SYSTEM IDLE</div>';
+        return;
+      }
+
+      const now = new Date().getTime();
+
+      tasks.forEach(task => {
+        const deadlineDate = getDeadlineDate(task.date, task.period);
+        const statusClass = getStatusClass(deadlineDate, task.est);
+        const remaining = deadlineDate.getTime() - now;
+        
+        
+        const month = String(deadlineDate.getMonth() + 1).padStart(2, '0');
+        const day = String(deadlineDate.getDate()).padStart(2, '0');
+        const dueStr = `${month}.${day}`;
+        
+        
+        let periodDisplay = `P-${task.period}`;
+        if (task.period === "end") periodDisplay = "23:59";
+
+        const item = document.createElement('div');
+        item.className = `dm-task ${statusClass}`;
+        
+        item.innerHTML = `
+          <div class="dm-info">
+            <div class="dm-task-title">${task.title}</div>
+            <div class="dm-meta">
+              <span>[DUE] ${dueStr} / ${periodDisplay}</span>
+              <span>[EST] ${task.est}m</span>
+            </div>
+          </div>
+          <div class="dm-right-col">
+            <div>
+              <span class="dm-time-label">T-MINUS</span>
+              <div class="dm-countdown">${formatTime(remaining)}</div>
+            </div>
+            <div class="dm-actions">
+              <button class="dm-btn-icon dm-btn-check" onclick="window.dmDone(${task.id})" title="COMPLETE">✓</button>
+              <button class="dm-btn-icon dm-btn-del" onclick="window.dmDel(${task.id})" title="DELETE">×</button>
+            </div>
+          </div>
+        `;
+        listEl.appendChild(item);
+      });
+    };
+
+    window.dmDone = (id) => {
+      tasks = tasks.filter(t => t.id !== id);
+      save();
+    };
+    window.dmDel = (id) => {
+      if(confirm('CONFIRM DELETION?')) {
+        tasks = tasks.filter(t => t.id !== id);
+        save();
+      }
+    };
+
+    formEl.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('task-title').value;
+      const date = document.getElementById('task-date').value;
+      const period = document.getElementById('task-period').value;
+      const est = parseInt(document.getElementById('task-est').value);
+
+      if (title && date && period && est) {
+        tasks.push({
+          id: Date.now(),
+          title,
+          date,
+          period,
+          est
+        });
+        formEl.reset();
+        save();
+      }
+    });
+
+    setInterval(() => {
+      const now = new Date();
+      
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      clockEl.innerText = `${h}:${m}:${s}`;
+      render();
+    }, 1000); 
+
+    render();
+  })();
+</script>
+
+<h3 class="relative group">SYSTEM_GUIDE
+    <div id="system_guide" class="anchor"></div>
     
     <span
         class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#latex-editor" aria-label="Anchor">#</a>
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#system_guide" aria-label="Anchor">#</a>
     </span>
     
-</h2>
-<p>LaTeX記法で数式を入力すると、リアルタイムでプレビューされる.
+</h3>
+<ol>
+<li><strong>TASK_NAME</strong>: 課題名を入力</li>
+<li><strong>DATE / PERIOD</strong>: 提出日と時限（1〜4限）を選択</li>
+<li><strong>EST (MIN)</strong>: 完了にかかる推定時間を「分」で入力</li>
+<li><strong>ADD</strong>: タスク登録</li>
+</ol>
 
-  
-  
-  
-  
-
-
-
-<div
-  
-    class="flex px-4 py-3 rounded-md bg-primary-100 dark:bg-primary-900"
-  
-  >
-  <span
+<h4 class="relative group">STATUS_CODE
+    <div id="status_code" class="anchor"></div>
     
-      class="text-primary-400 pe-3 flex items-center"
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#status_code" aria-label="Anchor">#</a>
+    </span>
     
-    >
-    <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
-</span>
-  </span>
-
-  <span
-    
-      class="dark:text-neutral-300"
-    
-    >slide = $x$ * {128 * 59}<br>
-thumb = $x$ * {16 * 9}</span>
-</div>
-</p>
-<script>
-  MathJax = {
-    
-    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-    svg: { 
-      fontCache: 'local' 
-    }
-  };
-</script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-<div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px; background-color: #f9f9f9; margin-top: 20px;">
-  
-  <textarea id="latex-input" style="
-    width: 100%; height: 100px; padding: 10px; 
-    font-family: monospace; margin-bottom: 15px; 
-    border: 1px solid #aaa; border-radius: 4px;
-    background-color: #fff; color: #000; font-size: 16px;" 
-    placeholder="例: \sum_{n=0}^{\infty} ...">\sum_{n=0}^{\infty} x^{2n} \zeta(2+2n) = \frac{1 - \pi x \cot(\pi x)}{2x^2} \quad (|x| &lt; 1)</textarea>
-  
-  <div style="margin-bottom: 15px; background: #eee; padding: 10px; border-radius: 4px;">
-    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-      <label style="width: 100px; font-size: 14px; font-weight: bold; color: #333;">横余白 (X): <span id="val-x">30</span>px</label>
-      <input type="range" id="slider-x" min="0" max="200" value="30" style="flex-grow: 1;">
-    </div>
-    <div style="display: flex; align-items: center;">
-      <label style="width: 100px; font-size: 14px; font-weight: bold; color: #333;">縦余白 (Y): <span id="val-y">30</span>px</label>
-      <input type="range" id="slider-y" min="0" max="200" value="30" style="flex-grow: 1;">
-    </div>
-  </div>
-
-  <div style="text-align: right; margin-bottom: 10px;">
-    <button id="save-btn" style="
-      padding: 8px 20px; background-color: #333; color: #fff; 
-      border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
-      Download PNG
-    </button>
-  </div>
-
-  <div id="latex-preview-container" style="
-    padding: 10px; background-color: #e0e0e0; 
-    border: 1px dashed #aaa; min-height: 80px; 
-    display: flex; justify-content: center; align-items: center;
-    overflow: hidden;
-    position: relative;">
-    
-    <div id="latex-preview" style="
-      padding: 30px 30px; 
-      background-color: #fff; 
-      display: inline-block;
-      color: #000;
-      font-size: 1.5em;
-      transform-origin: center center;
-      transition: transform 0.2s ease;">
-      $$ \sum_{n=0}^{\infty} x^{2n} \zeta(2+2n) = \frac{1 - \pi x \cot(\pi x)}{2x^2} \quad (|x| &lt; 1) $$
-    </div>
-
-    <div id="resolution-badge" style="
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      background-color: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      font-size: 12px;
-      font-family: monospace;
-      padding: 4px 8px;
-      border-radius: 4px;
-      pointer-events: none;
-      user-select: none;
-      z-index: 10;">
-      Computing...
-    </div>
-  </div>
-</div>
-
-<script>
-  window.addEventListener('load', () => {
-    const input = document.getElementById('latex-input');
-    const preview = document.getElementById('latex-preview');
-    const container = document.getElementById('latex-preview-container');
-    const saveBtn = document.getElementById('save-btn');
-    const sliderX = document.getElementById('slider-x');
-    const sliderY = document.getElementById('slider-y');
-    const valX = document.getElementById('val-x');
-    const valY = document.getElementById('val-y');
-    const badge = document.getElementById('resolution-badge');
-
-    
-    const OUTPUT_SCALE = 3;
-
-    
-    const updateResolution = () => {
-      const svgElement = preview.querySelector('svg');
-      if (!svgElement) {
-        badge.textContent = '- x - px';
-        return;
-      }
-      
-      const rect = svgElement.getBoundingClientRect();
-      const currentScale = preview.getBoundingClientRect().width / preview.offsetWidth || 1;
-      const svgW = rect.width / currentScale;
-      const svgH = rect.height / currentScale;
-
-      const padX = parseInt(sliderX.value);
-      const padY = parseInt(sliderY.value);
-
-      
-      const finalW = Math.round((svgW + padX * 2) * OUTPUT_SCALE);
-      const finalH = Math.round((svgH + padY * 2) * OUTPUT_SCALE);
-
-      badge.textContent = `${finalW} x ${finalH} px`;
-    };
-
-    
-    const fitToContainer = () => {
-      preview.style.transform = 'scale(1)';
-      const containerWidth = container.clientWidth - 20;
-      const contentWidth = preview.offsetWidth;
-      if (contentWidth > containerWidth) {
-        preview.style.transform = `scale(${containerWidth / contentWidth})`;
-      } else {
-        preview.style.transform = 'scale(1)';
-      }
-      
-      updateResolution();
-    };
-
-    const updateMath = () => {
-      preview.innerHTML = '$$' + input.value + '$$';
-      if(window.MathJax) {
-        MathJax.typesetPromise([preview]).then(() => fitToContainer());
-      }
-    };
-
-    input.addEventListener('input', updateMath);
-    
-    if(window.MathJax) MathJax.typesetPromise([preview]).then(() => fitToContainer());
-    window.addEventListener('resize', fitToContainer);
-
-    
-    const updatePadding = () => {
-      const x = sliderX.value;
-      const y = sliderY.value;
-      valX.textContent = x;
-      valY.textContent = y;
-      preview.style.paddingTop = y + "px";
-      preview.style.paddingBottom = y + "px";
-      preview.style.paddingLeft = x + "px";
-      preview.style.paddingRight = x + "px";
-      fitToContainer(); 
-    };
-    sliderX.addEventListener('input', updatePadding);
-    sliderY.addEventListener('input', updatePadding);
-
-    
-    saveBtn.addEventListener('click', () => {
-      const svgElement = preview.querySelector('svg');
-      if (!svgElement) {
-        alert("数式が描画されていません");
-        return;
-      }
-
-      const rect = svgElement.getBoundingClientRect();
-      const padX = parseInt(sliderX.value);
-      const padY = parseInt(sliderY.value);
-      const scale = OUTPUT_SCALE; 
-
-      
-      const currentScale = preview.getBoundingClientRect().width / preview.offsetWidth || 1;
-      const svgW = rect.width / currentScale;
-      const svgH = rect.height / currentScale;
-      
-      const canvas = document.createElement('canvas');
-      canvas.width = (svgW + padX * 2) * scale;
-      canvas.height = (svgH + padY * 2) * scale;
-      const ctx = canvas.getContext('2d');
-
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const serializer = new XMLSerializer();
-      const clonedSvg = svgElement.cloneNode(true);
-      clonedSvg.setAttribute('width', svgW + "px");
-      clonedSvg.setAttribute('height', svgH + "px");
-      clonedSvg.style.color = "#000000";
-      
-      const svgString = serializer.serializeToString(clonedSvg);
-      const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
-      const url = URL.createObjectURL(svgBlob);
-
-      const img = new Image();
-      img.onload = function() {
-        ctx.drawImage(img, padX * scale, padY * scale, svgW * scale, svgH * scale);
-        
-        try {
-          const pngUrl = canvas.toDataURL("image/png");
-          const downloadLink = document.createElement("a");
-          downloadLink.href = pngUrl;
-          downloadLink.download = "latex_formula.png";
-          
-          document.body.appendChild(downloadLink);
-          downloadLink.click();
-          document.body.removeChild(downloadLink);
-          
-          URL.revokeObjectURL(url);
-        } catch (e) {
-          alert("保存に失敗しました。長押しで保存してください。");
-          window.open(canvas.toDataURL("image/png"));
-        }
-      };
-      
-      img.onerror = function() {
-        alert("画像の生成に失敗しました");
-      };
-
-      img.src = url;
-    });
-  });
-</script>
+</h4>
+<ul>
+<li><strong>GREEN</strong>: 安全圏.</li>
+<li><strong>YELLOW</strong>: 猶予 24時間未満.</li>
+<li><strong>ORANGE</strong>: 猶予 3時間未満.</li>
+<li><strong>RED (BLINKING)</strong>: <strong>CRITICAL WARNING</strong>. 残り時間が作業時間を下回っているため，着手推奨.</li>
+</ul>
+<hr>
+<p><small style="color:#64748b; font-family:monospace;">&gt; LOCAL_STORAGE_CONNECTED. DATA_PERSISTENCE_ACTIVE.</small></p>
 
           
           
@@ -1587,11 +1789,11 @@ thumb = $x$ * {16 * 9}</span>
     <header>
       <a
         
-          href="/lab/deadline/"
+          href="/lab/latex/"
         
         class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
         <h2>
-          Deadline Manager
+          LaTeX Editor
           
         </h2>
       </a>
@@ -1639,7 +1841,7 @@ thumb = $x$ * {16 * 9}</span>
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>46 words</span>
+      <span>57 words</span>
     
 
     
@@ -1716,8 +1918,8 @@ thumb = $x$ * {16 * 9}</span>
           type="text/javascript"
           src="/js/page.min.54b6f4371722649edbe871e431d8670d670878c22be8f36e229fe53cc9b786fe25a834def5e6de621f7a3e37b72bc8cd73839aa5ed907ed6cbd45cd3e1b0fa20.js"
           integrity="sha512-VLb0NxciZJ7b6HHkMdhnDWcIeMIr6PNuIp/lPMm3hv4lqDTe9ebeYh96Pje3K8jNc4Oape2QftbL1FzT4bD6IA=="
-          data-oid="views_lab/latex.md"
-          data-oid-likes="likes_lab/latex.md"></script>
+          data-oid="views_lab/deadline.md"
+          data-oid-likes="likes_lab/deadline.md"></script>
       
     </section>
 
@@ -1735,9 +1937,9 @@ thumb = $x$ * {16 * 9}</span>
           
             <a
               class="flex text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
-              href="/lab/logic/">
+              href="/lab/latex/">
               <span class="leading-6">
-                <span class="inline-block rtl:rotate-180">&larr;</span>&ensp;Logic Circuit Simulator
+                <span class="inline-block rtl:rotate-180">&larr;</span>&ensp;LaTeX Editor
               </span>
             </a>
             
@@ -1747,9 +1949,9 @@ thumb = $x$ * {16 * 9}</span>
           
             <a
               class="flex text-right text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
-              href="/lab/deadline/">
+              href="/lab/crypto/">
               <span class="leading-6">
-                Deadline Manager&ensp;<span class="inline-block rtl:rotate-180">&rarr;</span>
+                Cryptography Lab&ensp;<span class="inline-block rtl:rotate-180">&rarr;</span>
               </span>
             </a>
             
