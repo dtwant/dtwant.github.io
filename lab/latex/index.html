@@ -225,7 +225,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "57"
+    "wordCount": "50"
   }]
   </script>
 
@@ -866,7 +866,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>57 words</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <span>50 words</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1004,184 +1004,527 @@
 thumb = $x$ * {16 * 9}</span>
 </div>
 </p>
+
+
+
 <script>
-  MathJax = {
-    
+  window.MathJax = {
     tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-    svg: { 
-      fontCache: 'local' 
+    svg: { fontCache: 'local' },
+    startup: {
+      pageReady: () => {
+        return MathJax.startup.defaultPageReady().then(() => {
+          window.dispatchEvent(new Event('mathjax-ready'));
+        });
+      }
     }
   };
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-<div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px; background-color: #f9f9f9; margin-top: 20px;">
-  
-  <textarea id="latex-input" style="
-    width: 100%; height: 100px; padding: 10px; 
-    font-family: monospace; margin-bottom: 15px; 
-    border: 1px solid #aaa; border-radius: 4px;
-    background-color: #fff; color: #000; font-size: 16px;" 
-    placeholder="例: \sum_{n=0}^{\infty} ...">\sum_{n=0}^{\infty} x^{2n} \zeta(2+2n) = \frac{1 - \pi x \cot(\pi x)}{2x^2} \quad (|x| &lt; 1)</textarea>
-  
-  <div style="margin-bottom: 15px; background: #eee; padding: 10px; border-radius: 4px;">
-    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-      <label style="width: 100px; font-size: 14px; font-weight: bold; color: #333;">横余白 (X): <span id="val-x">30</span>px</label>
-      <input type="range" id="slider-x" min="0" max="200" value="30" style="flex-grow: 1;">
-    </div>
-    <div style="display: flex; align-items: center;">
-      <label style="width: 100px; font-size: 14px; font-weight: bold; color: #333;">縦余白 (Y): <span id="val-y">30</span>px</label>
-      <input type="range" id="slider-y" min="0" max="200" value="30" style="flex-grow: 1;">
-    </div>
-  </div>
 
-  <div style="text-align: right; margin-bottom: 10px;">
-    <button id="save-btn" style="
-      padding: 8px 20px; background-color: #333; color: #fff; 
-      border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
-      Download PNG
-    </button>
-  </div>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-  <div id="latex-preview-container" style="
-    padding: 10px; background-color: #e0e0e0; 
-    border: 1px dashed #aaa; min-height: 80px; 
-    display: flex; justify-content: center; align-items: center;
+   
+  .cp-latex-container {
+    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
+    max-width: 800px;
+    margin: 2rem auto;
+    background-color: #09090b;
+    background-image: 
+      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
+    background-size: 20px 20px;
+    padding: 2rem;
+    border: 1px solid #333;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
+    color: #e2e8f0;
+    position: relative;
     overflow: hidden;
-    position: relative;">
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+  .cp-latex-container * { box-sizing: border-box; }
+
+   
+  .cp-latex-container h3,
+  .cp-latex-container p,
+  .cp-latex-container div,
+  .cp-latex-container span,
+  .cp-latex-container label {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: inherit;
+  }
+
+   
+  .cp-latex-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #f472b6, #a78bfa, #f472b6);
+    background-size: 200% 100%;
+    animation: scanline 4s linear infinite;
+    pointer-events: none;
+    z-index: 10;
+  }
+  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+   
+  .cp-latex-container .cp-header {
+    border-bottom: 1px solid #333 !important;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cp-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #f472b6 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 8px rgba(244, 114, 182, 0.4);
+  }
+  .cp-subtitle {
+    font-size: 0.7rem;
+    color: #64748b !important;
+  }
+
+   
+  .cp-textarea {
+    width: 100%;
+    height: 120px;
+    background: #000 !important;
+    border: 1px solid #444 !important;
+    color: #f472b6 !important;
+    padding: 15px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 1rem;
+    border-radius: 2px;
+    resize: vertical;
+    transition: all 0.2s;
+    box-shadow: none !important;
+    margin-bottom: 1.5rem;
+  }
+  .cp-textarea:focus {
+    outline: none;
+    border-color: #f472b6 !important;
+    box-shadow: 0 0 10px rgba(244, 114, 182, 0.2) !important;
+  }
+
+   
+  .cp-latex-container .cp-controls {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid #333 !important;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+   
+  .cp-control-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 600px) { .cp-control-panel { grid-template-columns: 1fr; } }
+
+  .cp-control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .cp-label {
+    font-size: 0.75rem;
+    color: #a78bfa !important;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+  }
+  .cp-val { color: #f472b6 !important; }
+
+   
+  .cp-range {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: #333 !important;
+    border-radius: 2px;
+    outline: none;
+    margin-top: 5px;
+    border: none !important;
+  }
+  .cp-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px; height: 16px;
+    background: #f472b6;
+    border-radius: 0;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(244, 114, 182, 0.5);
+    border: 1px solid #fff;
+  }
+
+   
+  .cp-aspect-btns {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .cp-aspect-btn {
+    flex: 1;
+    background: transparent !important;
+    border: 1px solid #444 !important;
+    color: #64748b !important;
+    padding: 0.5rem;
+    font-family: inherit;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    box-shadow: none !important;
+  }
+  .cp-aspect-btn:hover {
+    border-color: #a78bfa !important;
+    color: #a78bfa !important;
+  }
+  .cp-aspect-btn.active {
+    background: rgba(167, 139, 250, 0.1) !important;
+    border-color: #a78bfa !important;
+    color: #f472b6 !important;
+    box-shadow: 0 0 10px rgba(167, 139, 250, 0.2) !important;
+    font-weight: bold;
+  }
+
+   
+  .cp-actions {
+    text-align: right;
+    margin-bottom: 1rem;
+  }
+
+  .cp-btn {
+    background: transparent !important;
+    border: 1px solid #f472b6 !important;
+    color: #f472b6 !important;
+    padding: 0.6rem 1.5rem;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    box-shadow: none !important;
+  }
+  .cp-btn:hover {
+    background: #f472b6 !important;
+    color: #000 !important;
+    box-shadow: 0 0 15px rgba(244, 114, 182, 0.6) !important;
+  }
+
+   
+  .cp-latex-container .cp-preview-container {
+    background: #18181b !important;
+    border: 1px dashed #444 !important;
+    min-height: 150px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cp-preview-box {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+     
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+     
+    font-size: 20px !important;
+    line-height: normal !important;
+     
+    border: 1px solid #ddd;
+    box-shadow: none !important;
+    transform-origin: center center;
+    transition: transform 0.2s ease;
+  }
+  
+  .cp-preview-box svg {
+    display: block;
+  }
+
+  .cp-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8) !important;
+    border: 1px solid #333 !important;
+    color: #a78bfa !important;
+    font-size: 0.7rem;
+    font-family: monospace;
+    padding: 4px 8px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+  }
+</style>
+
+<div class="cp-latex-container">
+  <div class="cp-header">
+    <div class="cp-title">LATEX_RENDERER</div>
+    <div class="cp-subtitle">// 数式画像生成モジュール</div>
+  </div>
+  
+  <textarea id="latex-input" class="cp-textarea" placeholder="INSERT_LATEX_CODE (e.g. \sum_{n=0}^{\infty} ...)">\sum_{n=0}^{\infty} x^{2n} \zeta(2+2n) = \frac{1 - \pi x \cot(\pi x)}{2x^2} \quad (|x| &lt; 1)</textarea>
+  
+  <div class="cp-controls">
     
-    <div id="latex-preview" style="
-      padding: 30px 30px; 
-      background-color: #fff; 
-      display: inline-block;
-      color: #000;
-      font-size: 1.5em;
-      transform-origin: center center;
-      transition: transform 0.2s ease;">
-      $$ \sum_{n=0}^{\infty} x^{2n} \zeta(2+2n) = \frac{1 - \pi x \cot(\pi x)}{2x^2} \quad (|x| &lt; 1) $$
+    <div id="manual-controls" class="cp-control-panel">
+      <div class="cp-control-group">
+        <label class="cp-label">PADDING_X <span id="val-x" class="cp-val">30</span>px</label>
+        <input type="range" id="slider-x" class="cp-range" min="0" max="200" value="30">
+      </div>
+      <div class="cp-control-group">
+        <label class="cp-label">PADDING_Y <span id="val-y" class="cp-val">30</span>px</label>
+        <input type="range" id="slider-y" class="cp-range" min="0" max="200" value="30">
+      </div>
     </div>
 
-    <div id="resolution-badge" style="
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      background-color: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      font-size: 12px;
-      font-family: monospace;
-      padding: 4px 8px;
-      border-radius: 4px;
-      pointer-events: none;
-      user-select: none;
-      z-index: 10;">
-      Computing...
+    
+    <div id="aspect-controls" class="cp-control-panel" style="display:none; grid-template-columns: 1fr;">
+      <div class="cp-control-group">
+        <label class="cp-label">CANVAS_SCALE (ZOOM) <span id="val-scale" class="cp-val">1.2x</span></label>
+        <input type="range" id="slider-scale" class="cp-range" min="1" max="2.5" step="0.1" value="1.2">
+      </div>
     </div>
+  </div>
+
+  <div class="cp-aspect-btns">
+    <button class="cp-aspect-btn active" id="btn-free">FREE (MANUAL)</button>
+    <button class="cp-aspect-btn" id="btn-thumb">THUMB [16:9]</button>
+    <button class="cp-aspect-btn" id="btn-slide">SLIDE [128:59]</button>
+  </div>
+
+  <div class="cp-actions">
+    <button id="save-btn" class="cp-btn">DOWNLOAD_PNG</button>
+  </div>
+
+  <div id="latex-preview-container" class="cp-preview-container">
+    <div id="latex-preview" class="cp-preview-box">
+      
+    </div>
+    <div id="resolution-badge" class="cp-badge">INITIALIZING...</div>
   </div>
 </div>
 
 <script>
-  window.addEventListener('load', () => {
+  (function() {
     const input = document.getElementById('latex-input');
     const preview = document.getElementById('latex-preview');
     const container = document.getElementById('latex-preview-container');
     const saveBtn = document.getElementById('save-btn');
+    const badge = document.getElementById('resolution-badge');
+
+    
+    const manualControls = document.getElementById('manual-controls');
+    const aspectControls = document.getElementById('aspect-controls');
     const sliderX = document.getElementById('slider-x');
     const sliderY = document.getElementById('slider-y');
     const valX = document.getElementById('val-x');
     const valY = document.getElementById('val-y');
-    const badge = document.getElementById('resolution-badge');
+    const sliderScale = document.getElementById('slider-scale');
+    const valScale = document.getElementById('val-scale');
 
     
+    const btnFree = document.getElementById('btn-free');
+    const btnThumb = document.getElementById('btn-thumb');
+    const btnSlide = document.getElementById('btn-slide');
+
     const OUTPUT_SCALE = 3;
+    let currentAspect = null; 
+    let preciseW = 0;
+    let preciseH = 0;
 
     
-    const updateResolution = () => {
-      const svgElement = preview.querySelector('svg');
-      if (!svgElement) {
-        badge.textContent = '- x - px';
-        return;
-      }
-      
-      const rect = svgElement.getBoundingClientRect();
-      const currentScale = preview.getBoundingClientRect().width / preview.offsetWidth || 1;
-      const svgW = rect.width / currentScale;
-      const svgH = rect.height / currentScale;
 
-      const padX = parseInt(sliderX.value);
-      const padY = parseInt(sliderY.value);
-
-      
-      const finalW = Math.round((svgW + padX * 2) * OUTPUT_SCALE);
-      const finalH = Math.round((svgH + padY * 2) * OUTPUT_SCALE);
-
-      badge.textContent = `${finalW} x ${finalH} px`;
-    };
-
-    
     const fitToContainer = () => {
       preview.style.transform = 'scale(1)';
-      const containerWidth = container.clientWidth - 20;
+      const containerWidth = container.clientWidth - 40;
       const contentWidth = preview.offsetWidth;
+      
       if (contentWidth > containerWidth) {
         preview.style.transform = `scale(${containerWidth / contentWidth})`;
       } else {
         preview.style.transform = 'scale(1)';
       }
-      
-      updateResolution();
+      setTimeout(updateResolution, 0);
     };
 
-    const updateMath = () => {
+    const updateResolution = () => {
+      const svgElement = preview.querySelector('svg');
+      if (!svgElement) {
+        badge.textContent = 'RENDERING...';
+        return;
+      }
+      
+      let finalW, finalH;
+      
+      if (currentAspect === null) {
+        finalW = Math.round(preview.offsetWidth * OUTPUT_SCALE);
+        finalH = Math.round(preview.offsetHeight * OUTPUT_SCALE);
+      } else {
+        finalW = Math.round(preciseW * OUTPUT_SCALE);
+        finalH = Math.round(preciseH * OUTPUT_SCALE);
+      }
+
+      badge.textContent = `RES: ${finalW} x ${finalH} px`;
+    };
+
+    const applyPadding = () => {
+      if (currentAspect === null) {
+        const x = sliderX.value;
+        const y = sliderY.value;
+        valX.textContent = x;
+        valY.textContent = y;
+        preview.style.paddingLeft = x + "px";
+        preview.style.paddingRight = x + "px";
+        preview.style.paddingTop = y + "px";
+        preview.style.paddingBottom = y + "px";
+      } else {
+        const svgElement = preview.querySelector('svg');
+        if (!svgElement) return;
+
+        const svgRect = svgElement.getBoundingClientRect();
+        const parentScale = (preview.getBoundingClientRect().width / preview.offsetWidth) || 1;
+        const w = svgRect.width / parentScale;
+        const h = svgRect.height / parentScale;
+
+        const scale = parseFloat(sliderScale.value);
+        valScale.textContent = scale.toFixed(1) + "x";
+
+        let baseW, baseH;
+        if (w / h > currentAspect) {
+          baseW = w;
+          baseH = w / currentAspect;
+        } else {
+          baseH = h;
+          baseW = h * currentAspect;
+        }
+
+        const targetW = baseW * scale;
+        const targetH = baseH * scale;
+        
+        preciseW = targetW;
+        preciseH = targetH;
+
+        const px = Math.max(0, (targetW - w) / 2);
+        const py = Math.max(0, (targetH - h) / 2);
+
+        preview.style.paddingLeft = px + "px";
+        preview.style.paddingRight = px + "px";
+        preview.style.paddingTop = py + "px";
+        preview.style.paddingBottom = py + "px";
+      }
+      fitToContainer();
+    };
+
+    const renderMath = () => {
       preview.innerHTML = '$$' + input.value + '$$';
-      if(window.MathJax) {
-        MathJax.typesetPromise([preview]).then(() => fitToContainer());
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([preview]).then(() => {
+          applyPadding();
+        }).catch(err => console.log('MathJax typeset failed: ', err));
       }
     };
 
-    input.addEventListener('input', updateMath);
-    
-    if(window.MathJax) MathJax.typesetPromise([preview]).then(() => fitToContainer());
-    window.addEventListener('resize', fitToContainer);
+    const setMode = (mode, ratio) => {
+      currentAspect = ratio;
+      
+      [btnFree, btnThumb, btnSlide].forEach(b => b.classList.remove('active'));
+      
+      if (mode === 'free') {
+        btnFree.classList.add('active');
+        manualControls.style.display = 'grid';
+        aspectControls.style.display = 'none';
+      } else {
+        if (mode === 'thumb') btnThumb.classList.add('active');
+        if (mode === 'slide') btnSlide.classList.add('active');
+        manualControls.style.display = 'none';
+        aspectControls.style.display = 'grid';
+      }
+      applyPadding();
+    };
 
     
-    const updatePadding = () => {
-      const x = sliderX.value;
-      const y = sliderY.value;
-      valX.textContent = x;
-      valY.textContent = y;
-      preview.style.paddingTop = y + "px";
-      preview.style.paddingBottom = y + "px";
-      preview.style.paddingLeft = x + "px";
-      preview.style.paddingRight = x + "px";
-      fitToContainer(); 
+    input.addEventListener('input', renderMath);
+    window.addEventListener('resize', fitToContainer);
+    
+    sliderX.addEventListener('input', applyPadding);
+    sliderY.addEventListener('input', applyPadding);
+    sliderScale.addEventListener('input', applyPadding);
+
+    btnFree.addEventListener('click', () => setMode('free', null));
+    btnThumb.addEventListener('click', () => setMode('thumb', 16/9));
+    btnSlide.addEventListener('click', () => setMode('slide', 128/59));
+
+    
+    const init = () => {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        renderMath();
+      } else {
+        window.addEventListener('mathjax-ready', renderMath);
+        const checkInterval = setInterval(() => {
+          if (window.MathJax && window.MathJax.typesetPromise) {
+            clearInterval(checkInterval);
+            renderMath();
+          }
+        }, 500);
+      }
     };
-    sliderX.addEventListener('input', updatePadding);
-    sliderY.addEventListener('input', updatePadding);
+
+    init();
 
     
     saveBtn.addEventListener('click', () => {
       const svgElement = preview.querySelector('svg');
       if (!svgElement) {
-        alert("数式が描画されていません");
+        alert(">> ERROR: NO_RENDER_DATA");
         return;
       }
 
-      const rect = svgElement.getBoundingClientRect();
-      const padX = parseInt(sliderX.value);
-      const padY = parseInt(sliderY.value);
-      const scale = OUTPUT_SCALE; 
+      let canvasW, canvasH;
+      if (currentAspect === null) {
+        canvasW = preview.offsetWidth * OUTPUT_SCALE;
+        canvasH = preview.offsetHeight * OUTPUT_SCALE;
+      } else {
+        canvasW = preciseW * OUTPUT_SCALE;
+        canvasH = preciseH * OUTPUT_SCALE;
+      }
 
-      
-      const currentScale = preview.getBoundingClientRect().width / preview.offsetWidth || 1;
-      const svgW = rect.width / currentScale;
-      const svgH = rect.height / currentScale;
-      
       const canvas = document.createElement('canvas');
-      canvas.width = (svgW + padX * 2) * scale;
-      canvas.height = (svgH + padY * 2) * scale;
+      canvas.width = Math.round(canvasW);
+      canvas.height = Math.round(canvasH);
       const ctx = canvas.getContext('2d');
 
       ctx.fillStyle = '#FFFFFF';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const svgRect = svgElement.getBoundingClientRect();
+      const parentScale = (preview.getBoundingClientRect().width / preview.offsetWidth) || 1;
+      const svgW = svgRect.width / parentScale;
+      const svgH = svgRect.height / parentScale;
 
       const serializer = new XMLSerializer();
       const clonedSvg = svgElement.cloneNode(true);
@@ -1195,32 +1538,36 @@ thumb = $x$ * {16 * 9}</span>
 
       const img = new Image();
       img.onload = function() {
-        ctx.drawImage(img, padX * scale, padY * scale, svgW * scale, svgH * scale);
+        let dx, dy;
+        const style = window.getComputedStyle(preview);
+        
+        if (currentAspect === null) {
+           dx = parseFloat(style.paddingLeft) * OUTPUT_SCALE;
+           dy = parseFloat(style.paddingTop) * OUTPUT_SCALE;
+        } else {
+           dx = (canvas.width - (svgW * OUTPUT_SCALE)) / 2;
+           dy = (canvas.height - (svgH * OUTPUT_SCALE)) / 2;
+        }
+
+        ctx.drawImage(img, dx, dy, svgW * OUTPUT_SCALE, svgH * OUTPUT_SCALE);
+        URL.revokeObjectURL(url);
         
         try {
           const pngUrl = canvas.toDataURL("image/png");
           const downloadLink = document.createElement("a");
           downloadLink.href = pngUrl;
           downloadLink.download = "latex_formula.png";
-          
           document.body.appendChild(downloadLink);
           downloadLink.click();
           document.body.removeChild(downloadLink);
-          
-          URL.revokeObjectURL(url);
         } catch (e) {
-          alert("保存に失敗しました。長押しで保存してください。");
-          window.open(canvas.toDataURL("image/png"));
+          alert(">> ERROR: SAVE_FAILED");
         }
       };
-      
-      img.onerror = function() {
-        alert("画像の生成に失敗しました");
-      };
-
       img.src = url;
     });
-  });
+
+  })();
 </script>
 
           

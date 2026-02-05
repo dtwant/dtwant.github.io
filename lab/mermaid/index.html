@@ -977,191 +977,297 @@
     </span>
     
 </h1>
-<p>テキストで記述する作図ツール「Mermaid.js」のライブエディター.
+<p>テキストで記述する作図ツール「Mermaid.js」のライブエディター.<br>
 フローチャート、シーケンス図、ガントチャートなどが作成できる.</p>
+
+
+
 <style>
-     
-    .mermaid-editor-container {
-        background-color: #ffffff !important;
-        color: #333333 !important;
-        border: 1px solid #ccc;
-        padding: 20px;
-        border-radius: 8px;
-        margin-top: 20px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-    .editor-layout {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
+   
+  .cp-mermaid-container {
+    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
+    max-width: 1000px;
+    margin: 2rem auto;
+    background-color: #09090b;
+    background-image: 
+      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
+    background-size: 20px 20px;
+    padding: 2rem;
+    border: 1px solid #333;
+    border-radius: 4px;
+    position: relative;
+    box-sizing: border-box;
+    line-height: 1.5;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
+    color: #e2e8f0;
+  }
+  .cp-mermaid-container * { box-sizing: border-box; }
 
-     
-    @media (min-width: 768px) {
-        .editor-layout {
-            flex-direction: row;
-            align-items: flex-start;
-        }
-    }
+   
+   
+  .cp-mermaid-container h3,
+  .cp-mermaid-container p,
+  .cp-mermaid-container div,
+  .cp-mermaid-container span {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: inherit;
+  }
 
-    .input-pane {
-        flex: 1;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+   
+  .cp-mermaid-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #22d3ee, #10b981, #22d3ee);
+    background-size: 200% 100%;
+    animation: scanline 4s linear infinite;
+    pointer-events: none;
+    z-index: 10;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
-    .preview-pane {
-        flex: 1;
-        width: 100%;
-        min-height: 300px;
-        border: 1px solid #ddd;
-        background-color: #f9f9f9;  
-        border-radius: 4px;
-        padding: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: auto;
-    }
+   
+  .cp-header {
+    border-bottom: 1px solid #333 !important;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cp-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #22d3ee !important;  
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+  }
+  .cp-subtitle {
+    font-size: 0.7rem;
+    color: #64748b !important;
+  }
 
-    textarea#mermaidCode {
-        width: 100%;
-        height: 300px;
-        font-family: 'Consolas', 'Monaco', monospace;
-        padding: 10px;
-        border: 1px solid #999;
-        border-radius: 4px;
-        background-color: #fff !important;
-        color: #333 !important;
-        resize: vertical;
+   
+  .cp-editor-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  @media (min-width: 768px) {
+    .cp-editor-layout {
+      flex-direction: row;
+      align-items: flex-start;
     }
+  }
 
-    .btn-primary {
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-    
-    .btn-download {
-        padding: 8px 16px;
-        background-color: #28a745;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.9em;
-        margin-top: 10px;
-        display: none;  
-    }
+  .cp-pane {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 10px; 
+  }
 
-    .error-msg {
-        color: #d9534f;
-        font-weight: bold;
-        display: none;
-        white-space: pre-wrap;
-    }
+   
+  .cp-textarea {
+    width: 100%;
+    min-height: 350px;
+    height: auto;
+    background: #000 !important;
+    border: 1px solid #444 !important;  
+    color: #e2e8f0 !important;
+    padding: 15px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.9rem;
+    border-radius: 2px;
+    resize: vertical;
+    transition: border-color 0.2s;
+    box-shadow: none !important;
+  }
+  .cp-textarea:focus {
+    outline: none;
+    border-color: #22d3ee !important;
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.2) !important;
+  }
 
-     
-    .mermaid-editor-container text {
-        fill: #333 !important;
-    }
+   
+  .cp-preview-box {
+    width: 100%;
+    min-height: 350px;
+    background: #0e0e11 !important;
+    border: 1px dashed #444 !important;
+    border-radius: 2px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    position: relative;
+  }
+  
+   
+  .cp-btn {
+    background: transparent !important;
+    border: 1px solid #22d3ee !important;  
+    color: #22d3ee !important;
+    padding: 0.6rem 1.2rem;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    box-shadow: none !important;
+    display: inline-block;
+  }
+  .cp-btn:hover {
+    background: #22d3ee !important;
+    color: #000 !important;
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.5) !important;
+  }
+  
+  .cp-btn-secondary {
+    border-color: #10b981 !important;  
+    color: #10b981 !important;
+    display: none;
+    margin-top: 10px;
+  }
+  .cp-btn-secondary:hover {
+    background: #10b981 !important;
+    color: #000 !important;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5) !important;
+  }
+
+   
+  .cp-error {
+    color: #ef4444 !important;
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-top: 10px;
+    display: none;
+    border-left: 2px solid #ef4444 !important;
+    padding-left: 10px;
+    white-space: pre-wrap;
+  }
+
+   
+  .cp-preview-box svg {
+    max-width: 100%;
+    height: auto;
+  }
 </style>
 
-<div class="mermaid-editor-container">
-    <h3>Mermaid Live Editor</h3>
-    <p style="color:#2f4f4f; font-size:0.9em;">左側にMermaid記法を書くと、右側に図が生成されます。</p>
+<div class="cp-mermaid-container">
+  <div class="cp-header">
+    <div class="cp-title">DIAGRAM_EDITOR</div>
+    <div class="cp-subtitle">MERMAID.JS INTEGRATION</div>
+  </div>
 
-    <div class="editor-layout">
-        <div class="input-pane">
-<textarea id="mermaidCode" spellcheck="false">
+  <div class="cp-editor-layout">
+    
+    <div class="cp-pane">
+      <div style="font-size:0.75rem; color:#64748b; margin-bottom:5px;">INPUT_SOURCE [CODE]</div>
+<textarea id="mermaidCode" class="cp-textarea" spellcheck="false">
 graph TD
-    A[Start] --> B{Is it working?}
-    B -- Yes --> C[Great!]
-    B -- No --> D[Debug]
+    A[START] --> B{CHECK_SYSTEM}
+    B -- OK --> C[PROCEED]
+    B -- FAIL --> D[DEBUG_MODE]
     D --> B
 </textarea>
-            <div>
-                <button class="btn-primary" id="renderBtn">Render (描画)</button>
-            </div>
-            <div id="errorDisplay" class="error-msg"></div>
-        </div>
-
-        <div class="input-pane">
-            <div id="mermaidPreview" class="preview-pane">
-                <span style="color:#999;">ここに図が表示されます</span>
-            </div>
-            <button class="btn-download" id="downloadBtn">Download SVG</button>
-        </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+        <button class="cp-btn" id="renderBtn">RENDER_GRAPH</button>
+      </div>
+      <div id="errorDisplay" class="cp-error"></div>
     </div>
+
+    
+    <div class="cp-pane">
+      <div style="font-size:0.75rem; color:#64748b; margin-bottom:5px;">VISUAL_OUTPUT [SVG]</div>
+      <div id="mermaidPreview" class="cp-preview-box">
+        <span style="color:#444; font-size:0.8rem;">// AWAITING_RENDER...</span>
+      </div>
+      <button class="cp-btn cp-btn-secondary" id="downloadBtn">DOWNLOAD_SVG</button>
+    </div>
+  </div>
 </div>
 
 <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
 
-    mermaid.initialize({ 
-        startOnLoad: false,
-        theme: 'default',
-        securityLevel: 'loose'
-    });
+  
+  mermaid.initialize({ 
+    startOnLoad: false,
+    theme: 'dark',
+    securityLevel: 'loose',
+    fontFamily: 'JetBrains Mono, monospace'
+  });
 
-    const renderBtn = document.getElementById('renderBtn');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const input = document.getElementById('mermaidCode');
-    const output = document.getElementById('mermaidPreview');
-    const errorDisplay = document.getElementById('errorDisplay');
+  const renderBtn = document.getElementById('renderBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const input = document.getElementById('mermaidCode');
+  const output = document.getElementById('mermaidPreview');
+  const errorDisplay = document.getElementById('errorDisplay');
 
+  
+  async function renderMermaid() {
+    const code = input.value;
+    errorDisplay.style.display = 'none';
+    output.style.opacity = '0.5'; 
     
-    async function renderMermaid() {
-        const code = input.value;
-        errorDisplay.style.display = 'none';
-        
-        try {
-            
-            if (!await mermaid.parse(code)) {
-                throw new Error("Syntax Error");
-            }
+    try {
+      
+      if (!await mermaid.parse(code)) {
+        throw new Error("Syntax Error");
+      }
 
-            
-            const id = 'mermaid-graph-' + Date.now();
-            const { svg } = await mermaid.render(id, code);
-            
-            output.innerHTML = svg;
-            downloadBtn.style.display = 'inline-block'; 
+      
+      const id = 'mermaid-graph-' + Date.now();
+      const { svg } = await mermaid.render(id, code);
+      
+      output.innerHTML = svg;
+      output.style.opacity = '1';
+      downloadBtn.style.display = 'inline-block';
 
-        } catch (error) {
-            errorDisplay.style.display = 'block';
-            errorDisplay.textContent = "エラー: 構文が正しくありません。\n" + error.message;
-            console.error(error);
-        }
+    } catch (error) {
+      errorDisplay.style.display = 'block';
+      errorDisplay.innerText = ">> SYNTAX_ERROR: " + error.message;
+      output.style.opacity = '1';
+      console.error(error);
     }
+  }
 
+  
+  function downloadSVG() {
+    const svgData = output.innerHTML;
+    const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
     
-    function downloadSVG() {
-        const svgData = output.innerHTML;
-        const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        
-        link.href = url;
-        link.download = "diagram.svg";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
+    link.href = url;
+    link.download = "diagram_cyberpunk.svg";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
-    
-    renderBtn.addEventListener('click', renderMermaid);
-    downloadBtn.addEventListener('click', downloadSVG);
+  
+  renderBtn.addEventListener('click', renderMermaid);
+  downloadBtn.addEventListener('click', downloadSVG);
 
-    
-    setTimeout(renderMermaid, 500);
+  
+  setTimeout(renderMermaid, 500);
 </script>
 <hr>
 
@@ -1327,7 +1433,7 @@ graph TD
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>63 words</span>
+      <span>100 words</span>
     
 
     
