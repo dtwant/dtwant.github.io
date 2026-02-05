@@ -229,7 +229,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "110"
+    "wordCount": "107"
   }]
   </script>
 
@@ -746,7 +746,7 @@
    
   .cp-logic-container {
     font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
-    max-width: 900px;  
+    max-width: 900px;
     width: 95%;
     margin: 2rem auto;
     background-color: #09090b;
@@ -801,7 +801,7 @@
   .cp-header {
     border-bottom: 1px solid #333 !important;
     padding-bottom: 1.5rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -821,21 +821,20 @@
 
    
   .cp-input-area {
-    margin-bottom: 2.5rem;
+    margin-bottom: 1rem;
     display: flex;
     gap: 15px;
     align-items: stretch;
   }
   
-   
   .cp-logic-container .cp-input {
     flex: 1;
     background: #000 !important;
-    border: 1px solid #444 !important;  
+    border: 1px solid #444 !important;
     color: #10b981 !important;
     padding: 1rem;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 1.1rem;
     border-radius: 2px;
     transition: all 0.2s;
     box-shadow: none !important;
@@ -848,9 +847,41 @@
   }
 
    
+  .cp-input-pad {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .cp-logic-container .cp-pad-btn {
+    background: #18181b !important;
+    border: 1px solid #333 !important;
+    color: #a78bfa !important;  
+    padding: 6px 12px;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    box-shadow: none !important;
+  }
+  .cp-pad-btn:hover {
+    background: #222 !important;
+    border-color: #a78bfa !important;
+    color: #e2e8f0 !important;
+  }
+  .cp-pad-btn span {
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: normal;
+    margin-left: 4px;
+  }
+
   .cp-logic-container .cp-btn {
     background: transparent !important;
-    border: 1px solid #10b981 !important;  
+    border: 1px solid #10b981 !important;
     color: #10b981 !important;
     padding: 0 2rem;
     font-family: inherit;
@@ -875,33 +906,53 @@
   .cp-error {
     color: #ef4444 !important;
     font-size: 0.9rem;
-    margin-top: -1.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     display: none;
     border-left: 2px solid #ef4444 !important;
     padding-left: 10px;
+    background: rgba(239, 68, 68, 0.05);
+    padding: 10px;
   }
 
    
-  .cp-simulator {
+  .cp-tabs {
+    display: flex;
+    border-bottom: 1px solid #333 !important;
+    margin-bottom: 2rem;
+  }
+  .cp-logic-container .cp-tab-btn {
+    padding: 10px 20px;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 2px solid transparent !important;
+    color: #64748b !important;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    box-shadow: none !important;
+  }
+  .cp-tab-btn:hover { color: #e2e8f0 !important; }
+  .cp-tab-btn.active {
+    color: #10b981 !important;
+    border-bottom-color: #10b981 !important;
+    background: rgba(16, 185, 129, 0.05) !important;
+  }
+
+   
+  .cp-content { display: none; }
+  .cp-content.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+   
+  .cp-sim-box {
     background: rgba(255, 255, 255, 0.02) !important;
     border: 1px solid #333 !important;
     padding: 2rem;
-    margin-bottom: 2.5rem;
-    display: none;  
+    text-align: center;
   }
   
-  .cp-sim-header {
-    font-size: 0.9rem;
-    color: #94a3b8 !important;
-    margin-bottom: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-bottom: 1px dashed #333 !important;
-    padding-bottom: 0.5rem;
-  }
-
-   
   .cp-switch-container {
     display: flex;
     flex-wrap: wrap;
@@ -910,7 +961,6 @@
     justify-content: center;
   }
 
-   
   .cp-logic-container .cp-switch {
     display: flex;
     flex-direction: column;
@@ -918,9 +968,9 @@
     cursor: pointer;
     user-select: none;
     background: #0e0e11 !important;
-    border: 1px solid #333 !important;  
+    border: 1px solid #333 !important;
     padding: 15px;
-    min-width: 90px;
+    min-width: 80px;
     transition: all 0.2s;
     box-shadow: none !important;
   }
@@ -946,12 +996,14 @@
 
    
   .cp-result-display {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 15px;
-    padding-top: 1.5rem;
-    border-top: 1px solid #333 !important;
+    padding: 1rem 2rem;
+    border: 1px solid #333 !important;
+    background: #000 !important;
+    border-radius: 30px;
   }
 
   .cp-led {
@@ -962,7 +1014,7 @@
     transition: all 0.2s;
   }
   .cp-led.on {
-    background-color: #22c55e !important;  
+    background-color: #22c55e !important;
     border-color: #166534 !important;
     box-shadow: 0 0 15px #22c55e, inset 0 0 5px rgba(255,255,255,0.8) !important;
   }
@@ -978,6 +1030,7 @@
   .cp-table-wrapper {
     overflow-x: auto;
     border: 1px solid #333 !important;
+    margin-bottom: 2rem;
   }
   
   .cp-table {
@@ -1002,27 +1055,58 @@
     border-bottom: 1px solid #333 !important;
     border-right: 1px solid #333 !important;
   }
-  
   .cp-table tr:hover td { background-color: rgba(255,255,255,0.05) !important; }
-
-  .cp-res-true { color: #22c55e !important; font-weight: bold; }
+  .cp-res-true { color: #22c55e !important; font-weight: bold; background: rgba(34, 197, 94, 0.1) !important; }
   .cp-res-false { color: #ef4444 !important; opacity: 0.7; }
 
    
-  .cp-footer {
-    margin-top: 3rem;
-    font-size: 0.8rem;
-    color: #64748b !important;
-    border-top: 1px solid #333 !important;
-    padding-top: 1rem;
+  .cp-kmap-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    overflow-x: auto;
   }
-  .cp-code {
+  .cp-kmap {
+    border-collapse: collapse;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .cp-kmap td, .cp-kmap th {
+    border: 1px solid #444 !important;
+    padding: 15px;
+    text-align: center;
+    min-width: 40px;
+  }
+  .cp-kmap-header {
     background: #18181b !important;
-    padding: 2px 6px;
-    border-radius: 2px;
+    color: #a78bfa !important;
+    font-weight: bold;
+  }
+  .cp-kmap-cell {
+    color: #e2e8f0 !important;
+    font-size: 1.1rem;
+  }
+  .cp-kmap-cell.one {
     color: #10b981 !important;
-    font-family: monospace;
+    background: rgba(16, 185, 129, 0.1) !important;
+    font-weight: bold;
+  }
+
+   
+  .cp-analysis-box {
+    background: #0e0e11 !important;
     border: 1px solid #333 !important;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .cp-analysis-label {
+    color: #64748b;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+  }
+  .cp-analysis-val {
+    color: #facc15 !important;
+    font-size: 1rem;
   }
 
    
@@ -1051,12 +1135,12 @@
       padding: 1rem;
     }
 
-    .cp-simulator {
-      padding: 1.25rem;
+    .cp-input-pad {
+      gap: 5px;
     }
-
-    .cp-footer ul {
-      grid-template-columns: 1fr;  
+    .cp-pad-btn {
+      flex: 1;
+      text-align: center;
     }
   }
 
@@ -1065,31 +1149,55 @@
 <div class="cp-logic-container">
   <div class="cp-header">
     <div class="cp-title">LOGIC_CIRCUIT_SIM</div>
-    <div class="cp-subtitle">// 論理回路解析・シミュレータ</div>
+    <div class="cp-subtitle">// 論理回路解析・シミュレータ v2.0</div>
   </div>
 
   <div class="cp-input-area">
     <input type="text" id="logicInput" class="cp-input" placeholder="論理式を入力 (例: A & (B | C))" value="A & B">
     <button onclick="runAnalysis()" class="cp-btn">ANALYZE (解析)</button>
   </div>
+
+  <div class="cp-input-pad">
+    <button class="cp-pad-btn" onclick="insertSymbol('&')">& <span>AND</span></button>
+    <button class="cp-pad-btn" onclick="insertSymbol('|')">| <span>OR</span></button>
+    <button class="cp-pad-btn" onclick="insertSymbol('!')">! <span>NOT</span></button>
+    <button class="cp-pad-btn" onclick="insertSymbol('^')">^ <span>XOR</span></button>
+    <button class="cp-pad-btn" onclick="insertSymbol('(')">(</button>
+    <button class="cp-pad-btn" onclick="insertSymbol(')')">)</button>
+  </div>
   
   <div id="logicError" class="cp-error"></div>
 
-  <div id="simulatorBox" class="cp-simulator">
-    <div class="cp-sim-header">>> EXPERIMENT_MODE [実験モード: クリックで切替]</div>
-    
-    <div id="switchArea" class="cp-switch-container">
-      
-    </div>
+  
+  <div class="cp-tabs">
+    <button class="cp-tab-btn active" onclick="switchTab('sim')">SIMULATOR</button>
+    <button class="cp-tab-btn" onclick="switchTab('table')">TRUTH TABLE</button>
+    <button class="cp-tab-btn" onclick="switchTab('kmap')">K-MAP</button>
+  </div>
 
-    <div class="cp-result-display">
-      <div id="resultLed" class="cp-led"></div>
-      <div class="cp-led-text">OUTPUT: <span id="resultText">0</span></div>
+  
+  <div id="tab-sim" class="cp-content active">
+    <div class="cp-sim-box">
+      <div class="cp-sim-header" style="border:none;">>> INTERACTIVE_MODE [スイッチを操作してください]</div>
+      
+      <div id="switchArea" class="cp-switch-container">
+        
+        <span style="color:#666;">// WAITING FOR ANALYSIS...</span>
+      </div>
+
+      <div class="cp-result-display">
+        <div id="resultLed" class="cp-led"></div>
+        <div class="cp-led-text">OUTPUT: <span id="resultText">-</span></div>
+      </div>
     </div>
   </div>
+
   
-  <div id="tableWrapper" style="display:none;">
-    <div class="cp-sim-header">>> TRUTH_TABLE [真理値表: 全パターン解析]</div>
+  <div id="tab-table" class="cp-content">
+    <div class="cp-analysis-box">
+      <div class="cp-analysis-label">SOP (主加法標準形):</div>
+      <div id="sopResult" class="cp-analysis-val">// NOT AVAILABLE</div>
+    </div>
     <div class="cp-table-wrapper">
       <table id="truthTable" class="cp-table">
         <thead><tr id="tableHeader"></tr></thead>
@@ -1098,20 +1206,41 @@
     </div>
   </div>
 
-  <div class="cp-footer">
-    <div>SYNTAX_GUIDE (記号の使い方):</div>
-    <ul style="list-style:none; padding:0; margin-top:10px; display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-      <li>AND (かつ): <span class="cp-code">&</span> (A & B)</li>
-      <li>OR (または): <span class="cp-code">|</span> (A | B)</li>
-      <li>NOT (否定): <span class="cp-code">!</span> (!A)</li>
-      <li>XOR (排他): <span class="cp-code">^</span> (A ^ B)</li>
-    </ul>
+  
+  <div id="tab-kmap" class="cp-content">
+    <div style="text-align:center; padding:1rem;">
+      <div id="kmapContainer" class="cp-kmap-wrapper">
+        <span style="color:#666;">// 2〜4変数の論理式に対応しています</span>
+      </div>
+    </div>
   </div>
+
 </div>
 
 <script>
   let currentVariables = [];
   let currentExpression = "";
+  let truthTableData = [];
+
+  
+  function switchTab(tabId) {
+    document.querySelectorAll('.cp-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.cp-tab-btn').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById('tab-' + tabId).classList.add('active');
+    
+    
+    const buttons = document.querySelectorAll('.cp-tab-btn');
+    if (tabId === 'sim') buttons[0].classList.add('active');
+    if (tabId === 'table') buttons[1].classList.add('active');
+    if (tabId === 'kmap') buttons[2].classList.add('active');
+  }
+
+  function insertSymbol(sym) {
+    const input = document.getElementById('logicInput');
+    input.value += sym;
+    input.focus();
+  }
 
   function runAnalysis() {
     const input = document.getElementById('logicInput').value;
@@ -1119,6 +1248,7 @@
     
     const errDiv = document.getElementById('logicError');
     errDiv.style.display = 'none';
+    errDiv.textContent = "";
     
     if (!input.trim()) {
       showError(">> ERROR: 式が空です (EMPTY EXPRESSION)");
@@ -1134,18 +1264,27 @@
         return;
       }
 
+      
       setupSimulator(currentVariables);
-      generateTruthTable(currentVariables, input);
+      
+      
+      generateTruthTableData(currentVariables, input);
+      
+      
+      renderTruthTable();
+      renderSOP();
+
+      
+      renderKarnaughMap(currentVariables);
 
     } catch (e) {
       showError(">> SYNTAX_ERROR: " + e.message);
     }
   }
 
+  
   function setupSimulator(vars) {
-    const box = document.getElementById('simulatorBox');
     const area = document.getElementById('switchArea');
-    box.style.display = 'block';
     area.innerHTML = '';
 
     vars.forEach(v => {
@@ -1168,7 +1307,6 @@
   function toggleSwitch(variable) {
     const wrapper = document.getElementById('switch-wrap-' + variable);
     const valDisplay = document.getElementById('val-' + variable);
-    
     const currentVal = wrapper.dataset.value === "1" ? "0" : "1";
     wrapper.dataset.value = currentVal;
     
@@ -1179,7 +1317,6 @@
       wrapper.classList.remove('active');
       valDisplay.innerText = "OFF (0)";
     }
-
     updateSimulatorResult();
   }
 
@@ -1207,60 +1344,15 @@
     }
   }
 
-  function generateTruthTable(variables, expr) {
-    const wrapper = document.getElementById('tableWrapper');
-    const table = document.getElementById('truthTable');
-    const thead = document.getElementById('tableHeader');
-    const tbody = document.getElementById('tableBody');
-    
-    wrapper.style.display = 'block';
-    thead.innerHTML = '';
-    tbody.innerHTML = '';
-
-    
-    variables.forEach(v => {
-      const th = document.createElement('th');
-      th.textContent = v;
-      thead.appendChild(th);
-    });
-    const resultTh = document.createElement('th');
-    resultTh.textContent = "OUT";
-    resultTh.style.color = "#10b981"; 
-    thead.appendChild(resultTh);
-
-    
-    const rows = 1 << variables.length;
-    for (let i = 0; i < rows; i++) {
-      const tr = document.createElement('tr');
-      let context = {};
-      
-      for (let j = 0; j < variables.length; j++) {
-        const val = (i >> (variables.length - 1 - j)) & 1;
-        context[variables[j]] = val;
-        const td = document.createElement('td');
-        td.textContent = val;
-        tr.appendChild(td);
-      }
-
-      const result = evaluateExpression(expr, context);
-      const tdResult = document.createElement('td');
-      tdResult.textContent = result;
-      tdResult.className = result ? "cp-res-true" : "cp-res-false";
-      
-      tr.appendChild(tdResult);
-      tbody.appendChild(tr);
-    }
-  }
-
-  function showError(msg) {
-    const errorDiv = document.getElementById('logicError');
-    errorDiv.textContent = msg;
-    errorDiv.style.display = 'block';
-  }
-
+  
   function evaluateExpression(expr, context) {
     let parsed = expr;
-    for (const [key, value] of Object.entries(context)) {
+    
+    
+    const sortedVars = Object.keys(context).sort((a, b) => b.length - a.length);
+    
+    for (const key of sortedVars) {
+      const value = context[key];
       const regex = new RegExp("\\b" + key + "\\b", "g");
       parsed = parsed.replace(regex, value);
     }
@@ -1270,7 +1362,159 @@
                    .replace(/!/g, '!')
                    .replace(/\^/g, '!==');
 
-    return new Function('return ' + parsed)() ? 1 : 0;
+    try {
+      return new Function('return ' + parsed)() ? 1 : 0;
+    } catch (e) {
+      throw new Error("Invalid Expression");
+    }
+  }
+
+  
+  function generateTruthTableData(vars, expr) {
+    truthTableData = [];
+    const rows = 1 << vars.length;
+    for (let i = 0; i < rows; i++) {
+      let context = {};
+      let rowData = { bin: [], res: 0 };
+      
+      for (let j = 0; j < vars.length; j++) {
+        const val = (i >> (vars.length - 1 - j)) & 1;
+        context[vars[j]] = val;
+        rowData.bin.push(val);
+      }
+      
+      rowData.res = evaluateExpression(expr, context);
+      truthTableData.push(rowData);
+    }
+  }
+
+  function renderTruthTable() {
+    const thead = document.getElementById('tableHeader');
+    const tbody = document.getElementById('tableBody');
+    thead.innerHTML = '';
+    tbody.innerHTML = '';
+
+    currentVariables.forEach(v => {
+      const th = document.createElement('th');
+      th.textContent = v;
+      thead.appendChild(th);
+    });
+    const resultTh = document.createElement('th');
+    resultTh.textContent = "OUT";
+    resultTh.style.color = "#10b981";
+    thead.appendChild(resultTh);
+
+    truthTableData.forEach(row => {
+      const tr = document.createElement('tr');
+      row.bin.forEach(val => {
+        const td = document.createElement('td');
+        td.textContent = val;
+        tr.appendChild(td);
+      });
+      const tdRes = document.createElement('td');
+      tdRes.textContent = row.res;
+      tdRes.className = row.res ? "cp-res-true" : "cp-res-false";
+      tr.appendChild(tdRes);
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderSOP() {
+    const sopDiv = document.getElementById('sopResult');
+    const minterms = [];
+    
+    truthTableData.forEach((row, idx) => {
+      if (row.res === 1) minterms.push(idx);
+    });
+
+    if (minterms.length === 0) {
+      sopDiv.textContent = "0 (Always False)";
+    } else if (minterms.length === truthTableData.length) {
+      sopDiv.textContent = "1 (Always True)";
+    } else {
+      sopDiv.textContent = "Σm(" + minterms.join(", ") + ")";
+    }
+  }
+
+  
+  function renderKarnaughMap(vars) {
+    const container = document.getElementById('kmapContainer');
+    container.innerHTML = '';
+
+    const n = vars.length;
+    if (n < 2 || n > 4) {
+      container.innerHTML = '<span style="color:#64748b;">// カルノー図は2〜4変数のみ対応しています</span>';
+      return;
+    }
+
+    
+    const gray2 = ["00", "01", "11", "10"];
+    const gray1 = ["0", "1"];
+
+    let rowVars, colVars, rowCodes, colCodes;
+    
+    if (n === 2) { 
+      rowVars = vars.slice(0, 1); colVars = vars.slice(1);
+      rowCodes = gray1; colCodes = gray1;
+    } else if (n === 3) { 
+      rowVars = vars.slice(0, 1); colVars = vars.slice(1);
+      rowCodes = gray1; colCodes = gray2;
+    } else { 
+      rowVars = vars.slice(0, 2); colVars = vars.slice(2);
+      rowCodes = gray2; colCodes = gray2;
+    }
+
+    const table = document.createElement('table');
+    table.className = 'cp-kmap';
+
+    
+    const trHead = document.createElement('tr');
+    const thCorner = document.createElement('th');
+    thCorner.innerHTML = `${rowVars.join('')} \\ ${colVars.join('')}`;
+    thCorner.className = 'cp-kmap-header';
+    trHead.appendChild(thCorner);
+
+    colCodes.forEach(code => {
+      const th = document.createElement('th');
+      th.textContent = code;
+      th.className = 'cp-kmap-header';
+      trHead.appendChild(th);
+    });
+    table.appendChild(trHead);
+
+    
+    rowCodes.forEach(rCode => {
+      const tr = document.createElement('tr');
+      const thRow = document.createElement('th');
+      thRow.textContent = rCode;
+      thRow.className = 'cp-kmap-header';
+      tr.appendChild(thRow);
+
+      colCodes.forEach(cCode => {
+        
+        
+        
+        
+        
+        const binStr = rCode + cCode;
+        const index = parseInt(binStr, 2);
+        const res = truthTableData[index] ? truthTableData[index].res : 0;
+
+        const td = document.createElement('td');
+        td.textContent = res;
+        td.className = res ? 'cp-kmap-cell one' : 'cp-kmap-cell';
+        tr.appendChild(td);
+      });
+      table.appendChild(tr);
+    });
+
+    container.appendChild(table);
+  }
+
+  function showError(msg) {
+    const errorDiv = document.getElementById('logicError');
+    errorDiv.textContent = msg;
+    errorDiv.style.display = 'block';
   }
 </script>
 <hr>

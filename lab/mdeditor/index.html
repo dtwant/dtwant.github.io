@@ -15,21 +15,16 @@
 
   
   
-    <title>Labs &middot; dt&#39;s world</title>
-    <meta name="title" content="Labs &middot; dt&#39;s world">
+    <title>Markdown Editor &middot; dt&#39;s world</title>
+    <meta name="title" content="Markdown Editor &middot; dt&#39;s world">
   
 
   
   
-    <meta name="description" content="ツール集。">
   
   
   
-  
-  <link rel="canonical" href="https://dtwant.github.io/lab/">
-  
-    
-      <link rel="alternate" type="application/rss+xml" href="/lab/index.xml" title="dt's world" />
+  <link rel="canonical" href="https://dtwant.github.io/lab/mdeditor/">
   
 
   
@@ -47,17 +42,16 @@
   
 
   
-  <meta property="og:url" content="https://dtwant.github.io/lab/">
+  <meta property="og:url" content="https://dtwant.github.io/lab/mdeditor/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="Labs">
-  <meta property="og:description" content="らぼらとりぃ">
+  <meta property="og:title" content="Markdown Editor">
   <meta property="og:locale" content="en">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="lab">
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Labs">
-  <meta name="twitter:description" content="らぼらとりぃ">
+  <meta name="twitter:title" content="Markdown Editor">
 
   
   
@@ -115,6 +109,12 @@
   
   
   
+  
+    
+    <script
+      type="text/javascript"
+      src="/js/zen-mode.min.9814dee9614d32aeb56239d118edfe20acd6231424f9b19c2dd48835038414130a5e946c0d1c9087d60e60e31840c9babfd217e3d4b95643dc8d651a71ccdf4a.js"
+      integrity="sha512-mBTe6WFNMq61YjnRGO3&#43;IKzWIxQk&#43;bGcLdSINQOEFBMKXpRsDRyQh9YOYOMYQMm6v9IX49S5VkPcjWUacczfSg=="></script>
   
   
     
@@ -201,7 +201,34 @@
   
 
   
-  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Labs",
+    "name": "Markdown Editor",
+    "headline": "Markdown Editor",
+    
+    
+    "inLanguage": "en",
+    "url" : "https:\/\/dtwant.github.io\/lab\/mdeditor\/",
+    "author" : {
+      "@type": "Person",
+      "name": "dt"
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "16"
+  }]
+  </script>
+
 
 
   
@@ -674,6 +701,8 @@
   
     
   
+    
+  
   <li class="hidden">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/"
       >dt</a
@@ -681,9 +710,16 @@
   </li>
 
   
-  <li class="hidden">
+  <li class="inline">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/"
       >Labs</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/mdeditor/"
+      >Markdown Editor</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -692,44 +728,357 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        Labs
+        Markdown Editor
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <p>作成したツールをまとめている.</p>
-<hr>
+      <hr>
 
-<h2 class="relative group">一覧
-    <div id="一覧" class="anchor"></div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+    svg: { fontCache: 'global' },
+    startup: {
+      pageReady: () => {
+        return MathJax.startup.defaultPageReady().then(() => {
+          window.dispatchEvent(new Event('mathjax-ready'));
+        });
+      }
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+   
+  html body .ne-container {
+    font-family: "JetBrains Mono", monospace;
+    width: 100%;
+     
+    height: 85vh; 
+    min-height: 600px;
+    background-color: #09090b;
+    border: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .ne-container * { box-sizing: border-box; }
+
+   
+  html body .ne-container h3, 
+  html body .ne-container p, 
+  html body .ne-container div, 
+  html body .ne-container span, 
+  html body .ne-container button {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: inherit;
+  }
+
+   
+  .ne-header {
+    height: 50px;
+    background: #18181b;
+    border-bottom: 1px solid #333 !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    flex-shrink: 0;
+  }
+
+  .ne-title {
+    font-weight: bold;
+    color: #22d3ee;  
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ne-status {
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+
+  .ne-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  html body .ne-container button.ne-btn {
+    background: transparent !important;
+    border: 1px solid #444 !important;  
+    color: #a1a1aa !important;
+    padding: 4px 12px;
+    font-family: inherit;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: none !important;
+  }
+  html body .ne-container button.ne-btn:hover {
+    border-color: #22d3ee !important;
+    color: #22d3ee !important;
+    background: rgba(34, 211, 238, 0.1) !important;
+  }
+  html body .ne-container button.ne-btn-primary {
+    border-color: #22d3ee !important;
+    color: #22d3ee !important;
+  }
+  html body .ne-container button.ne-btn-danger {
+    border-color: #ef4444 !important;
+    color: #ef4444 !important;
+  }
+  html body .ne-container button.ne-btn-danger:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+  }
+
+   
+  .ne-workspace {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+   
+  .ne-input-pane {
+    flex: 1;
+    border-right: 1px solid #333 !important;
+    display: flex;
+    flex-direction: column;
+    background: #0c0c0e;
+  }
+  
+  html body .ne-container textarea.ne-textarea {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    background: transparent !important;
+    border: none !important;
+    color: #e2e8f0 !important;
+    padding: 1.5rem;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    overflow-y: auto;
+    box-shadow: none !important;
+    appearance: none !important;
+  }
+  .ne-textarea::placeholder { color: #333; }
+
+   
+  .ne-preview-pane {
+    flex: 1;
+    background: #ffffff !important;  
+    color: #000000 !important;
+    overflow-y: auto;
+    padding: 2rem 3rem;
+    font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+  }
+
+   
+  .ne-preview-content h1 { font-size: 2em; border-bottom: 2px solid #000 !important; padding-bottom: 0.5rem; margin-bottom: 1.5rem; color: #000 !important; }
+  .ne-preview-content h2 { font-size: 1.5em; border-left: 5px solid #000 !important; padding-left: 10px; margin-top: 2rem; margin-bottom: 1rem; color: #000 !important; }
+  .ne-preview-content h3 { font-size: 1.2em; font-weight: bold; margin-top: 1.5rem; color: #000 !important; }
+  .ne-preview-content p { margin-bottom: 1em; text-align: justify; color: #000 !important; }
+  .ne-preview-content ul, .ne-preview-content ol { margin-bottom: 1em; padding-left: 2em; color: #000 !important; }
+  .ne-preview-content li { margin-bottom: 0.5em; color: #000 !important; }
+  .ne-preview-content pre { background: #f4f4f5 !important; padding: 1em; border-radius: 4px; overflow-x: auto; margin-bottom: 1em; color: #333 !important; }
+  .ne-preview-content code { font-family: "JetBrains Mono", monospace; background: #f4f4f5 !important; padding: 0.2em 0.4em; border-radius: 3px; font-size: 0.9em; color: #d63384 !important; }
+  .ne-preview-content blockquote { border-left: 4px solid #ccc !important; padding-left: 1em; color: #555 !important; margin: 1em 0; }
+  .ne-preview-content table { border-collapse: collapse; width: 100%; margin-bottom: 1.5em; color: #000 !important; }
+  .ne-preview-content th, .ne-preview-content td { border: 1px solid #ddd !important; padding: 8px; text-align: left; }
+  .ne-preview-content th { background: #f9fafb !important; font-weight: bold; }
+  .ne-preview-content img { max-width: 100%; height: auto; display: block; margin: 1em auto; }
+
+   
+  .ne-footer {
+    height: 30px;
+    background: #18181b;
+    border-top: 1px solid #333 !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    font-size: 0.7rem;
+    color: #64748b;
+    flex-shrink: 0;
+  }
+
+   
+  @media (max-width: 768px) {
+    .ne-container { height: 90vh; }
+    .ne-workspace { flex-direction: column; }
+    .ne-input-pane { border-right: none !important; border-bottom: 1px solid #333 !important; flex: 1; }
+    .ne-preview-pane { flex: 1; padding: 1rem; }
+    .ne-btn span { display: none; }  
+  }
+
+   
+  @media print {
+    body * { visibility: hidden; }
+    .ne-preview-pane, .ne-preview-pane * { visibility: visible; }
+    .ne-preview-pane {
+      position: absolute;
+      left: 0; top: 0;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+      padding: 0;
+      margin: 0;
+      background: white !important;
+      color: black !important;
+    }
+  }
+</style>
+
+<div class="ne-container">
+  <div class="ne-header">
+    <div class="ne-title">
+      <span>NEURAL_EDITOR</span>
+    </div>
+    <div class="ne-actions">
+      <button class="ne-btn" onclick="insertText('**', '**')">B</button>
+      <button class="ne-btn" onclick="insertText('*', '*')">I</button>
+      <button class="ne-btn" onclick="insertText('# ', '')">H1</button>
+      <button class="ne-btn" onclick="insertText('## ', '')">H2</button>
+      <button class="ne-btn" onclick="insertText('$ ', ' $')">MATH</button>
+      <button class="ne-btn ne-btn-primary" onclick="window.print()">PRINT / PDF</button>
+      <button class="ne-btn ne-btn-danger" onclick="clearEditor()">CLEAR</button>
+    </div>
+  </div>
+
+  <div class="ne-workspace">
+    <div class="ne-input-pane">
+      <textarea id="ne-input" class="ne-textarea" placeholder="WRITE_SOURCE_CODE_HERE..." spellcheck="false"></textarea>
+    </div>
+    <div class="ne-preview-pane">
+      <div id="ne-preview" class="ne-preview-content"></div>
+    </div>
+  </div>
+
+  <div class="ne-footer">
+    <div id="ne-word-count">CHARS: 0 | LINES: 0</div>
+    <div id="ne-save-status">SYSTEM_READY</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const input = document.getElementById('ne-input');
+    const preview = document.getElementById('ne-preview');
+    const status = document.getElementById('ne-save-status');
+    const wordCount = document.getElementById('ne-word-count');
+    const STORAGE_KEY = 'dt_neural_editor_content';
+
     
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e4%b8%80%e8%a6%a7" aria-label="Anchor">#</a>
-    </span>
+    const DEFAULT_TEXT = `# 実験報告書
+
+**氏名:** **学籍番号:** **実験日:** 2026-xx-xx
+
+## 1. 目的
+ここに実験の目的を記述する。数式も使える。
+$$ E = mc^2 $$
+
+## 2. 原理
+Markdown記法で記述できる。
+- リスト項目1
+- リスト項目2
+
+## 3. 結果
+| 項目 | 値 |
+|---|---|
+| 電圧 | 5.0 V |
+| 電流 | 0.2 A |
+
+`;
+
     
-</h2>
-<ul>
-<li><strong><a
-  href="../lab/latex/">LaTeX Editor</a></strong>: LaTeXエディター(PNG保存)</li>
-<li><strong><a
-  href="../lab/logic/">論理回路Simulator</a></strong>: 真理値表ジェネレーター &amp; シミュレーター</li>
-<li><strong><a
-  href="../lab/mermaid/">Mermaid Editor</a></strong>: フローチャートなどの作図ツール</li>
-<li><strong><a
-  href="../lab/crypto/">Cryptography Lab</a></strong>: RSA暗号、シーザー暗号、基数変換ツール</li>
-<li><strong><a
-  href="../lab/math/">Math Solver</a></strong>: 部分分数分解ツール（Python powered）</li>
-<li><strong><a
-  href="../lab/stamp/">Stamp Calculator</a></strong>: 郵便料金計算機（最小枚数計算）</li>
-<li><strong><a
-  href="../lab/attendance/">Attendance Monitor</a></strong>: 欠課時数管理ツール</li>
-<li><strong><a
-  href="../lab/deadline/">Deadline Manager</a></strong>: 課題管理ツール</li>
-<li><strong><a
-  href="../lab/report">Report Generator(運用調整中)</a></strong>: レポートひな形作成ツール</li>
-<li><strong><a
-  href="../lab/mdeditor">Markdown Editor</a></strong>: Markdownエディタ</li>
-</ul>
+    const saved = localStorage.getItem(STORAGE_KEY);
+    input.value = saved ? saved : DEFAULT_TEXT;
+
+    
+    const renderMarkdown = () => {
+      const text = input.value;
+      
+      
+      
+      let html = marked.parse(text);
+      preview.innerHTML = html;
+
+      
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([preview]).catch(err => console.log(err));
+      }
+
+      
+      const chars = text.length;
+      const lines = text.split(/\r\n|\r|\n/).length;
+      wordCount.innerText = `CHARS: ${chars} | LINES: ${lines}`;
+    };
+
+    
+    const saveContent = () => {
+      localStorage.setItem(STORAGE_KEY, input.value);
+      status.innerText = "SAVED: " + new Date().toLocaleTimeString();
+      setTimeout(() => { status.innerText = "ONLINE"; }, 2000);
+    };
+
+    
+    let timeoutId;
+    input.addEventListener('input', () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        renderMarkdown();
+        saveContent();
+      }, 300); 
+    });
+
+    
+    window.insertText = (before, after) => {
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      const text = input.value;
+      const selected = text.substring(start, end);
+      
+      input.value = text.substring(0, start) + before + selected + after + text.substring(end);
+      input.focus();
+      input.selectionStart = start + before.length;
+      input.selectionEnd = end + before.length;
+      
+      renderMarkdown();
+      saveContent();
+    };
+
+    
+    window.clearEditor = () => {
+      if(confirm('ALL DATA WILL BE DELETED. PROCEED?')) {
+        input.value = '';
+        renderMarkdown();
+        saveContent();
+      }
+    };
+
+    
+    renderMarkdown();
+
+  })();
+</script>
 
     </section>
     <footer class="pt-8">

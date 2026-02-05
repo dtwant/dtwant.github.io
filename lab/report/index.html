@@ -15,21 +15,16 @@
 
   
   
-    <title>Labs &middot; dt&#39;s world</title>
-    <meta name="title" content="Labs &middot; dt&#39;s world">
+    <title>Report Generator &middot; dt&#39;s world</title>
+    <meta name="title" content="Report Generator &middot; dt&#39;s world">
   
 
   
   
-    <meta name="description" content="ツール集。">
   
   
   
-  
-  <link rel="canonical" href="https://dtwant.github.io/lab/">
-  
-    
-      <link rel="alternate" type="application/rss+xml" href="/lab/index.xml" title="dt's world" />
+  <link rel="canonical" href="https://dtwant.github.io/lab/report/">
   
 
   
@@ -47,17 +42,16 @@
   
 
   
-  <meta property="og:url" content="https://dtwant.github.io/lab/">
+  <meta property="og:url" content="https://dtwant.github.io/lab/report/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="Labs">
-  <meta property="og:description" content="らぼらとりぃ">
+  <meta property="og:title" content="Report Generator">
   <meta property="og:locale" content="en">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="lab">
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Labs">
-  <meta name="twitter:description" content="らぼらとりぃ">
+  <meta name="twitter:title" content="Report Generator">
 
   
   
@@ -115,6 +109,12 @@
   
   
   
+  
+    
+    <script
+      type="text/javascript"
+      src="/js/zen-mode.min.9814dee9614d32aeb56239d118edfe20acd6231424f9b19c2dd48835038414130a5e946c0d1c9087d60e60e31840c9babfd217e3d4b95643dc8d651a71ccdf4a.js"
+      integrity="sha512-mBTe6WFNMq61YjnRGO3&#43;IKzWIxQk&#43;bGcLdSINQOEFBMKXpRsDRyQh9YOYOMYQMm6v9IX49S5VkPcjWUacczfSg=="></script>
   
   
     
@@ -201,7 +201,34 @@
   
 
   
-  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Labs",
+    "name": "Report Generator",
+    "headline": "Report Generator",
+    
+    
+    "inLanguage": "en",
+    "url" : "https:\/\/dtwant.github.io\/lab\/report\/",
+    "author" : {
+      "@type": "Person",
+      "name": "dt"
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "55"
+  }]
+  </script>
+
 
 
   
@@ -674,6 +701,8 @@
   
     
   
+    
+  
   <li class="hidden">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/"
       >dt</a
@@ -681,9 +710,16 @@
   </li>
 
   
-  <li class="hidden">
+  <li class="inline">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/"
       >Labs</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/report/"
+      >Report Generator</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -692,44 +728,461 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        Labs
+        Report Generator
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <p>作成したツールをまとめている.</p>
-<hr>
+      <p>(試験運用中)</p>
+<p>簡易的なレポートのひな型を作成する.<br>
+LaTeXとmarkdownでの出力に対応している.</p>
 
-<h2 class="relative group">一覧
-    <div id="一覧" class="anchor"></div>
+
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+   
+  .cp-report-container {
+    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
+    max-width: 900px;
+    width: 95%;
+    margin: 2rem auto;
+    background-color: #09090b;
+    background-image: 
+      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
+    background-size: 20px 20px;
+    padding: 2.5rem;
+    border: 1px solid #333;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
+    color: #e2e8f0;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+  .cp-report-container * { box-sizing: border-box; }
+
+   
+   
+  .cp-report-container h3, .cp-report-container p, .cp-report-container div, 
+  .cp-report-container span, .cp-report-container label {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: inherit;
+  }
+
+   
+  .cp-report-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #8b5cf6, #ec4899, #8b5cf6);  
+    background-size: 200% 100%;
+    animation: scanline 4s linear infinite;
+    pointer-events: none;
+    z-index: 10;
+  }
+  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+   
+  .cp-report-container .cp-header {
+    border-bottom: 1px solid #333 !important;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cp-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ec4899 !important;  
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 8px rgba(236, 72, 153, 0.4);
+  }
+  .cp-subtitle {
+    font-size: 0.8rem;
+    color: #64748b !important;
+  }
+
+   
+  .cp-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 640px) { .cp-form-grid { grid-template-columns: 1fr; } }
+
+  .cp-control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cp-label {
+    font-size: 0.8rem;
+    color: #a78bfa !important;
+    font-weight: bold;
+  }
+
+   
+  .cp-report-container .cp-input, 
+  .cp-report-container .cp-select {
+    background: #000 !important;
+    border: 1px solid #444 !important;  
+    color: #ec4899 !important;
+    padding: 0.8rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    border-radius: 2px;
+    width: 100%;
+    transition: all 0.2s;
+    box-shadow: none !important;
+  }
+  .cp-input:focus, .cp-select:focus {
+    outline: none;
+    border-color: #ec4899 !important;
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.2) !important;
+  }
+
+   
+   
+  .cp-report-container .cp-toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: rgba(255,255,255,0.02) !important;
+    border: 1px solid #333 !important;  
+  }
+  .cp-report-container .cp-toggle-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #e2e8f0 !important;
+    padding: 5px 10px;
+    background: #0e0e11 !important;
+    border: 1px solid #444 !important;  
+    user-select: none;
+  }
+  .cp-toggle-input {
+    appearance: none;
+    width: 12px; height: 12px;
+    border: 1px solid #64748b !important;  
+    background: transparent !important;
+    cursor: pointer;
+    position: relative;
+    box-shadow: none !important;
+  }
+  .cp-toggle-input:checked {
+    background: #ec4899 !important;
+    border-color: #ec4899 !important;
+    box-shadow: 0 0 5px #ec4899 !important;
+  }
+
+   
+  .cp-output-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+   
+  .cp-report-container .cp-textarea {
+    width: 100%;
+    min-height: 300px;
+    background: #0e0e11 !important;
+    border: 1px dashed #444 !important;  
+    color: #e2e8f0 !important;
+    padding: 1.5rem;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    resize: vertical;
+    box-shadow: none !important;
+  }
+  .cp-textarea:focus {
+    outline: none;
+    border-color: #ec4899 !important;
+    background: #000 !important;
+  }
+
+   
+  .cp-report-container .cp-phrase-bank {
+    margin-top: 2rem;
+    border-top: 1px solid #333 !important;
+    padding-top: 1.5rem;
+  }
+  .cp-report-container .cp-bank-title {
+    font-size: 0.9rem;
+    color: #a78bfa !important;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-left: 2px solid #a78bfa !important;
+    padding-left: 10px;
+  }
+  
+   
+  .cp-bank-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .cp-bank-category {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .cp-cat-name {
+    font-size: 0.75rem;
+    color: #64748b !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+   
+  .cp-report-container .cp-chip {
+    background: #18181b !important;
+    border: 1px solid #333 !important;
+    color: #e2e8f0 !important;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: none !important;
+  }
+  .cp-chip::after {
+    content: '+';
+    color: #64748b;
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+  .cp-chip:hover {
+    border-color: #ec4899 !important;
+    color: #ec4899 !important;
+    background: #000 !important;
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.1) !important;
+  }
+  .cp-chip:hover::after { color: #ec4899; }
+
+   
+  .cp-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-bottom: 1rem;
+  }
+  
+  .cp-report-container .cp-btn {
+    background: transparent !important;
+    border: 1px solid #ec4899 !important;
+    color: #ec4899 !important;
+    padding: 0.8rem 2rem;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    box-shadow: none !important;
+  }
+  .cp-btn:hover {
+    background: #ec4899 !important;
+    color: #000 !important;
+    box-shadow: 0 0 15px rgba(236, 72, 153, 0.6) !important;
+  }
+  
+  .cp-btn-secondary {
+    border-color: #a78bfa !important;
+    color: #a78bfa !important;
+  }
+  .cp-btn-secondary:hover {
+    background: #a78bfa !important;
+    color: #000 !important;
+    box-shadow: 0 0 15px rgba(167, 139, 250, 0.6) !important;
+  }
+
+</style>
+
+<div class="cp-report-container">
+  <div class="cp-header">
+    <div class="cp-title">REPORT_SCAFFOLDER</div>
+    <div class="cp-subtitle">// レポート構成・定型文生成</div>
+  </div>
+
+  <div class="cp-form-grid">
+    <div class="cp-control-group">
+      <label class="cp-label">SUBJECT [科目/実験名]</label>
+      <input type="text" id="rep-subject" class="cp-input" placeholder="物理実験I">
+    </div>
+    <div class="cp-control-group">
+      <label class="cp-label">TITLE [題目]</label>
+      <input type="text" id="rep-title" class="cp-input" placeholder="単振り子の周期測定">
+    </div>
+    <div class="cp-control-group">
+      <label class="cp-label">AUTHOR [氏名]</label>
+      <input type="text" id="rep-name" class="cp-input">
+    </div>
+    <div class="cp-control-group">
+      <label class="cp-label">NUMBER [学籍番号]</label>
+      <input type="text" id="rep-id" class="cp-input">
+    </div>
+    <div class="cp-control-group">
+      <label class="cp-label">DATE [実験日]</label>
+      <input type="date" id="rep-date" class="cp-input">
+    </div>
+    <div class="cp-control-group">
+      <label class="cp-label">FORMAT [出力形式]</label>
+      <select id="rep-format" class="cp-select">
+        <option value="markdown">MARKDOWN (MD)</option>
+        <option value="latex">LATEX (TEX)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="cp-toggles">
+    <label class="cp-toggle-label"><input type="checkbox" class="cp-toggle-input" value="purpose" checked> 目的</label>
+    <label class="cp-toggle-label"><input type="checkbox" class="cp-toggle-input" value="theory" checked> 原理</label>
+    <label class="cp-toggle-label"><input type="checkbox" class="cp-toggle-input" value="method" checked> 方法</label>
+    <label class="cp-toggle-label"><input type="checkbox" class="cp-toggle-input" value="result" checked> 結果</label>
+    <label class="cp-toggle-label"><input type="checkbox" class="cp-toggle-input" value="discussion" checked> 考察</label>
+    <label class="cp-toggle-label"><input type="checkbox" class="cp-toggle-input" value="conclusion" checked> 結論</label>
+  </div>
+
+  <div class="cp-actions">
+    <button class="cp-btn cp-btn-secondary" onclick="generate()">GENERATE</button>
+    <button class="cp-btn" onclick="copyText()">COPY</button>
+  </div>
+
+  <div class="cp-output-area">
+    <textarea id="rep-output" class="cp-textarea" placeholder="// OUTPUT WILL APPEAR HERE..."></textarea>
+  </div>
+
+  <div class="cp-phrase-bank">
+    <div class="cp-bank-title">PHRASE_INJECTOR [定型文挿入]</div>
     
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e4%b8%80%e8%a6%a7" aria-label="Anchor">#</a>
-    </span>
+    <div class="cp-bank-grid">
+      
+      <div class="cp-bank-category">
+        <div class="cp-cat-name">PURPOSE / THEORY</div>
+        <button class="cp-chip" onclick="insert('本実験の目的は、～を検証することである。')">検証することである</button>
+        <button class="cp-chip" onclick="insert('～の原理に基づき、測定を行った。')">原理に基づき</button>
+      </div>
+
+      
+      <div class="cp-bank-category">
+        <div class="cp-cat-name">RESULTS</div>
+        <button class="cp-chip" onclick="insert('測定結果を表1に示す。')">表に示す</button>
+        <button class="cp-chip" onclick="insert('図1のような特性が得られた。')">図のようになった</button>
+        <button class="cp-chip" onclick="insert('理論値との誤差は～%であった。')">誤差は～%</button>
+      </div>
+
+      
+      <div class="cp-bank-category">
+        <div class="cp-cat-name">DISCUSSION / CONC.</div>
+        <button class="cp-chip" onclick="insert('この誤差の要因として、～が考えられる。')">誤差の要因</button>
+        <button class="cp-chip" onclick="insert('理論値と概ね一致した。')">概ね一致</button>
+        <button class="cp-chip" onclick="insert('以上の結果から、～であることが確認できた。')">確認できた</button>
+      </div>
+
+      
+      <div class="cp-bank-category">
+        <div class="cp-cat-name">LATEX SNIPPETS</div>
+        <button class="cp-chip" onclick="insert('\\begin{figure}[h]\n  \\centering\n  \\includegraphics[width=10cm]{fig1.png}\n  \\caption{キャプション}\n  \\label{fig:1}\n\\end{figure}')">図 (Figure)</button>
+        <button class="cp-chip" onclick="insert('\\begin{table}[h]\n  \\centering\n  \\caption{キャプション}\n  \\label{tab:1}\n  \\begin{tabular}{c c}\n    A & B \\\\\n    \\hline\n    1 & 2 \\\\\n  \\end{tabular}\n\\end{table}')">表 (Table)</button>
+        <button class="cp-chip" onclick="insert('\\begin{equation}\n  y = ax + b\n\\end{equation}')">数式 (Eq)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function generate() {
+    const subject = document.getElementById('rep-subject').value;
+    const title = document.getElementById('rep-title').value;
+    const name = document.getElementById('rep-name').value;
+    const id = document.getElementById('rep-id').value;
+    const date = document.getElementById('rep-date').value;
+    const format = document.getElementById('rep-format').value;
     
-</h2>
-<ul>
-<li><strong><a
-  href="../lab/latex/">LaTeX Editor</a></strong>: LaTeXエディター(PNG保存)</li>
-<li><strong><a
-  href="../lab/logic/">論理回路Simulator</a></strong>: 真理値表ジェネレーター &amp; シミュレーター</li>
-<li><strong><a
-  href="../lab/mermaid/">Mermaid Editor</a></strong>: フローチャートなどの作図ツール</li>
-<li><strong><a
-  href="../lab/crypto/">Cryptography Lab</a></strong>: RSA暗号、シーザー暗号、基数変換ツール</li>
-<li><strong><a
-  href="../lab/math/">Math Solver</a></strong>: 部分分数分解ツール（Python powered）</li>
-<li><strong><a
-  href="../lab/stamp/">Stamp Calculator</a></strong>: 郵便料金計算機（最小枚数計算）</li>
-<li><strong><a
-  href="../lab/attendance/">Attendance Monitor</a></strong>: 欠課時数管理ツール</li>
-<li><strong><a
-  href="../lab/deadline/">Deadline Manager</a></strong>: 課題管理ツール</li>
-<li><strong><a
-  href="../lab/report">Report Generator(運用調整中)</a></strong>: レポートひな形作成ツール</li>
-<li><strong><a
-  href="../lab/mdeditor">Markdown Editor</a></strong>: Markdownエディタ</li>
-</ul>
+    const sections = Array.from(document.querySelectorAll('.cp-toggle-input:checked')).map(cb => cb.value);
+    
+    let out = "";
+
+    if (format === 'markdown') {
+      out += `# ${title}\n\n`;
+      out += `**科目:** ${subject}  \n`;
+      out += `**学籍番号:** ${id}  \n`;
+      out += `**氏名:** ${name}  \n`;
+      out += `**実験日:** ${date}  \n`;
+      out += `\n---\n\n`;
+      
+      if (sections.includes('purpose')) out += `## 1. 目的\n\n`;
+      if (sections.includes('theory')) out += `## 2. 原理\n\n`;
+      if (sections.includes('method')) out += `## 3. 実験方法\n\n1. \n2. \n`;
+      if (sections.includes('result')) out += `## 4. 実験結果\n\n`;
+      if (sections.includes('discussion')) out += `## 5. 考察\n\n`;
+      if (sections.includes('conclusion')) out += `## 6. 結論\n\n`;
+      out += `## 参考文献\n`;
+    
+    } else {
+      out += `\\documentclass[a4paper,11pt]{jsarticle}\n`;
+      out += `\\usepackage[dvipdfmx]{graphicx}\n\\usepackage{amsmath}\n\n`;
+      out += `\\title{${title}}\n`;
+      out += `\\author{${id} ${name}}\n`;
+      out += `\\date{${date}}\n\n`;
+      out += `\\begin{document}\n\\maketitle\n\n`;
+      
+      if (sections.includes('purpose')) out += `\\section{目的}\n\n`;
+      if (sections.includes('theory')) out += `\\section{原理}\n\n`;
+      if (sections.includes('method')) out += `\\section{実験方法}\n\n`;
+      if (sections.includes('result')) out += `\\section{実験結果}\n\n`;
+      if (sections.includes('discussion')) out += `\\section{考察}\n\n`;
+      if (sections.includes('conclusion')) out += `\\section{結論}\n\n`;
+      out += `\\begin{thebibliography}{9}\n\\bibitem{ref1} 参考文献\n\\end{thebibliography}\n`;
+      out += `\\end{document}`;
+    }
+
+    document.getElementById('rep-output').value = out;
+  }
+
+  function insert(text) {
+    const textarea = document.getElementById('rep-output');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const original = textarea.value;
+    
+    textarea.value = original.substring(0, start) + text + original.substring(end);
+    textarea.focus();
+    textarea.selectionStart = textarea.selectionEnd = start + text.length;
+  }
+
+  function copyText() {
+    const textarea = document.getElementById('rep-output');
+    textarea.select();
+    document.execCommand('copy');
+    alert("COPIED TO CLIPBOARD");
+  }
+</script>
 
     </section>
     <footer class="pt-8">
