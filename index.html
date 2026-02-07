@@ -773,140 +773,282 @@
               </div>
             
           </div>
-          <section class="prose dark:prose-invert w-full"><hr>
-
-<h2 class="relative group"><a href="/0723/" style="text-decoration: none; cursor: text;">   </a>　　🐸🦎🐇🐶🐹🦐　　   
-    <div id="heading" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#heading" aria-label="Anchor">#</a>
-    </span>
-    
-</h2>
-<p>主に数学・物理の記録や植物の記録を載せます。<br>
-書いたPDFも載せたりします。</p>
-<p>サイト中で利用している生き物の画像に関しては全て家の生体たち，もしくは野外で撮影されたものです。</p>
-<!-- ▼▼▼ ここからスライドショー ▼▼▼ -->
-<div class="simple-slider">
-  <img src="/img/slide/IMG_0697.jpg" class="slider-img active">
-  <img src="/img/slide/IMG_1731.jpg" class="slider-img">
-  <img src="/img/slide/IMG_1990.jpg" class="slider-img">
-  <img src="/img/slide/IMG_2193.jpg" class="slider-img">
-  <img src="/img/slide/IMG_2346.jpg" class="slider-img">
-  <img src="/img/slide/IMG_2498.jpg" class="slider-img">
-  <img src="/img/slide/IMG_2640.jpg" class="slider-img">
-  <img src="/img/slide/IMG_2667.jpg" class="slider-img">
-  <img src="/img/slide/IMG_2731.jpg" class="slider-img">
-</div>
+          <section class="prose dark:prose-invert w-full"><!-- Google Fonts: デジタル感のあるOrbitronを追加 -->
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 <style>
-/* CSS: 見た目の設定 */
-.simple-slider {
+/* --- カラーパレット定義 --- */
+:root {
+  --bg-color: #f8f9fa;
+  --text-color: #374151;
+  --card-bg: #ffffff;
+  --accent-primary: #00f3ff; /* サイバーシアン */
+  --accent-secondary: #ff0055; /* ネオンピンク */
+  --grid-color: rgba(0, 0, 0, 0.05);
+  --border-color: #e5e7eb;
+}
+
+/* ダークモード時の定義 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #050505;
+    --text-color: #e5e7eb;
+    --card-bg: #111827;
+    --grid-color: rgba(0, 243, 255, 0.05);
+    --border-color: #374151;
+  }
+}
+
+/* --- ベースレイアウト（レスポンシブ対応強化） --- */
+.dt-container {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  color: var(--text-color);
+  line-height: 1.8;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1rem;
+  /* 背景にうっすらデジタルグリッドを表示 */
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+  min-height: 100vh;
+}
+
+/* --- カードスタイル（少しだけサイバー） --- */
+.dt-card {
+  background: var(--card-bg);
+  /* 角を少しカクっとさせる */
+  border-radius: 4px; 
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  border: 1px solid var(--border-color);
+  /* 控えめなネオン発光 */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+/* カードの左端にアクセントライン */
+.dt-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, var(--accent-primary), var(--accent-secondary));
+}
+
+/* スマホでのカード余白調整 */
+@media (max-width: 640px) {
+  .dt-card {
+    padding: 1.5rem 1rem;
+  }
+}
+
+/* --- 隠しリンクエリア --- */
+.secret-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  letter-spacing: 0.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hidden-trigger {
+  text-decoration: none;
+  cursor: text;
+  color: transparent;
+  user-select: none;
+  display: inline-block;
+  min-width: 20px;
+}
+
+.header-spacer {
+  display: inline-block;
+  min-width: 20px;
+  cursor: default;
+  user-select: none;
+}
+
+.intro-text {
+  text-align: center;
+  margin-bottom: 0;
+  font-weight: 500;
+}
+.intro-note {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: #6b7280; /* ダークモードでも読みやすいグレー */
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* --- スライドショー（枠にテック感をプラス） --- */
+.slider-wrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 128 / 59; 
+  aspect-ratio: 128 / 59;
   overflow: hidden;
-  border-radius: 10px;
-  background-color: #f0f0f0;
-  
-  /* 余白削除の決定版 */
-  margin: 1rem 0 2rem 0 !important; 
-  padding: 0 !important;
-  line-height: 0 !important;
+  border-radius: 2px;
+  margin: 2rem 0 1rem 0;
+  background-color: #000;
+  border: 1px solid var(--border-color);
 }
+
+/* スライドショーの四隅に装飾 */
+.slider-deco {
+  position: absolute;
+  width: 10px; height: 10px;
+  border: 2px solid var(--accent-primary);
+  z-index: 20;
+  pointer-events: none;
+}
+.sd-tl { top: 4px; left: 4px; border-right: none; border-bottom: none; }
+.sd-tr { top: 4px; right: 4px; border-left: none; border-bottom: none; }
+.sd-bl { bottom: 4px; left: 4px; border-right: none; border-top: none; }
+.sd-br { bottom: 4px; right: 4px; border-left: none; border-top: none; }
 
 .slider-img {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   object-fit: cover;
-  
-  /* ふわっと切り替わるアニメーション設定 */
   opacity: 0;
-  transition: opacity 1.5s ease-in-out; 
-  
-  /* テーマの余白設定を強制無効化 */
+  transition: opacity 1.2s ease-in-out;
   margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
   display: block !important;
-  z-index: 1; 
 }
 
-/* 表示中の画像 */
 .slider-img.active {
-  opacity: 1 !important;
+  opacity: 1;
   z-index: 10;
 }
+
+/* --- 見出しスタイル（OrbitronフォントでSF感） --- */
+h3.dt-heading {
+  font-family: 'Orbitron', sans-serif; /* ここを変更 */
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed var(--border-color);
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.1em;
+}
+
+/* 見出しのアイコン装飾 */
+h3.dt-heading::before {
+  content: '>';
+  margin-right: 0.8rem;
+  color: var(--accent-primary);
+  font-weight: 700;
+  animation: blink 1.5s infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* --- Interest リスト（パネルデザイン） --- */
+.interest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.interest-item {
+  background: rgba(128, 128, 128, 0.05);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  transition: all 0.3s;
+  position: relative;
+}
+.interest-item:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.interest-category {
+  display: block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 2px solid var(--accent-secondary);
+  width: fit-content;
+}
+
+.interest-content {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.95rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+.interest-content li {
+  margin-bottom: 0.4rem;
+}
+
+/* --- アラートエリア調整 --- */
+.alert-spacer {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+}
 </style>
-<!-- JS: 時間経過で切り替えるプログラム -->
-<script>
-(function() {
-  // 画像を取得
-  var images = document.querySelectorAll('.simple-slider .slider-img');
-  
-  // 画像がない場合は何もしない
-  if (images.length === 0) return;
-
-  var currentIndex = 0;
-  
-  // ▼▼▼ ここで時間を指定します (ミリ秒) ▼▼▼
-  var intervalTime =2000; 
-  // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-
-  // 一定時間ごとに実行されるループ処理
-  setInterval(function() {
-    // 1. 今の画像を消す
-    images[currentIndex].classList.remove('active');
-    
-    // 2. 次の番号へ (最後の画像の次は0に戻る)
-    currentIndex = (currentIndex + 1) % images.length;
-    
-    // 3. 次の画像を表示
-    images[currentIndex].classList.add('active');
-  }, intervalTime);
-})();
-</script>
-<!-- ▲▲▲ ここまでスライドショー ▲▲▲ -->
-<hr>
-
-<h3 class="relative group">&lt;Interest!&gt;
-    <div id="interest" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#interest" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-<ul>
-<li>数学
-<ul>
-<li>$\zeta$関数，MZV</li>
+<div class="dt-container">
+<div class="dt-card">
+<div class="secret-header">
+<a href="/0723/" class="hidden-trigger">&nbsp;&nbsp;&nbsp;</a>
+<span>🐸🦎🐇🐶🐹🦐</span>
+<span class="header-spacer">&nbsp;&nbsp;&nbsp;</span>
+</div>
+<div class="intro-text">
+主に数学・物理の記録や植物の記録を載せます。<br>
+書いたPDFも載せたりします。
+<span class="intro-note">※ サイト中で利用している生き物の画像に関しては全て家の生体たち，もしくは野外で撮影されたものです。</span>
+</div>
+<div class="slider-wrapper">
+<!-- 装飾用コーナー -->
+<div class="slider-deco sd-tl"></div>
+<div class="slider-deco sd-tr"></div>
+<div class="slider-deco sd-bl"></div>
+<div class="slider-deco sd-br"></div>
+<img src="/img/slide/IMG_0697.jpg" class="slider-img active" loading="lazy">
+<img src="/img/slide/IMG_1731.jpg" class="slider-img" loading="lazy">
+<img src="/img/slide/IMG_1990.jpg" class="slider-img" loading="lazy">
+<img src="/img/slide/IMG_2193.jpg" class="slider-img" loading="lazy">
+<img src="/img/slide/IMG_2346.jpg" class="slider-img" loading="lazy">
+<img src="/img/slide/IMG_2498.jpg" class="slider-img" loading="lazy">
+<img src="/img/slide/IMG_2640.jpg" class="slider-img" loading="lazy">
+<img src="/img/slide/IMG_2667.jpg" class="slider-img" loading="lazy">
+<img src="/img/slide/IMG_2731.jpg" class="slider-img" loading="lazy">
+</div>
+</div>
+<div class="dt-card">
+<h3 class="dt-heading">INTEREST</h3>
+<div class="interest-grid">
+<div class="interest-item">
+<span class="interest-category">MATHEMATICS</span>
+<ul class="interest-content">
+<li>$\zeta\,$関数，MZV</li>
 <li>位相空間論</li>
 <li>環論，圏論</li>
 </ul>
-</li>
-<li>物理，特に解析力学
-<ul>
-<li>電磁気
-<br></li>
+</div>
+<div class="interest-item">
+<span class="interest-category">PHYSICS</span>
+<ul class="interest-content">
+<li>解析力学</li>
+<li>電磁気学</li>
 </ul>
-</li>
-</ul>
-<hr>
-
-<h3 class="relative group"><Memo>
-    <div id="" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
+</div>
+</div>
+</div>
+<div class="dt-card">
+<h3 class="dt-heading">MEMO</h3>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script async src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script async src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -1051,7 +1193,8 @@
         });
     })();
 </script>
-<hr>
+</div>
+<div class="alert-spacer">
 
   
   
@@ -1082,8 +1225,23 @@
 そのような記事にはタイトルの末尾に&quot;☆“が付してあります。</span>
 </div>
 
-<hr>
-</section>
+</div>
+</div>
+<script>
+(function() {
+const images = document.querySelectorAll('.slider-wrapper .slider-img');
+if (images.length === 0) return;
+
+let currentIndex = 0;
+const intervalTime = 3000;
+
+setInterval(() => {
+images[currentIndex].classList.remove('active');
+currentIndex = (currentIndex + 1) % images.length;
+images[currentIndex].classList.add('active');
+}, intervalTime);
+})();
+</script></section>
         </div>
       </div>
     </div>
