@@ -854,6 +854,7 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  white-space: nowrap; /* 強制的に改行させない */
 }
 
 .hidden-trigger {
@@ -870,6 +871,18 @@
   min-width: 20px;
   cursor: default;
   user-select: none;
+}
+
+/* スマホ用のヘッダー調整（文字サイズ縮小で改行回避） */
+@media (max-width: 640px) {
+  .secret-header {
+    font-size: 1rem; /* サイズダウン */
+    letter-spacing: 0.05em; /* 文字間も詰める */
+    gap: 0.5rem;
+  }
+  .hidden-trigger, .header-spacer {
+    min-width: 10px; /* 隠しエリアも少し狭く */
+  }
 }
 
 .intro-text {
@@ -1033,7 +1046,7 @@ h3.dt-heading::before {
 <div class="interest-item">
 <span class="interest-category">MATHEMATICS</span>
 <ul class="interest-content">
-<li>$\zeta\,$関数，MZV</li>
+<li>$\zeta$関数，MZV</li>
 <li>位相空間論</li>
 <li>環論，圏論</li>
 </ul>
