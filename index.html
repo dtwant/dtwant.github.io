@@ -788,7 +788,6 @@
   --border-color: #e5e7eb;
 }
 
-/* ダークモード時の定義 */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg-color: #050505;
@@ -1003,7 +1002,7 @@ h3.dt-heading::before {
   font-size: 0.9rem;
 }
 
-/* --- ▼ 生体認証スキャナー (New Gimmick) --- */
+/* --- ▼ 生体認証スキャナー (画像表示版) --- */
 .bio-scanner-container {
   margin-top: 3rem;
   margin-bottom: 2rem;
@@ -1015,8 +1014,8 @@ h3.dt-heading::before {
 }
 
 .fingerprint-btn {
-  width: 80px;
-  height: 80px;
+  width: 90px; /* 少し大きくしました */
+  height: 90px;
   position: relative;
   cursor: pointer;
   opacity: 0.5;
@@ -1025,13 +1024,20 @@ h3.dt-heading::before {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 指紋SVGの設定 */
-.fingerprint-svg {
+.fingerprint-img {
   width: 100%;
   height: 100%;
-  fill: var(--text-color);
-  filter: drop-shadow(0 0 2px rgba(0, 243, 255, 0));
-  transition: fill 0.2s, filter 0.2s;
+  /* その画像を直接指定 */
+  background-image: url("https://illust8.com/wp-content/uploads/2021/07/fingerprint_14036.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  
+  /* 黒い画像を「白」に反転し、不透明度を下げる */
+  filter: invert(1) brightness(2);
+  opacity: 0.6;
+  
+  transition: all 0.2s;
 }
 
 /* スキャンバー */
@@ -1041,7 +1047,7 @@ h3.dt-heading::before {
   width: 100%;
   height: 4px;
   background: var(--accent-primary);
-  box-shadow: 0 0 10px var(--accent-primary);
+  box-shadow: 0 0 15px var(--accent-primary); /* ビームの発光を強化 */
   opacity: 0;
   pointer-events: none;
 }
@@ -1057,15 +1063,17 @@ h3.dt-heading::before {
   height: 1.2em;
 }
 
-/* --- スキャン中のスタイル --- */
+/* --- スキャン中 --- */
 .fingerprint-btn.scanning {
   opacity: 1;
   transform: scale(1.05);
 }
 
-.fingerprint-btn.scanning .fingerprint-svg {
-  fill: var(--accent-primary);
-  filter: drop-shadow(0 0 8px var(--accent-primary));
+.fingerprint-btn.scanning .fingerprint-img {
+  /* スキャン中は「シアン」色っぽく光らせるフィルター */
+  /* 白(invert1)にしてから、影(drop-shadow)で色をつける手法 */
+  filter: invert(1) drop-shadow(0 0 5px var(--accent-primary));
+  opacity: 1;
 }
 
 .fingerprint-btn.scanning .scan-beam {
@@ -1080,12 +1088,13 @@ h3.dt-heading::before {
   100% { top: 100%; opacity: 0; }
 }
 
-/* 成功時のスタイル */
+/* --- 成功時 --- */
 .fingerprint-btn.success {
   animation: success-pulse 0.5s ease forwards;
 }
-.fingerprint-btn.success .fingerprint-svg {
-  fill: #00ff66;
+.fingerprint-btn.success .fingerprint-img {
+  /* 成功時は緑の光 */
+  filter: invert(1) drop-shadow(0 0 5px #00ff66);
 }
 
 @keyframes success-pulse {
@@ -1323,9 +1332,7 @@ h3.dt-heading::before {
 </div>
 <div class="bio-scanner-container">
 <div class="fingerprint-btn" id="bioScanner">
-<svg class="fingerprint-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<path d="M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 2.74 12.01 2.74c-2.01 0-3.66.69-5.58 1.67-.18.09-.4.02-.49-.16-.09-.18-.02-.4.16-.49 2.04-1.04 3.82-1.78 5.91-1.78 2.1 0 3.91.75 5.99 1.93.17.1.23.32.13.49-.04.06-.11.07-.12.07ZM12.01 22.74c-1.57 0-2.95-.53-4.13-1.59-1.21-1.09-2.07-2.61-2.5-4.41-.05-.2.08-.4.28-.45.2-.05.4.08.45.28.38 1.58 1.14 2.92 2.2 3.88 1.03.92 2.23 1.39 3.7 1.39 1.48 0 2.67-.47 3.7-1.39 1.06-.96 1.82-2.3 2.2-3.88.05-.2.25-.33.45-.28.2.05.33.25.28.45-.43 1.8-1.29 3.32-2.5 4.41-1.18 1.06-2.56 1.59-4.13 1.59Zm5.43-6.28c-.06 0-.11-.01-.17-.03-2.3-1.01-3.23-3.48-3.26-3.55-.07-.19.03-.4.22-.47.19-.07.4.03.47.22.01.02.85 2.24 2.9 3.15.18.08.27.3.19.48-.06.13-.19.2-.35.2ZM7.04 16.2c-.03 0-.05 0-.08-.01-.2-.04-.32-.23-.28-.43.43-2.22 1.6-4.17 3.32-5.49.16-.13.4-.09.52.07.12.16.09.4-.07.52-1.54 1.18-2.58 2.93-2.97 4.92-.03.17-.18.39-.44.42Zm8.08-1.39c-.04 0-.08-.01-.12-.02-.19-.07-.29-.28-.21-.47.61-1.53.5-3.04-.3-4.19-1.06-1.52-2.93-1.92-3.1-1.96-.19-.05-.31-.24-.26-.44.05-.19.24-.31.44-.26.11.02 2.29.5 3.63 2.42.96 1.38 1.08 3.17.34 5.01-.06.16-.22.11-.42-.09ZM15.69 9.8c-.04 0-.09-.01-.13-.03-.18-.08-.26-.3-.18-.48.91-2.07.44-3.66-1.21-4.73-.17-.11-.22-.33-.11-.5.11-.17.33-.22.5-.11 2.01 1.3 2.62 3.31 1.52 5.82-.07.15-.22.13-.39.03Zm-8.15.22c-.08 0-.16-.03-.23-.08-1.84-1.34-2.2-3.35-1.15-5.22.1-.18.32-.24.5-.14.18.1.24.32.14.5-.85 1.51-.55 3.1.96 4.21.16.12.19.35.07.51-.07.1-.18.22-.29.22Z"/>
-</svg>
+<div class="fingerprint-img"></div>
 <div class="scan-beam"></div>
 </div>
 <div class="scan-status" id="scanStatus">READY TO SCAN</div>
