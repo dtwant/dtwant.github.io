@@ -239,6 +239,59 @@
 
   
   
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+   
+  
+   
+  .fixed.inset-0.z-40.flex,
+  .bg-neutral-800\/90, 
+  .bg-neutral-900\/90,
+  [x-show="mobileMenu"] {
+      background-color: #050505 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+  }
+
+   
+  nav ul li a {
+      font-family: 'Orbitron', sans-serif !important;  
+      color: #00f3ff !important;  
+      letter-spacing: 0.15em !important;
+      text-transform: uppercase !important;  
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.5) !important;
+      padding: 10px 0 !important;
+      border-bottom: 1px solid rgba(0, 243, 255, 0.1) !important;
+  }
+
+   
+  nav ul li a:hover {
+      color: #ff0055 !important;  
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.8) !important;
+      border-bottom-color: rgba(255, 0, 85, 0.5) !important;
+  }
+
+   
+  button[aria-label="Close menu"],
+  button[aria-label="Open menu"],
+  #menu button {
+      color: #00f3ff !important;
+  }
+
+   
+  ::-webkit-scrollbar {
+      width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+      background: #050505; 
+  }
+  ::-webkit-scrollbar-thumb {
+      background: #00f3ff; 
+      border-radius: 4px;
+  }
+</style>
+  
 
   
   
@@ -777,24 +830,24 @@
           </div>
           <section class="prose dark:prose-invert w-full"><link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 <style>
-/* --- カラーパレット定義 --- */
+/* --- カラーパレット定義 (サイバーパンク強制) --- */
 :root {
-  --bg-color: #f8f9fa;
-  --text-color: #374151;
-  --card-bg: #ffffff;
+  --bg-color: #050505;
+  --text-color: #e0f8ff; /* 青みがかった白 */
+  --card-bg: rgba(5, 5, 5, 0.6); /* 半透明の漆黒 */
   --accent-primary: #00f3ff; /* サイバーシアン */
   --accent-secondary: #ff0055; /* ネオンピンク */
-  --grid-color: rgba(0, 0, 0, 0.05);
-  --border-color: #e5e7eb;
+  --grid-color: rgba(0, 243, 255, 0.1);
+  --border-color: rgba(0, 243, 255, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --bg-color: #050505;
-    --text-color: #e5e7eb;
-    --card-bg: #111827;
-    --grid-color: rgba(0, 243, 255, 0.05);
-    --border-color: #374151;
+    --text-color: #e0f8ff;
+    --card-bg: rgba(5, 5, 5, 0.7);
+    --grid-color: rgba(0, 243, 255, 0.1);
+    --border-color: rgba(0, 243, 255, 0.3);
   }
 }
 
@@ -802,6 +855,8 @@
 .dt-container {
   font-family: 'Zen Kaku Gothic New', sans-serif;
   color: var(--text-color);
+  text-shadow: 0 0 2px rgba(0, 243, 255, 0.3); /* 文字のうっすら発光 */
+  letter-spacing: 0.05em;
   line-height: 1.8;
   max-width: 860px;
   margin: 0 auto;
@@ -816,13 +871,15 @@
 /* --- カードスタイル --- */
 .dt-card {
   background: var(--card-bg);
-  border-radius: 4px; 
+  border-radius: 6px; 
   padding: 2rem;
   margin-bottom: 2.5rem;
   border: 1px solid var(--border-color);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.05);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(4px); /* 背景を少しぼかす */
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .dt-card::before {
@@ -831,6 +888,7 @@
   top: 0; left: 0; bottom: 0;
   width: 4px;
   background: linear-gradient(to bottom, var(--accent-primary), var(--accent-secondary));
+  box-shadow: 0 0 10px var(--accent-primary);
 }
 
 @media (max-width: 640px) {
@@ -883,13 +941,16 @@
   text-align: center;
   margin-bottom: 0;
   font-weight: 500;
+  color: var(--accent-primary); /* シアンで強調 */
+  text-shadow: 0 0 8px rgba(0, 243, 255, 0.5); /* 強めの発光 */
 }
 .intro-note {
   display: block;
   margin-top: 1rem;
   font-size: 0.8rem;
-  color: #6b7280; 
+  color: #8be9fd; /* 淡いシアン */
   font-family: 'JetBrains Mono', monospace;
+  text-shadow: none;
 }
 
 /* --- スライドショー --- */
@@ -901,7 +962,8 @@
   border-radius: 2px;
   margin: 2rem 0 1rem 0;
   background-color: #000;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--accent-primary); /* 枠をシアンに */
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
 }
 
 .slider-deco {
@@ -910,6 +972,7 @@
   border: 2px solid var(--accent-primary);
   z-index: 20;
   pointer-events: none;
+  box-shadow: 0 0 5px var(--accent-primary);
 }
 .sd-tl { top: 4px; left: 4px; border-right: none; border-bottom: none; }
 .sd-tr { top: 4px; right: 4px; border-left: none; border-bottom: none; }
@@ -937,7 +1000,8 @@ h3.dt-heading {
   font-family: 'Orbitron', sans-serif;
   font-size: 1.3rem;
   font-weight: 700;
-  color: var(--text-color);
+  color: var(--accent-primary);
+  text-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
   margin-top: 0;
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
@@ -950,7 +1014,7 @@ h3.dt-heading {
 h3.dt-heading::before {
   content: '>';
   margin-right: 0.8rem;
-  color: var(--accent-primary);
+  color: var(--accent-secondary); /* 矢印はピンクに */
   font-weight: 700;
   animation: blink 1.5s infinite;
 }
@@ -964,27 +1028,30 @@ h3.dt-heading::before {
 }
 
 .interest-item {
-  background: rgba(128, 128, 128, 0.05);
+  background: rgba(0, 243, 255, 0.02);
   border: 1px solid var(--border-color);
   padding: 1.5rem;
   transition: all 0.3s;
   position: relative;
+  border-radius: 4px;
 }
 .interest-item:hover {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+  border-color: var(--accent-secondary); /* ホバーでピンクの枠線 */
+  box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
   transform: translateY(-2px);
+  background: rgba(255, 0, 85, 0.05);
 }
 
 .interest-category {
   display: block;
   font-family: 'Orbitron', sans-serif;
   font-size: 0.9rem;
-  color: var(--text-color);
+  color: var(--accent-primary);
   margin-bottom: 0.8rem;
   padding-bottom: 0.3rem;
   border-bottom: 2px solid var(--accent-secondary);
   width: fit-content;
+  text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
 }
 
 .interest-content {
@@ -992,6 +1059,7 @@ h3.dt-heading::before {
   padding-left: 1.2rem;
   font-size: 0.95rem;
   font-family: 'JetBrains Mono', monospace;
+  color: var(--text-color);
 }
 .interest-content li {
   margin-bottom: 0.4rem;
@@ -1014,7 +1082,7 @@ h3.dt-heading::before {
 }
 
 .fingerprint-btn {
-  width: 90px; /* 少し大きくしました */
+  width: 90px;
   height: 90px;
   position: relative;
   cursor: pointer;
@@ -1027,16 +1095,12 @@ h3.dt-heading::before {
 .fingerprint-img {
   width: 100%;
   height: 100%;
-  /* その画像を直接指定 */
   background-image: url("https://illust8.com/wp-content/uploads/2021/07/fingerprint_14036.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  
-  /* 黒い画像を「白」に反転し、不透明度を下げる */
   filter: invert(1) brightness(2);
   opacity: 0.6;
-  
   transition: all 0.2s;
 }
 
@@ -1047,7 +1111,7 @@ h3.dt-heading::before {
   width: 100%;
   height: 4px;
   background: var(--accent-primary);
-  box-shadow: 0 0 15px var(--accent-primary); /* ビームの発光を強化 */
+  box-shadow: 0 0 15px var(--accent-primary);
   opacity: 0;
   pointer-events: none;
 }
@@ -1070,8 +1134,6 @@ h3.dt-heading::before {
 }
 
 .fingerprint-btn.scanning .fingerprint-img {
-  /* スキャン中は「シアン」色っぽく光らせるフィルター */
-  /* 白(invert1)にしてから、影(drop-shadow)で色をつける手法 */
   filter: invert(1) drop-shadow(0 0 5px var(--accent-primary));
   opacity: 1;
 }
@@ -1093,7 +1155,6 @@ h3.dt-heading::before {
   animation: success-pulse 0.5s ease forwards;
 }
 .fingerprint-btn.success .fingerprint-img {
-  /* 成功時は緑の光 */
   filter: invert(1) drop-shadow(0 0 5px #00ff66);
 }
 
@@ -2772,6 +2833,205 @@ scanner.addEventListener('touchcancel', stopScan);
     });
   });
 </script>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+   
+  div.fixed.z-40, 
+  div.fixed.z-50,
+  .backdrop-blur-sm,
+  .backdrop-blur-md,
+  .bg-neutral-800\/90,
+  .bg-neutral-900\/90,
+  [x-show="mobileMenu"] {
+      background-color: #050505 !important;
+      background: #050505 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+  }
+
+   
+  .main-menu nav > a,
+  .main-menu nav > a.text-base.font-medium {
+      font-family: 'Orbitron', sans-serif !important;
+      color: #00f3ff !important;
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.4) !important;
+      letter-spacing: 0.1em !important;
+      -webkit-text-fill-color: #00f3ff !important;
+      transition: all 0.3s ease !important;
+  }
+  .main-menu nav > a:hover {
+      color: #ff0055 !important;
+      text-shadow: 0 0 10px rgba(255, 0, 85, 0.8), 0 0 20px rgba(255, 0, 85, 0.4) !important;
+      -webkit-text-fill-color: #ff0055 !important;
+  }
+
+   
+  .main-menu nav.hidden.md\:flex a,
+  .main-menu nav.hidden.md\:flex span {
+      font-family: 'Orbitron', sans-serif !important;
+      color: #00f3ff !important;
+      letter-spacing: 0.1em !important;
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.5) !important;
+      -webkit-text-fill-color: #00f3ff !important;
+      transition: all 0.3s ease !important;
+  }
+  .main-menu nav.hidden.md\:flex a:hover,
+  .main-menu nav.hidden.md\:flex a:hover span {
+      color: #ff0055 !important;
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.8) !important;
+      -webkit-text-fill-color: #ff0055 !important;
+  }
+
+   
+  div.fixed.z-40 nav a, 
+  div.fixed.z-50 nav a,
+  [x-show="mobileMenu"] nav a {
+      font-family: 'Orbitron', sans-serif !important;
+      color: #00f3ff !important;
+      letter-spacing: 0.1em !important;
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.5) !important;
+      -webkit-text-fill-color: #00f3ff !important;
+      transition: all 0.3s ease !important;
+  }
+  div.fixed.z-40 nav a:hover, 
+  div.fixed.z-50 nav a:hover,
+  [x-show="mobileMenu"] nav a:hover {
+      color: #ff0055 !important;
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.8) !important;
+      -webkit-text-fill-color: #ff0055 !important;
+  }
+
+   
+  div.fixed.z-40 nav ul li,
+  div.fixed.z-50 nav ul li {
+      border-bottom: 1px solid rgba(0, 243, 255, 0.1) !important;
+      padding-bottom: 0.5rem !important;
+      margin-bottom: 0.5rem !important;
+  }
+
+   
+  .main-menu svg,
+  div.fixed.z-40 svg,
+  div.fixed.z-50 svg,
+  button[aria-label="Close menu"] svg,
+  button[aria-label="Open menu"] svg {
+      color: #00f3ff !important; 
+      fill: currentColor !important;
+      stroke: currentColor !important;
+      filter: drop-shadow(0 0 3px rgba(0, 243, 255, 0.8)) !important; 
+      transition: all 0.3s ease !important;
+  }
+  .main-menu button:hover svg,
+  .main-menu a:hover svg,
+  div.fixed.z-40 button:hover svg,
+  div.fixed.z-50 button:hover svg {
+      color: #ff0055 !important;
+      filter: drop-shadow(0 0 5px rgba(255, 0, 85, 0.8)) !important;
+  }
+
+   
+  ::-webkit-scrollbar {
+      width: 8px !important;
+  }
+  ::-webkit-scrollbar-track {
+      background: #050505 !important; 
+  }
+  ::-webkit-scrollbar-thumb {
+      background: #00f3ff !important; 
+      border-radius: 4px !important;
+  }
+
+   
+  main#main-content h2.text-2xl.font-extrabold {
+      font-family: 'Orbitron', sans-serif !important;
+      color: #00f3ff !important;
+      letter-spacing: 0.1em !important;
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.4) !important;
+      -webkit-text-fill-color: #00f3ff !important;
+      border-bottom: 1px dashed rgba(0, 243, 255, 0.3) !important;
+      padding-bottom: 0.5rem !important;
+  }
+
+   
+  
+   
+  main#main-content section.grid > * {
+      transition: all 0.3s ease !important;
+      border: 1px solid rgba(0, 243, 255, 0.1) !important;
+      border-radius: 8px !important;
+      background: rgba(5, 5, 5, 0.3) !important;
+      overflow: hidden !important;
+  }
+
+   
+  main#main-content section.grid > *:hover {
+      box-shadow: 0 0 20px rgba(255, 0, 85, 0.2) !important;
+      border-color: rgba(255, 0, 85, 0.5) !important;
+      transform: translateY(-2px) !important;
+      background: rgba(5, 5, 5, 0.6) !important;
+  }
+
+   
+  main#main-content section.grid > * h3,
+  main#main-content section.grid > * h3 a,
+  main#main-content section.grid > * .text-xl,
+  main#main-content section.grid > * .font-semibold {
+      font-family: 'Orbitron', sans-serif !important;
+      font-size: 1.1rem !important; 
+      line-height: 1.4 !important;
+      color: #00f3ff !important;
+      -webkit-text-fill-color: #00f3ff !important;
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.2) !important;
+      transition: all 0.3s ease !important;
+      text-decoration: none !important;
+  }
+
+   
+  main#main-content section.grid > *:hover h3,
+  main#main-content section.grid > *:hover h3 a,
+  main#main-content section.grid > *:hover .text-xl,
+  main#main-content section.grid > *:hover .font-semibold {
+      color: #ff0055 !important;
+      -webkit-text-fill-color: #ff0055 !important;
+      text-shadow: 0 0 10px rgba(255, 0, 85, 0.8), 0 0 20px rgba(255, 0, 85, 0.4) !important;
+  }
+
+   
+   
+  article.prose .flex-col.items-center.text-center h1 {
+      font-family: 'Orbitron', sans-serif !important;
+      color: #00f3ff !important;
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.4) !important;
+      -webkit-text-fill-color: #00f3ff !important;
+      letter-spacing: 0.15em !important;
+  }
+
+   
+  article.prose .flex-col.items-center.text-center h2 {
+      font-family: 'JetBrains Mono', 'Orbitron', sans-serif !important;
+      color: #ff0055 !important;  
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.8) !important;
+      -webkit-text-fill-color: #ff0055 !important;
+      letter-spacing: 0.1em !important;
+  }
+
+   
+  article.prose .flex-col.items-center.text-center a svg {
+      color: #00f3ff !important;
+      fill: #00f3ff !important;
+      stroke: #00f3ff !important;
+      filter: drop-shadow(0 0 5px rgba(0, 243, 255, 0.8)) !important;
+      transition: all 0.3s ease !important;
+  }
+  article.prose .flex-col.items-center.text-center a:hover svg {
+      color: #ff0055 !important;
+      fill: #ff0055 !important;
+      stroke: #ff0055 !important;
+      filter: drop-shadow(0 0 8px rgba(255, 0, 85, 0.8)) !important;
+      transform: scale(1.1) !important;
+  }
+</style>
 </footer><div
   id="search-wrapper"
   class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh] z-500"
