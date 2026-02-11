@@ -232,7 +232,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "50"
+    "wordCount": "66"
   }]
   </script>
 
@@ -785,38 +785,113 @@
     <section class="max-w-full mt-6 prose dark:prose-invert">
       <p>判明しているタスクの一覧！<br>
 チェックボックスはページ上で記録出来ないようにしています。</p>
-
 <style>
+   
+  .cyber-tasks-wrapper {
+    font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace !important;
+  }
+
    
   #auth-container {
     text-align: center;
     padding: 3rem;
-    background: var(--color-neutral-100);
-    border-radius: 8px;
+    background: rgba(5, 5, 5, 0.8);
+    border: 1px solid #ff0055;
+    border-radius: 4px;
     margin: 2rem 0;
-    border: 1px solid var(--color-neutral-200);
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.2), inset 0 0 10px rgba(255, 0, 85, 0.1);
+    position: relative;
+    overflow: hidden;
   }
+  
+  #auth-container::before {
+    content: "WARNING: RESTRICTED AREA";
+    position: absolute;
+    top: -1px; left: -1px;
+    background: #ff0055;
+    color: #000;
+    padding: 2px 10px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+
+  .lock-icon {
+    font-size: 3rem; 
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 10px #ff0055);
+    animation: pulse-red 2s infinite;
+  }
+  @keyframes pulse-red { 0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px #ff0055); } 50% { opacity: 0.5; filter: drop-shadow(0 0 2px #ff0055); } }
+
+  .auth-title {
+    margin-bottom: 1.5rem; 
+    font-weight: bold; 
+    font-size: 1.2rem;
+    color: #ff0055;
+    text-shadow: 0 0 5px #ff0055;
+    letter-spacing: 0.1em;
+  }
+
+  .input-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .auth-prompt { color: #00f3ff; font-weight: bold; }
+
   #pass-input {
     padding: 0.5rem;
-    border: 1px solid var(--color-neutral-300);
-    border-radius: 4px;
-    margin-right: 0.5rem;
-    color: #333;
-    font-size: 1rem;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #00f3ff;
+    border-radius: 0;
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.2rem;
+    text-align: center;
+    outline: none;
+    letter-spacing: 5px;
+    text-shadow: 0 0 5px #fff;
+    width: 200px;
+    transition: all 0.3s;
   }
+  #pass-input:focus {
+    border-color: #ff0055;
+    box-shadow: 0 5px 10px -5px rgba(255, 0, 85, 0.5);
+  }
+
   #unlock-btn {
     padding: 0.5rem 1.5rem;
-    background-color: var(--color-primary-500);
-    color: white;
-    border: none;
-    border-radius: 4px;
+    background-color: transparent;
+    color: #00f3ff;
+    border: 1px solid #00f3ff;
     cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
     font-weight: bold;
     font-size: 1rem;
-    transition: opacity 0.2s;
+    transition: all 0.2s;
+    box-shadow: inset 0 0 5px rgba(0, 243, 255, 0.2);
   }
-  #unlock-btn:hover { opacity: 0.8; }
+  #unlock-btn:hover { 
+    background-color: #00f3ff; 
+    color: #000;
+    box-shadow: 0 0 15px #00f3ff;
+  }
   
+  #error-msg {
+    color: #ff0055; 
+    display: none; 
+    margin-top: 1rem; 
+    font-weight: bold;
+    text-shadow: 0 0 5px #ff0055;
+    animation: glitch 0.2s 3;
+  }
+  @keyframes glitch { 0% { transform: translate(0) } 20% { transform: translate(-2px, 1px) } 40% { transform: translate(-1px, -1px) } 60% { transform: translate(2px, 1px) } 80% { transform: translate(1px, -1px) } 100% { transform: translate(0) } }
+
    
   #secret-content { display: none; }
 
@@ -826,161 +901,196 @@
     border-collapse: collapse;
     margin: 1rem 0;
     font-size: 0.95rem;
+    background: rgba(5, 5, 5, 0.6);
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
   }
   .task-table th, .task-table td {
-    border: 1px solid var(--color-neutral-200);
-    padding: 0.6rem;
+    border: 1px solid rgba(0, 243, 255, 0.15);
+    padding: 0.8rem;
     text-align: left;
     vertical-align: middle;
+    color: #e0f8ff;
   }
   .task-table th {
-    background-color: var(--color-neutral-100);
+    background-color: rgba(0, 243, 255, 0.1);
+    font-family: 'Orbitron', sans-serif;
     font-weight: bold;
     text-align: center;
     white-space: nowrap;
-    color: var(--color-neutral-800);
+    color: #00f3ff;
+    text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+    letter-spacing: 1px;
+    border-bottom: 2px solid #00f3ff;
   }
+  
+  .task-table tr { transition: all 0.2s; }
+  .task-table tr:not(.task-done):hover {
+    background: rgba(0, 243, 255, 0.05);
+    box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.1);
+  }
+
   .task-center { text-align: center !important; }
   
    
-  .task-done {
-    opacity: 0.6;
-    background-color: rgba(0,0,0,0.02);
+   
+  .cyber-checkbox input[type="checkbox"] { display: none; }
+  .cyber-checkbox span {
+    color: #00f3ff;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
   }
-  .task-done td:not(:first-child) {
-    text-decoration: line-through;
-    color: var(--color-neutral-400);
+  .task-done .cyber-checkbox span {
+    color: #ff0055;
+    text-shadow: 0 0 5px rgba(255, 0, 85, 0.5);
   }
 
    
-  .priority-SS { color: #ca8a04;font-weight: 900;text-shadow: 0 0 5px #fde047;font-size: 1.1em;}
-  .priority-S { color: #e11d48; font-weight: 800; }  
-  .priority-A { color: #d97706; font-weight: 800; }  
-  .priority-B { color: #059669; font-weight: 600; }  
+  .task-done {
+    opacity: 0.5;
+    background-color: rgba(255, 0, 85, 0.05);
+  }
+  .task-done td:not(:first-child) {
+    text-decoration: line-through;
+    color: #ff0055;
+    text-shadow: none;
+  }
+
+   
+  .priority-SS { color: #bc13fe; font-weight: 900; text-shadow: 0 0 8px #bc13fe; font-size: 1.1em; }  
+  .priority-S { color: #ff0055; font-weight: 800; text-shadow: 0 0 5px #ff0055; }  
+  .priority-A { color: #fde047; font-weight: 800; text-shadow: 0 0 5px #ca8a04; }  
+  .priority-B { color: #00ff66; font-weight: 600; text-shadow: 0 0 5px #00ff66; }  
+
+   
+  .task-table a { color: #00f3ff !important; text-decoration: underline; }
+  .task-table a:hover { color: #ff0055 !important; }
+  .task-table code { background: rgba(0, 243, 255, 0.1); color: #ff0055; padding: 2px 4px; border-radius: 3px; }
 </style>
 
-
-<div id="auth-container">
-  <div style="font-size: 3rem; margin-bottom: 1rem;">🔒</div>
-  <p style="margin-bottom: 1.5rem; font-weight:bold; font-size: 1.2rem;">Restricted Access</p>
-  <div>
-    <input type="password" id="pass-input" placeholder="Password">
-    <button id="unlock-btn" onclick="checkPassword()">Unlock</button>
+<div class="cyber-tasks-wrapper">
+  <div id="auth-container">
+    <div class="lock-icon">🔒</div>
+    <p class="auth-title">SYSTEM LOCKED</p>
+    <div class="input-wrapper">
+      <span class="auth-prompt">></span>
+      <input type="password" id="pass-input" placeholder="KEY">
+      <button id="unlock-btn" onclick="checkPassword()">DECRYPT</button>
+    </div>
+    <p id="error-msg">ACCESS DENIED. INCORRECT KEY.</p>
   </div>
-  <p id="error-msg" style="color: #e11d48; display: none; margin-top: 1rem; font-weight: bold;">Incorrect Password</p>
-</div>
 
-
-<div id="secret-content">
-  <div style="overflow-x: auto;">
-  <table class="task-table">
-    <thead>
-      <tr>
-        <th style="width: 3rem;">状態</th>
-        <th>タスク名</th>
-        <th style="width: 4rem;">優先度</th>
-        <th>期限</th>
-        <th>備考</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      <tr class="">
-        <td class="task-center">
-          <input type="checkbox" disabled >
-        </td>
+  <div id="secret-content">
+    <div style="overflow-x: auto;">
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th style="width: 3rem;">STATUS</th>
+          <th>OBJECTIVE</th>
+          <th style="width: 4rem;">PRIORITY</th>
+          <th>DEADLINE</th>
+          <th>NOTES</th>
+        </tr>
+      </thead>
+      <tbody>
         
-        <td>電算レポート</td>
-        <td class="task-center">
-          <span class="priority-S">S</span>
-        </td>
-        <td>至急</td>
-        <td>評価配点大きい</td>
-      </tr>
-      
-      <tr class="">
-        <td class="task-center">
-          <input type="checkbox" disabled >
-        </td>
+        <tr class="">
+          <td class="task-center cyber-checkbox">
+            <input type="checkbox" disabled >
+            <span>[ ]</span>
+          </td>
+          <td>電算レポート</td>
+          <td class="task-center">
+            <span class="priority-S">S</span>
+          </td>
+          <td style="font-family: 'Orbitron', sans-serif;">至急</td>
+          <td>評価配点大きい</td>
+        </tr>
         
-        <td>微積レポート</td>
-        <td class="task-center">
-          <span class="priority-A">A</span>
-        </td>
-        <td>2025/12/15の週</td>
-        <td>範囲は画像参照のこと</td>
-      </tr>
-      
-      <tr class="">
-        <td class="task-center">
-          <input type="checkbox" disabled >
-        </td>
+        <tr class="">
+          <td class="task-center cyber-checkbox">
+            <input type="checkbox" disabled >
+            <span>[ ]</span>
+          </td>
+          <td>微積レポート</td>
+          <td class="task-center">
+            <span class="priority-A">A</span>
+          </td>
+          <td style="font-family: 'Orbitron', sans-serif;">2025/12/15の週</td>
+          <td>範囲は画像参照のこと</td>
+        </tr>
         
-        <td>物理のレポート+過去の課題確認</td>
-        <td class="task-center">
-          <span class="priority-A">A</span>
-        </td>
-        <td>なるはや 12月中</td>
-        <td>必要なら池田に聞く！</td>
-      </tr>
-      
-      <tr class="">
-        <td class="task-center">
-          <input type="checkbox" disabled >
-        </td>
+        <tr class="">
+          <td class="task-center cyber-checkbox">
+            <input type="checkbox" disabled >
+            <span>[ ]</span>
+          </td>
+          <td>物理のレポート+過去の課題確認</td>
+          <td class="task-center">
+            <span class="priority-A">A</span>
+          </td>
+          <td style="font-family: 'Orbitron', sans-serif;">なるはや 12月中</td>
+          <td>必要なら池田に聞く！</td>
+        </tr>
         
-        <td>倫理レポート</td>
-        <td class="task-center">
-          <span class="priority-S">S</span>
-        </td>
-        <td>-</td>
-        <td>急ぎではないが残りは確実に提出</td>
-      </tr>
-      
-      <tr class="task-done">
-        <td class="task-center">
-          <input type="checkbox" disabled checked>
-        </td>
+        <tr class="">
+          <td class="task-center cyber-checkbox">
+            <input type="checkbox" disabled >
+            <span>[ ]</span>
+          </td>
+          <td>倫理レポート</td>
+          <td class="task-center">
+            <span class="priority-S">S</span>
+          </td>
+          <td style="font-family: 'Orbitron', sans-serif;">-</td>
+          <td>急ぎではないが残りは確実に提出</td>
+        </tr>
         
-        <td>サイトのメニュー構築</td>
-        <td class="task-center">
-          <span class="priority-S">S</span>
-        </td>
-        <td>2025-12-07</td>
-        <td>完了</td>
-      </tr>
-      
-      <tr class="">
-        <td class="task-center">
-          <input type="checkbox" disabled >
-        </td>
+        <tr class="task-done">
+          <td class="task-center cyber-checkbox">
+            <input type="checkbox" disabled checked>
+            <span>[X]</span>
+          </td>
+          <td>サイトのメニュー構築</td>
+          <td class="task-center">
+            <span class="priority-S">S</span>
+          </td>
+          <td style="font-family: 'Orbitron', sans-serif;">2025-12-07</td>
+          <td>完了</td>
+        </tr>
         
-        <td>物理数学の記事の続き</td>
-        <td class="task-center">
-          <span class="priority-A">A</span>
-        </td>
-        <td>-</td>
-        <td>過去の手書きの内容もまとめたい</td>
-      </tr>
-      
-      <tr class="">
-        <td class="task-center">
-          <input type="checkbox" disabled >
-        </td>
+        <tr class="">
+          <td class="task-center cyber-checkbox">
+            <input type="checkbox" disabled >
+            <span>[ ]</span>
+          </td>
+          <td>物理数学の記事の続き</td>
+          <td class="task-center">
+            <span class="priority-A">A</span>
+          </td>
+          <td style="font-family: 'Orbitron', sans-serif;">-</td>
+          <td>過去の手書きの内容もまとめたい</td>
+        </tr>
         
-        <td>植物の記事を書いてまとめる</td>
-        <td class="task-center">
-          <span class="priority-A">A</span>
-        </td>
-        <td>-</td>
-        <td>写真撮っておかないと書けないので注意</td>
-      </tr>
-      
-    </tbody>
-  </table>
+        <tr class="">
+          <td class="task-center cyber-checkbox">
+            <input type="checkbox" disabled >
+            <span>[ ]</span>
+          </td>
+          <td>植物の記事を書いてまとめる</td>
+          <td class="task-center">
+            <span class="priority-A">A</span>
+          </td>
+          <td style="font-family: 'Orbitron', sans-serif;">-</td>
+          <td>写真撮っておかないと書けないので注意</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    </div>
   </div>
 </div>
-
 
 <script>
   function checkPassword() {
@@ -997,15 +1107,18 @@
       
       overlay.style.display = 'none';
       content.style.display = 'block';
-      
       sessionStorage.setItem('tasks_unlocked', 'true');
-      
       
       if (typeof MathJax !== 'undefined') {
         MathJax.typesetPromise();
       }
     } else {
       error.style.display = 'block';
+      
+      error.style.animation = 'none';
+      void error.offsetWidth;
+      error.style.animation = 'glitch 0.2s 3';
+      document.getElementById('pass-input').value = "";
     }
   }
 
@@ -1022,7 +1135,6 @@
     document.getElementById('secret-content').style.display = 'block';
   }
 </script>
-
 <blockquote>
 <p><strong>S</strong> (最優先) / <strong>A</strong> (優先) / <strong>B</strong> (通常)</p></blockquote>
 

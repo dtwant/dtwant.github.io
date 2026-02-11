@@ -751,43 +751,270 @@
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <p>作成したツールをまとめている.</p>
-<hr>
+      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=M+PLUS+1+Code:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* --- ベース設定 --- */
+.lab-container {
+font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace;
+color: #e0f8ff;
+margin-top: 2rem;
+}
 
-<h2 class="relative group">一覧
-    <div id="一覧" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e4%b8%80%e8%a6%a7" aria-label="Anchor">#</a>
-    </span>
-    
-</h2>
-<ul>
-<li><strong><a
-  href="../lab/latex/">LaTeX Editor</a></strong>: LaTeXエディター(PNG保存)</li>
-<li><strong><a
-  href="../lab/mdeditor">Markdown Editor</a></strong>: Markdownエディタ</li>
-<li><strong><a
-  href="../lab/mathcore1">MathCore Calculator</a></strong>: 積分や級数の簡易的な計算機</li>
-<li><strong><a
-  href="../lab/math/">Math Solver</a></strong>: 部分分数分解ツール（Python powered）</li>
-<li><strong><a
-  href="../lab/logic/">論理回路Simulator</a></strong>: 真理値表ジェネレーター &amp; シミュレーター</li>
-<li><strong><a
-  href="../lab/mermaid/">Mermaid Editor</a></strong>: フローチャートなどの作図ツール</li>
-<li><strong><a
-  href="../lab/crypto/">Cryptography Lab</a></strong>: RSA暗号、シーザー暗号、基数変換ツール</li>
-<li><strong><a
-  href="../lab/attendance/">Attendance Monitor</a></strong>: 欠課時数管理ツール</li>
-<li><strong><a
-  href="../lab/deadline/">Deadline Manager</a></strong>: 課題管理ツール</li>
-<li><strong><a
-  href="../lab/report">Report Generator(運用調整中)</a></strong>: レポートひな形作成ツール</li>
-<li><strong><a
-  href="../lab/stamp/">Stamp Calculator</a></strong>: 郵便料金計算機（最小枚数計算）</li>
-</ul>
+/* --- ターミナル風のイントロ --- */
+.lab-intro-box {
+background: rgba(5, 5, 5, 0.8);
+border: 1px solid rgba(0, 243, 255, 0.3);
+border-left: 4px solid #00f3ff;
+padding: 1rem 1.5rem;
+margin-bottom: 2.5rem;
+box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
+}
+.lab-intro-text {
+margin: 0;
+line-height: 1.6;
+color: #00f3ff;
+text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
+font-size: 0.95rem;
+}
+.lab-intro-text .blink {
+animation: blink-cursor 1s infinite;
+}
+@keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
+/* --- ツールグリッド (カードレイアウト) --- */
+.lab-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: 1.5rem;
+}
+
+/* --- ツールカード --- */
+.tool-card {
+display: flex;
+flex-direction: column;
+background: rgba(5, 5, 5, 0.6);
+border: 1px solid rgba(0, 243, 255, 0.2);
+border-radius: 4px;
+padding: 1.5rem;
+text-decoration: none !important;
+transition: all 0.3s ease;
+position: relative;
+overflow: hidden;
+backdrop-filter: blur(4px);
+-webkit-backdrop-filter: blur(4px);
+}
+
+.tool-card:hover {
+border-color: #ff0055;
+box-shadow: 0 0 20px rgba(255, 0, 85, 0.15), inset 0 0 10px rgba(255, 0, 85, 0.05);
+transform: translateY(-3px);
+background: rgba(255, 0, 85, 0.05);
+}
+
+.tool-card::before {
+content: '';
+position: absolute;
+top: 0; left: 0; bottom: 0;
+width: 3px;
+background: #00f3ff;
+box-shadow: 0 0 8px #00f3ff;
+transition: all 0.3s ease;
+}
+.tool-card:hover::before {
+background: #ff0055;
+box-shadow: 0 0 8px #ff0055;
+}
+
+/* --- カード内の要素 --- */
+.tool-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 1rem;
+border-bottom: 1px dashed rgba(0, 243, 255, 0.2);
+padding-bottom: 0.5rem;
+}
+
+.tool-id {
+font-family: 'Orbitron', sans-serif;
+font-size: 0.75rem;
+color: rgba(0, 243, 255, 0.6);
+letter-spacing: 2px;
+}
+
+.tool-status {
+font-family: 'Orbitron', sans-serif;
+font-size: 0.7rem;
+font-weight: bold;
+padding: 2px 6px;
+border-radius: 2px;
+letter-spacing: 1px;
+}
+.status-active {
+color: #00ff66;
+background: rgba(0, 255, 102, 0.1);
+border: 1px solid rgba(0, 255, 102, 0.3);
+text-shadow: 0 0 5px #00ff66;
+}
+.status-maintenance {
+color: #fde047;
+background: rgba(253, 224, 71, 0.1);
+border: 1px solid rgba(253, 224, 71, 0.3);
+text-shadow: 0 0 5px #fde047;
+}
+
+.tool-title {
+font-family: 'Orbitron', sans-serif;
+font-size: 1.2rem;
+font-weight: 700;
+color: #00f3ff;
+margin: 0 0 0.5rem 0;
+text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
+transition: color 0.3s ease;
+}
+.tool-card:hover .tool-title {
+color: #ff0055;
+text-shadow: 0 0 5px rgba(255, 0, 85, 0.4);
+}
+
+.tool-desc {
+font-size: 0.85rem;
+color: #a0c0d0;
+line-height: 1.5;
+margin: 0;
+}
+</style>
+<div class="lab-container">
+<div class="lab-intro-box">
+<p class="lab-intro-text">> INITIALIZING LABORATORY MODULES...</p>
+<p class="lab-intro-text">> LOADING CUSTOM TOOLS AND UTILITIES...</p>
+<p class="lab-intro-text">> ALL SYSTEMS SECURE. READY FOR OPERATION<span class="blink">_</span></p>
+</div>
+<div class="lab-grid">
+
+<a href="/lab/attendance/" class="tool-card">
+<div class="tool-header">
+<span class="tool-id">MOD-01</span>
+
+<span class="tool-status status-active">ACTIVE</span>
+
+</div>
+<h3 class="tool-title">Attendance Monitor</h3>
+<p class="tool-desc">欠課時数管理ツール</p>
+</a>
+
+<a href="/lab/crypto/" class="tool-card">
+<div class="tool-header">
+<span class="tool-id">MOD-02</span>
+
+<span class="tool-status status-active">ACTIVE</span>
+
+</div>
+<h3 class="tool-title">Cryptography Lab</h3>
+<p class="tool-desc">暗号あそびば</p>
+</a>
+
+<a href="/lab/deadline/" class="tool-card">
+<div class="tool-header">
+<span class="tool-id">MOD-03</span>
+
+<span class="tool-status status-active">ACTIVE</span>
+
+</div>
+<h3 class="tool-title">Deadline Manager</h3>
+<p class="tool-desc"></p>
+</a>
+
+<a href="/lab/latex/" class="tool-card">
+<div class="tool-header">
+<span class="tool-id">MOD-04</span>
+
+<span class="tool-status status-active">ACTIVE</span>
+
+</div>
+<h3 class="tool-title">LaTeX Editor</h3>
+<p class="tool-desc"></p>
+</a>
+
+<a href="/lab/logic/" class="tool-card">
+<div class="tool-header">
+<span class="tool-id">MOD-05</span>
+
+<span class="tool-status status-active">ACTIVE</span>
+
+</div>
+<h3 class="tool-title">Logic Circuit Simulator</h3>
+<p class="tool-desc">真理値表ジェネレーター</p>
+</a>
+
+<a href="/lab/mdeditor/" class="tool-card">
+<div class="tool-header">
+<span class="tool-id">MOD-06</span>
+
+<span class="tool-status status-active">ACTIVE</span>
+
+</div>
+<h3 class="tool-title">Markdown Editor</h3>
+<p class="tool-desc"></p>
+</a>
+
+<a href="/lab/math/" class="tool-card">
+<div class="tool-header">
+<span class="tool-id">MOD-07</span>
+
+<span class="tool-status status-active">ACTIVE</span>
+
+</div>
+<h3 class="tool-title">Math Solver (Partial Fraction)</h3>
+<p class="tool-desc">部分分数分解ツール</p>
+</a>
+
+<a href="/lab/mathcore1/" class="tool-card">
+<div class="tool-header">
+<span class="tool-id">MOD-08</span>
+
+<span class="tool-status status-active">ACTIVE</span>
+
+</div>
+<h3 class="tool-title">MathCore Calculator</h3>
+<p class="tool-desc">演算いろいろ</p>
+</a>
+
+<a href="/lab/mermaid/" class="tool-card">
+<div class="tool-header">
+<span class="tool-id">MOD-09</span>
+
+<span class="tool-status status-active">ACTIVE</span>
+
+</div>
+<h3 class="tool-title">Mermaid Editor</h3>
+<p class="tool-desc">テキストからフローチャートやシーケンス図を作成</p>
+</a>
+
+<a href="/lab/report/" class="tool-card">
+<div class="tool-header">
+<span class="tool-id">MOD-10</span>
+
+<span class="tool-status status-maintenance">MAINTENANCE</span>
+
+</div>
+<h3 class="tool-title">Report Generator</h3>
+<p class="tool-desc"></p>
+</a>
+
+<a href="/lab/stamp/" class="tool-card">
+<div class="tool-header">
+<span class="tool-id">MOD-11</span>
+
+<span class="tool-status status-active">ACTIVE</span>
+
+</div>
+<h3 class="tool-title">切手組み合わせ計算機</h3>
+<p class="tool-desc">郵便料金を入力すると，現在販売中の普通切手で最小枚数になる組み合わせを計算する.</p>
+</a>
+
+</div>
+</div>
     </section>
     <footer class="pt-8">
       
