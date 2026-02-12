@@ -777,6 +777,7 @@ font-family: 'Zen Maru Gothic', sans-serif !important;
 min-height: 100vh;
 margin: 0;
 }
+/* メインコンテナ */
 #kawaii-container {
 max-width: 900px;
 margin: 2rem auto;
@@ -800,6 +801,7 @@ padding: 2rem;
 border-radius: 24px;
 border: 2px dashed #f6cde3;
 margin-bottom: 2.5rem;
+box-sizing: border-box; /* はみ出し防止 */
 }
 .radio-group {
 display: flex;
@@ -870,6 +872,7 @@ color: #5d4a4a;
 outline: none;
 transition: 0.3s;
 text-align: center;
+box-sizing: border-box; /* 重要：これで幅100%でもはみ出さない */
 }
 .cute-input::placeholder { text-align: center; color: #aaa; }
 .cute-input:focus {
@@ -889,6 +892,7 @@ cursor: pointer;
 box-shadow: 0 4px 15px rgba(255, 64, 129, 0.3);
 transition: 0.2s;
 font-family: 'Zen Maru Gothic', sans-serif;
+box-sizing: border-box;
 }
 .add-btn:active { transform: scale(0.98); }
 .search-area {
@@ -911,6 +915,7 @@ font-weight: bold;
 font-family: 'Zen Maru Gothic', sans-serif;
 box-shadow: 0 4px 10px rgba(178, 223, 219, 0.4);
 transition: 0.2s;
+box-sizing: border-box;
 }
 .cmoa-btn:hover {
 background: #e0f2f1;
@@ -924,6 +929,7 @@ margin: 0 auto 1rem;
 display: block;
 text-align: center;
 background: rgba(255,255,255,0.8);
+box-sizing: border-box;
 }
 .filter-buttons {
 display: flex;
@@ -990,10 +996,11 @@ white-space: nowrap;
 text-align: center !important;
 box-sizing: border-box !important;
 }
-.col-comp { width: 10% !important; }
-.col-title { width: 40% !important; }
-.col-vol { width: 20% !important; }
-.col-rate { width: 20% !important; }
+/* PC用の列幅 */
+.col-comp { width: 8% !important; }
+.col-title { width: 42% !important; }
+.col-vol { width: 15% !important; }
+.col-rate { width: 25% !important; }
 .col-del { width: 10% !important; }
 .kawaii-table td {
 padding: 12px 2px;
@@ -1066,22 +1073,46 @@ display: flex; justify-content: center; align-items: center;
 margin: 0 auto;
 }
 .delete-btn:hover { background: #ef9a9a; }
+/* ▼▼▼ スマホ用調整（ガッツリ修正） ▼▼▼ */
 @media (max-width: 768px) {
+/* コンテナを広げて余白を減らす */
 #kawaii-container {
-padding: 1rem;
-margin: 1rem;
-width: auto;
+width: 96% !important;
+margin: 10px auto !important;
+padding: 15px 10px !important;
+}
+.room-title { font-size: 1.5rem !important; }
+.input-area {
+padding: 15px !important;
 }
 .input-group {
 flex-direction: column;
+gap: 10px;
 }
-.tables-container {
-flex-direction: column;
-gap: 2rem;
+.cute-input {
+width: 100% !important;
+min-width: 0 !important;
 }
+/* テーブル調整：文字を小さく */
 .kawaii-table th, .kawaii-table td {
-font-size: 0.85rem;
-padding: 8px 2px;
+font-size: 0.75rem !important; /* 12px相当 */
+padding: 6px 1px !important;
+}
+.rate-select { font-size: 0.75rem !important; }
+/* スマホ時の列幅微調整 */
+.col-comp { width: 10% !important; }
+.col-title { width: 40% !important; }
+.col-vol { width: 12% !important; } /* 巻数を狭く */
+.col-rate { width: 26% !important; } /* 評価プルダウン用に確保 */
+.col-del { width: 12% !important; }
+/* 削除ボタンも小さく */
+.delete-btn {
+width: 22px; height: 22px;
+font-size: 0.8rem;
+}
+/* チェックボックスも少し小さく */
+.comp-check {
+width: 18px; height: 18px;
 }
 }
 </style>
@@ -1127,10 +1158,8 @@ padding: 8px 2px;
 <tr>
 <th class="col-comp">完</th>
 <th class="col-title">タイトル</th>
-<th class="col-vol">巻数</th>
-<th class="col-rate">評価</th>
-<th class="col-del">削除</th>
-</tr>
+<th class="col-vol">巻</th> <th class="col-rate">評価</th>
+<th class="col-del">×</th> </tr>
 </thead>
 <tbody id="shonen-tbody"></tbody>
 </table>
@@ -1142,9 +1171,9 @@ padding: 8px 2px;
 <tr>
 <th class="col-comp">完</th>
 <th class="col-title">タイトル</th>
-<th class="col-vol">巻数</th>
+<th class="col-vol">巻</th>
 <th class="col-rate">評価</th>
-<th class="col-del">削除</th>
+<th class="col-del">×</th>
 </tr>
 </thead>
 <tbody id="shojo-tbody"></tbody>
@@ -1235,7 +1264,7 @@ const isChecked = manga.completed ? "checked" : "";
 row.innerHTML = `
 <td><input type="checkbox" class="comp-check" ${isChecked} onchange="toggleCompletion(${manga.id})"></td>
 <td class="cell-title">${manga.title}</td>
-<td>${manga.volume} 巻</td>
+<td>${manga.volume}</td>
 <td class="cell-rate">
 <select class="rate-select" onchange="updateRating(${manga.id}, this.value)">
 <option value="👍" ${rating === '👍' ? 'selected' : ''}>👍</option>
