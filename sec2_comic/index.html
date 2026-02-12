@@ -751,26 +751,49 @@
     <section class="max-w-full mt-6 prose dark:prose-invert">
       <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* --- 目に優しい「くすみパステル」にトーンダウン --- */
+/* --- 1. ヘッダーのサイバーパンク感を抹殺して可愛くする --- */
+/* ヘッダー背景を透過・白っぽく */
+header, #dt-nav, .nav-container, .header-container {
+background: rgba(255, 255, 255, 0.4) !important;
+backdrop-filter: blur(8px) !important;
+border-bottom: 2px solid #fff !important;
+box-shadow: none !important;
+}
+/* 文字色をブラウンに、フォントを丸文字に、ネオン発光を削除 */
+header a, .nav-link, .logo, .search-btn, .theme-toggle, header span {
+color: #8d6e63 !important;
+font-family: 'Zen Maru Gothic', sans-serif !important;
+text-shadow: none !important;
+font-weight: bold !important;
+}
+/* ロゴなどのホバー時 */
+header a:hover, .nav-link:hover {
+color: #d18290 !important;
+background: transparent !important;
+}
+/* ハンバーガーメニューの線もブラウンに */
+.toggle-icon, .toggle-icon::before, .toggle-icon::after {
+background-color: #8d6e63 !important;
+}
+
+/* --- 2. ページ全体のデザイン --- */
 body {
-background: linear-gradient(135deg, #f6cde3 0%, #e8eaf6 100%) !important;
+background: #f6cde3 !important; /* 指定色 */
 color: #5d4a4a !important; 
 font-family: 'Zen Maru Gothic', sans-serif !important;
 min-height: 100vh;
+margin: 0;
 }
 
-.header, .footer { display: none !important; }
-
-/* --- メインコンテナ --- */
+/* メインコンテナ */
 #kawaii-container {
-max-width: 800px;
+max-width: 900px;
 margin: 2rem auto;
 padding: 2rem;
-background: rgba(255, 255, 255, 0.85);
-border-radius: 24px;
-box-shadow: 0 8px 32px rgba(200, 180, 190, 0.2);
-border: 2px solid #fff;
-backdrop-filter: blur(8px);
+background: rgba(255, 255, 255, 0.7);
+border-radius: 30px;
+border: 4px solid #fff;
+box-shadow: 0 10px 30px rgba(219, 112, 147, 0.2);
 }
 
 .room-title {
@@ -779,139 +802,178 @@ color: #d18290;
 font-size: 2rem;
 font-weight: 700;
 margin-bottom: 2rem;
-text-shadow: 2px 2px 0 #fff;
+letter-spacing: 0.1em;
 }
-.room-title::before, .room-title::after { content: " ✧ "; color: #e6c27a; }
 
-/* --- 入力フォーム --- */
+/* --- 3. 入力エリア (レスポンシブ対応) --- */
 .input-area {
 background: #fff;
-padding: 1.5rem;
-border-radius: 16px;
-border: 2px dashed #dcb4bd;
-margin-bottom: 2rem;
+padding: 2rem;
+border-radius: 24px;
+border: 2px dashed #f6cde3;
+margin-bottom: 2.5rem;
 }
-.input-group {
-display: flex;
-gap: 10px;
-margin-bottom: 15px;
-flex-wrap: wrap;
-}
-.cute-input {
-flex: 1;
-min-width: 150px;
-padding: 12px 15px;
-border: 2px solid #ecdce0;
-border-radius: 20px;
-font-family: 'Zen Maru Gothic', sans-serif;
-font-size: 1rem;
-color: #5d4a4a;
-background: #faf8f9;
-outline: none;
-transition: all 0.3s;
-}
-.cute-input:focus { border-color: #d18290; box-shadow: 0 0 10px rgba(209, 130, 144, 0.2); }
 
-/* --- ★マカロン風の選択ボタン★ --- */
+/* ラジオボタン */
 .radio-group {
 display: flex;
 gap: 15px;
 justify-content: center;
 margin-bottom: 20px;
 }
-.radio-group input[type="radio"] {
-display: none; 
-}
+.radio-group input[type="radio"] { display: none; }
 .radio-label {
 padding: 10px 25px;
 background: #fff;
 border: 2px solid #ecdce0;
-border-radius: 30px;
+border-radius: 50px;
 font-weight: bold;
 color: #aaa;
 cursor: pointer;
-transition: all 0.3s ease;
-font-size: 1.1rem;
+transition: all 0.3s;
+font-size: 1rem;
 }
-/* 少年漫画が選ばれた時 (少しくすんだ青) */
 #cat-shonen:checked + .radio-label {
-background: #f0f4f8;
-border-color: #a8c1d9;
-color: #7a9ebf;
-box-shadow: 0 4px 0 #a8c1d9;
-transform: translateY(-2px);
+background: #e3f2fd; border-color: #90caf9; color: #42a5f5;
+transform: scale(1.05);
 }
-/* 少女漫画が選ばれた時 (少しくすんだピンク) */
 #cat-shojo:checked + .radio-label {
-background: #fcf4f6;
-border-color: #dcb4bd;
-color: #d18290;
-box-shadow: 0 4px 0 #dcb4bd;
-transform: translateY(-2px);
+background: #fce4ec; border-color: #f48fb1; color: #ec407a;
+transform: scale(1.05);
 }
 
-/* 登録ボタン */
+/* 入力欄の並び */
+.input-group {
+display: flex;
+gap: 12px;
+margin-bottom: 20px;
+flex-wrap: wrap; /* スマホで折り返す */
+}
+.cute-input {
+flex: 1;
+min-width: 200px; /* スマホで狭くなりすぎないように */
+padding: 14px;
+border: 2px solid #eee;
+border-radius: 15px;
+font-family: 'Zen Maru Gothic', sans-serif;
+font-size: 1rem;
+color: #5d4a4a;
+outline: none;
+transition: 0.3s;
+}
+.cute-input:focus {
+border-color: #f48fb1;
+box-shadow: 0 0 10px rgba(244, 143, 177, 0.3);
+}
+
+/* ▼▼▼ 修正1：ボタンをパステルカラーに変更 ▼▼▼ */
 .add-btn {
 width: 100%;
-padding: 12px;
-background: linear-gradient(to right, #dcb4bd, #d18290);
+padding: 15px;
+/* パステルピンク〜ラベンダー系の優しいグラデーションに変更 */
+background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
 color: #fff;
 border: none;
-border-radius: 20px;
+border-radius: 50px;
 font-size: 1.1rem;
 font-weight: bold;
 cursor: pointer;
-transition: transform 0.2s;
-box-shadow: 0 4px 0 #b36f7b;
+box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
+transition: 0.2s;
 font-family: 'Zen Maru Gothic', sans-serif;
 }
-.add-btn:active { transform: translateY(4px); box-shadow: none; }
+.add-btn:active { transform: scale(0.98); }
 
-/* --- 検索窓 --- */
-.search-area { margin-bottom: 2rem; text-align: center; }
+/* --- 4. 検索とテーブル --- */
 .search-input {
-width: 80%;
-padding: 12px 20px;
-border: 2px solid #a8c1d9;
-background: #f4f7fa;
-border-radius: 30px;
-font-size: 1rem;
+width: 100%;
+max-width: 500px;
+margin: 0 auto 2rem;
+display: block;
 text-align: center;
+background: rgba(255,255,255,0.8);
 }
 
-/* --- 表 (テーブル) --- */
-.tables-container { display: flex; gap: 2rem; flex-wrap: wrap; }
-.table-wrapper { flex: 1; min-width: 300px; }
+.tables-container {
+display: flex;
+gap: 2rem;
+align-items: flex-start;
+}
 
+.table-wrapper {
+flex: 1;
+background: #fff;
+border-radius: 20px;
+overflow: hidden;
+box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+padding-bottom: 10px;
+}
+
+.table-title {
+padding: 15px;
+text-align: center;
+font-weight: bold;
+font-size: 1.1rem;
+}
+.title-shonen { background: #e3f2fd; color: #1e88e5; }
+.title-shojo { background: #fce4ec; color: #d81b60; }
+
+/* ▼▼▼ 修正2：テーブルの幅広がり対応 ▼▼▼ */
 .kawaii-table {
 width: 100%;
-border-collapse: separate;
-border-spacing: 0;
-background: #fff;
-border-radius: 12px;
-overflow: hidden;
-box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+border-collapse: collapse;
+table-layout: fixed; /* 列幅を固定するために必須 */
 }
-.kawaii-table th { padding: 12px; font-weight: bold; color: #5d4a4a; }
-.kawaii-table td { padding: 12px; border-bottom: 1px dashed #ecdce0; text-align: center; }
-.kawaii-table tr:last-child td { border-bottom: none; }
-.kawaii-table tr:hover { background: #faf8f9; }
 
-/* 少年漫画用のヘッダー色 */
-.shonen-table th { background: #f0f4f8; border-bottom: 2px solid #a8c1d9; }
-/* 少女漫画用のヘッダー色 */
-.shojo-table th { background: #fcf4f6; border-bottom: 2px solid #dcb4bd; }
+/* 列幅を指定して右側の余白を埋める */
+.kawaii-table th {
+padding: 10px;
+color: #8d6e63;
+font-size: 0.9rem;
+border-bottom: 2px solid #f0f0f0;
+}
+/* タイトル列を広く取る */
+.kawaii-table th:nth-child(1) { width: 60%; }
+.kawaii-table th:nth-child(2) { width: 25%; }
+.kawaii-table th:nth-child(3) { width: 15%; }
 
-.table-title { text-align: center; font-size: 1.3rem; font-weight: bold; margin-bottom: 1rem; }
-.title-shonen { color: #7a9ebf; }
-.title-shojo { color: #d18290; }
-
+.kawaii-table td {
+padding: 12px 10px;
+border-bottom: 1px solid #f9f9f9;
+text-align: center;
+font-size: 0.95rem;
+word-wrap: break-word; /* 長い文字は折り返す */
+}
 .delete-btn {
-background: #e6b8be; border: none; border-radius: 50%;
-width: 25px; height: 25px; color: #fff; cursor: pointer;
-font-weight: bold; line-height: 25px; padding: 0;
+background: #ffcdd2; color: #c62828;
+border: none; border-radius: 50%;
+width: 28px; height: 28px;
+cursor: pointer; font-weight: bold;
+transition: 0.2s;
 }
-.delete-btn:hover { background: #d18290; }
+.delete-btn:hover { background: #ef9a9a; }
+
+/* --- 5. スマホ用レスポンシブ調整 --- */
+@media (max-width: 768px) {
+#kawaii-container {
+padding: 1rem;
+margin: 1rem;
+}
+.input-group {
+flex-direction: column; /* 縦並び */
+}
+.cute-input {
+width: 100%; /* 横幅いっぱい */
+box-sizing: border-box;
+}
+.tables-container {
+flex-direction: column; /* テーブルも縦並び */
+gap: 2rem;
+}
+.room-title {
+font-size: 1.5rem;
+}
+}
 </style>
 <div id="kawaii-container">
 <h1 class="room-title">わたしの本棚</h1>
@@ -925,25 +987,23 @@ font-weight: bold; line-height: 25px; padding: 0;
 <div class="input-group">
 <input type="text" id="manga-title" class="cute-input" placeholder="タイトル (例: 呪術廻戦)">
 <input type="text" id="manga-furi" class="cute-input" placeholder="フリガナ (例: ジュジュツカイセン)">
-<input type="number" id="manga-vol" class="cute-input" placeholder="読んだ巻数 (例: 24)" style="flex: 0.5;">
+<input type="number" id="manga-vol" class="cute-input" placeholder="読んだ巻数 (例: 24)">
 </div>
 <button class="add-btn" onclick="addManga()">🎀 ほんだなに追加する 🎀</button>
 </div>
-<div class="search-area">
 <input type="text" id="search-box" class="cute-input search-input" placeholder="🔍 タイトルやフリガナで探す..." oninput="renderTables()">
-</div>
 <div class="tables-container">
 <div class="table-wrapper">
 <div class="table-title title-shonen">📘 少年漫画</div>
 <table class="kawaii-table shonen-table">
-<thead><tr><th>タイトル</th><th>巻数</th><th>×</th></tr></thead>
+<thead><tr><th>タイトル</th><th>巻数</th><th>削除</th></tr></thead>
 <tbody id="shonen-tbody"></tbody>
 </table>
 </div>
 <div class="table-wrapper">
 <div class="table-title title-shojo">🌸 少女漫画</div>
 <table class="kawaii-table shojo-table">
-<thead><tr><th>タイトル</th><th>巻数</th><th>×</th></tr></thead>
+<thead><tr><th>タイトル</th><th>巻数</th><th>削除</th></tr></thead>
 <tbody id="shojo-tbody"></tbody>
 </table>
 </div>
@@ -959,7 +1019,7 @@ const volume = document.getElementById('manga-vol').value.trim();
 const category = document.querySelector('input[name="category"]:checked').value;
 
 if (!title || !furigana || !volume) {
-alert("タイトル、フリガナ、巻数を入力してね！");
+alert("全部入力してね！");
 return;
 }
 
@@ -985,7 +1045,7 @@ document.getElementById('manga-vol').value = "";
 }
 
 function deleteManga(id) {
-if(confirm("この漫画を本棚から削除する？")) {
+if(confirm("本当に消す？")) {
 mangaList = mangaList.filter(manga => manga.id !== id);
 saveData();
 renderTables();
@@ -1022,8 +1082,8 @@ shojoTbody.appendChild(row);
 }
 });
 
-if(shonenTbody.innerHTML === "") shonenTbody.innerHTML = "<tr><td colspan='3' style='color:#ccc;'>まだないよ</td></tr>";
-if(shojoTbody.innerHTML === "") shojoTbody.innerHTML = "<tr><td colspan='3' style='color:#ccc;'>まだないよ</td></tr>";
+if(shonenTbody.innerHTML === "") shonenTbody.innerHTML = "<tr><td colspan='3' style='color:#ccc; padding:20px;'>まだないよ</td></tr>";
+if(shojoTbody.innerHTML === "") shojoTbody.innerHTML = "<tr><td colspan='3' style='color:#ccc; padding:20px;'>まだないよ</td></tr>";
 }
 
 window.onload = renderTables;
