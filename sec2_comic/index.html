@@ -777,7 +777,6 @@ font-family: 'Zen Maru Gothic', sans-serif !important;
 min-height: 100vh;
 margin: 0;
 }
-/* メインコンテナ */
 #kawaii-container {
 max-width: 900px;
 margin: 2rem auto;
@@ -801,7 +800,7 @@ padding: 2rem;
 border-radius: 24px;
 border: 2px dashed #f6cde3;
 margin-bottom: 2.5rem;
-box-sizing: border-box; /* はみ出し防止 */
+box-sizing: border-box;
 }
 .radio-group {
 display: flex;
@@ -872,7 +871,7 @@ color: #5d4a4a;
 outline: none;
 transition: 0.3s;
 text-align: center;
-box-sizing: border-box; /* 重要：これで幅100%でもはみ出さない */
+box-sizing: border-box;
 }
 .cute-input::placeholder { text-align: center; color: #aaa; }
 .cute-input:focus {
@@ -996,7 +995,6 @@ white-space: nowrap;
 text-align: center !important;
 box-sizing: border-box !important;
 }
-/* PC用の列幅 */
 .col-comp { width: 8% !important; }
 .col-title { width: 42% !important; }
 .col-vol { width: 15% !important; }
@@ -1073,9 +1071,7 @@ display: flex; justify-content: center; align-items: center;
 margin: 0 auto;
 }
 .delete-btn:hover { background: #ef9a9a; }
-/* ▼▼▼ スマホ用調整（ガッツリ修正） ▼▼▼ */
 @media (max-width: 768px) {
-/* コンテナを広げて余白を減らす */
 #kawaii-container {
 width: 96% !important;
 margin: 10px auto !important;
@@ -1093,24 +1089,24 @@ gap: 10px;
 width: 100% !important;
 min-width: 0 !important;
 }
-/* テーブル調整：文字を小さく */
+.tables-container {
+flex-direction: column !important;
+gap: 2rem !important;
+}
 .kawaii-table th, .kawaii-table td {
-font-size: 0.75rem !important; /* 12px相当 */
+font-size: 0.75rem !important;
 padding: 6px 1px !important;
 }
 .rate-select { font-size: 0.75rem !important; }
-/* スマホ時の列幅微調整 */
 .col-comp { width: 10% !important; }
 .col-title { width: 40% !important; }
-.col-vol { width: 12% !important; } /* 巻数を狭く */
-.col-rate { width: 26% !important; } /* 評価プルダウン用に確保 */
+.col-vol { width: 12% !important; }
+.col-rate { width: 26% !important; }
 .col-del { width: 12% !important; }
-/* 削除ボタンも小さく */
 .delete-btn {
 width: 22px; height: 22px;
 font-size: 0.8rem;
 }
-/* チェックボックスも少し小さく */
 .comp-check {
 width: 18px; height: 18px;
 }
@@ -1158,8 +1154,10 @@ width: 18px; height: 18px;
 <tr>
 <th class="col-comp">完</th>
 <th class="col-title">タイトル</th>
-<th class="col-vol">巻</th> <th class="col-rate">評価</th>
-<th class="col-del">×</th> </tr>
+<th class="col-vol">巻</th>
+<th class="col-rate">評価</th>
+<th class="col-del">×</th>
+</tr>
 </thead>
 <tbody id="shonen-tbody"></tbody>
 </table>
