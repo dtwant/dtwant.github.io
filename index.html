@@ -110,8 +110,8 @@
   <link
     type="text/css"
     rel="stylesheet"
-    href="/css/main.bundle.min.2feda4fd88610dacf593c49f662faca85817707a207fa6a9ee268b912468d431858f2925b55879af386ef8511e278673eabf6aeabffcb32398369a37d296f4cc.css"
-    integrity="sha512-L&#43;2k/YhhDaz1k8SfZi&#43;sqFgXcHogf6ap7iaLkSRo1DGFjykltVh5rzhu&#43;FEeJ4Zz6r9q6r/8syOYNpo30pb0zA==">
+    href="/css/main.bundle.min.761ff0e5dacc327220ca1b4b78d68b28d7dd62cf2f9b242d43a2441065a3a050e8496bcfcc1d50df266eecd51142883595be944cfa20738346238eed9c703b20.css"
+    integrity="sha512-dh/w5drMMnIgyhtLeNaLKNfdYs8vmyQtQ6JEEGWjoFDoSWvPzB1Q3yZu7NURQog1lb6UTPogc4NGI47tnHA7IA==">
 
   
   
@@ -1247,243 +1247,228 @@ h3.dt-heading::before {
 <script async src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script async src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script async src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
 <style>
-     
-    .quick-memo-card {
-        background: rgba(5, 5, 5, 0.6) !important;  
-        border: 1px solid rgba(0, 243, 255, 0.3) !important;  
-        border-radius: 6px;
-        box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
-        padding: 20px;
-        margin: 20px 0;
-        position: relative;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-    }
-    .quick-memo-card:hover {
-        box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-        border-color: rgba(0, 243, 255, 0.6) !important;
-    }
-    
-     
-    .quick-memo-card, .quick-memo-card * {
-        color: #e0f8ff !important;  
-        font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace !important;
-        box-sizing: border-box;
-    }
-
-    .memo-header { 
-        display: flex; justify-content: space-between; align-items: center; 
-        margin-bottom: 15px; 
-        border-bottom: 1px dashed rgba(0, 243, 255, 0.3) !important; 
-        padding-bottom: 10px; 
-    }
-    .memo-title { 
-        font-family: 'Orbitron', sans-serif !important;
-        color: #00f3ff !important;
-        text-shadow: 0 0 5px rgba(0, 243, 255, 0.5) !important;
-        font-weight: 700; 
-        font-size: 1.1em; 
-        display: flex; align-items: center; gap: 6px; 
-        letter-spacing: 0.1em;
-    }
-    
-    .action-btn { 
-        background: rgba(0, 243, 255, 0.1) !important; 
-        border: 1px solid rgba(0, 243, 255, 0.5) !important; 
-        cursor: pointer; 
-        font-size: 0.9em; 
-        color: #00f3ff !important; 
-        padding: 5px 12px; 
-        border-radius: 4px; 
-        transition: all 0.3s ease; 
-        display: flex; align-items: center; gap: 5px; 
-        text-shadow: 0 0 3px rgba(0, 243, 255, 0.5);
-    }
-    .action-btn:hover { 
-        background: #00f3ff !important; 
-        color: #000 !important; 
-        box-shadow: 0 0 10px #00f3ff;
-        text-shadow: none;
-    }
-     
-    .action-btn.done-mode { 
-        background: rgba(255, 0, 85, 0.1) !important;
-        border-color: #ff0055 !important;
-        color: #ff0055 !important; 
-        text-shadow: 0 0 5px #ff0055;
-    }
-    .action-btn.done-mode:hover {
-        background: #ff0055 !important;
-        color: #000 !important;
-        box-shadow: 0 0 10px #ff0055;
-        text-shadow: none;
-    }
-    
-     
-    .memo-area { 
-        width: 100%; min-height: 200px; 
-        border: 1px solid rgba(0, 243, 255, 0.2) !important; 
-        border-radius: 4px; 
-        padding: 12px; 
-        font-size: 14px; line-height: 1.6; 
-        resize: vertical; 
-        background: rgba(0, 0, 0, 0.8) !important;  
-        color: #00f3ff !important;  
-        display: none; outline: none; 
-    }
-    .memo-area:focus { 
-        border-color: #00f3ff !important; 
-        box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.1);
-    }
-    .memo-area::placeholder {
-        color: rgba(0, 243, 255, 0.3) !important;
-    }
-    
-     
-    .preview-area { 
-        width: 100%; min-height: 100px; 
-        color: #e0f8ff !important; 
-        display: block; overflow-wrap: break-word; line-height: 1.8; 
-        letter-spacing: 0.05em;
-    }
-    .preview-area h1, .preview-area h2, .preview-area h3 { 
-        color: #00f3ff !important;
-        border-bottom: 1px dashed rgba(0, 243, 255, 0.3) !important; 
-        padding-bottom: 5px; margin-top: 15px; 
-        text-shadow: 0 0 5px rgba(0, 243, 255, 0.3);
-    }
-    .preview-area ul, .preview-area ol { padding-left: 20px; }
-    .preview-area p { margin-bottom: 10px; }
-    .preview-area blockquote { 
-        border-left: 3px solid #ff0055 !important; 
-        padding-left: 10px; 
-        color: rgba(224, 248, 255, 0.7) !important; 
-        background: rgba(255, 0, 85, 0.05) !important;
-        margin: 10px 0; 
-    }
-    .preview-area code { 
-        background: rgba(0, 243, 255, 0.1) !important; 
-        padding: 2px 4px; border-radius: 3px; 
-        color: #ff0055 !important;  
-        font-size: 0.9em; 
-        border: 1px solid rgba(255, 0, 85, 0.3);
-    }
-    .preview-area pre { 
-        background: rgba(0, 0, 0, 0.8) !important; 
-        padding: 10px; border-radius: 4px; overflow-x: auto; 
-        border: 1px solid rgba(0, 243, 255, 0.2);
-    }
-    .preview-area pre code {
-        background: transparent !important;
-        border: none !important;
-        color: #00f3ff !important;
-    }
-    
-    .empty-msg { 
-        color: rgba(0, 243, 255, 0.4) !important; 
-        font-style: italic; text-align: center; padding: 20px; 
-        animation: blink 2s infinite;
-    }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+ 
+.quick-memo-card {
+background: rgba(5, 5, 5, 0.6) !important;
+border: 1px solid rgba(0, 243, 255, 0.3) !important;
+border-radius: 6px;
+box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
+padding: 20px;
+margin: 20px 0;
+position: relative;
+transition: all 0.3s ease;
+backdrop-filter: blur(4px);
+-webkit-backdrop-filter: blur(4px);
+ 
+color: #e0f8ff !important;
+font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace;
+}
+.quick-memo-card * {
+box-sizing: border-box;
+}
+.quick-memo-card:hover {
+box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+border-color: rgba(0, 243, 255, 0.6) !important;
+}
+ 
+.katex {
+color: #00f3ff !important;
+ 
+text-shadow: 
+0 0 2px #fff,
+0 0 5px #00f3ff, 
+0 0 10px #00f3ff, 
+0 0 20px #00f3ff,
+0 0 30px rgba(0, 243, 255, 0.8) !important;
+}
+.memo-header {
+display: flex; justify-content: space-between; align-items: center;
+margin-bottom: 15px;
+border-bottom: 1px dashed rgba(0, 243, 255, 0.3) !important;
+padding-bottom: 10px;
+}
+.memo-title {
+font-family: 'Orbitron', sans-serif !important;
+color: #00f3ff !important;
+text-shadow: 0 0 5px rgba(0, 243, 255, 0.5) !important;
+font-weight: 700;
+font-size: 1.1em;
+display: flex; align-items: center; gap: 6px;
+letter-spacing: 0.1em;
+}
+.action-btn {
+background: rgba(0, 243, 255, 0.1) !important;
+border: 1px solid rgba(0, 243, 255, 0.5) !important;
+cursor: pointer;
+font-size: 0.9em;
+color: #00f3ff !important;
+padding: 5px 12px;
+border-radius: 4px;
+transition: all 0.3s ease;
+display: flex; align-items: center; gap: 5px;
+text-shadow: 0 0 3px rgba(0, 243, 255, 0.5);
+font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace;
+}
+.action-btn:hover {
+background: #00f3ff !important;
+color: #000 !important;
+box-shadow: 0 0 10px #00f3ff;
+text-shadow: none;
+}
+.action-btn.done-mode {
+background: rgba(255, 0, 85, 0.1) !important;
+border-color: #ff0055 !important;
+color: #ff0055 !important;
+text-shadow: 0 0 5px #ff0055;
+}
+.action-btn.done-mode:hover {
+background: #ff0055 !important;
+color: #000 !important;
+box-shadow: 0 0 10px #ff0055;
+text-shadow: none;
+}
+.memo-area {
+width: 100%; min-height: 200px;
+border: 1px solid rgba(0, 243, 255, 0.2) !important;
+border-radius: 4px;
+padding: 12px;
+font-size: 14px; line-height: 1.6;
+resize: vertical;
+background: rgba(0, 0, 0, 0.8) !important;
+color: #00f3ff !important;
+display: none; outline: none;
+font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace !important;
+}
+.memo-area:focus {
+border-color: #00f3ff !important;
+box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.1);
+}
+.memo-area::placeholder {
+color: rgba(0, 243, 255, 0.3) !important;
+}
+.preview-area {
+width: 100%; min-height: 100px;
+color: #e0f8ff !important;
+display: block; overflow-wrap: break-word; line-height: 1.8;
+letter-spacing: 0.05em;
+}
+.preview-area h1, .preview-area h2, .preview-area h3 {
+color: #00f3ff !important;
+border-bottom: 1px dashed rgba(0, 243, 255, 0.3) !important;
+padding-bottom: 5px; margin-top: 15px;
+text-shadow: 0 0 5px rgba(0, 243, 255, 0.3);
+}
+.preview-area ul, .preview-area ol { padding-left: 20px; }
+.preview-area p { margin-bottom: 10px; }
+.preview-area blockquote {
+border-left: 3px solid #ff0055 !important;
+padding-left: 10px;
+color: rgba(224, 248, 255, 0.7) !important;
+background: rgba(255, 0, 85, 0.05) !important;
+margin: 10px 0;
+}
+.preview-area code {
+background: rgba(0, 243, 255, 0.1) !important;
+padding: 2px 4px; border-radius: 3px;
+color: #ff0055 !important;
+font-size: 0.9em;
+border: 1px solid rgba(255, 0, 85, 0.3);
+}
+.preview-area pre {
+background: rgba(0, 0, 0, 0.8) !important;
+padding: 10px; border-radius: 4px; overflow-x: auto;
+border: 1px solid rgba(0, 243, 255, 0.2);
+}
+.preview-area pre code {
+background: transparent !important;
+border: none !important;
+color: #00f3ff !important;
+}
+.empty-msg {
+color: rgba(0, 243, 255, 0.4) !important;
+font-style: italic; text-align: center; padding: 20px;
+animation: blink 2s infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 </style>
-
 <div class="quick-memo-card">
-    <div class="memo-header">
-        <div class="memo-title">> SYSTEM_MEMO</div>
-        <button id="actionBtn" class="action-btn">
-            <span id="btnIcon">[ EDIT ]</span>
-        </button>
-    </div>
-    <div id="memoPreview" class="preview-area"></div>
-    <textarea id="memoInput" class="memo-area" placeholder="> Input data (Markdown & LaTeX supported)..._"></textarea>
+<div class="memo-header">
+<div class="memo-title">> SYSTEM_MEMO</div>
+<button id="actionBtn" class="action-btn">
+<span id="btnIcon">[ EDIT ]</span>
+</button>
 </div>
-
+<div id="memoPreview" class="preview-area"></div>
+<textarea id="memoInput" class="memo-area" placeholder="> Input data (Markdown & LaTeX supported)..._"></textarea>
+</div>
 <script>
-    (function() {
-        const STORAGE_KEY = 'dtwant_quick_memo_content';
-        const input = document.getElementById('memoInput');
-        const preview = document.getElementById('memoPreview');
-        const actionBtn = document.getElementById('actionBtn');
-        const btnIcon = document.getElementById('btnIcon');
-
-        let isEditMode = false;
-
-        function safeRender(rawText) {
-            try {
-                if (!rawText.trim()) {
-                    preview.innerHTML = '<div class="empty-msg">> NO DATA FOUND. CLICK [ EDIT ] TO INITIALIZE.</div>';
-                    return;
-                }
-
-                let html = rawText;
-
-                
-                if (typeof marked !== 'undefined') {
-                    const mathBlocks = [];
-                    
-                    const protectedText = rawText.replace(/(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$)/g, (match) => {
-                        mathBlocks.push(match);
-                        return `MATHBLOCK${mathBlocks.length - 1}END`;
-                    });
-                    
-                    html = marked.parse(protectedText);
-
-                    
-                    html = html.replace(/MATHBLOCK(\d+)END/g, (match, index) => {
-                        return mathBlocks[index];
-                    });
-                }
-
-                preview.innerHTML = html;
-
-                
-                if (typeof renderMathInElement !== 'undefined') {
-                    renderMathInElement(preview, {
-                        delimiters: [
-                            {left: '$$', right: '$$', display: true},
-                            {left: '$', right: '$', display: false}
-                        ],
-                        throwOnError: false
-                    });
-                }
-            } catch (e) {
-                console.error("Memo render error:", e);
-                preview.innerHTML = '<div class="empty-msg" style="color:#ff0055!important;">> ERROR: RENDER FAILED.</div>';
-            }
-        }
-
-        window.addEventListener('load', () => {
-            const saved = localStorage.getItem(STORAGE_KEY) || "";
-            input.value = saved;
-            
-            setTimeout(() => safeRender(saved), 500);
-        });
-
-        input.addEventListener('input', () => {
-            localStorage.setItem(STORAGE_KEY, input.value);
-        });
-
-        actionBtn.addEventListener('click', () => {
-            isEditMode = !isEditMode;
-            if (isEditMode) {
-                preview.style.display = 'none';
-                input.style.display = 'block';
-                input.focus();
-                btnIcon.textContent = "[ SAVE ]";
-                actionBtn.classList.add('done-mode');
-            } else {
-                localStorage.setItem(STORAGE_KEY, input.value);
-                safeRender(input.value);
-                input.style.display = 'none';
-                preview.style.display = 'block';
-                btnIcon.textContent = "[ EDIT ]";
-                actionBtn.classList.remove('done-mode');
-            }
-        });
-    })();
+(function() {
+const STORAGE_KEY = 'dtwant_quick_memo_content';
+const input = document.getElementById('memoInput');
+const preview = document.getElementById('memoPreview');
+const actionBtn = document.getElementById('actionBtn');
+const btnIcon = document.getElementById('btnIcon');
+let isEditMode = false;
+function safeRender(rawText) {
+try {
+if (!rawText.trim()) {
+preview.innerHTML = '<div class="empty-msg">> NO DATA FOUND. CLICK [ EDIT ] TO INITIALIZE.</div>';
+return;
+}
+let html = rawText;
+if (typeof marked !== 'undefined') {
+const mathBlocks = [];
+const protectedText = rawText.replace(/(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$)/g, (match) => {
+mathBlocks.push(match);
+return `MATHBLOCK${mathBlocks.length - 1}END`;
+});
+html = marked.parse(protectedText);
+html = html.replace(/MATHBLOCK(\d+)END/g, (match, index) => {
+return mathBlocks[index];
+});
+}
+preview.innerHTML = html;
+if (typeof renderMathInElement !== 'undefined') {
+renderMathInElement(preview, {
+delimiters: [
+{left: '$$', right: '$$', display: true},
+{left: '$', right: '$', display: false}
+],
+throwOnError: false
+});
+}
+} catch (e) {
+console.error("Memo render error:", e);
+preview.innerHTML = '<div class="empty-msg" style="color:#ff0055!important;">> ERROR: RENDER FAILED.</div>';
+}
+}
+window.addEventListener('load', () => {
+const saved = localStorage.getItem(STORAGE_KEY) || "";
+input.value = saved;
+setTimeout(() => safeRender(saved), 500);
+});
+input.addEventListener('input', () => {
+localStorage.setItem(STORAGE_KEY, input.value);
+});
+actionBtn.addEventListener('click', () => {
+isEditMode = !isEditMode;
+if (isEditMode) {
+preview.style.display = 'none';
+input.style.display = 'block';
+input.focus();
+btnIcon.textContent = "[ SAVE ]";
+actionBtn.classList.add('done-mode');
+} else {
+localStorage.setItem(STORAGE_KEY, input.value);
+safeRender(input.value);
+input.style.display = 'none';
+preview.style.display = 'block';
+btnIcon.textContent = "[ EDIT ]";
+actionBtn.classList.remove('done-mode');
+}
+});
+})();
 </script>
 </div>
 <div class="alert-spacer">

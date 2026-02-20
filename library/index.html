@@ -99,8 +99,8 @@
   <link
     type="text/css"
     rel="stylesheet"
-    href="/css/main.bundle.min.2feda4fd88610dacf593c49f662faca85817707a207fa6a9ee268b912468d431858f2925b55879af386ef8511e278673eabf6aeabffcb32398369a37d296f4cc.css"
-    integrity="sha512-L&#43;2k/YhhDaz1k8SfZi&#43;sqFgXcHogf6ap7iaLkSRo1DGFjykltVh5rzhu&#43;FEeJ4Zz6r9q6r/8syOYNpo30pb0zA==">
+    href="/css/main.bundle.min.761ff0e5dacc327220ca1b4b78d68b28d7dd62cf2f9b242d43a2441065a3a050e8496bcfcc1d50df266eecd51142883595be944cfa20738346238eed9c703b20.css"
+    integrity="sha512-dh/w5drMMnIgyhtLeNaLKNfdYs8vmyQtQ6JEEGWjoFDoSWvPzB1Q3yZu7NURQog1lb6UTPogc4NGI47tnHA7IA==">
 
   
   
@@ -228,7 +228,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "537"
+    "wordCount": "709"
   }]
   </script>
 
@@ -783,1764 +783,2152 @@
 作業が面倒なのでまだまだ終わっていない(2025/12/19時点)</p>
 
 
-<style>
-   
-  .bookshelf-container {
-    margin-bottom: 2.5rem;
-  }
-  .bookshelf-title {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 0.8rem;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 0.3rem;
-    color: var(--color-contrast-high);
-  }
-  .book-grid {
-    display: grid;
-     
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 18px;
-    align-items: start;
-  }
-  
-   
-  .book-card {
-    background: var(--color-bg-secondary);
-    border-radius: 6px;
-    padding: 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    transition: transform 0.2s;
-    text-align: center;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  .book-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
-  
-   
-  .book-cover {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 22 / 30;
-    object-fit: cover;
-    border-radius: 3px;
-    margin-bottom: 8px;
-    background-color: #eee;
-  }
-  
-   
-  .book-info {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .book-title {
-    font-size: 0.9rem;
-    font-weight: bold;
-    line-height: 1.3;
-    margin-bottom: 4px;
-    color: var(--color-contrast-high);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .book-author {
-    font-size: 0.8rem;
-    color: var(--color-contrast-medium);
-    margin-bottom: 2px;  
-    font-style: normal;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-   
-  .book-publisher {
-    font-size: 0.7rem;
-    color: #888;  
-    margin-bottom: 6px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
-  .book-comment {
-    font-size: 0.75rem;
-    color: var(--color-contrast-medium);
-    margin-top: auto;
-    border-top: 1px dotted #ddd;
-    padding-top: 5px;
-    text-align: left;
-    line-height: 1.3;
-    white-space: pre-wrap;
-  }
-  
-  a.book-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    height: 100%;
-  }
+<div class="cyber-scanline-overlay"></div>
+
+<style>
+ 
+:root {
+  --neon-pink-bs: #ff0055;
+  --neon-cyan-bs: #00f3ff;
+  --neon-green-bs: #00ff41;
+  --bg-dark-bs: #050505;
+  --panel-bg-bs: rgba(10, 14, 18, 0.90);
+}
+
+ 
+body {
+  background-color: var(--bg-dark-bs) !important;
+  background-image: 
+      linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px) !important;
+  background-size: 40px 40px !important;
+  animation: bg-scroll-bs 20s linear infinite !important;
+  color: #e0e0e0 !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+ 
+main, article, .content-wrapper, .page, .main-content {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+@keyframes bg-scroll-bs {
+    0% { background-position: 0 0; }
+    100% { background-position: 40px 40px; }
+}
+
+ 
+.cyber-scanline-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.6;
+}
+
+ 
+p {
+  color: #a0e0e0 !important;
+  text-shadow: 0 0 5px rgba(0, 243, 255, 0.3) !important;
+  line-height: 1.6;
+  font-size: 0.95rem !important;  
+}
+h1, h2 {
+  color: var(--neon-cyan-bs) !important;
+  font-family: 'Orbitron', sans-serif !important;
+  text-shadow: 0 0 10px rgba(0, 243, 255, 0.5) !important;
+}
+
+
+ 
+.bookshelf-wrapper {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 2rem auto;
+}
+
+.bookshelf-container {
+  margin-bottom: 3rem;
+}
+
+ 
+.bookshelf-title {
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 1.5rem;  
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  position: relative;
+  display: inline-block;
+  color: var(--neon-cyan-bs);
+  text-shadow: 2px 2px var(--neon-pink-bs), 0 0 10px rgba(0, 243, 255, 0.5);
+  letter-spacing: 0.1em;
+  border-bottom: 2px solid rgba(0, 243, 255, 0.5);
+}
+
+.bookshelf-title::before, .bookshelf-title::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: var(--bg-dark-bs);
+}
+.bookshelf-title::before {
+  left: 2px; text-shadow: -1px 0 var(--neon-pink-bs);
+  clip: rect(24px, 550px, 90px, 0);
+  animation: glitch-anim-bs-2 3s infinite linear alternate-reverse;
+}
+.bookshelf-title::after {
+  left: -2px; text-shadow: -1px 0 var(--neon-green-bs);
+  clip: rect(85px, 550px, 140px, 0);
+  animation: glitch-anim-bs 2.5s infinite linear alternate-reverse;
+}
+
+.title-wishlist {
+  color: var(--neon-pink-bs);
+  text-shadow: 2px 2px var(--neon-cyan-bs), 0 0 10px rgba(255, 0, 85, 0.5);
+  border-bottom: 2px solid rgba(255, 0, 85, 0.5);
+}
+.title-wishlist::before { text-shadow: -1px 0 var(--neon-cyan-bs); background: var(--bg-dark-bs); }
+.title-wishlist::after { text-shadow: -1px 0 var(--neon-pink-bs); background: var(--bg-dark-bs); }
+
+@keyframes glitch-anim-bs {
+  0% { clip: rect(14px, 9999px, 122px, 0); }
+  5% { clip: rect(82px, 9999px, 92px, 0); }
+  100% { clip: rect(5px, 9999px, 133px, 0); }
+}
+@keyframes glitch-anim-bs-2 {
+  0% { clip: rect(65px, 9999px, 100px, 0); }
+  100% { clip: rect(10px, 9999px, 111px, 0); }
+}
+
+ 
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));  
+  gap: 18px;  
+  align-items: start;
+}
+
+.book-card {
+  background: var(--panel-bg-bs);
+  border: 1px solid rgba(0, 243, 255, 0.4);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 243, 255, 0.08);
+  padding: 10px;  
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  backdrop-filter: blur(5px);
+   
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.book-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 12px; height: 12px;  
+  border-top: 2px solid var(--neon-cyan-bs);
+  border-left: 2px solid var(--neon-cyan-bs);
+  opacity: 0.6;
+  pointer-events: none;
+}
+.book-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0; right: 0; width: 12px; height: 12px;  
+  border-bottom: 2px solid var(--neon-cyan-bs);
+  border-right: 2px solid var(--neon-cyan-bs);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.book-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-color: var(--neon-cyan-bs);
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.3), inset 0 0 25px rgba(0, 243, 255, 0.15);
+  z-index: 10;
+}
+.book-card:hover::before, .book-card:hover::after { opacity: 1; box-shadow: 0 0 8px var(--neon-cyan-bs); }
+
+.wishlist-card {
+  border: 1px solid rgba(255, 0, 85, 0.4);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(255, 0, 85, 0.08);
+}
+.wishlist-card::before { border-color: var(--neon-pink-bs); }
+.wishlist-card::after { border-color: var(--neon-pink-bs); }
+
+.wishlist-card:hover {
+  border-color: var(--neon-pink-bs);
+  box-shadow: 0 0 20px rgba(255, 0, 85, 0.3), inset 0 0 25px rgba(255, 0, 85, 0.15);
+}
+.wishlist-card:hover::before, .wishlist-card:hover::after { box-shadow: 0 0 8px var(--neon-pink-bs); }
+
+ 
+.book-cover-wrapper {
+  position: relative;
+  margin-bottom: 10px;  
+  width: 100%;
+  aspect-ratio: 22 / 30;
+  overflow: hidden;
+  border: 1px solid rgba(0, 243, 255, 0.6);
+  box-shadow: 0 0 8px rgba(0, 243, 255, 0.1);
+}
+.wishlist-card .book-cover-wrapper { border-color: rgba(255, 0, 85, 0.6); box-shadow: 0 0 8px rgba(255, 0, 85, 0.1); }
+
+.book-cover-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(rgba(0, 243, 255, 0.15) 1px, transparent 1px);
+  background-size: 100% 3px;
+  pointer-events: none;
+  z-index: 2;
+}
+.wishlist-card .book-cover-wrapper::after {
+  background: linear-gradient(rgba(255, 0, 85, 0.15) 1px, transparent 1px);
+  background-size: 100% 3px;
+}
+
+.book-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.2) grayscale(30%) sepia(10%);
+  transition: filter 0.3s;
+}
+.book-card:hover .book-cover { filter: contrast(1.1) grayscale(0%) sepia(0%); }
+
+.img-null {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.8);
+  color: var(--neon-cyan-bs);
+  font-size: 0.7rem;  
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px var(--neon-cyan-bs);
+}
+.wishlist-card .img-null { color: var(--neon-pink-bs); text-shadow: 0 0 5px var(--neon-pink-bs); }
+
+ 
+.book-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-title {
+  font-size: 0.9rem;  
+  font-weight: bold;
+  line-height: 1.3;
+  margin-bottom: 6px;
+  color: #fff;
+  text-shadow: 0 0 5px rgba(0, 243, 255, 0.6);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.wishlist-card .book-title { text-shadow: 0 0 5px rgba(255, 0, 85, 0.6); }
+
+.book-author {
+  font-size: 0.75rem;  
+  color: var(--neon-cyan-bs);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 0 3px rgba(0, 243, 255, 0.3);
+}
+.wishlist-card .book-author { color: var(--neon-pink-bs); text-shadow: 0 0 3px rgba(255, 0, 85, 0.3); }
+
+.book-publisher {
+  font-size: 0.65rem;  
+  color: #999;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+ 
+.book-comment {
+  font-size: 0.7rem;  
+  color: #a0e0e0;
+  margin-top: auto;
+  border-top: 1px dashed rgba(0, 243, 255, 0.4);
+  padding: 8px 4px 4px 10px;  
+  text-align: left;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  background: rgba(0, 0, 0, 0.6);
+  border-left: 2px solid var(--neon-cyan-bs);
+  position: relative;
+  font-family: 'JetBrains Mono', monospace;
+}
+.book-comment::before {
+  content: ">";
+  position: absolute;
+  left: 3px;
+  top: 8px;
+  color: var(--neon-cyan-bs);
+  font-weight: bold;
+}
+
+.wishlist-card .book-comment {
+  color: #e0a0b0;
+  border-top: 1px dashed rgba(255, 0, 85, 0.4);
+  border-left: 2px solid var(--neon-pink-bs);
+}
+.wishlist-card .book-comment::before { color: var(--neon-pink-bs); }
+
+a.book-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
 </style>
 
-<div class="bookshelf-container">
-  <h3 class="bookshelf-title">📚 Library</h3>
-  <div class="book-grid">
-    
+<div class="bookshelf-wrapper">
+  
+  <div class="bookshelf-container">
+    <h3 class="bookshelf-title" data-text="> DATA_LIBRARY_CORE">> DATA_LIBRARY_CORE</h3>
+    <div class="book-grid">
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/518doVjQnsL.jpg" alt="数学の真髄 論理・写像" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/518doVjQnsL.jpg" alt="数学の真髄 論理・写像" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">数学の真髄 論理・写像</div>
-            <div class="book-author">青木 純二</div>
-            
-            
-            <div class="book-publisher">東進ブックス</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">数学の真髄 論理・写像</div>
+          <div class="book-author">青木 純二</div>
+          
+          <div class="book-publisher">PUB_ID // 東進ブックス</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71BuUrtKyCL._AC_UF1000,1000_QL80_.jpg" alt="数学基礎セミナー" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71BuUrtKyCL._AC_UF1000,1000_QL80_.jpg" alt="数学基礎セミナー" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">数学基礎セミナー</div>
-            <div class="book-author">日本大学文理学部数学科</div>
-            
-            
-            <div class="book-publisher">日本評論社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">数学基礎セミナー</div>
+          <div class="book-author">日本大学文理学部数学科</div>
+          
+          <div class="book-publisher">PUB_ID // 日本評論社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71BBoEHYPFL._UF1000,1000_QL80_.jpg" alt="代数・解析 パーフェクト・マスター" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71BBoEHYPFL._UF1000,1000_QL80_.jpg" alt="代数・解析 パーフェクト・マスター" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">代数・解析 パーフェクト・マスター</div>
-            <div class="book-author">鈴木 晋一</div>
-            
-            
-            <div class="book-publisher">日本評論社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">代数・解析 パーフェクト・マスター</div>
+          <div class="book-author">鈴木 晋一</div>
+          
+          <div class="book-publisher">PUB_ID // 日本評論社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71TYa9CU3RL.jpg" alt="平面幾何 パーフェクト・マスター" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71TYa9CU3RL.jpg" alt="平面幾何 パーフェクト・マスター" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">平面幾何 パーフェクト・マスター</div>
-            <div class="book-author">鈴木 晋一</div>
-            
-            
-            <div class="book-publisher">日本評論社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">平面幾何 パーフェクト・マスター</div>
+          <div class="book-author">鈴木 晋一</div>
+          
+          <div class="book-publisher">PUB_ID // 日本評論社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71oXuwaccUL.jpg" alt="初等整数 パーフェクト・マスター" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71oXuwaccUL.jpg" alt="初等整数 パーフェクト・マスター" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">初等整数 パーフェクト・マスター</div>
-            <div class="book-author">鈴木 晋一</div>
-            
-            
-            <div class="book-publisher">日本評論社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">初等整数 パーフェクト・マスター</div>
+          <div class="book-author">鈴木 晋一</div>
+          
+          <div class="book-publisher">PUB_ID // 日本評論社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/710K3PkJPjL._UF1000,1000_QL80_.jpg" alt="数学オリンピック 2016-2020" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/710K3PkJPjL._UF1000,1000_QL80_.jpg" alt="数学オリンピック 2016-2020" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">数学オリンピック 2016-2020</div>
-            <div class="book-author">数学オリンピック財団</div>
-            
-            
-            <div class="book-publisher">日本評論社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">数学オリンピック 2016-2020</div>
+          <div class="book-author">数学オリンピック財団</div>
+          
+          <div class="book-publisher">PUB_ID // 日本評論社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://www.dainippon-tosho.co.jp/college_math/images/book_re_applied.png" alt="新応用数学 (高専テキストシリーズ)" class="book-cover" loading="lazy">
+          <img src="https://www.dainippon-tosho.co.jp/college_math/images/book_re_applied.png" alt="新応用数学 (高専テキストシリーズ)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">新応用数学 (高専テキストシリーズ)</div>
-            <div class="book-author">大日本図書</div>
-            
-            
-            <div class="book-publisher">大日本図書</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">新応用数学 (高専テキストシリーズ)</div>
+          <div class="book-author">大日本図書</div>
+          
+          <div class="book-publisher">PUB_ID // 大日本図書</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71YRZ4Kpt3L.jpg" alt="新版 応用数学 改訂版 (新版数学シリーズ)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71YRZ4Kpt3L.jpg" alt="新版 応用数学 改訂版 (新版数学シリーズ)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">新版 応用数学 改訂版 (新版数学シリーズ)</div>
-            <div class="book-author">岡本 和夫 他</div>
-            
-            
-            <div class="book-publisher">実教出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">新版 応用数学 改訂版 (新版数学シリーズ)</div>
+          <div class="book-author">岡本 和夫 他</div>
+          
+          <div class="book-publisher">PUB_ID // 実教出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71&#43;cWQBtjdL.jpg" alt="ラプラス変換 (数学のかんどころ 13)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71&#43;cWQBtjdL.jpg" alt="ラプラス変換 (数学のかんどころ 13)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">ラプラス変換 (数学のかんどころ 13)</div>
-            <div class="book-author">國分 雅敏</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">ラプラス変換 (数学のかんどころ 13)</div>
+          <div class="book-author">國分 雅敏</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://content.bookoff.co.jp/goodsimages/LL/001695/0016956288LL.jpg" alt="体論、これはおもしろい (数学のかんどころ 18)" class="book-cover" loading="lazy">
+          <img src="https://content.bookoff.co.jp/goodsimages/LL/001695/0016956288LL.jpg" alt="体論、これはおもしろい (数学のかんどころ 18)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">体論、これはおもしろい (数学のかんどころ 18)</div>
-            <div class="book-author">飯高 茂</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">体論、これはおもしろい (数学のかんどころ 18)</div>
+          <div class="book-author">飯高 茂</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/61hP1pTG8oL._AC_UF1000,1000_QL80_.jpg" alt="多変数関数論 (数学のかんどころ 21)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/61hP1pTG8oL._AC_UF1000,1000_QL80_.jpg" alt="多変数関数論 (数学のかんどころ 21)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">多変数関数論 (数学のかんどころ 21)</div>
-            <div class="book-author">若林 功</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">多変数関数論 (数学のかんどころ 21)</div>
+          <div class="book-author">若林 功</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://shop.r10s.jp/bookfan/cabinet/00498/bk432011065x.jpg" alt="わかる！使える！楽しめる！ベクトル空間 (数学のかんどころ 24)" class="book-cover" loading="lazy">
+          <img src="https://shop.r10s.jp/bookfan/cabinet/00498/bk432011065x.jpg" alt="わかる！使える！楽しめる！ベクトル空間 (数学のかんどころ 24)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">わかる！使える！楽しめる！ベクトル空間 (数学のかんどころ 24)</div>
-            <div class="book-author">福間 慶明</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">わかる！使える！楽しめる！ベクトル空間 (数学のかんどころ 24)</div>
+          <div class="book-author">福間 慶明</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71Ni6XGI8RL.jpg" alt="早わかりルベーグ積分 (数学のかんどころ 29)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71Ni6XGI8RL.jpg" alt="早わかりルベーグ積分 (数学のかんどころ 29)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">早わかりルベーグ積分 (数学のかんどころ 29)</div>
-            <div class="book-author">澤野 嘉宏</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">早わかりルベーグ積分 (数学のかんどころ 29)</div>
+          <div class="book-author">澤野 嘉宏</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81FedImgLwL.jpg" alt="可換環論の勘どころ (数学のかんどころ 32)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81FedImgLwL.jpg" alt="可換環論の勘どころ (数学のかんどころ 32)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">可換環論の勘どころ (数学のかんどころ 32)</div>
-            <div class="book-author">後藤 四郎</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">可換環論の勘どころ (数学のかんどころ 32)</div>
+          <div class="book-author">後藤 四郎</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81tsMJumoUL._AC_UF1000,1000_QL80_.jpg" alt="有理型関数 (数学のかんどころ 37)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81tsMJumoUL._AC_UF1000,1000_QL80_.jpg" alt="有理型関数 (数学のかんどころ 37)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">有理型関数 (数学のかんどころ 37)</div>
-            <div class="book-author">新井 仁之</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">有理型関数 (数学のかんどころ 37)</div>
+          <div class="book-author">新井 仁之</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81XYYF4xM-L.jpg" alt="多変数の微積分 (数学のかんどころ 38)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81XYYF4xM-L.jpg" alt="多変数の微積分 (数学のかんどころ 38)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">多変数の微積分 (数学のかんどころ 38)</div>
-            <div class="book-author">酒井 文雄</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">多変数の微積分 (数学のかんどころ 38)</div>
+          <div class="book-author">酒井 文雄</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/61xHrXTACpL._AC_UF1000,1000_QL80_.jpg" alt="線形代数 I (東京大学工学教程 基礎系 数学)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/61xHrXTACpL._AC_UF1000,1000_QL80_.jpg" alt="線形代数 I (東京大学工学教程 基礎系 数学)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">線形代数 I (東京大学工学教程 基礎系 数学)</div>
-            <div class="book-author">室田 一雄, 杉原 正顯</div>
-            
-            
-            <div class="book-publisher">丸善出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">線形代数 I (東京大学工学教程 基礎系 数学)</div>
+          <div class="book-author">室田 一雄, 杉原 正顯</div>
+          
+          <div class="book-publisher">PUB_ID // 丸善出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81dvCXTngqL.jpg" alt="ベクトル解析 (東京大学工学教程 基礎系 数学)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81dvCXTngqL.jpg" alt="ベクトル解析 (東京大学工学教程 基礎系 数学)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">ベクトル解析 (東京大学工学教程 基礎系 数学)</div>
-            <div class="book-author">大岩 顕、奥薗 透、松野 俊一、岡 隆史</div>
-            
-            
-            <div class="book-publisher">丸善出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">ベクトル解析 (東京大学工学教程 基礎系 数学)</div>
+          <div class="book-author">大岩 顕、奥薗 透、松野 俊一、岡 隆史</div>
+          
+          <div class="book-publisher">PUB_ID // 丸善出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71szvwXM7HL._AC_UF1000,1000_QL80_.jpg" alt="ゼータへの招待 (シリーズ ゼータの現在)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71szvwXM7HL._AC_UF1000,1000_QL80_.jpg" alt="ゼータへの招待 (シリーズ ゼータの現在)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">ゼータへの招待 (シリーズ ゼータの現在)</div>
-            <div class="book-author">黒川 信重, 小山 信也</div>
-            
-            
-            <div class="book-publisher">日本評論社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">ゼータへの招待 (シリーズ ゼータの現在)</div>
+          <div class="book-author">黒川 信重, 小山 信也</div>
+          
+          <div class="book-publisher">PUB_ID // 日本評論社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/817DEACbLfL._UF1000,1000_QL80_.jpg" alt="オイラーとリーマンのゼータ関数 (シリーズ ゼータの現在)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/817DEACbLfL._UF1000,1000_QL80_.jpg" alt="オイラーとリーマンのゼータ関数 (シリーズ ゼータの現在)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">オイラーとリーマンのゼータ関数 (シリーズ ゼータの現在)</div>
-            <div class="book-author">黒川 信重</div>
-            
-            
-            <div class="book-publisher">日本評論社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">オイラーとリーマンのゼータ関数 (シリーズ ゼータの現在)</div>
+          <div class="book-author">黒川 信重</div>
+          
+          <div class="book-publisher">PUB_ID // 日本評論社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         <a href="/posts/2025-06-05-books/" class="book-link">
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81d7gK8bcAL._AC_UF1000,1000_QL80_.jpg" alt="解析概論" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81d7gK8bcAL._AC_UF1000,1000_QL80_.jpg" alt="解析概論" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">解析概論</div>
-            <div class="book-author">高木 貞治</div>
-            
-            
-            <div class="book-publisher">岩波書店</div>
-            
+        </div>
 
-            
-            <div class="book-comment">名著。</div>
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">解析概論</div>
+          <div class="book-author">高木 貞治</div>
+          
+          <div class="book-publisher">PUB_ID // 岩波書店</div>
+          
+          
+          <div class="book-comment">名著。</div>
+          
+        </div>
+
         </a>
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71wvtPjiITL._UF1000,1000_QL80_.jpg" alt="微分積分と集合 そのまま使える答えの書き方" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71wvtPjiITL._UF1000,1000_QL80_.jpg" alt="微分積分と集合 そのまま使える答えの書き方" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">微分積分と集合 そのまま使える答えの書き方</div>
-            <div class="book-author">飯高 茂</div>
-            
-            
-            <div class="book-publisher">講談社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">微分積分と集合 そのまま使える答えの書き方</div>
+          <div class="book-author">飯高 茂</div>
+          
+          <div class="book-publisher">PUB_ID // 講談社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71nBOffEOHL._AC_UF1000,1000_QL80_.jpg" alt="詳解 大学院への数学 微分積分編" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71nBOffEOHL._AC_UF1000,1000_QL80_.jpg" alt="詳解 大学院への数学 微分積分編" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">詳解 大学院への数学 微分積分編</div>
-            <div class="book-author">本田 龍央, 五十嵐 貫</div>
-            
-            
-            <div class="book-publisher">東京図書</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">詳解 大学院への数学 微分積分編</div>
+          <div class="book-author">本田 龍央, 五十嵐 貫</div>
+          
+          <div class="book-publisher">PUB_ID // 東京図書</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/317DNyFxBuL._AC_UF1000,1000_QL80_.jpg" alt="解析演習 (理工系のための数学演習ライブラリ 2)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/317DNyFxBuL._AC_UF1000,1000_QL80_.jpg" alt="解析演習 (理工系のための数学演習ライブラリ 2)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">解析演習 (理工系のための数学演習ライブラリ 2)</div>
-            <div class="book-author">野本 久夫, 岸 正倫</div>
-            
-            
-            <div class="book-publisher">サイエンス社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">解析演習 (理工系のための数学演習ライブラリ 2)</div>
+          <div class="book-author">野本 久夫, 岸 正倫</div>
+          
+          <div class="book-publisher">PUB_ID // サイエンス社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://hondana-image.s3.amazonaws.com/book/image/10003335/normal_89a6365e-e35a-4e3f-a5ab-c21e58907f70.jpg" alt="理工系のための関数論" class="book-cover" loading="lazy">
+          <img src="https://hondana-image.s3.amazonaws.com/book/image/10003335/normal_89a6365e-e35a-4e3f-a5ab-c21e58907f70.jpg" alt="理工系のための関数論" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">理工系のための関数論</div>
-            <div class="book-author">上江洌 達也, 吉岡 英生</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">理工系のための関数論</div>
+          <div class="book-author">上江洌 達也, 吉岡 英生</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://content.bookoff.co.jp/goodsimages/LL/002040/0020405979LL.jpg" alt="ルベーグ積分30講 (数学30講シリーズ 9) [新装版]" class="book-cover" loading="lazy">
+          <img src="https://content.bookoff.co.jp/goodsimages/LL/002040/0020405979LL.jpg" alt="ルベーグ積分30講 (数学30講シリーズ 9) [新装版]" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">ルベーグ積分30講 (数学30講シリーズ 9) [新装版]</div>
-            <div class="book-author">志賀 浩二</div>
-            
-            
-            <div class="book-publisher">朝倉書店</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">ルベーグ積分30講 (数学30講シリーズ 9) [新装版]</div>
+          <div class="book-author">志賀 浩二</div>
+          
+          <div class="book-publisher">PUB_ID // 朝倉書店</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71V7V05lVoL._AC_UF1000,1000_QL80_.jpg" alt="ルベーグ積分入門 [新装版]" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71V7V05lVoL._AC_UF1000,1000_QL80_.jpg" alt="ルベーグ積分入門 [新装版]" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">ルベーグ積分入門 [新装版]</div>
-            <div class="book-author">伊藤 清三</div>
-            
-            
-            <div class="book-publisher">裳華房</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">ルベーグ積分入門 [新装版]</div>
+          <div class="book-author">伊藤 清三</div>
+          
+          <div class="book-publisher">PUB_ID // 裳華房</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://images-na.ssl-images-amazon.com/images/P/4320110595.01._SCLZZZZZZZ_.jpg" alt="基礎から学ぶ 微分方程式" class="book-cover" loading="lazy">
+          <img src="https://images-na.ssl-images-amazon.com/images/P/4320110595.01._SCLZZZZZZZ_.jpg" alt="基礎から学ぶ 微分方程式" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">基礎から学ぶ 微分方程式</div>
-            <div class="book-author">梅野 高司, 濱田 英隆 他</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">基礎から学ぶ 微分方程式</div>
+          <div class="book-author">梅野 高司, 濱田 英隆 他</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/61PmGOh423L._AC_UF1000,1000_QL80_.jpg" alt="詳解 大学院への数学 線形代数編" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/61PmGOh423L._AC_UF1000,1000_QL80_.jpg" alt="詳解 大学院への数学 線形代数編" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">詳解 大学院への数学 線形代数編</div>
-            <div class="book-author">本田 龍央, 佐藤 義隆</div>
-            
-            
-            <div class="book-publisher">東京図書</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">詳解 大学院への数学 線形代数編</div>
+          <div class="book-author">本田 龍央, 佐藤 義隆</div>
+          
+          <div class="book-publisher">PUB_ID // 東京図書</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/91mjwW4z9CL._AC_UF1000,1000_QL80_.jpg" alt="ベクトル解析 (現代数学レクチャーズ C-1)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/91mjwW4z9CL._AC_UF1000,1000_QL80_.jpg" alt="ベクトル解析 (現代数学レクチャーズ C-1)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">ベクトル解析 (現代数学レクチャーズ C-1)</div>
-            <div class="book-author">藤本 淳夫</div>
-            
-            
-            <div class="book-publisher">培風館</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">ベクトル解析 (現代数学レクチャーズ C-1)</div>
+          <div class="book-author">藤本 淳夫</div>
+          
+          <div class="book-publisher">PUB_ID // 培風館</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71Y8fzPr6JL.jpg" alt="ベクトル解析 (数・学・探・検 12)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71Y8fzPr6JL.jpg" alt="ベクトル解析 (数・学・探・検 12)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">ベクトル解析 (数・学・探・検 12)</div>
-            <div class="book-author">加須栄 篤</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">ベクトル解析 (数・学・探・検 12)</div>
+          <div class="book-author">加須栄 篤</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/814&#43;4B11V7L.jpg" alt="復刻版 ベクトル解析からの幾何学入門" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/814&#43;4B11V7L.jpg" alt="復刻版 ベクトル解析からの幾何学入門" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">復刻版 ベクトル解析からの幾何学入門</div>
-            <div class="book-author">千葉 逸人</div>
-            
-            
-            <div class="book-publisher">現代数学社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">復刻版 ベクトル解析からの幾何学入門</div>
+          <div class="book-author">千葉 逸人</div>
+          
+          <div class="book-publisher">PUB_ID // 現代数学社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://www.nippyo.co.jp/shop/img/content_sub/temp/09165_1.jpg" alt="代数学 1 群論入門 [第2版]" class="book-cover" loading="lazy">
+          <img src="https://www.nippyo.co.jp/shop/img/content_sub/temp/09165_1.jpg" alt="代数学 1 群論入門 [第2版]" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">代数学 1 群論入門 [第2版]</div>
-            <div class="book-author">雪江 明彦</div>
-            
-            
-            <div class="book-publisher">日本評論社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">代数学 1 群論入門 [第2版]</div>
+          <div class="book-author">雪江 明彦</div>
+          
+          <div class="book-publisher">PUB_ID // 日本評論社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/61jtuIUWtCL._AC_UF1000,1000_QL80_.jpg" alt="集合・論理と位相 (基幹講座 数学)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/61jtuIUWtCL._AC_UF1000,1000_QL80_.jpg" alt="集合・論理と位相 (基幹講座 数学)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">集合・論理と位相 (基幹講座 数学)</div>
-            <div class="book-author">新井 敏康</div>
-            
-            
-            <div class="book-publisher">東京図書</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">集合・論理と位相 (基幹講座 数学)</div>
+          <div class="book-author">新井 敏康</div>
+          
+          <div class="book-publisher">PUB_ID // 東京図書</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://www.morikita.co.jp/storage/images/cvr/007861cvr.jpg" alt="位相空間論 (現代数学への基礎)" class="book-cover" loading="lazy">
+          <img src="https://www.morikita.co.jp/storage/images/cvr/007861cvr.jpg" alt="位相空間論 (現代数学への基礎)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">位相空間論 (現代数学への基礎)</div>
-            <div class="book-author">小山 晃</div>
-            
-            
-            <div class="book-publisher">森北出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">位相空間論 (現代数学への基礎)</div>
+          <div class="book-author">小山 晃</div>
+          
+          <div class="book-publisher">PUB_ID // 森北出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/51KAgZbkNYL._AC_UF1000,1000_QL80_.jpg" alt="圏論によるトポロジー" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/51KAgZbkNYL._AC_UF1000,1000_QL80_.jpg" alt="圏論によるトポロジー" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">圏論によるトポロジー</div>
-            <div class="book-author">Tai-Danae Bradley (著), 小森 洋平 (訳)</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">圏論によるトポロジー</div>
+          <div class="book-author">Tai-Danae Bradley (著), 小森 洋平 (訳)</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://www.morikita.co.jp/storage/images/cvr/007891cvr.jpg" alt="数論幾何入門" class="book-cover" loading="lazy">
+          <img src="https://www.morikita.co.jp/storage/images/cvr/007891cvr.jpg" alt="数論幾何入門" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">数論幾何入門</div>
-            <div class="book-author">三枝 洋一</div>
-            
-            
-            <div class="book-publisher">森北出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">数論幾何入門</div>
+          <div class="book-author">三枝 洋一</div>
+          
+          <div class="book-publisher">PUB_ID // 森北出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81uuCn0MF7L.jpg" alt="新・物理入門 &lt;増補改訂版&gt;" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81uuCn0MF7L.jpg" alt="新・物理入門 &lt;増補改訂版&gt;" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">新・物理入門 &lt;増補改訂版&gt;</div>
-            <div class="book-author">山本 義隆</div>
-            
-            
-            <div class="book-publisher">駿台文庫</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">新・物理入門 &lt;増補改訂版&gt;</div>
+          <div class="book-author">山本 義隆</div>
+          
+          <div class="book-publisher">PUB_ID // 駿台文庫</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/51kKuDkohLL._AC_UF1000,1000_QL80_.jpg" alt="新・物理入門問題演習 &lt;改訂版&gt;" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/51kKuDkohLL._AC_UF1000,1000_QL80_.jpg" alt="新・物理入門問題演習 &lt;改訂版&gt;" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">新・物理入門問題演習 &lt;改訂版&gt;</div>
-            <div class="book-author">山本 義隆</div>
-            
-            
-            <div class="book-publisher">駿台文庫</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">新・物理入門問題演習 &lt;改訂版&gt;</div>
+          <div class="book-author">山本 義隆</div>
+          
+          <div class="book-publisher">PUB_ID // 駿台文庫</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/61-1xMfi6kL._AC_UF1000,1000_QL80_.jpg" alt="理論物理への道標 (上) [三訂版]" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/61-1xMfi6kL._AC_UF1000,1000_QL80_.jpg" alt="理論物理への道標 (上) [三訂版]" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">理論物理への道標 (上) [三訂版]</div>
-            <div class="book-author">杉山 忠男</div>
-            
-            
-            <div class="book-publisher">河合出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">理論物理への道標 (上) [三訂版]</div>
+          <div class="book-author">杉山 忠男</div>
+          
+          <div class="book-publisher">PUB_ID // 河合出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://images-na.ssl-images-amazon.com/images/P/4320114434.01._SCLZZZZZZZ_.jpg" alt="工学系学生のための数学物理学演習 [増補版]" class="book-cover" loading="lazy">
+          <img src="https://images-na.ssl-images-amazon.com/images/P/4320114434.01._SCLZZZZZZZ_.jpg" alt="工学系学生のための数学物理学演習 [増補版]" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">工学系学生のための数学物理学演習 [増補版]</div>
-            <div class="book-author">橋爪 秀利</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">工学系学生のための数学物理学演習 [増補版]</div>
+          <div class="book-author">橋爪 秀利</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnMMoh5cMX1ASh8It813380Uyin8Kw1O2qgw&amp;s" alt="詳解 物理応用数学演習" class="book-cover" loading="lazy">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnMMoh5cMX1ASh8It813380Uyin8Kw1O2qgw&amp;s" alt="詳解 物理応用数学演習" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">詳解 物理応用数学演習</div>
-            <div class="book-author">後藤 憲一, 山本 邦夫, 神吉 健</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">詳解 物理応用数学演習</div>
+          <div class="book-author">後藤 憲一, 山本 邦夫, 神吉 健</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/51-wB-91oVL._AC_UF1000,1000_QL80_.jpg" alt="物理数学 (物理学レクチャーコース)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/51-wB-91oVL._AC_UF1000,1000_QL80_.jpg" alt="物理数学 (物理学レクチャーコース)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">物理数学 (物理学レクチャーコース)</div>
-            <div class="book-author">橋爪 洋一郎</div>
-            
-            
-            <div class="book-publisher">裳華房</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">物理数学 (物理学レクチャーコース)</div>
+          <div class="book-author">橋爪 洋一郎</div>
+          
+          <div class="book-publisher">PUB_ID // 裳華房</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://www.shokabo.co.jp/newgif/c2416.jpg" alt="解析力学 (物理学レクチャーコース)" class="book-cover" loading="lazy">
+          <img src="https://www.shokabo.co.jp/newgif/c2416.jpg" alt="解析力学 (物理学レクチャーコース)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">解析力学 (物理学レクチャーコース)</div>
-            <div class="book-author">河辺 哲次</div>
-            
-            
-            <div class="book-publisher">裳華房</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">解析力学 (物理学レクチャーコース)</div>
+          <div class="book-author">河辺 哲次</div>
+          
+          <div class="book-publisher">PUB_ID // 裳華房</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/51YZbp-2GSL._AC_UF1000,1000_QL80_.jpg" alt="電磁気学入門 (物理学レクチャーコース)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/51YZbp-2GSL._AC_UF1000,1000_QL80_.jpg" alt="電磁気学入門 (物理学レクチャーコース)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">電磁気学入門 (物理学レクチャーコース)</div>
-            <div class="book-author">加藤 岳生</div>
-            
-            
-            <div class="book-publisher">裳華房</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">電磁気学入門 (物理学レクチャーコース)</div>
+          <div class="book-author">加藤 岳生</div>
+          
+          <div class="book-publisher">PUB_ID // 裳華房</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/613NHXAzNQL._AC_UF1000,1000_QL80_.jpg" alt="相対性理論 (物理学レクチャーコース)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/613NHXAzNQL._AC_UF1000,1000_QL80_.jpg" alt="相対性理論 (物理学レクチャーコース)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">相対性理論 (物理学レクチャーコース)</div>
-            <div class="book-author">河辺 哲次</div>
-            
-            
-            <div class="book-publisher">裳華房</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">相対性理論 (物理学レクチャーコース)</div>
+          <div class="book-author">河辺 哲次</div>
+          
+          <div class="book-publisher">PUB_ID // 裳華房</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/61P2S&#43;l9VIL.jpg" alt="弱点克服 大学生の初等力学 [改訂版]" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/61P2S&#43;l9VIL.jpg" alt="弱点克服 大学生の初等力学 [改訂版]" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">弱点克服 大学生の初等力学 [改訂版]</div>
-            <div class="book-author">石川 裕</div>
-            
-            
-            <div class="book-publisher">東京図書</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">弱点克服 大学生の初等力学 [改訂版]</div>
+          <div class="book-author">石川 裕</div>
+          
+          <div class="book-publisher">PUB_ID // 東京図書</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://content.bookoff.co.jp/goodsimages/LL/001604/0016045084LL.jpg" alt="MIT物理 力学" class="book-cover" loading="lazy">
+          <img src="https://content.bookoff.co.jp/goodsimages/LL/001604/0016045084LL.jpg" alt="MIT物理 力学" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">MIT物理 力学</div>
-            <div class="book-author">A.P.フレンチ (著), 橘高 重義 (監訳)</div>
-            
-            
-            <div class="book-publisher">培風館</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">MIT物理 力学</div>
+          <div class="book-author">A.P.フレンチ (著), 橘高 重義 (監訳)</div>
+          
+          <div class="book-publisher">PUB_ID // 培風館</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         <a href="#" class="book-link">
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/812oUWSe4IL._AC_UF1000,1000_QL80_.jpg" alt="力学 (ランダウ=リフシッツ理論物理学教程)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/812oUWSe4IL._AC_UF1000,1000_QL80_.jpg" alt="力学 (ランダウ=リフシッツ理論物理学教程)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">力学 (ランダウ=リフシッツ理論物理学教程)</div>
-            <div class="book-author">L.D.ランダウ, E.M.リフシッツ</div>
-            
-            
-            <div class="book-publisher">東京図書</div>
-            
+        </div>
 
-            
-            <div class="book-comment">test</div>
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">力学 (ランダウ=リフシッツ理論物理学教程)</div>
+          <div class="book-author">L.D.ランダウ, E.M.リフシッツ</div>
+          
+          <div class="book-publisher">PUB_ID // 東京図書</div>
+          
+          
+          <div class="book-comment">test</div>
+          
+        </div>
+
         </a>
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://content.bookoff.co.jp/goodsimages/LL/001639/0016394878LL.jpg" alt="ファインマン物理学 I 力学 [新装版]" class="book-cover" loading="lazy">
+          <img src="https://content.bookoff.co.jp/goodsimages/LL/001639/0016394878LL.jpg" alt="ファインマン物理学 I 力学 [新装版]" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">ファインマン物理学 I 力学 [新装版]</div>
-            <div class="book-author">リチャード・P・ファインマン</div>
-            
-            
-            <div class="book-publisher">岩波書店</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">ファインマン物理学 I 力学 [新装版]</div>
+          <div class="book-author">リチャード・P・ファインマン</div>
+          
+          <div class="book-publisher">PUB_ID // 岩波書店</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://content.bookoff.co.jp/goodsimages/LL/001590/0015905629LL.jpg" alt="力学・解析力学 (岩波基礎物理シリーズ 1) [新装版]" class="book-cover" loading="lazy">
+          <img src="https://content.bookoff.co.jp/goodsimages/LL/001590/0015905629LL.jpg" alt="力学・解析力学 (岩波基礎物理シリーズ 1) [新装版]" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">力学・解析力学 (岩波基礎物理シリーズ 1) [新装版]</div>
-            <div class="book-author">阿部 龍蔵</div>
-            
-            
-            <div class="book-publisher">岩波書店</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">力学・解析力学 (岩波基礎物理シリーズ 1) [新装版]</div>
+          <div class="book-author">阿部 龍蔵</div>
+          
+          <div class="book-publisher">PUB_ID // 岩波書店</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/814NshbnF6L._AC_UF1000,1000_QL80_.jpg" alt="演習 力学 [新訂版] (セミナーライブラリ 物理学2)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/814NshbnF6L._AC_UF1000,1000_QL80_.jpg" alt="演習 力学 [新訂版] (セミナーライブラリ 物理学2)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">演習 力学 [新訂版] (セミナーライブラリ 物理学2)</div>
-            <div class="book-author">今井 功, 高見 穎郎 他</div>
-            
-            
-            <div class="book-publisher">サイエンス社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">演習 力学 [新訂版] (セミナーライブラリ 物理学2)</div>
+          <div class="book-author">今井 功, 高見 穎郎 他</div>
+          
+          <div class="book-publisher">PUB_ID // サイエンス社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://hondana-image.s3.amazonaws.com/book/image/10011293/normal_2f13c650-be59-4597-924c-964be21b5b86.jpg" alt="詳解 物理学演習 上" class="book-cover" loading="lazy">
+          <img src="https://hondana-image.s3.amazonaws.com/book/image/10011293/normal_2f13c650-be59-4597-924c-964be21b5b86.jpg" alt="詳解 物理学演習 上" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">詳解 物理学演習 上</div>
-            <div class="book-author">後藤 憲一, 山本 邦夫, 神吉 健</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">詳解 物理学演習 上</div>
+          <div class="book-author">後藤 憲一, 山本 邦夫, 神吉 健</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/917zjJg556L._AC_UF1000,1000_QL80_.jpg" alt="構造力学 [第2版] (上) 静定編" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/917zjJg556L._AC_UF1000,1000_QL80_.jpg" alt="構造力学 [第2版] (上) 静定編" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">構造力学 [第2版] (上) 静定編</div>
-            <div class="book-author">崎元 達郎</div>
-            
-            
-            <div class="book-publisher">森北出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">構造力学 [第2版] (上) 静定編</div>
+          <div class="book-author">崎元 達郎</div>
+          
+          <div class="book-publisher">PUB_ID // 森北出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81ZS1gRMqnL._AC_UF350,350_QL50_.jpg" alt="物理入門コース 2 解析力学" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81ZS1gRMqnL._AC_UF350,350_QL50_.jpg" alt="物理入門コース 2 解析力学" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">物理入門コース 2 解析力学</div>
-            <div class="book-author">小出 昭一郎</div>
-            
-            
-            <div class="book-publisher">岩波書店</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">物理入門コース 2 解析力学</div>
+          <div class="book-author">小出 昭一郎</div>
+          
+          <div class="book-publisher">PUB_ID // 岩波書店</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/61Dix6KUezL.jpg" alt="解析力学 (基礎の基礎から発展的なトピックまで)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/61Dix6KUezL.jpg" alt="解析力学 (基礎の基礎から発展的なトピックまで)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">解析力学 (基礎の基礎から発展的なトピックまで)</div>
-            <div class="book-author">渡辺 悠樹</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">解析力学 (基礎の基礎から発展的なトピックまで)</div>
+          <div class="book-author">渡辺 悠樹</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71xIgmkvHfL._AC_UF1000,1000_QL80_.jpg" alt="解析力学 (フロー式物理演習シリーズ 17)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71xIgmkvHfL._AC_UF1000,1000_QL80_.jpg" alt="解析力学 (フロー式物理演習シリーズ 17)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">解析力学 (フロー式物理演習シリーズ 17)</div>
-            <div class="book-author">綿村 哲</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">解析力学 (フロー式物理演習シリーズ 17)</div>
+          <div class="book-author">綿村 哲</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71xRNfB0nIL.jpg" alt="電磁気学 (現象と理論)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71xRNfB0nIL.jpg" alt="電磁気学 (現象と理論)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">電磁気学 (現象と理論)</div>
-            <div class="book-author">藤田 丈久</div>
-            
-            
-            <div class="book-publisher">三省堂</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">電磁気学 (現象と理論)</div>
+          <div class="book-author">藤田 丈久</div>
+          
+          <div class="book-publisher">PUB_ID // 三省堂</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81UBfSWtenL.jpg" alt="電磁気学 I (基幹講座 物理学)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81UBfSWtenL.jpg" alt="電磁気学 I (基幹講座 物理学)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">電磁気学 I (基幹講座 物理学)</div>
-            <div class="book-author">益川 敏英 (監修), 植松 恒夫 他</div>
-            
-            
-            <div class="book-publisher">東京図書</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">電磁気学 I (基幹講座 物理学)</div>
+          <div class="book-author">益川 敏英 (監修), 植松 恒夫 他</div>
+          
+          <div class="book-publisher">PUB_ID // 東京図書</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71nDdk&#43;ty&#43;L.jpg" alt="電磁気学講義ノート" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71nDdk&#43;ty&#43;L.jpg" alt="電磁気学講義ノート" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">電磁気学講義ノート</div>
-            <div class="book-author">高木 淳 他</div>
-            
-            
-            <div class="book-publisher">サイエンス社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">電磁気学講義ノート</div>
+          <div class="book-author">高木 淳 他</div>
+          
+          <div class="book-publisher">PUB_ID // サイエンス社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://hondana-image.s3.amazonaws.com/book/image/10011310/normal_ee3528e0-eb28-4f08-bde8-edd8832ffdb0.jpg" alt="詳解 電磁気学演習" class="book-cover" loading="lazy">
+          <img src="https://hondana-image.s3.amazonaws.com/book/image/10011310/normal_ee3528e0-eb28-4f08-bde8-edd8832ffdb0.jpg" alt="詳解 電磁気学演習" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">詳解 電磁気学演習</div>
-            <div class="book-author">後藤 憲一, 山崎 修一郎</div>
-            
-            
-            <div class="book-publisher">共立出版</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">詳解 電磁気学演習</div>
+          <div class="book-author">後藤 憲一, 山崎 修一郎</div>
+          
+          <div class="book-publisher">PUB_ID // 共立出版</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71IEbBfeSUL._AC_UF1000,1000_QL80_.jpg" alt="原点からの化学 化学の理論" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71IEbBfeSUL._AC_UF1000,1000_QL80_.jpg" alt="原点からの化学 化学の理論" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">原点からの化学 化学の理論</div>
-            <div class="book-author">石川 正明</div>
-            
-            
-            <div class="book-publisher">駿台文庫</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">原点からの化学 化学の理論</div>
+          <div class="book-author">石川 正明</div>
+          
+          <div class="book-publisher">PUB_ID // 駿台文庫</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/61U9hGl1g5L._AC_UF1000,1000_QL80_.jpg" alt="理系標準問題集 化学" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/61U9hGl1g5L._AC_UF1000,1000_QL80_.jpg" alt="理系標準問題集 化学" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">理系標準問題集 化学</div>
-            <div class="book-author">石川 正明</div>
-            
-            
-            <div class="book-publisher">駿台文庫</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">理系標準問題集 化学</div>
+          <div class="book-author">石川 正明</div>
+          
+          <div class="book-publisher">PUB_ID // 駿台文庫</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71KMlO4y1SL._AC_UF1000,1000_QL80_.jpg" alt="理系大学受験 化学の新演習" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71KMlO4y1SL._AC_UF1000,1000_QL80_.jpg" alt="理系大学受験 化学の新演習" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">理系大学受験 化学の新演習</div>
-            <div class="book-author">卜部 吉庸</div>
-            
-            
-            <div class="book-publisher">三省堂</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">理系大学受験 化学の新演習</div>
+          <div class="book-author">卜部 吉庸</div>
+          
+          <div class="book-publisher">PUB_ID // 三省堂</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/41r9Of0AqTL._AC_UF1000,1000_QL80_.jpg" alt="精選化学 I・II 問題演習" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/41r9Of0AqTL._AC_UF1000,1000_QL80_.jpg" alt="精選化学 I・II 問題演習" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">精選化学 I・II 問題演習</div>
-            <div class="book-author">小川 裕司</div>
-            
-            
-            <div class="book-publisher">旺文社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">精選化学 I・II 問題演習</div>
+          <div class="book-author">小川 裕司</div>
+          
+          <div class="book-publisher">PUB_ID // 旺文社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/41e-EdAP73L._AC_UF1000,1000_QL80_.jpg" alt="デジタル回路演習ノート" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/41e-EdAP73L._AC_UF1000,1000_QL80_.jpg" alt="デジタル回路演習ノート" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">デジタル回路演習ノート</div>
-            <div class="book-author">浅井 秀樹</div>
-            
-            
-            <div class="book-publisher">コロナ社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">デジタル回路演習ノート</div>
+          <div class="book-author">浅井 秀樹</div>
+          
+          <div class="book-publisher">PUB_ID // コロナ社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81VnPOlfCZL._AC_UF1000,1000_QL80_.jpg" alt="令和04年 栢木先生の書き込み式ドリル 基本情報技術者" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81VnPOlfCZL._AC_UF1000,1000_QL80_.jpg" alt="令和04年 栢木先生の書き込み式ドリル 基本情報技術者" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">令和04年 栢木先生の書き込み式ドリル 基本情報技術者</div>
-            <div class="book-author">栢木 厚</div>
-            
-            
-            <div class="book-publisher">技術評論社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">令和04年 栢木先生の書き込み式ドリル 基本情報技術者</div>
+          <div class="book-author">栢木 厚</div>
+          
+          <div class="book-publisher">PUB_ID // 技術評論社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81n8PDfFiIL._AC_UF1000,1000_QL80_.jpg" alt="情報処理教科書 応用情報技術者 テキスト＆問題集 2025年版" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81n8PDfFiIL._AC_UF1000,1000_QL80_.jpg" alt="情報処理教科書 応用情報技術者 テキスト＆問題集 2025年版" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">情報処理教科書 応用情報技術者 テキスト＆問題集 2025年版</div>
-            <div class="book-author">日高 哲郎</div>
-            
-            
-            <div class="book-publisher">翔泳社</div>
-            
+        </div>
 
-            
-            <div class="book-comment">test</div>
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">情報処理教科書 応用情報技術者 テキスト＆問題集 2025年版</div>
+          <div class="book-author">日高 哲郎</div>
+          
+          <div class="book-publisher">PUB_ID // 翔泳社</div>
+          
+          
+          <div class="book-comment">test</div>
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71shtiQC00L._AC_UF1000,1000_QL80_.jpg" alt="HTML5 プロフェッショナル認定試験 レベル1" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71shtiQC00L._AC_UF1000,1000_QL80_.jpg" alt="HTML5 プロフェッショナル認定試験 レベル1" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">HTML5 プロフェッショナル認定試験 レベル1</div>
-            <div class="book-author">富士栄 尚寛 他</div>
-            
-            
-            <div class="book-publisher">翔泳社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">HTML5 プロフェッショナル認定試験 レベル1</div>
+          <div class="book-author">富士栄 尚寛 他</div>
+          
+          <div class="book-publisher">PUB_ID // 翔泳社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71RdOTT-fRL._AC_UF1000,1000_QL80_.jpg" alt="合格対策 AZ-104: Microsoft Azure Administrator テキスト＆演習問題" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71RdOTT-fRL._AC_UF1000,1000_QL80_.jpg" alt="合格対策 AZ-104: Microsoft Azure Administrator テキスト＆演習問題" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">合格対策 AZ-104: Microsoft Azure Administrator テキスト＆演習問題</div>
-            <div class="book-author">吉田 薫</div>
-            
-            
-            <div class="book-publisher">リックテレコム</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">合格対策 AZ-104: Microsoft Azure Administrator テキスト＆演習問題</div>
+          <div class="book-author">吉田 薫</div>
+          
+          <div class="book-publisher">PUB_ID // リックテレコム</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81bvHt&#43;pC2L.jpg" alt="新・解きながら学ぶC言語 [第2版]" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81bvHt&#43;pC2L.jpg" alt="新・解きながら学ぶC言語 [第2版]" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">新・解きながら学ぶC言語 [第2版]</div>
-            <div class="book-author">柴田 望洋, 由梨 かおる</div>
-            
-            
-            <div class="book-publisher">SBクリエイティブ</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">新・解きながら学ぶC言語 [第2版]</div>
+          <div class="book-author">柴田 望洋, 由梨 かおる</div>
+          
+          <div class="book-publisher">PUB_ID // SBクリエイティブ</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81Vkcl0zDDL._AC_UF1000,1000_QL80_.jpg" alt="Pythonプロフェッショナルプログラミング 第4版" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81Vkcl0zDDL._AC_UF1000,1000_QL80_.jpg" alt="Pythonプロフェッショナルプログラミング 第4版" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">Pythonプロフェッショナルプログラミング 第4版</div>
-            <div class="book-author">ビープラウド</div>
-            
-            
-            <div class="book-publisher">秀和システム</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">Pythonプロフェッショナルプログラミング 第4版</div>
+          <div class="book-author">ビープラウド</div>
+          
+          <div class="book-publisher">PUB_ID // 秀和システム</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/71HkbpNFhaL.jpg" alt="プログラミング学習シリーズ Java 第3版 入門編" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/71HkbpNFhaL.jpg" alt="プログラミング学習シリーズ Java 第3版 入門編" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">プログラミング学習シリーズ Java 第3版 入門編</div>
-            <div class="book-author">三谷 純</div>
-            
-            
-            <div class="book-publisher">翔泳社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">プログラミング学習シリーズ Java 第3版 入門編</div>
+          <div class="book-author">三谷 純</div>
+          
+          <div class="book-publisher">PUB_ID // 翔泳社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81lspovrLtL._UF1000,1000_QL80_.jpg" alt="1日で基本が身に付く！ JavaScript 超入門" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81lspovrLtL._UF1000,1000_QL80_.jpg" alt="1日で基本が身に付く！ JavaScript 超入門" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">1日で基本が身に付く！ JavaScript 超入門</div>
-            <div class="book-author">WINGSプロジェクト (著), 山田 祥寛 (監修)</div>
-            
-            
-            <div class="book-publisher">技術評論社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">1日で基本が身に付く！ JavaScript 超入門</div>
+          <div class="book-author">WINGSプロジェクト (著), 山田 祥寛 (監修)</div>
+          
+          <div class="book-publisher">PUB_ID // 技術評論社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/61FI&#43;wkcRCL._AC_UF1000,1000_QL80_.jpg" alt="React.js &amp; Next.js超入門 第2版" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/61FI&#43;wkcRCL._AC_UF1000,1000_QL80_.jpg" alt="React.js &amp; Next.js超入門 第2版" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">React.js &amp; Next.js超入門 第2版</div>
-            <div class="book-author">掌田 津耶乃</div>
-            
-            
-            <div class="book-publisher">秀和システム</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">React.js &amp; Next.js超入門 第2版</div>
+          <div class="book-author">掌田 津耶乃</div>
+          
+          <div class="book-publisher">PUB_ID // 秀和システム</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81v3o9pA7TL.jpg" alt="TypeScriptとReact/Next.jsでつくる実践Webアプリケーション開発" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81v3o9pA7TL.jpg" alt="TypeScriptとReact/Next.jsでつくる実践Webアプリケーション開発" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">TypeScriptとReact/Next.jsでつくる実践Webアプリケーション開発</div>
-            <div class="book-author">手島 拓也 他</div>
-            
-            
-            <div class="book-publisher">技術評論社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">TypeScriptとReact/Next.jsでつくる実践Webアプリケーション開発</div>
+          <div class="book-author">手島 拓也 他</div>
+          
+          <div class="book-publisher">PUB_ID // 技術評論社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81HMfLkR6HL._AC_UF1000,1000_QL80_.jpg" alt="実装で学ぶフルスタックWeb開発" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81HMfLkR6HL._AC_UF1000,1000_QL80_.jpg" alt="実装で学ぶフルスタックWeb開発" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">実装で学ぶフルスタックWeb開発</div>
-            <div class="book-author">古川 正寿</div>
-            
-            
-            <div class="book-publisher">翔泳社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">実装で学ぶフルスタックWeb開発</div>
+          <div class="book-author">古川 正寿</div>
+          
+          <div class="book-publisher">PUB_ID // 翔泳社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/81Z8OMEGBJL._UF1000,1000_QL80_.jpg" alt="いちばんやさしい Git &amp; GitHubの教本 [第3版]" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/81Z8OMEGBJL._UF1000,1000_QL80_.jpg" alt="いちばんやさしい Git &amp; GitHubの教本 [第3版]" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">いちばんやさしい Git &amp; GitHubの教本 [第3版]</div>
-            <div class="book-author">横田 紋奈, 宇賀神 みずき</div>
-            
-            
-            <div class="book-publisher">インプレス</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">いちばんやさしい Git &amp; GitHubの教本 [第3版]</div>
+          <div class="book-author">横田 紋奈, 宇賀神 みずき</div>
+          
+          <div class="book-publisher">PUB_ID // インプレス</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://www.hakusuisha.co.jp/images/book/370899_lrg.jpg" alt="ニューエクスプレスプラス ラテン語" class="book-cover" loading="lazy">
+          <img src="https://www.hakusuisha.co.jp/images/book/370899_lrg.jpg" alt="ニューエクスプレスプラス ラテン語" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">ニューエクスプレスプラス ラテン語</div>
-            <div class="book-author">岩崎 務</div>
-            
-            
-            <div class="book-publisher">白水社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">ニューエクスプレスプラス ラテン語</div>
+          <div class="book-author">岩崎 務</div>
+          
+          <div class="book-publisher">PUB_ID // 白水社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/91T5r&#43;dDJ-L._AC_UF1000,1000_QL80_.jpg" alt="DISCOVERY ヤモリ大図鑑" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/91T5r&#43;dDJ-L._AC_UF1000,1000_QL80_.jpg" alt="DISCOVERY ヤモリ大図鑑" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">DISCOVERY ヤモリ大図鑑</div>
-            <div class="book-author">中井 穂瑞領</div>
-            
-            
-            <div class="book-publisher">誠文堂新光社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">DISCOVERY ヤモリ大図鑑</div>
+          <div class="book-author">中井 穂瑞領</div>
+          
+          <div class="book-publisher">PUB_ID // 誠文堂新光社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/51JBP0on9SL._AC_UF1000,1000_QL80_.jpg" alt="ザ・カエル (世界のカエルの飼育がわかる本)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/51JBP0on9SL._AC_UF1000,1000_QL80_.jpg" alt="ザ・カエル (世界のカエルの飼育がわかる本)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">ザ・カエル (世界のカエルの飼育がわかる本)</div>
-            <div class="book-author">田向 健一</div>
-            
-            
-            <div class="book-publisher">誠文堂新光社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">ザ・カエル (世界のカエルの飼育がわかる本)</div>
+          <div class="book-author">田向 健一</div>
+          
+          <div class="book-publisher">PUB_ID // 誠文堂新光社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/91A6KMOeUUL.jpg" alt="中・小型水槽で楽しむ アクアリウム" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/91A6KMOeUUL.jpg" alt="中・小型水槽で楽しむ アクアリウム" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">中・小型水槽で楽しむ アクアリウム</div>
-            <div class="book-author">千田 義洋</div>
-            
-            
-            <div class="book-publisher">日本文芸社</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">中・小型水槽で楽しむ アクアリウム</div>
+          <div class="book-author">千田 義洋</div>
+          
+          <div class="book-publisher">PUB_ID // 日本文芸社</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://www.mpj-aqualife.com/wp-content/uploads/2024/02/80152da2f324db182efd64c2733f602b.jpg" alt="新装版 パルダリウムとアクアテラリウム" class="book-cover" loading="lazy">
+          <img src="https://www.mpj-aqualife.com/wp-content/uploads/2024/02/80152da2f324db182efd64c2733f602b.jpg" alt="新装版 パルダリウムとアクアテラリウム" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">新装版 パルダリウムとアクアテラリウム</div>
-            <div class="book-author"></div>
-            
-            
-            <div class="book-publisher">エムピージェー</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">新装版 パルダリウムとアクアテラリウム</div>
+          <div class="book-author"></div>
+          
+          <div class="book-publisher">PUB_ID // エムピージェー</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://m.media-amazon.com/images/I/712VbejZXYL.jpg" alt="水草レイアウト制作ノート (緑のアクアリウムの作り方)" class="book-cover" loading="lazy">
+          <img src="https://m.media-amazon.com/images/I/712VbejZXYL.jpg" alt="水草レイアウト制作ノート (緑のアクアリウムの作り方)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">水草レイアウト制作ノート (緑のアクアリウムの作り方)</div>
-            <div class="book-author">アクアライフ編集部</div>
-            
-            
-            <div class="book-publisher">エムピージェー</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">水草レイアウト制作ノート (緑のアクアリウムの作り方)</div>
+          <div class="book-author">アクアライフ編集部</div>
+          
+          <div class="book-publisher">PUB_ID // エムピージェー</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
       <div class="book-card">
         
+        
+        <div class="book-cover-wrapper">
           
-            <img src="https://img.hmv.co.jp/image/jacket/400/0000126/0/2/845.jpg" alt="水草レイアウト制作ノート2 (緑のアクアリウムのアイデア集)" class="book-cover" loading="lazy">
+          <img src="https://img.hmv.co.jp/image/jacket/400/0000126/0/2/845.jpg" alt="水草レイアウト制作ノート2 (緑のアクアリウムのアイデア集)" class="book-cover" loading="lazy">
           
-          
-          <div class="book-info">
-            <div class="book-title">水草レイアウト制作ノート2 (緑のアクアリウムのアイデア集)</div>
-            <div class="book-author">アクアライフ編集部</div>
-            
-            
-            <div class="book-publisher">エムピージェー</div>
-            
+        </div>
 
-            
-          </div>
+        <div class="book-info">
+          <div class="book-title">水草レイアウト制作ノート2 (緑のアクアリウムのアイデア集)</div>
+          <div class="book-author">アクアライフ編集部</div>
+          
+          <div class="book-publisher">PUB_ID // エムピージェー</div>
+          
+          
+        </div>
+
         
       </div>
-    
+      
+    </div>
   </div>
-</div>
 
-<div class="bookshelf-container">
-  <h3 class="bookshelf-title">🌟 Wishlist</h3>
-  <div class="book-grid">
-    
-      <div class="book-card" style="opacity: 0.85;">
+  <div class="bookshelf-container">
+    <h3 class="bookshelf-title title-wishlist" data-text="> WISHLIST_QUEUE">> WISHLIST_QUEUE</h3>
+    <div class="book-grid">
+      
+      <div class="book-card wishlist-card">
         <a href="35" class="book-link" target="_blank">
           
+          <div class="book-cover-wrapper">
+            
             <img src="https://m.media-amazon.com/images/I/81sr4LoeEqL._AC_UF1000,1000_QL80_.jpg" alt="The Selfish Gene (利己的な遺伝子)" class="book-cover" loading="lazy">
-          
+            
+          </div>
+
           <div class="book-info">
             <div class="book-title">The Selfish Gene (利己的な遺伝子)</div>
             <div class="book-author">Richard Dawkins</div>
             
+            <div class="book-publisher">PUB_ID // 紀伊國屋書店</div>
             
-            <div class="book-publisher">紀伊國屋書店</div>
-            
-
             
             <div class="book-comment">原著で読んでみたい。</div>
             
           </div>
+          
         </a>
       </div>
-    
+      
+    </div>
   </div>
+
 </div>
 
     </section>
