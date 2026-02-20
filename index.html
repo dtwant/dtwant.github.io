@@ -1192,6 +1192,62 @@ h3.dt-heading::before {
   50% { transform: scale(1.2); }
   100% { transform: scale(1); }
 }
+
+/* --- Quick Tools リンクカード --- */
+.quick-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+.quick-link-card {
+  display: block;
+  text-decoration: none;
+  background: rgba(0, 243, 255, 0.02);
+  border: 1px solid rgba(0, 243, 255, 0.2);
+  padding: 1.2rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.quick-link-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 3px; height: 100%;
+  background: #00f3ff;
+  transition: all 0.3s ease;
+}
+.quick-link-card:hover {
+  border-color: #ff0055;
+  background: rgba(255, 0, 85, 0.05);
+  transform: translateX(4px);
+  box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+}
+.quick-link-card:hover::before {
+  background: #ff0055;
+  box-shadow: 0 0 8px #ff0055;
+}
+.ql-title {
+  font-family: 'Orbitron', 'M PLUS 1 Code', sans-serif;
+  color: #00f3ff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
+  transition: all 0.3s ease;
+}
+.quick-link-card:hover .ql-title {
+  color: #ff0055;
+  text-shadow: 0 0 5px rgba(255, 0, 85, 0.4);
+}
+.ql-desc {
+  font-family: 'M PLUS 1 Code', monospace !important;
+  color: #e0f8ff;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  opacity: 0.8;
+}
 </style>
 <div class="dt-container">
 <div class="dt-card">
@@ -1242,7 +1298,7 @@ h3.dt-heading::before {
 </div>
 </div>
 <div class="dt-card">
-<h3 class="dt-heading">MEMO</h3>
+<h3 class="dt-heading">Quick_tools</h3>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script async src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script async src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -1394,7 +1450,7 @@ animation: blink 2s infinite;
 </style>
 <div class="quick-memo-card">
 <div class="memo-header">
-<div class="memo-title">> SYSTEM_MEMO</div>
+<div class="memo-title"> LaTeX_MEMO</div>
 <button id="actionBtn" class="action-btn">
 <span id="btnIcon">[ EDIT ]</span>
 </button>
@@ -1470,6 +1526,18 @@ actionBtn.classList.remove('done-mode');
 });
 })();
 </script>
+<div class="quick-tools-grid">
+  <a href="https://dtwant.github.io/lab/attendance/" class="quick-link-card">
+    <div class="ql-title">ATTENDANCE_SYS</div>
+    <div class="ql-desc">出席ログ</div>
+  </a>
+</div>
+<div class="quick-tools-grid">
+  <a href="https://dtwant.github.io/lab/deadline/" class="quick-link-card">
+    <div class="ql-title">DEADLINE_SYS</div>
+    <div class="ql-desc">課題管理</div>
+  </a>
+</div>
 </div>
 <div class="alert-spacer">
 
