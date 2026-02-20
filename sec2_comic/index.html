@@ -828,6 +828,15 @@ transform: scale(1.05);
 background: #fce4ec; border-color: #f48fb1; color: #ec407a;
 transform: scale(1.05);
 }
+/* ▼▼▼ 追加：サイト選択用のボタンスタイル ▼▼▼ */
+#site-cmoa:checked + .radio-label {
+background: #e0f7fa; border-color: #4dd0e1; color: #00bcd4;
+transform: scale(1.05);
+}
+#site-piccoma:checked + .radio-label {
+background: #fff8e1; border-color: #ffd54f; color: #fbc02d;
+transform: scale(1.05);
+}
 .rating-input-group {
 display: flex;
 gap: 15px;
@@ -995,14 +1004,15 @@ white-space: nowrap;
 text-align: center !important;
 box-sizing: border-box !important;
 }
-/* 左端の余白追加 */
 .kawaii-table th:first-child, .kawaii-table td:first-child {
 padding-left: 15px !important;
 }
-.col-comp { width: 8% !important; }
-.col-title { width: 42% !important; }
-.col-vol { width: 15% !important; }
-.col-rate { width: 25% !important; }
+/* ▼▼▼ 修正：サイト列が追加されたためのPC用幅再計算 ▼▼▼ */
+.col-comp { width: 6% !important; }
+.col-title { width: 34% !important; }
+.col-vol { width: 12% !important; }
+.col-rate { width: 20% !important; }
+.col-site { width: 18% !important; } /* 追加 */
 .col-del { width: 10% !important; }
 .kawaii-table td {
 padding: 12px 2px;
@@ -1022,7 +1032,11 @@ font-weight: bold;
 .cell-rate {
 text-align: center !important;
 }
-/* 評価の枠線を消す */
+.cell-site {
+font-size: 0.85rem;
+font-weight: bold;
+color: #8d6e63;
+}
 .rate-select {
 border: none !important;
 background: transparent !important;
@@ -1080,7 +1094,7 @@ display: flex; justify-content: center; align-items: center;
 margin: 0 auto;
 }
 .delete-btn:hover { background: #ef9a9a; }
-/* ▼▼▼ スマホ用調整（縦並びを強制） ▼▼▼ */
+/* ▼▼▼ スマホ用調整（縦並び強制 ＋ 列幅再計算） ▼▼▼ */
 @media (max-width: 768px) {
 #kawaii-container {
 width: 96% !important;
@@ -1099,7 +1113,6 @@ gap: 10px;
 width: 100% !important;
 min-width: 0 !important;
 }
-/* テーブルを縦に並べるための強制設定 */
 .tables-container {
 flex-direction: column !important;
 display: flex !important;
@@ -1114,11 +1127,14 @@ font-size: 0.75rem !important;
 padding: 6px 1px !important;
 }
 .rate-select { font-size: 0.75rem !important; }
-.col-comp { width: 10% !important; }
-.col-title { width: 40% !important; }
-.col-vol { width: 12% !important; }
-.col-rate { width: 26% !important; }
-.col-del { width: 12% !important; }
+.cell-site { font-size: 0.65rem !important; } /* スマホではサイト名を少し小さめに */
+/* スマホ時の列幅微調整（6項目あるのでギリギリに詰めます） */
+.col-comp { width: 8% !important; }
+.col-title { width: 28% !important; }
+.col-vol { width: 10% !important; }
+.col-rate { width: 25% !important; }
+.col-site { width: 19% !important; } /* 追加 */
+.col-del { width: 10% !important; }
 .delete-btn {
 width: 22px; height: 22px;
 font-size: 0.8rem;
@@ -1136,6 +1152,12 @@ width: 18px; height: 18px;
 <label for="cat-shonen" class="radio-label">少年漫画</label>
 <input type="radio" id="cat-shojo" name="category" value="shojo">
 <label for="cat-shojo" class="radio-label">少女漫画</label>
+</div>
+<div class="radio-group">
+<input type="radio" id="site-cmoa" name="site" value="シーモア" checked>
+<label for="site-cmoa" class="radio-label">シーモア</label>
+<input type="radio" id="site-piccoma" name="site" value="ピッコマ">
+<label for="site-piccoma" class="radio-label">ピッコマ</label>
 </div>
 <div class="rating-input-group">
 <input type="radio" id="rate-good" name="rating" value="👍" checked>
@@ -1172,7 +1194,7 @@ width: 18px; height: 18px;
 <th class="col-title">タイトル</th>
 <th class="col-vol">巻</th>
 <th class="col-rate">評価</th>
-<th class="col-del">×</th>
+<th class="col-site">サイト</th> <th class="col-del">×</th>
 </tr>
 </thead>
 <tbody id="shonen-tbody"></tbody>
@@ -1187,7 +1209,7 @@ width: 18px; height: 18px;
 <th class="col-title">タイトル</th>
 <th class="col-vol">巻</th>
 <th class="col-rate">評価</th>
-<th class="col-del">×</th>
+<th class="col-site">サイト</th> <th class="col-del">×</th>
 </tr>
 </thead>
 <tbody id="shojo-tbody"></tbody>
@@ -1203,6 +1225,7 @@ const title = document.getElementById('manga-title').value.trim();
 const furigana = document.getElementById('manga-furi').value.trim();
 const volume = document.getElementById('manga-vol').value.trim();
 const category = document.querySelector('input[name="category"]:checked').value;
+const site = document.querySelector('input[name="site"]:checked').value; // サイトを取得
 const rating = document.querySelector('input[name="rating"]:checked').value;
 if (!title || !furigana || !volume) {
 alert("全部入力してね！");
@@ -1217,6 +1240,7 @@ title: title,
 furigana: kana,
 volume: volume,
 category: category,
+site: site, // サイトを保存
 rating: rating,
 completed: false
 };
@@ -1226,6 +1250,7 @@ renderTables();
 document.getElementById('manga-title').value = "";
 document.getElementById('manga-furi').value = "";
 document.getElementById('manga-vol').value = "";
+document.getElementById('site-cmoa').checked = true; // 追加後にシーモアへ戻す
 document.getElementById('rate-good').checked = true;
 }
 function updateRating(id, newRating) {
@@ -1274,6 +1299,7 @@ return matchesSearch && matchesFilter;
 filteredList.forEach(manga => {
 const row = document.createElement('tr');
 const rating = manga.rating ? manga.rating : "👍";
+const siteName = manga.site ? manga.site : "-"; // 過去のデータ用
 const isChecked = manga.completed ? "checked" : "";
 row.innerHTML = `
 <td><input type="checkbox" class="comp-check" ${isChecked} onchange="toggleCompletion(${manga.id})"></td>
@@ -1286,7 +1312,7 @@ row.innerHTML = `
 <option value="👎" ${rating === '👎' ? 'selected' : ''}>👎</option>
 </select>
 </td>
-<td><button class="delete-btn" onclick="deleteManga(${manga.id})">×</button></td>
+<td class="cell-site">${siteName}</td> <td><button class="delete-btn" onclick="deleteManga(${manga.id})">×</button></td>
 `;
 if (manga.category === 'shonen') {
 shonenTbody.appendChild(row);
@@ -1294,8 +1320,8 @@ shonenTbody.appendChild(row);
 shojoTbody.appendChild(row);
 }
 });
-if(shonenTbody.innerHTML === "") shonenTbody.innerHTML = "<tr><td colspan='5' style='color:#ccc; padding:20px;'>まだないよ</td></tr>";
-if(shojoTbody.innerHTML === "") shojoTbody.innerHTML = "<tr><td colspan='5' style='color:#ccc; padding:20px;'>まだないよ</td></tr>";
+if(shonenTbody.innerHTML === "") shonenTbody.innerHTML = "<tr><td colspan='6' style='color:#ccc; padding:20px;'>まだないよ</td></tr>";
+if(shojoTbody.innerHTML === "") shojoTbody.innerHTML = "<tr><td colspan='6' style='color:#ccc; padding:20px;'>まだないよ</td></tr>";
 }
 window.onload = renderTables;
 </script>
