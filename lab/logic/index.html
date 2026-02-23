@@ -21,7 +21,7 @@
 
   
   
-    <meta name="description" content="真理値表ジェネレーター">
+    <meta name="description" content="論理回路解析">
   
   
   
@@ -47,7 +47,7 @@
   <meta property="og:url" content="https://dtwant.github.io/lab/logic/">
   <meta property="og:site_name" content="dt&#39;s world">
   <meta property="og:title" content="Logic Circuit Simulator">
-  <meta property="og:description" content="真理値表ジェネレーター">
+  <meta property="og:description" content="論理回路解析">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="lab">
@@ -55,7 +55,7 @@
   
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Logic Circuit Simulator">
-  <meta name="twitter:description" content="真理値表ジェネレーター">
+  <meta name="twitter:description" content="論理回路解析">
 
   
   
@@ -214,7 +214,7 @@
     "articleSection": "Labs",
     "name": "Logic Circuit Simulator",
     "headline": "Logic Circuit Simulator",
-    "description": "真理値表ジェネレーター",
+    "description": "論理回路解析",
     
     "inLanguage": "en",
     "url" : "https:\/\/dtwant.github.io\/lab\/logic\/",
@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "107"
+    "wordCount": "119"
   }]
   </script>
 
@@ -792,423 +792,107 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       <p>論理式を入力するとそれに対応する真理値表を自動生成する.</p>
-
-
-
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
    
-  .cp-logic-container {
-    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
-    max-width: 900px;
-    width: 95%;
-    margin: 2rem auto;
-    background-color: #09090b;
-    background-image: 
-      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
-    background-size: 20px 20px;
-    padding: 2.5rem;
-    border: 1px solid #333;
-    border-radius: 4px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
-    color: #e2e8f0;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-    line-height: 1.5;
-  }
+  .cp-logic-container { font-family: "JetBrains Mono", "Consolas", "Monaco", monospace; max-width: 900px; width: 95%; margin: 2rem auto; background-color: #09090b; background-image: linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px); background-size: 20px 20px; padding: 2.5rem; border: 1px solid #333; border-radius: 4px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important; color: #e2e8f0; position: relative; overflow: hidden; box-sizing: border-box; line-height: 1.5; }
   .cp-logic-container * { box-sizing: border-box; }
-
+  
    
+  .cp-logic-container, .cp-logic-container * { text-decoration: none !important; }
+  .cp-logic-container span, .cp-logic-container label, .cp-logic-container button, .cp-logic-container text { background-image: none !important; border-bottom: none !important; }
+  
    
-  .cp-logic-container h3,
-  .cp-logic-container h4,
-  .cp-logic-container p,
-  .cp-logic-container li,
-  .cp-logic-container label,
-  .cp-logic-container table,
-  .cp-logic-container th,
-  .cp-logic-container td {
-    text-decoration: none !important;
-    border-bottom: none !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    color: inherit;
-  }
-
-   
-  .cp-logic-container::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #10b981, #34d399, #10b981);  
-    background-size: 200% 100%;
-    animation: scanline 4s linear infinite;
-    pointer-events: none;
-    z-index: 10;
-  }
+  .cp-logic-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #10b981, #34d399, #10b981); background-size: 200% 100%; animation: scanline 4s linear infinite; pointer-events: none; z-index: 10; }
   @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
-   
-  .cp-header {
-    border-bottom: 1px solid #333 !important;
-    padding-bottom: 1.5rem;
-    margin-bottom: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .cp-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #10b981 !important;  
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
-  }
-  .cp-subtitle {
-    font-size: 0.8rem;
-    color: #64748b !important;
-  }
+  .cp-header { border-bottom: 1px solid #333 !important; padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
+  .cp-title { font-size: 1.5rem; font-weight: 700; color: #10b981 !important; text-transform: uppercase; letter-spacing: 0.1em; text-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+  .cp-subtitle { font-size: 0.8rem; color: #64748b !important; }
 
-   
-  .cp-input-area {
-    margin-bottom: 1rem;
-    display: flex;
-    gap: 15px;
-    align-items: stretch;
-  }
+  .cp-input-area { margin-bottom: 1rem; display: flex; gap: 15px; align-items: stretch; }
+  .cp-logic-container .cp-input { flex: 1; background: #000 !important; border: 1px solid #444 !important; color: #10b981 !important; padding: 1rem; font-family: inherit; font-size: 1.1rem; border-radius: 2px; transition: all 0.2s; box-shadow: none !important; min-width: 0; }
+  .cp-input:focus { outline: none; border-color: #10b981 !important; box-shadow: 0 0 10px rgba(16, 185, 129, 0.2) !important; }
+
+  .cp-input-pad { display: flex; gap: 8px; margin-bottom: 2rem; flex-wrap: wrap; }
+  .cp-logic-container .cp-pad-btn { background: #18181b !important; border: 1px solid #333 !important; color: #a78bfa !important; padding: 6px 12px; font-family: inherit; font-weight: bold; font-size: 0.85rem; cursor: pointer; border-radius: 2px; transition: all 0.2s; box-shadow: none !important; }
+  .cp-pad-btn:hover { background: #222 !important; border-color: #a78bfa !important; color: #e2e8f0 !important; }
+  .cp-pad-btn span { color: #64748b; font-size: 0.75rem; font-weight: normal; margin-left: 4px; }
   
-  .cp-logic-container .cp-input {
-    flex: 1;
-    background: #000 !important;
-    border: 1px solid #444 !important;
-    color: #10b981 !important;
-    padding: 1rem;
-    font-family: inherit;
-    font-size: 1.1rem;
-    border-radius: 2px;
-    transition: all 0.2s;
-    box-shadow: none !important;
-    min-width: 0;
-  }
-  .cp-input:focus {
-    outline: none;
-    border-color: #10b981 !important;
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2) !important;
-  }
+  .cp-logic-container .cp-btn { background: transparent !important; border: 1px solid #10b981 !important; color: #10b981 !important; padding: 0 2rem; font-family: inherit; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; justify-content: center; }
+  .cp-btn:hover { background: #10b981 !important; color: #000 !important; box-shadow: 0 0 10px rgba(16, 185, 129, 0.5) !important; }
 
-   
-  .cp-input-pad {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-  }
-  
-  .cp-logic-container .cp-pad-btn {
-    background: #18181b !important;
-    border: 1px solid #333 !important;
-    color: #a78bfa !important;  
-    padding: 6px 12px;
-    font-family: inherit;
-    font-weight: bold;
-    font-size: 0.85rem;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.2s;
-    box-shadow: none !important;
-  }
-  .cp-pad-btn:hover {
-    background: #222 !important;
-    border-color: #a78bfa !important;
-    color: #e2e8f0 !important;
-  }
-  .cp-pad-btn span {
-    color: #64748b;
-    font-size: 0.75rem;
-    font-weight: normal;
-    margin-left: 4px;
-  }
+  .cp-error { color: #ef4444 !important; font-size: 0.9rem; margin-bottom: 1.5rem; display: none; border-left: 2px solid #ef4444 !important; background: rgba(239, 68, 68, 0.05); padding: 10px; }
 
-  .cp-logic-container .cp-btn {
-    background: transparent !important;
-    border: 1px solid #10b981 !important;
-    color: #10b981 !important;
-    padding: 0 2rem;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    transition: all 0.2s;
-    box-shadow: none !important;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .cp-btn:hover {
-    background: #10b981 !important;
-    color: #000 !important;
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5) !important;
-  }
-
-  .cp-error {
-    color: #ef4444 !important;
-    font-size: 0.9rem;
-    margin-bottom: 1.5rem;
-    display: none;
-    border-left: 2px solid #ef4444 !important;
-    padding-left: 10px;
-    background: rgba(239, 68, 68, 0.05);
-    padding: 10px;
-  }
-
-   
-  .cp-tabs {
-    display: flex;
-    border-bottom: 1px solid #333 !important;
-    margin-bottom: 2rem;
-  }
-  .cp-logic-container .cp-tab-btn {
-    padding: 10px 20px;
-    background: transparent !important;
-    border: none !important;
-    border-bottom: 2px solid transparent !important;
-    color: #64748b !important;
-    cursor: pointer;
-    font-family: inherit;
-    font-weight: bold;
-    font-size: 0.9rem;
-    transition: all 0.2s;
-    box-shadow: none !important;
-  }
+  .cp-tabs { display: flex; border-bottom: 1px solid #333 !important; margin-bottom: 2rem; flex-wrap: wrap; }
+  .cp-logic-container .cp-tab-btn { padding: 10px 20px; background: transparent !important; border-bottom: 2px solid transparent !important; color: #64748b !important; cursor: pointer; font-family: inherit; font-weight: bold; font-size: 0.9rem; transition: all 0.2s; box-shadow: none !important; }
   .cp-tab-btn:hover { color: #e2e8f0 !important; }
-  .cp-tab-btn.active {
-    color: #10b981 !important;
-    border-bottom-color: #10b981 !important;
-    background: rgba(16, 185, 129, 0.05) !important;
-  }
+  .cp-tab-btn.active { color: #10b981 !important; border-bottom-color: #10b981 !important; background: rgba(16, 185, 129, 0.05) !important; }
 
-   
   .cp-content { display: none; }
   .cp-content.active { display: block; animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-   
-  .cp-sim-box {
-    background: rgba(255, 255, 255, 0.02) !important;
-    border: 1px solid #333 !important;
-    padding: 2rem;
-    text-align: center;
-  }
-  
-  .cp-switch-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-bottom: 2rem;
-    justify-content: center;
-  }
-
-  .cp-logic-container .cp-switch {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-    background: #0e0e11 !important;
-    border: 1px solid #333 !important;
-    padding: 15px;
-    min-width: 80px;
-    transition: all 0.2s;
-    box-shadow: none !important;
-  }
+  .cp-sim-box { background: rgba(255, 255, 255, 0.02) !important; border: 1px solid #333 !important; padding: 2rem; text-align: center; }
+  .cp-switch-container { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 2rem; justify-content: center; }
+  .cp-logic-container .cp-switch { display: flex; flex-direction: column; align-items: center; cursor: pointer; user-select: none; background: #0e0e11 !important; border: 1px solid #333 !important; padding: 15px; min-width: 80px; transition: all 0.2s; box-shadow: none !important; }
   .cp-switch:hover { border-color: #666 !important; }
-  
-  .cp-switch.active {
-    border-color: #10b981 !important;
-    box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.1) !important;
-  }
-
-  .cp-switch-label {
-    font-weight: bold;
-    color: #e2e8f0 !important;
-    margin-bottom: 5px;
-    font-size: 1.2rem;
-  }
-
-  .cp-switch-val {
-    font-size: 0.8rem;
-    color: #64748b !important;
-  }
+  .cp-switch.active { border-color: #10b981 !important; box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.1) !important; }
+  .cp-switch-label { font-weight: bold; color: #e2e8f0 !important; margin-bottom: 5px; font-size: 1.2rem; }
+  .cp-switch-val { font-size: 0.8rem; color: #64748b !important; }
   .cp-switch.active .cp-switch-val { color: #10b981 !important; font-weight: bold; }
 
-   
-  .cp-result-display {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    padding: 1rem 2rem;
-    border: 1px solid #333 !important;
-    background: #000 !important;
-    border-radius: 30px;
-  }
-
-  .cp-led {
-    width: 24px; height: 24px;
-    border-radius: 50%;
-    background-color: #333 !important;
-    border: 2px solid #555 !important;
-    transition: all 0.2s;
-  }
-  .cp-led.on {
-    background-color: #22c55e !important;
-    border-color: #166534 !important;
-    box-shadow: 0 0 15px #22c55e, inset 0 0 5px rgba(255,255,255,0.8) !important;
-  }
-
-  .cp-led-text {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #64748b !important;
-  }
+  .cp-result-display { display: inline-flex; align-items: center; justify-content: center; gap: 15px; padding: 1rem 2rem; border: 1px solid #333 !important; background: #000 !important; border-radius: 30px; }
+  .cp-led { width: 24px; height: 24px; border-radius: 50%; background-color: #333 !important; border: 2px solid #555 !important; transition: all 0.2s; }
+  .cp-led.on { background-color: #22c55e !important; border-color: #166534 !important; box-shadow: 0 0 15px #22c55e, inset 0 0 5px rgba(255,255,255,0.8) !important; }
+  .cp-led-text { font-size: 1.2rem; font-weight: bold; color: #64748b !important; }
   .cp-led.on + .cp-led-text { color: #22c55e !important; text-shadow: 0 0 5px rgba(34, 197, 94, 0.5); }
 
-   
-  .cp-table-wrapper {
-    overflow-x: auto;
-    border: 1px solid #333 !important;
-    margin-bottom: 2rem;
-  }
-  
-  .cp-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-    text-align: center;
-  }
-  
-  .cp-table th {
-    background-color: #18181b !important;
-    color: #10b981 !important;
-    padding: 12px;
-    border-bottom: 1px solid #333 !important;
-    border-right: 1px solid #333 !important;
-    text-transform: uppercase;
-  }
-  
-  .cp-table td {
-    padding: 10px;
-    color: #e2e8f0 !important;
-    border-bottom: 1px solid #333 !important;
-    border-right: 1px solid #333 !important;
-  }
+  .cp-table-wrapper, .cp-kmap-wrapper { overflow-x: auto; border: 1px solid #333 !important; margin-bottom: 2rem; -webkit-overflow-scrolling: touch; }
+  .cp-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: center; }
+  .cp-table th { background-color: #18181b !important; color: #10b981 !important; padding: 12px; border-bottom: 1px solid #333 !important; border-right: 1px solid #333 !important; text-transform: uppercase; }
+  .cp-table td { padding: 10px; color: #e2e8f0 !important; border-bottom: 1px solid #333 !important; border-right: 1px solid #333 !important; }
   .cp-table tr:hover td { background-color: rgba(255,255,255,0.05) !important; }
   .cp-res-true { color: #22c55e !important; font-weight: bold; background: rgba(34, 197, 94, 0.1) !important; }
   .cp-res-false { color: #ef4444 !important; opacity: 0.7; }
+  
+  .cp-kmap { border-collapse: collapse; margin: 0 auto; }
+  .cp-kmap td, .cp-kmap th { border: 1px solid #444 !important; padding: 15px; text-align: center; min-width: 40px; }
+  .cp-kmap-header { background: #18181b !important; color: #a78bfa !important; font-weight: bold; }
+  .cp-kmap-cell { color: #e2e8f0 !important; font-size: 1.1rem; }
+  .cp-kmap-cell.one { color: #10b981 !important; background: rgba(16, 185, 129, 0.1) !important; font-weight: bold; }
+
+  .cp-analysis-box { background: #0e0e11 !important; border: 1px solid #333 !important; padding: 1rem; margin-bottom: 2rem; }
+  .cp-analysis-label { color: #64748b; font-size: 0.8rem; margin-bottom: 5px; }
+  .cp-analysis-val { color: #facc15 !important; font-size: 1rem; }
+
+  .cp-svg-container { overflow-x: auto; padding: 2.5rem 1rem; background: #09090b; border: 1px solid #333; min-height: 250px; -webkit-overflow-scrolling: touch; }
 
    
-  .cp-kmap-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-    overflow-x: auto;
-  }
-  .cp-kmap {
-    border-collapse: collapse;
-    font-family: "JetBrains Mono", monospace;
-  }
-  .cp-kmap td, .cp-kmap th {
-    border: 1px solid #444 !important;
-    padding: 15px;
-    text-align: center;
-    min-width: 40px;
-  }
-  .cp-kmap-header {
-    background: #18181b !important;
-    color: #a78bfa !important;
-    font-weight: bold;
-  }
-  .cp-kmap-cell {
-    color: #e2e8f0 !important;
-    font-size: 1.1rem;
-  }
-  .cp-kmap-cell.one {
-    color: #10b981 !important;
-    background: rgba(16, 185, 129, 0.1) !important;
-    font-weight: bold;
-  }
+  .cp-toggle-container { display: flex; align-items: center; gap: 8px; background: #18181b; padding: 8px 12px; border: 1px solid #333; border-radius: 4px; cursor: pointer; transition: all 0.2s; user-select: none; }
+  .cp-toggle-container:hover { border-color: #10b981; }
+  .cp-toggle-container.active { border-color: #0ea5e9; background: rgba(14, 165, 233, 0.1); }
+  .cp-toggle-text { font-size: 0.8rem; font-weight: bold; color: #64748b; }
+  .cp-toggle-container.active .cp-toggle-text { color: #0ea5e9; text-shadow: 0 0 5px rgba(14, 165, 233, 0.5); }
 
-   
-  .cp-analysis-box {
-    background: #0e0e11 !important;
-    border: 1px solid #333 !important;
-    padding: 1rem;
-    margin-bottom: 2rem;
-    font-family: "JetBrains Mono", monospace;
-  }
-  .cp-analysis-label {
-    color: #64748b;
-    font-size: 0.8rem;
-    margin-bottom: 5px;
-  }
-  .cp-analysis-val {
-    color: #facc15 !important;
-    font-size: 1rem;
-  }
-
-   
   @media (max-width: 640px) {
-    .cp-logic-container {
-      padding: 1.5rem 1rem;
-      width: 100%;
-      margin: 1rem 0;
-      border-left: none; border-right: none; border-radius: 0;
-    }
-    
-    .cp-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .cp-input-area {
-      flex-direction: column;
-      gap: 15px;
-    }
-    
-    .cp-btn {
-      width: 100%;
-      padding: 1rem;
-    }
-
-    .cp-input-pad {
-      gap: 5px;
-    }
-    .cp-pad-btn {
-      flex: 1;
-      text-align: center;
-    }
+    .cp-logic-container { padding: 1.5rem 1rem; width: 100%; margin: 1rem 0; border: none; }
+    .cp-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .cp-input-area { flex-direction: column; }
+    .cp-btn { width: 100%; padding: 1rem; }
+    .cp-pad-btn { flex: 1; text-align: center; }
   }
-
 </style>
 
 <div class="cp-logic-container">
   <div class="cp-header">
     <div class="cp-title">LOGIC_CIRCUIT_SIM</div>
-    <div class="cp-subtitle">// 論理回路解析・シミュレータ v2.0</div>
+    <div class="cp-subtitle">// 論理回路解析・シミュレータ v10.0 (FINAL)</div>
   </div>
 
   <div class="cp-input-area">
-    <input type="text" id="logicInput" class="cp-input" placeholder="論理式を入力 (例: A & (B | C))" value="A & B">
+    <input type="text" id="logicInput" class="cp-input" placeholder="論理式を入力 (例: !(A & B) | C)" value="!(A & B) | C">
     <button onclick="runAnalysis()" class="cp-btn">ANALYZE (解析)</button>
   </div>
 
@@ -1223,23 +907,17 @@
   
   <div id="logicError" class="cp-error"></div>
 
-  
   <div class="cp-tabs">
-    <button class="cp-tab-btn active" onclick="switchTab('sim')">SIMULATOR</button>
-    <button class="cp-tab-btn" onclick="switchTab('table')">TRUTH TABLE</button>
-    <button class="cp-tab-btn" onclick="switchTab('kmap')">K-MAP</button>
+    <button id="btn-sim" class="cp-tab-btn active" onclick="switchTab('sim')">SIMULATOR</button>
+    <button id="btn-table" class="cp-tab-btn" onclick="switchTab('table')">TRUTH TABLE</button>
+    <button id="btn-kmap" class="cp-tab-btn" onclick="switchTab('kmap')">K-MAP</button>
+    <button id="btn-svg" class="cp-tab-btn" onclick="switchTab('svg')">SCHEMATIC</button>
   </div>
 
-  
   <div id="tab-sim" class="cp-content active">
     <div class="cp-sim-box">
-      <div class="cp-sim-header" style="border:none;">>> INTERACTIVE_MODE [スイッチを操作してください]</div>
-      
-      <div id="switchArea" class="cp-switch-container">
-        
-        <span style="color:#666;">// WAITING FOR ANALYSIS...</span>
-      </div>
-
+      <div style="margin-bottom:1rem; color:#64748b; font-size:0.9rem; font-weight:bold;">>> INTERACTIVE_MODE [スイッチを操作してください]</div>
+      <div id="switchArea" class="cp-switch-container"><span style="color:#666;">// WAITING FOR ANALYSIS...</span></div>
       <div class="cp-result-display">
         <div id="resultLed" class="cp-led"></div>
         <div class="cp-led-text">OUTPUT: <span id="resultText">-</span></div>
@@ -1247,7 +925,6 @@
     </div>
   </div>
 
-  
   <div id="tab-table" class="cp-content">
     <div class="cp-analysis-box">
       <div class="cp-analysis-label">SOP (主加法標準形):</div>
@@ -1261,12 +938,27 @@
     </div>
   </div>
 
-  
   <div id="tab-kmap" class="cp-content">
     <div style="text-align:center; padding:1rem;">
-      <div id="kmapContainer" class="cp-kmap-wrapper">
+      <div id="kmapContainer" class="cp-kmap-wrapper" style="border:none; margin:0;">
         <span style="color:#666;">// 2〜4変数の論理式に対応しています</span>
       </div>
+    </div>
+  </div>
+
+  <div id="tab-svg" class="cp-content">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
+      
+      <label id="nandToggleWrapper" class="cp-toggle-container">
+        <input type="checkbox" id="nandModeToggle" onchange="toggleNandMode()" style="display:none;">
+        <div style="width:12px; height:12px; border-radius:50%; background:#444; border:1px solid #666;" id="nandIndicator"></div>
+        <span class="cp-toggle-text">NAND ONLY MODE</span>
+      </label>
+
+      <button onclick="downloadSVGAsPNG()" class="cp-btn" style="padding: 0.5rem 1rem; font-size: 0.8rem; height: auto;">SAVE AS PNG</button>
+    </div>
+    <div id="svgContainer" class="cp-svg-container">
+      <span style="color:#666;">// WAITING FOR ANALYSIS...</span>
     </div>
   </div>
 
@@ -1277,18 +969,11 @@
   let currentExpression = "";
   let truthTableData = [];
 
-  
   function switchTab(tabId) {
     document.querySelectorAll('.cp-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.cp-tab-btn').forEach(el => el.classList.remove('active'));
-    
     document.getElementById('tab-' + tabId).classList.add('active');
-    
-    
-    const buttons = document.querySelectorAll('.cp-tab-btn');
-    if (tabId === 'sim') buttons[0].classList.add('active');
-    if (tabId === 'table') buttons[1].classList.add('active');
-    if (tabId === 'kmap') buttons[2].classList.add('active');
+    document.getElementById('btn-' + tabId).classList.add('active');
   }
 
   function insertSymbol(sym) {
@@ -1297,65 +982,82 @@
     input.focus();
   }
 
+  function toggleNandMode() {
+    const wrapper = document.getElementById('nandToggleWrapper');
+    const indicator = document.getElementById('nandIndicator');
+    if (document.getElementById('nandModeToggle').checked) {
+      wrapper.classList.add('active');
+      indicator.style.background = '#0ea5e9';
+      indicator.style.borderColor = '#0ea5e9';
+      indicator.style.boxShadow = '0 0 8px #0ea5e9';
+    } else {
+      wrapper.classList.remove('active');
+      indicator.style.background = '#444';
+      indicator.style.borderColor = '#666';
+      indicator.style.boxShadow = 'none';
+    }
+    runAnalysis(); 
+  }
+
   function runAnalysis() {
     const input = document.getElementById('logicInput').value;
     currentExpression = input;
-    
     const errDiv = document.getElementById('logicError');
     errDiv.style.display = 'none';
     errDiv.textContent = "";
     
-    if (!input.trim()) {
-      showError(">> ERROR: 式が空です (EMPTY EXPRESSION)");
-      return;
-    }
+    if (!input.trim()) return showError(">> ERROR: 式が空です (EMPTY EXPRESSION)");
 
     try {
-      
-      currentVariables = [...new Set(input.match(/[a-zA-Z]+/g))].sort();
-      
-      if (!currentVariables || currentVariables.length === 0) {
-        showError(">> ERROR: 変数が見つかりません (NO VARIABLES FOUND)");
-        return;
-      }
+      currentVariables = [...new Set(input.match(/[a-zA-Z0-9_]+/g))].filter(v => !['AND','OR','NOT','XOR','NAND','NOR'].includes(v.toUpperCase())).sort();
+      if (currentVariables.length === 0) return showError(">> ERROR: 変数が見つかりません");
 
-      
       setupSimulator(currentVariables);
-      
-      
       generateTruthTableData(currentVariables, input);
-      
-      
       renderTruthTable();
       renderSOP();
-
-      
       renderKarnaughMap(currentVariables);
 
+      try {
+        let ast = parseToAST(input);
+        ast = optimizeAST(ast); 
+        
+        if (document.getElementById('nandModeToggle').checked) {
+          ast = convertToNandOnly(ast); 
+        }
+        
+        document.getElementById('svgContainer').innerHTML = buildSVGTree(ast);
+      } catch (astErr) {
+        document.getElementById('svgContainer').innerHTML = `<span style="color:#ef4444;">// SCHEMATIC ERROR: ${astErr.message}</span>`;
+      }
     } catch (e) {
       showError(">> SYNTAX_ERROR: " + e.message);
     }
   }
 
-  
+   
+  function evaluateExpression(expr, context) {
+    let parsed = expr;
+    const sortedVars = Object.keys(context).sort((a, b) => b.length - a.length);
+    for (const key of sortedVars) {
+      parsed = parsed.replace(new RegExp("\\b" + key + "\\b", "g"), context[key]);
+    }
+    parsed = parsed.replace(/&/g, '&&').replace(/\|/g, '||').replace(/!/g, '!').replace(/\^/g, '!==');
+    try { return new Function('return ' + parsed)() ? 1 : 0; } catch (e) { throw new Error("Invalid Expression"); }
+  }
+
   function setupSimulator(vars) {
     const area = document.getElementById('switchArea');
     area.innerHTML = '';
-
     vars.forEach(v => {
       const wrapper = document.createElement('div');
       wrapper.className = 'cp-switch';
       wrapper.onclick = () => toggleSwitch(v);
       wrapper.id = 'switch-wrap-' + v;
       wrapper.dataset.value = "0";
-
-      wrapper.innerHTML = `
-        <div class="cp-switch-label">${v}</div>
-        <div class="cp-switch-val" id="val-${v}">OFF (0)</div>
-      `;
+      wrapper.innerHTML = `<div class="cp-switch-label">${v}</div><div class="cp-switch-val" id="val-${v}">OFF (0)</div>`;
       area.appendChild(wrapper);
     });
-
     updateSimulatorResult();
   }
 
@@ -1364,212 +1066,392 @@
     const valDisplay = document.getElementById('val-' + variable);
     const currentVal = wrapper.dataset.value === "1" ? "0" : "1";
     wrapper.dataset.value = currentVal;
-    
-    if (currentVal === "1") {
-      wrapper.classList.add('active');
-      valDisplay.innerText = "ON (1)";
-    } else {
-      wrapper.classList.remove('active');
-      valDisplay.innerText = "OFF (0)";
-    }
+    if (currentVal === "1") { wrapper.classList.add('active'); valDisplay.innerText = "ON (1)"; } 
+    else { wrapper.classList.remove('active'); valDisplay.innerText = "OFF (0)"; }
     updateSimulatorResult();
   }
 
   function updateSimulatorResult() {
     let context = {};
-    currentVariables.forEach(v => {
-      const wrapper = document.getElementById('switch-wrap-' + v);
-      context[v] = parseInt(wrapper.dataset.value);
-    });
-
+    currentVariables.forEach(v => { context[v] = parseInt(document.getElementById('switch-wrap-' + v).dataset.value); });
     try {
       const result = evaluateExpression(currentExpression, context);
       const led = document.getElementById('resultLed');
       const text = document.getElementById('resultText');
-
-      if (result === 1) {
-        led.classList.add('on');
-        text.textContent = "1 (TRUE)";
-      } else {
-        led.classList.remove('on');
-        text.textContent = "0 (FALSE)";
-      }
-    } catch (e) {
-      console.error(e);
-    }
+      if (result === 1) { led.classList.add('on'); text.textContent = "1 (TRUE)"; } 
+      else { led.classList.remove('on'); text.textContent = "0 (FALSE)"; }
+    } catch (e) {}
   }
 
-  
-  function evaluateExpression(expr, context) {
-    let parsed = expr;
-    
-    
-    const sortedVars = Object.keys(context).sort((a, b) => b.length - a.length);
-    
-    for (const key of sortedVars) {
-      const value = context[key];
-      const regex = new RegExp("\\b" + key + "\\b", "g");
-      parsed = parsed.replace(regex, value);
-    }
-    
-    parsed = parsed.replace(/&/g, '&&')
-                   .replace(/\|/g, '||')
-                   .replace(/!/g, '!')
-                   .replace(/\^/g, '!==');
-
-    try {
-      return new Function('return ' + parsed)() ? 1 : 0;
-    } catch (e) {
-      throw new Error("Invalid Expression");
-    }
-  }
-
-  
   function generateTruthTableData(vars, expr) {
     truthTableData = [];
     const rows = 1 << vars.length;
     for (let i = 0; i < rows; i++) {
-      let context = {};
-      let rowData = { bin: [], res: 0 };
-      
+      let context = {}; let rowData = { bin: [], res: 0 };
       for (let j = 0; j < vars.length; j++) {
         const val = (i >> (vars.length - 1 - j)) & 1;
-        context[vars[j]] = val;
-        rowData.bin.push(val);
+        context[vars[j]] = val; rowData.bin.push(val);
       }
-      
       rowData.res = evaluateExpression(expr, context);
       truthTableData.push(rowData);
     }
   }
 
   function renderTruthTable() {
-    const thead = document.getElementById('tableHeader');
-    const tbody = document.getElementById('tableBody');
-    thead.innerHTML = '';
-    tbody.innerHTML = '';
-
-    currentVariables.forEach(v => {
-      const th = document.createElement('th');
-      th.textContent = v;
-      thead.appendChild(th);
-    });
-    const resultTh = document.createElement('th');
-    resultTh.textContent = "OUT";
-    resultTh.style.color = "#10b981";
-    thead.appendChild(resultTh);
-
+    const thead = document.getElementById('tableHeader'), tbody = document.getElementById('tableBody');
+    thead.innerHTML = ''; tbody.innerHTML = '';
+    currentVariables.forEach(v => { const th = document.createElement('th'); th.textContent = v; thead.appendChild(th); });
+    const resultTh = document.createElement('th'); resultTh.textContent = "OUT"; resultTh.style.color = "#10b981"; thead.appendChild(resultTh);
     truthTableData.forEach(row => {
       const tr = document.createElement('tr');
-      row.bin.forEach(val => {
-        const td = document.createElement('td');
-        td.textContent = val;
-        tr.appendChild(td);
-      });
-      const tdRes = document.createElement('td');
-      tdRes.textContent = row.res;
-      tdRes.className = row.res ? "cp-res-true" : "cp-res-false";
-      tr.appendChild(tdRes);
-      tbody.appendChild(tr);
+      row.bin.forEach(val => { const td = document.createElement('td'); td.textContent = val; tr.appendChild(td); });
+      const tdRes = document.createElement('td'); tdRes.textContent = row.res; tdRes.className = row.res ? "cp-res-true" : "cp-res-false";
+      tr.appendChild(tdRes); tbody.appendChild(tr);
     });
   }
 
   function renderSOP() {
     const sopDiv = document.getElementById('sopResult');
     const minterms = [];
-    
-    truthTableData.forEach((row, idx) => {
-      if (row.res === 1) minterms.push(idx);
-    });
-
-    if (minterms.length === 0) {
-      sopDiv.textContent = "0 (Always False)";
-    } else if (minterms.length === truthTableData.length) {
-      sopDiv.textContent = "1 (Always True)";
-    } else {
-      sopDiv.textContent = "Σm(" + minterms.join(", ") + ")";
-    }
+    truthTableData.forEach((row, idx) => { if (row.res === 1) minterms.push(idx); });
+    if (minterms.length === 0) sopDiv.textContent = "0 (Always False)";
+    else if (minterms.length === truthTableData.length) sopDiv.textContent = "1 (Always True)";
+    else sopDiv.textContent = "Σm(" + minterms.join(", ") + ")";
   }
 
-  
   function renderKarnaughMap(vars) {
     const container = document.getElementById('kmapContainer');
     container.innerHTML = '';
-
     const n = vars.length;
-    if (n < 2 || n > 4) {
-      container.innerHTML = '<span style="color:#64748b;">// カルノー図は2〜4変数のみ対応しています</span>';
-      return;
-    }
-
-    
-    const gray2 = ["00", "01", "11", "10"];
-    const gray1 = ["0", "1"];
-
+    if (n < 2 || n > 4) { container.innerHTML = '<span style="color:#64748b;">// カルノー図は2〜4変数のみ対応しています</span>'; return; }
+    const gray2 = ["00", "01", "11", "10"], gray1 = ["0", "1"];
     let rowVars, colVars, rowCodes, colCodes;
-    
-    if (n === 2) { 
-      rowVars = vars.slice(0, 1); colVars = vars.slice(1);
-      rowCodes = gray1; colCodes = gray1;
-    } else if (n === 3) { 
-      rowVars = vars.slice(0, 1); colVars = vars.slice(1);
-      rowCodes = gray1; colCodes = gray2;
-    } else { 
-      rowVars = vars.slice(0, 2); colVars = vars.slice(2);
-      rowCodes = gray2; colCodes = gray2;
-    }
+    if (n === 2) { rowVars = vars.slice(0, 1); colVars = vars.slice(1); rowCodes = gray1; colCodes = gray1; } 
+    else if (n === 3) { rowVars = vars.slice(0, 1); colVars = vars.slice(1); rowCodes = gray1; colCodes = gray2; } 
+    else { rowVars = vars.slice(0, 2); colVars = vars.slice(2); rowCodes = gray2; colCodes = gray2; }
 
-    const table = document.createElement('table');
-    table.className = 'cp-kmap';
-
-    
-    const trHead = document.createElement('tr');
-    const thCorner = document.createElement('th');
-    thCorner.innerHTML = `${rowVars.join('')} \\ ${colVars.join('')}`;
-    thCorner.className = 'cp-kmap-header';
-    trHead.appendChild(thCorner);
-
-    colCodes.forEach(code => {
-      const th = document.createElement('th');
-      th.textContent = code;
-      th.className = 'cp-kmap-header';
-      trHead.appendChild(th);
-    });
+    const table = document.createElement('table'); table.className = 'cp-kmap';
+    const trHead = document.createElement('tr'), thCorner = document.createElement('th');
+    thCorner.innerHTML = `${rowVars.join('')} \\ ${colVars.join('')}`; thCorner.className = 'cp-kmap-header'; trHead.appendChild(thCorner);
+    colCodes.forEach(code => { const th = document.createElement('th'); th.textContent = code; th.className = 'cp-kmap-header'; trHead.appendChild(th); });
     table.appendChild(trHead);
 
-    
     rowCodes.forEach(rCode => {
-      const tr = document.createElement('tr');
-      const thRow = document.createElement('th');
-      thRow.textContent = rCode;
-      thRow.className = 'cp-kmap-header';
-      tr.appendChild(thRow);
-
+      const tr = document.createElement('tr'), thRow = document.createElement('th');
+      thRow.textContent = rCode; thRow.className = 'cp-kmap-header'; tr.appendChild(thRow);
       colCodes.forEach(cCode => {
-        
-        
-        
-        
-        
-        const binStr = rCode + cCode;
-        const index = parseInt(binStr, 2);
+        const index = parseInt(rCode + cCode, 2);
         const res = truthTableData[index] ? truthTableData[index].res : 0;
-
-        const td = document.createElement('td');
-        td.textContent = res;
-        td.className = res ? 'cp-kmap-cell one' : 'cp-kmap-cell';
-        tr.appendChild(td);
+        const td = document.createElement('td'); td.textContent = res; td.className = res ? 'cp-kmap-cell one' : 'cp-kmap-cell'; tr.appendChild(td);
       });
       table.appendChild(tr);
     });
-
     container.appendChild(table);
+  }
+
+   
+  function parseToAST(expression) {
+    const tokens = expression.match(/([a-zA-Z0-9_]+|[&|^!()])/g);
+    if (!tokens) throw new Error("無効な式");
+    const precedence = { '!': 4, '&': 3, '^': 2, '|': 1 };
+    const output = [], operators = [];
+
+    for (const token of tokens) {
+      if (/^[a-zA-Z0-9_]+$/.test(token)) { output.push({ type: 'INPUT', value: token }); } 
+      else if (['&', '|', '^'].includes(token)) {
+        while (operators.length > 0 && operators[operators.length - 1] !== '(' && precedence[operators[operators.length - 1]] >= precedence[token]) {
+          output.push({ type: 'OP', value: operators.pop() });
+        }
+        operators.push(token);
+      } else if (token === '!') { operators.push(token); }
+      else if (token === '(') { operators.push(token); }
+      else if (token === ')') {
+        while (operators.length > 0 && operators[operators.length - 1] !== '(') { output.push({ type: 'OP', value: operators.pop() }); }
+        if (operators.length === 0) throw new Error("括弧の不一致");
+        operators.pop(); 
+      }
+    }
+    while (operators.length > 0) {
+      const op = operators.pop();
+      if (op === '(' || op === ')') throw new Error("括弧の不一致");
+      output.push({ type: 'OP', value: op });
+    }
+
+    const stack = [];
+    for (const token of output) {
+      if (token.type === 'INPUT') stack.push(token);
+      else if (token.type === 'OP') {
+        if (token.value === '!') {
+          if (stack.length < 1) throw new Error("!の対象が不足");
+          stack.push({ type: 'NOT', child: stack.pop() });
+        } else {
+          if (stack.length < 2) throw new Error("演算子の対象が不足");
+          const right = stack.pop(), left = stack.pop();
+          const type = token.value === '&' ? 'AND' : (token.value === '|' ? 'OR' : 'XOR');
+          stack.push({ type: type, left: left, right: right });
+        }
+      }
+    }
+    if (stack.length !== 1) throw new Error("式の構文エラー");
+    return stack[0];
+  }
+
+  function optimizeAST(node) {
+    if (!node) return null;
+    if (node.type === 'INPUT') return node;
+    if (node.type === 'NOT') {
+      const child = optimizeAST(node.child);
+      if (child.type === 'AND') return { type: 'NAND', left: child.left, right: child.right };
+      if (child.type === 'OR') return { type: 'NOR', left: child.left, right: child.right };
+      return { type: 'NOT', child: child };
+    }
+    return { type: node.type, left: optimizeAST(node.left), right: optimizeAST(node.right) };
+  }
+
+  function cloneAST(node) {
+    if (!node) return null;
+    const copy = { type: node.type };
+    if (node.value !== undefined) copy.value = node.value;
+    if (node.left !== undefined) copy.left = cloneAST(node.left);
+    if (node.right !== undefined) copy.right = cloneAST(node.right);
+    if (node.child !== undefined) copy.child = cloneAST(node.child);
+    return copy;
+  }
+
+  function convertToNandOnly(node) {
+    if (!node) return null;
+    if (node.type === 'INPUT') return { type: 'INPUT', value: node.value };
+    if (node.type === 'NAND') return { type: 'NAND', left: convertToNandOnly(node.left), right: convertToNandOnly(node.right) };
+    if (node.type === 'NOT') {
+      const child1 = convertToNandOnly(node.child);
+      const child2 = cloneAST(child1);
+      return { type: 'NAND', left: child1, right: child2 };
+    }
+    if (node.type === 'AND') {
+      const l = convertToNandOnly(node.left);
+      const r = convertToNandOnly(node.right);
+      const nand1 = { type: 'NAND', left: l, right: r };
+      const nand2 = cloneAST(nand1);
+      return { type: 'NAND', left: nand1, right: nand2 };
+    }
+    if (node.type === 'OR') {
+      const l1 = convertToNandOnly(node.left);
+      const l2 = cloneAST(l1);
+      const r1 = convertToNandOnly(node.right);
+      const r2 = cloneAST(r1);
+      return { type: 'NAND', left: { type: 'NAND', left: l1, right: l2 }, right: { type: 'NAND', left: r1, right: r2 } };
+    }
+    if (node.type === 'NOR') {
+      const l1 = convertToNandOnly(node.left);
+      const l2 = cloneAST(l1);
+      const r1 = convertToNandOnly(node.right);
+      const r2 = cloneAST(r1);
+      const orNode1 = { type: 'NAND', left: { type: 'NAND', left: l1, right: l2 }, right: { type: 'NAND', left: r1, right: r2 } };
+      const orNode2 = cloneAST(orNode1);
+      return { type: 'NAND', left: orNode1, right: orNode2 };
+    }
+    if (node.type === 'XOR') {
+      const a1 = convertToNandOnly(node.left);
+      const a2 = cloneAST(a1);
+      const b1 = convertToNandOnly(node.right);
+      const b2 = cloneAST(b1);
+      const mid1 = { type: 'NAND', left: a1, right: b1 };
+      const mid2 = cloneAST(mid1);
+      const mid3 = cloneAST(mid1);
+      const leftPath = { type: 'NAND', left: a2, right: mid2 };
+      const rightPath = { type: 'NAND', left: b2, right: mid3 };
+      return { type: 'NAND', left: leftPath, right: rightPath };
+    }
+    return node;
+  }
+
+   
+  function getGateOutX(node) {
+    if (node.type === 'INPUT') return node.cx;
+    if (node.type === 'NOT') return node.cx + 13;
+    if (node.type === 'AND' || node.type === 'OR') return node.cx + 15;
+    if (node.type === 'XOR') return node.cx + 17;
+    if (node.type === 'NAND' || node.type === 'NOR') return node.cx + 23;
+    return node.cx + 15;
+  }
+
+  function getGateInX(node) {
+    if (node.type === 'NOT') return node.cx - 15;
+    if (node.type === 'XOR') return node.cx - 30;
+    return node.cx - 25; 
+  }
+
+  function buildSVGTree(ast) {
+    function setDepth(node) {
+      if (node.type === 'INPUT') { node.depth = 0; return 0; }
+      if (node.type === 'NOT') { node.depth = setDepth(node.child) + 1; return node.depth; }
+      node.depth = Math.max(setDepth(node.left), setDepth(node.right)) + 1;
+      return node.depth;
+    }
+    setDepth(ast);
+
+    const busSpacing = 40;
+    const busStartX = 40;
+    const numVars = currentVariables.length;
+    const busEndX = busStartX + numVars * busSpacing;
+    const levelW = 100;
+    const rowH = 60;
+    const colors = ["#f43f5e", "#3b82f6", "#8b5cf6", "#f59e0b", "#06b6d4", "#10b981", "#d946ef", "#f97316"];
+    const defaultWire = "#10b981";
+
+    let leafY = 0;
+    function calcPos(node) {
+      if (node.type === 'INPUT') {
+        node.cy = leafY * rowH;
+        leafY++;
+        node.cx = busEndX + 30;
+        return;
+      }
+      if (node.type === 'NOT') {
+        calcPos(node.child);
+        node.cy = node.child.cy;
+        node.cx = busEndX + 40 + node.depth * levelW;
+        return;
+      }
+      calcPos(node.left);
+      calcPos(node.right);
+      node.cy = (node.left.cy + node.right.cy) / 2;
+      node.cx = busEndX + 40 + node.depth * levelW;
+    }
+    calcPos(ast);
+
+    const pad = 40;
+    const maxCy = Math.max((leafY - 1) * rowH, 10) + 40;
+    const width = ast.cx + 100;
+    const height = maxCy + 60;
+
+    let html = `<svg id="logicSvgExport" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" style="display:block; margin:0 auto; overflow:visible; font-family:monospace;">`;
+    html += `<g transform="translate(${pad}, 40)">`;
+
+    currentVariables.forEach((v, i) => {
+      const x = busStartX + i * busSpacing;
+      const color = colors[i % colors.length];
+      html += `<text x="${x}" y="-20" fill="${color}" font-weight="bold" font-size="16" text-anchor="middle" style="user-select:none;">${v}</text>`;
+      html += `<line x1="${x}" y1="-10" x2="${x}" y2="${maxCy}" stroke="${color}" stroke-width="2" opacity="0.8"/>`;
+    });
+
+    function drawWires(node) {
+      if (node.type === 'INPUT') {
+        const idx = currentVariables.indexOf(node.value);
+        const x = busStartX + idx * busSpacing;
+        const color = colors[idx % colors.length];
+        html += `<path d="M ${x} ${node.cy} L ${node.cx} ${node.cy}" stroke="${color}" stroke-width="2" fill="none"/>`;
+        html += `<circle cx="${x}" cy="${node.cy}" r="4" fill="${color}"/>`;
+        return;
+      }
+
+      if (node.type === 'NOT') {
+        drawWires(node.child);
+        let outX = getGateOutX(node.child);
+        let inX = getGateInX(node);
+        let wireColor = node.child.type === 'INPUT' ? colors[currentVariables.indexOf(node.child.value) % colors.length] : defaultWire;
+        let midX = (outX + inX) / 2;
+        html += `<path d="M ${outX} ${node.child.cy} L ${midX} ${node.child.cy} L ${midX} ${node.cy} L ${inX} ${node.cy}" stroke="${wireColor}" stroke-width="2" fill="none"/>`;
+        return;
+      }
+
+      drawWires(node.left);
+      drawWires(node.right);
+
+      let outX1 = getGateOutX(node.left);
+      let inX1 = getGateInX(node);
+      let inY1 = node.cy - 8;
+      let wireColor1 = node.left.type === 'INPUT' ? colors[currentVariables.indexOf(node.left.value) % colors.length] : defaultWire;
+      let midX1 = (outX1 + inX1) / 2;
+      html += `<path d="M ${outX1} ${node.left.cy} L ${midX1} ${node.left.cy} L ${midX1} ${inY1} L ${inX1} ${inY1}" stroke="${wireColor1}" stroke-width="2" fill="none"/>`;
+
+      let outX2 = getGateOutX(node.right);
+      let inX2 = getGateInX(node);
+      let inY2 = node.cy + 8;
+      let wireColor2 = node.right.type === 'INPUT' ? colors[currentVariables.indexOf(node.right.value) % colors.length] : defaultWire;
+      let midX2 = (outX2 + inX2) / 2;
+      html += `<path d="M ${outX2} ${node.right.cy} L ${midX2} ${node.right.cy} L ${midX2} ${inY2} L ${inX2} ${inY2}" stroke="${wireColor2}" stroke-width="2" fill="none"/>`;
+    }
+    drawWires(ast);
+
+    let finalOutX = getGateOutX(ast);
+    html += `<path d="M ${finalOutX} ${ast.cy} L ${finalOutX + 30} ${ast.cy}" stroke="#10b981" stroke-width="2" fill="none"/>`;
+    html += `<text x="${finalOutX + 40}" y="${ast.cy + 5}" fill="#10b981" font-weight="bold" font-size="14" style="user-select:none;">OUT</text>`;
+
+    function drawGates(node) {
+      if (node.type === 'INPUT') return;
+
+      if (node.type === 'NOT') {
+        drawGates(node.child);
+        html += `<g transform="translate(${node.cx}, ${node.cy})">`;
+        html += `<path d="M -15 -10 L 5 0 L -15 10 Z" fill="#0e0e11" stroke="#a78bfa" stroke-width="2"/>`;
+        html += `<circle cx="9" cy="0" r="4" fill="#0e0e11" stroke="#a78bfa" stroke-width="2"/>`;
+        html += `<text x="-3" y="-18" fill="#94a3b8" font-size="10" font-weight="bold" text-anchor="middle" style="user-select:none;">NOT</text>`;
+        html += `</g>`;
+        return;
+      }
+
+      drawGates(node.left);
+      drawGates(node.right);
+
+      html += `<g transform="translate(${node.cx}, ${node.cy})">`;
+      html += `<text x="-5" y="-22" fill="#94a3b8" font-size="10" font-weight="bold" text-anchor="middle" style="user-select:none;">${node.type}</text>`;
+
+      if (node.type === 'AND') {
+        html += `<path d="M -25 -15 L 0 -15 A 15 15 0 0 1 15 0 A 15 15 0 0 1 0 15 L -25 15 Z" fill="#0e0e11" stroke="#3b82f6" stroke-width="2" style="filter: drop-shadow(0 0 5px rgba(59,130,246,0.5));"/>`;
+      } else if (node.type === 'OR') {
+        html += `<path d="M -25 -15 Q -15 0 -25 15 Q 0 15 15 0 Q 0 -15 -25 -15 Z" fill="#0e0e11" stroke="#f59e0b" stroke-width="2" style="filter: drop-shadow(0 0 5px rgba(245,158,11,0.5));"/>`;
+      } else if (node.type === 'XOR') {
+        html += `<path d="M -30 -15 Q -20 0 -30 15" fill="none" stroke="#ec4899" stroke-width="2"/>`;
+        html += `<path d="M -23 -15 Q -13 0 -23 15 Q 2 15 17 0 Q 2 -15 -23 -15 Z" fill="#0e0e11" stroke="#ec4899" stroke-width="2" style="filter: drop-shadow(0 0 5px rgba(236,72,153,0.5));"/>`;
+      } else if (node.type === 'NAND') {
+        html += `<path d="M -25 -15 L 0 -15 A 15 15 0 0 1 15 0 A 15 15 0 0 1 0 15 L -25 15 Z" fill="#0e0e11" stroke="#0ea5e9" stroke-width="2" style="filter: drop-shadow(0 0 5px rgba(14,165,233,0.5));"/>`;
+        html += `<circle cx="19" cy="0" r="4" fill="#0e0e11" stroke="#0ea5e9" stroke-width="2"/>`;
+      } else if (node.type === 'NOR') {
+        html += `<path d="M -25 -15 Q -15 0 -25 15 Q 0 15 15 0 Q 0 -15 -25 -15 Z" fill="#0e0e11" stroke="#f43f5e" stroke-width="2" style="filter: drop-shadow(0 0 5px rgba(244,63,94,0.5));"/>`;
+        html += `<circle cx="19" cy="0" r="4" fill="#0e0e11" stroke="#f43f5e" stroke-width="2"/>`;
+      }
+      html += `</g>`;
+    }
+    drawGates(ast);
+
+    html += `</g></svg>`;
+    return html;
   }
 
   function showError(msg) {
     const errorDiv = document.getElementById('logicError');
-    errorDiv.textContent = msg;
-    errorDiv.style.display = 'block';
+    errorDiv.textContent = msg; errorDiv.style.display = 'block';
+  }
+
+  function downloadSVGAsPNG() {
+    const svgElement = document.getElementById('logicSvgExport');
+    if (!svgElement) return alert("解析を実行して回路図を生成してください。");
+    const clonedSvg = svgElement.cloneNode(true);
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("width", "100%");
+    rect.setAttribute("height", "100%");
+    rect.setAttribute("fill", "#09090b");
+    clonedSvg.insertBefore(rect, clonedSvg.firstChild);
+
+    const svgData = new XMLSerializer().serializeToString(clonedSvg);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    
+    canvas.width = parseInt(svgElement.getAttribute("width"));
+    canvas.height = parseInt(svgElement.getAttribute("height"));
+
+    img.onload = function() {
+      ctx.drawImage(img, 0, 0);
+      const a = document.createElement("a");
+      a.download = "logic_circuit_schematic.png";
+      a.href = canvas.toDataURL("image/png");
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
   }
 </script>
 <hr>
