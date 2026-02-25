@@ -753,476 +753,158 @@
 <style>
 /* --- 0. 基盤リセット --- */
 :root {
---neon-cyan: #00f3ff;
---neon-pink: #ff0055;
---neon-purple: #bc13fe;
---bg-dark: #000000;
+  --neon-cyan: #00f3ff;
+  --neon-pink: #ff0055;
+  --neon-purple: #bc13fe;
+  --bg-dark: #000000;
 }
-
 h1:not(.page-title) { display: none !important; }
-
 body {
-padding: 0 !important;
-background-color: var(--bg-dark) !important;
-color: #e0e0e0;
-font-family: 'JetBrains Mono', monospace;
-overflow-x: hidden;
-width: 100vw;
-min-height: 100vh;
-font-size: 14px;
+  padding: 0 !important;
+  background-color: var(--bg-dark) !important;
+  color: #e0e0e0;
+  font-family: 'JetBrains Mono', monospace;
+  overflow-x: hidden;
+  width: 100vw;
+  min-height: 100vh;
+  font-size: 14px;
 }
-
-*, *::before, *::after {
-box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
 /* --- 1. 背景・全体エフェクト --- */
-.cyber-bg {
-position: fixed;
-top: 0; left: 0; width: 100vw; height: 100vh;
-background: radial-gradient(circle at 50% 50%, #110520 0%, #000000 90%);
-z-index: -3;
-}
-
+.cyber-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at 50% 50%, #110520 0%, #000000 90%); z-index: -3; }
 .cyber-grid {
-position: fixed;
-top: -50%; left: -50%; width: 200vw; height: 200vh;
-background: 
-linear-gradient(transparent 0%, rgba(0, 243, 255, 0.08) 1%, transparent 2%),
-linear-gradient(90deg, transparent 0%, rgba(188, 19, 254, 0.08) 1%, transparent 2%);
-background-size: 40px 40px;
-transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px);
-animation: grid-move 8s linear infinite;
-z-index: -2;
-pointer-events: none;
-filter: drop-shadow(0 0 2px var(--neon-cyan));
+  position: fixed; top: -50%; left: -50%; width: 200vw; height: 200vh;
+  background: linear-gradient(transparent 0%, rgba(0, 243, 255, 0.08) 1%, transparent 2%), linear-gradient(90deg, transparent 0%, rgba(188, 19, 254, 0.08) 1%, transparent 2%);
+  background-size: 40px 40px; transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px);
+  animation: grid-move 8s linear infinite; z-index: -2; pointer-events: none; filter: drop-shadow(0 0 2px var(--neon-cyan));
 }
-@keyframes grid-move {
-0% { transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px); }
-100% { transform: perspective(300px) rotateX(60deg) translateY(40px) translateZ(-100px); }
-}
-
-.scanline {
-position: fixed;
-top: 0; left: 0; width: 100%; height: 100%;
-background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
-background-size: 100% 3px;
-pointer-events: none;
-z-index: 100;
-opacity: 0.15;
-mix-blend-mode: overlay;
-}
+@keyframes grid-move { 0% { transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px); } 100% { transform: perspective(300px) rotateX(60deg) translateY(40px) translateZ(-100px); } }
+.scanline { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2)); background-size: 100% 3px; pointer-events: none; z-index: 100; opacity: 0.15; mix-blend-mode: overlay; }
 
 /* --- 2. メインレイアウト --- */
 .secret-container {
-max-width: 850px;
-margin: 0 auto;
-padding: 4rem 2rem;
-min-height: 100vh;
-position: relative;
-background: rgba(0, 0, 0, 0.6);
-border-left: 1px solid rgba(0, 243, 255, 0.3);
-border-right: 1px solid rgba(0, 243, 255, 0.3);
-box-shadow: 0 0 80px rgba(0, 0, 0, 0.9);
-backdrop-filter: blur(4px);
+  max-width: 850px; margin: 0 auto; padding: 4rem 2rem; min-height: 100vh; position: relative; background: rgba(0, 0, 0, 0.6);
+  border-left: 1px solid rgba(0, 243, 255, 0.3); border-right: 1px solid rgba(0, 243, 255, 0.3);
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.9); backdrop-filter: blur(4px);
+  filter: blur(8px); opacity: 0.3; transition: all 1s ease-out;
 }
+.secret-container.unlocked { filter: blur(0); opacity: 1; }
 
 /* --- 3. コンポーネント装飾 --- */
+.access-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid var(--neon-pink); padding-bottom: 0.5rem; margin-bottom: 4rem; position: relative; }
+.page-title { font-family: 'Orbitron', sans-serif; font-size: 3.5rem; font-weight: 900; color: #fff; letter-spacing: 0.1em; text-shadow: 0 0 10px var(--neon-pink); margin: 0; line-height: 1; }
+.access-badge { font-family: 'Orbitron', sans-serif; color: var(--neon-cyan); border: 1px solid var(--neon-cyan); padding: 0.5rem 1rem; background: rgba(0, 243, 255, 0.1); box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); font-size: 0.9rem; letter-spacing: 1px; }
 
-/* ヘッダー */
-.access-header {
-display: flex;
-justify-content: space-between;
-align-items: flex-end;
-border-bottom: 2px solid var(--neon-pink);
-padding-bottom: 0.5rem;
-margin-bottom: 4rem;
-position: relative;
-}
-
-.page-title {
-font-family: 'Orbitron', sans-serif;
-font-size: 3.5rem;
-font-weight: 900;
-color: #fff;
-letter-spacing: 0.1em;
-text-shadow: 0 0 10px var(--neon-pink);
-margin: 0;
-line-height: 1;
-}
-
-.access-badge {
-font-family: 'Orbitron', sans-serif;
-color: var(--neon-cyan);
-border: 1px solid var(--neon-cyan);
-padding: 0.5rem 1rem;
-background: rgba(0, 243, 255, 0.1);
-box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-font-size: 0.9rem;
-letter-spacing: 1px;
-}
-
-/* プロフィールセクション */
-.profile-card {
-display: flex;
-align-items: center;
-gap: 3rem;
-padding: 2rem;
-background: linear-gradient(135deg, rgba(15, 15, 20, 0.9) 0%, rgba(0,0,0,0.8) 100%);
-border: 1px solid #333;
-margin-bottom: 4rem;
-position: relative;
-box-shadow: inset 0 0 30px rgba(0, 243, 255, 0.05);
-border-left: 3px solid var(--neon-cyan);
-}
-
-.profile-img-container {
-flex-shrink: 0;
-width: 120px;
-height: 120px;
-position: relative;
-display: flex;
-justify-content: center;
-align-items: center;
-}
-
-.profile-img {
-width: 100%; height: 100%;
-object-fit: cover;
-border-radius: 50%;
-border: 2px solid var(--neon-pink);
-box-shadow: 0 0 15px var(--neon-pink);
-filter: contrast(1.2) grayscale(0.3);
-position: relative;
-z-index: 2;
-margin: 0 !important;
-display: block;
-}
-
-.img-ring {
-position: absolute;
-width: 140px;
-height: 140px;
-border: 1px dashed var(--neon-cyan);
-border-radius: 50%;
-z-index: 1;
-animation: spin 12s linear infinite;
-pointer-events: none;
-}
+.profile-card { display: flex; align-items: center; gap: 3rem; padding: 2rem; background: linear-gradient(135deg, rgba(15, 15, 20, 0.9) 0%, rgba(0,0,0,0.8) 100%); border: 1px solid #333; margin-bottom: 4rem; position: relative; box-shadow: inset 0 0 30px rgba(0, 243, 255, 0.05); border-left: 3px solid var(--neon-cyan); }
+.profile-img-container { flex-shrink: 0; width: 120px; height: 120px; position: relative; display: flex; justify-content: center; align-items: center; }
+.profile-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid var(--neon-pink); box-shadow: 0 0 15px var(--neon-pink); filter: contrast(1.2) grayscale(0.3); position: relative; z-index: 2; margin: 0 !important; display: block; }
+.img-ring { position: absolute; width: 140px; height: 140px; border: 1px dashed var(--neon-cyan); border-radius: 50%; z-index: 1; animation: spin 12s linear infinite; pointer-events: none; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-.profile-info h3 {
-font-family: 'Orbitron', sans-serif;
-color: var(--neon-cyan);
-font-size: 1.8rem;
-margin: 0 0 0.8rem 0;
-text-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
-}
-.profile-data p {
-font-family: 'JetBrains Mono', monospace;
-color: #bbb;
-line-height: 1.6;
-font-size: 1rem;
-margin: 0.4rem 0;
-}
+.profile-info h3 { font-family: 'Orbitron', sans-serif; color: var(--neon-cyan); font-size: 1.8rem; margin: 0 0 0.8rem 0; text-shadow: 0 0 8px rgba(0, 243, 255, 0.6); }
+.profile-data p { font-family: 'JetBrains Mono', monospace; color: #bbb; line-height: 1.6; font-size: 1rem; margin: 0.4rem 0; }
 .data-label { color: var(--neon-pink); margin-right: 0.5rem; }
 
-/* 時間割セクション */
 .portal-section { margin-bottom: 4rem; }
-
-.cyber-h2 {
-font-family: 'Orbitron', sans-serif;
-font-size: 1.5rem;
-color: #fff;
-border-bottom: 1px dashed var(--neon-cyan);
-padding-bottom: 0.5rem;
-margin-bottom: 1.5rem;
-text-shadow: 0 0 5px var(--neon-cyan);
-display: flex;
-align-items: center;
-}
-.cyber-h2::before {
-content: '>';
-margin-right: 0.8rem;
-color: var(--neon-pink);
-animation: blink-h2 1s infinite;
-}
+.cyber-h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: #fff; border-bottom: 1px dashed var(--neon-cyan); padding-bottom: 0.5rem; margin-bottom: 1.5rem; text-shadow: 0 0 5px var(--neon-cyan); display: flex; align-items: center; }
+.cyber-h2::before { content: '>'; margin-right: 0.8rem; color: var(--neon-pink); animation: blink-h2 1s infinite; }
 @keyframes blink-h2 { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-.table-container {
-border: 1px solid var(--neon-cyan);
-background: rgba(5, 10, 15, 0.8);
-box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
-position: relative;
-padding: 5px;
-width: 100%;
-display: block;
-}
+.table-container { border: 1px solid var(--neon-cyan); background: rgba(5, 10, 15, 0.8); box-shadow: 0 0 20px rgba(0, 243, 255, 0.1); position: relative; padding: 5px; width: 100%; display: block; }
+.scroll-wrapper { overflow-x: auto; width: 100%; display: block; }
+.cyber-table { width: 100% !important; border-collapse: collapse; margin: 0 !important; table-layout: fixed !important; display: table !important; }
+.cyber-table th, .cyber-table td { padding: 0.8rem; border: 1px solid rgba(0, 243, 255, 0.2); font-family: 'Orbitron', sans-serif; font-size: 0.9rem; text-align: center !important; vertical-align: middle !important; box-sizing: border-box; word-break: break-all; }
+.cyber-table th { background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); letter-spacing: 1px; }
+.cyber-table td { border: 1px solid rgba(255, 255, 255, 0.1); color: #ddd; font-size: 0.85rem; }
+.cyber-table td:first-child { color: var(--neon-pink); font-weight: bold; background: rgba(255, 0, 85, 0.05); }
+.cyber-table tr:hover td { background: rgba(0, 243, 255, 0.15); color: #fff; text-shadow: 0 0 5px #fff; }
 
-.scroll-wrapper {
-overflow-x: auto;
-width: 100%;
-display: block;
-}
-
-.cyber-table {
-width: 100% !important;
-border-collapse: collapse;
-margin: 0 !important;
-table-layout: fixed !important;
-display: table !important;
-}
-
-.cyber-table th, .cyber-table td {
-padding: 0.8rem;
-border: 1px solid rgba(0, 243, 255, 0.2);
-font-family: 'Orbitron', sans-serif;
-font-size: 0.9rem;
-text-align: center !important;
-vertical-align: middle !important;
-box-sizing: border-box;
-word-break: break-all;
-}
-
-.cyber-table th {
-background: rgba(0, 243, 255, 0.1);
-color: var(--neon-cyan);
-letter-spacing: 1px;
-}
-
-.cyber-table td {
-border: 1px solid rgba(255, 255, 255, 0.1);
-color: #ddd;
-font-size: 0.85rem;
-}
-
-.cyber-table td:first-child {
-color: var(--neon-pink);
-font-weight: bold;
-background: rgba(255, 0, 85, 0.05);
-}
-
-.cyber-table tr:hover td {
-background: rgba(0, 243, 255, 0.15);
-color: #fff;
-text-shadow: 0 0 5px #fff;
-}
-
-/* 画像ログ */
-.visual-log-frame {
-border: 1px solid #444;
-padding: 5px;
-background: rgba(0, 0, 0, 0.5);
-position: relative;
-margin-bottom: 4rem;
-box-shadow: 0 0 30px rgba(0,0,0,0.8);
-}
-.corner-tl, .corner-tr, .corner-bl, .corner-br {
-position: absolute; width: 10px; height: 10px; border-color: var(--neon-purple); border-style: solid;
-}
+.visual-log-frame { border: 1px solid #444; padding: 5px; background: rgba(0, 0, 0, 0.5); position: relative; margin-bottom: 4rem; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+.corner-tl, .corner-tr, .corner-bl, .corner-br { position: absolute; width: 10px; height: 10px; border-color: var(--neon-purple); border-style: solid; }
 .corner-tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
 .corner-tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
 .corner-bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
 .corner-br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+.evidence-img { width: 100%; display: block; filter: sepia(30%) hue-rotate(190deg) contrast(1.1) brightness(0.9); opacity: 0.9; border: 1px solid #222; }
+.img-meta { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--neon-cyan); margin-top: 0.5rem; font-family: 'Orbitron', sans-serif; }
 
-.evidence-img {
-width: 100%; display: block;
-filter: sepia(30%) hue-rotate(190deg) contrast(1.1) brightness(0.9);
-opacity: 0.9;
-border: 1px solid #222;
-}
-.img-meta {
-display: flex; justify-content: space-between;
-font-size: 0.8rem; color: var(--neon-cyan);
-margin-top: 0.5rem;
-font-family: 'Orbitron', sans-serif;
-}
-
-/* リンクボタン */
-.encrypted-link {
-display: block;
-padding: 1.5rem;
-text-align: center;
-border: 1px solid var(--neon-pink);
-color: var(--neon-pink);
-text-decoration: none;
-font-family: 'Orbitron', sans-serif;
-font-size: 1.1rem;
-font-weight: bold;
-background: rgba(255, 0, 85, 0.05);
-transition: all 0.3s;
-letter-spacing: 2px;
-box-shadow: 0 0 10px rgba(255, 0, 85, 0.1);
-position: relative;
-overflow: hidden;
-}
-.encrypted-link::before {
-content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-background: linear-gradient(90deg, transparent, rgba(255,0,85,0.2), transparent);
-transition: 0.5s;
-}
-.encrypted-link:hover {
-background: var(--neon-pink);
-color: #000;
-box-shadow: 0 0 30px var(--neon-pink);
-}
+.encrypted-link { display: block; padding: 1.5rem; text-align: center; border: 1px solid var(--neon-pink); color: var(--neon-pink); text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: bold; background: rgba(255, 0, 85, 0.05); transition: all 0.3s; letter-spacing: 2px; box-shadow: 0 0 10px rgba(255, 0, 85, 0.1); position: relative; overflow: hidden; }
+.encrypted-link::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,0,85,0.2), transparent); transition: 0.5s; }
+.encrypted-link:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 30px var(--neon-pink); }
 .encrypted-link:hover::before { left: 100%; }
 
-/* --- 4. ターミナル風ロック画面 --- */
-#cyber-lock-screen {
-position: fixed;
-top: 0; left: 0;
-width: 100vw; height: 100vh;
-background-color: #030303;
-z-index: 999999;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-font-family: 'JetBrains Mono', monospace;
-color: var(--neon-cyan);
-transition: opacity 0.8s ease-out, visibility 0.8s;
-}
+/* --- 🌟 幾何学パターンロック画面 🌟 --- */
+#cyber-lock-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(3, 3, 3, 0.85); backdrop-filter: blur(8px); z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'JetBrains Mono', monospace; color: var(--neon-cyan); transition: opacity 0.8s ease-out, visibility 0.8s; }
+#cyber-lock-screen.unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
+#cyber-lock-screen::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 2px, 3px 100%; pointer-events: none; }
 
-#cyber-lock-screen::before {
-content: "";
-position: absolute;
-top: 0; left: 0; width: 100%; height: 100%;
-background: 
-linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-background-size: 100% 2px, 3px 100%;
-pointer-events: none;
-}
+/* 被り問題の修正: padding-top を広くし、バッジを要素として分離 */
+.lock-container { width: 90%; max-width: 500px; background: rgba(0, 10, 20, 0.85); border: 1px solid var(--neon-cyan); box-shadow: 0 0 30px rgba(0, 243, 255, 0.15), inset 0 0 20px rgba(0, 243, 255, 0.1); padding: 3.5rem 2rem 2rem; position: relative; text-align: center; display: flex; flex-direction: column; align-items: center; margin-top: 1rem; }
+.clearance-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #030303; padding: 4px 15px; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; color: var(--neon-pink); letter-spacing: 2px; border: 1px solid var(--neon-pink); white-space: nowrap; }
 
-.lock-container {
-width: 90%;
-max-width: 600px;
-background: rgba(0, 20, 30, 0.8);
-border: 1px solid var(--neon-cyan);
-box-shadow: 0 0 20px rgba(0, 243, 255, 0.2), inset 0 0 20px rgba(0, 243, 255, 0.1);
-padding: 2rem;
-position: relative;
-text-align: left;
-}
-
-.lock-container::before {
-content: "RESTRICTED AREA";
-position: absolute;
-top: -12px; left: 20px;
-background: #030303;
-padding: 0 10px;
-font-family: 'Orbitron', sans-serif;
-font-size: 0.9rem;
-color: var(--neon-pink);
-letter-spacing: 2px;
-}
-
-.terminal-text {
-margin: 0 0 1rem 0;
-font-size: 1.1rem;
-line-height: 1.5;
-text-shadow: 0 0 5px var(--neon-cyan);
-}
-
-.terminal-text span.pink { color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink); }
+.terminal-text { margin: 0 0 0.5rem 0; font-size: 1rem; line-height: 1.5; text-shadow: 0 0 5px var(--neon-cyan); }
+.terminal-text span.pink { color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink); font-weight: bold; }
 .terminal-text span.blink { animation: blink-cursor 1s infinite; }
 @keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-.input-group {
-display: flex;
-align-items: center;
-margin-top: 2rem;
-border-bottom: 2px solid var(--neon-cyan);
-padding-bottom: 5px;
-}
-
-.input-prompt {
-color: var(--neon-pink);
-margin-right: 10px;
-font-size: 1.2rem;
-font-weight: bold;
-}
-
-#pass-input {
-background: transparent;
-border: none;
-color: #fff;
-font-family: 'JetBrains Mono', monospace;
-font-size: 1.2rem;
-width: 100%;
-outline: none;
-letter-spacing: 5px;
-text-shadow: 0 0 5px #fff;
-}
-#pass-input::placeholder {
-color: rgba(0, 243, 255, 0.3);
-letter-spacing: 2px;
-}
-
-.error-msg {
-color: var(--neon-pink);
-font-size: 0.9rem;
-margin-top: 10px;
-height: 1.2em;
-text-shadow: 0 0 5px var(--neon-pink);
-opacity: 0;
-}
+.error-msg { color: var(--neon-pink); font-size: 0.9rem; margin-top: 15px; height: 1.2em; text-shadow: 0 0 5px var(--neon-pink); opacity: 0; font-family: 'Orbitron', sans-serif; }
 .error-msg.show { opacity: 1; animation: glitch-anim 0.2s 3; }
+.error-msg.success { color: #00ff66; text-shadow: 0 0 5px #00ff66; }
 
-@keyframes glitch-anim {
-0% { transform: translate(0) }
-20% { transform: translate(-2px, 1px) }
-40% { transform: translate(-1px, -1px) }
-60% { transform: translate(2px, 1px) }
-80% { transform: translate(1px, -1px) }
-100% { transform: translate(0) }
-}
+.radar-bg { position: absolute; width: 340px; height: 340px; border-radius: 50%; border: 1px dashed rgba(0, 243, 255, 0.2); z-index: 0; pointer-events: none; animation: radar-spin 20s linear infinite; }
+.radar-bg::after { content: ''; position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; border-radius: 50%; border: 1px solid rgba(188, 19, 254, 0.2); }
+@keyframes radar-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* ロック解除時の演出用クラス */
-#cyber-lock-screen.unlocked {
-opacity: 0;
-visibility: hidden;
-pointer-events: none;
-}
+.pattern-container { position: relative; width: 280px; height: 280px; margin-top: 1.5rem; touch-action: none; z-index: 2; }
+#pattern-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+#pattern-svg polyline, #pattern-svg line { stroke: var(--neon-cyan); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 8px var(--neon-cyan)); transition: stroke 0.3s; }
+.pattern-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); z-index: 2; }
+.node-wrap { display: flex; justify-content: center; align-items: center; cursor: crosshair; }
+/* ノードのヒットボックス（見えない判定エリア）を大きく取る */
+.node-hitbox { position: absolute; width: 100%; height: 100%; top: 0; left: 0; }
+.node { width: 14px; height: 14px; background: rgba(0, 243, 255, 0.2); border: 1px solid var(--neon-cyan); box-shadow: 0 0 5px rgba(0, 243, 255, 0.5); transform: rotate(45deg); transition: all 0.2s; pointer-events: none; }
+.node-wrap.active .node { background: var(--neon-cyan); transform: rotate(45deg) scale(1.8); box-shadow: 0 0 15px var(--neon-cyan); }
+.pattern-container.error #pattern-svg polyline, .pattern-container.error #pattern-svg line { stroke: var(--neon-pink); filter: drop-shadow(0 0 8px var(--neon-pink)); }
+.pattern-container.error .node-wrap.active .node { background: var(--neon-pink); border-color: var(--neon-pink); box-shadow: 0 0 15px var(--neon-pink); }
+.pattern-container.success #pattern-svg polyline, .pattern-container.success #pattern-svg line { stroke: #00ff66; filter: drop-shadow(0 0 8px #00ff66); }
+.pattern-container.success .node-wrap.active .node { background: #00ff66; border-color: #00ff66; box-shadow: 0 0 15px #00ff66; }
 
-/* --- レスポンシブ対応 --- */
-@media (max-width: 768px) {
-.secret-container { width: 100%; padding: 1.5rem 1rem; border: none; }
-.page-title { font-size: 2rem; }
-.profile-card { flex-direction: column; text-align: center; gap: 1rem; padding: 1.5rem; }
-.profile-img-container { width: 90px; height: 90px; }
-.img-ring { width: 110px; height: 110px; }
-.access-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+@keyframes glitch-anim { 0% { transform: translate(0) } 20% { transform: translate(-2px, 1px) } 40% { transform: translate(-1px, -1px) } 60% { transform: translate(2px, 1px) } 80% { transform: translate(1px, -1px) } 100% { transform: translate(0) } }
 
-.cyber-table th, .cyber-table td {
-padding: 0.4rem 0.1rem;
-font-size: 0.6rem;
-line-height: 1.2;
-}
-.cyber-table th { letter-spacing: 0; }
-
-.terminal-text { font-size: 0.9rem; }
-#pass-input { font-size: 1rem; }
-}
+@media (max-width: 768px) { .secret-container { width: 100%; padding: 1.5rem 1rem; border: none; } .page-title { font-size: 2rem; } .profile-card { flex-direction: column; text-align: center; gap: 1rem; padding: 1.5rem; } .profile-img-container { width: 90px; height: 90px; } .img-ring { width: 110px; height: 110px; } .access-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; } .cyber-table th, .cyber-table td { padding: 0.4rem 0.1rem; font-size: 0.6rem; line-height: 1.2; } .terminal-text { font-size: 0.9rem; } .pattern-container { width: 240px; height: 240px; } }
 </style>
 <div id="cyber-lock-screen">
 <div class="lock-container">
+<div class="clearance-badge">LEVEL 5 CLEARANCE REQUIRED</div>
 <p class="terminal-text">> SECURE CONNECTION ESTABLISHED.</p>
-<p class="terminal-text">> WARNING: YOU ARE ATTEMPTING TO ACCESS <span class="pink">LEVEL 5 DATA</span>.</p>
-<p class="terminal-text">> UNAUTHORIZED ACCESS WILL BE LOGGED AND TRACED.</p>
-<p class="terminal-text" style="margin-top: 2rem;">> ENTER DECRYPTION KEY<span class="blink">_</span></p>
-<div class="input-group">
-<span class="input-prompt">root@dt:~$</span>
-<input type="password" id="pass-input" placeholder="********" autocomplete="off" autofocus>
+<p class="terminal-text">> WARNING: <span class="pink">UNAUTHORIZED ACCESS DETECTED.</span></p>
+<p class="terminal-text">> ALIGN NEURAL NODES TO PROCEED<span class="blink">_</span></p>
+<div class="radar-bg"></div>
+<div class="pattern-container" id="pattern-container">
+<svg id="pattern-svg">
+<polyline id="pattern-path" fill="none" points=""></polyline>
+<line id="dynamic-line" x1="0" y1="0" x2="0" y2="0" style="display:none;"></line>
+</svg>
+<div class="pattern-grid" id="pattern-grid">
+<div class="node-wrap" data-id="1"><div class="node"></div></div>
+<div class="node-wrap" data-id="2"><div class="node"></div></div>
+<div class="node-wrap" data-id="3"><div class="node"></div></div>
+<div class="node-wrap" data-id="4"><div class="node"></div></div>
+<div class="node-wrap" data-id="5"><div class="node"></div></div>
+<div class="node-wrap" data-id="6"><div class="node"></div></div>
+<div class="node-wrap" data-id="7"><div class="node"></div></div>
+<div class="node-wrap" data-id="8"><div class="node"></div></div>
+<div class="node-wrap" data-id="9"><div class="node"></div></div>
 </div>
-<div class="error-msg" id="error-msg">ACCESS DENIED. INCORRECT KEY.</div>
+</div>
+<div class="error-msg" id="error-msg">ACCESS DENIED. INVALID PATTERN.</div>
 </div>
 </div>
 <div class="cyber-bg"></div>
 <div class="cyber-grid"></div>
 <div class="scanline"></div>
-<div class="secret-container">
+<div class="secret-container" id="main-secret-container">
 <div class="access-header">
 <div class="page-title">SECRET</div>
 <div class="access-badge">LEVEL: 5</div>
@@ -1326,137 +1008,249 @@ line-height: 1.2;
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-// --- ロック画面の処理 ---
-const lockScreen = document.getElementById('cyber-lock-screen');
-const passInput = document.getElementById('pass-input');
-const errorMsg = document.getElementById('error-msg');
 
-// ★ ここでパスワードを設定 (仮パスワード: 0101)
-const SECRET_KEY = "0101"; 
+  const SECRET_PATTERN = [1, 5, 9, 8, 7];
 
-// 自動で入力欄にフォーカス
-if(passInput) {
-passInput.focus();
+  const lockScreen = document.getElementById('cyber-lock-screen');
+  const mainContainer = document.getElementById('main-secret-container');
+  const container = document.getElementById('pattern-container');
+  const grid = document.getElementById('pattern-grid');
+  const pathEl = document.getElementById('pattern-path');
+  const dynamicLine = document.getElementById('dynamic-line');
+  const errorMsg = document.getElementById('error-msg');
+  
+  let isDrawing = false;
+  let currentPath = []; 
+  let pointsStr = "";   
 
-// 画面のどこをクリックしても入力欄にフォーカスを戻す（ハッカーの操作ミスを防ぐ）
-document.addEventListener('click', () => {
-if(!lockScreen.classList.contains('unlocked')) {
-passInput.focus();
-}
-});
+  // 各ノードの中心座標を計算
+  const getNodeCenter = (nodeWrap) => {
+    const rect = nodeWrap.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    return {
+      x: rect.left - containerRect.left + rect.width / 2,
+      y: rect.top - containerRect.top + rect.height / 2
+    };
+  };
 
-passInput.addEventListener('keydown', (e) => {
-if (e.key === 'Enter') {
-const inputValue = passInput.value;
+  // 飛び石（斜めなどで中央の点を抜かした時）の補完ロジック
+  const getIntermediate = (lastId, nextId) => {
+    const map = {
+      '1,3': 2, '3,1': 2,
+      '4,6': 5, '6,4': 5,
+      '7,9': 8, '9,7': 8,
+      '1,7': 4, '7,1': 4,
+      '2,8': 5, '8,2': 5,
+      '3,9': 6, '9,3': 6,
+      '1,9': 5, '9,1': 5,
+      '3,7': 5, '7,3': 5
+    };
+    return map[`${lastId},${nextId}`];
+  };
 
-if (inputValue === SECRET_KEY) {
-// パスワード正解
-errorMsg.classList.remove('show');
-errorMsg.style.opacity = 1;
-errorMsg.style.color = "#00ff66";
-errorMsg.style.textShadow = "0 0 5px #00ff66";
-errorMsg.innerText = "> DECRYPTION SUCCESSFUL. WELCOME, dt.";
+  const addNode = (nodeWrap) => {
+    const id = parseInt(nodeWrap.getAttribute('data-id'));
+    if (!currentPath.includes(id)) {
+      
+      // 飛び石補完処理
+      if (currentPath.length > 0) {
+        const lastId = currentPath[currentPath.length - 1];
+        const midId = getIntermediate(lastId, id);
+        if (midId && !currentPath.includes(midId)) {
+          const midNodeWrap = document.querySelector(`.node-wrap[data-id="${midId}"]`);
+          if (midNodeWrap) addNode(midNodeWrap); // 再帰で間の点を追加
+        }
+      }
 
-// 1秒後にロック画面を消す（フェードアウト）
-setTimeout(() => {
-lockScreen.classList.add('unlocked');
-// パスワード入力フィールドを無効化
-passInput.disabled = true;
-}, 1000);
-} else {
-// パスワード不正解
-passInput.value = "";
-errorMsg.innerText = "ACCESS DENIED. INCORRECT KEY.";
-errorMsg.classList.remove('show');
-// アニメーションを再発火させるためのハック
-void errorMsg.offsetWidth; 
-errorMsg.classList.add('show');
-}
-}
-});
-}
+      currentPath.push(id);
+      nodeWrap.classList.add('active');
+      
+      const center = getNodeCenter(nodeWrap);
+      pointsStr += `${pointsStr ? ' ' : ''}${center.x},${center.y}`;
+      pathEl.setAttribute('points', pointsStr);
+      
+      dynamicLine.setAttribute('x1', center.x);
+      dynamicLine.setAttribute('y1', center.y);
+      dynamicLine.style.display = 'block';
+    }
+  };
 
-// --- 以降は元の0723ページの文字化けギミックとコマンドギミック ---
-const targets = document.querySelectorAll('.data-label, th, .cyber-h2');
-const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&';
-targets.forEach(target => {
-const originalText = target.innerText;
-let iteration = 0;
-const interval = setInterval(() => {
-target.innerText = originalText.split('').map((letter, index) => {
-if(index < iteration) return originalText[index];
-return chars[Math.floor(Math.random() * chars.length)];
-}).join('');
-if(iteration >= originalText.length) clearInterval(interval);
-iteration += 1 / 2;
-}, 30);
-});
+  // ★座標ベースの当たり判定に完全刷新★
+  const handleMove = (clientX, clientY) => {
+    if (!isDrawing) return;
+    
+    const containerRect = container.getBoundingClientRect();
+    const x = clientX - containerRect.left;
+    const y = clientY - containerRect.top;
+    
+    dynamicLine.setAttribute('x2', x);
+    dynamicLine.setAttribute('y2', y);
 
-const activateOverride = () => {
-const overlay = document.createElement('div');
-overlay.style.cssText = `
-position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-background: rgba(255, 0, 0, 0.2); z-index: 99999;
-display: flex; justify-content: center; align-items: center; flex-direction: column;
-pointer-events: none; font-family: 'Orbitron', sans-serif;
-`;
-overlay.innerHTML = `
-<h1 style="font-size: 5vw; color: #ff0055; text-shadow: 0 0 20px red; background: #000; padding: 20px; border: 2px solid red;">SYSTEM OVERRIDE</h1>
-<p style="color: #fff; font-family: monospace; background: #000; padding: 5px;">> ACCESS GRANTED_</p>
-`;
-document.body.appendChild(overlay);
+    // すべてのノードに対して、現在の指/マウス座標からの距離を計算
+    document.querySelectorAll('.node-wrap').forEach(nodeWrap => {
+      const id = parseInt(nodeWrap.getAttribute('data-id'));
+      if (currentPath.includes(id)) return;
 
-const style = document.createElement('style');
-style.innerHTML = `@keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } } body { animation: shake 0.5s infinite; }`;
-document.head.appendChild(style);
+      const center = getNodeCenter(nodeWrap);
+      const dist = Math.hypot(x - center.x, y - center.y);
+      
+      // 半径35px以内に入ったらヒットとみなす（スマホでもスッと吸い付く）
+      if (dist < 35) {
+        addNode(nodeWrap);
+      }
+    });
+  };
 
-setTimeout(() => {
-overlay.remove();
-document.body.style.animation = "";
-alert("Welcome to the Deep Layer.");
-}, 3000);
-};
+  // 開始時の判定も距離ベースに変更（指が少しズレていても始まるように）
+  const handleStart = (clientX, clientY) => {
+    resetPattern();
+    const containerRect = container.getBoundingClientRect();
+    const x = clientX - containerRect.left;
+    const y = clientY - containerRect.top;
 
-const trigger = document.getElementById('secret-trigger');
-let tapCount = 0;
-let resetTimer;
+    document.querySelectorAll('.node-wrap').forEach(nodeWrap => {
+      const center = getNodeCenter(nodeWrap);
+      const dist = Math.hypot(x - center.x, y - center.y);
+      if (dist < 35) {
+        isDrawing = true;
+        addNode(nodeWrap);
+      }
+    });
+  };
 
-if (trigger) {
-trigger.addEventListener('click', () => {
-tapCount++;
-trigger.style.borderColor = (tapCount % 2 === 0) ? '#ff0055' : '#00f3ff';
-clearTimeout(resetTimer);
-if (tapCount >= 7) {
-activateOverride();
-tapCount = 0;
-trigger.style.borderColor = '#00f3ff';
-} else {
-resetTimer = setTimeout(() => {
-tapCount = 0;
-trigger.style.borderColor = '#00f3ff';
-}, 500);
-}
-});
-}
+  grid.addEventListener('mousedown', (e) => handleStart(e.clientX, e.clientY));
+  window.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+  window.addEventListener('mouseup', () => { if (isDrawing) checkPattern(); });
 
-const code = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-let inputPos = 0;
-document.addEventListener('keydown', (e) => {
-// ロック画面が表示されている間はコナミコマンドを無効化
-if(!lockScreen.classList.contains('unlocked')) return;
+  grid.addEventListener('touchstart', (e) => {
+    e.preventDefault(); 
+    handleStart(e.touches[0].clientX, e.touches[0].clientY);
+  });
+  window.addEventListener('touchmove', (e) => {
+    if(!isDrawing) return;
+    e.preventDefault();
+    handleMove(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: false });
+  window.addEventListener('touchend', () => { if (isDrawing) checkPattern(); });
 
-if (e.key === code[inputPos]) {
-inputPos++;
-if (inputPos === code.length) {
-activateOverride();
-inputPos = 0;
-}
-} else {
-inputPos = 0;
-}
-});
+  const resetPattern = () => {
+    currentPath = [];
+    pointsStr = "";
+    pathEl.setAttribute('points', "");
+    dynamicLine.style.display = 'none';
+    container.classList.remove('error', 'success');
+    document.querySelectorAll('.node-wrap').forEach(n => n.classList.remove('active'));
+    errorMsg.classList.remove('show', 'success');
+  };
 
-console.log("%c SYSTEM READY ", "background: #00f3ff; color: #000; padding: 5px; font-weight: bold;");
+  const checkPattern = () => {
+    isDrawing = false;
+    dynamicLine.style.display = 'none';
+    
+    if (currentPath.length === 0) return;
+
+    const isCorrect = JSON.stringify(currentPath) === JSON.stringify(SECRET_PATTERN);
+
+    if (isCorrect) {
+      container.classList.add('success');
+      errorMsg.innerText = "> CLEARANCE ACCEPTED.";
+      errorMsg.classList.add('show', 'success');
+      
+      setTimeout(() => {
+        lockScreen.classList.add('unlocked');
+        mainContainer.classList.add('unlocked');
+      }, 1000);
+    } else {
+      container.classList.add('error');
+      errorMsg.innerText = "ACCESS DENIED. INVALID PATTERN.";
+      
+      errorMsg.classList.remove('show');
+      void errorMsg.offsetWidth; 
+      errorMsg.classList.add('show');
+      
+      setTimeout(() => { if (!isDrawing) resetPattern(); }, 1000);
+    }
+  };
+
+
+  const targets = document.querySelectorAll('.data-label, th, .cyber-h2');
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&';
+  targets.forEach(target => {
+    const originalText = target.innerText;
+    let iteration = 0;
+    const interval = setInterval(() => {
+      target.innerText = originalText.split('').map((letter, index) => {
+        if(index < iteration) return originalText[index];
+        return chars[Math.floor(Math.random() * chars.length)];
+      }).join('');
+      if(iteration >= originalText.length) clearInterval(interval);
+      iteration += 1 / 2;
+    }, 30);
+  });
+
+  const activateOverride = () => {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(255, 0, 0, 0.2); z-index: 99999;
+      display: flex; justify-content: center; align-items: center; flex-direction: column;
+      pointer-events: none; font-family: 'Orbitron', sans-serif;
+    `;
+    overlay.innerHTML = `
+      <h1 style="font-size: 5vw; color: #ff0055; text-shadow: 0 0 20px red; background: #000; padding: 20px; border: 2px solid red;">SYSTEM OVERRIDE</h1>
+      <p style="color: #fff; font-family: monospace; background: #000; padding: 5px;">> ACCESS GRANTED_</p>
+    `;
+    document.body.appendChild(overlay);
+
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } } body { animation: shake 0.5s infinite; }`;
+    document.head.appendChild(style);
+
+    setTimeout(() => {
+      overlay.remove();
+      document.body.style.animation = "";
+      alert("Welcome to the Deep Layer.");
+    }, 3000);
+  };
+
+  const trigger = document.getElementById('secret-trigger');
+  let tapCount = 0;
+  let resetTimer;
+
+  if (trigger) {
+    trigger.addEventListener('click', () => {
+      tapCount++;
+      trigger.style.borderColor = (tapCount % 2 === 0) ? '#ff0055' : '#00f3ff';
+      clearTimeout(resetTimer);
+      if (tapCount >= 7) {
+        activateOverride();
+        tapCount = 0;
+        trigger.style.borderColor = '#00f3ff';
+      } else {
+        resetTimer = setTimeout(() => {
+          tapCount = 0;
+          trigger.style.borderColor = '#00f3ff';
+        }, 500);
+      }
+    });
+  }
+
+  const code = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  let inputPos = 0;
+  document.addEventListener('keydown', (e) => {
+    if(!lockScreen.classList.contains('unlocked')) return;
+    if (e.key === code[inputPos]) {
+      inputPos++;
+      if (inputPos === code.length) {
+        activateOverride();
+        inputPos = 0;
+      }
+    } else {
+      inputPos = 0;
+    }
+  });
+
+  console.log("%c SYSTEM READY ", "background: #00f3ff; color: #000; padding: 5px; font-weight: bold;");
 });
 </script>
     </section>

@@ -753,224 +753,336 @@
 <style>
 /* --- カラー & 変数定義 --- */
 :root {
---cyber-cyan: #00f3ff;
---cyber-pink: #ff0055;
---cyber-dark: #050505;
---cyber-grid: rgba(0, 243, 255, 0.1);
---scan-line: rgba(0, 243, 255, 0.3);
+  --cyber-cyan: #00f3ff;
+  --cyber-pink: #ff0055;
+  --cyber-green: #00ff66;
+  --cyber-dark: #050505;
+  --cyber-grid: rgba(0, 243, 255, 0.1);
+  --scan-line: rgba(0, 243, 255, 0.3);
 }
 
 /* --- 全体設定 --- */
 body {
-background-color: var(--cyber-dark) !important;
-color: var(--cyber-cyan) !important;
-font-family: 'Orbitron', sans-serif;
-overflow-x: hidden;
-/* デジタルグリッド背景 */
-background-image: 
-linear-gradient(var(--cyber-grid) 1px, transparent 1px),
-linear-gradient(90deg, var(--cyber-grid) 1px, transparent 1px);
-background-size: 30px 30px;
-background-position: center center;
+  background-color: var(--cyber-dark) !important;
+  color: var(--cyber-cyan) !important;
+  font-family: 'Orbitron', sans-serif;
+  overflow-x: hidden;
+  background-image: 
+    linear-gradient(var(--cyber-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cyber-grid) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: center center;
 }
 
-/* 画面全体を覆うスキャンラインエフェクト */
 body::after {
-content: "";
-position: fixed;
-top: 0; left: 0; width: 100vw; height: 100vh;
-background: repeating-linear-gradient(
-0deg,
-rgba(0, 0, 0, 0.15) 0px,
-rgba(0, 0, 0, 0.15) 1px,
-transparent 1px,
-transparent 2px
-);
-pointer-events: none;
-z-index: 100;
-animation: scanline-scroll 10s linear infinite;
+  content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px);
+  pointer-events: none; z-index: 100;
+  animation: scanline-scroll 10s linear infinite;
 }
-@keyframes scanline-scroll {
-from { background-position: 0 0; }
-to { background-position: 0 100%; }
-}
+@keyframes scanline-scroll { from { background-position: 0 0; } to { background-position: 0 100%; } }
 
 /* --- メインコンテナ (HUD風デザイン) --- */
 .cyber-hud-container {
-position: relative;
-max-width: 800px;
-margin: 10vh auto 2rem;
-padding: 3rem;
-background: rgba(5, 5, 5, 0.8);
-border: 2px solid var(--cyber-cyan);
-box-shadow: 0 0 30px rgba(0, 243, 255, 0.2), inset 0 0 20px rgba(0, 243, 255, 0.1);
-overflow: hidden;
+  position: relative; max-width: 800px; margin: 10vh auto 2rem; padding: 3rem;
+  background: rgba(5, 5, 5, 0.8); border: 2px solid var(--cyber-cyan);
+  box-shadow: 0 0 30px rgba(0, 243, 255, 0.2), inset 0 0 20px rgba(0, 243, 255, 0.1);
+  overflow: hidden;
+  /* 初期状態はぼかし（ロック画面用） */
+  filter: blur(8px); opacity: 0.3; transition: all 1s ease-out;
 }
+.cyber-hud-container.unlocked { filter: blur(0); opacity: 1; }
 
-/* 四隅の装飾パーツ */
-.hud-corner {
-position: absolute;
-width: 30px; height: 30px;
-border-color: var(--cyber-cyan);
-border-style: solid;
-z-index: 10;
-}
+.hud-corner { position: absolute; width: 30px; height: 30px; border-color: var(--cyber-cyan); border-style: solid; z-index: 10; }
 .tl { top: 0; left: 0; border-width: 4px 0 0 4px; }
 .tr { top: 0; right: 0; border-width: 4px 4px 0 0; }
 .bl { bottom: 0; left: 0; border-width: 0 0 4px 4px; }
 .br { bottom: 0; right: 0; border-width: 0 4px 4px 0; }
 
-/* 内部のスキャン光 */
 .scan-beam-inner {
-position: absolute;
-top: -50%; left: -50%; width: 200%; height: 50%;
-background: linear-gradient(to bottom, transparent, var(--scan-line), transparent);
-transform: rotate(-45deg);
-animation: beam-scan 5s ease-in-out infinite;
-opacity: 0.5;
-pointer-events: none;
+  position: absolute; top: -50%; left: -50%; width: 200%; height: 50%;
+  background: linear-gradient(to bottom, transparent, var(--scan-line), transparent);
+  transform: rotate(-45deg); animation: beam-scan 5s ease-in-out infinite;
+  opacity: 0.5; pointer-events: none;
 }
-@keyframes beam-scan {
-0% { top: -150%; }
-100% { top: 150%; }
-}
+@keyframes beam-scan { 0% { top: -150%; } 100% { top: 150%; } }
 
 /* --- テキストエフェクト --- */
 h1.cyber-title {
-font-size: 3rem;
-font-weight: 900;
-text-align: center;
-margin-bottom: 0.5rem;
-position: relative;
-text-shadow: 0 0 10px var(--cyber-cyan), 0 0 20px var(--cyber-cyan);
-/* グリッチアニメーション */
-animation: glitch-skew 2s infinite linear alternate-reverse;
+  font-size: 3rem; font-weight: 900; text-align: center; margin-bottom: 0.5rem; position: relative;
+  text-shadow: 0 0 10px var(--cyber-cyan), 0 0 20px var(--cyber-cyan);
+  animation: glitch-skew 2s infinite linear alternate-reverse;
 }
 h1.cyber-title::before, h1.cyber-title::after {
-content: attr(data-text);
-position: absolute;
-top: 0; left: 0; width: 100%; height: 100%;
-opacity: 0.8;
+  content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8;
 }
-h1.cyber-title::before {
-color: var(--cyber-pink);
-z-index: -1;
-animation: glitch-anim-1 0.4s infinite linear alternate-reverse;
-}
-h1.cyber-title::after {
-color: #00ff00; /* 緑の色ズレ */
-z-index: -2;
-animation: glitch-anim-2 0.4s infinite linear alternate-reverse;
-}
+h1.cyber-title::before { color: var(--cyber-pink); z-index: -1; animation: glitch-anim-1 0.4s infinite linear alternate-reverse; }
+h1.cyber-title::after { color: #00ff00; z-index: -2; animation: glitch-anim-2 0.4s infinite linear alternate-reverse; }
 
 .cyber-subtitle {
-text-align: center;
-font-family: 'JetBrains Mono', monospace;
-color: #fff;
-letter-spacing: 0.2em;
-margin-bottom: 3rem;
-opacity: 0.8;
+  text-align: center; font-family: 'JetBrains Mono', monospace; color: #fff;
+  letter-spacing: 0.2em; margin-bottom: 3rem; opacity: 0.8;
 }
 .cyber-subtitle::before { content: "[ "; color: var(--cyber-cyan); }
 .cyber-subtitle::after { content: " ]"; color: var(--cyber-cyan); }
 
-/* --- コンテンツエリア --- */
-.cyber-content {
-font-family: 'JetBrains Mono', monospace;
-color: #e0e0e0;
-line-height: 1.8;
-border-top: 1px dashed var(--cyber-cyan);
-padding-top: 2rem;
-}
+.cyber-content { font-family: 'JetBrains Mono', monospace; color: #e0e0e0; line-height: 1.8; border-top: 1px dashed var(--cyber-cyan); padding-top: 2rem; }
+ul.cyber-list { list-style: none; padding: 0; margin-top: 2rem; }
+ul.cyber-list li { margin-bottom: 1.5rem; padding-left: 1.5rem; position: relative; }
+ul.cyber-list li::before { content: ">"; position: absolute; left: 0; color: var(--cyber-cyan); font-weight: bold; animation: blink 1s infinite; }
 
-/* サイバーパンクなリスト */
-ul.cyber-list {
-list-style: none;
-padding: 0;
-margin-top: 2rem;
-}
-ul.cyber-list li {
-margin-bottom: 1.5rem;
-padding-left: 1.5rem;
-position: relative;
-}
-/* リストマーカー */
-ul.cyber-list li::before {
-content: ">";
-position: absolute;
-left: 0;
-color: var(--cyber-cyan);
-font-weight: bold;
-animation: blink 1s infinite;
-}
-
-/* リンクスタイル */
 a.cyber-link {
-text-decoration: none;
-color: var(--cyber-cyan);
-font-weight: 700;
-letter-spacing: 0.1em;
-position: relative;
-transition: all 0.3s;
-padding: 0.5rem 1rem;
-border: 1px solid transparent;
+  text-decoration: none; color: var(--cyber-cyan); font-weight: 700; letter-spacing: 0.1em;
+  position: relative; transition: all 0.3s; padding: 0.5rem 1rem; border: 1px solid transparent;
 }
-a.cyber-link:hover {
-background: rgba(0, 243, 255, 0.1);
-border-color: var(--cyber-cyan);
-box-shadow: 0 0 15px var(--cyber-cyan);
-text-shadow: 0 0 5px #fff;
-}
-/* ピンク色のリンク */
+a.cyber-link:hover { background: rgba(0, 243, 255, 0.1); border-color: var(--cyber-cyan); box-shadow: 0 0 15px var(--cyber-cyan); text-shadow: 0 0 5px #fff; }
 a.cyber-link.pink { color: var(--cyber-pink); }
-a.cyber-link.pink:hover {
-background: rgba(255, 0, 85, 0.1);
-border-color: var(--cyber-pink);
-box-shadow: 0 0 15px var(--cyber-pink);
+a.cyber-link.pink:hover { background: rgba(255, 0, 85, 0.1); border-color: var(--cyber-pink); box-shadow: 0 0 15px var(--cyber-pink); }
+
+/* --- 🌟 パターンロック画面 🌟 --- */
+#pattern-lock-screen {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
+  z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center;
+  transition: opacity 0.8s ease-out, visibility 0.8s;
+}
+#pattern-lock-screen.unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.lock-info {
+  text-align: center; margin-bottom: 2rem; font-family: 'JetBrains Mono', monospace;
+  color: var(--cyber-cyan); text-shadow: 0 0 8px var(--cyber-cyan);
+}
+.lock-info h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 0.5rem; letter-spacing: 2px; }
+.lock-msg { font-size: 0.9rem; min-height: 1.2rem; }
+.lock-msg.error { color: var(--cyber-pink); text-shadow: 0 0 8px var(--cyber-pink); animation: shake 0.3s; }
+.lock-msg.success { color: var(--cyber-green); text-shadow: 0 0 8px var(--cyber-green); }
+
+/* 3x3グリッドコンテナ */
+.pattern-container {
+  position: relative; width: 300px; height: 300px;
+  touch-action: none; /* スマホのスワイプスクロール防止 */
+}
+/* 線を描画するSVGレイヤー */
+#pattern-svg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;
+}
+#pattern-svg polyline, #pattern-svg line {
+  stroke: var(--cyber-cyan); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px var(--cyber-cyan)); transition: stroke 0.3s;
 }
 
-/* --- アニメーション定義 --- */
+/* 9つのノード（点） */
+.pattern-grid {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+  z-index: 2;
+}
+.node-wrap {
+  display: flex; justify-content: center; align-items: center; cursor: crosshair;
+}
+.node {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: transparent; border: 2px solid var(--cyber-cyan);
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+  transition: all 0.2s; pointer-events: none; /* 判定はwrapで行う */
+}
+/* 通過したノード */
+.node-wrap.active .node {
+  background: var(--cyber-cyan); transform: scale(1.5);
+  box-shadow: 0 0 20px var(--cyber-cyan);
+}
+
+/* --- エラー／成功時のカラー変更 --- */
+.pattern-container.error #pattern-svg polyline, .pattern-container.error #pattern-svg line { stroke: var(--cyber-pink); filter: drop-shadow(0 0 8px var(--cyber-pink)); }
+.pattern-container.error .node-wrap.active .node { background: var(--cyber-pink); border-color: var(--cyber-pink); box-shadow: 0 0 20px var(--cyber-pink); }
+.pattern-container.success #pattern-svg polyline, .pattern-container.success #pattern-svg line { stroke: var(--cyber-green); filter: drop-shadow(0 0 8px var(--cyber-green)); }
+.pattern-container.success .node-wrap.active .node { background: var(--cyber-green); border-color: var(--cyber-green); box-shadow: 0 0 20px var(--cyber-green); }
+
+/* アニメーション */
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-/* グリッチ用アニメーション（激しめ） */
-@keyframes glitch-skew {
-0% { transform: skew(0deg); }
-20% { transform: skew(0deg); }
-21% { transform: skew(2deg); }
-22% { transform: skew(-2deg); }
-23% { transform: skew(0deg); }
-100% { transform: skew(0deg); }
-}
-@keyframes glitch-anim-1 {
-0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 2px); }
-100% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -2px); }
-}
-@keyframes glitch-anim-2 {
-0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -2px); }
-100% { clip-path: inset(80% 0 20% 0); transform: translate(-2px, 2px); }
-}
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+@keyframes glitch-skew { 0% { transform: skew(0deg); } 20% { transform: skew(0deg); } 21% { transform: skew(2deg); } 22% { transform: skew(-2deg); } 23% { transform: skew(0deg); } 100% { transform: skew(0deg); } }
+@keyframes glitch-anim-1 { 0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 2px); } 100% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -2px); } }
+@keyframes glitch-anim-2 { 0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -2px); } 100% { clip-path: inset(80% 0 20% 0); transform: translate(-2px, 2px); } }
 </style>
-<div class="cyber-hud-container">
-<div class="hud-corner tl"></div>
-<div class="hud-corner tr"></div>
-<div class="hud-corner bl"></div>
-<div class="hud-corner br"></div>
-<div class="scan-beam-inner"></div>
-<h1 class="cyber-title" data-text="SYSTEM ROOT">SYSTEM ROOT</h1>
-<p class="cyber-subtitle">AUTHENTICATION VERIFIED. WELCOME ADMINISTRATOR.</p>
-<div class="cyber-content">
-<p>ここは認証されたユーザーのみがアクセスできる管理領域です。</p>
-<p>開発中のドラフト記事や、表向きには公開していない秘密のリンク集として利用してください。</p>
-<ul class="cyber-list">
-<li>
-<a href="/0723/" class="cyber-link pink">>> ACCESS SECRET SECTOR</a>
-</li>
-<li>
-<a href="/" class="cyber-link">>> RETURN TO SURFACE</a>
-</li>
-</ul>
+<div id="pattern-lock-screen">
+  <div class="lock-info">
+    <h2>RESTRICTED_AREA</h2>
+    <div id="lock-msg" class="lock-msg">> INPUT_SECURITY_PATTERN_</div>
+  </div>
+  <div class="pattern-container" id="pattern-container">
+    <svg id="pattern-svg">
+      <polyline id="pattern-path" fill="none" points=""></polyline>
+      <line id="dynamic-line" x1="0" y1="0" x2="0" y2="0" style="display:none;"></line>
+    </svg>
+    <div class="pattern-grid" id="pattern-grid">
+      <div class="node-wrap" data-id="1"><div class="node"></div></div>
+      <div class="node-wrap" data-id="2"><div class="node"></div></div>
+      <div class="node-wrap" data-id="3"><div class="node"></div></div>
+      <div class="node-wrap" data-id="4"><div class="node"></div></div>
+      <div class="node-wrap" data-id="5"><div class="node"></div></div>
+      <div class="node-wrap" data-id="6"><div class="node"></div></div>
+      <div class="node-wrap" data-id="7"><div class="node"></div></div>
+      <div class="node-wrap" data-id="8"><div class="node"></div></div>
+      <div class="node-wrap" data-id="9"><div class="node"></div></div>
+    </div>
+  </div>
 </div>
+<div class="cyber-hud-container" id="main-hud">
+  <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+  <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+  <div class="scan-beam-inner"></div>
+  <h1 class="cyber-title" data-text="SYSTEM ROOT">SYSTEM ROOT</h1>
+  <p class="cyber-subtitle">AUTHENTICATION VERIFIED.</p>
+  <div class="cyber-content">
+    <p>表向きには公開しないリンク集や記事を載せる。</p>
+    <ul class="cyber-list">
+      <li><a href="/0723/" class="cyber-link pink">>> ACCESS SECRET SECTOR</a></li>
+      <li><a href="/" class="cyber-link">>> RETURN TO SURFACE</a></li>
+    </ul>
+  </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // ★ ここで解除パターンを設定 (数字は 1〜9)
+  // 例: 1 -> 4 -> 7 -> 8 -> 9 (L字型)
+  const SECRET_PATTERN = [1, 4, 7, 8, 9];
+
+  const lockScreen = document.getElementById('pattern-lock-screen');
+  const mainHud = document.getElementById('main-hud');
+  const container = document.getElementById('pattern-container');
+  const grid = document.getElementById('pattern-grid');
+  const pathEl = document.getElementById('pattern-path');
+  const dynamicLine = document.getElementById('dynamic-line');
+  const msgEl = document.getElementById('lock-msg');
+  
+  let isDrawing = false;
+  let currentPath = []; // 通過したノードIDの配列
+  let pointsStr = "";   // SVGのpolyline用座標文字列
+
+  // ノードの中心座標を取得する関数
+  const getNodeCenter = (nodeWrap) => {
+    const rect = nodeWrap.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    return {
+      x: rect.left - containerRect.left + rect.width / 2,
+      y: rect.top - containerRect.top + rect.height / 2
+    };
+  };
+
+  // ノードを追加処理する関数
+  const addNode = (nodeWrap) => {
+    const id = parseInt(nodeWrap.getAttribute('data-id'));
+    // まだ通っていないノードのみ追加
+    if (!currentPath.includes(id)) {
+      currentPath.push(id);
+      nodeWrap.classList.add('active');
+      
+      const center = getNodeCenter(nodeWrap);
+      pointsStr += `${pointsStr ? ' ' : ''}${center.x},${center.y}`;
+      pathEl.setAttribute('points', pointsStr);
+      
+      // 動的線の起点を最新のノードに更新
+      dynamicLine.setAttribute('x1', center.x);
+      dynamicLine.setAttribute('y1', center.y);
+      dynamicLine.style.display = 'block';
+    }
+  };
+
+  // マウス/タッチ座標から要素を取得して処理
+  const handleMove = (clientX, clientY) => {
+    if (!isDrawing) return;
+    
+    // 動的線の終点をカーソル/指に追従させる
+    const containerRect = container.getBoundingClientRect();
+    dynamicLine.setAttribute('x2', clientX - containerRect.left);
+    dynamicLine.setAttribute('y2', clientY - containerRect.top);
+
+    // 座標下にある要素を取得
+    const el = document.elementFromPoint(clientX, clientY);
+    if (el && el.classList.contains('node-wrap')) {
+      addNode(el);
+    }
+  };
+
+  // --- イベントリスナー (PC / マウス) ---
+  grid.addEventListener('mousedown', (e) => {
+    if (e.target.classList.contains('node-wrap')) {
+      resetPattern();
+      isDrawing = true;
+      addNode(e.target);
+    }
+  });
+  window.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+  window.addEventListener('mouseup', () => { if (isDrawing) checkPattern(); });
+
+  // --- イベントリスナー (スマホ / タッチ) ---
+  grid.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // スクロール防止
+    const touch = e.touches[0];
+    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (el && el.classList.contains('node-wrap')) {
+      resetPattern();
+      isDrawing = true;
+      addNode(el);
+    }
+  });
+  window.addEventListener('touchmove', (e) => {
+    if(!isDrawing) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    handleMove(touch.clientX, touch.clientY);
+  }, { passive: false });
+  window.addEventListener('touchend', () => { if (isDrawing) checkPattern(); });
+
+  // リセット処理
+  const resetPattern = () => {
+    currentPath = [];
+    pointsStr = "";
+    pathEl.setAttribute('points', "");
+    dynamicLine.style.display = 'none';
+    container.classList.remove('error', 'success');
+    document.querySelectorAll('.node-wrap').forEach(n => n.classList.remove('active'));
+    msgEl.innerText = "> INPUT_SECURITY_PATTERN_";
+    msgEl.className = "lock-msg";
+  };
+
+  // 判定処理
+  const checkPattern = () => {
+    isDrawing = false;
+    dynamicLine.style.display = 'none'; // 追従線を消す
+    
+    // パターンが空なら何もしない
+    if (currentPath.length === 0) return;
+
+    // 配列同士の比較
+    const isCorrect = JSON.stringify(currentPath) === JSON.stringify(SECRET_PATTERN);
+
+    if (isCorrect) {
+      // 成功！
+      container.classList.add('success');
+      msgEl.innerText = "> ACCESS_GRANTED";
+      msgEl.className = "lock-msg success";
+      
+      // 1.5秒後にロック画面をフェードアウトし、HUDをクリアにする
+      setTimeout(() => {
+        lockScreen.classList.add('unlocked');
+        mainHud.classList.add('unlocked');
+      }, 1000);
+    } else {
+      // 失敗
+      container.classList.add('error');
+      msgEl.innerText = "> ERROR: INVALID_PATTERN";
+      msgEl.className = "lock-msg error";
+      
+      // 少し待ってからリセット
+      setTimeout(() => {
+        if (!isDrawing) resetPattern();
+      }, 1000);
+    }
+  };
+});
+</script>
     </section>
     <footer class="pt-8">
       
