@@ -227,7 +227,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "25"
+    "wordCount": "42"
   }]
   </script>
 
@@ -788,15 +788,15 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       <hr>
-
-
-
-
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
   window.MathJax = {
-    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-    svg: { fontCache: 'global' },
+    tex: { 
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+     
+    svg: { fontCache: 'local' },
     startup: {
       pageReady: () => {
         return MathJax.startup.defaultPageReady().then(() => {
@@ -808,503 +808,559 @@
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
+<script type="text/template" id="tpl-report"># 令和○年度 専門実験 報告書
+
+**提出日:** 202X年 X月 X日
+**学年・学科:** 2年 情報工学科
+**学籍番号:** XXXXXX
+**氏名:** ---
+
+## 1. 実験目的
+本実験では、[実験の目的] について理解を深め、その動作原理を検証する。
+
+## 2. 理論・原理
+この実験における基本方程式は以下の通りである。
+
+$$
+F = m \frac{d^2 x}{dt^2}
+$$
+
+また、回路の抵抗値 $R$ はオームの法則 $V = IR$ により求められる。
+
+## 3. 実験方法および使用器具
+1. 電源装置を起動し、電圧を 5.0V に設定する。
+2. 電流計を用いて回路内の電流を計測する。
+
+## 4. 実験結果
+測定結果を以下の表に示す。
+
+| 測定回数 | 電圧 $V$ [V] | 電流 $I$ [A] |
+|:---:|:---:|:---:|
+| 1 | 5.0 | 0.21 |
+| 2 | 10.0 | 0.42 |
+| 3 | 15.0 | 0.63 |
+| 4 | 20.0 | 0.81 |
+
+## 5. 考察
+実験結果より、電圧と電流は比例関係にあることが確認できた。誤差の原因として...
+
+## 6. 結論
+本実験を通じて、...
+</script>
+
+<script type="text/template" id="tpl-math"># Mathematical Notes
+
+## 1. ガンマ関数とゼータ関数
+リーマンゼータ関数 $\zeta(s)$ は以下のように定義される。
+
+$$
+\zeta(s) = \sum_{n=1}^{\infty} \frac{1}{n^s} \quad (\Re(s) > 1)
+$$
+
+また、オイラーのガンマ関数 $\Gamma(s)$ との間には次の美しい関係式が成り立つ。
+
+$$
+\zeta(s)\Gamma(s) = \int_{0}^{\infty} \frac{x^{s-1}}{e^x - 1} dx
+$$
+
+## 2. 圏論の基礎
+対象 $A, B$ について、射の集合を $\mathrm{Hom}(A, B)$ と記述する...
+</script>
+
+<script type="text/template" id="tpl-memo"># [LOG] SYSTEM_UPDATE_MEMO
+**DATE:** 202X.XX.XX
+**STATUS:** ACTIVE
+
+## TODO_LIST
+- [ ] データベースのバックアップ
+- [ ] UIのレスポンシブ最適化
+- [x] LaTeXレンダリングエンジンの組み込み
+
+## CODE_SNIPPET
+Pythonによる簡単なスクリプト例：
+
+~~~python
+import numpy as np
+
+def calculate_energy(mass):
+    c = 299792458 # 光速 (m/s)
+    return mass * (c ** 2)
+
+print(f"Energy: {calculate_energy(1.0)} J")
+~~~
+</script>
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
 
-   
-  html body .ne-container {
-    font-family: "JetBrains Mono", monospace;
-    width: 100%;
-    height: 90vh; 
-    min-height: 700px;
-    background-color: #09090b;
-    border: 1px solid #333;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-  .ne-container * { box-sizing: border-box; }
-
-   
-  html body .ne-container h3, 
-  html body .ne-container p, 
-  html body .ne-container div, 
-  html body .ne-container span, 
-  html body .ne-container button,
-  html body .ne-container select {
-    text-decoration: none !important;
-    border-bottom: none !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    color: inherit;
+  #editor-space-root {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #030406; z-index: 9999; overflow: hidden;
+    font-family: 'JetBrains Mono', monospace; color: #e2e8f0;
+    display: flex; flex-direction: column;
   }
 
-   
-  .ne-header {
-    height: auto;
-    min-height: 50px;
-    background: #18181b;
-    border-bottom: 1px solid #333 !important;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    gap: 10px;
-    flex-shrink: 0;
+  .editor-bg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+      radial-gradient(circle at 20% 0%, rgba(0, 243, 255, 0.03) 0%, transparent 60%),
+      radial-gradient(circle at 20% 100%, rgba(255, 0, 85, 0.02) 0%, transparent 60%);
+    z-index: 1; pointer-events: none;
+  }
+  .grid-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+      linear-gradient(rgba(0, 243, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 243, 255, 0.02) 1px, transparent 1px);
+    background-size: 20px 20px; z-index: 2; pointer-events: none;
   }
 
-  .ne-brand {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-
-  .ne-title {
-    font-weight: bold;
-    color: #22d3ee;  
-    letter-spacing: 0.1em;
-  }
-
-   
-  .ne-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .ne-separator {
-    width: 1px;
-    height: 20px;
-    background: #444;
-    margin: 0 4px;
-  }
-
-  html body .ne-container button.ne-btn {
-    background: transparent !important;
-    border: 1px solid #444 !important;
-    color: #a1a1aa !important;
-    padding: 4px 10px;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: none !important;
-    border-radius: 2px;
-    height: 28px;
-    white-space: nowrap;
-  }
-  html body .ne-container button.ne-btn:hover {
-    border-color: #22d3ee !important;
-    color: #22d3ee !important;
-    background: rgba(34, 211, 238, 0.1) !important;
-  }
-  html body .ne-container button.ne-btn-primary {
-    border-color: #22d3ee !important;
-    color: #22d3ee !important;
-    font-weight: bold;
-  }
-  html body .ne-container button.ne-btn-danger {
-    border-color: #ef4444 !important;
-    color: #ef4444 !important;
-  }
-  html body .ne-container button.ne-btn-danger:hover {
-    background: rgba(239, 68, 68, 0.1) !important;
-  }
-
-   
-  html body .ne-container select.ne-select {
-    background: #000 !important;
-    border: 1px solid #444 !important;
-    color: #22d3ee !important;
-    padding: 0 8px;
-    font-family: inherit;
-    font-size: 0.75rem;
-    height: 28px;
-    border-radius: 2px;
-    cursor: pointer;
-    box-shadow: none !important;
-  }
-  html body .ne-container select.ne-select:focus {
-    outline: none;
-    border-color: #22d3ee !important;
-  }
-
-   
-  .ne-workspace {
-    flex: 1;
-    display: flex;
-    overflow: hidden;
-  }
-
-   
-  .ne-input-pane {
-    flex: 1;
-    border-right: 1px solid #333 !important;
-    display: flex;
-    flex-direction: column;
-    background: #0c0c0e;
-    position: relative;
+  .editor-header {
+    position: relative; z-index: 10; padding: 10px 20px;
+    background: rgba(0, 5, 10, 0.95); border-bottom: 2px solid rgba(0, 243, 255, 0.3);
+    display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
   }
   
-  html body .ne-container textarea.ne-textarea {
-    flex: 1;
-    width: 100%;
-    height: 100%;
-    background: transparent !important;
-    border: none !important;
-    color: #e2e8f0 !important;
-    padding: 1.5rem;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 14px;
-    line-height: 1.6;
-    resize: none;
-    outline: none;
-    overflow-y: auto;
-    box-shadow: none !important;
-    appearance: none !important;
-  }
-  .ne-textarea::placeholder { color: #333; }
+  .brand-area { display: flex; align-items: center; gap: 15px; }
+  .brand-title { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); letter-spacing: 2px; }
+  .brand-title span { color: #00f3ff; }
 
-   
-  .ne-preview-pane {
-    flex: 1;
+  .toolbar { display: flex; gap: 6px; align-items: center; }
+  .tool-btn {
+    background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.2);
+    color: #00f3ff; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: bold;
+    padding: 6px 12px; cursor: pointer; transition: all 0.2s; border-radius: 2px; letter-spacing: 1px;
+  }
+  .tool-btn:hover { background: #00f3ff; color: #000; box-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
+  
+  .tool-btn.danger { border-color: rgba(255, 0, 85, 0.3); color: #ff0055; background: rgba(255, 0, 85, 0.05); }
+  .tool-btn.danger:hover { background: #ff0055; color: #000; box-shadow: 0 0 10px rgba(255, 0, 85, 0.5); }
+
+  .separator { width: 1px; height: 20px; background: rgba(255, 255, 255, 0.1); margin: 0 5px; }
+
+  select.tool-select {
+    background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 243, 255, 0.2);
+    color: #00f3ff; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: bold;
+    padding: 5px 10px; outline: none; cursor: pointer;
+  }
+  select.tool-select:hover, select.tool-select:focus { border-color: #00f3ff; }
+
+  .exit-btn {
+    padding: 6px 15px; background: transparent; border: 1px solid #ff0055; color: #ff0055;
+    font-family: 'Orbitron', sans-serif; font-size: 0.7rem; cursor: pointer; transition: all 0.3s;
+    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  }
+  .exit-btn:hover { background: #ff0055; color: #000; box-shadow: 0 0 15px rgba(255, 0, 85, 0.5); }
+
+  .workspace { position: relative; z-index: 10; flex-grow: 1; display: flex; overflow: hidden; }
+
+  .input-pane {
+    width: 50%; background: rgba(0, 0, 0, 0.7); border-right: 1px solid rgba(0, 243, 255, 0.2);
+    display: flex; flex-direction: column; position: relative;
+  }
+  
+  .crt-scanline {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%);
+    background-size: 100% 4px; z-index: 1; pointer-events: none; opacity: 0.8;
+  }
+
+  .pane-header {
+    background: rgba(0, 243, 255, 0.05); border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+    padding: 5px 15px; font-size: 0.6rem; color: rgba(0, 243, 255, 0.6); letter-spacing: 2px;
+    font-family: 'Orbitron', sans-serif; display: flex; justify-content: space-between;
+    position: relative; z-index: 2;
+  }
+  
+  textarea.neo-editor {
+    flex-grow: 1; width: 100%; background: transparent; border: none; outline: none;
+    color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 15px; line-height: 1.8;
+    padding: 20px; resize: none; overflow-y: auto; position: relative; z-index: 2;
+  }
+  textarea.neo-editor::-webkit-scrollbar { width: 6px; }
+  textarea.neo-editor::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.3); }
+
+  .preview-pane {
+    width: 50%; background: #262626; 
+    display: block; position: relative; overflow-y: auto; z-index: 10;
+  }
+  
+  .a4-paper {
+    box-sizing: border-box !important; 
     background-color: #ffffff !important;
-    color: #000000 !important;
-    overflow-y: auto;
-    padding: 2rem 3rem;
-    font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.7;
-
-     
-    background-image: repeating-linear-gradient(
-      to bottom,
-      transparent,
-      transparent calc(297mm - 2px),
-      rgba(255, 0, 0, 0.4) calc(297mm - 2px),
-      rgba(255, 0, 0, 0.4) 297mm
-    ) !important;
+    background-image: none !important;
     
-    background-attachment: local !important;
-    background-repeat: repeat-y !important;
+    color: #000000 !important; 
+    margin: 0 auto 40px auto !important; 
+    padding: 25mm 25mm !important; 
+    width: 210mm !important; 
+    min-height: 297mm !important; 
+    height: auto !important;      
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8); position: relative;
+    font-family: 'Zen Kaku Gothic New', "Helvetica Neue", Arial, sans-serif; line-height: 1.8;
   }
 
-   
-  .ne-preview-content h1 { font-size: 2em; border-bottom: 2px solid #000 !important; padding-bottom: 0.5rem; margin-bottom: 1.5rem; color: #000 !important; line-height: 1.3; }
-  .ne-preview-content h2 { font-size: 1.5em; border-left: 5px solid #000 !important; padding-left: 10px; margin-top: 2rem; margin-bottom: 1rem; color: #000 !important; line-height: 1.3; }
-  .ne-preview-content h3 { font-size: 1.2em; font-weight: bold; margin-top: 1.5rem; color: #000 !important; }
-  .ne-preview-content p { margin-bottom: 1em; text-align: justify; color: #000 !important; }
-  .ne-preview-content ul, .ne-preview-content ol { margin-bottom: 1em; padding-left: 2em; color: #000 !important; }
-  .ne-preview-content li { margin-bottom: 0.5em; color: #000 !important; }
-  .ne-preview-content pre { background: #f4f4f5 !important; padding: 1em; border-radius: 4px; overflow-x: auto; margin-bottom: 1em; color: #333 !important; border: 1px solid #ddd; }
-  .ne-preview-content code { font-family: "JetBrains Mono", monospace; background: #f4f4f5 !important; padding: 0.2em 0.4em; border-radius: 3px; font-size: 0.9em; color: #d63384 !important; }
-  .ne-preview-content blockquote { border-left: 4px solid #ccc !important; padding-left: 1em; color: #555 !important; margin: 1em 0; background: #fafafa; }
-  .ne-preview-content table { border-collapse: collapse; width: 100%; margin-bottom: 1.5em; color: #000 !important; }
-  .ne-preview-content th, .ne-preview-content td { border: 1px solid #ddd !important; padding: 8px; text-align: left; }
-  .ne-preview-content th { background: #f9fafb !important; font-weight: bold; }
-  .ne-preview-content img { max-width: 100%; height: auto; display: block; margin: 1em auto; border: 1px solid #eee; }
-  .ne-preview-content hr { border: none; border-top: 2px solid #000; margin: 2rem 0; }
-
-   
-  .ne-footer {
-    height: 30px;
-    background: #18181b;
-    border-top: 1px solid #333 !important;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 1rem;
-    font-size: 0.7rem;
-    color: #64748b;
-    flex-shrink: 0;
+  .a4-paper h1, .a4-paper h2, .a4-paper h3, .a4-paper h4, .a4-paper h5, .a4-paper h6,
+  .a4-paper p, .a4-paper li, .a4-paper td, .a4-paper th, .a4-paper strong, .a4-paper em {
+    color: #000000 !important; background: transparent !important;
   }
+
+  .a4-paper h1 { font-size: 1.8rem !important; border-bottom: 2px solid #000 !important; padding-bottom: 0.5rem; margin-top: 0 !important; margin-bottom: 1.5rem; }
+  .a4-paper h2 { font-size: 1.4rem !important; border-left: 5px solid #000 !important; padding-left: 12px; margin-top: 2rem; margin-bottom: 1rem; border-bottom: none !important; }
+  .a4-paper h3 { font-size: 1.2rem !important; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+  .a4-paper p { margin-bottom: 1rem; text-align: justify; }
+  .a4-paper ul, .a4-paper ol { margin-bottom: 1rem; padding-left: 1.5rem; }
   
-  .ne-toast {
-    position: absolute;
-    bottom: 40px;
-    right: 20px;
-    background: #10b981;
-    color: #000;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 0.8rem;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-  }
-  .ne-toast.show { opacity: 1; }
-
+  .a4-paper table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; font-size: 0.95rem; }
+  .a4-paper th, .a4-paper td { border: 1px solid #333 !important; padding: 8px 12px !important; }
+  .a4-paper th { background-color: #f0f0f0 !important; font-weight: bold !important; text-align: center !important; }
+  
+  .a4-paper pre { background-color: #f5f5f5 !important; padding: 1.2rem !important; border: 1px solid #ccc !important; overflow-x: auto; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;}
+  .a4-paper code { background-color: #f5f5f5 !important; padding: 0.1rem 0.3rem; border-radius: 3px; font-family: 'JetBrains Mono', monospace; color: #d63384 !important; font-size: 0.9em;}
+  .a4-paper pre code { color: #333 !important; } 
+  .a4-paper blockquote { border-left: 4px solid #aaa !important; padding-left: 1rem; color: #555 !important; margin: 1rem 0; background: transparent !important; }
+  .a4-paper img { max-width: 100%; height: auto; display: block; margin: 1.5rem auto; border: 1px solid #ccc !important; }
+  
    
-  @media (max-width: 768px) {
-    html body .ne-container { height: 90vh; }
-    .ne-workspace { flex-direction: column; }
-    .ne-input-pane { border-right: none !important; border-bottom: 1px solid #333 !important; flex: 1; }
-    .ne-preview-pane { flex: 1; padding: 1rem; }
-    .ne-header { gap: 10px; justify-content: flex-start; overflow-x: auto; }
-    .ne-toolbar { flex-wrap: nowrap; }
+  .math-display {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 1.5rem 0 !important;
+  }
+  .a4-paper mjx-container { color: #000 !important; margin: 0 !important; padding: 0 !important;}
+  .a4-paper mjx-container:not([display="true"]) { display: inline-block !important; }
+  
+   
+  mjx-assistive-mml { display: none !important; width: 0 !important; height: 0 !important; overflow: hidden !important; position: absolute !important; }
+
+  .editor-footer {
+    position: relative; z-index: 10; height: 25px;
+    background: rgba(0, 0, 0, 0.9); border-top: 1px solid rgba(0, 243, 255, 0.3);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 20px; font-size: 0.65rem; color: #00f3ff; font-family: 'Orbitron', sans-serif;
   }
 
-   
+  .toast-msg {
+    position: absolute; bottom: 40px; right: 20px; background: rgba(0, 243, 255, 0.1);
+    border: 1px solid #00f3ff; color: #00f3ff; padding: 8px 20px;
+    font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.3); opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100;
+  }
+  .toast-msg.show { opacity: 1; }
+
   @media print {
-    body * { visibility: hidden; }
-    .ne-preview-pane, .ne-preview-pane * { visibility: visible; }
-    .ne-preview-pane {
-      position: absolute;
-      left: 0; top: 0;
-      width: 100%;
-      height: auto;
-      overflow: visible;
-      padding: 0;
-      margin: 0;
-      background: white !important;
-      background-image: none !important;  
-      color: black !important;
+    @page { size: A4; margin: 25mm !important; }
+    body * { visibility: hidden !important; }
+    #editor-space-root { position: static !important; height: auto !important; width: auto !important; overflow: visible !important; display: block !important; background: transparent !important; }
+    .editor-header, .editor-footer, .input-pane, .editor-bg, .grid-overlay, .crt-scanline, .pane-header { display: none !important; }
+    .workspace, .preview-pane { display: block !important; position: static !important; width: 100% !important; height: auto !important; overflow: visible !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
+    
+    .a4-paper, .a4-paper * { visibility: visible !important; }
+    .a4-paper { 
+      position: absolute; left: 0; top: 0; 
+      width: 100% !important; margin: 0 !important; 
+      padding: 0 !important;
+      box-shadow: none !important; min-height: auto !important; 
     }
+    
+    .a4-paper h1, .a4-paper h2, .a4-paper h3 { page-break-after: avoid; break-after: avoid; }
+    .a4-paper table, .a4-paper img, .a4-paper pre { page-break-inside: avoid; break-inside: avoid; }
+  }
+
+  @media (max-width: 900px) {
+    .workspace { flex-direction: column; }
+    .input-pane, .preview-pane { width: 100%; height: 50%; border-right: none; }
+    .input-pane { border-bottom: 2px solid rgba(0, 243, 255, 0.3); }
+    .toolbar { flex-wrap: wrap; }
+    .a4-paper { width: 95% !important; min-height: auto !important; padding: 15px !important; margin: 0 auto 15px auto !important; }
   }
 </style>
 
-<div class="ne-container">
-  <div class="ne-header">
-    <div class="ne-brand">
-      <div class="ne-title">NEURAL_EDITOR</div>
-      <select id="ne-template" class="ne-select" onchange="loadTemplate(this.value)">
-        <option value="">+ TEMPLATES</option>
-        <option value="report">実験レポート</option>
-        <option value="paper">論文・論文要旨</option>
-        <option value="memo">技術メモ</option>
-      </select>
+<div id="editor-space-root">
+  <div class="editor-bg"></div>
+  <div class="grid-overlay"></div>
+
+  <header class="editor-header">
+    <div class="brand-area">
+      <div class="brand-title">NEURAL<span>_</span>EDITOR</div>
+      <div class="toolbar">
+        <select id="ne-template" class="tool-select" onchange="loadTemplate(this.value)">
+          <option value="">[ LOAD_TEMPLATE ]</option>
+          <option value="report">» 専門実験 報告書 (KOSEN)</option>
+          <option value="math">» 数学ノート (数式特化)</option>
+          <option value="memo">» システム・ログ (コード)</option>
+        </select>
+        <div class="separator"></div>
+        <button class="tool-btn" onclick="insertText('**', '**')" title="Bold">B</button>
+        <button class="tool-btn" onclick="insertText('*', '*')" title="Italic">I</button>
+        <button class="tool-btn" onclick="insertText('## ', '')" title="Header">H2</button>
+        <div class="separator"></div>
+        <button class="tool-btn" onclick="insertText('\n    ', '')" title="Code">CODE</button>
+        <button class="tool-btn" onclick="insertTable()" title="Table">TBL</button>
+        <button class="tool-btn" onclick="insertText('$$\n', '\n$$')" title="Math">MATH</button>
+      </div>
     </div>
     
-    <div class="ne-toolbar">
-      
-      <button class="ne-btn" onclick="insertText('**', '**')" title="Bold (Ctrl+B)">B</button>
-      <button class="ne-btn" onclick="insertText('*', '*')" title="Italic (Ctrl+I)">I</button>
-      <button class="ne-btn" onclick="insertText('# ', '')" title="Header">H1</button>
-      <button class="ne-btn" onclick="insertText('## ', '')">H2</button>
-      <div class="ne-separator"></div>
-      
-      
-      <button class="ne-btn" onclick="insertText('- ', '')" title="List">LIST</button>
-      <button class="ne-btn" onclick="insertText('\n```\n', '\n```\n')" title="Code Block">CODE</button>
-      <button class="ne-btn" onclick="insertTable()" title="Table">TBL</button>
-      <button class="ne-btn" onclick="insertText('$ ', ' $')" title="Inline Math">MATH</button>
-      <button class="ne-btn" onclick="insertText('\n$$ \n', '\n$$ \n')" title="Block Math">EQ</button>
-      <div class="ne-separator"></div>
+    <div class="toolbar">
+      <button class="tool-btn" onclick="downloadFile()">DL .MD</button>
+      <button class="tool-btn" onclick="printPerfectPDF()">PRINT PDF</button>
+      <div class="separator"></div>
+      <button class="tool-btn danger" onclick="clearEditor()">PURGE</button>
+      <button class="exit-btn" onclick="history.back()">DISCONNECT</button>
+    </div>
+  </header>
 
-      
-      <button class="ne-btn ne-btn-primary" onclick="downloadFile()" title="Download .md">SAVE_MD</button>
-      <button class="ne-btn" onclick="window.print()" title="Print to PDF">PRINT</button>
-      <button class="ne-btn ne-btn-danger" onclick="clearEditor()" title="Clear All">RESET</button>
+  <div class="workspace">
+    <div class="input-pane">
+      <div class="crt-scanline"></div>
+      <div class="pane-header">
+        <span>// SOURCE_CODE</span>
+        <span id="ne-word-count">L:0 | C:0</span>
+      </div>
+      <textarea id="ne-input" class="neo-editor" placeholder="[ SYS_READY ] Awaiting input..."></textarea>
+      <div id="ne-toast" class="toast-msg">SAVED</div>
+    </div>
+
+    <div class="preview-pane">
+      <div class="pane-header" style="background: #111; border-bottom: 1px solid #333; padding: 5px 15px; font-size: 0.6rem; color: #888; font-family: 'Orbitron', sans-serif; position: sticky; top: 0; z-index: 20; display: flex; justify-content: space-between;">
+        <span>// RENDER_PREVIEW (A4_SIZE)</span>
+      </div>
+      <div class="a4-paper" id="ne-preview"></div>
     </div>
   </div>
 
-  <div class="ne-workspace">
-    <div class="ne-input-pane">
-      <textarea id="ne-input" class="ne-textarea" placeholder="// WRITE_SOURCE_CODE_HERE..." spellcheck="false"></textarea>
-      <div id="ne-toast" class="ne-toast">SAVED</div>
-    </div>
-    <div class="ne-preview-pane">
-      <div id="ne-preview" class="ne-preview-content"></div>
-    </div>
-  </div>
-
-  <div class="ne-footer">
-    <div id="ne-word-count">CHARS: 0 | LINES: 0</div>
-    <div id="ne-save-status">SYSTEM_READY</div>
-  </div>
+  <footer class="editor-footer">
+    <div id="ne-save-status">STATUS: SECURE</div>
+    <div>ENCRYPTION: ENABLED | LATENCY: 4ms</div>
+  </footer>
 </div>
 
 <script>
-  (function() {
-    const input = document.getElementById('ne-input');
-    const preview = document.getElementById('ne-preview');
-    const status = document.getElementById('ne-save-status');
-    const wordCount = document.getElementById('ne-word-count');
-    const toast = document.getElementById('ne-toast');
-    const templateSelect = document.getElementById('ne-template');
-    const STORAGE_KEY = 'dt_neural_editor_content';
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('ne-input');
+  const preview = document.getElementById('ne-preview');
+  const previewContainer = document.querySelector('.preview-pane');
+  const status = document.getElementById('ne-save-status');
+  const wordCount = document.getElementById('ne-word-count');
+  const toast = document.getElementById('ne-toast');
+  const templateSelect = document.getElementById('ne-template');
+  const STORAGE_KEY = 'dt_neural_editor_v7_5'; 
 
+  const TEMPLATES = {
+    report: document.getElementById('tpl-report').innerHTML.trim(),
+    math: document.getElementById('tpl-math').innerHTML.trim(),
+    memo: document.getElementById('tpl-memo').innerHTML.trim()
+  };
+
+  const saved = localStorage.getItem(STORAGE_KEY);
+  input.value = saved ? saved : TEMPLATES.report;
+
+  const renderMarkdown = () => {
+    let text = input.value;
+    const blockMath = [];
+    const inlineMath = [];
     
-    const TEMPLATES = {
-      report: `# 実験報告書
-
-**科目名:** **実験日:** 202X-XX-XX
-**学籍番号:** **氏名:** ## 1. 目的
-本実験の目的は...
-
-## 2. 原理
-理論式は以下の通りである。
-$$ E = mc^2 $$
-
-## 3. 実験方法
-1. 手順1
-2. 手順2
-
-## 4. 結果
-| 項目 | 値 | 単位 |
-|:---|:---:|:---|
-| 電圧 | 5.0 | V |
-| 電流 | 0.2 | A |
-
-## 5. 考察
-結果より...
-
-## 6. 結論
-`,
-      paper: `# 研究題目
-
-**概要**
-ここに概要を記述する。
-
-## 1. 緒言
-背景について...
-
-## 2. 提案手法
-$$ f(x) = \int_{-\infty}^{\infty} e^{-x^2} dx $$
-
-## 3. 実験
-## 4. 結言
-`,
-      memo: `# 技術メモ
-**Date:** 202X-XX-XX
-
-## Todo
-- [ ] タスク1
-- [ ] タスク2
-
-## Code Snippet
-\`\`\`python
-print("Hello World")
-\`\`\`
-`
-    };
-
     
-    const saved = localStorage.getItem(STORAGE_KEY);
-    input.value = saved ? saved : TEMPLATES.report;
-
+    text = text.replace(/\$\$([\s\S]+?)\$\$/g, (match) => {
+      blockMath.push(match);
+      return `%%%BLOCK_MATH_${blockMath.length - 1}%%%`;
+    });
     
-    const renderMarkdown = () => {
-      const text = input.value;
-      
-      let html = marked.parse(text);
-      preview.innerHTML = html;
-
-      if (window.MathJax && window.MathJax.typesetPromise) {
-        window.MathJax.typesetPromise([preview]).catch(err => console.log(err));
-      }
-
-      const chars = text.length;
-      const lines = text.split(/\r\n|\r|\n/).length;
-      wordCount.innerText = `CHARS: ${chars} | LINES: ${lines}`;
-    };
-
     
-    const saveContent = () => {
-      localStorage.setItem(STORAGE_KEY, input.value);
-      status.innerText = "AUTOSAVE: " + new Date().toLocaleTimeString();
-      setTimeout(() => { status.innerText = "ONLINE"; }, 2000);
-    };
-
-    
-    const showToast = (msg) => {
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2000);
-    };
-
-    
-    let timeoutId;
-    input.addEventListener('input', () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        renderMarkdown();
-        saveContent();
-      }, 300);
+    text = text.replace(/\$([\s\S]+?)\$/g, (match) => {
+      inlineMath.push(match);
+      return `%%%INLINE_MATH_${inlineMath.length - 1}%%%`;
     });
 
-    
-    window.insertText = (before, after) => {
+    let html = marked.parse(text);
+
+    html = html.replace(/<p>\s*(%%%BLOCK_MATH_\d+%%%)\s*<\/p>/g, "$1");
+    html = html.replace(/%%%BLOCK_MATH_(\d+)%%%/g, (m, i) => {
+      return `<div class="math-display">${blockMath[i]}</div>`;
+    });
+    html = html.replace(/%%%INLINE_MATH_(\d+)%%%/g, (m, i) => {
+      return `<span class="math-inline-placeholder">${inlineMath[i]}</span>`;
+    });
+
+    preview.innerHTML = html;
+
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      window.MathJax.typesetPromise([preview]).catch(err => console.error(err));
+    }
+
+    const chars = input.value.length;
+    const lines = input.value.split(/\r\n|\r|\n/).length;
+    wordCount.innerText = `L:${lines} | C:${chars}`;
+  };
+
+  const saveContent = () => {
+    localStorage.setItem(STORAGE_KEY, input.value);
+    const time = new Date().toLocaleTimeString();
+    status.innerHTML = `<span style="color:#10b981;">●</span> SYNCED: ${time}`;
+  };
+
+  const showToast = (msg) => {
+    toast.textContent = `> ${msg}`;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  };
+
+  let timeoutId;
+  input.addEventListener('input', () => {
+    status.innerHTML = `<span style="color:#f59e0b;">●</span> COMPILING...`;
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      renderMarkdown();
+      saveContent();
+    }, 400);
+  });
+
+  input.addEventListener('scroll', () => {
+    const percentage = input.scrollTop / (input.scrollHeight - input.clientHeight);
+    if(previewContainer.scrollHeight > previewContainer.clientHeight) {
+      previewContainer.scrollTop = percentage * (previewContainer.scrollHeight - previewContainer.clientHeight);
+    }
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
       const start = input.selectionStart;
       const end = input.selectionEnd;
-      const text = input.value;
-      const selected = text.substring(start, end);
-      
-      input.value = text.substring(0, start) + before + selected + after + text.substring(end);
-      input.focus();
-      input.selectionStart = start + before.length;
-      input.selectionEnd = end + before.length;
-      
+      input.value = input.value.substring(0, start) + '    ' + input.value.substring(end);
+      input.selectionStart = input.selectionEnd = start + 4;
       renderMarkdown();
       saveContent();
-    };
+    }
+  });
 
-    window.insertTable = () => {
-      const tableMd = `\n| Header1 | Header2 |\n|---|---|\n| Data1 | Data2 |\n`;
-      insertText(tableMd, '');
-    };
-
-    window.clearEditor = () => {
-      if(confirm('ALL DATA WILL BE DELETED. PROCEED?')) {
-        input.value = '';
-        renderMarkdown();
-        saveContent();
-      }
-    };
-
-    window.loadTemplate = (type) => {
-      if (!type) return;
-      if (input.value.trim().length > 0 && !confirm('CURRENT CONTENT WILL BE REPLACED. OK?')) {
-        templateSelect.value = "";
-        return;
-      }
-      input.value = TEMPLATES[type];
-      renderMarkdown();
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
       saveContent();
-      templateSelect.value = "";
-    };
+      showToast("MANUAL_SYNC_COMPLETE");
+    }
+  });
 
-    window.downloadFile = () => {
-      const blob = new Blob([input.value], { type: 'text/markdown' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'document.md';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast("DOWNLOADED");
-    };
+  window.insertText = (before, after) => {
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    const text = input.value;
+    const selected = text.substring(start, end);
+    input.value = text.substring(0, start) + before + selected + after + text.substring(end);
+    input.focus();
+    input.selectionStart = start + before.length;
+    input.selectionEnd = end + before.length;
+    renderMarkdown(); saveContent();
+  };
 
+  window.insertTable = () => { insertText(`\n| 見出し1 | 見出し2 |\n|:---:|:---:|\n| データ | データ |\n`, ''); };
+
+  window.clearEditor = () => {
+    if(confirm('WARNING: すべてのデータが消去されます。よろしいですか？')) {
+      input.value = ''; renderMarkdown(); saveContent(); showToast('DATA_PURGED');
+    }
+  };
+
+  window.loadTemplate = (type) => {
+    if (!type) return;
+    if (input.value.trim().length > 0 && !confirm('現在の入力内容が上書きされます。よろしいですか？')) {
+      templateSelect.value = ""; return;
+    }
+    input.value = document.getElementById(`tpl-${type}`).innerHTML.trim();
+    renderMarkdown(); saveContent(); showToast(`TEMPLATE_LOADED`);
+    templateSelect.value = "";
+  };
+
+  window.downloadFile = () => {
+    const blob = new Blob([input.value], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `neural_log_${new Date().getTime()}.md`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    showToast("FILE_DOWNLOADED");
+  };
+
+  window.printPerfectPDF = () => {
+    const content = document.getElementById('ne-preview').innerHTML;
     
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey || e.metaKey) {
-        if (e.key === 's') {
-          e.preventDefault();
-          saveContent();
-          showToast("SAVED (CTRL+S)");
-        }
-        if (e.key === 'b') {
-          e.preventDefault();
-          insertText('**', '**');
-        }
-        if (e.key === 'i') {
-          e.preventDefault();
-          insertText('*', '*');
-        }
-      }
-    });
-
+    const mathJaxStyles = document.getElementById('MJX-SVG-styles') ? document.getElementById('MJX-SVG-styles').outerHTML : '';
     
-    renderMarkdown();
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = 'none';
+    document.body.appendChild(iframe);
+    
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(`
+      <html>
+      <head>
+        <title>Document</title>
+        ${mathJaxStyles} <style>
+          @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+          @page { size: A4; margin: 25mm; } 
+          body { 
+            font-family: 'Zen Kaku Gothic New', "Helvetica Neue", Arial, sans-serif; 
+            line-height: 1.8; color: #000; margin: 0; padding: 0; 
+          }
+          .a4-paper { padding: 0 !important; margin: 0 !important; width: 100% !important; box-shadow: none !important; }
+          h1 { font-size: 1.8rem; border-bottom: 2px solid #000; padding-bottom: 0.5rem; margin-top: 0; margin-bottom: 1.5rem; page-break-after: avoid; }
+          h2 { font-size: 1.4rem; border-left: 5px solid #000; padding-left: 12px; margin-top: 2rem; margin-bottom: 1rem; page-break-after: avoid; }
+          h3 { font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.5rem; page-break-after: avoid; }
+          p { margin-bottom: 1rem; text-align: justify; }
+          ul, ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+          table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; font-size: 0.95rem; page-break-inside: avoid; }
+          th, td { border: 1px solid #333; padding: 8px 12px; }
+          th { background-color: #f0f0f0; font-weight: bold; text-align: center; }
+          pre { background-color: #f5f5f5; padding: 1.2rem; border: 1px solid #ccc; overflow-x: auto; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; page-break-inside: avoid; }
+          code { font-family: 'JetBrains Mono', monospace; color: #d63384; font-size: 0.9em; }
+          pre code { color: #333; }
+          blockquote { border-left: 4px solid #aaa; padding-left: 1rem; color: #555; margin: 1rem 0; }
+          img { max-width: 100%; height: auto; display: block; margin: 1.5rem auto; border: 1px solid #ccc; page-break-inside: avoid; }
+          
+          .math-display { display: flex; justify-content: center; align-items: center; width: 100%; margin: 1.5rem 0; page-break-inside: avoid; }
+          mjx-container { color: #000 !important; }
+          
+          /* 【最重要】PDF出力時に数式が「V=IR V=IR」と二重になるバグを完全に破壊する */
+          mjx-assistive-mml {
+            display: none !important;
+            clip: rect(1px, 1px, 1px, 1px) !important;
+            clip-path: inset(50%) !important;
+            height: 1px !important;
+            width: 1px !important;
+            position: absolute !important;
+            overflow: hidden !important;
+          }
+        </style>
+      </head>
+      <body>
+        ${content}
+      </body>
+      </html>
+    `);
+    doc.close();
+    
+    setTimeout(() => {
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+      
+      setTimeout(() => { 
+        if (document.body.contains(iframe)) {
+          document.body.removeChild(iframe); 
+        }
+      }, 3000);
+    }, 500);
+  };
 
-  })();
+  renderMarkdown();
+});
 </script>
 
     </section>
