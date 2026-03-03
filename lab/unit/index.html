@@ -15,21 +15,18 @@
 
   
   
-    <title>Labs &middot; dt&#39;s world</title>
-    <meta name="title" content="Labs &middot; dt&#39;s world">
+    <title>UNIT_CONVERTER &middot; dt&#39;s world</title>
+    <meta name="title" content="UNIT_CONVERTER &middot; dt&#39;s world">
   
 
   
   
-    <meta name="description" content="ツール集。">
+    <meta name="description" content="⚡ 物理単位変換・次元解析ツール">
   
   
   
   
-  <link rel="canonical" href="https://dtwant.github.io/lab/">
-  
-    
-      <link rel="alternate" type="application/rss+xml" href="/lab/index.xml" title="dt's world" />
+  <link rel="canonical" href="https://dtwant.github.io/lab/unit/">
   
 
   
@@ -47,17 +44,18 @@
   
 
   
-  <meta property="og:url" content="https://dtwant.github.io/lab/">
+  <meta property="og:url" content="https://dtwant.github.io/lab/unit/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="Labs">
-  <meta property="og:description" content="らぼらとりぃ">
+  <meta property="og:title" content="UNIT_CONVERTER">
+  <meta property="og:description" content="⚡ 物理単位変換・次元解析ツール">
   <meta property="og:locale" content="en">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="lab">
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Labs">
-  <meta name="twitter:description" content="らぼらとりぃ">
+  <meta name="twitter:title" content="UNIT_CONVERTER">
+  <meta name="twitter:description" content="⚡ 物理単位変換・次元解析ツール">
 
   
   
@@ -117,6 +115,12 @@
   
   
   
+  
+    
+    <script
+      type="text/javascript"
+      src="/js/zen-mode.min.9814dee9614d32aeb56239d118edfe20acd6231424f9b19c2dd48835038414130a5e946c0d1c9087d60e60e31840c9babfd217e3d4b95643dc8d651a71ccdf4a.js"
+      integrity="sha512-mBTe6WFNMq61YjnRGO3&#43;IKzWIxQk&#43;bGcLdSINQOEFBMKXpRsDRyQh9YOYOMYQMm6v9IX49S5VkPcjWUacczfSg=="></script>
   
   
     
@@ -203,7 +207,34 @@
   
 
   
-  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Labs",
+    "name": "UNIT_CONVERTER",
+    "headline": "UNIT_CONVERTER",
+    "description": "⚡ 物理単位変換・次元解析ツール",
+    
+    "inLanguage": "en",
+    "url" : "https:\/\/dtwant.github.io\/lab\/unit\/",
+    "author" : {
+      "@type": "Person",
+      "name": "dt"
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "44"
+  }]
+  </script>
+
 
 
   
@@ -729,6 +760,8 @@
   
     
   
+    
+  
   <li class="hidden">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/"
       >dt</a
@@ -736,9 +769,16 @@
   </li>
 
   
-  <li class="hidden">
+  <li class="inline">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/"
       >Labs</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/unit/"
+      >UNIT_CONVERTER</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -747,340 +787,547 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        Labs
+        UNIT_CONVERTER
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=M+PLUS+1+Code:wght@400;700&display=swap" rel="stylesheet">
+      
+<h1 class="relative group">UNIT_CONVERTER <span style="font-size:12px;color:#fcee0a;">// TARGET_LOCK</span>
+    <div id="unit_converter--target_lock" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#unit_converter--target_lock" aria-label="Anchor">#</a>
+    </span>
+    
+</h1>
+<p>SI単位系や非SI単位系の相互変換を高速に行うハッキング型ユーティリティ。
+数値を入力すると、同種の物理量すべてに対して同時に影響波及（計算）が行われます。</p>
+<blockquote>
+<p>[!NOTE]
+<strong>AVAILABLE MODULES:</strong></p>
+<ul>
+<li><strong>[ LENGTH ]</strong> (m, ft, in, ly&hellip;)</li>
+<li><strong>[ MASS ]</strong> (kg, lb, oz&hellip;)</li>
+<li><strong>[ ENERGY ]</strong> (J, eV, cal, kWh&hellip;)</li>
+<li><strong>[ PRESSURE ]</strong> (Pa, atm, bar, Torr&hellip;)</li>
+</ul></blockquote>
+<hr>
 <style>
-/* --- ベース設定 --- */
-.lab-container {
-font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace;
-color: #e0f8ff;
-margin-top: 2rem;
-}
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
 
-/* --- ターミナル風のイントロ --- */
-.lab-intro-box {
-background: rgba(5, 5, 5, 0.8);
-border: 1px solid rgba(0, 243, 255, 0.3);
-border-left: 4px solid #00f3ff;
-padding: 1rem 1.5rem;
-margin-bottom: 2.5rem;
-box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
-}
-.lab-intro-text {
-margin: 0;
-line-height: 1.6;
-color: #00f3ff;
-text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
-font-size: 0.95rem;
-}
-.lab-intro-text .blink {
-animation: blink-cursor 1s infinite;
-}
-@keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+   
+  #uc-app {
+    --neon-cyan: #00f3ff;
+    --neon-pink: #ff0055;
+    --neon-yellow: #fcee0a;
+    --neon-green: #00ff41;
+    --bg-dark: #050505;
+    --panel-bg: rgba(10,14,18,0.95);
+    
+    font-family: 'JetBrains Mono', monospace;
+    color: #e2e8f0;
+    
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 99999;
+    background: var(--bg-dark);
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #uc-app * { box-sizing: inherit; }
 
-/* --- ツールグリッド (カードレイアウト) --- */
-.lab-grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-gap: 1.5rem;
-}
+   
+  .uc-bg-grid {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background-image: 
+      radial-gradient(circle at 50% 100%, rgba(252, 238, 10, 0.05) 0%, transparent 60%),
+      linear-gradient(rgba(252, 238, 10, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(252, 238, 10, 0.03) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px; 
+    z-index: 1; pointer-events: none;
+  }
+  .uc-scanline {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%);
+    background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.6;
+  }
 
-/* --- ツールカード --- */
-.tool-card {
-display: flex;
-flex-direction: column;
-background: rgba(5, 5, 5, 0.6);
-border: 1px solid rgba(0, 243, 255, 0.2);
-border-radius: 4px;
-padding: 1.5rem;
-text-decoration: none !important;
-transition: all 0.3s ease;
-position: relative;
-overflow: hidden;
-backdrop-filter: blur(4px);
--webkit-backdrop-filter: blur(4px);
-}
+   
+  .uc-container {
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column;
+    width: 100%; height: 100%;
+  }
 
-.tool-card:hover {
-border-color: #ff0055;
-box-shadow: 0 0 20px rgba(255, 0, 85, 0.15), inset 0 0 10px rgba(255, 0, 85, 0.05);
-transform: translateY(-3px);
-background: rgba(255, 0, 85, 0.05);
-}
+   
+  .uc-header {
+    background: rgba(0,0,0,0.95);
+    border-bottom: 2px solid rgba(252, 238, 10, 0.4);
+    padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,0.8);
+  }
+  .uc-title {
+    font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 900;
+    color: var(--neon-yellow); text-shadow: 0 0 10px rgba(252, 238, 10, 0.5);
+    letter-spacing: 2px; display: flex; align-items: center; gap: 15px;
+  }
+  .uc-sys-status {
+    font-size: 0.7rem; color: var(--neon-cyan);
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(0, 243, 255, 0.05); padding: 4px 10px; border: 1px solid rgba(0, 243, 255, 0.2);
+    font-family: 'Orbitron', sans-serif;
+  }
+  .uc-exit-btn {
+    background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
+    font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: bold;
+    padding: 6px 15px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
+    margin-left: 15px;
+  }
+  .uc-exit-btn:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px rgba(255,0,85,0.5); }
 
-.tool-card::before {
-content: '';
-position: absolute;
-top: 0; left: 0; bottom: 0;
-width: 3px;
-background: #00f3ff;
-box-shadow: 0 0 8px #00f3ff;
-transition: all 0.3s ease;
-}
-.tool-card:hover::before {
-background: #ff0055;
-box-shadow: 0 0 8px #ff0055;
-}
+   
+  .uc-workspace {
+    flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;
+  }
+  @media(min-width: 900px) { .uc-workspace { flex-direction: row; } }
 
-/* --- カード内の要素 --- */
-.tool-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 1rem;
-border-bottom: 1px dashed rgba(0, 243, 255, 0.2);
-padding-bottom: 0.5rem;
-}
+   
+  .uc-sidebar {
+    width: 100%; background: rgba(5,5,5,0.9);
+    border-right: 1px solid rgba(252, 238, 10, 0.2);
+    display: flex; flex-direction: row; overflow-x: auto;
+    flex-shrink: 0; box-shadow: inset -10px 0 20px rgba(0,0,0,0.5);
+  }
+  @media(min-width: 900px) { 
+    .uc-sidebar { 
+      width: 250px; flex-direction: column; overflow-y: auto; overflow-x: hidden;
+    } 
+  }
+  .uc-sidebar::-webkit-scrollbar { width: 4px; height: 4px;}
+  .uc-sidebar::-webkit-scrollbar-thumb { background: rgba(252, 238, 10, 0.3); }
 
-.tool-id {
-font-family: 'Orbitron', sans-serif;
-font-size: 0.75rem;
-color: rgba(0, 243, 255, 0.6);
-letter-spacing: 2px;
-}
+  .uc-cat-btn {
+    background: transparent; border: none; border-left: 3px solid transparent; border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: #888; text-align: left; padding: 15px 20px; font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    letter-spacing: 1px; white-space: nowrap;
+  }
+  @media(max-width: 899px) { .uc-cat-btn { border-left: none; border-bottom: 3px solid transparent; border-right: 1px solid rgba(255,255,255,0.05); } }
+  .uc-cat-btn:hover { background: rgba(252, 238, 10, 0.05); color: #ccc; }
+  .uc-cat-btn.active {
+    background: rgba(252, 238, 10, 0.08); color: var(--neon-yellow);
+    text-shadow: 0 0 8px rgba(252, 238, 10, 0.4);
+  }
+  @media(min-width: 900px) { .uc-cat-btn.active { border-left-color: var(--neon-yellow); } }
+  @media(max-width: 899px) { .uc-cat-btn.active { border-bottom-color: var(--neon-yellow); } }
+  
+  .uc-cat-dim { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #555; margin-top: 4px; font-weight: 400; }
+  .uc-cat-btn.active .uc-cat-dim { color: rgba(252, 238, 10, 0.6); }
 
-.tool-status {
-font-family: 'Orbitron', sans-serif;
-font-size: 0.7rem;
-font-weight: bold;
-padding: 2px 6px;
-border-radius: 2px;
-letter-spacing: 1px;
-}
-.status-active {
-color: #00ff66;
-background: rgba(0, 255, 102, 0.1);
-border: 1px solid rgba(0, 255, 102, 0.3);
-text-shadow: 0 0 5px #00ff66;
-}
-.status-maintenance {
-color: #fde047;
-background: rgba(253, 224, 71, 0.1);
-border: 1px solid rgba(253, 224, 71, 0.3);
-text-shadow: 0 0 5px #fde047;
-}
+   
+  .uc-panel {
+    flex-grow: 1; padding: 30px; overflow-y: auto;
+    display: flex; flex-direction: column; background: transparent;
+  }
+  .uc-panel::-webkit-scrollbar { width: 6px; }
+  .uc-panel::-webkit-scrollbar-thumb { background: rgba(252, 238, 10, 0.2); }
+  
+  .uc-panel-title {
+    font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: #fff;
+    margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; justify-content: space-between; align-items: flex-end; text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .uc-dimension-label { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--neon-cyan); background: rgba(0,243,255,0.05); padding: 4px 10px; border: 1px solid rgba(0,243,255,0.3); }
 
-.tool-title {
-font-family: 'Orbitron', sans-serif;
-font-size: 1.2rem;
-font-weight: 700;
-color: #00f3ff;
-margin: 0 0 0.5rem 0;
-text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
-transition: color 0.3s ease;
-}
-.tool-card:hover .tool-title {
-color: #ff0055;
-text-shadow: 0 0 5px rgba(255, 0, 85, 0.4);
-}
+   
+  .uc-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;
+  }
+  
+   
+  .uc-unit-card {
+    background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 20px;
+    position: relative; transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    backdrop-filter: blur(5px); display: flex; flex-direction: column;
+  }
+  .uc-unit-card:hover { border-color: #555; background: rgba(10,10,10,0.8); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+  .uc-unit-card.active { border-color: var(--neon-yellow); background: rgba(252, 238, 10, 0.03); box-shadow: 0 0 20px rgba(252, 238, 10, 0.15); transform: translateY(-2px); }
 
-.tool-desc {
-font-size: 0.85rem;
-color: #a0c0d0;
-line-height: 1.5;
-margin: 0;
-}
+   
+  .uc-card-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  .uc-unit-name {
+    font-size: 0.8rem; color: #aaa; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .uc-unit-name span { display: block; }
+  .uc-unit-sys {
+    font-size: 0.6rem; color: #00f3ff; background: rgba(0,243,255,0.05); 
+    padding: 2px 6px; border: 1px solid rgba(0,243,255,0.2); 
+    align-self: flex-start; font-family: 'JetBrains Mono', monospace;
+  }
+  
+  .uc-action-bar { display: flex; gap: 8px; }
+  .uc-copy-btn {
+    background: transparent; border: 1px solid #444; color: #888;
+    font-size: 0.6rem; padding: 4px 8px; cursor: pointer; transition: all 0.2s; 
+    font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
+  }
+  .uc-copy-btn:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0,243,255,0.1); }
+
+   
+  .uc-input-row { 
+    display: flex; align-items: stretch; background: #000; 
+    border: 1px solid #222; height: 50px; transition: border-color 0.3s;
+  }
+  .uc-unit-card:hover .uc-input-row { border-color: #444; }
+  .uc-unit-card.active .uc-input-row { border-color: var(--neon-yellow); }
+
+  .uc-input {
+    flex-grow: 1; background: transparent; border: none; outline: none;
+    color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 1.3rem;
+    padding: 0 15px; width: 100%; transition: color 0.3s;
+  }
+  .uc-unit-card.active .uc-input { color: var(--neon-yellow); text-shadow: 0 0 8px rgba(252, 238, 10, 0.4); }
+
+  .uc-unit-symbol {
+    font-size: 1.1rem; color: var(--neon-cyan); font-weight: bold;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 15px; min-width: 60px;
+    background: rgba(0,243,255,0.03); border-left: 1px solid #222;
+    font-family: 'Orbitron', sans-serif; transition: all 0.3s;
+  }
+  .uc-unit-card:hover .uc-unit-symbol { border-color: #444; background: rgba(0,243,255,0.08); }
+  .uc-unit-card.active .uc-unit-symbol { border-color: var(--neon-yellow); color: var(--neon-yellow); background: rgba(252,238,10,0.1); }
+
+   
+  .uc-toast {
+    position: absolute; bottom: 30px; right: 30px; background: rgba(0,0,0,0.9);
+    border: 1px solid var(--neon-yellow); color: var(--neon-yellow); padding: 12px 25px;
+    font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: bold; letter-spacing: 1px;
+    box-shadow: 0 0 20px rgba(252, 238, 10, 0.4);
+    opacity: 0; transform: translateY(20px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none; z-index: 1000;
+  }
+  .uc-toast.show { opacity: 1; transform: translateY(0); }
+
 </style>
-<div class="lab-container">
-<div class="lab-intro-box">
-<p class="lab-intro-text">> INITIALIZING LABORATORY MODULES...</p>
-<p class="lab-intro-text">> LOADING CUSTOM TOOLS AND UTILITIES...</p>
-<p class="lab-intro-text">> ALL SYSTEMS SECURE. READY FOR OPERATION<span class="blink">_</span></p>
+
+<div id="uc-app">
+  <div class="uc-bg-grid"></div>
+  <div class="uc-scanline"></div>
+
+  <div class="uc-container">
+    
+    <div class="uc-header">
+      <div class="uc-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--neon-yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        UNIT_CONVERTER
+      </div>
+      <div style="display:flex; align-items:center;">
+        <div class="uc-sys-status"><span style="color:#00ff41;">●</span> REALTIME_SYNC_ACTIVE</div>
+        <button class="uc-exit-btn" onclick="history.back()">DISCONNECT</button>
+      </div>
+    </div>
+
+    <div class="uc-workspace">
+      
+      <div class="uc-sidebar" id="uc-sidebar"></div>
+      
+      
+      <div class="uc-panel">
+        <div class="uc-panel-title">
+          <span id="uc-current-cat">SELECT CATEGORY</span>
+          <span class="uc-dimension-label" id="uc-current-dim">[-]</span>
+        </div>
+
+        <div class="uc-grid" id="uc-grid"></div>
+      </div>
+
+    </div>
+  </div>
+  <div id="uc-toast" class="uc-toast">COPIED</div>
 </div>
-<div class="lab-grid">
 
-<a href="/lab/mdeditor/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-01</span>
+<script>
+var ucApp = (function() {
+  "use strict";
+  
+  const toast = document.getElementById('uc-toast');
 
-<span class="tool-status status-active">ACTIVE</span>
+  
 
-</div>
-<h3 class="tool-title">Markdown Editor</h3>
-<p class="tool-desc"></p>
-</a>
 
-<a href="/lab/report/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-02</span>
+  const db = {
+    length: {
+      name: "LENGTH (長さ)", dim: "[L]", base: "m",
+      units: [
+        { id: "m", name: "Meter (SI base)", symbol: "m", factor: 1, sys: "SI" },
+        { id: "cm", name: "Centimeter", symbol: "cm", factor: 0.01, sys: "Metric" },
+        { id: "mm", name: "Millimeter", symbol: "mm", factor: 0.001, sys: "Metric" },
+        { id: "km", name: "Kilometer", symbol: "km", factor: 1000, sys: "Metric" },
+        { id: "in", name: "Inch", symbol: "in", factor: 0.0254, sys: "Imperial" },
+        { id: "ft", name: "Foot", symbol: "ft", factor: 0.3048, sys: "Imperial" },
+        { id: "yd", name: "Yard", symbol: "yd", factor: 0.9144, sys: "Imperial" },
+        { id: "mi", name: "Mile", symbol: "mi", factor: 1609.344, sys: "Imperial" },
+        { id: "nm", name: "Nanometer", symbol: "nm", factor: 1e-9, sys: "Metric" },
+        { id: "au", name: "Astronomical Unit", symbol: "au", factor: 149597870700, sys: "Astro" },
+        { id: "ly", name: "Light Year", symbol: "ly", factor: 9460730472580800, sys: "Astro" },
+      ]
+    },
+    mass: {
+      name: "MASS (質量)", dim: "[M]", base: "kg",
+      units: [
+        { id: "kg", name: "Kilogram (SI base)", symbol: "kg", factor: 1, sys: "SI" },
+        { id: "g", name: "Gram", symbol: "g", factor: 0.001, sys: "Metric" },
+        { id: "mg", name: "Milligram", symbol: "mg", factor: 1e-6, sys: "Metric" },
+        { id: "t", name: "Tonne", symbol: "t", factor: 1000, sys: "Metric" },
+        { id: "lb", name: "Pound", symbol: "lb", factor: 0.45359237, sys: "Imperial" },
+        { id: "oz", name: "Ounce", symbol: "oz", factor: 0.028349523125, sys: "Imperial" },
+        { id: "amu", name: "Atomic Mass Unit", symbol: "u", factor: 1.66053906660e-27, sys: "Physics" },
+      ]
+    },
+    time: {
+      name: "TIME (時間)", dim: "[T]", base: "s",
+      units: [
+        { id: "s", name: "Second (SI base)", symbol: "s", factor: 1, sys: "SI" },
+        { id: "ms", name: "Millisecond", symbol: "ms", factor: 0.001, sys: "Metric" },
+        { id: "min", name: "Minute", symbol: "min", factor: 60, sys: "Non-SI" },
+        { id: "h", name: "Hour", symbol: "h", factor: 3600, sys: "Non-SI" },
+        { id: "d", name: "Day", symbol: "d", factor: 86400, sys: "Non-SI" },
+        { id: "y", name: "Year (Julian)", symbol: "y", factor: 31557600, sys: "Astro" },
+      ]
+    },
+    temperature: {
+      name: "TEMPERATURE (温度)", dim: "[Θ]", base: "K",
+      units: [
+        { id: "K", name: "Kelvin (SI base)", symbol: "K", factor: 1, offset: 0, sys: "SI" },
+        { id: "C", name: "Celsius", symbol: "°C", factor: 1, offset: 273.15, sys: "Metric" },
+        { id: "F", name: "Fahrenheit", symbol: "°F", factor: 5/9, offset: 273.15 - (32 * 5/9), sys: "Imperial" },
+      ]
+    },
+    energy: {
+      name: "ENERGY (エネルギー)", dim: "[M][L]²[T]⁻²", base: "J",
+      units: [
+        { id: "J", name: "Joule (SI)", symbol: "J", factor: 1, sys: "SI" },
+        { id: "kJ", name: "Kilojoule", symbol: "kJ", factor: 1000, sys: "Metric" },
+        { id: "cal", name: "Calorie (thermochemical)", symbol: "cal", factor: 4.184, sys: "Non-SI" },
+        { id: "kcal", name: "Kilocalorie", symbol: "kcal", factor: 4184, sys: "Metric" },
+        { id: "eV", name: "Electronvolt", symbol: "eV", factor: 1.602176634e-19, sys: "Physics" },
+        { id: "kWh", name: "Kilowatt-hour", symbol: "kWh", factor: 3.6e6, sys: "Elec" },
+        { id: "erg", name: "Erg", symbol: "erg", factor: 1e-7, sys: "CGS" },
+        { id: "btu", name: "British Thermal Unit", symbol: "BTU", factor: 1055.056, sys: "Imperial" },
+      ]
+    },
+    pressure: {
+      name: "PRESSURE (圧力)", dim: "[M][L]⁻¹[T]⁻²", base: "Pa",
+      units: [
+        { id: "Pa", name: "Pascal (SI)", symbol: "Pa", factor: 1, sys: "SI" },
+        { id: "kPa", name: "Kilopascal", symbol: "kPa", factor: 1000, sys: "Metric" },
+        { id: "MPa", name: "Megapascal", symbol: "MPa", factor: 1e6, sys: "Metric" },
+        { id: "bar", name: "Bar", symbol: "bar", factor: 1e5, sys: "Non-SI" },
+        { id: "atm", name: "Standard Atmosphere", symbol: "atm", factor: 101325, sys: "Physics" },
+        { id: "torr", name: "Torr", symbol: "Torr", factor: 133.322368, sys: "Physics" },
+        { id: "psi", name: "Pound-force / sq inch", symbol: "psi", factor: 6894.757, sys: "Imperial" },
+      ]
+    },
+    force: {
+      name: "FORCE (力)", dim: "[M][L][T]⁻²", base: "N",
+      units: [
+        { id: "N", name: "Newton (SI)", symbol: "N", factor: 1, sys: "SI" },
+        { id: "dyn", name: "Dyne", symbol: "dyn", factor: 1e-5, sys: "CGS" },
+        { id: "kgf", name: "Kilogram-force", symbol: "kgf", factor: 9.80665, sys: "Metric" },
+        { id: "lbf", name: "Pound-force", symbol: "lbf", factor: 4.448222, sys: "Imperial" },
+      ]
+    },
+    power: {
+      name: "POWER (仕事率)", dim: "[M][L]²[T]⁻³", base: "W",
+      units: [
+        { id: "W", name: "Watt (SI)", symbol: "W", factor: 1, sys: "SI" },
+        { id: "kW", name: "Kilowatt", symbol: "kW", factor: 1000, sys: "Metric" },
+        { id: "MW", name: "Megawatt", symbol: "MW", factor: 1e6, sys: "Metric" },
+        { id: "hp", name: "Horsepower (mech)", symbol: "hp", factor: 745.699872, sys: "Imperial" },
+        { id: "ps", name: "Pferdestärke (metric)", symbol: "PS", factor: 735.49875, sys: "Metric" },
+      ]
+    },
+    speed: {
+      name: "SPEED (速度)", dim: "[L][T]⁻¹", base: "ms",
+      units: [
+        { id: "ms", name: "Meter per sec (SI)", symbol: "m/s", factor: 1, sys: "SI" },
+        { id: "kmh", name: "Kilometer per hour", symbol: "km/h", factor: 1/3.6, sys: "Metric" },
+        { id: "mph", name: "Mile per hour", symbol: "mph", factor: 0.44704, sys: "Imperial" },
+        { id: "knot", name: "Knot", symbol: "kn", factor: 0.514444, sys: "Nautical" },
+        { id: "mach", name: "Mach (Standard SL)", symbol: "Ma", factor: 340.3, sys: "Aero" },
+        { id: "c", name: "Speed of Light", symbol: "c", factor: 299792458, sys: "Physics" },
+      ]
+    },
+    information: {
+      name: "DATA (情報量)", dim: "None", base: "b",
+      units: [
+        { id: "b", name: "Bit", symbol: "b", factor: 1, sys: "Binary" },
+        { id: "B", name: "Byte", symbol: "B", factor: 8, sys: "Binary" },
+        { id: "KB", name: "Kilobyte", symbol: "KB", factor: 8000, sys: "Decimal" },
+        { id: "KiB", name: "Kibibyte", symbol: "KiB", factor: 8192, sys: "Binary" },
+        { id: "MB", name: "Megabyte", symbol: "MB", factor: 8e6, sys: "Decimal" },
+        { id: "MiB", name: "Mebibyte", symbol: "MiB", factor: 8388608, sys: "Binary" },
+        { id: "GB", name: "Gigabyte", symbol: "GB", factor: 8e9, sys: "Decimal" },
+        { id: "GiB", name: "Gibibyte", symbol: "GiB", factor: 8589934592, sys: "Binary" },
+      ]
+    }
+  };
 
-<span class="tool-status status-maintenance">MAINTENANCE</span>
+  let currentCategory = 'length';
+  let activeInputs = {};
 
-</div>
-<h3 class="tool-title">Report Generator</h3>
-<p class="tool-desc"></p>
-</a>
+  function init() {
+    renderSidebar();
+    loadCategory('length');
+  }
 
-<a href="/lab/latex/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-03</span>
+  function renderSidebar() {
+    const sb = document.getElementById('uc-sidebar');
+    sb.innerHTML = '';
+    Object.keys(db).forEach(key => {
+      const cat = db[key];
+      const btn = document.createElement('button');
+      btn.className = `uc-cat-btn ${key === currentCategory ? 'active' : ''}`;
+      btn.innerHTML = `${cat.name} <span class="uc-cat-dim">${cat.dim}</span>`;
+      btn.onclick = () => {
+        document.querySelectorAll('.uc-cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        loadCategory(key);
+      };
+      sb.appendChild(btn);
+    });
+  }
 
-<span class="tool-status status-active">ACTIVE</span>
+  function loadCategory(key) {
+    currentCategory = key;
+    const cat = db[key];
+    document.getElementById('uc-current-cat').textContent = cat.name;
+    document.getElementById('uc-current-dim').textContent = cat.dim;
+    
+    const grid = document.getElementById('uc-grid');
+    grid.innerHTML = '';
+    activeInputs = {};
 
-</div>
-<h3 class="tool-title">LaTeX Editor</h3>
-<p class="tool-desc"></p>
-</a>
+    cat.units.forEach(u => {
+      const card = document.createElement('div');
+      card.className = 'uc-unit-card';
+      card.id = `card-${u.id}`;
+      
+      card.innerHTML = `
+        <div class="uc-card-header">
+          <div class="uc-unit-name">
+            <span>${u.name}</span>
+            <span class="uc-unit-sys">${u.sys}</span>
+          </div>
+          <div class="uc-action-bar">
+            <button class="uc-copy-btn" onclick="ucApp.copyVal('${u.id}')">COPY</button>
+          </div>
+        </div>
+        <div class="uc-input-row">
+          <input type="text" class="uc-input" id="in-${u.id}" placeholder="0" autocomplete="off" 
+            onfocus="ucApp.focusIn('${u.id}')" onblur="ucApp.focusOut('${u.id}')" oninput="ucApp.handleConv('${u.id}')">
+          <div class="uc-unit-symbol">${u.symbol}</div>
+        </div>
+      `;
+      grid.appendChild(card);
+      activeInputs[u.id] = document.getElementById(`in-${u.id}`);
+    });
+    
+    
+    const baseIn = activeInputs[cat.base] || activeInputs[cat.units[0].id];
+    baseIn.value = "1";
+    handleConv(cat.base || cat.units[0].id);
+  }
 
-<a href="/lab/mermaid/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-04</span>
+  function focusIn(id) {
+    document.getElementById(`card-${id}`).classList.add('active');
+  }
 
-<span class="tool-status status-active">ACTIVE</span>
+  function focusOut(id) {
+    document.getElementById(`card-${id}`).classList.remove('active');
+  }
 
-</div>
-<h3 class="tool-title">Mermaid Editor</h3>
-<p class="tool-desc">テキストからフローチャートやシーケンス図を作成</p>
-</a>
+  function handleConv(sourceId) {
+    const sourceStr = activeInputs[sourceId].value;
+    if (sourceStr === "" || isNaN(sourceStr)) {
+      Object.keys(activeInputs).forEach(id => {
+        if(id !== sourceId) activeInputs[id].value = "";
+      });
+      return;
+    }
 
-<a href="/lab/unit/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-05</span>
+    const sourceVal = parseFloat(sourceStr);
+    const cat = db[currentCategory];
+    const sourceUnit = cat.units.find(u => u.id === sourceId);
 
-<span class="tool-status status-active">ACTIVE</span>
+    
+    let baseVal = 0;
+    if (currentCategory === 'temperature') {
+      baseVal = sourceVal * sourceUnit.factor + sourceUnit.offset;
+    } else {
+      baseVal = sourceVal * sourceUnit.factor;
+    }
 
-</div>
-<h3 class="tool-title">UNIT_CONVERTER</h3>
-<p class="tool-desc">⚡ 物理単位変換・次元解析ツール</p>
-</a>
+    
+    cat.units.forEach(u => {
+      if (u.id === sourceId) return; 
+      
+      let targetVal = 0;
+      if (currentCategory === 'temperature') {
+        targetVal = (baseVal - u.offset) / u.factor;
+      } else {
+        targetVal = baseVal / u.factor;
+      }
+      
+      activeInputs[u.id].value = formatNumber(targetVal);
+    });
+  }
 
-<a href="/lab/probability/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-06</span>
+  function formatNumber(num) {
+    if (num === 0) return "0";
+    const abs = Math.abs(num);
+    
+    if (abs < 1e-6 || abs >= 1e9) {
+      return num.toExponential(6).replace(/\.?0+e/, 'e');
+    }
+    
+    return Math.round(num * 1e8) / 1e8;
+  }
 
-<span class="tool-status status-active">ACTIVE</span>
+  function copyVal(id) {
+    const val = activeInputs[id].value;
+    if(!val) return;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(val);
+    } else {
+      const el = document.createElement('textarea');
+      el.value = val; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+    }
+    
+    toast.textContent = `[ ${val} ] COPIED TO CLIPBOARD`;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }
 
-</div>
-<h3 class="tool-title">PROBABILITY_SIM</h3>
-<p class="tool-desc">🎲 大数の法則・モンテカルロ法 リアルタイムシミュレータ</p>
-</a>
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { setTimeout(init, 50); }
 
-<a href="/lab/sequence/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-07</span>
+  return { loadCategory, handleConv, focusIn, focusOut, copyVal };
+})();
+</script>
 
-<span class="tool-status status-active">ACTIVE</span>
 
-</div>
-<h3 class="tool-title">SEQUENCE_ANALYZER</h3>
-<p class="tool-desc">数列解析・一般項推論</p>
-</a>
-
-<a href="/lab/math/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-08</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">FRAC_SOLVER // SYS.VER.2.0</h3>
-<p class="tool-desc">部分分数分解ツール</p>
-</a>
-
-<a href="/lab/mathcore1/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-09</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MathCore Calculator</h3>
-<p class="tool-desc">演算いろいろ</p>
-</a>
-
-<a href="/lab/matrix/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-10</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MATRIX_LAB</h3>
-<p class="tool-desc">行列計算</p>
-</a>
-
-<a href="/lab/graph/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-11</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">GRAPH_PLOTTER</h3>
-<p class="tool-desc">関数グラフプロッター</p>
-</a>
-
-<a href="/lab/logic/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-12</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Logic Circuit Simulator</h3>
-<p class="tool-desc">論理回路解析</p>
-</a>
-
-<a href="/lab/deadline/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-13</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Deadline Manager</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/attendance/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-14</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Attendance Monitor</h3>
-<p class="tool-desc">欠課時数管理ツール</p>
-</a>
-
-<a href="/lab/isbn/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-15</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">ISBN_DECODER // SYS.VER.3.0</h3>
-<p class="tool-desc">ISBNスキャナー</p>
-</a>
-
-<a href="/lab/crypto/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-16</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Cryptography Lab</h3>
-<p class="tool-desc">暗号あそびば</p>
-</a>
-
-<a href="/lab/stamp/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-17</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">切手組み合わせ計算機</h3>
-<p class="tool-desc">郵便料金を入力すると，現在販売中の普通切手で最小枚数になる組み合わせを計算する.</p>
-</a>
-
-</div>
-</div>
     </section>
     <footer class="pt-8">
       

@@ -15,21 +15,18 @@
 
   
   
-    <title>Labs &middot; dt&#39;s world</title>
-    <meta name="title" content="Labs &middot; dt&#39;s world">
+    <title>PROBABILITY_SIM &middot; dt&#39;s world</title>
+    <meta name="title" content="PROBABILITY_SIM &middot; dt&#39;s world">
   
 
   
   
-    <meta name="description" content="ツール集。">
+    <meta name="description" content="🎲 大数の法則・モンテカルロ法 リアルタイムシミュレータ">
   
   
   
   
-  <link rel="canonical" href="https://dtwant.github.io/lab/">
-  
-    
-      <link rel="alternate" type="application/rss+xml" href="/lab/index.xml" title="dt's world" />
+  <link rel="canonical" href="https://dtwant.github.io/lab/probability/">
   
 
   
@@ -47,17 +44,18 @@
   
 
   
-  <meta property="og:url" content="https://dtwant.github.io/lab/">
+  <meta property="og:url" content="https://dtwant.github.io/lab/probability/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="Labs">
-  <meta property="og:description" content="らぼらとりぃ">
+  <meta property="og:title" content="PROBABILITY_SIM">
+  <meta property="og:description" content="🎲 大数の法則・モンテカルロ法 リアルタイムシミュレータ">
   <meta property="og:locale" content="en">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="lab">
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Labs">
-  <meta name="twitter:description" content="らぼらとりぃ">
+  <meta name="twitter:title" content="PROBABILITY_SIM">
+  <meta name="twitter:description" content="🎲 大数の法則・モンテカルロ法 リアルタイムシミュレータ">
 
   
   
@@ -117,6 +115,12 @@
   
   
   
+  
+    
+    <script
+      type="text/javascript"
+      src="/js/zen-mode.min.9814dee9614d32aeb56239d118edfe20acd6231424f9b19c2dd48835038414130a5e946c0d1c9087d60e60e31840c9babfd217e3d4b95643dc8d651a71ccdf4a.js"
+      integrity="sha512-mBTe6WFNMq61YjnRGO3&#43;IKzWIxQk&#43;bGcLdSINQOEFBMKXpRsDRyQh9YOYOMYQMm6v9IX49S5VkPcjWUacczfSg=="></script>
   
   
     
@@ -203,7 +207,34 @@
   
 
   
-  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Labs",
+    "name": "PROBABILITY_SIM",
+    "headline": "PROBABILITY_SIM",
+    "description": "🎲 大数の法則・モンテカルロ法 リアルタイムシミュレータ",
+    
+    "inLanguage": "en",
+    "url" : "https:\/\/dtwant.github.io\/lab\/probability\/",
+    "author" : {
+      "@type": "Person",
+      "name": "dt"
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "85"
+  }]
+  </script>
+
 
 
   
@@ -729,6 +760,8 @@
   
     
   
+    
+  
   <li class="hidden">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/"
       >dt</a
@@ -736,9 +769,16 @@
   </li>
 
   
-  <li class="hidden">
+  <li class="inline">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/"
       >Labs</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/probability/"
+      >PROBABILITY_SIM</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -747,340 +787,660 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        Labs
+        PROBABILITY_SIM
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=M+PLUS+1+Code:wght@400;700&display=swap" rel="stylesheet">
+      
+<h1 class="relative group">PROBABILITY_SIM <span style="font-size:12px;color:#00ff41;">// STOCHASTIC_ENGINE</span>
+    <div id="probability_sim--stochastic_engine" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#probability_sim--stochastic_engine" aria-label="Anchor">#</a>
+    </span>
+    
+</h1>
+<p>高度な乱数生成器を用いて、統計的振る舞い（大数の法則やモンテカルロ法）をリアルタイムに可視化するシミュレータです。</p>
+<blockquote>
+<p>[!NOTE]
+<strong>SIMULATION MODULES:</strong></p>
+<ul>
+<li><strong>[ COIN_TOSS ]</strong> 二項分布への収束</li>
+<li><strong>[ MULTI_DICE ]</strong> 複数サイコロの和による正規分布への収束（中心極限定理）</li>
+<li><strong>[ MONTE_CARLO_PI ]</strong> ランダムプロットによる円周率 $\pi$ の推定</li>
+</ul></blockquote>
+<hr>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-/* --- ベース設定 --- */
-.lab-container {
-font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace;
-color: #e0f8ff;
-margin-top: 2rem;
-}
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
 
-/* --- ターミナル風のイントロ --- */
-.lab-intro-box {
-background: rgba(5, 5, 5, 0.8);
-border: 1px solid rgba(0, 243, 255, 0.3);
-border-left: 4px solid #00f3ff;
-padding: 1rem 1.5rem;
-margin-bottom: 2.5rem;
-box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
-}
-.lab-intro-text {
-margin: 0;
-line-height: 1.6;
-color: #00f3ff;
-text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
-font-size: 0.95rem;
-}
-.lab-intro-text .blink {
-animation: blink-cursor 1s infinite;
-}
-@keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+   
+  #ps-app {
+    --neon-cyan: #00f3ff;
+    --neon-pink: #ff0055;
+    --neon-green: #00ff41;
+    --neon-yellow: #fcee0a;
+    --bg-dark: #050505;
+    
+    font-family: 'Zen Kaku Gothic New', sans-serif;  
+    color: #e2e8f0;
+    
+    position: fixed; top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 99999;
+    background: var(--bg-dark);
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  #ps-app * { box-sizing: inherit; }
 
-/* --- ツールグリッド (カードレイアウト) --- */
-.lab-grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-gap: 1.5rem;
-}
+   
+  .ps-bg-grid {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background-image: 
+      radial-gradient(circle at 100% 100%, rgba(0, 255, 65, 0.08) 0%, transparent 50%),
+      linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px; 
+    z-index: 1; pointer-events: none;
+  }
+  .ps-scanline {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.3) 50%);
+    background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.7;
+  }
 
-/* --- ツールカード --- */
-.tool-card {
-display: flex;
-flex-direction: column;
-background: rgba(5, 5, 5, 0.6);
-border: 1px solid rgba(0, 243, 255, 0.2);
-border-radius: 4px;
-padding: 1.5rem;
-text-decoration: none !important;
-transition: all 0.3s ease;
-position: relative;
-overflow: hidden;
-backdrop-filter: blur(4px);
--webkit-backdrop-filter: blur(4px);
-}
+   
+  .ps-container {
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column; width: 100%; height: 100%;
+  }
 
-.tool-card:hover {
-border-color: #ff0055;
-box-shadow: 0 0 20px rgba(255, 0, 85, 0.15), inset 0 0 10px rgba(255, 0, 85, 0.05);
-transform: translateY(-3px);
-background: rgba(255, 0, 85, 0.05);
-}
+   
+  .ps-header {
+    background: rgba(0,0,0,0.95); border-bottom: 2px solid rgba(0, 255, 65, 0.4);
+    padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,0.8);
+  }
+  .ps-title {
+    font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 900;
+    color: var(--neon-green); text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+    letter-spacing: 2px; display: flex; align-items: center; gap: 15px;
+  }
+  .ps-sys-status {
+    font-size: 0.75rem; color: var(--neon-cyan);
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(0, 243, 255, 0.05); padding: 5px 12px; border: 1px solid rgba(0, 243, 255, 0.2);
+    font-family: 'JetBrains Mono', monospace; font-weight: bold;
+  }
+  .ps-exit-btn {
+    background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
+    font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.75rem; font-weight: bold;
+    padding: 6px 15px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px; margin-left:15px;
+  }
+  .ps-exit-btn:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px rgba(255,0,85,0.5); }
 
-.tool-card::before {
-content: '';
-position: absolute;
-top: 0; left: 0; bottom: 0;
-width: 3px;
-background: #00f3ff;
-box-shadow: 0 0 8px #00f3ff;
-transition: all 0.3s ease;
-}
-.tool-card:hover::before {
-background: #ff0055;
-box-shadow: 0 0 8px #ff0055;
-}
+   
+  .ps-workspace {
+    flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;
+  }
+  @media(min-width: 1000px) { .ps-workspace { flex-direction: row; } }
 
-/* --- カード内の要素 --- */
-.tool-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 1rem;
-border-bottom: 1px dashed rgba(0, 243, 255, 0.2);
-padding-bottom: 0.5rem;
-}
+   
+  .ps-sidebar {
+    width: 100%; background: rgba(5,5,5,0.9);
+    border-right: 1px solid rgba(0, 255, 65, 0.2);
+    display: flex; flex-direction: column; overflow-y: auto;
+    flex-shrink: 0; box-shadow: inset -10px 0 20px rgba(0,0,0,0.5);
+    padding: 20px; gap: 15px;
+  }
+  @media(min-width: 1000px) { .ps-sidebar { width: 340px; } }
+  .ps-sidebar::-webkit-scrollbar { width: 4px; }
+  .ps-sidebar::-webkit-scrollbar-thumb { background: rgba(0, 255, 65, 0.3); }
 
-.tool-id {
-font-family: 'Orbitron', sans-serif;
-font-size: 0.75rem;
-color: rgba(0, 243, 255, 0.6);
-letter-spacing: 2px;
-}
+  .ps-control-group { 
+    background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 15px; 
+    border-left: 3px solid #333; transition: border-color 0.3s; 
+  }
+  .ps-control-group:hover { border-left-color: var(--neon-green); background: rgba(0, 255, 65, 0.02); }
+  
+  .ps-label-eng { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: var(--neon-cyan); letter-spacing: 1px; display: block; }
+  .ps-label-jp { font-size: 0.8rem; color: #fff; font-weight: bold; margin-bottom: 8px; display: block; }
+  .ps-desc { font-size: 0.7rem; color: #888; margin-top: 5px; line-height: 1.4; }
+  
+  .ps-select, .ps-input {
+    width: 100%; background: #000; border: 1px solid #444; color: #fff;
+    font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.9rem; padding: 10px;
+    outline: none; transition: all 0.2s; font-weight: bold;
+  }
+  .ps-select:focus, .ps-input:focus { border-color: var(--neon-green); box-shadow: 0 0 10px rgba(0,255,65,0.2); }
+  
+  .ps-btn-group { display: flex; gap: 10px; margin-top: 15px; }
+  .ps-btn {
+    flex: 1; background: transparent; border: 1px solid var(--neon-green); color: var(--neon-green);
+    font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.9rem; font-weight: bold; padding: 12px;
+    cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  }
+  .ps-btn-en { font-family: 'Orbitron', sans-serif; font-size: 0.6rem; opacity: 0.8; }
+  
+  .ps-btn:hover { background: rgba(0,255,65,0.2); box-shadow: 0 0 15px rgba(0,255,65,0.4); }
+  .ps-btn.active { background: var(--neon-green); color: #000; box-shadow: 0 0 20px rgba(0,255,65,0.6); }
+  .ps-btn.stop { border-color: var(--neon-pink); color: var(--neon-pink); }
+  .ps-btn.stop:hover { background: rgba(255,0,85,0.2); box-shadow: 0 0 15px rgba(255,0,85,0.4); }
 
-.tool-status {
-font-family: 'Orbitron', sans-serif;
-font-size: 0.7rem;
-font-weight: bold;
-padding: 2px 6px;
-border-radius: 2px;
-letter-spacing: 1px;
-}
-.status-active {
-color: #00ff66;
-background: rgba(0, 255, 102, 0.1);
-border: 1px solid rgba(0, 255, 102, 0.3);
-text-shadow: 0 0 5px #00ff66;
-}
-.status-maintenance {
-color: #fde047;
-background: rgba(253, 224, 71, 0.1);
-border: 1px solid rgba(253, 224, 71, 0.3);
-text-shadow: 0 0 5px #fde047;
-}
+   
+  .ps-panel {
+    flex-grow: 1; padding: 25px; overflow-y: auto;
+    display: flex; flex-direction: column; background: transparent; position: relative; gap: 20px;
+  }
+  
+   
+  .ps-telemetry { display: flex; gap: 15px; flex-wrap: wrap; }
+  .ps-stat-box {
+    background: rgba(0,0,0,0.8); border: 1px solid rgba(0,243,255,0.3);
+    padding: 15px 20px; flex: 1; min-width: 180px; position: relative;
+    display: flex; flex-direction: column; justify-content: flex-end; backdrop-filter: blur(4px);
+  }
+  .ps-stat-box::before {
+    content: ''; position: absolute; top:0; left:0; width:4px; height:100%; background: var(--neon-cyan); opacity: 0.5;
+  }
+  .ps-stat-box.highlight { border-color: var(--neon-yellow); }
+  .ps-stat-box.highlight::before { background: var(--neon-yellow); opacity: 1; }
 
-.tool-title {
-font-family: 'Orbitron', sans-serif;
-font-size: 1.2rem;
-font-weight: 700;
-color: #00f3ff;
-margin: 0 0 0.5rem 0;
-text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
-transition: color 0.3s ease;
-}
-.tool-card:hover .tool-title {
-color: #ff0055;
-text-shadow: 0 0 5px rgba(255, 0, 85, 0.4);
-}
+  .ps-stat-label-en { font-family: 'Orbitron', sans-serif; font-size: 0.6rem; color: #888; letter-spacing: 1px; }
+  .ps-stat-label-jp { font-size: 0.85rem; color: #bbb; font-weight: bold; margin-bottom: 5px; }
+  
+  .ps-stat-value { font-family: 'JetBrains Mono', monospace; font-size: 1.8rem; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+  .ps-stat-value.highlight { color: var(--neon-yellow); text-shadow: 0 0 10px rgba(252,238,10,0.5); }
 
-.tool-desc {
-font-size: 0.85rem;
-color: #a0c0d0;
-line-height: 1.5;
-margin: 0;
-}
+   
+  .ps-charts-container {
+    flex-grow: 1; display: flex; flex-direction: column; gap: 20px; min-height: 500px;
+  }
+  @media(min-width: 1200px) { .ps-charts-container { flex-direction: row; } }
+  
+  .ps-chart-card {
+    flex: 1; background: rgba(0,0,0,0.6); border: 1px solid #333;
+    display: flex; flex-direction: column; backdrop-filter: blur(5px);
+  }
+  .ps-chart-header {
+    background: rgba(0,0,0,0.8); border-bottom: 1px solid #333; padding: 10px 15px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .ps-chart-title { font-size: 0.9rem; font-weight: bold; color: #fff; display: flex; gap: 10px; align-items: center; }
+  .ps-chart-title-en { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; color: var(--neon-green); }
+  
+  .ps-chart-wrapper {
+    flex-grow: 1; padding: 15px; position: relative; min-height: 250px;
+  }
+  
+  canvas { width: 100% !important; height: 100% !important; }
+
 </style>
-<div class="lab-container">
-<div class="lab-intro-box">
-<p class="lab-intro-text">> INITIALIZING LABORATORY MODULES...</p>
-<p class="lab-intro-text">> LOADING CUSTOM TOOLS AND UTILITIES...</p>
-<p class="lab-intro-text">> ALL SYSTEMS SECURE. READY FOR OPERATION<span class="blink">_</span></p>
+
+<div id="ps-app">
+  <div class="ps-bg-grid"></div>
+  <div class="ps-scanline"></div>
+
+  <div class="ps-container">
+    
+    <div class="ps-header">
+      <div class="ps-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83M22 12A10 10 0 0 0 12 2v10z"/></svg>
+        PROBABILITY_SIM
+      </div>
+      <div style="display:flex; align-items:center;">
+        <div class="ps-sys-status" id="ps-indicator"><span style="color:#f59e0b;">●</span> IDLE (待機中)</div>
+        <button class="ps-exit-btn" onclick="history.back()">閉じる (DISCONNECT)</button>
+      </div>
+    </div>
+
+    <div class="ps-workspace">
+      
+      <div class="ps-sidebar">
+        
+        <div class="ps-control-group">
+          <span class="ps-label-eng">SIMULATION_MODE</span>
+          <span class="ps-label-jp">実験モード選択</span>
+          <select id="ps-mode" class="ps-select" onchange="psApp.changeMode()">
+            <option value="coin">表裏の確率（コイントス・二項分布）</option>
+            <option value="dice">サイコロの和（中心極限定理・正規分布）</option>
+            <option value="pi">ランダムドット（モンテカルロ法・円周率）</option>
+          </select>
+          <div class="ps-desc" id="ps-desc-text">コイントスを繰り返し、表が出る割合を理論値と比較します。「大数の法則」を視覚化します。</div>
+        </div>
+
+        <div class="ps-control-group" id="ps-param-group">
+          <span class="ps-label-eng" id="ps-param-eng">PROBABILITY</span>
+          <span class="ps-label-jp" id="ps-param-jp">表が出る確率設定</span>
+          <input type="number" id="ps-param" class="ps-input" value="0.5" min="0.01" max="0.99" step="0.01">
+        </div>
+
+        <div class="ps-control-group">
+          <span class="ps-label-eng">TRIALS_PER_TICK</span>
+          <span class="ps-label-jp">シミュレーション速度（1描画あたりの試行回数）</span>
+          <select id="ps-speed" class="ps-select">
+            <option value="1">1回 / 描画（手動確認用）</option>
+            <option value="10">10回 / 描画（ゆっくり）</option>
+            <option value="100" selected>100回 / 描画（推奨・高速）</option>
+            <option value="1000">1000回 / 描画（オーバー・ドライブ）</option>
+          </select>
+        </div>
+
+        <div class="ps-control-group">
+          <span class="ps-label-eng">EXECUTION_ENGINE</span>
+          <span class="ps-label-jp">実行コントロール</span>
+          <div class="ps-btn-group">
+            <button class="ps-btn" id="btn-run" onclick="psApp.toggleRun()">
+              自動実行 <span class="ps-btn-en">START AUTO-RUN</span>
+            </button>
+            <button class="ps-btn" id="btn-step" onclick="psApp.step()">
+              1ステップ進行 <span class="ps-btn-en">STEP FORWARD</span>
+            </button>
+          </div>
+          <div class="ps-btn-group">
+            <button class="ps-btn stop" onclick="psApp.reset()">
+              データ初期化 <span class="ps-btn-en">WIPE DATA</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+      
+      
+      <div class="ps-panel">
+        
+        
+        <div class="ps-telemetry">
+          <div class="ps-stat-box">
+            <span class="ps-stat-label-en">TOTAL_TRIALS (N)</span>
+            <span class="ps-stat-label-jp">総試行回数</span>
+            <span class="ps-stat-value" id="stat-trials">0</span>
+          </div>
+          <div class="ps-stat-box">
+            <span class="ps-stat-label-en">EXPECTED_VALUE (THEORY)</span>
+            <span class="ps-stat-label-jp" id="stat-target-label">理論値 (確率)</span>
+            <span class="ps-stat-value" id="stat-theory">0.00</span>
+          </div>
+          <div class="ps-stat-box highlight">
+            <span class="ps-stat-label-en">OBSERVED_VALUE (EMPIRICAL)</span>
+            <span class="ps-stat-label-jp" id="stat-obs-label">実測値 (結果)</span>
+            <span class="ps-stat-value highlight" id="stat-obs">0.00</span>
+          </div>
+          <div class="ps-stat-box">
+            <span class="ps-stat-label-en">ERROR_MARGIN</span>
+            <span class="ps-stat-label-jp">理論値との誤差</span>
+            <span class="ps-stat-value" id="stat-err">0.00%</span>
+          </div>
+        </div>
+
+        
+        <div class="ps-charts-container">
+          
+          
+          <div class="ps-chart-card">
+            <div class="ps-chart-header">
+              <div class="ps-chart-title">
+                <span id="chart1-title-jp">現在の分布状態</span>
+                <span class="ps-chart-title-en" id="chart1-title-en">CURRENT_DISTRIBUTION</span>
+              </div>
+            </div>
+            <div class="ps-chart-wrapper">
+              <canvas id="ps-chart1"></canvas>
+            </div>
+          </div>
+
+          
+          <div class="ps-chart-card">
+            <div class="ps-chart-header">
+              <div class="ps-chart-title">
+                <span>大数の法則（収束履歴グラフ）</span>
+                <span class="ps-chart-title-en">CONVERGENCE_HISTORY (X_n → μ)</span>
+              </div>
+            </div>
+            <div class="ps-chart-wrapper">
+              <canvas id="ps-chart2"></canvas>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
 </div>
-<div class="lab-grid">
 
-<a href="/lab/mdeditor/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-01</span>
+<script>
+var psApp = (function() {
+  "use strict";
+  
+  
+  Chart.defaults.color = '#aaaddd';
+  Chart.defaults.font.family = "'JetBrains Mono', monospace";
+  Chart.defaults.scale.grid.color = 'rgba(255,255,255,0.1)';
+  
+  let cDist = null; 
+  let cHist = null; 
+  
+  let mode = 'coin';
+  let isRunning = false;
+  let runTimer = null;
+  
+  
+  let totalTrials = 0;
+  let distData = {}; 
+  
+  let piInside = 0;
+  let piPoints = []; 
+  
+  
+  let historyData = [];
+  let theoryValue = 0;
+  let historyTickDelay = 0;
 
-<span class="tool-status status-active">ACTIVE</span>
+  const btnRun = document.getElementById('btn-run');
+  const ind = document.getElementById('ps-indicator');
+  
+  function init() {
+    changeMode();
+  }
 
-</div>
-<h3 class="tool-title">Markdown Editor</h3>
-<p class="tool-desc"></p>
-</a>
+  function changeMode() {
+    stop();
+    mode = document.getElementById('ps-mode').value;
+    const desc = document.getElementById('ps-desc-text');
+    const paramGrp = document.getElementById('ps-param-group');
+    const pEng = document.getElementById('ps-param-eng');
+    const pJp = document.getElementById('ps-param-jp');
+    const paramIn = document.getElementById('ps-param');
+    const lblT = document.getElementById('stat-target-label');
+    const lblO = document.getElementById('stat-obs-label');
+    
+    if (mode === 'coin') {
+      desc.innerHTML = `コイントスを繰り返し、表が出る割合を理論値と比較します。<br>試行を重ねるごとに割合が理論値に収束する「大数の法則」を視覚化します。`;
+      paramGrp.style.display = 'block';
+      pEng.textContent = 'COIN_WEIGHT (Prob of Heads)'; pJp.textContent = '表が出る確率設定';
+      paramIn.value = '0.5'; paramIn.min = '0.01'; paramIn.max = '0.99'; paramIn.step = '0.01';
+      lblT.textContent = '理論上の確率 (期待値)'; lblO.textContent = '実際の「表」の割合';
+      document.getElementById('chart1-title-jp').textContent = '表と裏の出現割合（ヒストグラム）';
+    } else if (mode === 'dice') {
+      desc.innerHTML = `複数個のサイコロを振り、合計値の分布を記録します。<br>試行を重ねるとグラフが綺麗な「正規分布（ベルカーブ）」の形になる「中心極限定理」を視覚化します。`;
+      paramGrp.style.display = 'block';
+      pEng.textContent = 'DICE_COUNT (Sum of N Dice)'; pJp.textContent = '同時に振るサイコロの個数';
+      paramIn.value = '3'; paramIn.min = '1'; paramIn.max = '10'; paramIn.step = '1';
+      lblT.textContent = '合計の平均値 (期待値)'; lblO.textContent = '実際の合計の平均値';
+      document.getElementById('chart1-title-jp').textContent = '合計値の出現回数（分布形状）';
+    } else if (mode === 'pi') {
+      desc.innerHTML = `1×1の正方形にランダムに点を打ち、「円の中に入った点の数 ÷ 全体の点の数 × 4」で円周率 $\\pi$ を推定します（モンテカルロ法）。`;
+      paramGrp.style.display = 'none';
+      lblT.textContent = '真の円周率 (3.14159...)'; lblO.textContent = '乱数による推定円周率';
+      document.getElementById('chart1-title-jp').textContent = 'XY座標へのランダムプロット';
+    }
+    
+    reset();
+  }
 
-<a href="/lab/report/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-02</span>
+  function reset() {
+    totalTrials = 0;
+    distData = {};
+    piInside = 0;
+    piPoints = [];
+    historyData = [];
+    historyTickDelay = 0;
+    
+    updateStats();
+    initCharts();
+  }
 
-<span class="tool-status status-maintenance">MAINTENANCE</span>
+  function initCharts() {
+    if (cDist) cDist.destroy();
+    if (cHist) cHist.destroy();
+    
+    const ctx1 = document.getElementById('ps-chart1').getContext('2d');
+    const ctx2 = document.getElementById('ps-chart2').getContext('2d');
+    
+    
+    if (mode === 'coin') {
+      cDist = new Chart(ctx1, {
+        type: 'bar',
+        data: { labels: ['表 (Heads)', '裏 (Tails)'], datasets: [{ label: '割合', data: [0,0], backgroundColor: 'rgba(0, 255, 65, 0.6)', borderColor: '#00ff41', borderWidth: 1 }] },
+        options: { responsive: true, maintainAspectRatio: false, animation: { duration: 0 }, plugins: { legend: { display: false } },
+                   scales: { y: { beginAtZero: true, max: 1.0 } } }
+      });
+    } else if (mode === 'dice') {
+      cDist = new Chart(ctx1, {
+        type: 'bar',
+        data: { labels: [], datasets: [
+          
+          { label: '回数', data: [], backgroundColor: 'rgba(0, 243, 255, 0.6)', borderColor: '#00f3ff', borderWidth: 1 }
+        ]},
+        options: { responsive: true, maintainAspectRatio: false, animation: { duration: 0 }, plugins: { legend: { display: false } },
+                   scales: { y: { beginAtZero: true } } }
+      });
+    } else if (mode === 'pi') {
+      cDist = new Chart(ctx1, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            { label: 'Inside (円内)', data: [], backgroundColor: 'rgba(0, 243, 255, 1)', pointRadius: 2, pointHoverRadius: 2 },
+            { label: 'Outside (円外)', data: [], backgroundColor: 'rgba(255, 0, 85, 0.8)', pointRadius: 2, pointHoverRadius: 2 },
+            { type: 'line', label: 'Circle Limit', data: getCirclePoints(), backgroundColor: 'transparent', borderColor: '#fcee0a', borderWidth: 2, pointRadius: 0 }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, animation: { duration: 0 }, plugins: { legend: { display: false } },
+                   scales: { y: { min: -1.05, max: 1.05 }, x: { min: -1.05, max: 1.05 } } }
+      });
+    }
 
-</div>
-<h3 class="tool-title">Report Generator</h3>
-<p class="tool-desc"></p>
-</a>
+    
+    cHist = new Chart(ctx2, {
+      type: 'line',
+      data: {
+        datasets: [
+          { label: '実測値 (Observed)', data: [], borderColor: 'rgba(0, 255, 65, 1)', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, tension: 0.1 },
+          { label: '理論値 (Theory)', data: [], borderColor: 'rgba(252, 238, 10, 0.8)', backgroundColor: 'transparent', borderWidth: 1, pointRadius: 0, borderDash: [5, 5] }
+        ]
+      },
+      options: { 
+        responsive: true, maintainAspectRatio: false, animation: { duration: 0 },
+        plugins: { legend: { labels:{color:'#fff', font:{family:"'Zen Kaku Gothic New', sans-serif"}} } },
+        scales: {
+          x: { type: 'linear', title: {display:true, text:'試行回数 (N)', color:'#aaa'} },
+          y: { title: {display:true, text:'推移', color:'#aaa'}, suggestedMin: 0, suggestedMax: 1 }
+        }
+      }
+    });
+  }
+  
+  function getCirclePoints() {
+    const pts = [];
+    for(let i=0; i<=100; i++) {
+      let angle = (i/100) * 2 * Math.PI;
+      pts.push({ x: Math.cos(angle), y: Math.sin(angle) });
+    }
+    return pts;
+  }
 
-<a href="/lab/latex/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-03</span>
+  function toggleRun() {
+    isRunning = !isRunning;
+    if (isRunning) {
+      btnRun.innerHTML = `自動停止 <span class="ps-btn-en">STOP AUTO-RUN</span>`; btnRun.classList.add('active');
+      ind.innerHTML = `<span style="color:#00ff41;">●</span> PROCESSING (実行中)`;
+      runLoop();
+    } else {
+      stop();
+    }
+  }
 
-<span class="tool-status status-active">ACTIVE</span>
+  function stop() {
+    isRunning = false;
+    btnRun.innerHTML = `自動実行 <span class="ps-btn-en">START AUTO-RUN</span>`; btnRun.classList.remove('active');
+    ind.innerHTML = `<span style="color:#f59e0b;">●</span> IDLE (待機中)`;
+    cancelAnimationFrame(runTimer);
+  }
 
-</div>
-<h3 class="tool-title">LaTeX Editor</h3>
-<p class="tool-desc"></p>
-</a>
+  function step() {
+    let speed = parseInt(document.getElementById('ps-speed').value);
+    computeStep(speed);
+  }
 
-<a href="/lab/mermaid/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-04</span>
+  function runLoop() {
+    if (!isRunning) return;
+    let speed = parseInt(document.getElementById('ps-speed').value);
+    computeStep(speed);
+    
+    
+    if(speed >= 1000) {
+      runTimer = setTimeout(() => requestAnimationFrame(runLoop), 30); 
+    } else {
+      runTimer = requestAnimationFrame(runLoop);
+    }
+  }
 
-<span class="tool-status status-active">ACTIVE</span>
+  function computeStep(count) {
+    if (mode === 'coin') {
+      let P = parseFloat(document.getElementById('ps-param').value);
+      theoryValue = P;
+      for(let i=0; i<count; i++) {
+        let res = Math.random() < P ? 'Heads' : 'Tails';
+        distData[res] = (distData[res] || 0) + 1;
+        totalTrials++;
+      }
+    } else if (mode === 'dice') {
+      let N = parseInt(document.getElementById('ps-param').value);
+      theoryValue = 3.5 * N;
+      for(let i=0; i<count; i++) {
+        let sum = 0;
+        for(let j=0; j<N; j++) sum += Math.floor(Math.random() * 6) + 1;
+        distData[sum] = (distData[sum] || 0) + 1;
+        totalTrials++;
+      }
+    } else if (mode === 'pi') {
+      theoryValue = Math.PI;
+      for(let i=0; i<count; i++) {
+        let x = (Math.random() * 2) - 1;
+        let y = (Math.random() * 2) - 1;
+        let r2 = x*x + y*y;
+        let isInside = r2 <= 1;
+        
+        if (isInside) piInside++;
+        totalTrials++;
+        
+        piPoints.push({ x: x, y: y, inside: isInside });
+      }
+      
+      if(piPoints.length > 2000) piPoints.splice(0, piPoints.length - 2000);
+    }
+    
+    updateStats();
+    
+    
+    historyTickDelay++;
+    if(historyTickDelay >= Math.max(1, count/20)) {
+      historyTickDelay = 0;
+      const obs = getCurrentObserved();
+      historyData.push({x: totalTrials, y: obs});
+      if(historyData.length > 500) {
+        
+        const compressed = [];
+        for(let i=0; i<historyData.length; i+=2) compressed.push(historyData[i]);
+        compressed.push(historyData[historyData.length-1]);
+        historyData = compressed;
+      }
+    }
 
-</div>
-<h3 class="tool-title">Mermaid Editor</h3>
-<p class="tool-desc">テキストからフローチャートやシーケンス図を作成</p>
-</a>
+    renderCharts();
+  }
 
-<a href="/lab/unit/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-05</span>
+  function getCurrentObserved() {
+    if (totalTrials === 0) return 0;
+    if (mode === 'coin') return (distData['Heads'] || 0) / totalTrials;
+    if (mode === 'dice') {
+      let totalSum = 0;
+      for (const [val, count] of Object.entries(distData)) totalSum += parseInt(val) * count;
+      return totalSum / totalTrials;
+    }
+    if (mode === 'pi') return 4 * (piInside / totalTrials);
+    return 0;
+  }
 
-<span class="tool-status status-active">ACTIVE</span>
+  function updateStats() {
+    document.getElementById('stat-trials').textContent = totalTrials;
+    const obs = getCurrentObserved();
+    
+    if (totalTrials === 0) {
+      document.getElementById('stat-theory').textContent = "0.00";
+      document.getElementById('stat-obs').textContent = "0.00";
+      document.getElementById('stat-err').textContent = "0.00%";
+      return;
+    }
 
-</div>
-<h3 class="tool-title">UNIT_CONVERTER</h3>
-<p class="tool-desc">⚡ 物理単位変換・次元解析ツール</p>
-</a>
+    document.getElementById('stat-theory').textContent = theoryValue.toFixed(5);
+    document.getElementById('stat-obs').textContent = obs.toFixed(5);
+    
+    let err = Math.abs((obs - theoryValue) / theoryValue) * 100;
+    document.getElementById('stat-err').textContent = err.toFixed(3) + "%";
+  }
 
-<a href="/lab/probability/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-06</span>
+  function renderCharts() {
+    if (!cDist || !cHist) return;
+    
+    
+    if (mode === 'coin') {
+      cDist.data.datasets[0].data = [ (distData['Heads']||0)/totalTrials, (distData['Tails']||0)/totalTrials ];
+      cDist.update();
+    } else if (mode === 'dice') {
+      let N = parseInt(document.getElementById('ps-param').value);
+      let min = N; let max = N*6;
+      let labels = []; let data = [];
+      for(let i=min; i<=max; i++) {
+        labels.push(i);
+        data.push(distData[i] || 0); 
+      }
+      cDist.data.labels = labels;
+      cDist.data.datasets[0].data = data;
+      cDist.update();
+    } else if (mode === 'pi') {
+      const insidePts = []; const outsidePts = [];
+      piPoints.forEach(p => p.inside ? insidePts.push({x:p.x, y:p.y}) : outsidePts.push({x:p.x, y:p.y}));
+      cDist.data.datasets[0].data = insidePts;
+      cDist.data.datasets[1].data = outsidePts;
+      cDist.update();
+    }
 
-<span class="tool-status status-active">ACTIVE</span>
+    
+    if(historyData.length > 0) {
+      cHist.data.datasets[0].data = historyData;
+      
+      cHist.data.datasets[1].data = [
+        {x: historyData[0].x, y: theoryValue},
+        {x: historyData[historyData.length-1].x, y: theoryValue}
+      ];
+      
+      
+      let yMin = theoryValue * 0.5; let yMax = theoryValue * 1.5;
+      if(mode === 'coin') { yMin = 0; yMax = 1; }
+      else if (mode === 'dice') { yMin = theoryValue * 0.8; yMax = theoryValue * 1.2; }
+      else if (mode === 'pi') { yMin = 2.5; yMax = 4.0; }
+      
+      cHist.options.scales.y.suggestedMin = yMin;
+      cHist.options.scales.y.suggestedMax = yMax;
+      
+      cHist.update();
+    }
+  }
 
-</div>
-<h3 class="tool-title">PROBABILITY_SIM</h3>
-<p class="tool-desc">🎲 大数の法則・モンテカルロ法 リアルタイムシミュレータ</p>
-</a>
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { setTimeout(init, 50); }
 
-<a href="/lab/sequence/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-07</span>
+  return { changeMode, toggleRun, step, reset };
+})();
+</script>
 
-<span class="tool-status status-active">ACTIVE</span>
 
-</div>
-<h3 class="tool-title">SEQUENCE_ANALYZER</h3>
-<p class="tool-desc">数列解析・一般項推論</p>
-</a>
-
-<a href="/lab/math/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-08</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">FRAC_SOLVER // SYS.VER.2.0</h3>
-<p class="tool-desc">部分分数分解ツール</p>
-</a>
-
-<a href="/lab/mathcore1/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-09</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MathCore Calculator</h3>
-<p class="tool-desc">演算いろいろ</p>
-</a>
-
-<a href="/lab/matrix/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-10</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MATRIX_LAB</h3>
-<p class="tool-desc">行列計算</p>
-</a>
-
-<a href="/lab/graph/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-11</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">GRAPH_PLOTTER</h3>
-<p class="tool-desc">関数グラフプロッター</p>
-</a>
-
-<a href="/lab/logic/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-12</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Logic Circuit Simulator</h3>
-<p class="tool-desc">論理回路解析</p>
-</a>
-
-<a href="/lab/deadline/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-13</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Deadline Manager</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/attendance/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-14</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Attendance Monitor</h3>
-<p class="tool-desc">欠課時数管理ツール</p>
-</a>
-
-<a href="/lab/isbn/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-15</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">ISBN_DECODER // SYS.VER.3.0</h3>
-<p class="tool-desc">ISBNスキャナー</p>
-</a>
-
-<a href="/lab/crypto/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-16</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Cryptography Lab</h3>
-<p class="tool-desc">暗号あそびば</p>
-</a>
-
-<a href="/lab/stamp/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-17</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">切手組み合わせ計算機</h3>
-<p class="tool-desc">郵便料金を入力すると，現在販売中の普通切手で最小枚数になる組み合わせを計算する.</p>
-</a>
-
-</div>
-</div>
     </section>
     <footer class="pt-8">
       
