@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "44"
+    "wordCount": "70"
   }]
   </script>
 
@@ -801,17 +801,15 @@
     </span>
     
 </h1>
-<p>SI単位系や非SI単位系の相互変換を高速に行うハッキング型ユーティリティ。
-数値を入力すると、同種の物理量すべてに対して同時に影響波及（計算）が行われます。</p>
+<p>SI単位系・非SI単位系・和単位の相互変換を高速に行うハッキング型ユーティリティ。
+数値を入力すると、同種の物理量すべてに対して同時に計算が行われます。</p>
 <blockquote>
 <p>[!NOTE]
-<strong>AVAILABLE MODULES:</strong></p>
-<ul>
-<li><strong>[ LENGTH ]</strong> (m, ft, in, ly&hellip;)</li>
-<li><strong>[ MASS ]</strong> (kg, lb, oz&hellip;)</li>
-<li><strong>[ ENERGY ]</strong> (J, eV, cal, kWh&hellip;)</li>
-<li><strong>[ PRESSURE ]</strong> (Pa, atm, bar, Torr&hellip;)</li>
-</ul></blockquote>
+<strong>14 MODULES — FULL SPECTRUM COVERAGE:</strong></p>
+<p>📏 LENGTH ・ ⬜ AREA ・ 📦 VOLUME ・ ⚖️ MASS ・ ⏱️ TIME ・ 🌡️ TEMPERATURE
+⚡ ENERGY ・ 💨 PRESSURE ・ 💪 FORCE ・ 🔋 POWER ・ 🏎️ SPEED
+📐 ANGLE ・ 📶 FREQUENCY ・ 💾 DATA</p>
+<p><strong>検索・お気に入り・クイックスワップ・変換式表示</strong> 搭載</p></blockquote>
 <hr>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
@@ -840,6 +838,7 @@
     overflow: hidden;
   }
   #uc-app * { box-sizing: inherit; }
+  #uc-app *:not(.uc-fav-star) { text-decoration: none !important; }
 
    
   .uc-bg-grid {
@@ -868,26 +867,58 @@
   .uc-header {
     background: rgba(0,0,0,0.95);
     border-bottom: 2px solid rgba(252, 238, 10, 0.4);
-    padding: 10px 20px;
+    padding: 8px 15px;
     display: flex; justify-content: space-between; align-items: center;
     flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    gap: 10px; flex-wrap: wrap;
   }
   .uc-title {
-    font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 900;
+    font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
     color: var(--neon-yellow); text-shadow: 0 0 10px rgba(252, 238, 10, 0.5);
-    letter-spacing: 2px; display: flex; align-items: center; gap: 15px;
+    letter-spacing: 2px; display: flex; align-items: center; gap: 10px;
+    white-space: nowrap;
   }
+  .uc-header-right {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+
+   
+  .uc-search-wrap {
+    position: relative; display: flex; align-items: center;
+  }
+  .uc-search {
+    background: rgba(0,0,0,0.8); border: 1px solid #444; color: var(--neon-yellow);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+    padding: 6px 12px 6px 30px; width: 200px; outline: none; transition: all 0.2s;
+  }
+  .uc-search:focus { border-color: var(--neon-yellow); box-shadow: 0 0 10px rgba(252,238,10,0.2); width: 260px; }
+  .uc-search-icon {
+    position: absolute; left: 8px; color: #666; font-size: 0.8rem; pointer-events: none;
+  }
+  .uc-search-results {
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: rgba(5,5,5,0.98); border: 1px solid var(--neon-yellow);
+    max-height: 300px; overflow-y: auto; z-index: 999; display: none;
+  }
+  .uc-search-results.show { display: block; }
+  .uc-search-item {
+    padding: 8px 12px; cursor: pointer; font-size: 0.75rem;
+    border-bottom: 1px solid #1a1a1a; transition: background 0.15s;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .uc-search-item:hover { background: rgba(252,238,10,0.08); }
+  .uc-search-item-cat { color: #666; font-size: 0.6rem; }
+
   .uc-sys-status {
-    font-size: 0.7rem; color: var(--neon-cyan);
-    display: flex; align-items: center; gap: 8px;
-    background: rgba(0, 243, 255, 0.05); padding: 4px 10px; border: 1px solid rgba(0, 243, 255, 0.2);
-    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem; color: var(--neon-cyan);
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(0, 243, 255, 0.05); padding: 4px 8px; border: 1px solid rgba(0, 243, 255, 0.2);
+    font-family: 'Orbitron', sans-serif; white-space: nowrap;
   }
   .uc-exit-btn {
     background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
-    font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: bold;
-    padding: 6px 15px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
-    margin-left: 15px;
+    font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: bold;
+    padding: 5px 12px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
   }
   .uc-exit-btn:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px rgba(255,0,85,0.5); }
 
@@ -906,7 +937,7 @@
   }
   @media(min-width: 900px) { 
     .uc-sidebar { 
-      width: 250px; flex-direction: column; overflow-y: auto; overflow-x: hidden;
+      width: 230px; flex-direction: column; overflow-y: auto; overflow-x: hidden;
     } 
   }
   .uc-sidebar::-webkit-scrollbar { width: 4px; height: 4px;}
@@ -914,11 +945,11 @@
 
   .uc-cat-btn {
     background: transparent; border: none; border-left: 3px solid transparent; border-bottom: 1px solid rgba(255,255,255,0.05);
-    color: #888; text-align: left; padding: 15px 20px; font-family: 'Orbitron', sans-serif;
-    font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
-    letter-spacing: 1px; white-space: nowrap;
+    color: #888; text-align: left; padding: 12px 15px; font-family: 'Orbitron', sans-serif;
+    font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    letter-spacing: 1px; white-space: nowrap; display: flex; align-items: center; gap: 8px;
   }
-  @media(max-width: 899px) { .uc-cat-btn { border-left: none; border-bottom: 3px solid transparent; border-right: 1px solid rgba(255,255,255,0.05); } }
+  @media(max-width: 899px) { .uc-cat-btn { border-left: none; border-bottom: 3px solid transparent; border-right: 1px solid rgba(255,255,255,0.05); padding: 10px 12px; font-size: 0.65rem; } }
   .uc-cat-btn:hover { background: rgba(252, 238, 10, 0.05); color: #ccc; }
   .uc-cat-btn.active {
     background: rgba(252, 238, 10, 0.08); color: var(--neon-yellow);
@@ -927,82 +958,110 @@
   @media(min-width: 900px) { .uc-cat-btn.active { border-left-color: var(--neon-yellow); } }
   @media(max-width: 899px) { .uc-cat-btn.active { border-bottom-color: var(--neon-yellow); } }
   
-  .uc-cat-dim { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #555; margin-top: 4px; font-weight: 400; }
+  .uc-cat-icon { font-size: 1rem; }
+  .uc-cat-dim { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; color: #555; margin-top: 2px; font-weight: 400; }
   .uc-cat-btn.active .uc-cat-dim { color: rgba(252, 238, 10, 0.6); }
 
    
   .uc-panel {
-    flex-grow: 1; padding: 30px; overflow-y: auto;
+    flex-grow: 1; padding: 20px; overflow-y: auto;
     display: flex; flex-direction: column; background: transparent;
   }
   .uc-panel::-webkit-scrollbar { width: 6px; }
   .uc-panel::-webkit-scrollbar-thumb { background: rgba(252, 238, 10, 0.2); }
   
   .uc-panel-title {
-    font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: #fff;
-    margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: #fff;
+    margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);
     display: flex; justify-content: space-between; align-items: flex-end; text-transform: uppercase;
     letter-spacing: 2px;
   }
-  .uc-dimension-label { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--neon-cyan); background: rgba(0,243,255,0.05); padding: 4px 10px; border: 1px solid rgba(0,243,255,0.3); }
+  .uc-dimension-label { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--neon-cyan); background: rgba(0,243,255,0.05); padding: 3px 8px; border: 1px solid rgba(0,243,255,0.3); }
+
+   
+  .uc-quickswap {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+    background: rgba(0,0,0,0.4); border: 1px solid #222; padding: 12px; flex-wrap: wrap;
+  }
+  .uc-qs-select {
+    background: #000; border: 1px solid #444; color: var(--neon-cyan); padding: 8px 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; outline: none;
+    flex: 1; min-width: 100px;
+  }
+  .uc-qs-select:focus { border-color: var(--neon-yellow); }
+  .uc-qs-result {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--neon-yellow);
+    padding: 6px 12px; background: rgba(252,238,10,0.05); border: 1px solid rgba(252,238,10,0.2);
+    min-width: 200px; text-align: center; flex: 2;
+  }
+  .uc-qs-swap-btn {
+    background: transparent; border: 1px solid #555; color: #888; width: 32px; height: 32px;
+    font-size: 1rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+  }
+  .uc-qs-swap-btn:hover { border-color: var(--neon-yellow); color: var(--neon-yellow); }
 
    
   .uc-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;
   }
+  @media(max-width: 640px) { .uc-grid { grid-template-columns: 1fr; gap: 10px; } }
   
    
   .uc-unit-card {
-    background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 20px;
+    background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 15px;
     position: relative; transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     backdrop-filter: blur(5px); display: flex; flex-direction: column;
   }
   .uc-unit-card:hover { border-color: #555; background: rgba(10,10,10,0.8); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
   .uc-unit-card.active { border-color: var(--neon-yellow); background: rgba(252, 238, 10, 0.03); box-shadow: 0 0 20px rgba(252, 238, 10, 0.15); transform: translateY(-2px); }
+  .uc-unit-card.fav { border-left: 3px solid var(--neon-yellow); }
 
    
   .uc-card-header {
     display: flex; justify-content: space-between; align-items: flex-start;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   .uc-unit-name {
-    font-size: 0.8rem; color: #aaa; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
-    display: flex; flex-direction: column; gap: 4px;
+    font-size: 0.75rem; color: #aaa; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
+    display: flex; flex-direction: column; gap: 3px;
   }
   .uc-unit-name span { display: block; }
   .uc-unit-sys {
-    font-size: 0.6rem; color: #00f3ff; background: rgba(0,243,255,0.05); 
-    padding: 2px 6px; border: 1px solid rgba(0,243,255,0.2); 
+    font-size: 0.55rem; color: #00f3ff; background: rgba(0,243,255,0.05); 
+    padding: 2px 5px; border: 1px solid rgba(0,243,255,0.2); 
     align-self: flex-start; font-family: 'JetBrains Mono', monospace;
   }
   
-  .uc-action-bar { display: flex; gap: 8px; }
-  .uc-copy-btn {
+  .uc-action-bar { display: flex; gap: 5px; }
+  .uc-copy-btn, .uc-fav-btn {
     background: transparent; border: 1px solid #444; color: #888;
-    font-size: 0.6rem; padding: 4px 8px; cursor: pointer; transition: all 0.2s; 
+    font-size: 0.55rem; padding: 3px 6px; cursor: pointer; transition: all 0.2s; 
     font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
   }
   .uc-copy-btn:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0,243,255,0.1); }
+  .uc-fav-btn { font-size: 0.8rem; padding: 2px 5px; }
+  .uc-fav-btn:hover { border-color: var(--neon-yellow); color: var(--neon-yellow); }
+  .uc-fav-btn.active { color: var(--neon-yellow); border-color: var(--neon-yellow); }
 
    
   .uc-input-row { 
     display: flex; align-items: stretch; background: #000; 
-    border: 1px solid #222; height: 50px; transition: border-color 0.3s;
+    border: 1px solid #222; height: 46px; transition: border-color 0.3s;
   }
   .uc-unit-card:hover .uc-input-row { border-color: #444; }
   .uc-unit-card.active .uc-input-row { border-color: var(--neon-yellow); }
 
   .uc-input {
     flex-grow: 1; background: transparent; border: none; outline: none;
-    color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 1.3rem;
-    padding: 0 15px; width: 100%; transition: color 0.3s;
+    color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 1.2rem;
+    padding: 0 12px; width: 100%; transition: color 0.3s;
   }
   .uc-unit-card.active .uc-input { color: var(--neon-yellow); text-shadow: 0 0 8px rgba(252, 238, 10, 0.4); }
 
   .uc-unit-symbol {
-    font-size: 1.1rem; color: var(--neon-cyan); font-weight: bold;
+    font-size: 1rem; color: var(--neon-cyan); font-weight: bold;
     display: flex; align-items: center; justify-content: center;
-    padding: 0 15px; min-width: 60px;
+    padding: 0 12px; min-width: 50px;
     background: rgba(0,243,255,0.03); border-left: 1px solid #222;
     font-family: 'Orbitron', sans-serif; transition: all 0.3s;
   }
@@ -1010,16 +1069,36 @@
   .uc-unit-card.active .uc-unit-symbol { border-color: var(--neon-yellow); color: var(--neon-yellow); background: rgba(252,238,10,0.1); }
 
    
+  .uc-formula {
+    font-size: 0.6rem; color: #555; margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px;
+    transition: color 0.3s;
+  }
+  .uc-unit-card.active .uc-formula { color: rgba(252,238,10,0.5); }
+
+   
   .uc-toast {
     position: absolute; bottom: 30px; right: 30px; background: rgba(0,0,0,0.9);
-    border: 1px solid var(--neon-yellow); color: var(--neon-yellow); padding: 12px 25px;
-    font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: bold; letter-spacing: 1px;
+    border: 1px solid var(--neon-yellow); color: var(--neon-yellow); padding: 10px 20px;
+    font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: bold; letter-spacing: 1px;
     box-shadow: 0 0 20px rgba(252, 238, 10, 0.4);
     opacity: 0; transform: translateY(20px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     pointer-events: none; z-index: 1000;
   }
   .uc-toast.show { opacity: 1; transform: translateY(0); }
 
+   
+  @media(max-width: 640px) {
+    .uc-header { padding: 6px 10px; }
+    .uc-title { font-size: 0.9rem; gap: 6px; }
+    .uc-search { width: 140px; font-size: 0.7rem; }
+    .uc-search:focus { width: 180px; }
+    .uc-panel { padding: 12px 10px; }
+    .uc-panel-title { font-size: 1rem; }
+    .uc-quickswap { padding: 8px; gap: 6px; }
+    .uc-unit-card { padding: 12px; }
+    .uc-input { font-size: 1rem; }
+  }
 </style>
 
 <div id="uc-app">
@@ -1030,12 +1109,17 @@
     
     <div class="uc-header">
       <div class="uc-title">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--neon-yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--neon-yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         UNIT_CONVERTER
       </div>
-      <div style="display:flex; align-items:center;">
-        <div class="uc-sys-status"><span style="color:#00ff41;">●</span> REALTIME_SYNC_ACTIVE</div>
-        <button class="uc-exit-btn" onclick="history.back()">DISCONNECT</button>
+      <div class="uc-header-right">
+        <div class="uc-search-wrap">
+          <span class="uc-search-icon">&#x1F50D;</span>
+          <input type="text" class="uc-search" id="uc-search" placeholder="単位を検索..." autocomplete="off">
+          <div class="uc-search-results" id="uc-search-results"></div>
+        </div>
+        <div class="uc-sys-status"><span style="color:#00ff41;">&#x25CF;</span> SYNC (同期中)</div>
+        <button class="uc-exit-btn" onclick="history.back()">閉じる</button>
       </div>
     </div>
 
@@ -1048,6 +1132,14 @@
         <div class="uc-panel-title">
           <span id="uc-current-cat">SELECT CATEGORY</span>
           <span class="uc-dimension-label" id="uc-current-dim">[-]</span>
+        </div>
+
+        
+        <div class="uc-quickswap">
+          <select class="uc-qs-select" id="uc-qs-from"></select>
+          <button class="uc-qs-swap-btn" id="uc-qs-swap" title="Swap">⇄</button>
+          <select class="uc-qs-select" id="uc-qs-to"></select>
+          <div class="uc-qs-result" id="uc-qs-result">1 ? = ? ?</div>
         </div>
 
         <div class="uc-grid" id="uc-grid"></div>
@@ -1063,124 +1155,198 @@ var ucApp = (function() {
   "use strict";
   
   const toast = document.getElementById('uc-toast');
+  const FAV_KEY = 'uc_favorites_v1';
 
-  
-
+  let favorites = JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
 
   const db = {
     length: {
-      name: "LENGTH (長さ)", dim: "[L]", base: "m",
+      name: "LENGTH", nameJp: "長さ", icon: "📏", dim: "[L]", base: "m",
       units: [
-        { id: "m", name: "Meter (SI base)", symbol: "m", factor: 1, sys: "SI" },
-        { id: "cm", name: "Centimeter", symbol: "cm", factor: 0.01, sys: "Metric" },
-        { id: "mm", name: "Millimeter", symbol: "mm", factor: 0.001, sys: "Metric" },
-        { id: "km", name: "Kilometer", symbol: "km", factor: 1000, sys: "Metric" },
-        { id: "in", name: "Inch", symbol: "in", factor: 0.0254, sys: "Imperial" },
-        { id: "ft", name: "Foot", symbol: "ft", factor: 0.3048, sys: "Imperial" },
-        { id: "yd", name: "Yard", symbol: "yd", factor: 0.9144, sys: "Imperial" },
-        { id: "mi", name: "Mile", symbol: "mi", factor: 1609.344, sys: "Imperial" },
-        { id: "nm", name: "Nanometer", symbol: "nm", factor: 1e-9, sys: "Metric" },
-        { id: "au", name: "Astronomical Unit", symbol: "au", factor: 149597870700, sys: "Astro" },
-        { id: "ly", name: "Light Year", symbol: "ly", factor: 9460730472580800, sys: "Astro" },
+        { id: "m", name: "メートル", nameEn: "Meter", symbol: "m", factor: 1, sys: "SI" },
+        { id: "cm", name: "センチメートル", nameEn: "Centimeter", symbol: "cm", factor: 0.01, sys: "Metric" },
+        { id: "mm", name: "ミリメートル", nameEn: "Millimeter", symbol: "mm", factor: 0.001, sys: "Metric" },
+        { id: "um", name: "マイクロメートル", nameEn: "Micrometer", symbol: "µm", factor: 1e-6, sys: "Metric" },
+        { id: "km", name: "キロメートル", nameEn: "Kilometer", symbol: "km", factor: 1000, sys: "Metric" },
+        { id: "in", name: "インチ", nameEn: "Inch", symbol: "in", factor: 0.0254, sys: "Imperial" },
+        { id: "ft", name: "フィート", nameEn: "Foot", symbol: "ft", factor: 0.3048, sys: "Imperial" },
+        { id: "yd", name: "ヤード", nameEn: "Yard", symbol: "yd", factor: 0.9144, sys: "Imperial" },
+        { id: "mi", name: "マイル", nameEn: "Mile", symbol: "mi", factor: 1609.344, sys: "Imperial" },
+        { id: "nm", name: "ナノメートル", nameEn: "Nanometer", symbol: "nm", factor: 1e-9, sys: "Metric" },
+        { id: "au", name: "天文単位", nameEn: "Astronomical Unit", symbol: "au", factor: 149597870700, sys: "Astro" },
+        { id: "ly", name: "光年", nameEn: "Light Year", symbol: "ly", factor: 9460730472580800, sys: "Astro" },
+      ]
+    },
+    area: {
+      name: "AREA", nameJp: "面積", icon: "⬜", dim: "[L]²", base: "m2",
+      units: [
+        { id: "m2", name: "平方メートル", nameEn: "Square Meter", symbol: "m²", factor: 1, sys: "SI" },
+        { id: "cm2", name: "平方センチ", nameEn: "Square Centimeter", symbol: "cm²", factor: 1e-4, sys: "Metric" },
+        { id: "km2", name: "平方キロメートル", nameEn: "Square Kilometer", symbol: "km²", factor: 1e6, sys: "Metric" },
+        { id: "ha", name: "ヘクタール", nameEn: "Hectare", symbol: "ha", factor: 10000, sys: "Metric" },
+        { id: "a", name: "アール", nameEn: "Are", symbol: "a", factor: 100, sys: "Metric" },
+        { id: "acre", name: "エーカー", nameEn: "Acre", symbol: "ac", factor: 4046.8564224, sys: "Imperial" },
+        { id: "ft2", name: "平方フィート", nameEn: "Square Foot", symbol: "ft²", factor: 0.09290304, sys: "Imperial" },
+        { id: "in2", name: "平方インチ", nameEn: "Square Inch", symbol: "in²", factor: 6.4516e-4, sys: "Imperial" },
+        { id: "tsubo", name: "坤", nameEn: "Tsubo", symbol: "坤", factor: 3.305785, sys: "和" },
+        { id: "tatami", name: "畳", nameEn: "Tatami", symbol: "畳", factor: 1.6529, sys: "和" },
+      ]
+    },
+    volume: {
+      name: "VOLUME", nameJp: "体積", icon: "📦", dim: "[L]³", base: "L",
+      units: [
+        { id: "L", name: "リットル", nameEn: "Liter", symbol: "L", factor: 1, sys: "Metric" },
+        { id: "mL", name: "ミリリットル", nameEn: "Milliliter", symbol: "mL", factor: 0.001, sys: "Metric" },
+        { id: "m3", name: "立方メートル", nameEn: "Cubic Meter", symbol: "m³", factor: 1000, sys: "SI" },
+        { id: "cm3", name: "立方センチ (cc)", nameEn: "Cubic Centimeter", symbol: "cm³", factor: 0.001, sys: "Metric" },
+        { id: "gal_us", name: "米ガロン", nameEn: "US Gallon", symbol: "gal", factor: 3.785411784, sys: "US" },
+        { id: "qt_us", name: "米クォート", nameEn: "US Quart", symbol: "qt", factor: 0.946352946, sys: "US" },
+        { id: "pt_us", name: "米パイント", nameEn: "US Pint", symbol: "pt", factor: 0.473176473, sys: "US" },
+        { id: "floz_us", name: "米液量オンス", nameEn: "US Fluid Ounce", symbol: "fl oz", factor: 0.0295735296, sys: "US" },
+        { id: "gal_uk", name: "英ガロン", nameEn: "Imperial Gallon", symbol: "imp gal", factor: 4.54609, sys: "Imperial" },
+        { id: "go", name: "合", nameEn: "Gō", symbol: "合", factor: 0.18039, sys: "和" },
+        { id: "sho", name: "升", nameEn: "Shō", symbol: "升", factor: 1.8039, sys: "和" },
+        { id: "to", name: "斗", nameEn: "To", symbol: "斗", factor: 18.039, sys: "和" },
       ]
     },
     mass: {
-      name: "MASS (質量)", dim: "[M]", base: "kg",
+      name: "MASS", nameJp: "質量", icon: "⚖️", dim: "[M]", base: "kg",
       units: [
-        { id: "kg", name: "Kilogram (SI base)", symbol: "kg", factor: 1, sys: "SI" },
-        { id: "g", name: "Gram", symbol: "g", factor: 0.001, sys: "Metric" },
-        { id: "mg", name: "Milligram", symbol: "mg", factor: 1e-6, sys: "Metric" },
-        { id: "t", name: "Tonne", symbol: "t", factor: 1000, sys: "Metric" },
-        { id: "lb", name: "Pound", symbol: "lb", factor: 0.45359237, sys: "Imperial" },
-        { id: "oz", name: "Ounce", symbol: "oz", factor: 0.028349523125, sys: "Imperial" },
-        { id: "amu", name: "Atomic Mass Unit", symbol: "u", factor: 1.66053906660e-27, sys: "Physics" },
+        { id: "kg", name: "キログラム", nameEn: "Kilogram", symbol: "kg", factor: 1, sys: "SI" },
+        { id: "g", name: "グラム", nameEn: "Gram", symbol: "g", factor: 0.001, sys: "Metric" },
+        { id: "mg", name: "ミリグラム", nameEn: "Milligram", symbol: "mg", factor: 1e-6, sys: "Metric" },
+        { id: "t", name: "トン", nameEn: "Tonne", symbol: "t", factor: 1000, sys: "Metric" },
+        { id: "lb", name: "ポンド", nameEn: "Pound", symbol: "lb", factor: 0.45359237, sys: "Imperial" },
+        { id: "oz", name: "オンス", nameEn: "Ounce", symbol: "oz", factor: 0.028349523125, sys: "Imperial" },
+        { id: "st", name: "ストーン", nameEn: "Stone", symbol: "st", factor: 6.35029318, sys: "Imperial" },
+        { id: "amu", name: "原子質量単位", nameEn: "Atomic Mass Unit", symbol: "u", factor: 1.66053906660e-27, sys: "Physics" },
+        { id: "kan", name: "貫", nameEn: "Kan", symbol: "貫", factor: 3.75, sys: "和" },
+        { id: "momme", name: "匁", nameEn: "Momme", symbol: "匁", factor: 0.00375, sys: "和" },
       ]
     },
     time: {
-      name: "TIME (時間)", dim: "[T]", base: "s",
+      name: "TIME", nameJp: "時間", icon: "⏱️", dim: "[T]", base: "s",
       units: [
-        { id: "s", name: "Second (SI base)", symbol: "s", factor: 1, sys: "SI" },
-        { id: "ms", name: "Millisecond", symbol: "ms", factor: 0.001, sys: "Metric" },
-        { id: "min", name: "Minute", symbol: "min", factor: 60, sys: "Non-SI" },
-        { id: "h", name: "Hour", symbol: "h", factor: 3600, sys: "Non-SI" },
-        { id: "d", name: "Day", symbol: "d", factor: 86400, sys: "Non-SI" },
-        { id: "y", name: "Year (Julian)", symbol: "y", factor: 31557600, sys: "Astro" },
+        { id: "s", name: "秒", nameEn: "Second", symbol: "s", factor: 1, sys: "SI" },
+        { id: "ms", name: "ミリ秒", nameEn: "Millisecond", symbol: "ms", factor: 0.001, sys: "Metric" },
+        { id: "us_t", name: "マイクロ秒", nameEn: "Microsecond", symbol: "µs", factor: 1e-6, sys: "Metric" },
+        { id: "ns", name: "ナノ秒", nameEn: "Nanosecond", symbol: "ns", factor: 1e-9, sys: "Metric" },
+        { id: "min", name: "分", nameEn: "Minute", symbol: "min", factor: 60, sys: "Non-SI" },
+        { id: "h", name: "時間", nameEn: "Hour", symbol: "h", factor: 3600, sys: "Non-SI" },
+        { id: "d", name: "日", nameEn: "Day", symbol: "d", factor: 86400, sys: "Non-SI" },
+        { id: "wk", name: "週", nameEn: "Week", symbol: "wk", factor: 604800, sys: "Non-SI" },
+        { id: "y", name: "年 (ユリウス)", nameEn: "Year (Julian)", symbol: "y", factor: 31557600, sys: "Astro" },
       ]
     },
     temperature: {
-      name: "TEMPERATURE (温度)", dim: "[Θ]", base: "K",
+      name: "TEMPERATURE", nameJp: "温度", icon: "🌡️", dim: "[Θ]", base: "K",
       units: [
-        { id: "K", name: "Kelvin (SI base)", symbol: "K", factor: 1, offset: 0, sys: "SI" },
-        { id: "C", name: "Celsius", symbol: "°C", factor: 1, offset: 273.15, sys: "Metric" },
-        { id: "F", name: "Fahrenheit", symbol: "°F", factor: 5/9, offset: 273.15 - (32 * 5/9), sys: "Imperial" },
+        { id: "K", name: "ケルビン", nameEn: "Kelvin", symbol: "K", factor: 1, offset: 0, sys: "SI" },
+        { id: "C", name: "摂氏", nameEn: "Celsius", symbol: "°C", factor: 1, offset: 273.15, sys: "Metric" },
+        { id: "F", name: "華氏", nameEn: "Fahrenheit", symbol: "°F", factor: 5/9, offset: 273.15 - (32 * 5/9), sys: "Imperial" },
+        { id: "R", name: "ランキン", nameEn: "Rankine", symbol: "°R", factor: 5/9, offset: 0, sys: "Imperial" },
       ]
     },
     energy: {
-      name: "ENERGY (エネルギー)", dim: "[M][L]²[T]⁻²", base: "J",
+      name: "ENERGY", nameJp: "エネルギー", icon: "⚡", dim: "[M][L]²[T]⁻²", base: "J",
       units: [
-        { id: "J", name: "Joule (SI)", symbol: "J", factor: 1, sys: "SI" },
-        { id: "kJ", name: "Kilojoule", symbol: "kJ", factor: 1000, sys: "Metric" },
-        { id: "cal", name: "Calorie (thermochemical)", symbol: "cal", factor: 4.184, sys: "Non-SI" },
-        { id: "kcal", name: "Kilocalorie", symbol: "kcal", factor: 4184, sys: "Metric" },
-        { id: "eV", name: "Electronvolt", symbol: "eV", factor: 1.602176634e-19, sys: "Physics" },
-        { id: "kWh", name: "Kilowatt-hour", symbol: "kWh", factor: 3.6e6, sys: "Elec" },
-        { id: "erg", name: "Erg", symbol: "erg", factor: 1e-7, sys: "CGS" },
-        { id: "btu", name: "British Thermal Unit", symbol: "BTU", factor: 1055.056, sys: "Imperial" },
+        { id: "J", name: "ジュール", nameEn: "Joule", symbol: "J", factor: 1, sys: "SI" },
+        { id: "kJ", name: "キロジュール", nameEn: "Kilojoule", symbol: "kJ", factor: 1000, sys: "Metric" },
+        { id: "MJ", name: "メガジュール", nameEn: "Megajoule", symbol: "MJ", factor: 1e6, sys: "Metric" },
+        { id: "cal", name: "カロリー", nameEn: "Calorie", symbol: "cal", factor: 4.184, sys: "Non-SI" },
+        { id: "kcal", name: "キロカロリー", nameEn: "Kilocalorie", symbol: "kcal", factor: 4184, sys: "Metric" },
+        { id: "eV", name: "電子ボルト", nameEn: "Electronvolt", symbol: "eV", factor: 1.602176634e-19, sys: "Physics" },
+        { id: "kWh", name: "キロワット時", nameEn: "Kilowatt-hour", symbol: "kWh", factor: 3.6e6, sys: "Elec" },
+        { id: "Wh", name: "ワット時", nameEn: "Watt-hour", symbol: "Wh", factor: 3600, sys: "Elec" },
+        { id: "erg", name: "エルグ", nameEn: "Erg", symbol: "erg", factor: 1e-7, sys: "CGS" },
+        { id: "btu", name: "英熱量", nameEn: "BTU", symbol: "BTU", factor: 1055.056, sys: "Imperial" },
       ]
     },
     pressure: {
-      name: "PRESSURE (圧力)", dim: "[M][L]⁻¹[T]⁻²", base: "Pa",
+      name: "PRESSURE", nameJp: "圧力", icon: "💨", dim: "[M][L]⁻¹[T]⁻²", base: "Pa",
       units: [
-        { id: "Pa", name: "Pascal (SI)", symbol: "Pa", factor: 1, sys: "SI" },
-        { id: "kPa", name: "Kilopascal", symbol: "kPa", factor: 1000, sys: "Metric" },
-        { id: "MPa", name: "Megapascal", symbol: "MPa", factor: 1e6, sys: "Metric" },
-        { id: "bar", name: "Bar", symbol: "bar", factor: 1e5, sys: "Non-SI" },
-        { id: "atm", name: "Standard Atmosphere", symbol: "atm", factor: 101325, sys: "Physics" },
-        { id: "torr", name: "Torr", symbol: "Torr", factor: 133.322368, sys: "Physics" },
-        { id: "psi", name: "Pound-force / sq inch", symbol: "psi", factor: 6894.757, sys: "Imperial" },
+        { id: "Pa", name: "パスカル", nameEn: "Pascal", symbol: "Pa", factor: 1, sys: "SI" },
+        { id: "hPa", name: "ヘクトパスカル", nameEn: "Hectopascal", symbol: "hPa", factor: 100, sys: "Metric" },
+        { id: "kPa", name: "キロパスカル", nameEn: "Kilopascal", symbol: "kPa", factor: 1000, sys: "Metric" },
+        { id: "MPa", name: "メガパスカル", nameEn: "Megapascal", symbol: "MPa", factor: 1e6, sys: "Metric" },
+        { id: "bar", name: "バール", nameEn: "Bar", symbol: "bar", factor: 1e5, sys: "Non-SI" },
+        { id: "atm", name: "気圧 (標準大気圧)", nameEn: "Atmosphere", symbol: "atm", factor: 101325, sys: "Physics" },
+        { id: "torr", name: "トル", nameEn: "Torr", symbol: "Torr", factor: 133.322368, sys: "Physics" },
+        { id: "mmHg", name: "水銀柱ミリ", nameEn: "mmHg", symbol: "mmHg", factor: 133.322387415, sys: "Physics" },
+        { id: "psi", name: "ポンド毎平方インチ", nameEn: "PSI", symbol: "psi", factor: 6894.757, sys: "Imperial" },
       ]
     },
     force: {
-      name: "FORCE (力)", dim: "[M][L][T]⁻²", base: "N",
+      name: "FORCE", nameJp: "力", icon: "💪", dim: "[M][L][T]⁻²", base: "N",
       units: [
-        { id: "N", name: "Newton (SI)", symbol: "N", factor: 1, sys: "SI" },
-        { id: "dyn", name: "Dyne", symbol: "dyn", factor: 1e-5, sys: "CGS" },
-        { id: "kgf", name: "Kilogram-force", symbol: "kgf", factor: 9.80665, sys: "Metric" },
-        { id: "lbf", name: "Pound-force", symbol: "lbf", factor: 4.448222, sys: "Imperial" },
+        { id: "N", name: "ニュートン", nameEn: "Newton", symbol: "N", factor: 1, sys: "SI" },
+        { id: "kN", name: "キロニュートン", nameEn: "Kilonewton", symbol: "kN", factor: 1000, sys: "Metric" },
+        { id: "dyn", name: "ダイン", nameEn: "Dyne", symbol: "dyn", factor: 1e-5, sys: "CGS" },
+        { id: "kgf", name: "重量キログラム", nameEn: "Kilogram-force", symbol: "kgf", factor: 9.80665, sys: "Metric" },
+        { id: "lbf", name: "重量ポンド", nameEn: "Pound-force", symbol: "lbf", factor: 4.448222, sys: "Imperial" },
+        { id: "gf", name: "重量グラム", nameEn: "Gram-force", symbol: "gf", factor: 0.00980665, sys: "Metric" },
       ]
     },
     power: {
-      name: "POWER (仕事率)", dim: "[M][L]²[T]⁻³", base: "W",
+      name: "POWER", nameJp: "仕事率", icon: "🔋", dim: "[M][L]²[T]⁻³", base: "W",
       units: [
-        { id: "W", name: "Watt (SI)", symbol: "W", factor: 1, sys: "SI" },
-        { id: "kW", name: "Kilowatt", symbol: "kW", factor: 1000, sys: "Metric" },
-        { id: "MW", name: "Megawatt", symbol: "MW", factor: 1e6, sys: "Metric" },
-        { id: "hp", name: "Horsepower (mech)", symbol: "hp", factor: 745.699872, sys: "Imperial" },
-        { id: "ps", name: "Pferdestärke (metric)", symbol: "PS", factor: 735.49875, sys: "Metric" },
+        { id: "W", name: "ワット", nameEn: "Watt", symbol: "W", factor: 1, sys: "SI" },
+        { id: "kW", name: "キロワット", nameEn: "Kilowatt", symbol: "kW", factor: 1000, sys: "Metric" },
+        { id: "MW", name: "メガワット", nameEn: "Megawatt", symbol: "MW", factor: 1e6, sys: "Metric" },
+        { id: "hp", name: "馬力 (英)", nameEn: "Horsepower", symbol: "hp", factor: 745.699872, sys: "Imperial" },
+        { id: "ps", name: "馬力 (仏)", nameEn: "Pferdestarke", symbol: "PS", factor: 735.49875, sys: "Metric" },
+        { id: "btu_h", name: "BTU毎時", nameEn: "BTU/hour", symbol: "BTU/h", factor: 0.29307107, sys: "Imperial" },
       ]
     },
     speed: {
-      name: "SPEED (速度)", dim: "[L][T]⁻¹", base: "ms",
+      name: "SPEED", nameJp: "速度", icon: "🏎️", dim: "[L][T]⁻¹", base: "ms_spd",
       units: [
-        { id: "ms", name: "Meter per sec (SI)", symbol: "m/s", factor: 1, sys: "SI" },
-        { id: "kmh", name: "Kilometer per hour", symbol: "km/h", factor: 1/3.6, sys: "Metric" },
-        { id: "mph", name: "Mile per hour", symbol: "mph", factor: 0.44704, sys: "Imperial" },
-        { id: "knot", name: "Knot", symbol: "kn", factor: 0.514444, sys: "Nautical" },
-        { id: "mach", name: "Mach (Standard SL)", symbol: "Ma", factor: 340.3, sys: "Aero" },
-        { id: "c", name: "Speed of Light", symbol: "c", factor: 299792458, sys: "Physics" },
+        { id: "ms_spd", name: "メートル毎秒", nameEn: "Meter/sec", symbol: "m/s", factor: 1, sys: "SI" },
+        { id: "kmh", name: "キロメートル毎時", nameEn: "km/h", symbol: "km/h", factor: 1/3.6, sys: "Metric" },
+        { id: "mph", name: "マイル毎時", nameEn: "mph", symbol: "mph", factor: 0.44704, sys: "Imperial" },
+        { id: "knot", name: "ノット", nameEn: "Knot", symbol: "kn", factor: 0.514444, sys: "Nautical" },
+        { id: "mach", name: "マッハ", nameEn: "Mach", symbol: "Ma", factor: 340.3, sys: "Aero" },
+        { id: "c", name: "光速", nameEn: "Speed of Light", symbol: "c", factor: 299792458, sys: "Physics" },
+      ]
+    },
+    angle: {
+      name: "ANGLE", nameJp: "角度", icon: "📐", dim: "None", base: "rad",
+      units: [
+        { id: "rad", name: "ラジアン", nameEn: "Radian", symbol: "rad", factor: 1, sys: "SI" },
+        { id: "deg", name: "度", nameEn: "Degree", symbol: "°", factor: Math.PI/180, sys: "Non-SI" },
+        { id: "grad", name: "グラジアン", nameEn: "Gradian", symbol: "gon", factor: Math.PI/200, sys: "Non-SI" },
+        { id: "rev", name: "回転", nameEn: "Revolution", symbol: "rev", factor: 2*Math.PI, sys: "Non-SI" },
+        { id: "arcmin", name: "分角", nameEn: "Arcminute", symbol: "'", factor: Math.PI/10800, sys: "Non-SI" },
+        { id: "arcsec", name: "秒角", nameEn: "Arcsecond", symbol: '"', factor: Math.PI/648000, sys: "Non-SI" },
+        { id: "mrad", name: "ミリラジアン", nameEn: "Milliradian", symbol: "mrad", factor: 0.001, sys: "Metric" },
+      ]
+    },
+    frequency: {
+      name: "FREQUENCY", nameJp: "周波数", icon: "📶", dim: "[T]⁻¹", base: "Hz",
+      units: [
+        { id: "Hz", name: "ヘルツ", nameEn: "Hertz", symbol: "Hz", factor: 1, sys: "SI" },
+        { id: "kHz", name: "キロヘルツ", nameEn: "Kilohertz", symbol: "kHz", factor: 1000, sys: "Metric" },
+        { id: "MHz", name: "メガヘルツ", nameEn: "Megahertz", symbol: "MHz", factor: 1e6, sys: "Metric" },
+        { id: "GHz", name: "ギガヘルツ", nameEn: "Gigahertz", symbol: "GHz", factor: 1e9, sys: "Metric" },
+        { id: "THz", name: "テラヘルツ", nameEn: "Terahertz", symbol: "THz", factor: 1e12, sys: "Metric" },
+        { id: "rpm", name: "回転毎分", nameEn: "RPM", symbol: "rpm", factor: 1/60, sys: "Mech" },
+        { id: "rps", name: "回転毎秒", nameEn: "RPS", symbol: "rps", factor: 1, sys: "Mech" },
+        { id: "bpm", name: "拍毎分", nameEn: "BPM", symbol: "bpm", factor: 1/60, sys: "Music" },
       ]
     },
     information: {
-      name: "DATA (情報量)", dim: "None", base: "b",
+      name: "DATA", nameJp: "情報量", icon: "💾", dim: "None", base: "b",
       units: [
-        { id: "b", name: "Bit", symbol: "b", factor: 1, sys: "Binary" },
-        { id: "B", name: "Byte", symbol: "B", factor: 8, sys: "Binary" },
-        { id: "KB", name: "Kilobyte", symbol: "KB", factor: 8000, sys: "Decimal" },
-        { id: "KiB", name: "Kibibyte", symbol: "KiB", factor: 8192, sys: "Binary" },
-        { id: "MB", name: "Megabyte", symbol: "MB", factor: 8e6, sys: "Decimal" },
-        { id: "MiB", name: "Mebibyte", symbol: "MiB", factor: 8388608, sys: "Binary" },
-        { id: "GB", name: "Gigabyte", symbol: "GB", factor: 8e9, sys: "Decimal" },
-        { id: "GiB", name: "Gibibyte", symbol: "GiB", factor: 8589934592, sys: "Binary" },
+        { id: "b", name: "ビット", nameEn: "Bit", symbol: "b", factor: 1, sys: "Binary" },
+        { id: "B", name: "バイト", nameEn: "Byte", symbol: "B", factor: 8, sys: "Binary" },
+        { id: "KB", name: "キロバイト", nameEn: "Kilobyte", symbol: "KB", factor: 8000, sys: "Decimal" },
+        { id: "KiB", name: "キビバイト", nameEn: "Kibibyte", symbol: "KiB", factor: 8192, sys: "Binary" },
+        { id: "MB", name: "メガバイト", nameEn: "Megabyte", symbol: "MB", factor: 8e6, sys: "Decimal" },
+        { id: "MiB", name: "メビバイト", nameEn: "Mebibyte", symbol: "MiB", factor: 8388608, sys: "Binary" },
+        { id: "GB", name: "ギガバイト", nameEn: "Gigabyte", symbol: "GB", factor: 8e9, sys: "Decimal" },
+        { id: "GiB", name: "ギビバイト", nameEn: "Gibibyte", symbol: "GiB", factor: 8589934592, sys: "Binary" },
+        { id: "TB", name: "テラバイト", nameEn: "Terabyte", symbol: "TB", factor: 8e12, sys: "Decimal" },
+        { id: "TiB", name: "テビバイト", nameEn: "Tebibyte", symbol: "TiB", factor: 8796093022208, sys: "Binary" },
       ]
     }
   };
@@ -1191,6 +1357,7 @@ var ucApp = (function() {
   function init() {
     renderSidebar();
     loadCategory('length');
+    setupSearch();
   }
 
   function renderSidebar() {
@@ -1200,7 +1367,7 @@ var ucApp = (function() {
       const cat = db[key];
       const btn = document.createElement('button');
       btn.className = `uc-cat-btn ${key === currentCategory ? 'active' : ''}`;
-      btn.innerHTML = `${cat.name} <span class="uc-cat-dim">${cat.dim}</span>`;
+      btn.innerHTML = `<span class="uc-cat-icon">${cat.icon}</span> ${cat.name} <span class="uc-cat-dim">${cat.dim}</span>`;
       btn.onclick = () => {
         document.querySelectorAll('.uc-cat-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -1213,58 +1380,174 @@ var ucApp = (function() {
   function loadCategory(key) {
     currentCategory = key;
     const cat = db[key];
-    document.getElementById('uc-current-cat').textContent = cat.name;
+    document.getElementById('uc-current-cat').textContent = `${cat.icon} ${cat.name} (${cat.nameJp})`;
     document.getElementById('uc-current-dim').textContent = cat.dim;
     
     const grid = document.getElementById('uc-grid');
     grid.innerHTML = '';
     activeInputs = {};
 
-    cat.units.forEach(u => {
+    
+    const qsFrom = document.getElementById('uc-qs-from');
+    const qsTo = document.getElementById('uc-qs-to');
+    qsFrom.innerHTML = '';
+    qsTo.innerHTML = '';
+    cat.units.forEach((u, i) => {
+      qsFrom.innerHTML += `<option value="${u.id}" ${i===0?'selected':''}>${u.symbol} - ${u.name}</option>`;
+      qsTo.innerHTML += `<option value="${u.id}" ${i===1?'selected':''}>${u.symbol} - ${u.name}</option>`;
+    });
+    updateQuickSwap();
+
+    
+    const sortedUnits = [...cat.units].sort((a, b) => {
+      const aFav = favorites.includes(`${key}:${a.id}`) ? -1 : 0;
+      const bFav = favorites.includes(`${key}:${b.id}`) ? -1 : 0;
+      return aFav - bFav;
+    });
+
+    sortedUnits.forEach(u => {
       const card = document.createElement('div');
-      card.className = 'uc-unit-card';
+      const isFav = favorites.includes(`${key}:${u.id}`);
+      card.className = `uc-unit-card ${isFav ? 'fav' : ''}`;
       card.id = `card-${u.id}`;
+      
+      
+      const baseUnit = cat.units.find(x => x.id === cat.base) || cat.units[0];
+      let formulaText = '';
+      if (u.id !== cat.base && key !== 'temperature') {
+        const ratio = u.factor / baseUnit.factor;
+        formulaText = `1 ${u.symbol} = ${formatNumber(ratio)} ${baseUnit.symbol}`;
+      } else if (key === 'temperature' && u.id !== 'K') {
+        if (u.id === 'C') formulaText = 'T(K) = T(°C) + 273.15';
+        else if (u.id === 'F') formulaText = 'T(K) = (T(°F) - 32) × 5/9 + 273.15';
+        else if (u.id === 'R') formulaText = 'T(K) = T(°R) × 5/9';
+      }
       
       card.innerHTML = `
         <div class="uc-card-header">
           <div class="uc-unit-name">
             <span>${u.name}</span>
+            <span style="font-size:0.6rem;color:#666;font-family:'JetBrains Mono',monospace;">${u.nameEn || ''}</span>
             <span class="uc-unit-sys">${u.sys}</span>
           </div>
           <div class="uc-action-bar">
+            <button class="uc-fav-btn ${isFav ? 'active' : ''}" onclick="ucApp.toggleFav('${key}','${u.id}',this)" title="Favorite">${isFav ? '★' : '☆'}</button>
             <button class="uc-copy-btn" onclick="ucApp.copyVal('${u.id}')">COPY</button>
           </div>
         </div>
         <div class="uc-input-row">
-          <input type="text" class="uc-input" id="in-${u.id}" placeholder="0" autocomplete="off" 
+          <input type="text" class="uc-input" id="in-${u.id}" placeholder="0" autocomplete="off" inputmode="decimal"
             onfocus="ucApp.focusIn('${u.id}')" onblur="ucApp.focusOut('${u.id}')" oninput="ucApp.handleConv('${u.id}')">
           <div class="uc-unit-symbol">${u.symbol}</div>
         </div>
+        ${formulaText ? `<div class="uc-formula">${formulaText}</div>` : ''}
       `;
       grid.appendChild(card);
       activeInputs[u.id] = document.getElementById(`in-${u.id}`);
     });
     
     
-    const baseIn = activeInputs[cat.base] || activeInputs[cat.units[0].id];
-    baseIn.value = "1";
-    handleConv(cat.base || cat.units[0].id);
+    const baseId = cat.base || cat.units[0].id;
+    if (activeInputs[baseId]) {
+      activeInputs[baseId].value = "1";
+      handleConv(baseId);
+    }
   }
 
-  function focusIn(id) {
-    document.getElementById(`card-${id}`).classList.add('active');
+  
+  function updateQuickSwap() {
+    const from = document.getElementById('uc-qs-from').value;
+    const to = document.getElementById('uc-qs-to').value;
+    const cat = db[currentCategory];
+    const fromU = cat.units.find(u => u.id === from);
+    const toU = cat.units.find(u => u.id === to);
+    if (!fromU || !toU) return;
+    
+    let result;
+    if (currentCategory === 'temperature') {
+      const baseVal = 1 * fromU.factor + (fromU.offset||0);
+      result = (baseVal - (toU.offset||0)) / toU.factor;
+    } else {
+      result = fromU.factor / toU.factor;
+    }
+    document.getElementById('uc-qs-result').textContent = `1 ${fromU.symbol} = ${formatNumber(result)} ${toU.symbol}`;
+  }
+  document.getElementById('uc-qs-from').addEventListener('change', updateQuickSwap);
+  document.getElementById('uc-qs-to').addEventListener('change', updateQuickSwap);
+  document.getElementById('uc-qs-swap').addEventListener('click', () => {
+    const f = document.getElementById('uc-qs-from');
+    const t = document.getElementById('uc-qs-to');
+    const tmp = f.value; f.value = t.value; t.value = tmp;
+    updateQuickSwap();
+  });
+
+  
+  function setupSearch() {
+    const searchInput = document.getElementById('uc-search');
+    const resultsEl = document.getElementById('uc-search-results');
+    
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase().trim();
+      if (q.length < 1) { resultsEl.classList.remove('show'); return; }
+      
+      const matches = [];
+      Object.keys(db).forEach(catKey => {
+        db[catKey].units.forEach(u => {
+          if (u.name.toLowerCase().includes(q) || u.symbol.toLowerCase().includes(q) || u.id.toLowerCase().includes(q) || (u.nameEn && u.nameEn.toLowerCase().includes(q))) {
+            matches.push({ catKey, unit: u, catName: db[catKey].name });
+          }
+        });
+      });
+      
+      if (matches.length === 0) { resultsEl.innerHTML = '<div class="uc-search-item" style="color:#555;">No results</div>'; resultsEl.classList.add('show'); return; }
+      
+      resultsEl.innerHTML = matches.slice(0, 15).map(m =>
+        `<div class="uc-search-item" onclick="ucApp.jumpTo('${m.catKey}','${m.unit.id}')">
+          <span>${m.unit.name} (${m.unit.symbol})</span>
+          <span class="uc-search-item-cat">${m.catName}</span>
+        </div>`
+      ).join('');
+      resultsEl.classList.add('show');
+    });
+    
+    searchInput.addEventListener('blur', () => {
+      setTimeout(() => resultsEl.classList.remove('show'), 200);
+    });
   }
 
-  function focusOut(id) {
-    document.getElementById(`card-${id}`).classList.remove('active');
+  function jumpTo(catKey, unitId) {
+    document.querySelectorAll('.uc-cat-btn').forEach((b, i) => {
+      b.classList.toggle('active', Object.keys(db)[i] === catKey);
+    });
+    loadCategory(catKey);
+    document.getElementById('uc-search').value = '';
+    document.getElementById('uc-search-results').classList.remove('show');
+    
+    setTimeout(() => {
+      const card = document.getElementById(`card-${unitId}`);
+      if (card) { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); card.classList.add('active'); setTimeout(() => card.classList.remove('active'), 2000); }
+    }, 100);
   }
+
+  
+  function toggleFav(catKey, unitId, btn) {
+    const key = `${catKey}:${unitId}`;
+    const idx = favorites.indexOf(key);
+    if (idx >= 0) { favorites.splice(idx, 1); btn.classList.remove('active'); btn.textContent = '☆'; }
+    else { favorites.push(key); btn.classList.add('active'); btn.textContent = '★'; }
+    localStorage.setItem(FAV_KEY, JSON.stringify(favorites));
+    
+    const card = document.getElementById(`card-${unitId}`);
+    if (card) card.classList.toggle('fav', favorites.includes(key));
+  }
+
+  function focusIn(id) { document.getElementById(`card-${id}`).classList.add('active'); }
+  function focusOut(id) { document.getElementById(`card-${id}`).classList.remove('active'); }
 
   function handleConv(sourceId) {
     const sourceStr = activeInputs[sourceId].value;
     if (sourceStr === "" || isNaN(sourceStr)) {
-      Object.keys(activeInputs).forEach(id => {
-        if(id !== sourceId) activeInputs[id].value = "";
-      });
+      Object.keys(activeInputs).forEach(id => { if(id !== sourceId) activeInputs[id].value = ""; });
       return;
     }
 
@@ -1272,7 +1555,6 @@ var ucApp = (function() {
     const cat = db[currentCategory];
     const sourceUnit = cat.units.find(u => u.id === sourceId);
 
-    
     let baseVal = 0;
     if (currentCategory === 'temperature') {
       baseVal = sourceVal * sourceUnit.factor + sourceUnit.offset;
@@ -1280,50 +1562,44 @@ var ucApp = (function() {
       baseVal = sourceVal * sourceUnit.factor;
     }
 
-    
     cat.units.forEach(u => {
-      if (u.id === sourceId) return; 
-      
+      if (u.id === sourceId) return;
       let targetVal = 0;
       if (currentCategory === 'temperature') {
         targetVal = (baseVal - u.offset) / u.factor;
       } else {
         targetVal = baseVal / u.factor;
       }
-      
-      activeInputs[u.id].value = formatNumber(targetVal);
+      if (activeInputs[u.id]) activeInputs[u.id].value = formatNumber(targetVal);
     });
+
+    updateQuickSwap();
   }
 
   function formatNumber(num) {
     if (num === 0) return "0";
     const abs = Math.abs(num);
-    
-    if (abs < 1e-6 || abs >= 1e9) {
+    if (abs < 1e-6 || abs >= 1e12) {
       return num.toExponential(6).replace(/\.?0+e/, 'e');
     }
-    
+    if (abs < 0.01) return num.toPrecision(6);
     return Math.round(num * 1e8) / 1e8;
   }
 
   function copyVal(id) {
-    const val = activeInputs[id].value;
+    const val = activeInputs[id] ? activeInputs[id].value : '';
     if(!val) return;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(val);
-    } else {
-      const el = document.createElement('textarea');
-      el.value = val; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
-    }
+    if (navigator.clipboard) { navigator.clipboard.writeText(val); }
+    else { const el = document.createElement('textarea'); el.value = val; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); }
     
-    toast.textContent = `[ ${val} ] COPIED TO CLIPBOARD`;
+    toast.textContent = `[ ${val} ] COPIED`;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2000);
   }
 
   if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { setTimeout(init, 50); }
 
-  return { loadCategory, handleConv, focusIn, focusOut, copyVal };
+  return { loadCategory, handleConv, focusIn, focusOut, copyVal, toggleFav, jumpTo };
 })();
 </script>
 
