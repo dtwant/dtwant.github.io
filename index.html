@@ -1118,6 +1118,8 @@ h3.dt-heading::before {
   opacity: 0.5;
   transition: all 0.3s ease;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -1667,7 +1669,7 @@ if (navigator.vibrate) navigator.vibrate(pattern);
 };
 
 const startScan = (e) => {
-e.preventDefault();
+if (e.cancelable) e.preventDefault();
 scanner.classList.add('scanning');
 statusText.innerText = "AUTHENTICATING...";
 statusText.style.opacity = "1";
@@ -1710,14 +1712,20 @@ window.location.href = TARGET_URL;
 };
 
 scanner.addEventListener('mousedown', startScan);
-scanner.addEventListener('touchstart', startScan);
+scanner.addEventListener('touchstart', startScan, { passive: false });
 
 scanner.addEventListener('mouseup', stopScan);
 scanner.addEventListener('mouseleave', stopScan);
 scanner.addEventListener('touchend', stopScan);
 scanner.addEventListener('touchcancel', stopScan);
+
+scanner.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  return false;
+});
 })();
-</script></section>
+</script>
+</section>
         </div>
       </div>
     </div>
