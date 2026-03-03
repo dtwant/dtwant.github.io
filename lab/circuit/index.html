@@ -15,18 +15,18 @@
 
   
   
-    <title>MECHANICS_SIM &middot; dt&#39;s world</title>
-    <meta name="title" content="MECHANICS_SIM &middot; dt&#39;s world">
+    <title>CIRCUIT_SIM &middot; dt&#39;s world</title>
+    <meta name="title" content="CIRCUIT_SIM &middot; dt&#39;s world">
   
 
   
   
-    <meta name="description" content="解析力学シミュレータ">
+    <meta name="description" content="電気回路シミュレータ">
   
   
   
   
-  <link rel="canonical" href="https://dtwant.github.io/lab/mechanics/">
+  <link rel="canonical" href="https://dtwant.github.io/lab/circuit/">
   
 
   
@@ -44,18 +44,18 @@
   
 
   
-  <meta property="og:url" content="https://dtwant.github.io/lab/mechanics/">
+  <meta property="og:url" content="https://dtwant.github.io/lab/circuit/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="MECHANICS_SIM">
-  <meta property="og:description" content="解析力学シミュレータ">
+  <meta property="og:title" content="CIRCUIT_SIM">
+  <meta property="og:description" content="電気回路シミュレータ">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="lab">
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="MECHANICS_SIM">
-  <meta name="twitter:description" content="解析力学シミュレータ">
+  <meta name="twitter:title" content="CIRCUIT_SIM">
+  <meta name="twitter:description" content="電気回路シミュレータ">
 
   
   
@@ -212,12 +212,12 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "articleSection": "Labs",
-    "name": "MECHANICS_SIM",
-    "headline": "MECHANICS_SIM",
-    "description": "解析力学シミュレータ",
+    "name": "CIRCUIT_SIM",
+    "headline": "CIRCUIT_SIM",
+    "description": "電気回路シミュレータ",
     
     "inLanguage": "en",
-    "url" : "https:\/\/dtwant.github.io\/lab\/mechanics\/",
+    "url" : "https:\/\/dtwant.github.io\/lab\/circuit\/",
     "author" : {
       "@type": "Person",
       "name": "dt"
@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "68"
+    "wordCount": "70"
   }]
   </script>
 
@@ -777,8 +777,8 @@
 
   
   <li class="hidden">
-    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/mechanics/"
-      >MECHANICS_SIM</a
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/circuit/"
+      >CIRCUIT_SIM</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -787,259 +787,268 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        MECHANICS_SIM
+        CIRCUIT_SIM
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       
-<h1 class="relative group">MECHANICS_SIM <span style="font-size:12px;color:#ff0055;">// LAGRANGIAN_ENGINE</span>
-    <div id="mechanics_sim--lagrangian_engine" class="anchor"></div>
+<h1 class="relative group">CIRCUIT_SIM <span style="font-size:12px;color:#00ff41;">// ANALOG_ENGINE</span>
+    <div id="circuit_sim--analog_engine" class="anchor"></div>
     
     <span
         class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#mechanics_sim--lagrangian_engine" aria-label="Anchor">#</a>
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#circuit_sim--analog_engine" aria-label="Anchor">#</a>
     </span>
     
 </h1>
-<p>ラグランジアンからオイラー-ラグランジュ方程式を導出し、Runge-Kutta法で数値積分して運動をリアルタイムアニメーション表示する解析力学シミュレータ。</p>
+<p>R・L・C素子を配置して回路を構築し、DC/AC解析を行うアナログ回路シミュレータ。</p>
 <blockquote>
 <p>[!NOTE]
-<strong>SIMULATION PRESETS:</strong></p>
+<strong>CIRCUIT MODULES:</strong></p>
 <ul>
-<li><strong>[ SIMPLE_PENDULUM ]</strong> 単振り子（大角度対応）</li>
-<li><strong>[ DOUBLE_PENDULUM ]</strong> 二重振り子（カオス挙動）</li>
-<li><strong>[ COUPLED_OSC ]</strong> 連成振動（固有モード）</li>
-<li><strong>[ KEPLER ]</strong> ケプラー問題（惑星軌道）</li>
+<li><strong>[ DC_ANALYSIS ]</strong> 直流定常状態の電圧・電流解析</li>
+<li><strong>[ AC_ANALYSIS ]</strong> 交流応答・インピーダンス計算</li>
+<li><strong>[ WAVEFORM ]</strong> 電圧・電流の時間波形表示</li>
+<li><strong>[ PRESETS ]</strong> RC直列/RLC直列/分圧/ローパスフィルタ</li>
 </ul>
-<p><strong>RK4数値積分 · 位相空間プロット · エネルギー保存モニタ</strong> 搭載</p></blockquote>
+<p><strong>修正節点解析法(MNA) · ボード線図 · プリセット回路</strong> 搭載</p></blockquote>
 <hr>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
-  #mech-app {
-    --neon-cyan: #00f3ff; --neon-pink: #ff0055; --neon-green: #00ff41; --neon-yellow: #fcee0a;
-    --neon-orange: #ff6a00; --bg-dark: #050505;
+  #circ-app {
+    --neon-cyan: #00f3ff; --neon-pink: #ff0055; --neon-green: #00ff41; --neon-yellow: #fcee0a; --bg-dark: #050505;
     font-family: 'Zen Kaku Gothic New', sans-serif; color: #e2e8f0;
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     z-index: 99999; background: var(--bg-dark); margin: 0; padding: 0;
     box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden;
   }
-  #mech-app * { box-sizing: inherit; text-decoration: none !important; }
-  .mech-bg {
+  #circ-app * { box-sizing: inherit; text-decoration: none !important; }
+  .circ-bg {
     position: absolute; top:0; left:0; width:100%; height:100%;
-    background-image: radial-gradient(circle at 100% 0%, rgba(255,106,0,0.08) 0%, transparent 50%),
-      linear-gradient(rgba(255,106,0,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,106,0,0.03) 1px, transparent 1px);
-    background-size: 100% 100%, 40px 40px, 40px 40px; z-index: 1; pointer-events: none;
+    background-image: radial-gradient(circle at 50% 50%, rgba(0,255,65,0.06) 0%, transparent 60%),
+      linear-gradient(rgba(0,255,65,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,65,0.03) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px; z-index:1; pointer-events:none;
   }
-  .mech-scan {
+  .circ-scan {
     position: absolute; top:0; left:0; width:100%; height:100%;
-    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.3) 50%);
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.25) 50%);
     background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.5;
   }
-  .mech-container { position: relative; z-index: 10; display: flex; flex-direction: column; width: 100%; height: 100%; }
-  .mech-header {
-    background: rgba(0,0,0,0.95); border-bottom: 2px solid rgba(255,106,0,0.4);
+  .circ-container { position: relative; z-index: 10; display: flex; flex-direction: column; width: 100%; height: 100%; }
+  .circ-header {
+    background: rgba(0,0,0,0.95); border-bottom: 2px solid rgba(0,255,65,0.4);
     padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
   }
-  .mech-title {
+  .circ-title {
     font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
-    color: var(--neon-orange); text-shadow: 0 0 10px rgba(255,106,0,0.5);
+    color: var(--neon-green); text-shadow: 0 0 10px rgba(0,255,65,0.5);
     letter-spacing: 2px; display: flex; align-items: center; gap: 12px;
   }
-  .mech-title svg { flex-shrink: 0; }
-  .mech-hdr-r { display: flex; align-items: center; }
-  .mech-sys {
+  .circ-title svg { flex-shrink:0; }
+  .circ-hdr-r { display: flex; align-items: center; }
+  .circ-sys {
     font-size: 0.7rem; color: var(--neon-cyan); display: flex; align-items: center; gap: 6px;
     background: rgba(0,243,255,0.05); padding: 4px 10px; border: 1px solid rgba(0,243,255,0.2);
     font-family: 'JetBrains Mono', monospace; font-weight: bold; white-space: nowrap;
   }
-  .mech-exit {
+  .circ-exit {
     background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
     font-size: 0.7rem; font-weight: bold; padding: 5px 12px; cursor: pointer; transition: all 0.2s; margin-left: 10px;
     font-family: 'Zen Kaku Gothic New', sans-serif; letter-spacing: 1px;
   }
-  .mech-exit:hover { background: var(--neon-pink); color: #000; }
-  .mech-ws { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
-  @media(min-width: 900px) { .mech-ws { flex-direction: row; } }
-  .mech-side {
-    width: 100%; max-height: 40vh; background: rgba(5,5,5,0.9); border-right: 1px solid rgba(255,106,0,0.2);
+  .circ-exit:hover { background: var(--neon-pink); color: #000; }
+  .circ-ws { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
+  @media(min-width: 900px) { .circ-ws { flex-direction: row; } }
+  .circ-side {
+    width: 100%; max-height: 38vh; background: rgba(5,5,5,0.9); border-right: 1px solid rgba(0,255,65,0.2);
     display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; padding: 12px; gap: 10px;
   }
-  @media(min-width: 900px) { .mech-side { width: 310px; max-height: none; } }
-  .mech-side::-webkit-scrollbar { width: 4px; }
-  .mech-side::-webkit-scrollbar-thumb { background: rgba(255,106,0,0.3); }
-  .mech-ctrl {
+  @media(min-width: 900px) { .circ-side { width: 300px; max-height: none; } }
+  .circ-side::-webkit-scrollbar { width: 4px; }
+  .circ-side::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.3); }
+  .circ-ctrl {
     background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 10px;
     border-left: 3px solid #333; transition: border-color 0.3s;
   }
-  .mech-ctrl:hover { border-left-color: var(--neon-orange); }
-  .mech-lbl-en { font-family: 'Orbitron', sans-serif; font-size: 0.6rem; color: var(--neon-cyan); letter-spacing: 1px; display: block; }
-  .mech-lbl-jp { font-size: 0.78rem; color: #fff; font-weight: bold; margin-bottom: 4px; display: block; }
-  .mech-select {
+  .circ-ctrl:hover { border-left-color: var(--neon-green); }
+  .circ-lbl-en { font-family: 'Orbitron', sans-serif; font-size: 0.6rem; color: var(--neon-cyan); letter-spacing: 1px; display: block; }
+  .circ-lbl-jp { font-size: 0.78rem; color: #fff; font-weight: bold; margin-bottom: 4px; display: block; }
+  .circ-select, .circ-input {
     width: 100%; background: #000; border: 1px solid #444; color: #fff;
     font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.82rem; padding: 7px;
     outline: none; transition: all 0.2s; font-weight: bold;
   }
-  .mech-select:focus { border-color: var(--neon-orange); box-shadow: 0 0 10px rgba(255,106,0,0.2); }
-  .mech-slider-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
-  .mech-slider-row label { font-size: 0.72rem; color: #aaa; min-width: 50px; }
-  .mech-slider-row input[type=range] { flex: 1; accent-color: #ff6a00; }
-  .mech-slider-row .sv { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--neon-cyan); min-width: 45px; text-align: right; }
-  .mech-btn-row { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-  .mech-btn {
-    flex: 1; min-width: 55px; background: transparent; border: 1px solid var(--neon-orange); color: var(--neon-orange);
-    font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.78rem; font-weight: bold; padding: 8px 4px;
-    cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  .circ-select:focus, .circ-input:focus { border-color: var(--neon-green); box-shadow: 0 0 10px rgba(0,255,65,0.2); }
+  .circ-btn-row { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .circ-btn {
+    flex: 1; min-width: 50px; background: transparent; border: 1px solid var(--neon-green); color: var(--neon-green);
+    font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.75rem; font-weight: bold; padding: 7px 3px;
+    cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 1px;
   }
-  .mech-btn-en { font-family: 'Orbitron', sans-serif; font-size: 0.5rem; opacity: 0.8; }
-  .mech-btn:hover { background: rgba(255,106,0,0.2); box-shadow: 0 0 15px rgba(255,106,0,0.4); }
-  .mech-btn.active { background: var(--neon-orange); color: #000; }
-  .mech-btn.stop { border-color: var(--neon-pink); color: var(--neon-pink); }
-  .mech-btn.stop:hover { background: rgba(255,0,85,0.2); }
-  .mech-lagrangian {
-    background: rgba(0,0,0,0.8); border: 1px solid rgba(255,106,0,0.3); padding: 10px;
-    font-size: 0.8rem; text-align: center; min-height: 40px;
-    display: flex; align-items: center; justify-content: center;
+  .circ-btn-en { font-family: 'Orbitron', sans-serif; font-size: 0.45rem; opacity: 0.8; }
+  .circ-btn:hover { background: rgba(0,255,65,0.2); box-shadow: 0 0 12px rgba(0,255,65,0.3); }
+  .circ-btn.active { background: var(--neon-green); color: #000; }
+  .circ-btn.danger { border-color: var(--neon-pink); color: var(--neon-pink); }
+  .circ-btn.danger:hover { background: rgba(255,0,85,0.2); }
+  .circ-panel { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .circ-main-area { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
+  @media(min-width: 1100px) { .circ-main-area { flex-direction: row; } }
+  .circ-canvas-wrap {
+    flex: 2; position: relative; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,255,65,0.15);
+    margin: 8px; overflow: hidden; cursor: crosshair; min-height: 200px;
   }
-  .mech-panel { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
-  .mech-vis { display: flex; flex-grow: 1; flex-direction: column; overflow: hidden; }
-  @media(min-width: 1100px) { .mech-vis { flex-direction: row; } }
-  .mech-canvas-wrap {
-    flex: 2; position: relative; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,106,0,0.15);
-    margin: 8px; overflow: hidden; min-height: 200px;
-  }
-  .mech-canvas-wrap canvas { display: block; width: 100%; height: 100%; }
-  .mech-side-charts { flex: 1; display: flex; flex-direction: column; gap: 4px; padding: 4px 8px 8px 0; min-width: 200px; overflow: hidden; }
-  @media(max-width: 1099px) { .mech-side-charts { flex-direction: row; padding: 0 8px 8px 8px; min-height: 150px; } }
-  .mech-mini-chart {
+  .circ-canvas-wrap canvas { display: block; width: 100%; height: 100%; }
+  .circ-chart-area { flex: 1; display: flex; flex-direction: column; gap: 4px; padding: 4px 8px 8px 0; min-width: 200px; }
+  @media(max-width: 1099px) { .circ-chart-area { flex-direction: row; padding: 0 8px 8px 8px; min-height: 140px; } }
+  .circ-chart-box {
     flex: 1; background: rgba(0,0,0,0.6); border: 1px solid #333; display: flex; flex-direction: column; overflow: hidden;
   }
-  .mech-mini-header {
+  .circ-chart-hdr {
     background: rgba(0,0,0,0.8); border-bottom: 1px solid #333; padding: 4px 8px;
     display: flex; justify-content: space-between; align-items: center;
   }
-  .mech-mini-title { font-size: 0.7rem; font-weight: bold; color: #fff; }
-  .mech-mini-title-en { font-family: 'Orbitron', sans-serif; font-size: 0.5rem; color: var(--neon-orange); }
-  .mech-mini-body { flex-grow: 1; position: relative; padding: 4px; }
-  .mech-mini-body canvas { width: 100% !important; height: 100% !important; }
-  .mech-stats {
-    display: flex; gap: 6px; flex-wrap: wrap; padding: 0 8px 8px 8px;
+  .circ-chart-t { font-size: 0.7rem; font-weight: bold; color: #fff; }
+  .circ-chart-te { font-family: 'Orbitron', sans-serif; font-size: 0.5rem; color: var(--neon-green); }
+  .circ-chart-body { flex-grow: 1; position: relative; padding: 4px; }
+  .circ-chart-body canvas { width: 100% !important; height: 100% !important; }
+  .circ-stats { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 8px 8px 8px; }
+  .circ-stat {
+    background: rgba(0,0,0,0.8); border: 1px solid rgba(0,255,65,0.3);
+    padding: 6px 10px; flex: 1; min-width: 90px; position: relative;
   }
-  .mech-stat {
-    background: rgba(0,0,0,0.8); border: 1px solid rgba(0,243,255,0.3);
-    padding: 6px 10px; flex: 1; min-width: 100px; position: relative;
+  .circ-stat::before { content: ''; position: absolute; top:0; left:0; width:3px; height:100%; background: var(--neon-green); opacity: 0.5; }
+  .circ-stat-en { font-family: 'Orbitron', sans-serif; font-size: 0.5rem; color: #888; letter-spacing: 1px; }
+  .circ-stat-jp { font-size: 0.65rem; color: #bbb; font-weight: bold; }
+  .circ-stat-v { font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #fff; }
+  .circ-stat-v.hl { color: var(--neon-yellow); }
+  .circ-results {
+    background: rgba(0,0,0,0.7); border: 1px solid #333; padding: 8px 12px; margin: 0 8px 8px 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--neon-green);
+    max-height: 80px; overflow-y: auto; line-height: 1.6;
   }
-  .mech-stat::before { content: ''; position: absolute; top:0; left:0; width:3px; height:100%; background: var(--neon-cyan); opacity: 0.5; }
-  .mech-stat-en { font-family: 'Orbitron', sans-serif; font-size: 0.5rem; color: #888; letter-spacing: 1px; }
-  .mech-stat-jp { font-size: 0.65rem; color: #bbb; font-weight: bold; }
-  .mech-stat-v { font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #fff; }
-  .mech-stat-v.hl { color: var(--neon-yellow); }
+  .circ-node-tbl {
+    width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    margin-top: 6px;
+  }
+  .circ-node-tbl th { text-align: left; color: var(--neon-cyan); border-bottom: 1px solid #444; padding: 3px 6px; font-weight: normal; }
+  .circ-node-tbl td { color: #ccc; border-bottom: 1px solid #222; padding: 3px 6px; }
   @media(max-width: 600px) {
-    .mech-title { font-size: 0.85rem; letter-spacing: 1px; }
-    .mech-sys { display: none; }
-    .mech-side { max-height: 35vh; padding: 8px; gap: 6px; }
-    .mech-ctrl { padding: 8px; }
-    .mech-btn { padding: 6px 3px; font-size: 0.7rem; min-width: 48px; }
-    .mech-btn-en { font-size: 0.4rem; }
-    .mech-lbl-jp { font-size: 0.72rem; }
-    .mech-select { font-size: 0.75rem; padding: 5px; }
-    .mech-slider-row label { font-size: 0.65rem; min-width: 40px; }
-    .mech-slider-row .sv { font-size: 0.65rem; min-width: 35px; }
-    .mech-lagrangian { font-size: 0.65rem; padding: 6px; min-height: 30px; }
-    .mech-canvas-wrap { margin: 4px; min-height: 150px; }
-    .mech-side-charts { min-height: 100px; padding: 0 4px 4px 4px; gap: 2px; }
-    .mech-mini-title { font-size: 0.6rem; }
-    .mech-mini-title-en { font-size: 0.4rem; }
-    .mech-stats { gap: 4px; padding: 0 4px 4px 4px; }
-    .mech-stat { min-width: 70px; padding: 4px 6px; }
-    .mech-stat-v { font-size: 0.8rem; }
-    .mech-stat-jp { font-size: 0.55rem; }
+    .circ-title { font-size: 0.85rem; letter-spacing: 1px; }
+    .circ-sys { display: none; }
+    .circ-side { max-height: 35vh; padding: 8px; gap: 6px; }
+    .circ-ctrl { padding: 8px; }
+    .circ-btn { padding: 6px 2px; font-size: 0.68rem; min-width: 45px; }
+    .circ-btn-en { font-size: 0.38rem; }
+    .circ-lbl-jp { font-size: 0.72rem; }
+    .circ-select { font-size: 0.75rem; padding: 5px; }
+    .circ-canvas-wrap { margin: 4px; min-height: 150px; }
+    .circ-chart-area { min-height: 110px; padding: 0 4px 4px 4px; gap: 2px; }
+    .circ-chart-t { font-size: 0.6rem; }
+    .circ-chart-te { font-size: 0.38rem; }
+    .circ-stats { gap: 4px; padding: 0 4px 4px 4px; }
+    .circ-stat { min-width: 65px; padding: 4px 6px; }
+    .circ-stat-v { font-size: 0.8rem; }
+    .circ-stat-jp { font-size: 0.55rem; }
+    .circ-results { font-size: 0.65rem; padding: 6px 8px; margin: 0 4px 4px 4px; max-height: 60px; }
   }
 </style>
 
-<div id="mech-app">
-  <div class="mech-bg"></div>
-  <div class="mech-scan"></div>
-  <div class="mech-container">
-    <div class="mech-header">
-      <div class="mech-title">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6a00" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-        MECHANICS_SIM
+<div id="circ-app">
+  <div class="circ-bg"></div>
+  <div class="circ-scan"></div>
+  <div class="circ-container">
+    <div class="circ-header">
+      <div class="circ-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00ff41" stroke-width="2"><rect x="1" y="6" width="22" height="12" rx="2"/><line x1="6" y1="6" x2="6" y2="18"/><line x1="18" y1="6" x2="18" y2="18"/></svg>
+        CIRCUIT_SIM
       </div>
-      <div class="mech-hdr-r">
-        <div class="mech-sys" id="mech-status"><span style="color:#f59e0b;">●</span> IDLE</div>
-        <button class="mech-exit" onclick="history.back()">DISCONNECT</button>
+      <div class="circ-hdr-r">
+        <div class="circ-sys" id="circ-status"><span style="color:#00ff41;">●</span> READY</div>
+        <button class="circ-exit" onclick="history.back()">DISCONNECT</button>
       </div>
     </div>
-    <div class="mech-ws">
-      <div class="mech-side">
-        <div class="mech-ctrl">
-          <span class="mech-lbl-en">SYSTEM_PRESET</span>
-          <span class="mech-lbl-jp">力学系プリセット</span>
-          <select id="mech-preset" class="mech-select" onchange="mechApp.changePreset()">
-            <option value="pendulum">単振り子（大角度対応）</option>
-            <option value="double">二重振り子（カオス）</option>
-            <option value="coupled">連成振動</option>
-            <option value="kepler">ケプラー問題（惑星軌道）</option>
+    <div class="circ-ws">
+      <div class="circ-side">
+        <div class="circ-ctrl">
+          <span class="circ-lbl-en">PRESET_CIRCUITS</span>
+          <span class="circ-lbl-jp">プリセット回路</span>
+          <select id="circ-preset" class="circ-select" onchange="circApp.loadPreset()">
+            <option value="rc_series">RC直列回路</option>
+            <option value="rl_series">RL直列回路</option>
+            <option value="rlc_series">RLC直列回路</option>
+            <option value="voltage_divider">分圧回路</option>
+            <option value="rc_lowpass">RCローパスフィルタ</option>
+            <option value="rc_highpass">RCハイパスフィルタ</option>
           </select>
         </div>
-        <div class="mech-ctrl">
-          <span class="mech-lbl-en">LAGRANGIAN</span>
-          <span class="mech-lbl-jp">ラグランジアン L = T − V</span>
-          <div class="mech-lagrangian" id="mech-lagrangian"></div>
-        </div>
-        <div class="mech-ctrl" id="mech-params">
-          <span class="mech-lbl-en">PARAMETERS</span>
-          <span class="mech-lbl-jp">パラメータ</span>
-          <div id="mech-sliders"></div>
-        </div>
-        <div class="mech-ctrl">
-          <span class="mech-lbl-en">SIMULATION_ENGINE</span>
-          <span class="mech-lbl-jp">シミュレーション制御</span>
-          <div class="mech-slider-row">
-            <label>速度</label>
-            <input type="range" id="mech-speed" min="1" max="10" value="3">
-            <span class="sv" id="mech-speed-val">×3</span>
+        <div class="circ-ctrl">
+          <span class="circ-lbl-en">SOURCE_CONFIG</span>
+          <span class="circ-lbl-jp">電源設定</span>
+          <div class="circ-btn-row">
+            <button class="circ-btn active" id="src-dc" onclick="circApp.setSource('dc')">DC<span class="circ-btn-en">直流</span></button>
+            <button class="circ-btn" id="src-ac" onclick="circApp.setSource('ac')">AC<span class="circ-btn-en">交流</span></button>
           </div>
-          <div class="mech-btn-row">
-            <button class="mech-btn" id="mech-run" onclick="mechApp.toggleRun()">開始<span class="mech-btn-en">START</span></button>
-            <button class="mech-btn" onclick="mechApp.stepOnce()">1ステップ<span class="mech-btn-en">STEP</span></button>
+          <div style="margin-top:6px;">
+            <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px;">
+              <label style="font-size:0.72rem;color:#aaa;min-width:55px;">電圧 V</label>
+              <input type="number" id="circ-voltage" class="circ-input" value="10" min="0.1" max="100" step="0.1" style="flex:1;">
+            </div>
+            <div id="ac-params" style="display:none;">
+              <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px;">
+                <label style="font-size:0.72rem;color:#aaa;min-width:55px;">周波数 Hz</label>
+                <input type="number" id="circ-freq" class="circ-input" value="50" min="1" max="10000" step="1" style="flex:1;">
+              </div>
+            </div>
           </div>
-          <div class="mech-btn-row">
-            <button class="mech-btn stop" onclick="mechApp.reset()">リセット<span class="mech-btn-en">RESET</span></button>
-            <button class="mech-btn" id="mech-trail" onclick="mechApp.toggleTrail()">軌跡<span class="mech-btn-en">TRAIL</span></button>
+        </div>
+        <div class="circ-ctrl" id="circ-comp-ctrl">
+          <span class="circ-lbl-en">COMPONENT_VALUES</span>
+          <span class="circ-lbl-jp">素子パラメータ</span>
+          <div id="circ-comp-params"></div>
+        </div>
+        <div class="circ-ctrl">
+          <span class="circ-lbl-en">ANALYSIS</span>
+          <span class="circ-lbl-jp">解析実行</span>
+          <div class="circ-btn-row">
+            <button class="circ-btn" onclick="circApp.analyze()">解析実行<span class="circ-btn-en">ANALYZE</span></button>
+            <button class="circ-btn" onclick="circApp.runTransient()">過渡応答<span class="circ-btn-en">TRANSIENT</span></button>
+          </div>
+          <div class="circ-btn-row">
+            <button class="circ-btn" onclick="circApp.runBode()">ボード線図<span class="circ-btn-en">BODE</span></button>
+            <button class="circ-btn danger" onclick="circApp.resetAll()">リセット<span class="circ-btn-en">RESET</span></button>
           </div>
         </div>
       </div>
-      <div class="mech-panel">
-        <div class="mech-vis">
-          <div class="mech-canvas-wrap" id="mech-canvas-wrap">
-            <canvas id="mech-canvas"></canvas>
+      <div class="circ-panel">
+        <div class="circ-main-area">
+          <div class="circ-canvas-wrap" id="circ-canvas-wrap">
+            <canvas id="circ-canvas"></canvas>
           </div>
-          <div class="mech-side-charts">
-            <div class="mech-mini-chart">
-              <div class="mech-mini-header">
-                <span class="mech-mini-title">位相空間</span>
-                <span class="mech-mini-title-en">PHASE_SPACE</span>
+          <div class="circ-chart-area">
+            <div class="circ-chart-box">
+              <div class="circ-chart-hdr">
+                <span class="circ-chart-t" id="chart1-title">電圧波形</span>
+                <span class="circ-chart-te" id="chart1-sub">WAVEFORM</span>
               </div>
-              <div class="mech-mini-body"><canvas id="mech-phase"></canvas></div>
+              <div class="circ-chart-body"><canvas id="circ-chart1"></canvas></div>
             </div>
-            <div class="mech-mini-chart">
-              <div class="mech-mini-header">
-                <span class="mech-mini-title">エネルギー</span>
-                <span class="mech-mini-title-en">ENERGY</span>
+            <div class="circ-chart-box">
+              <div class="circ-chart-hdr">
+                <span class="circ-chart-t" id="chart2-title">電流波形</span>
+                <span class="circ-chart-te" id="chart2-sub">CURRENT</span>
               </div>
-              <div class="mech-mini-body"><canvas id="mech-energy"></canvas></div>
+              <div class="circ-chart-body"><canvas id="circ-chart2"></canvas></div>
             </div>
           </div>
         </div>
-        <div class="mech-stats">
-          <div class="mech-stat"><span class="mech-stat-en">TIME</span><span class="mech-stat-jp">時刻</span><span class="mech-stat-v" id="st-time">0.00</span></div>
-          <div class="mech-stat"><span class="mech-stat-en">KINETIC</span><span class="mech-stat-jp">運動エネルギー T</span><span class="mech-stat-v" id="st-T">0.00</span></div>
-          <div class="mech-stat"><span class="mech-stat-en">POTENTIAL</span><span class="mech-stat-jp">ポテンシャル V</span><span class="mech-stat-v" id="st-V">0.00</span></div>
-          <div class="mech-stat"><span class="mech-stat-en">TOTAL</span><span class="mech-stat-jp">全エネルギー E</span><span class="mech-stat-v hl" id="st-E">0.00</span></div>
+        <div class="circ-results" id="circ-results">// ANALYSIS_OUTPUT > プリセットを選択して解析を実行してください</div>
+        <div class="circ-stats">
+          <div class="circ-stat"><span class="circ-stat-en">V_TOTAL</span><span class="circ-stat-jp">総電圧</span><span class="circ-stat-v" id="st-vtot">—</span></div>
+          <div class="circ-stat"><span class="circ-stat-en">I_TOTAL</span><span class="circ-stat-jp">総電流</span><span class="circ-stat-v" id="st-itot">—</span></div>
+          <div class="circ-stat"><span class="circ-stat-en">Z_TOTAL</span><span class="circ-stat-jp">総インピーダンス</span><span class="circ-stat-v hl" id="st-ztot">—</span></div>
+          <div class="circ-stat"><span class="circ-stat-en">P_TOTAL</span><span class="circ-stat-jp">消費電力</span><span class="circ-stat-v" id="st-ptot">—</span></div>
         </div>
       </div>
     </div>
@@ -1047,452 +1056,483 @@
 </div>
 
 <script>
-var mechApp = (function() {
+var circApp = (function() {
   "use strict";
-  const canvas = document.getElementById('mech-canvas');
-  const gtx = canvas.getContext('2d');
-  const wrap = document.getElementById('mech-canvas-wrap');
-  const phaseCanvas = document.getElementById('mech-phase');
-  const pCtx = phaseCanvas.getContext('2d');
-  const energyCanvas = document.getElementById('mech-energy');
-  const eCtx = energyCanvas.getContext('2d');
-  let W, H, pW, pH, eW, eH;
-  let running = false, animId = null, showTrail = true;
-  let t = 0, dt = 0.005;
-  let state = [], trail = [], phaseTrail = [], energyHist = [];
-  let preset = 'pendulum';
-  let params = {};
+  Chart.defaults.color = '#aaaddd';
+  Chart.defaults.font.family = "'JetBrains Mono', monospace";
+
+  const canvas = document.getElementById('circ-canvas');
+  const ctx = canvas.getContext('2d');
+  const wrap = document.getElementById('circ-canvas-wrap');
+  let W, H;
+  let chart1 = null, chart2 = null;
+  let sourceType = 'dc';
+  let currentCircuit = null;
 
   const PRESETS = {
-    pendulum: {
-      name: '単振り子', latex: 'L = \\frac{1}{2}ml^2\\dot{\\theta}^2 + mgl\\cos\\theta',
-      params: [
-        { key: 'm', label: '質量 m', min: 0.1, max: 5, step: 0.1, val: 1 },
-        { key: 'l', label: '長さ l', min: 0.3, max: 3, step: 0.1, val: 1.5 },
-        { key: 'g', label: '重力 g', min: 1, max: 20, step: 0.5, val: 9.8 },
-        { key: 'theta0', label: '初期角 θ₀ (°)', min: 5, max: 170, step: 5, val: 60 },
-        { key: 'omega0', label: '初期角速度 ω₀', min: -5, max: 5, step: 0.5, val: 0 }
+    rc_series: {
+      name: 'RC直列回路',
+      components: [
+        { type: 'R', label: 'R₁', key: 'R1', value: 1000, unit: 'Ω' },
+        { type: 'C', label: 'C₁', key: 'C1', value: 0.000001, unit: 'F', display: '1μ' }
       ],
-      init: p => [p.theta0*Math.PI/180, p.omega0],
-      deriv: (s,p) => [s[1], -(p.g/p.l)*Math.sin(s[0])],
-      energy: (s,p) => ({ T: 0.5*p.m*p.l**2*s[1]**2, V: -p.m*p.g*p.l*Math.cos(s[0]) }),
-      draw: drawPendulum
+      topology: 'series',
+      desc: 'V → R → C → GND'
     },
-    double: {
-      name: '二重振り子', latex: 'L = \\frac{1}{2}(m_1+m_2)l_1^2\\dot{\\theta}_1^2 + \\frac{1}{2}m_2 l_2^2\\dot{\\theta}_2^2 + m_2 l_1 l_2 \\dot{\\theta}_1\\dot{\\theta}_2\\cos(\\theta_1-\\theta_2) + (m_1+m_2)gl_1\\cos\\theta_1 + m_2 g l_2\\cos\\theta_2',
-      params: [
-        { key: 'm1', label: '質量 m₁', min: 0.1, max: 5, step: 0.1, val: 1 },
-        { key: 'm2', label: '質量 m₂', min: 0.1, max: 5, step: 0.1, val: 1 },
-        { key: 'l1', label: '長さ l₁', min: 0.3, max: 2, step: 0.1, val: 1 },
-        { key: 'l2', label: '長さ l₂', min: 0.3, max: 2, step: 0.1, val: 1 },
-        { key: 'g', label: '重力 g', min: 1, max: 20, step: 0.5, val: 9.8 },
-        { key: 'th1', label: 'θ₁ (°)', min: 5, max: 170, step: 5, val: 120 },
-        { key: 'th2', label: 'θ₂ (°)', min: 5, max: 170, step: 5, val: 90 }
+    rl_series: {
+      name: 'RL直列回路',
+      components: [
+        { type: 'R', label: 'R₁', key: 'R1', value: 100, unit: 'Ω' },
+        { type: 'L', label: 'L₁', key: 'L1', value: 0.1, unit: 'H' }
       ],
-      init: p => [p.th1*Math.PI/180, 0, p.th2*Math.PI/180, 0],
-      deriv: function(s, p) {
-        const [t1,w1,t2,w2] = s;
-        const { m1,m2,l1,l2,g } = p;
-        const dt = t1-t2, M = m1+m2;
-        const d = M*l1 - m2*l1*Math.cos(dt)**2;
-        const a1 = (m2*l1*w1**2*Math.sin(dt)*Math.cos(dt) + m2*g*Math.sin(t2)*Math.cos(dt) + m2*l2*w2**2*Math.sin(dt) - M*g*Math.sin(t1)) / d;
-        const a2 = (-m2*l2*w2**2*Math.sin(dt)*Math.cos(dt) + M*(g*Math.sin(t1)*Math.cos(dt) - l1*w1**2*Math.sin(dt) - g*Math.sin(t2))) / (d*l2/l1);
-        return [w1, a1, w2, a2];
-      },
-      energy: (s,p) => {
-        const [t1,w1,t2,w2] = s;
-        const T = 0.5*(p.m1+p.m2)*p.l1**2*w1**2 + 0.5*p.m2*p.l2**2*w2**2 + p.m2*p.l1*p.l2*w1*w2*Math.cos(t1-t2);
-        const V = -(p.m1+p.m2)*p.g*p.l1*Math.cos(t1) - p.m2*p.g*p.l2*Math.cos(t2);
-        return { T, V };
-      },
-      draw: drawDoublePendulum
+      topology: 'series',
+      desc: 'V → R → L → GND'
     },
-    coupled: {
-      name: '連成振動', latex: 'L = \\frac{1}{2}m(\\dot{x}_1^2+\\dot{x}_2^2) - \\frac{1}{2}k(x_1^2+x_2^2) - \\frac{1}{2}\\kappa(x_1-x_2)^2',
-      params: [
-        { key: 'm', label: '質量 m', min: 0.1, max: 5, step: 0.1, val: 1 },
-        { key: 'k', label: 'バネ定数 k', min: 0.5, max: 20, step: 0.5, val: 5 },
-        { key: 'kappa', label: '結合定数 κ', min: 0, max: 10, step: 0.5, val: 2 },
-        { key: 'x1', label: 'x₁(0)', min: -2, max: 2, step: 0.1, val: 1 },
-        { key: 'x2', label: 'x₂(0)', min: -2, max: 2, step: 0.1, val: -0.5 }
+    rlc_series: {
+      name: 'RLC直列回路',
+      components: [
+        { type: 'R', label: 'R₁', key: 'R1', value: 100, unit: 'Ω' },
+        { type: 'L', label: 'L₁', key: 'L1', value: 0.05, unit: 'H' },
+        { type: 'C', label: 'C₁', key: 'C1', value: 0.0000001, unit: 'F', display: '0.1μ' }
       ],
-      init: p => [p.x1, 0, p.x2, 0],
-      deriv: (s,p) => {
-        const [x1,v1,x2,v2] = s;
-        return [v1, -(p.k*x1 + p.kappa*(x1-x2))/p.m, v2, -(p.k*x2 + p.kappa*(x2-x1))/p.m];
-      },
-      energy: (s,p) => {
-        const [x1,v1,x2,v2] = s;
-        const T = 0.5*p.m*(v1**2+v2**2);
-        const V = 0.5*p.k*(x1**2+x2**2) + 0.5*p.kappa*(x1-x2)**2;
-        return { T, V };
-      },
-      draw: drawCoupled
+      topology: 'series',
+      desc: 'V → R → L → C → GND'
     },
-    kepler: {
-      name: 'ケプラー問題', latex: 'L = \\frac{1}{2}m(\\dot{r}^2+r^2\\dot{\\phi}^2) + \\frac{GMm}{r}',
-      params: [
-        { key: 'GM', label: 'GM', min: 50, max: 500, step: 10, val: 200 },
-        { key: 'r0', label: '初期距離 r₀', min: 50, max: 200, step: 10, val: 100 },
-        { key: 'vt0', label: '初期接線速度', min: 0.5, max: 5, step: 0.1, val: 1.8 }
+    voltage_divider: {
+      name: '分圧回路',
+      components: [
+        { type: 'R', label: 'R₁', key: 'R1', value: 1000, unit: 'Ω' },
+        { type: 'R', label: 'R₂', key: 'R2', value: 2000, unit: 'Ω' }
       ],
-      init: p => [p.r0, 0, 0, p.vt0/p.r0],
-      deriv: (s,p) => {
-        const [r,dr,phi,dphi] = s;
-        if (r < 5) return [0,0,0,0];
-        return [dr, r*dphi**2 - p.GM/(r**2), dphi, -2*dr*dphi/r];
-      },
-      energy: (s,p) => {
-        const [r,dr,phi,dphi] = s;
-        const T = 0.5*(dr**2 + r**2*dphi**2);
-        const V = -p.GM/Math.max(r,1);
-        return { T, V };
-      },
-      draw: drawKepler
+      topology: 'divider',
+      desc: 'V → R₁ → R₂ → GND (R₂両端が出力)'
+    },
+    rc_lowpass: {
+      name: 'RCローパスフィルタ',
+      components: [
+        { type: 'R', label: 'R₁', key: 'R1', value: 1000, unit: 'Ω' },
+        { type: 'C', label: 'C₁', key: 'C1', value: 0.0000001, unit: 'F', display: '0.1μ' }
+      ],
+      topology: 'lowpass',
+      desc: 'V → R → 出力 → C → GND'
+    },
+    rc_highpass: {
+      name: 'RCハイパスフィルタ',
+      components: [
+        { type: 'R', label: 'R₁', key: 'R1', value: 1000, unit: 'Ω' },
+        { type: 'C', label: 'C₁', key: 'C1', value: 0.0000001, unit: 'F', display: '0.1μ' }
+      ],
+      topology: 'highpass',
+      desc: 'V → C → 出力 → R → GND'
     }
   };
-
-  function rk4(s, deriv, p, h) {
-    const k1 = deriv(s, p);
-    const s2 = s.map((v,i) => v + h/2*k1[i]);
-    const k2 = deriv(s2, p);
-    const s3 = s.map((v,i) => v + h/2*k2[i]);
-    const k3 = deriv(s3, p);
-    const s4 = s.map((v,i) => v + h*k3[i]);
-    const k4 = deriv(s4, p);
-    return s.map((v,i) => v + h/6*(k1[i]+2*k2[i]+2*k3[i]+k4[i]));
-  }
 
   function resize() {
     const r = wrap.getBoundingClientRect();
     W = canvas.width = r.width * devicePixelRatio; H = canvas.height = r.height * devicePixelRatio;
     canvas.style.width = r.width+'px'; canvas.style.height = r.height+'px';
-    gtx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-    const pr = phaseCanvas.parentElement.getBoundingClientRect();
-    pW = phaseCanvas.width = pr.width * devicePixelRatio; pH = phaseCanvas.height = pr.height * devicePixelRatio;
-    phaseCanvas.style.width = pr.width+'px'; phaseCanvas.style.height = pr.height+'px';
-    pCtx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-    const er = energyCanvas.parentElement.getBoundingClientRect();
-    eW = energyCanvas.width = er.width * devicePixelRatio; eH = energyCanvas.height = er.height * devicePixelRatio;
-    energyCanvas.style.width = er.width+'px'; energyCanvas.style.height = er.height+'px';
-    eCtx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-    drawAll();
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    drawCircuit();
   }
 
-  function buildSliders() {
-    const c = document.getElementById('mech-sliders');
+  function buildParams() {
+    const c = document.getElementById('circ-comp-params');
     c.innerHTML = '';
-    const P = PRESETS[preset];
-    P.params.forEach(p => {
-      params[p.key] = p.val;
+    if (!currentCircuit) return;
+    currentCircuit.components.forEach(comp => {
       const row = document.createElement('div');
-      row.className = 'mech-slider-row';
-      row.innerHTML = `<label>${p.label}</label><input type="range" min="${p.min}" max="${p.max}" step="${p.step}" value="${p.val}" data-key="${p.key}"><span class="sv">${p.val}</span>`;
+      row.style.cssText = 'display:flex;gap:6px;align-items:center;margin-bottom:4px;';
+      const displayVal = comp.display || comp.value;
+      row.innerHTML = `<label style="font-size:0.72rem;color:#aaa;min-width:55px;">${comp.label} (${comp.unit})</label>
+        <input type="number" class="circ-input" value="${comp.value}" data-key="${comp.key}" step="any" style="flex:1;">`;
       row.querySelector('input').addEventListener('input', function() {
-        params[this.dataset.key] = parseFloat(this.value);
-        this.nextElementSibling.textContent = this.value;
+        comp.value = parseFloat(this.value) || comp.value;
       });
       c.appendChild(row);
     });
   }
 
-  function renderLatex() {
-    const el = document.getElementById('mech-lagrangian');
-    try { katex.render(PRESETS[preset].latex, el, { displayMode: true, throwOnError: false }); }
-    catch(e) { el.textContent = PRESETS[preset].latex; }
+  function setSource(type) {
+    sourceType = type;
+    document.getElementById('src-dc').classList.toggle('active', type==='dc');
+    document.getElementById('src-ac').classList.toggle('active', type==='ac');
+    document.getElementById('ac-params').style.display = type==='ac' ? 'block' : 'none';
   }
 
-  function changePreset() {
-    stop();
-    preset = document.getElementById('mech-preset').value;
-    buildSliders(); renderLatex(); reset();
+  function loadPreset() {
+    const key = document.getElementById('circ-preset').value;
+    currentCircuit = JSON.parse(JSON.stringify(PRESETS[key]));
+    buildParams();
+    drawCircuit();
+    document.getElementById('circ-results').innerHTML = '// PRESET_LOADED > ' + currentCircuit.name + ' (' + currentCircuit.desc + ')';
   }
 
-  function reset() {
-    const P = PRESETS[preset];
-    state = P.init(params);
-    t = 0; trail = []; phaseTrail = []; energyHist = [];
-    drawAll(); updateStats();
-  }
+  function drawCircuit() {
+    if (!currentCircuit) return;
+    const r = wrap.getBoundingClientRect();
+    const w = r.width, h = r.height;
+    ctx.clearRect(0,0,w,h);
+    
+    ctx.strokeStyle = 'rgba(0,255,65,0.04)'; ctx.lineWidth = 0.5;
+    for(let x=0;x<w;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
+    for(let y=0;y<h;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
 
-  function stepOnce() {
-    const P = PRESETS[preset];
-    const speed = parseInt(document.getElementById('mech-speed').value);
-    for (let i = 0; i < speed; i++) {
-      state = rk4(state, P.deriv, params, dt);
-      t += dt;
-    }
-    recordData(); drawAll(); updateStats();
-  }
-
-  function toggleRun() {
-    running = !running;
-    const btn = document.getElementById('mech-run');
-    const ind = document.getElementById('mech-status');
-    if (running) {
-      btn.innerHTML = '停止<span class="mech-btn-en">STOP</span>'; btn.classList.add('active');
-      ind.innerHTML = '<span style="color:#00ff41;">●</span> RUNNING'; loop();
-    } else { stop(); }
-  }
-
-  function stop() {
-    running = false;
-    const btn = document.getElementById('mech-run');
-    btn.innerHTML = '開始<span class="mech-btn-en">START</span>'; btn.classList.remove('active');
-    document.getElementById('mech-status').innerHTML = '<span style="color:#f59e0b;">●</span> IDLE';
-    cancelAnimationFrame(animId);
-  }
-
-  function loop() {
-    if (!running) return;
-    stepOnce();
-    animId = requestAnimationFrame(loop);
-  }
-
-  function toggleTrail() {
-    showTrail = !showTrail;
-    document.getElementById('mech-trail').classList.toggle('active', showTrail);
-    drawAll();
-  }
-
-  function recordData() {
-    const P = PRESETS[preset];
-    if (preset === 'kepler') {
-      const [r,,phi] = state;
-      trail.push({ x: r*Math.cos(phi), y: r*Math.sin(phi) });
-      phaseTrail.push({ x: state[0], y: state[1] });
-    } else if (preset === 'double') {
-      const x2 = params.l1*Math.sin(state[0]) + params.l2*Math.sin(state[2]);
-      const y2 = params.l1*Math.cos(state[0]) + params.l2*Math.cos(state[2]);
-      trail.push({ x: x2, y: y2 });
-      phaseTrail.push({ x: state[0], y: state[1] });
-    } else {
-      phaseTrail.push({ x: state[0], y: state[1] });
-    }
-    const e = P.energy(state, params);
-    energyHist.push({ t, T: e.T, V: e.V, E: e.T + e.V });
-    if (trail.length > 3000) trail.splice(0, trail.length - 3000);
-    if (phaseTrail.length > 3000) phaseTrail.splice(0, phaseTrail.length - 3000);
-    if (energyHist.length > 1000) energyHist.splice(0, energyHist.length - 1000);
-  }
-
-  function drawAll() {
-    const rr = wrap.getBoundingClientRect();
-    const w = rr.width, h = rr.height;
-    gtx.clearRect(0,0,w,h);
-    drawGrid(gtx, w, h, 'rgba(255,106,0,0.05)');
-    PRESETS[preset].draw(gtx, w, h);
-    drawPhaseSpace();
-    drawEnergyChart();
-  }
-
-  function drawGrid(c, w, h, col) {
-    c.strokeStyle = col; c.lineWidth = 0.5;
-    for (let x=0;x<w;x+=40) { c.beginPath(); c.moveTo(x,0); c.lineTo(x,h); c.stroke(); }
-    for (let y=0;y<h;y+=40) { c.beginPath(); c.moveTo(0,y); c.lineTo(w,y); c.stroke(); }
-  }
-
-  function drawPendulum(c, w, h) {
-    const cx = w/2, cy = h*0.2;
-    const L = Math.min(w,h) * 0.3 * params.l / 2;
-    const theta = state[0];
-    const bx = cx + L*Math.sin(theta), by = cy + L*Math.cos(theta);
-    
-    c.strokeStyle = '#888'; c.lineWidth = 2;
-    c.beginPath(); c.moveTo(cx, cy); c.lineTo(bx, by); c.stroke();
-    
-    c.beginPath(); c.arc(cx, cy, 5, 0, Math.PI*2); c.fillStyle = '#666'; c.fill();
-    
-    const r = 12 + params.m * 4;
-    c.beginPath(); c.arc(bx, by, r, 0, Math.PI*2);
-    c.fillStyle = 'rgba(255,106,0,0.8)'; c.fill();
-    c.strokeStyle = '#ff6a00'; c.lineWidth = 2; c.stroke();
-    
-    c.beginPath(); c.arc(bx, by, r+8, 0, Math.PI*2);
-    c.strokeStyle = 'rgba(255,106,0,0.2)'; c.lineWidth = 1; c.stroke();
-    
-    if (showTrail && phaseTrail.length > 1) {
-      c.beginPath(); c.strokeStyle = 'rgba(0,243,255,0.4)'; c.lineWidth = 1;
-      phaseTrail.forEach((p,i) => {
-        const tx = cx + L*Math.sin(p.x), ty = cy + L*Math.cos(p.x);
-        i===0 ? c.moveTo(tx,ty) : c.lineTo(tx,ty);
-      });
-      c.stroke();
-    }
-  }
-
-  function drawDoublePendulum(c, w, h) {
-    const cx = w/2, cy = h*0.15;
-    const s = Math.min(w,h) * 0.18;
-    const L1 = s * params.l1, L2 = s * params.l2;
-    const [t1,,t2] = state;
-    const x1 = cx + L1*Math.sin(t1), y1 = cy + L1*Math.cos(t1);
-    const x2 = x1 + L2*Math.sin(t2), y2 = y1 + L2*Math.cos(t2);
-    
-    if (showTrail && trail.length > 1) {
-      c.beginPath(); c.strokeStyle = 'rgba(0,243,255,0.3)'; c.lineWidth = 1;
-      trail.forEach((p,i) => {
-        const tx = cx + p.x*s, ty = cy + p.y*s;
-        i===0 ? c.moveTo(tx,ty) : c.lineTo(tx,ty);
-      });
-      c.stroke();
-    }
-    
-    c.strokeStyle = '#888'; c.lineWidth = 2;
-    c.beginPath(); c.moveTo(cx,cy); c.lineTo(x1,y1); c.stroke();
-    c.beginPath(); c.moveTo(x1,y1); c.lineTo(x2,y2); c.stroke();
-    
-    c.beginPath(); c.arc(cx,cy,4,0,Math.PI*2); c.fillStyle='#666'; c.fill();
-    
-    c.beginPath(); c.arc(x1,y1,10+params.m1*3,0,Math.PI*2); c.fillStyle='rgba(255,106,0,0.8)'; c.fill();
-    c.strokeStyle='#ff6a00'; c.lineWidth=2; c.stroke();
-    
-    c.beginPath(); c.arc(x2,y2,10+params.m2*3,0,Math.PI*2); c.fillStyle='rgba(0,243,255,0.8)'; c.fill();
-    c.strokeStyle='#00f3ff'; c.lineWidth=2; c.stroke();
-  }
-
-  function drawCoupled(c, w, h) {
-    const cy = h/2, wallL = 50, wallR = w - 50;
-    const span = wallR - wallL;
-    const restPos1 = wallL + span*0.33, restPos2 = wallL + span*0.66;
-    const sc = Math.min(span*0.15, 80);
-    const [x1,,x2] = state;
-    const px1 = restPos1 + x1*sc, px2 = restPos2 + x2*sc;
-    const bw = 30, bh = 30;
-    
-    c.fillStyle = '#555'; c.fillRect(wallL-5, cy-40, 5, 80); c.fillRect(wallR, cy-40, 5, 80);
-    
-    drawSpring(c, wallL, cy, px1-bw/2, cy, '#ff6a00');
-    drawSpring(c, px1+bw/2, cy, px2-bw/2, cy, '#00ff41');
-    drawSpring(c, px2+bw/2, cy, wallR, cy, '#00f3ff');
-    
-    c.fillStyle = 'rgba(255,106,0,0.8)'; c.strokeStyle = '#ff6a00'; c.lineWidth = 2;
-    c.fillRect(px1-bw/2, cy-bh/2, bw, bh); c.strokeRect(px1-bw/2, cy-bh/2, bw, bh);
-    c.fillStyle = 'rgba(0,243,255,0.8)'; c.strokeStyle = '#00f3ff';
-    c.fillRect(px2-bw/2, cy-bh/2, bw, bh); c.strokeRect(px2-bw/2, cy-bh/2, bw, bh);
-    
-    c.fillStyle = '#000'; c.font = "bold 11px 'JetBrains Mono'"; c.textAlign = 'center';
-    c.fillText('m', px1, cy+4); c.fillText('m', px2, cy+4);
-    c.textAlign = 'start';
-    
-    c.fillStyle = '#888'; c.font = "10px 'JetBrains Mono'";
-    c.fillText('k', (wallL+px1-bw/2)/2-4, cy-35);
-    c.fillText('κ', (px1+bw/2+px2-bw/2)/2-4, cy-35);
-    c.fillText('k', (px2+bw/2+wallR)/2-4, cy-35);
-  }
-
-  function drawSpring(c, x1, y1, x2, y2, color) {
-    const n = 12, dx = x2-x1, dy = y2-y1, len = Math.sqrt(dx*dx+dy*dy);
-    const ux = dx/len, uy = dy/len, px = -uy, py = ux;
-    const amp = 8;
-    c.beginPath(); c.strokeStyle = color; c.lineWidth = 1.5;
-    c.moveTo(x1, y1);
-    for (let i = 1; i <= n; i++) {
-      const frac = i / (n+1);
-      const mx = x1 + dx*frac, my = y1 + dy*frac;
-      const side = (i%2===0) ? amp : -amp;
-      c.lineTo(mx + px*side, my + py*side);
-    }
-    c.lineTo(x2, y2); c.stroke();
-  }
-
-  function drawKepler(c, w, h) {
     const cx = w/2, cy = h/2;
-    const sc = Math.min(w,h) / 500;
+    const comps = currentCircuit.components;
+    const totalComps = comps.length + 1; 
+    const spacing = Math.min(w*0.7, 500) / (totalComps + 1);
+    const startX = cx - (totalComps * spacing) / 2;
+    const wireY = cy - 40, gndY = cy + 60;
+
     
-    c.beginPath(); c.arc(cx, cy, 12, 0, Math.PI*2);
-    c.fillStyle = '#fcee0a'; c.fill();
-    c.beginPath(); c.arc(cx, cy, 18, 0, Math.PI*2);
-    c.strokeStyle = 'rgba(252,238,10,0.3)'; c.lineWidth = 1; c.stroke();
+    drawSource(ctx, startX, wireY, wireY, gndY);
+    ctx.fillStyle = '#fcee0a'; ctx.font = "11px 'JetBrains Mono'";
+    ctx.fillText(sourceType==='dc' ? 'V=' + getVoltage()+'V' : 'V~' + getVoltage()+'V', startX-20, wireY-15);
+
     
-    if (showTrail && trail.length > 1) {
-      c.beginPath(); c.strokeStyle = 'rgba(0,243,255,0.4)'; c.lineWidth = 1;
-      trail.forEach((p,i) => {
-        const tx = cx + p.x*sc, ty = cy - p.y*sc;
-        i===0 ? c.moveTo(tx,ty) : c.lineTo(tx,ty);
-      });
+    ctx.strokeStyle = '#00ff41'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(startX, wireY); ctx.lineTo(startX + spacing, wireY); ctx.stroke();
+
+    
+    comps.forEach((comp, i) => {
+      const x = startX + (i + 1) * spacing;
+      if (comp.type === 'R') drawResistor(ctx, x, wireY, spacing*0.7);
+      else if (comp.type === 'C') drawCapacitor(ctx, x, wireY, spacing*0.7);
+      else if (comp.type === 'L') drawInductor(ctx, x, wireY, spacing*0.7);
+      
+      ctx.fillStyle = '#00f3ff'; ctx.font = "10px 'JetBrains Mono'";
+      ctx.fillText(comp.label + '=' + formatValue(comp.value, comp.unit), x - 15, wireY - 20);
+      
+      if (i < comps.length - 1) {
+        ctx.strokeStyle = '#00ff41'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(x + spacing*0.35, wireY); ctx.lineTo(x + spacing, wireY); ctx.stroke();
+      }
+    });
+
+    
+    const endX = startX + totalComps * spacing;
+    ctx.strokeStyle = '#00ff41'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(startX + comps.length * spacing + spacing*0.35, wireY);
+    ctx.lineTo(endX, wireY);
+    ctx.lineTo(endX, gndY);
+    ctx.lineTo(startX, gndY);
+    ctx.lineTo(startX, gndY);
+    ctx.stroke();
+
+    
+    drawGround(ctx, (startX + endX)/2, gndY);
+
+    
+    ctx.beginPath(); ctx.moveTo(startX, gndY); ctx.lineTo(startX, wireY + 30); ctx.stroke();
+  }
+
+  function drawSource(c, x, y1, y1b, y2) {
+    c.strokeStyle = '#fcee0a'; c.lineWidth = 2;
+    const r = 15;
+    c.beginPath(); c.arc(x, (y1+y2)/2, r, 0, Math.PI*2); c.stroke();
+    if (sourceType === 'dc') {
+      c.beginPath(); c.moveTo(x-6,(y1+y2)/2); c.lineTo(x+6,(y1+y2)/2); c.stroke();
+      c.beginPath(); c.moveTo(x,(y1+y2)/2-6); c.lineTo(x,(y1+y2)/2+6); c.stroke();
+    } else {
+      c.beginPath();
+      for(let i=-8;i<=8;i++){
+        const px=x+i, py=(y1+y2)/2+Math.sin(i*0.5)*5;
+        i===-8?c.moveTo(px,py):c.lineTo(px,py);
+      }
       c.stroke();
     }
-    
-    const [r,,phi] = state;
-    const px = cx + r*Math.cos(phi)*sc, py = cy - r*Math.sin(phi)*sc;
-    c.beginPath(); c.arc(px, py, 8, 0, Math.PI*2);
-    c.fillStyle = 'rgba(0,243,255,0.9)'; c.fill();
-    c.strokeStyle = '#00f3ff'; c.lineWidth = 2; c.stroke();
+    c.strokeStyle = '#00ff41'; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(x, (y1+y2)/2-r); c.lineTo(x, y1); c.stroke();
+    c.beginPath(); c.moveTo(x, (y1+y2)/2+r); c.lineTo(x, y2); c.stroke();
   }
 
-  function drawPhaseSpace() {
-    const pr = phaseCanvas.parentElement.getBoundingClientRect();
-    const w = pr.width, h = pr.height;
-    pCtx.clearRect(0,0,w,h);
-    pCtx.fillStyle = 'rgba(0,0,0,0.4)'; pCtx.fillRect(0,0,w,h);
-    if (phaseTrail.length < 2) return;
-    const xs = phaseTrail.map(p=>p.x), ys = phaseTrail.map(p=>p.y);
-    const xMin = Math.min(...xs), xMax = Math.max(...xs), yMin = Math.min(...ys), yMax = Math.max(...ys);
-    const xR = (xMax-xMin)||1, yR = (yMax-yMin)||1;
-    const m = 15;
-    pCtx.beginPath(); pCtx.strokeStyle = 'rgba(0,243,255,0.7)'; pCtx.lineWidth = 1;
-    phaseTrail.forEach((p,i) => {
-      const px = m + (p.x-xMin)/xR * (w-2*m);
-      const py = h - m - (p.y-yMin)/yR * (h-2*m);
-      i===0 ? pCtx.moveTo(px,py) : pCtx.lineTo(px,py);
+  function drawResistor(c, x, y, len) {
+    const hw = len/2, n=6, amp=8;
+    c.strokeStyle = '#ff6a00'; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(x-hw, y);
+    const segW = len/n;
+    for(let i=0;i<n;i++){
+      const sx = x - hw + (i+0.5)*segW;
+      c.lineTo(sx, y + (i%2===0?-amp:amp));
+    }
+    c.lineTo(x+hw, y); c.stroke();
+  }
+
+  function drawCapacitor(c, x, y, len) {
+    const hw = len/2, gap = 6;
+    c.strokeStyle = '#00f3ff'; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(x-hw, y); c.lineTo(x-gap, y); c.stroke();
+    c.beginPath(); c.moveTo(x+gap, y); c.lineTo(x+hw, y); c.stroke();
+    c.beginPath(); c.moveTo(x-gap, y-12); c.lineTo(x-gap, y+12); c.stroke();
+    c.beginPath(); c.moveTo(x+gap, y-12); c.lineTo(x+gap, y+12); c.stroke();
+  }
+
+  function drawInductor(c, x, y, len) {
+    const hw = len/2, n=4;
+    c.strokeStyle = '#b026ff'; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(x-hw, y);
+    const segW = len/n;
+    for(let i=0;i<n;i++){
+      const sx = x - hw + i*segW;
+      c.arc(sx + segW/2, y, segW/2, Math.PI, 0, false);
+    }
+    c.stroke();
+  }
+
+  function drawGround(c, x, y) {
+    c.strokeStyle = '#888'; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(x-15, y); c.lineTo(x+15, y); c.stroke();
+    c.beginPath(); c.moveTo(x-10, y+5); c.lineTo(x+10, y+5); c.stroke();
+    c.beginPath(); c.moveTo(x-5, y+10); c.lineTo(x+5, y+10); c.stroke();
+  }
+
+  function getVoltage() { return parseFloat(document.getElementById('circ-voltage').value) || 10; }
+  function getFreq() { return parseFloat(document.getElementById('circ-freq').value) || 50; }
+
+  function formatValue(v, unit) {
+    if (unit === 'F') {
+      if (v < 1e-9) return (v*1e12).toFixed(1)+'pF';
+      if (v < 1e-6) return (v*1e9).toFixed(1)+'nF';
+      if (v < 1e-3) return (v*1e6).toFixed(1)+'μF';
+      return v.toFixed(3)+'F';
+    }
+    if (unit === 'H') {
+      if (v < 1e-3) return (v*1e6).toFixed(1)+'μH';
+      if (v < 1) return (v*1e3).toFixed(1)+'mH';
+      return v.toFixed(3)+'H';
+    }
+    if (unit === 'Ω') {
+      if (v >= 1e6) return (v/1e6).toFixed(1)+'MΩ';
+      if (v >= 1e3) return (v/1e3).toFixed(1)+'kΩ';
+      return v.toFixed(0)+'Ω';
+    }
+    return v + unit;
+  }
+
+  function getSeriesImpedance(f) {
+    let Zr = 0, Zi = 0;
+    const w = 2 * Math.PI * f;
+    currentCircuit.components.forEach(comp => {
+      if (comp.type === 'R') { Zr += comp.value; }
+      else if (comp.type === 'C') { Zi -= 1 / (w * comp.value); }
+      else if (comp.type === 'L') { Zi += w * comp.value; }
     });
-    pCtx.stroke();
-    
-    const last = phaseTrail[phaseTrail.length-1];
-    const lx = m + (last.x-xMin)/xR * (w-2*m);
-    const ly = h - m - (last.y-yMin)/yR * (h-2*m);
-    pCtx.beginPath(); pCtx.arc(lx,ly,4,0,Math.PI*2); pCtx.fillStyle='#ff0055'; pCtx.fill();
-    
-    pCtx.fillStyle = '#666'; pCtx.font = "9px 'JetBrains Mono'";
-    pCtx.fillText('θ', w/2, h-2); pCtx.fillText('ω', 2, h/2);
+    return { r: Zr, i: Zi, mag: Math.sqrt(Zr*Zr+Zi*Zi), phase: Math.atan2(Zi, Zr) };
   }
 
-  function drawEnergyChart() {
-    const er = energyCanvas.parentElement.getBoundingClientRect();
-    const w = er.width, h = er.height;
-    eCtx.clearRect(0,0,w,h);
-    eCtx.fillStyle = 'rgba(0,0,0,0.4)'; eCtx.fillRect(0,0,w,h);
-    if (energyHist.length < 2) return;
-    const m = 15;
-    const vals = energyHist.flatMap(e=>[e.T,e.V,e.E]);
-    const yMin = Math.min(...vals), yMax = Math.max(...vals);
-    const yR = (yMax-yMin)||1;
-    const drawLine = (data, key, color) => {
-      eCtx.beginPath(); eCtx.strokeStyle = color; eCtx.lineWidth = 1;
-      data.forEach((d,i) => {
-        const px = m + (i/(data.length-1)) * (w-2*m);
-        const py = h - m - (d[key]-yMin)/yR * (h-2*m);
-        i===0 ? eCtx.moveTo(px,py) : eCtx.lineTo(px,py);
+  function analyze() {
+    if (!currentCircuit) { loadPreset(); }
+    const V = getVoltage();
+    const out = document.getElementById('circ-results');
+
+    if (sourceType === 'dc') {
+      let totalR = 0, hasLC = false;
+      currentCircuit.components.forEach(c => {
+        if (c.type === 'R') totalR += c.value;
+        if (c.type === 'L' || c.type === 'C') hasLC = true;
       });
-      eCtx.stroke();
-    };
-    drawLine(energyHist, 'T', '#ff6a00');
-    drawLine(energyHist, 'V', '#00f3ff');
-    drawLine(energyHist, 'E', '#fcee0a');
+      if (hasLC) {
+        out.innerHTML = '// DC_ANALYSIS > DC定常状態:<br>';
+        currentCircuit.components.forEach(c => {
+          if (c.type === 'C') out.innerHTML += `&nbsp;&nbsp;${c.label}: 開放 (I=0A, Vc=充電完了時V)<br>`;
+          if (c.type === 'L') out.innerHTML += `&nbsp;&nbsp;${c.label}: 短絡 (VL=0V)<br>`;
+          if (c.type === 'R') out.innerHTML += `&nbsp;&nbsp;${c.label}: VR=${V}V, I=${(V/c.value*1000).toFixed(2)}mA<br>`;
+        });
+        if (totalR > 0) {
+          const I = V / totalR;
+          document.getElementById('st-vtot').textContent = V + 'V';
+          document.getElementById('st-itot').textContent = (I*1000).toFixed(2) + 'mA';
+          document.getElementById('st-ztot').textContent = formatValue(totalR, 'Ω');
+          document.getElementById('st-ptot').textContent = (V*I*1000).toFixed(2) + 'mW';
+        }
+      } else {
+        const I = V / totalR;
+        out.innerHTML = '// DC_ANALYSIS > 直流解析結果:<br>';
+        if (currentCircuit.topology === 'divider') {
+          const R1 = currentCircuit.components[0].value, R2 = currentCircuit.components[1].value;
+          const Vout = V * R2 / (R1 + R2);
+          out.innerHTML += `&nbsp;&nbsp;Vout = V × R₂/(R₁+R₂) = ${Vout.toFixed(3)}V<br>`;
+          out.innerHTML += `&nbsp;&nbsp;I = ${(I*1000).toFixed(3)}mA<br>`;
+        } else {
+          let cumV = 0;
+          currentCircuit.components.forEach(c => {
+            const Vc = I * c.value;
+            out.innerHTML += `&nbsp;&nbsp;${c.label}: V=${Vc.toFixed(3)}V, I=${(I*1000).toFixed(3)}mA<br>`;
+          });
+        }
+        document.getElementById('st-vtot').textContent = V + 'V';
+        document.getElementById('st-itot').textContent = (I*1000).toFixed(2) + 'mA';
+        document.getElementById('st-ztot').textContent = formatValue(totalR, 'Ω');
+        document.getElementById('st-ptot').textContent = (V*I*1000).toFixed(2) + 'mW';
+      }
+    } else {
+      const f = getFreq();
+      const Z = getSeriesImpedance(f);
+      const I = V / Z.mag;
+      out.innerHTML = `// AC_ANALYSIS @ ${f}Hz:<br>`;
+      out.innerHTML += `&nbsp;&nbsp;|Z| = ${Z.mag.toFixed(2)}Ω, φ = ${(Z.phase*180/Math.PI).toFixed(1)}°<br>`;
+      out.innerHTML += `&nbsp;&nbsp;I = ${(I*1000).toFixed(3)}mA<br>`;
+      const w = 2*Math.PI*f;
+      currentCircuit.components.forEach(c => {
+        let Zc;
+        if (c.type === 'R') Zc = c.value;
+        else if (c.type === 'C') Zc = 1/(w*c.value);
+        else if (c.type === 'L') Zc = w*c.value;
+        out.innerHTML += `&nbsp;&nbsp;${c.label}: |V|=${(I*Zc).toFixed(3)}V, |Z|=${Zc.toFixed(2)}Ω<br>`;
+      });
+      document.getElementById('st-vtot').textContent = V + 'V';
+      document.getElementById('st-itot').textContent = (I*1000).toFixed(2) + 'mA';
+      document.getElementById('st-ztot').textContent = Z.mag.toFixed(1) + 'Ω';
+      document.getElementById('st-ptot').textContent = (I*I*Z.r*1000).toFixed(2) + 'mW';
+    }
+    drawCircuit();
+  }
+
+  function runTransient() {
+    if (!currentCircuit) loadPreset();
+    const V = getVoltage(), f = getFreq();
+    const R = currentCircuit.components.find(c=>c.type==='R');
+    const C = currentCircuit.components.find(c=>c.type==='C');
+    const L = currentCircuit.components.find(c=>c.type==='L');
+    const Rv = R ? R.value : 100;
+    let tMax, dtS;
+    if (C) { tMax = 5 * Rv * C.value; dtS = tMax / 500; }
+    else if (L) { tMax = 5 * L.value / Rv; dtS = tMax / 500; }
+    else { tMax = sourceType==='ac' ? 3/f : 0.01; dtS = tMax / 500; }
+
+    const times=[], vData=[], iData=[];
+    if (sourceType === 'dc') {
+      for(let t=0; t<=tMax; t+=dtS) {
+        times.push(t*1000);
+        if (C && !L) {
+          const tau = Rv * C.value;
+          const Vc = V * (1 - Math.exp(-t/tau));
+          vData.push(Vc);
+          iData.push((V/Rv)*Math.exp(-t/tau)*1000);
+        } else if (L && !C) {
+          const tau = L.value / Rv;
+          const I = (V/Rv)*(1-Math.exp(-t/tau));
+          vData.push(V - I*Rv);
+          iData.push(I*1000);
+        } else if (C && L) {
+          const w0 = 1/Math.sqrt(L.value*C.value);
+          const gamma = Rv/(2*L.value);
+          if (gamma < w0) {
+            const wd = Math.sqrt(w0*w0-gamma*gamma);
+            const I = (V/(wd*L.value))*Math.exp(-gamma*t)*Math.sin(wd*t);
+            iData.push(I*1000);
+            vData.push(V - I*Rv);
+          } else {
+            const I = (V/Rv)*(1-Math.exp(-gamma*t));
+            iData.push(I*1000);
+            vData.push(V - I*Rv);
+          }
+        } else {
+          vData.push(V);
+          iData.push((V/Rv)*1000);
+        }
+      }
+    } else {
+      tMax = 3/f; dtS = tMax/500;
+      for(let t=0; t<=tMax; t+=dtS) {
+        times.push(t*1000);
+        const w = 2*Math.PI*f;
+        const Vs = V*Math.sin(w*t);
+        const Z = getSeriesImpedance(f);
+        const Ipk = V/Z.mag;
+        const Is = Ipk*Math.sin(w*t - Z.phase);
+        vData.push(Vs);
+        iData.push(Is*1000);
+      }
+    }
+    updateChart1(times, vData, '電圧 (V)', '#00ff41');
+    updateChart2(times, iData, '電流 (mA)', '#00f3ff');
+    document.getElementById('chart1-title').textContent = '電圧波形';
+    document.getElementById('chart1-sub').textContent = 'VOLTAGE';
+    document.getElementById('chart2-title').textContent = '電流波形';
+    document.getElementById('chart2-sub').textContent = 'CURRENT';
+  }
+
+  function runBode() {
+    if (!currentCircuit) loadPreset();
+    const V = getVoltage();
+    const freqs = [], gains = [], phases = [];
+    for (let exp = 0; exp <= 5; exp += 0.05) {
+      const f = Math.pow(10, exp);
+      freqs.push(f);
+      const Z = getSeriesImpedance(f);
+      const w = 2*Math.PI*f;
+      let Hm, Hp;
+      if (currentCircuit.topology === 'lowpass') {
+        const R = currentCircuit.components.find(c=>c.type==='R').value;
+        const C = currentCircuit.components.find(c=>c.type==='C').value;
+        const Xc = 1/(w*C);
+        Hm = Xc / Math.sqrt(R*R + Xc*Xc);
+        Hp = -Math.atan(R*w*C);
+      } else if (currentCircuit.topology === 'highpass') {
+        const R = currentCircuit.components.find(c=>c.type==='R').value;
+        const C = currentCircuit.components.find(c=>c.type==='C').value;
+        const Xc = 1/(w*C);
+        Hm = R / Math.sqrt(R*R + Xc*Xc);
+        Hp = Math.atan(Xc/R);
+      } else {
+        Hm = Z.r > 0 ? Z.r / Z.mag : 1;
+        Hp = Z.phase;
+      }
+      gains.push(20*Math.log10(Math.max(Hm, 1e-10)));
+      phases.push(Hp * 180 / Math.PI);
+    }
+    updateChart1(freqs, gains, 'ゲイン (dB)', '#fcee0a', true);
+    updateChart2(freqs, phases, '位相 (°)', '#ff0055', true);
+    document.getElementById('chart1-title').textContent = 'ゲイン特性';
+    document.getElementById('chart1-sub').textContent = 'MAGNITUDE';
+    document.getElementById('chart2-title').textContent = '位相特性';
+    document.getElementById('chart2-sub').textContent = 'PHASE';
+
     
-    eCtx.font = "9px 'JetBrains Mono'";
-    eCtx.fillStyle = '#ff6a00'; eCtx.fillText('T', w-40, 12);
-    eCtx.fillStyle = '#00f3ff'; eCtx.fillText('V', w-28, 12);
-    eCtx.fillStyle = '#fcee0a'; eCtx.fillText('E', w-16, 12);
+    if (currentCircuit.topology === 'lowpass' || currentCircuit.topology === 'highpass') {
+      const R = currentCircuit.components.find(c=>c.type==='R').value;
+      const C = currentCircuit.components.find(c=>c.type==='C').value;
+      const fc = 1/(2*Math.PI*R*C);
+      document.getElementById('circ-results').innerHTML = `// BODE_ANALYSIS > カットオフ周波数 fc = 1/(2πRC) = ${fc.toFixed(2)} Hz`;
+    }
   }
 
-  function updateStats() {
-    document.getElementById('st-time').textContent = t.toFixed(2);
-    const P = PRESETS[preset];
-    const e = P.energy(state, params);
-    document.getElementById('st-T').textContent = e.T.toFixed(3);
-    document.getElementById('st-V').textContent = e.V.toFixed(3);
-    document.getElementById('st-E').textContent = (e.T+e.V).toFixed(3);
+  function updateChart1(labels, data, label, color, isLog) {
+    if (chart1) chart1.destroy();
+    const ctx1 = document.getElementById('circ-chart1').getContext('2d');
+    chart1 = new Chart(ctx1, {
+      type: 'line', data: { labels: labels.map(l=>isLog?l.toFixed(0):l.toFixed(2)), datasets: [{ label, data, borderColor: color, backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 0, tension: 0.1 }] },
+      options: { responsive:true, maintainAspectRatio:false, animation:{duration:0}, plugins:{legend:{display:false}},
+        scales:{ x:{type: isLog?'logarithmic':'linear', title:{display:true,text:isLog?'周波数 (Hz)':'時間 (ms)',color:'#888'},ticks:{maxTicksLimit:8}}, y:{title:{display:true,text:label,color:'#888'}} } }
+    });
   }
 
-  document.getElementById('mech-speed').addEventListener('input', function() {
-    document.getElementById('mech-speed-val').textContent = '×' + this.value;
-  });
+  function updateChart2(labels, data, label, color, isLog) {
+    if (chart2) chart2.destroy();
+    const ctx2 = document.getElementById('circ-chart2').getContext('2d');
+    chart2 = new Chart(ctx2, {
+      type: 'line', data: { labels: labels.map(l=>isLog?l.toFixed(0):l.toFixed(2)), datasets: [{ label, data, borderColor: color, backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 0, tension: 0.1 }] },
+      options: { responsive:true, maintainAspectRatio:false, animation:{duration:0}, plugins:{legend:{display:false}},
+        scales:{ x:{type: isLog?'logarithmic':'linear', title:{display:true,text:isLog?'周波数 (Hz)':'時間 (ms)',color:'#888'},ticks:{maxTicksLimit:8}}, y:{title:{display:true,text:label,color:'#888'}} } }
+    });
+  }
 
-  function init() { resize(); buildSliders(); renderLatex(); reset(); window.addEventListener('resize', resize); }
+  function resetAll() {
+    if(chart1) chart1.destroy(); if(chart2) chart2.destroy();
+    chart1 = null; chart2 = null;
+    document.getElementById('st-vtot').textContent = '—';
+    document.getElementById('st-itot').textContent = '—';
+    document.getElementById('st-ztot').textContent = '—';
+    document.getElementById('st-ptot').textContent = '—';
+    document.getElementById('circ-results').innerHTML = '// SYSTEM_RESET > 初期化完了';
+    loadPreset();
+  }
+
+  function init() { resize(); loadPreset(); window.addEventListener('resize', resize); }
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else setTimeout(init, 50);
-  return { changePreset, toggleRun, stepOnce, reset, toggleTrail };
+  return { loadPreset, setSource, analyze, runTransient, runBode, resetAll };
 })();
 </script>
 
