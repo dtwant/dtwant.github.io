@@ -15,8 +15,8 @@
 
   
   
-    <title>Math Solver (Partial Fraction) &middot; dt&#39;s world</title>
-    <meta name="title" content="Math Solver (Partial Fraction) &middot; dt&#39;s world">
+    <title>FRAC_SOLVER // SYS.VER.2.0 &middot; dt&#39;s world</title>
+    <meta name="title" content="FRAC_SOLVER // SYS.VER.2.0 &middot; dt&#39;s world">
   
 
   
@@ -46,7 +46,7 @@
   
   <meta property="og:url" content="https://dtwant.github.io/lab/math/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="Math Solver (Partial Fraction)">
+  <meta property="og:title" content="FRAC_SOLVER // SYS.VER.2.0">
   <meta property="og:description" content="部分分数分解ツール">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
@@ -54,7 +54,7 @@
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Math Solver (Partial Fraction)">
+  <meta name="twitter:title" content="FRAC_SOLVER // SYS.VER.2.0">
   <meta name="twitter:description" content="部分分数分解ツール">
 
   
@@ -212,8 +212,8 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "articleSection": "Labs",
-    "name": "Math Solver (Partial Fraction)",
-    "headline": "Math Solver (Partial Fraction)",
+    "name": "FRAC_SOLVER \/\/ SYS.VER.2.0",
+    "headline": "FRAC_SOLVER \/\/ SYS.VER.2.0",
     "description": "部分分数分解ツール",
     
     "inLanguage": "en",
@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "126"
+    "wordCount": "82"
   }]
   </script>
 
@@ -778,7 +778,7 @@
   
   <li class="hidden">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/math/"
-      >Math Solver (Partial Fraction)</a
+      >FRAC_SOLVER // SYS.VER.2.0</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -787,395 +787,369 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        Math Solver (Partial Fraction)
+        FRAC_SOLVER // SYS.VER.2.0
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <p>Pythonの数式処理ライブラリ <strong>SymPy</strong> をブラウザ上で動作させている.
-有理関数の部分分数分解を行う.</p>
+      
 
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
 
 <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<div id="cyber-pf-app">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
-
-   
-  .cp-solver-container {
-    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
-    max-width: 900px;
-    width: 95%;
-    margin: 2rem auto;
-    background-color: #09090b;
-    background-image: 
-      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
-    background-size: 20px 20px;
-    padding: 2.5rem;
-    border: 1px solid #333;
-    border-radius: 4px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
-    color: #e2e8f0;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-  }
-  .cp-solver-container * { box-sizing: border-box; }
-
-   
-   
-  .cp-solver-container h3,
-  .cp-solver-container p,
-  .cp-solver-container span,
-  .cp-solver-container label {
-    text-decoration: none !important;
-    border-bottom: none !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    color: inherit;
-  }
-
-   
-  .cp-solver-container::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #d946ef, #22d3ee, #d946ef);
-    background-size: 200% 100%;
-    animation: scanline 4s linear infinite;
-    pointer-events: none;
-    z-index: 10;
-  }
-  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
-
-   
-  .cp-header {
-    border-bottom: 1px solid #333 !important;
-    padding-bottom: 1.5rem;
-    margin-bottom: 2.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .cp-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #d946ef !important;  
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 8px rgba(217, 70, 239, 0.4);
-  }
-  .cp-subtitle {
-    font-size: 0.7rem;
-    color: #64748b !important;
-  }
-
-   
-  .cp-status-bar {
-    font-size: 0.75rem;
-    margin-bottom: 2rem;
-    padding: 0.8rem 1rem;
-    border: 1px dashed #333 !important;
-    background: rgba(0, 0, 0, 0.5) !important;
-    color: #94a3b8 !important;
-    display: block;
-    transition: all 0.3s;
-  }
-  
-  .status-ready {
-    border-color: #22c55e !important;
-    color: #22c55e !important;  
-    background: rgba(34, 197, 94, 0.05) !important;
-    box-shadow: 0 0 10px rgba(34, 197, 94, 0.1) !important;
-  }
-
-  .status-loading {
-    border-color: #eab308 !important;
-    color: #eab308 !important;  
-    animation: pulse-text 1.5s infinite;
-  }
-  @keyframes pulse-text { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-   
-  .cp-input-group {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 15px;
-    margin-bottom: 2.5rem;
-  }
-
-  .cp-input {
-    background: #000 !important;
-    border: 1px solid #444 !important;
-    color: #22d3ee !important;  
-    padding: 1rem;
-    font-family: inherit;
-    font-size: 1rem;
-    border-radius: 2px;
-    width: 100%;
-    min-width: 0;
-    box-shadow: none !important;  
-  }
-  .cp-input::placeholder { color: #334155; }
-  .cp-input:focus {
-    outline: none;
-    border-color: #22d3ee !important;
-    box-shadow: 0 0 10px rgba(34, 211, 238, 0.2) !important;
-  }
-  .cp-input:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .cp-btn {
-    padding: 0 2rem;
-    background: transparent !important;
-    color: #22d3ee !important;
-    border: 1px solid #22d3ee !important;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.2s;
-    font-size: 1rem;
-    box-shadow: none !important;
-  }
-  .cp-btn:hover:not(:disabled) {
-    background: #22d3ee !important;
-    color: #000 !important;
-    box-shadow: 0 0 15px rgba(34, 211, 238, 0.5) !important;
-  }
-  .cp-btn:disabled {
-    border-color: #444 !important;
-    color: #444 !important;
-    cursor: not-allowed;
-  }
-
-   
-  .cp-result-area {
-    min-height: 120px;
-    padding: 2rem;
-    border: 1px solid #333 !important;  
-    background: #0e0e11 !important;
-    color: #e2e8f0 !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    overflow-x: auto;
-    position: relative;
-  }
-  
-   
-  .cp-result-area::after {
-    content: 'OUTPUT_TERMINAL';
-    position: absolute;
-    bottom: 5px; right: 8px;
-    font-size: 0.6rem;
-    color: #333;
-  }
-
-   
-  @media (max-width: 640px) {
-    .cp-solver-container {
-      padding: 1.5rem 1rem;
-      margin: 1rem 0;
-      width: 100%;
-      border-left: none; border-right: none; border-radius: 0;
+    #cyber-pf-app {
+        --neon-pink: #ff0055; --neon-cyan: #00f3ff; --neon-green: #00ff41;
+        --neon-magenta: #d946ef; --bg-dark: #050505; --panel-bg: rgba(10,14,18,0.90);
+        font-family: 'JetBrains Mono', monospace; color: #e0e0e0;
+        background-color: var(--bg-dark);
+        background-image: linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px);
+        background-size: 40px 40px; animation: pf-bg 20s linear infinite;
+        min-height: calc(100vh - 100px); width: 100%; position: relative; z-index: 10; margin: 0; padding: 0;
     }
+    #cyber-pf-app * { box-sizing: border-box; }
+    #cyber-pf-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:#050505; z-index:-2; }
+    #cyber-pf-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-image:linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px); background-size:40px 40px; animation:pf-bg 20s linear infinite; z-index:-1; }
+    #cyber-pf-app .pf-scan { position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1)); background-size:100% 4px; pointer-events:none; z-index:50; opacity:0.6; }
+    @keyframes pf-bg { 0%{background-position:0 0}100%{background-position:40px 40px} }
 
-    .cp-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
+    #cyber-pf-app .pf-clip { clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
+    #cyber-pf-app .pf-glitch { font-family:'Orbitron',sans-serif; position:relative; color:var(--neon-cyan); text-shadow:2px 2px var(--neon-pink); }
+    #cyber-pf-app .pf-glitch::before,#cyber-pf-app .pf-glitch::after { content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%; background:transparent; }
+    #cyber-pf-app .pf-glitch::before { left:2px; text-shadow:-1px 0 var(--neon-pink); clip:rect(24px,550px,90px,0); animation:pf-g2 3s infinite linear alternate-reverse; }
+    #cyber-pf-app .pf-glitch::after { left:-2px; text-shadow:-1px 0 var(--neon-green); clip:rect(85px,550px,140px,0); animation:pf-g1 2.5s infinite linear alternate-reverse; }
+    @keyframes pf-g1 { 0%{clip:rect(14px,9999px,122px,0)} 5%{clip:rect(82px,9999px,92px,0)} 100%{clip:rect(5px,9999px,133px,0)} }
+    @keyframes pf-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
 
-    .cp-input-group {
-      grid-template-columns: 1fr;  
-      gap: 10px;
-    }
+    #cyber-pf-app .pf-panel { background:var(--panel-bg); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 20px rgba(0,0,0,0.8),inset 0 0 30px rgba(0,243,255,0.05); backdrop-filter:blur(5px); }
+    #cyber-pf-app .pf-main { width:100%; max-width:960px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
+    @media(min-width:768px) { #cyber-pf-app .pf-main { padding:0 0 32px 0; margin-top:32px; } }
 
-    .cp-btn {
-      width: 100%;
-      padding: 1rem;
-    }
-    
-    .cp-result-area {
-      padding: 1rem;
-      font-size: 1.1rem;
-    }
-  }
+     
+    #cyber-pf-app .pf-hbar { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; padding:0 4px; opacity:0.8; }
+    #cyber-pf-app .pf-sysver { font-size:9px; color:#06b6d4; font-family:monospace; letter-spacing:2px; }
+    @media(min-width:768px) { #cyber-pf-app .pf-sysver { font-size:12px; } }
+    #cyber-pf-app .pf-status { font-size:9px; font-family:monospace; display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:4px; border:1px solid rgba(234,179,8,0.4); color:#eab308; white-space:nowrap; }
+    @media(min-width:768px) { #cyber-pf-app .pf-status { font-size:12px; padding:4px 12px; gap:8px; } }
+    #cyber-pf-app .pf-pulse { animation:pf-p 1.5s ease-in-out infinite; }
+    @keyframes pf-p { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-   
-  .katex { color: #e2e8f0 !important; }
-  .MathJax { color: #e2e8f0 !important; outline: none; }
+     
+    #cyber-pf-app .pf-title-sec { margin-bottom:24px; text-align:center; border-bottom:1px solid #1f2937; padding-bottom:16px; position:relative; padding-top:24px; }
+    @media(min-width:768px) { #cyber-pf-app .pf-title-sec { text-align:left; padding-top:0; margin-bottom:32px; padding-bottom:24px; } }
+    #cyber-pf-app .pf-return { position:absolute; top:0; right:0; color:#06b6d4; font-family:monospace; font-size:10px; border:1px solid rgba(6,182,212,0.3); background:rgba(0,0,0,0.8); padding:4px 8px; text-decoration:none; transition:color 0.3s; z-index:20; }
+    @media(min-width:768px) { #cyber-pf-app .pf-return { font-size:12px; } }
+    #cyber-pf-app .pf-return:hover { color:var(--neon-pink); }
+    #cyber-pf-app .pf-title { font-size:22px; font-weight:700; letter-spacing:-0.05em; margin-bottom:4px; margin-top:8px; }
+    @media(min-width:768px) { #cyber-pf-app .pf-title { font-size:44px; margin-top:0; } }
+    #cyber-pf-app .pf-sub { font-size:10px; color:#9ca3af; font-family:monospace; letter-spacing:0.1em; text-transform:uppercase; }
+    @media(min-width:768px) { #cyber-pf-app .pf-sub { font-size:14px; letter-spacing:0.2em; } }
+    #cyber-pf-app .pf-engine-tag { position:absolute; bottom:0; right:0; font-size:9px; color:var(--neon-pink); font-family:monospace; display:none; }
+    @media(min-width:768px) { #cyber-pf-app .pf-engine-tag { display:block; } }
+
+     
+    #cyber-pf-app .pf-input-sec { margin-bottom:24px; }
+    #cyber-pf-app .pf-input-label { font-size:10px; color:var(--neon-cyan); font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
+    @media(min-width:768px) { #cyber-pf-app .pf-input-label { font-size:12px; } }
+    #cyber-pf-app .pf-input-wrap { display:flex; align-items:center; background:rgba(0,0,0,0.7); border:1px solid #444; transition:all 0.3s; padding:2px 4px 2px 12px; }
+    #cyber-pf-app .pf-input-wrap.pf-focus { border-color:var(--neon-green); box-shadow:0 0 15px rgba(0,255,65,0.15); }
+    #cyber-pf-app .pf-prompt { color:var(--neon-pink); font-weight:700; font-size:16px; margin-right:6px; font-family:monospace; white-space:nowrap; }
+    #cyber-pf-app .pf-input { flex:1; background:transparent; border:none; color:var(--neon-green); font-family:'JetBrains Mono',monospace; font-size:14px; padding:12px 4px; outline:none; min-width:0; }
+    @media(min-width:768px) { #cyber-pf-app .pf-input { font-size:16px; padding:14px 4px; } }
+    #cyber-pf-app .pf-input::placeholder { color:#374151; }
+    #cyber-pf-app .pf-input:disabled { opacity:0.4; }
+    #cyber-pf-app .pf-send { background:transparent; border:1px solid rgba(0,243,255,0.3); color:var(--neon-cyan); cursor:pointer; padding:8px 12px; transition:all 0.3s; flex-shrink:0; margin-left:4px; font-family:monospace; font-size:14px; }
+    @media(min-width:768px) { #cyber-pf-app .pf-send { padding:10px 16px; font-size:16px; } }
+    #cyber-pf-app .pf-send:hover:not(:disabled) { background:var(--neon-cyan); color:#000; box-shadow:0 0 12px var(--neon-cyan); }
+    #cyber-pf-app .pf-send:disabled { border-color:#333; color:#333; cursor:not-allowed; }
+    #cyber-pf-app .pf-hint { font-size:9px; color:#555; margin-top:6px; font-family:monospace; }
+    @media(min-width:768px) { #cyber-pf-app .pf-hint { font-size:10px; } }
+
+     
+    #cyber-pf-app .pf-exec { width:100%; background:linear-gradient(90deg,transparent 0%,rgba(0,255,65,0.1) 50%,transparent 100%); border:1px solid var(--neon-green); color:var(--neon-green); font-family:'Orbitron',sans-serif; font-size:14px; font-weight:700; padding:12px 16px; cursor:pointer; transition:all 0.3s; letter-spacing:2px; position:relative; overflow:hidden; margin-bottom:20px; }
+    @media(min-width:768px) { #cyber-pf-app .pf-exec { font-size:18px; letter-spacing:3px; } }
+    #cyber-pf-app .pf-exec:hover:not(:disabled) { background:var(--neon-green); color:#000; box-shadow:0 0 25px var(--neon-green); }
+    #cyber-pf-app .pf-exec:disabled { border-color:#333; color:#333; cursor:not-allowed; }
+    #cyber-pf-app .pf-exec::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent); transition:0.5s; }
+    #cyber-pf-app .pf-exec:hover:not(:disabled)::before { left:100%; }
+
+     
+    #cyber-pf-app .pf-result-sec { position:relative; margin-top:32px; margin-bottom:16px; }
+    #cyber-pf-app .pf-result-label { position:absolute; top:-12px; left:8px; background:rgba(0,0,0,0.9); padding:0 8px; font-size:10px; color:var(--neon-cyan); font-weight:700; text-transform:uppercase; letter-spacing:2px; border:1px solid rgba(6,182,212,0.3); transform:skewX(12deg); z-index:20; }
+    @media(min-width:768px) { #cyber-pf-app .pf-result-label { font-size:12px; left:16px; top:-14px; } }
+    #cyber-pf-app .pf-result-box { border:1px solid #1f2937; background:rgba(0,0,0,0.6); padding:24px 16px; min-height:100px; display:flex; align-items:center; justify-content:center; position:relative; overflow-x:auto; }
+    @media(min-width:768px) { #cyber-pf-app .pf-result-box { padding:32px 24px; min-height:130px; } }
+
+     
+    #cyber-pf-app .pf-result-box .katex * {
+        border-image: none !important;
+        background-image: none !important;
+        text-decoration: none !important;
+    }
+    #cyber-pf-app .pf-result-box .katex .frac-line {
+        border-bottom-style: solid !important;
+        border-bottom-color: currentColor !important;
+        border-bottom-width: 1px !important;
+        min-height: 1px !important;
+        background: none !important;
+    }
+    #cyber-pf-app .pf-result-box .katex .frac-line::before,
+    #cyber-pf-app .pf-result-box .katex .frac-line::after {
+        display: none !important;
+    }
+    #cyber-pf-app .pf-result-box .katex .sqrt-line,
+    #cyber-pf-app .pf-result-box .katex .overline-line,
+    #cyber-pf-app .pf-result-box .katex .underline-line {
+        border-bottom-style: solid !important;
+        min-height: 1px !important;
+    }
+    #cyber-pf-app .pf-result-box .katex { font-size: 1.4em; color: #e0e0e0; }
+    @media(min-width:768px) { #cyber-pf-app .pf-result-box .katex { font-size: 1.8em; } }
+    #cyber-pf-app .pf-result-tag { position:absolute; bottom:4px; right:8px; font-size:9px; color:#333; font-family:monospace; }
+
+     
+    #cyber-pf-app .pf-examples { margin-top:20px; }
+    #cyber-pf-app .pf-ex-toggle { background:transparent; border:1px solid rgba(0,243,255,0.2); color:rgba(0,243,255,0.6); font-family:'JetBrains Mono',monospace; font-size:10px; padding:4px 10px; cursor:pointer; transition:all 0.2s; margin-bottom:8px; letter-spacing:1px; }
+    @media(min-width:768px) { #cyber-pf-app .pf-ex-toggle { font-size:11px; } }
+    #cyber-pf-app .pf-ex-toggle:hover { border-color:var(--neon-cyan); color:var(--neon-cyan); }
+    #cyber-pf-app .pf-ex-box { display:none; background:rgba(0,0,0,0.4); border:1px solid rgba(0,243,255,0.1); padding:12px; font-size:11px; line-height:1.7; color:#9ca3af; }
+    @media(min-width:768px) { #cyber-pf-app .pf-ex-box { font-size:12px; padding:16px; } }
+    #cyber-pf-app .pf-ex-box.open { display:block; }
+    #cyber-pf-app .pf-ex-item { cursor:pointer; padding:6px 8px; border-left:2px solid transparent; transition:all 0.2s; margin-bottom:2px; }
+    #cyber-pf-app .pf-ex-item:hover { border-left-color:var(--neon-pink); color:var(--neon-cyan); background:rgba(0,243,255,0.03); }
+    #cyber-pf-app .pf-ex-item code { color:var(--neon-green); background:rgba(0,255,65,0.06); padding:1px 5px; font-family:'JetBrains Mono',monospace; }
+
+     
+    #cyber-pf-app .pf-log-sec { border-top:1px solid rgba(31,41,55,0.5); padding-top:12px; margin-top:24px; }
+    #cyber-pf-app .pf-log-h { font-size:9px; color:#6b7280; margin-bottom:8px; text-transform:uppercase; letter-spacing:2px; display:flex; justify-content:space-between; }
+    @media(min-width:768px) { #cyber-pf-app .pf-log-h { font-size:10px; } }
+    #cyber-pf-app .pf-log-h span:last-child { color:#374151; }
+    #cyber-pf-app .pf-term { font-family:'JetBrains Mono',monospace; height:80px; padding:8px; background:rgba(0,0,0,0.5); border:1px solid #111827; font-size:10px; border-radius:4px; overflow-y:auto; word-break:break-all; white-space:pre-wrap; }
+    @media(min-width:768px) { #cyber-pf-app .pf-term { height:96px; font-size:12px; } }
+    #cyber-pf-app .pf-term::-webkit-scrollbar { width:6px; }
+    #cyber-pf-app .pf-term::-webkit-scrollbar-track { background:rgba(0,0,0,0.5); }
+    #cyber-pf-app .pf-term::-webkit-scrollbar-thumb { background:var(--neon-cyan); border-radius:3px; }
+    #cyber-pf-app .pf-li { color:#9ca3af; }
+    #cyber-pf-app .pf-ls { color:#4ade80; }
+    #cyber-pf-app .pf-le { color:#f43f5e; }
+    #cyber-pf-app .pf-lw { color:#facc15; }
+
+     
+    #cyber-pf-app .pf-corner { position:absolute; width:24px; height:24px; border-color:#06b6d4; opacity:0.5; }
+    @media(min-width:768px) { #cyber-pf-app .pf-corner { width:32px; height:32px; } }
+    #cyber-pf-app .pf-c-tl { top:0; left:0; border-top:2px solid; border-left:2px solid; }
+    #cyber-pf-app .pf-c-tr { top:0; right:0; border-top:2px solid; border-right:2px solid; }
+    #cyber-pf-app .pf-c-bl { bottom:0; left:0; border-bottom:2px solid; border-left:2px solid; }
+    #cyber-pf-app .pf-c-br { bottom:0; right:0; border-bottom:2px solid; border-right:2px solid; }
 </style>
 
-<div class="cp-solver-container">
-  <div class="cp-header">
-    <div class="cp-title">∫PARTIAL_FRACTION_SOLVER∑</div>
-    <div class="cp-subtitle">SYM_PY ENGINE INTEGRATED</div>
-  </div>
-  
-  <div id="pyStatus" class="cp-status-bar status-loading">
-    >> INITIALIZING PYTHON KERNEL...
-  </div>
+<div class="pf-scan"></div>
+<div class="pf-main">
+    <div class="pf-hbar">
+        <div class="pf-sysver">SYS.VER.2.0 // SYMPY_ENGINE</div>
+        <div class="pf-status" id="pfStatus"><span class="pf-pulse">●</span> INITIALIZING KERNEL...</div>
+    </div>
+    <div class="pf-panel pf-clip" style="padding:12px; position:relative;">
+        <div class="pf-corner pf-c-tl"></div><div class="pf-corner pf-c-tr"></div>
+        <div class="pf-corner pf-c-bl"></div><div class="pf-corner pf-c-br"></div>
 
-  <div class="cp-input-group">
-    <input type="text" id="mathInput" class="cp-input" placeholder="INPUT_EXPRESSION (e.g., 1/(x^2 - 1))" disabled>
-    <button id="solveBtn" class="cp-btn" onclick="runSolver()" disabled>EXECUTE</button>
-  </div>
+        <div class="pf-title-sec">
+            <a href="/lab" class="pf-return">[RETURN]</a>
+            <h1 class="pf-title pf-glitch" data-text="FRAC_SOLVER">FRAC_SOLVER</h1>
+            <p class="pf-sub">Partial Fraction Decomposition Engine</p>
+            <span class="pf-engine-tag">RUNNING ON PYODIDE.WASM</span>
+        </div>
 
-  <div id="mathResult" class="cp-result-area">
-    <span style="color:#444; font-size:0.9rem;">// WAITING FOR INPUT...</span>
-  </div>
+        
+        <div class="pf-input-sec">
+            <div class="pf-input-label">Expression Input</div>
+            <div class="pf-input-wrap" id="pfInputWrap">
+                <span class="pf-prompt">>></span>
+                <input type="text" class="pf-input" id="pfInput" placeholder="1/(x^2 - 1)" disabled autocomplete="off">
+                <button class="pf-send" id="pfSendBtn" onclick="pfApp.solve()" disabled>▶</button>
+            </div>
+            <div class="pf-hint">掛け算は * を明記 / べき乗は ^ / 例: (3*x + 5) / (x * (x + 1)^2)</div>
+        </div>
+
+        <button class="pf-exec" id="pfExecBtn" onclick="pfApp.solve()" disabled>EXECUTE DECOMPOSITION</button>
+
+        
+        <div class="pf-result-sec">
+            <div class="pf-result-label">Decomposition Output</div>
+            <div class="pf-result-box" id="pfResult">
+                <span style="color:#555;font-size:12px;font-family:monospace;">WAITING FOR INPUT...</span>
+            </div>
+        </div>
+
+        
+        <div class="pf-examples">
+            <button class="pf-ex-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'▼ HIDE EXAMPLES':'▶ SHOW EXAMPLES';">▶ SHOW EXAMPLES</button>
+            <div class="pf-ex-box" id="pfExamples">
+                <div class="pf-ex-item" onclick="pfApp.setInput('1/(x^2 - 1)')"><code>1/(x^2 - 1)</code> — 基本的な部分分数分解</div>
+                <div class="pf-ex-item" onclick="pfApp.setInput('1/(x^2 + 5*x + 6)')"><code>1/(x^2 + 5*x + 6)</code> — 因数分解可能な分母</div>
+                <div class="pf-ex-item" onclick="pfApp.setInput('(3*x + 2)/(x * (x + 1)^2)')"><code>(3*x+2)/(x*(x+1)^2)</code> — 重複因子を含む</div>
+                <div class="pf-ex-item" onclick="pfApp.setInput('x^3 / (x^2 - 1)')"><code>x^3/(x^2 - 1)</code> — 仮分数（分子の次数 ≥ 分母）</div>
+                <div class="pf-ex-item" onclick="pfApp.setInput('1 / (x^2 - a^2)')"><code>1/(x^2 - a^2)</code> — パラメータ a を含む</div>
+            </div>
+        </div>
+
+        
+        <div class="pf-log-sec">
+            <div class="pf-log-h"><span>System Log</span><span>/var/log/sympy_engine.log</span></div>
+            <div class="pf-term" id="pfTerm"><div class="pf-li">> Partial fraction engine booting...</div></div>
+        </div>
+
+    </div>
+</div>
 </div>
 
 <script>
-  let pyodide = null;
-  let sympyLoaded = false;
-  const statusDiv = document.getElementById('pyStatus');
-  const inputField = document.getElementById('mathInput');
-  const solveBtn = document.getElementById('solveBtn');
-  const resultDiv = document.getElementById('mathResult');
+var pfApp = (function() {
+    "use strict";
+    var pyodide = null;
+    var ready = false;
 
-  async function main() {
-    try {
-      pyodide = await loadPyodide();
-      statusDiv.innerHTML = ">> INSTALLING MODULE: SYMPY...";
-      
-      await pyodide.loadPackage("micropip");
-      const micropip = pyodide.pyimport("micropip");
-      await micropip.install("sympy");
-      
-      sympyLoaded = true;
-      statusDiv.innerHTML = ">> SYSTEM READY. ENGINE ONLINE.";
-      statusDiv.className = "cp-status-bar status-ready";
-      inputField.disabled = false;
-      solveBtn.disabled = false;
-      
-      
-      pyodide.runPython(`
-        import sympy
-        from sympy import symbols, apart, latex, sympify
-        
-        def decompose_fraction(expr_str):
-          try:
-            x = symbols('x')
-            expr_str = expr_str.replace('^', '**')
-            
-            # 数式化
-            expr = sympify(expr_str)
-            
-            # xについて分解
-            result = apart(expr, x)
-            
-            return latex(result)
-          except Exception as e:
-            return "Error: " + str(e)
-      `);
-
-    } catch (err) {
-      statusDiv.innerHTML = ">> SYSTEM ERROR: KERNEL FAILURE";
-      statusDiv.style.borderColor = "#ef4444";
-      statusDiv.style.color = "#ef4444";
-      console.error(err);
+    function init() {
+        var input = document.getElementById('pfInput');
+        input.addEventListener('focus', function() { document.getElementById('pfInputWrap').classList.add('pf-focus'); });
+        input.addEventListener('blur', function() { document.getElementById('pfInputWrap').classList.remove('pf-focus'); });
+        input.addEventListener('keydown', function(e) { if (e.key === 'Enter') solve(); });
+        loadEngine();
     }
-  }
 
-  async function runSolver() {
-    if (!sympyLoaded) return;
-    
-    const expression = inputField.value;
-    if (!expression.trim()) return;
-
-    resultDiv.innerHTML = '<span style="color:#eab308; font-size:0.9rem;">>> PROCESSING...</span>';
-
-    try {
-      const decompose = pyodide.globals.get('decompose_fraction');
-      const latexResult = decompose(expression);
-
-      if (latexResult.startsWith("Error")) {
-        resultDiv.innerHTML = `<span style="color:#ef4444; font-size:0.9rem;">>> ${latexResult}</span>`;
-      } else {
-        resultDiv.innerHTML = `$$ ${latexResult} $$`;
-        
-        if (window.renderMathInElement) {
-          renderMathInElement(resultDiv, {
-            delimiters: [{left: '$$', right: '$$', display: true}]
-          });
-        } else if (window.MathJax) {
-          window.MathJax.typesetPromise([resultDiv]);
-        }
-      }
-    } catch (e) {
-      resultDiv.innerHTML = '<span style="color:#ef4444;">>> RUNTIME ERROR</span>';
-      console.error(e);
+    function loadEngine() {
+        log('Loading Pyodide runtime (WASM)...', 'i');
+        loadPyodide().then(function(py) {
+            pyodide = py;
+            log('Pyodide loaded. Installing SymPy...', 'w');
+            setStatus('INSTALLING SYMPY...', 'loading');
+            return pyodide.loadPackage('micropip').then(function() {
+                var micropip = pyodide.pyimport('micropip');
+                return micropip.install('sympy');
+            });
+        }).then(function() {
+            pyodide.runPython(pythonCode);
+            ready = true;
+            document.getElementById('pfInput').disabled = false;
+            document.getElementById('pfExecBtn').disabled = false;
+            document.getElementById('pfSendBtn').disabled = false;
+            setStatus('ENGINE ONLINE', 'ready');
+            log('SymPy engine ready.', 's');
+        }).catch(function(err) {
+            setStatus('KERNEL ERROR', 'error');
+            log('Critical Error: ' + err.message, 'e');
+            console.error(err);
+        });
     }
-  }
 
-  main();
+    var pythonCode = [
+        'import sympy',
+        'from sympy import symbols, apart, latex, sympify',
+        '',
+        'def decompose_fraction(expr_str):',
+        '    try:',
+        '        x = symbols("x")',
+        '        expr_str = expr_str.replace("^", "**")',
+        '        expr = sympify(expr_str)',
+        '        result = apart(expr, x)',
+        '        return "OK:" + latex(result)',
+        '    except Exception as e:',
+        '        return "ERR:" + str(e)'
+    ].join('\n');
+
+    function solve() {
+        if (!ready) return;
+        var expr = document.getElementById('pfInput').value.trim();
+        if (!expr) return;
+
+        var box = document.getElementById('pfResult');
+        box.innerHTML = '<span style="color:#eab308;font-size:12px;font-family:monospace;">PROCESSING...</span>';
+        log('Decomposing: ' + expr, 'i');
+        setStatus('COMPUTING...', 'loading');
+
+        setTimeout(function() {
+            try {
+                var fn = pyodide.globals.get('decompose_fraction');
+                var result = fn(expr);
+
+                if (result.indexOf('OK:') === 0) {
+                    var latexStr = result.substring(3);
+                    box.innerHTML = '';
+                    var mathEl = document.createElement('div');
+                    mathEl.style.width = '100%';
+                    mathEl.style.textAlign = 'center';
+                    mathEl.style.overflowX = 'auto';
+                    box.appendChild(mathEl);
+
+                    if (typeof katex !== 'undefined') {
+                        katex.render(latexStr, mathEl, { throwOnError: false, displayMode: true });
+                    } else {
+                        mathEl.textContent = latexStr;
+                    }
+
+                    log('Decomposition complete.', 's');
+                    setStatus('RESULT READY', 'ready');
+                } else {
+                    var errMsg = result.substring(4);
+                    box.innerHTML = '<span style="color:#f43f5e;font-size:12px;font-family:monospace;">ERROR: ' + errMsg + '</span>';
+                    log('Error: ' + errMsg, 'e');
+                    setStatus('SYNTAX ERROR', 'error');
+                }
+            } catch(e) {
+                box.innerHTML = '<span style="color:#f43f5e;font-size:12px;font-family:monospace;">RUNTIME EXCEPTION</span>';
+                log('Runtime: ' + e.message, 'e');
+                setStatus('RUNTIME ERROR', 'error');
+                console.error(e);
+            }
+        }, 50);
+    }
+
+    function setInput(expr) {
+        var input = document.getElementById('pfInput');
+        input.value = expr;
+        input.focus();
+    }
+
+    function setStatus(text, state) {
+        var el = document.getElementById('pfStatus');
+        if (!el) return;
+        var color = '#eab308', border = 'rgba(234,179,8,0.4)', icon = '●', cls = 'pf-pulse';
+        if (state === 'ready') { color = '#4ade80'; border = 'rgba(0,255,65,0.3)'; }
+        else if (state === 'error') { color = '#f43f5e'; border = 'rgba(244,63,94,0.4)'; icon = '✖'; cls = ''; }
+        el.style.color = color; el.style.borderColor = border;
+        el.style.boxShadow = '0 0 10px ' + border;
+        el.innerHTML = '<span class="' + cls + '">' + icon + '</span> ' + text;
+    }
+
+    function log(msg, type) {
+        var cls = 'pf-li';
+        if (type === 's') cls = 'pf-ls';
+        else if (type === 'e') cls = 'pf-le';
+        else if (type === 'w') cls = 'pf-lw';
+        var term = document.getElementById('pfTerm');
+        if (!term) return;
+        var div = document.createElement('div');
+        div.className = cls;
+        var time = new Date().toLocaleTimeString('en-US', { hour12: false });
+        div.textContent = '[' + time + '] ' + msg;
+        term.appendChild(div);
+        term.scrollTop = term.scrollHeight;
+    }
+
+    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); }
+    else { setTimeout(init, 100); }
+
+    return { solve: solve, setInput: setInput };
+})();
 </script>
-<hr>
-
-<h3 class="relative group">入力例
-    <div id="入力例" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%85%a5%e5%8a%9b%e4%be%8b" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-<p>プログラム記法で数式を入力する.</p>
-<ul>
-<li><strong>基本:</strong> <code>1 / (x^2 - 1)</code>
-<ul>
-<li>結果: $$\frac{1}{2(x - 1)} - \frac{1}{2(x + 1)}$$</li>
-</ul>
-</li>
-<li><strong>複雑な例:</strong> <code>(3*x + 5) / (x * (x + 1)^2)</code>
-<ul>
-<li>掛け算は <code>*</code> を明記する.</li>
-<li>べき乗は <code>^</code> で記述する.</li>
-</ul>
-</li>
-</ul>
-
-<h3 class="relative group">動作確認用コード
-    <div id="動作確認用コード" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%8b%95%e4%bd%9c%e7%a2%ba%e8%aa%8d%e7%94%a8%e3%82%b3%e3%83%bc%e3%83%89" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-<p><code>1/(x^2 - 1)</code>
-</p>
-$$\frac{1}{2(x - 1)} - \frac{1}{2(x + 1)}$$<p><code>1/(x^2 + 5*x + 6)</code>
-</p>
-$$\frac{1}{x + 2} - \frac{1}{x + 3}$$<p><code>(3*x + 2)/(x * (x + 1)^2)</code>
-</p>
-$$\frac{2}{x} - \frac{2}{x + 1} + \frac{1}{(x + 1)^{2}}$$<p><code>x^3 / (x^2 - 1)</code>
-</p>
-$$x + \frac{1}{2(x - 1)} + \frac{1}{2(x + 1)}$$<p><code>1 / (x^2 - a^2)</code>
-</p>
-$$- \frac{1}{2 a (x + a)} + \frac{1}{2 a (x - a)}$$
-<h3 class="relative group">注意点
-    <div id="注意点" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e6%b3%a8%e6%84%8f%e7%82%b9" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-<ul>
-<li>初回ロード時のみ，Pythonエンジンのダウンロードに数秒〜十数秒かかる.</li>
-<li>変数は <code>x</code> を推奨するが，<code>y</code> や <code>a</code> も認識する.</li>
-</ul>
 
     </section>
     <footer class="pt-8">
