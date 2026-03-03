@@ -227,7 +227,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "55"
+    "wordCount": "91"
   }]
   </script>
 
@@ -790,453 +790,602 @@
       <p>(試験運用中)</p>
 <p>簡易的なレポートのひな型を作成する.<br>
 LaTeXとmarkdownでの出力に対応している.</p>
-
-
-
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&display=swap');
 
    
-  .cp-report-container {
-    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
-    max-width: 900px;
-    width: 95%;
-    margin: 2rem auto;
-    background-color: #09090b;
-    background-image: 
-      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
-    background-size: 20px 20px;
-    padding: 2.5rem;
-    border: 1px solid #333;
-    border-radius: 4px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
-    color: #e2e8f0;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-    line-height: 1.5;
+
+  #cyber-rg-app {
+    --neon-pink: #ff0055; --neon-cyan: #00f3ff; --neon-green: #00ff41;
+    --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #050505; --panel-bg: rgba(10,14,18,0.95);
+    font-family: 'JetBrains Mono', monospace; color: #e0e0e0;
+    background-color: var(--bg-dark);
+    background-image: linear-gradient(rgba(176,38,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(176,38,255,0.05) 1px,transparent 1px);
+    background-size: 40px 40px; animation: rg-bg 20s linear infinite;
+    min-height: calc(100vh - 100px); width: 100%; position: relative; z-index: 10; margin: 0; padding: 0;
   }
-  .cp-report-container * { box-sizing: border-box; }
+  #cyber-rg-app * { box-sizing: border-box; }
+  #cyber-rg-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:#050505; z-index:-2; }
+  #cyber-rg-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-image:linear-gradient(rgba(176,38,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(176,38,255,0.05) 1px,transparent 1px); background-size:40px 40px; animation:rg-bg 20s linear infinite; z-index:-1; }
+  #cyber-rg-app .rg-scan { position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1)); background-size:100% 4px; pointer-events:none; z-index:50; opacity:0.6; }
+  @keyframes rg-bg { 0%{background-position:0 0}100%{background-position:40px 40px} }
+
+  #cyber-rg-app .rg-clip { clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
+  #cyber-rg-app .rg-glitch { font-family:'Orbitron',sans-serif; position:relative; color:var(--neon-purple); text-shadow:2px 2px var(--neon-cyan); }
+  #cyber-rg-app .rg-glitch::before,#cyber-rg-app .rg-glitch::after { content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%; background:transparent; }
+  #cyber-rg-app .rg-glitch::before { left:2px; text-shadow:-1px 0 var(--neon-cyan); clip:rect(24px,550px,90px,0); animation:rg-g2 3s infinite linear alternate-reverse; }
+  #cyber-rg-app .rg-glitch::after { left:-2px; text-shadow:-1px 0 var(--neon-pink); clip:rect(85px,550px,140px,0); animation:rg-g1 2.5s infinite linear alternate-reverse; }
+  @keyframes rg-g1 { 0%{clip:rect(14px,9999px,122px,0)} 5%{clip:rect(82px,9999px,92px,0)} 100%{clip:rect(5px,9999px,133px,0)} }
+  @keyframes rg-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
+
+  #cyber-rg-app .rg-panel { background:var(--panel-bg); border:1px solid rgba(176,38,255,0.3); box-shadow:0 0 20px rgba(0,0,0,0.8),inset 0 0 30px rgba(176,38,255,0.05); backdrop-filter:blur(5px); }
+  #cyber-rg-app .rg-main { width:100%; max-width:1400px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
+  @media(min-width:768px) { #cyber-rg-app .rg-main { padding:0 0 32px 0; margin-top:32px; } }
 
    
-   
-  .cp-report-container h3, .cp-report-container p, .cp-report-container div, 
-  .cp-report-container span, .cp-report-container label {
-    text-decoration: none !important;
-    border-bottom: none !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    color: inherit;
-  }
+  #cyber-rg-app .rg-hbar { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; padding:0 4px; opacity:0.8; }
+  #cyber-rg-app .rg-sysver { font-size:9px; color:#b026ff; font-family:monospace; letter-spacing:2px; }
+  @media(min-width:768px) { #cyber-rg-app .rg-sysver { font-size:12px; } }
+  #cyber-rg-app .rg-status { font-size:9px; font-family:monospace; display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:4px; border:1px solid rgba(0,255,65,0.3); color:#4ade80; white-space:nowrap; }
+  @media(min-width:768px) { #cyber-rg-app .rg-status { font-size:12px; padding:4px 12px; gap:8px; } }
+  #cyber-rg-app .rg-pulse { animation:rg-p 1.5s ease-in-out infinite; }
+  @keyframes rg-p { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
    
-  .cp-report-container::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #8b5cf6, #ec4899, #8b5cf6);  
-    background-size: 200% 100%;
-    animation: scanline 4s linear infinite;
-    pointer-events: none;
-    z-index: 10;
-  }
-  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+  #cyber-rg-app .rg-title-sec { margin-bottom:16px; text-align:center; border-bottom:1px solid #1f2937; padding-bottom:16px; position:relative; padding-top:24px; }
+  @media(min-width:768px) { #cyber-rg-app .rg-title-sec { text-align:left; padding-top:0; margin-bottom:24px; padding-bottom:20px; } }
+  #cyber-rg-app .rg-title { font-size:20px; font-weight:700; letter-spacing:-0.05em; margin-bottom:4px; margin-top:8px; }
+  @media(min-width:768px) { #cyber-rg-app .rg-title { font-size:40px; margin-top:0; } }
+  #cyber-rg-app .rg-sub { font-size:9px; color:#9ca3af; font-family:monospace; letter-spacing:0.1em; text-transform:uppercase; }
+  @media(min-width:768px) { #cyber-rg-app .rg-sub { font-size:12px; letter-spacing:0.2em; } }
+  #cyber-rg-app .rg-badge { position:absolute; bottom:0; right:0; font-size:9px; color:var(--neon-yellow); font-family:monospace; border:1px solid rgba(252,238,10,0.4); padding:2px 6px; background:rgba(0,0,0,0.8); display:none; }
+  @media(min-width:768px) { #cyber-rg-app .rg-badge { display:block; } }
 
    
-  .cp-report-container .cp-header {
-    border-bottom: 1px solid #333 !important;
-    padding-bottom: 1.5rem;
-    margin-bottom: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .cp-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #ec4899 !important;  
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 8px rgba(236, 72, 153, 0.4);
-  }
-  .cp-subtitle {
-    font-size: 0.8rem;
-    color: #64748b !important;
-  }
+  #cyber-rg-app .rg-config-toggle { border:1px solid rgba(176,38,255,0.4); background:transparent; color:var(--neon-purple); font-family:'Orbitron',sans-serif; font-size:10px; padding:6px 16px; cursor:pointer; transition:all 0.3s; margin-bottom:16px; letter-spacing:1px; }
+  @media(min-width:768px) { #cyber-rg-app .rg-config-toggle { font-size:12px; padding:8px 24px; } }
+  #cyber-rg-app .rg-config-toggle:hover { background:rgba(176,38,255,0.1); box-shadow:0 0 10px rgba(176,38,255,0.2); }
+  
+  #cyber-rg-app .rg-settings-panel { display:none; padding:16px; background:rgba(0,0,0,0.4); border:1px solid #1f2937; margin-bottom:16px; }
+  #cyber-rg-app .rg-settings-panel.open { display:block; }
 
    
-  .cp-form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 2rem;
-  }
-  @media (max-width: 640px) { .cp-form-grid { grid-template-columns: 1fr; } }
-
-  .cp-control-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .cp-label {
-    font-size: 0.8rem;
-    color: #a78bfa !important;
-    font-weight: bold;
-  }
+  #cyber-rg-app .rg-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:16px; }
+  @media(min-width:768px) { #cyber-rg-app .rg-grid { grid-template-columns:1fr 1fr; gap:20px; } }
 
    
-  .cp-report-container .cp-input, 
-  .cp-report-container .cp-select {
-    background: #000 !important;
-    border: 1px solid #444 !important;  
-    color: #ec4899 !important;
-    padding: 0.8rem;
-    font-family: inherit;
-    font-size: 0.9rem;
-    border-radius: 2px;
-    width: 100%;
-    transition: all 0.2s;
-    box-shadow: none !important;
-  }
-  .cp-input:focus, .cp-select:focus {
-    outline: none;
-    border-color: #ec4899 !important;
-    box-shadow: 0 0 10px rgba(236, 72, 153, 0.2) !important;
-  }
+  #cyber-rg-app .rg-group { display:flex; flex-direction:column; gap:6px; }
+  #cyber-rg-app .rg-label { font-size:10px; color:var(--neon-cyan); font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+  @media(min-width:768px) { #cyber-rg-app .rg-label { font-size:11px; } }
+  #cyber-rg-app .rg-input { background:rgba(0,0,0,0.7); border:1px solid #333; color:var(--neon-purple); font-family:'JetBrains Mono',monospace; font-size:14px; padding:10px 12px; outline:none; transition:all 0.2s; width:100%; border-radius:0; }
+  #cyber-rg-app .rg-input:focus { border-color:var(--neon-purple); box-shadow:0 0 10px rgba(176,38,255,0.2); }
+  #cyber-rg-app .rg-input::placeholder { color:#4b5563; }
+  #cyber-rg-app select.rg-input { cursor:pointer; appearance:none; background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b026ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat:no-repeat; background-position:right 12px center; background-size:16px; padding-right:40px; }
 
    
-   
-  .cp-report-container .cp-toggles {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    background: rgba(255,255,255,0.02) !important;
-    border: 1px solid #333 !important;  
-  }
-  .cp-report-container .cp-toggle-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    color: #e2e8f0 !important;
-    padding: 5px 10px;
-    background: #0e0e11 !important;
-    border: 1px solid #444 !important;  
-    user-select: none;
-  }
-  .cp-toggle-input {
-    appearance: none;
-    width: 12px; height: 12px;
-    border: 1px solid #64748b !important;  
-    background: transparent !important;
-    cursor: pointer;
-    position: relative;
-    box-shadow: none !important;
-  }
-  .cp-toggle-input:checked {
-    background: #ec4899 !important;
-    border-color: #ec4899 !important;
-    box-shadow: 0 0 5px #ec4899 !important;
-  }
+  #cyber-rg-app .rg-toggles { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; padding:12px; background:rgba(0,0,0,0.4); border:1px solid #1f2937; }
+  #cyber-rg-app .rg-check-lbl { display:flex; align-items:center; gap:8px; font-size:11px; cursor:pointer; color:#d1d5db; padding:4px 8px; border:1px solid transparent; transition:all 0.2s; user-select:none; }
+  #cyber-rg-app .rg-check-lbl:hover { background:rgba(176,38,255,0.1); border-color:rgba(176,38,255,0.3); }
+  #cyber-rg-app .rg-check { appearance:none; width:14px; height:14px; border:1px solid #6b7280; background:transparent; cursor:pointer; position:relative; outline:none; border-radius:0; margin:0; }
+  #cyber-rg-app .rg-check:checked { background:var(--neon-purple); border-color:var(--neon-purple); box-shadow:0 0 8px var(--neon-purple); }
+  #cyber-rg-app .rg-check:checked::after { content:''; position:absolute; left:4px; top:1px; width:4px; height:8px; border:solid #000; border-width:0 2px 2px 0; transform:rotate(45deg); }
 
    
-  .cp-output-area {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  #cyber-rg-app .rg-workspace { display:flex; flex-direction:column; gap:20px; }
+  @media(min-width:1024px) { #cyber-rg-app .rg-workspace { flex-direction:row; } }
+  #cyber-rg-app .rg-tools-sec { width:100%; display:flex; flex-direction:column; gap:16px; }
+  @media(min-width:1024px) { #cyber-rg-app .rg-tools-sec { width:300px; } }
+  
+  #cyber-rg-app .rg-panes { display:flex; flex-direction:column; flex:1; gap:16px; }
+  @media(min-width:768px) { #cyber-rg-app .rg-panes { flex-direction:row; } }
+  
+  #cyber-rg-app .rg-editor-wrap { flex:1; display:flex; flex-direction:column; position:relative; }
+  #cyber-rg-app .rg-preview-wrap { flex:1; display:flex; flex-direction:column; position:relative; display:none; }
+  #cyber-rg-app .rg-preview-wrap.show { display:flex; }
   
    
-  .cp-report-container .cp-textarea {
-    width: 100%;
-    min-height: 300px;
-    background: #0e0e11 !important;
-    border: 1px dashed #444 !important;  
-    color: #e2e8f0 !important;
-    padding: 1.5rem;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    resize: vertical;
-    box-shadow: none !important;
-  }
-  .cp-textarea:focus {
-    outline: none;
-    border-color: #ec4899 !important;
-    background: #000 !important;
-  }
+  #cyber-rg-app .rg-stats { display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.8); border:1px solid #333; border-bottom:none; padding:8px 12px; font-size:11px; color:#9ca3af; font-family:monospace; }
+  #cyber-rg-app .rg-stats-val { color:var(--neon-green); font-weight:bold; }
+  #cyber-rg-app .rg-stats-btn { background:transparent; border:1px solid rgba(0,243,255,0.4); color:var(--neon-cyan); padding:2px 8px; font-size:10px; cursor:pointer; transition:all 0.2s; }
+  #cyber-rg-app .rg-stats-btn:hover { background:rgba(0,243,255,0.2); }
 
    
-  .cp-report-container .cp-phrase-bank {
-    margin-top: 2rem;
-    border-top: 1px solid #333 !important;
-    padding-top: 1.5rem;
-  }
-  .cp-report-container .cp-bank-title {
-    font-size: 0.9rem;
-    color: #a78bfa !important;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-left: 2px solid #a78bfa !important;
-    padding-left: 10px;
-  }
-  
-   
-  .cp-bank-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-  }
-  
-  .cp-bank-category {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .cp-cat-name {
-    font-size: 0.75rem;
-    color: #64748b !important;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-bottom: 0.25rem;
-  }
+  #cyber-rg-app .rg-textarea { width:100%; height:500px; background:rgba(0,0,0,0.8); border:1px solid #444; color:#e0e0e0; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.6; padding:16px; resize:vertical; outline:none; transition:all 0.3s; }
+  @media(min-width:768px) { #cyber-rg-app .rg-textarea { height:650px; font-size:14px; } }
+  #cyber-rg-app .rg-textarea:focus { border-color:var(--neon-purple); background:#000; box-shadow:inset 0 0 10px rgba(176,38,255,0.1); }
+  #cyber-rg-app .rg-textarea::-webkit-scrollbar { width:8px; }
+  #cyber-rg-app .rg-textarea::-webkit-scrollbar-track { background:rgba(0,0,0,0.5); }
+  #cyber-rg-app .rg-textarea::-webkit-scrollbar-thumb { background:var(--neon-purple); }
 
    
-  .cp-report-container .cp-chip {
-    background: #18181b !important;
-    border: 1px solid #333 !important;
-    color: #e2e8f0 !important;
-    padding: 8px 12px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: none !important;
-  }
-  .cp-chip::after {
-    content: '+';
-    color: #64748b;
-    font-weight: bold;
-    font-size: 0.9rem;
-  }
-  .cp-chip:hover {
-    border-color: #ec4899 !important;
-    color: #ec4899 !important;
-    background: #000 !important;
-    box-shadow: 0 0 10px rgba(236, 72, 153, 0.1) !important;
-  }
-  .cp-chip:hover::after { color: #ec4899; }
+  #cyber-rg-app .rg-preview { width:100%; height:500px; background:#fff; border:1px solid #444; color:#333; font-family:'Zen Kaku Gothic New',sans-serif; font-size:14px; line-height:1.6; padding:24px; overflow-y:auto; transition:all 0.3s; }
+  @media(min-width:768px) { #cyber-rg-app .rg-preview { height:650px; font-size:15px; } }
+  #cyber-rg-app .rg-preview h1, #cyber-rg-app .rg-preview h2 { border-bottom:1px solid #ccc; padding-bottom:4px; margin-top:24px; color:#111; }
+  #cyber-rg-app .rg-preview h1:first-child { margin-top:0; }
+  #cyber-rg-app .rg-preview p { margin:10px 0; }
+  #cyber-rg-app .rg-preview table { border-collapse:collapse; width:100%; margin:16px 0; }
+  #cyber-rg-app .rg-preview th, #cyber-rg-app .rg-preview td { border:1px solid #ccc; padding:8px; text-align:left; }
+  #cyber-rg-app .rg-preview th { background:#f3f4f6; }
 
    
-  .cp-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    margin-bottom: 1rem;
-  }
-  
-  .cp-report-container .cp-btn {
-    background: transparent !important;
-    border: 1px solid #ec4899 !important;
-    color: #ec4899 !important;
-    padding: 0.8rem 2rem;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    transition: all 0.2s;
-    box-shadow: none !important;
-  }
-  .cp-btn:hover {
-    background: #ec4899 !important;
-    color: #000 !important;
-    box-shadow: 0 0 15px rgba(236, 72, 153, 0.6) !important;
-  }
-  
-  .cp-btn-secondary {
-    border-color: #a78bfa !important;
-    color: #a78bfa !important;
-  }
-  .cp-btn-secondary:hover {
-    background: #a78bfa !important;
-    color: #000 !important;
-    box-shadow: 0 0 15px rgba(167, 139, 250, 0.6) !important;
-  }
+  #cyber-rg-app .rg-actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+  #cyber-rg-app .rg-btn { background:linear-gradient(90deg,transparent 0%,rgba(176,38,255,0.1) 50%,transparent 100%); border:1px solid var(--neon-purple); color:var(--neon-purple); font-family:'Orbitron',sans-serif; font-size:12px; font-weight:700; padding:12px; cursor:pointer; transition:all 0.3s; letter-spacing:1px; position:relative; overflow:hidden; text-align:center; }
+  @media(min-width:768px) { #cyber-rg-app .rg-btn { font-size:13px; letter-spacing:2px; } }
+  #cyber-rg-app .rg-btn:hover { background:var(--neon-purple); color:#000; box-shadow:0 0 20px var(--neon-purple); }
+  #cyber-rg-app .rg-btn-green { border-color:var(--neon-green); color:var(--neon-green); background:linear-gradient(90deg,transparent 0%,rgba(0,255,65,0.1) 50%,transparent 100%); width:100%; grid-column:span 2; }
+  #cyber-rg-app .rg-btn-green:hover { background:var(--neon-green); color:#000; box-shadow:0 0 20px var(--neon-green); }
+  #cyber-rg-app .rg-btn-cyan { border-color:var(--neon-cyan); color:var(--neon-cyan); background:linear-gradient(90deg,transparent 0%,rgba(0,243,255,0.1) 50%,transparent 100%); }
+  #cyber-rg-app .rg-btn-cyan:hover { background:var(--neon-cyan); color:#000; box-shadow:0 0 20px var(--neon-cyan); }
+  #cyber-rg-app .rg-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent); transition:0.5s; }
+  #cyber-rg-app .rg-btn:hover::before { left:100%; }
 
+   
+  #cyber-rg-app .rg-bank { border:1px solid #1f2937; background:rgba(0,0,0,0.4); padding:16px; flex:1; display:flex; flex-direction:column; overflow-y:auto; max-height:800px; }
+  #cyber-rg-app .rg-bank-lbl { font-size:10px; color:var(--neon-cyan); font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; border-bottom:1px solid #1f2937; padding-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+  #cyber-rg-app .rg-bank-lbl button { background:transparent; border:1px solid #444; color:#fff; font-size:10px; cursor:pointer; padding:2px 6px; }
+  #cyber-rg-app .rg-bank-lbl button:hover { border-color:var(--neon-cyan); color:var(--neon-cyan); }
+  
+  #cyber-rg-app .rg-cat { margin-bottom:16px; }
+  #cyber-rg-app .rg-cat-name { font-size:9px; color:#9ca3af; margin-bottom:8px; font-weight:bold; letter-spacing:1px; display:flex; justify-content:space-between; border-bottom:1px dashed #333; padding-bottom:4px; }
+  #cyber-rg-app .rg-chip { display:flex; justify-content:space-between; align-items:center; background:rgba(18,18,18,0.8); border:1px solid #333; color:#d1d5db; padding:6px 10px; font-size:11px; cursor:pointer; transition:all 0.2s; margin-bottom:6px; width:100%; text-align:left; font-family:'JetBrains Mono',monospace; line-height:1.4; user-select:none; }
+  #cyber-rg-app .rg-chip::after { content:'+'; color:var(--neon-green); font-weight:bold; opacity:0; transition:opacity 0.2s; }
+  #cyber-rg-app .rg-chip:hover { border-color:var(--neon-cyan); color:var(--neon-cyan); background:rgba(0,243,255,0.05); }
+  #cyber-rg-app .rg-chip:hover::after { opacity:1; }
+  #cyber-rg-app .rg-chip-del { display:none; background:transparent; border:none; color:#ef4444; font-size:12px; cursor:pointer; padding:0 4px; }
+  #cyber-rg-app .rg-chip:hover .rg-chip-del { display:inline-block; }
+  #cyber-rg-app .rg-chip-del:hover { background:#ef4444; color:#fff; }
+
+   
+  #cyber-rg-app .rg-add-form { display:none; flex-direction:column; gap:8px; margin-bottom:16px; padding:12px; border:1px solid rgba(0,243,255,0.3); background:rgba(0,243,255,0.05); }
+  #cyber-rg-app .rg-add-form.show { display:flex; }
+  #cyber-rg-app .rg-add-input { background:#000; border:1px solid #444; color:#fff; font-size:11px; padding:6px; font-family:monospace; }
+  #cyber-rg-app .rg-add-input:focus { border-color:var(--neon-cyan); outline:none; }
+  #cyber-rg-app .rg-add-btn { background:var(--neon-cyan); border:none; color:#000; font-weight:bold; cursor:pointer; padding:6px; font-size:10px; }
+
+   
+  #cyber-rg-app .rg-toast { position:fixed; bottom:20px; right:20px; background:rgba(0,0,0,0.9); border:1px solid var(--neon-green); color:var(--neon-green); padding:12px 24px; font-family:'Orbitron',sans-serif; font-size:12px; font-weight:700; letter-spacing:1px; box-shadow:0 0 15px rgba(0,255,65,0.2); z-index:1000; opacity:0; transform:translateY(20px); transition:all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); pointer-events:none; }
+  #cyber-rg-app .rg-toast.show { opacity:1; transform:translateY(0); }
+
+   
+  #cyber-rg-app .rg-corner { position:absolute; width:24px; height:24px; border-color:var(--neon-purple); opacity:0.5; }
+  @media(min-width:768px) { #cyber-rg-app .rg-corner { width:32px; height:32px; } }
+  #cyber-rg-app .rg-c-tl { top:0; left:0; border-top:2px solid; border-left:2px solid; }
+  #cyber-rg-app .rg-c-tr { top:0; right:0; border-top:2px solid; border-right:2px solid; }
+  #cyber-rg-app .rg-c-bl { bottom:0; left:0; border-bottom:2px solid; border-left:2px solid; }
+  #cyber-rg-app .rg-c-br { bottom:0; right:0; border-bottom:2px solid; border-right:2px solid; }
 </style>
 
-<div class="cp-report-container">
-  <div class="cp-header">
-    <div class="cp-title">REPORT_SCAFFOLDER</div>
-    <div class="cp-subtitle">// レポート構成・定型文生成</div>
-  </div>
 
-  <div class="cp-form-grid">
-    <div class="cp-control-group">
-      <label class="cp-label">SUBJECT [科目/実験名]</label>
-      <input type="text" id="rep-subject" class="cp-input" placeholder="物理実験I">
-    </div>
-    <div class="cp-control-group">
-      <label class="cp-label">TITLE [題目]</label>
-      <input type="text" id="rep-title" class="cp-input" placeholder="単振り子の周期測定">
-    </div>
-    <div class="cp-control-group">
-      <label class="cp-label">AUTHOR [氏名]</label>
-      <input type="text" id="rep-name" class="cp-input">
-    </div>
-    <div class="cp-control-group">
-      <label class="cp-label">NUMBER [学籍番号]</label>
-      <input type="text" id="rep-id" class="cp-input">
-    </div>
-    <div class="cp-control-group">
-      <label class="cp-label">DATE [実験日]</label>
-      <input type="date" id="rep-date" class="cp-input">
-    </div>
-    <div class="cp-control-group">
-      <label class="cp-label">FORMAT [出力形式]</label>
-      <select id="rep-format" class="cp-select">
-        <option value="markdown">MARKDOWN (MD)</option>
-        <option value="latex">LATEX (TEX)</option>
-      </select>
-    </div>
-  </div>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-  <div class="cp-toggles">
-    <label class="cp-toggle-label"><input type="checkbox" class="cp-toggle-input" value="purpose" checked> 目的</label>
-    <label class="cp-toggle-label"><input type="checkbox" class="cp-toggle-input" value="theory" checked> 原理</label>
-    <label class="cp-toggle-label"><input type="checkbox" class="cp-toggle-input" value="method" checked> 方法</label>
-    <label class="cp-toggle-label"><input type="checkbox" class="cp-toggle-input" value="result" checked> 結果</label>
-    <label class="cp-toggle-label"><input type="checkbox" class="cp-toggle-input" value="discussion" checked> 考察</label>
-    <label class="cp-toggle-label"><input type="checkbox" class="cp-toggle-input" value="conclusion" checked> 結論</label>
-  </div>
-
-  <div class="cp-actions">
-    <button class="cp-btn cp-btn-secondary" onclick="generate()">GENERATE</button>
-    <button class="cp-btn" onclick="copyText()">COPY</button>
-  </div>
-
-  <div class="cp-output-area">
-    <textarea id="rep-output" class="cp-textarea" placeholder="// OUTPUT WILL APPEAR HERE..."></textarea>
-  </div>
-
-  <div class="cp-phrase-bank">
-    <div class="cp-bank-title">PHRASE_INJECTOR [定型文挿入]</div>
+<div id="cyber-rg-app">
+  <div class="rg-scan"></div>
+  <div class="rg-main">
+    <div class="rg-hbar">
+      <div class="rg-sysver">SYS.VER.3.0 // REPORT_ENGINE</div>
+      <div class="rg-status" id="rgStatus"><span class="rg-pulse">●</span> AUTO-SAVE ACTIVE</div>
+    </div>
     
-    <div class="cp-bank-grid">
-      
-      <div class="cp-bank-category">
-        <div class="cp-cat-name">PURPOSE / THEORY</div>
-        <button class="cp-chip" onclick="insert('本実験の目的は、～を検証することである。')">検証することである</button>
-        <button class="cp-chip" onclick="insert('～の原理に基づき、測定を行った。')">原理に基づき</button>
+    <div class="rg-panel rg-clip" style="padding:16px; position:relative;">
+      <div class="rg-corner rg-c-tl"></div><div class="rg-corner rg-c-tr"></div>
+      <div class="rg-corner rg-c-bl"></div><div class="rg-corner rg-c-br"></div>
+
+      <div class="rg-title-sec">
+        <h1 class="rg-title rg-glitch" data-text="REPORT_SCAFFOLDER">REPORT_SCAFFOLDER</h1>
+        <p class="rg-sub">Automated Document Generation System</p>
+        <span class="rg-badge" id="rg-word-badge">0 CHARS</span>
       </div>
 
       
-      <div class="cp-bank-category">
-        <div class="cp-cat-name">RESULTS</div>
-        <button class="cp-chip" onclick="insert('測定結果を表1に示す。')">表に示す</button>
-        <button class="cp-chip" onclick="insert('図1のような特性が得られた。')">図のようになった</button>
-        <button class="cp-chip" onclick="insert('理論値との誤差は～%であった。')">誤差は～%</button>
+      <button class="rg-config-toggle" onclick="document.getElementById('rgSettings').classList.toggle('open'); this.textContent = document.getElementById('rgSettings').classList.contains('open') ? '▼ HIDE SETTINGS' : '▶ SHOW SETTINGS'">▼ HIDE SETTINGS</button>
+
+      
+      <div id="rgSettings" class="rg-settings-panel open">
+        <div class="rg-grid">
+          <div class="rg-group">
+            <label class="rg-label">SUBJECT [科目・実験名]</label>
+            <input type="text" id="rg-subject" class="rg-input" placeholder="物理学実験I" oninput="rgApp.saveSettings()">
+          </div>
+          <div class="rg-group">
+            <label class="rg-label">TITLE [レポート題目]</label>
+            <input type="text" id="rg-title" class="rg-input" placeholder="単振り子の周期測定" oninput="rgApp.saveSettings()">
+          </div>
+          <div class="rg-group">
+            <label class="rg-label">AUTHOR [氏名]</label>
+            <input type="text" id="rg-name" class="rg-input" placeholder="Cyber Punk" oninput="rgApp.saveSettings()">
+          </div>
+          <div class="rg-group">
+            <label class="rg-label">NUMBER [学籍番号]</label>
+            <input type="text" id="rg-id" class="rg-input" placeholder="24XXXX" oninput="rgApp.saveSettings()">
+          </div>
+          <div class="rg-group">
+            <label class="rg-label">DATE [実験日]</label>
+            <input type="date" id="rg-date" class="rg-input" oninput="rgApp.saveSettings()">
+          </div>
+          <div class="rg-group">
+            <label class="rg-label">FORMAT [出力形式]</label>
+            <select id="rg-format" class="rg-input" onchange="rgApp.saveSettings()">
+              <option value="markdown">MARKDOWN (.md)</option>
+              <option value="latex">LATEX (.tex)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="rg-toggles">
+          <label class="rg-check-lbl"><input type="checkbox" class="rg-check" id="rg-chk-purpose" checked onchange="rgApp.saveSettings()"> 目的</label>
+          <label class="rg-check-lbl"><input type="checkbox" class="rg-check" id="rg-chk-theory" checked onchange="rgApp.saveSettings()"> 原理</label>
+          <label class="rg-check-lbl"><input type="checkbox" class="rg-check" id="rg-chk-method" checked onchange="rgApp.saveSettings()"> 方法</label>
+          <label class="rg-check-lbl"><input type="checkbox" class="rg-check" id="rg-chk-result" checked onchange="rgApp.saveSettings()"> 結果</label>
+          <label class="rg-check-lbl"><input type="checkbox" class="rg-check" id="rg-chk-discussion" checked onchange="rgApp.saveSettings()"> 考察</label>
+          <label class="rg-check-lbl"><input type="checkbox" class="rg-check" id="rg-chk-conclusion" checked onchange="rgApp.saveSettings()"> 結論</label>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end;">
+          <button class="rg-config-toggle" style="margin-bottom:0;" onclick="rgApp.injectScaffold()">GENERATE SCAFFOLD (OVERWRITE)</button>
+        </div>
       </div>
 
       
-      <div class="cp-bank-category">
-        <div class="cp-cat-name">DISCUSSION / CONC.</div>
-        <button class="cp-chip" onclick="insert('この誤差の要因として、～が考えられる。')">誤差の要因</button>
-        <button class="cp-chip" onclick="insert('理論値と概ね一致した。')">概ね一致</button>
-        <button class="cp-chip" onclick="insert('以上の結果から、～であることが確認できた。')">確認できた</button>
+      <div class="rg-workspace">
+        
+        
+        <div class="rg-panes">
+          
+          <div class="rg-editor-wrap">
+            <div class="rg-stats">
+              <span>RAW EDITOR</span>
+              <span>CHARS: <span id="rgWordCount" class="rg-stats-val">0</span></span>
+            </div>
+            <textarea id="rg-output" class="rg-textarea" placeholder="// DATA WILL BE SYNCED HERE..." oninput="rgApp.handleInput()"></textarea>
+            
+            <div class="rg-actions">
+              <button class="rg-btn" onclick="rgApp.copyToClipboard()">COPY TEXT</button>
+              <button class="rg-btn rg-btn-cyan" onclick="rgApp.exportFile()">EXPORT FILE</button>
+              <button class="rg-btn rg-btn-green" id="rgPreviewBtn" onclick="rgApp.togglePreview()">SHOW LIVE PREVIEW</button>
+            </div>
+          </div>
+          
+          
+          <div class="rg-preview-wrap" id="rg-preview-pane">
+            <div class="rg-stats">
+              <span>LIVE RENDER</span>
+              <span>MARKDOWN ONLY</span>
+            </div>
+            <div id="rg-preview-content" class="rg-preview"></div>
+          </div>
+        </div>
+
+        
+        <div class="rg-tools-sec">
+          <div class="rg-bank">
+            <div class="rg-bank-lbl">
+              <span>PHRASE_INJECTOR</span>
+              <button onclick="document.getElementById('rgAddForm').classList.toggle('show')">+ ADD</button>
+            </div>
+            
+            
+            <div id="rgAddForm" class="rg-add-form">
+              <input type="text" id="rgAddTitle" class="rg-add-input" placeholder="Title (e.g. 誤差)">
+              <textarea id="rgAddContent" class="rg-add-input" rows="2" placeholder="Text to insert..."></textarea>
+              <button class="rg-add-btn" onclick="rgApp.addCustomSnippet()">SAVE SNIPPET</button>
+            </div>
+
+            
+            <div class="rg-cat" id="rgCustomCat" style="display:none;">
+              <div class="rg-cat-name"><span>CUSTOM</span> <button onclick="rgApp.clearCustom()" style="background:none;border:none;color:#ef4444;font-size:8px;cursor:pointer;">CLEAR</button></div>
+              <div id="rgCustomContainer"></div>
+            </div>
+            
+            <div class="rg-cat">
+              <div class="rg-cat-name"><span>PURPOSE / THEORY</span></div>
+              <button class="rg-chip" onclick="rgApp.insert('本実験の目的は、〜を検証することである。')"><span>検証することである</span></button>
+              <button class="rg-chip" onclick="rgApp.insert('〜の原理に基づき、測定を行った。')"><span>原理に基づき</span></button>
+            </div>
+            
+            <div class="rg-cat">
+              <div class="rg-cat-name"><span>RESULTS / DISCUSSION</span></div>
+              <button class="rg-chip" onclick="rgApp.insert('測定結果を表1に示す。')"><span>表に示す</span></button>
+              <button class="rg-chip" onclick="rgApp.insert('図1のような特性が得られた。')"><span>図のようになっ…</span></button>
+              <button class="rg-chip" onclick="rgApp.insert('理論値と概ね一致した。')"><span>理論値と一致</span></button>
+              <button class="rg-chip" onclick="rgApp.insert('この誤差の主な要因として、〜が考えられる。')"><span>誤差の要因</span></button>
+            </div>
+
+            <div class="rg-cat">
+              <div class="rg-cat-name"><span>LATEX SNIPPETS</span></div>
+              <button class="rg-chip" onclick="rgApp.insert('\\begin{figure}[htbp]\n  \\centering\n  \\includegraphics[width=8cm]{filename.png}\n  \\caption{キャプション}\n  \\label{fig:label}\n\\end{figure}')"><span>Figure (画像)</span></button>
+              <button class="rg-chip" onclick="rgApp.insert('\\begin{table}[htbp]\n  \\centering\n  \\caption{キャプション}\n  \\label{tab:label}\n  \\begin{tabular}{c c c}\n    \\hline\n    A & B & C \\\\\n    \\hline\n    1 & 2 & 3 \\\\\n    \\hline\n  \\end{tabular}\n\\end{table}')"><span>Table (表)</span></button>
+              <button class="rg-chip" onclick="rgApp.insert('\\begin{equation}\n  E = mc^2\n\\end{equation}')"><span>Equation (数式)</span></button>
+            </div>
+
+            <div class="rg-cat">
+              <div class="rg-cat-name"><span>MARKDOWN SNIPPETS</span></div>
+              <button class="rg-chip" onclick="rgApp.insert('![alt](image.png)')"><span>Image</span></button>
+              <button class="rg-chip" onclick="rgApp.insert('| A | B | C |\n|---|---|---|\n| 1 | 2 | 3 |')"><span>Table</span></button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      
-      <div class="cp-bank-category">
-        <div class="cp-cat-name">LATEX SNIPPETS</div>
-        <button class="cp-chip" onclick="insert('\\begin{figure}[h]\n  \\centering\n  \\includegraphics[width=10cm]{fig1.png}\n  \\caption{キャプション}\n  \\label{fig:1}\n\\end{figure}')">図 (Figure)</button>
-        <button class="cp-chip" onclick="insert('\\begin{table}[h]\n  \\centering\n  \\caption{キャプション}\n  \\label{tab:1}\n  \\begin{tabular}{c c}\n    A & B \\\\\n    \\hline\n    1 & 2 \\\\\n  \\end{tabular}\n\\end{table}')">表 (Table)</button>
-        <button class="cp-chip" onclick="insert('\\begin{equation}\n  y = ax + b\n\\end{equation}')">数式 (Eq)</button>
-      </div>
     </div>
   </div>
+  <div id="rg-toast" class="rg-toast">NOTIFICATION</div>
 </div>
 
 <script>
-  function generate() {
-    const subject = document.getElementById('rep-subject').value;
-    const title = document.getElementById('rep-title').value;
-    const name = document.getElementById('rep-name').value;
-    const id = document.getElementById('rep-id').value;
-    const date = document.getElementById('rep-date').value;
-    const format = document.getElementById('rep-format').value;
-    
-    const sections = Array.from(document.querySelectorAll('.cp-toggle-input:checked')).map(cb => cb.value);
-    
-    let out = "";
+var rgApp = (function() {
+  "use strict";
 
-    if (format === 'markdown') {
-      out += `# ${title}\n\n`;
-      out += `**科目:** ${subject}  \n`;
-      out += `**学籍番号:** ${id}  \n`;
-      out += `**氏名:** ${name}  \n`;
-      out += `**実験日:** ${date}  \n`;
-      out += `\n---\n\n`;
-      
-      if (sections.includes('purpose')) out += `## 1. 目的\n\n`;
-      if (sections.includes('theory')) out += `## 2. 原理\n\n`;
-      if (sections.includes('method')) out += `## 3. 実験方法\n\n1. \n2. \n`;
-      if (sections.includes('result')) out += `## 4. 実験結果\n\n`;
-      if (sections.includes('discussion')) out += `## 5. 考察\n\n`;
-      if (sections.includes('conclusion')) out += `## 6. 結論\n\n`;
-      out += `## 参考文献\n`;
+  var ta = null;
+  var customSnippets = [];
+  var isPreviewMode = false;
+
+  function init() {
+    ta = document.getElementById('rg-output');
     
-    } else {
-      out += `\\documentclass[a4paper,11pt]{jsarticle}\n`;
-      out += `\\usepackage[dvipdfmx]{graphicx}\n\\usepackage{amsmath}\n\n`;
-      out += `\\title{${title}}\n`;
-      out += `\\author{${id} ${name}}\n`;
-      out += `\\date{${date}}\n\n`;
-      out += `\\begin{document}\n\\maketitle\n\n`;
+    
+    var dateInput = document.getElementById('rg-date');
+    if (!dateInput.value) dateInput.valueAsDate = new Date();
+
+    loadStorage();
+    renderCustomSnippets();
+    
+    
+    updateWordCount();
+    updatePreview();
+  }
+
+  
+  function loadStorage() {
+    if (!localStorage) return;
+    try {
       
-      if (sections.includes('purpose')) out += `\\section{目的}\n\n`;
-      if (sections.includes('theory')) out += `\\section{原理}\n\n`;
-      if (sections.includes('method')) out += `\\section{実験方法}\n\n`;
-      if (sections.includes('result')) out += `\\section{実験結果}\n\n`;
-      if (sections.includes('discussion')) out += `\\section{考察}\n\n`;
-      if (sections.includes('conclusion')) out += `\\section{結論}\n\n`;
-      out += `\\begin{thebibliography}{9}\n\\bibitem{ref1} 参考文献\n\\end{thebibliography}\n`;
-      out += `\\end{document}`;
+      var fields = ['subject','title','name','id','date','format'];
+      fields.forEach(f => {
+        var val = localStorage.getItem('rg_conf_' + f);
+        if (val) document.getElementById('rg-' + f).value = val;
+      });
+
+      var checks = ['purpose','theory','method','result','discussion','conclusion'];
+      checks.forEach(c => {
+        var val = localStorage.getItem('rg_chk_' + c);
+        if (val !== null) document.getElementById('rg-chk-' + c).checked = (val === 'true');
+      });
+
+      var savedText = localStorage.getItem('rg_text');
+      if (savedText) {
+        ta.value = savedText;
+      } else {
+        injectScaffold(); 
+      }
+
+      var savedSnips = localStorage.getItem('rg_snips');
+      if (savedSnips) customSnippets = JSON.parse(savedSnips);
+      
+    } catch(e) { console.warn("Storage load failed"); }
+  }
+
+  function saveSettings() {
+    if (!localStorage) return;
+    var fields = ['subject','title','name','id','date','format'];
+    fields.forEach(f => {
+      localStorage.setItem('rg_conf_' + f, document.getElementById('rg-' + f).value);
+    });
+    var checks = ['purpose','theory','method','result','discussion','conclusion'];
+    checks.forEach(c => {
+      localStorage.setItem('rg_chk_' + c, document.getElementById('rg-chk-' + c).checked);
+    });
+  }
+
+  function saveText() {
+    if (!localStorage) return;
+    localStorage.setItem('rg_text', ta.value);
+  }
+
+  function handleInput() {
+    saveText();
+    updateWordCount();
+    if (isPreviewMode) updatePreview();
+  }
+
+  
+  function injectScaffold() {
+    var subject = document.getElementById('rg-subject').value || '[科目名]';
+    var title = document.getElementById('rg-title').value || '[レポート題目]';
+    var name = document.getElementById('rg-name').value || '[氏名]';
+    var id = document.getElementById('rg-id').value || '[学籍番号]';
+    var date = document.getElementById('rg-date').value || '[実験日]';
+    var format = document.getElementById('rg-format').value;
+    
+    var sMap = {
+      'purpose': document.getElementById('rg-chk-purpose').checked,
+      'theory': document.getElementById('rg-chk-theory').checked,
+      'method': document.getElementById('rg-chk-method').checked,
+      'result': document.getElementById('rg-chk-result').checked,
+      'discussion': document.getElementById('rg-chk-discussion').checked,
+      'conclusion': document.getElementById('rg-chk-conclusion').checked,
+    };
+    
+    var out = "";
+    if (format === 'markdown') {
+      out += `# ${title}\n\n**科目:** ${subject}  \n**学籍番号:** ${id}  \n**氏名:** ${name}  \n**実験日:** ${date}  \n\n---\n\n`;
+      if (sMap.purpose) out += `## 1. 目的\n\n\n\n`;
+      if (sMap.theory) out += `## 2. 原理\n\n\n\n`;
+      if (sMap.method) out += `## 3. 実験方法\n\n1. \n2. \n\n`;
+      if (sMap.result) out += `## 4. 実験結果\n\n\n\n`;
+      if (sMap.discussion) out += `## 5. 考察\n\n\n\n`;
+      if (sMap.conclusion) out += `## 6. 結論\n\n\n\n`;
+      out += `## 参考文献\n[1] \n`;
+    } else {
+      out += `\\documentclass[a4paper,11pt]{jsarticle}\n\\usepackage[dvipdfmx]{graphicx}\n\\usepackage{amsmath}\n\n`;
+      out += `\\title{${title}}\n\\author{${id} \\quad ${name}}\n\\date{${date}}\n\n\\begin{document}\n\\maketitle\n\n`;
+      if (sMap.purpose) out += `\\section{目的}\n\n\n\n`;
+      if (sMap.theory) out += `\\section{原理}\n\n\n\n`;
+      if (sMap.method) out += `\\section{実験方法}\n\n\n\n`;
+      if (sMap.result) out += `\\section{実験結果}\n\n\n\n`;
+      if (sMap.discussion) out += `\\section{考察}\n\n\n\n`;
+      if (sMap.conclusion) out += `\\section{結論}\n\n\n\n`;
+      out += `\\begin{thebibliography}{9}\n\\bibitem{ref1} \n\\end{thebibliography}\n\\end{document}`;
     }
 
-    document.getElementById('rep-output').value = out;
-  }
-
-  function insert(text) {
-    const textarea = document.getElementById('rep-output');
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const original = textarea.value;
+    if (ta.value.trim() !== '' && !confirm("現在のテキストを破棄して雛形を上書きしますか？")) return;
     
-    textarea.value = original.substring(0, start) + text + original.substring(end);
-    textarea.focus();
-    textarea.selectionStart = textarea.selectionEnd = start + text.length;
+    ta.value = out;
+    handleInput();
+    showToast("SCAFFOLD GENERATED");
   }
 
-  function copyText() {
-    const textarea = document.getElementById('rep-output');
-    textarea.select();
-    document.execCommand('copy');
-    alert("COPIED TO CLIPBOARD");
+  
+  function insert(text) {
+    var start = ta.selectionStart;
+    var end = ta.selectionEnd;
+    var orig = ta.value;
+    
+    ta.value = orig.substring(0, start) + text + orig.substring(end);
+    ta.focus();
+    ta.selectionStart = ta.selectionEnd = start + text.length;
+    handleInput();
   }
+
+  
+  function addCustomSnippet() {
+    var title = document.getElementById('rgAddTitle').value.trim();
+    var content = document.getElementById('rgAddContent').value.trim();
+    if (!title || !content) return;
+    
+    customSnippets.push({ title: title, content: content });
+    if(localStorage) localStorage.setItem('rg_snips', JSON.stringify(customSnippets));
+    
+    document.getElementById('rgAddTitle').value = '';
+    document.getElementById('rgAddContent').value = '';
+    document.getElementById('rgAddForm').classList.remove('show');
+    renderCustomSnippets();
+    showToast("SNIPPET SAVED");
+  }
+
+  function removeCustomSnippet(idx) {
+    customSnippets.splice(idx, 1);
+    if(localStorage) localStorage.setItem('rg_snips', JSON.stringify(customSnippets));
+    renderCustomSnippets();
+  }
+
+  function clearCustom() {
+    if(confirm("全カスタム定型文を削除しますか？")) {
+      customSnippets = [];
+      if(localStorage) localStorage.removeItem('rg_snips');
+      renderCustomSnippets();
+    }
+  }
+
+  function renderCustomSnippets() {
+    var cat = document.getElementById('rgCustomCat');
+    var container = document.getElementById('rgCustomContainer');
+    container.innerHTML = '';
+    
+    if (customSnippets.length === 0) {
+      cat.style.display = 'none';
+      return;
+    }
+    
+    cat.style.display = 'block';
+    customSnippets.forEach((s, idx) => {
+      var btn = document.createElement('button');
+      btn.className = 'rg-chip';
+      btn.innerHTML = `<span>${s.title}</span> <span class="rg-chip-del" onclick="rgApp.removeCustomSnippet(event, ${idx})">×</span>`;
+      btn.onclick = function(e) { if(e.target.className !== 'rg-chip-del') insert(s.content); };
+      container.appendChild(btn);
+    });
+  }
+
+  
+  function togglePreview() {
+    var pane = document.getElementById('rg-preview-pane');
+    var btn = document.getElementById('rgPreviewBtn');
+    if (document.getElementById('rg-format').value !== 'markdown') {
+      alert("プレビュー機能はMarkdown形式のみ対応しています。");
+      return;
+    }
+    isPreviewMode = !pane.classList.contains('show');
+    if (isPreviewMode) {
+      pane.classList.add('show');
+      btn.textContent = 'HIDE PREVIEW';
+      btn.classList.remove('rg-btn-green');
+      btn.classList.add('rg-btn-cyan');
+      updatePreview();
+    } else {
+      pane.classList.remove('show');
+      btn.textContent = 'SHOW LIVE PREVIEW';
+      btn.classList.remove('rg-btn-cyan');
+      btn.classList.add('rg-btn-green');
+    }
+  }
+
+  function updatePreview() {
+    if (!isPreviewMode || typeof marked === 'undefined') return;
+    var content = ta.value;
+    document.getElementById('rg-preview-content').innerHTML = marked.parse(content);
+  }
+
+  
+  function updateWordCount() {
+    var text = ta.value || '';
+    var noSpace = text.replace(/\s+/g, '');
+    var count = noSpace.length;
+    document.getElementById('rgWordCount').textContent = count;
+    document.getElementById('rg-word-badge').textContent = count + " CHARS";
+  }
+
+  function copyToClipboard() {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(ta.value).then(function() { showToast("COPIED TO CLIPBOARD"); }).catch(function(err) { fallbackCopy(); });
+    } else {
+      fallbackCopy();
+    }
+  }
+
+  function fallbackCopy() {
+    ta.select();
+    try { document.execCommand('copy'); showToast("COPIED TO CLIPBOARD"); } catch (err) {}
+    window.getSelection().removeAllRanges();
+  }
+
+  function exportFile() {
+    var format = document.getElementById('rg-format').value;
+    var dateStr = new Date().toISOString().slice(0,10);
+    var ext = format === 'latex' ? '.tex' : '.md';
+    var filename = 'report_' + dateStr + ext;
+    
+    var blob = new Blob([ta.value], { type: 'text/plain' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast("FILE EXPORTED");
+  }
+
+  function showToast(msg) {
+    var toast = document.getElementById('rg-toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 2500);
+  }
+
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { setTimeout(init, 100); }
+
+  return {
+    saveSettings: saveSettings,
+    injectScaffold: injectScaffold,
+    insert: insert,
+    copyToClipboard: copyToClipboard,
+    exportFile: exportFile,
+    handleInput: handleInput,
+    togglePreview: togglePreview,
+    addCustomSnippet: addCustomSnippet,
+    removeCustomSnippet: function(e, idx) { e.stopPropagation(); removeCustomSnippet(idx); },
+    clearCustom: clearCustom
+  };
+})();
 </script>
 
     </section>

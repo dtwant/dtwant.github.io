@@ -227,7 +227,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "42"
+    "wordCount": "67"
   }]
   </script>
 
@@ -787,15 +787,36 @@
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <hr>
+      
+<h1 class="relative group">NEURAL_EDITOR <span style="font-size:12px;color:#00f3ff;">// ADVANCED_TEXT_PROCESSING_UNIT</span>
+    <div id="neural_editor--advanced_text_processing_unit" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#neural_editor--advanced_text_processing_unit" aria-label="Anchor">#</a>
+    </span>
+    
+</h1>
+<p>サイバーパンク環境に特化した、マークダウン対応の最強テキストエディタ。
+ブラウザ上に３つの独立した記憶スロット（SLOT 1〜3）を持ち、リロードしてもデータは自動復元されます。</p>
+<blockquote>
+<p>[!TIP]
+<strong>OVERKILL_FEATURES (特殊機能):</strong></p>
+<ul>
+<li>⚡ <strong>ZEN_MODE:</strong> 執筆中の行以外を暗く落とし、極限の集中状態を作ります</li>
+<li>✨ <strong>SPARKS:</strong> 打鍵に連動してサイバー粒子が飛び散るエフェクト（処理が重い場合はOFF推奨）</li>
+<li>⏱ <strong>HISTORY:</strong> 数分おきに自動でスナップショットを取得。右側のパネルから過去の状態へタイムトラベル可能。</li>
+<li>📐 <strong>MERMAID_DIAGRAM:</strong> <code>` ` `mermaid</code> で囲んでテキストを書くと、自動でフローチャートやシーケンス図に変換されます。</li>
+</ul></blockquote>
+<hr>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 <script>
   window.MathJax = {
     tex: { 
       inlineMath: [['$', '$'], ['\\(', '\\)']],
       displayMath: [['$$', '$$'], ['\\[', '\\]']]
     },
-     
     svg: { fontCache: 'local' },
     startup: {
       pageReady: () => {
@@ -807,6 +828,7 @@
   };
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
 
 <script type="text/template" id="tpl-report"># 令和○年度 専門実験 報告書
 
@@ -838,413 +860,664 @@ $$
 |:---:|:---:|:---:|
 | 1 | 5.0 | 0.21 |
 | 2 | 10.0 | 0.42 |
-| 3 | 15.0 | 0.63 |
-| 4 | 20.0 | 0.81 |
 
 ## 5. 考察
-実験結果より、電圧と電流は比例関係にあることが確認できた。誤差の原因として...
+実験結果より、電圧と電流は比例関係にあることが確認できた。
 
 ## 6. 結論
 本実験を通じて、...
 </script>
 
-<script type="text/template" id="tpl-math"># Mathematical Notes
+<script type="text/template" id="tpl-mermaid"># Sequence Diagram Example
 
-## 1. ガンマ関数とゼータ関数
-リーマンゼータ関数 $\zeta(s)$ は以下のように定義される。
+\`\`\`mermaid
+sequenceDiagram
+    autonumber
+    Client->>Server: Request Data
+    activate Server
+    Server-->>DB: Query User
+    activate DB
+    DB-->>Server: Return Data
+    deactivate DB
+    Server-->>Client: Response (JSON)
+    deactivate Server
+\`\`\`
 
-$$
-\zeta(s) = \sum_{n=1}^{\infty} \frac{1}{n^s} \quad (\Re(s) > 1)
-$$
+# Flowchart Example
 
-また、オイラーのガンマ関数 $\Gamma(s)$ との間には次の美しい関係式が成り立つ。
-
-$$
-\zeta(s)\Gamma(s) = \int_{0}^{\infty} \frac{x^{s-1}}{e^x - 1} dx
-$$
-
-## 2. 圏論の基礎
-対象 $A, B$ について、射の集合を $\mathrm{Hom}(A, B)$ と記述する...
-</script>
-
-<script type="text/template" id="tpl-memo"># [LOG] SYSTEM_UPDATE_MEMO
-**DATE:** 202X.XX.XX
-**STATUS:** ACTIVE
-
-## TODO_LIST
-- [ ] データベースのバックアップ
-- [ ] UIのレスポンシブ最適化
-- [x] LaTeXレンダリングエンジンの組み込み
-
-## CODE_SNIPPET
-Pythonによる簡単なスクリプト例：
-
-~~~python
-import numpy as np
-
-def calculate_energy(mass):
-    c = 299792458 # 光速 (m/s)
-    return mass * (c ** 2)
-
-print(f"Energy: {calculate_energy(1.0)} J")
-~~~
+\`\`\`mermaid
+graph TD
+    A[Start] --> B{Is it raining?}
+    B -- Yes --> C[Take Umbrella]
+    B -- No --> D[Enjoy the sun]
+    C --> E[Go outside]
+    D --> E
+\`\`\`
 </script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
 
-  #editor-space-root {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: #030406; z-index: 9999; overflow: hidden;
-    font-family: 'JetBrains Mono', monospace; color: #e2e8f0;
-    display: flex; flex-direction: column;
+   
+  #ne-root {
+    --neon-cyan: #00f3ff;
+    --neon-pink: #ff0055;
+    --neon-green: #00ff41;
+    --neon-purple: #b026ff;
+    --bg-dark: #050505;
+    --panel-bg: rgba(10,14,18,0.95);
+    
+    font-family: 'JetBrains Mono', monospace;
+    color: #e2e8f0;
+    
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 99999;
+    background: var(--bg-dark);
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
   }
 
-  .editor-bg {
+  #ne-root * { box-sizing: inherit; }
+
+   
+  .ne-header {
+    background: rgba(0, 5, 10, 0.95);
+    border-bottom: 2px solid rgba(0, 243, 255, 0.3);
+    padding: 10px 15px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0;
+  }
+  
+  .ne-brand {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+    letter-spacing: 2px;
+    display: flex; align-items: center; gap: 15px;
+  }
+  .ne-brand span { color: var(--neon-cyan); }
+  @media(max-width: 768px) { .ne-brand { font-size: 1rem; } }
+
+   
+  .ne-toolbar { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .ne-btn {
+    background: rgba(0, 243, 255, 0.05);
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    color: var(--neon-cyan);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem; font-weight: bold;
+    padding: 6px 12px; cursor: pointer; transition: all 0.2s;
+    border-radius: 2px; letter-spacing: 1px;
+  }
+  .ne-btn:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
+  .ne-btn.danger { border-color: rgba(255, 0, 85, 0.3); color: var(--neon-pink); background: rgba(255, 0, 85, 0.05); }
+  .ne-btn.danger:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 10px rgba(255, 0, 85, 0.5); }
+  .ne-btn.active { background: var(--neon-purple); border-color: var(--neon-purple); color: #000; box-shadow: 0 0 10px rgba(176,38,255,0.8); }
+
+  .ne-separator { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.2); margin: 0 4px; }
+  .ne-select {
+    background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 243, 255, 0.2);
+    color: var(--neon-cyan); font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem; font-weight: bold; padding: 5px 10px; outline: none; cursor: pointer;
+  }
+  .ne-select:hover, .ne-select:focus { border-color: var(--neon-cyan); }
+
+   
+  .ne-workspace {
+    flex-grow: 1;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    background: var(--bg-dark);
+  }
+  @media (max-width: 900px) { .ne-workspace { flex-direction: column; } }
+
+   
+  .ne-editor-wrap {
+    width: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    border-right: 1px solid rgba(0, 243, 255, 0.2);
+    display: flex; flex-direction: column;
+    position: relative;
+    overflow: hidden;  
+  }
+  @media (max-width: 900px) { .ne-editor-wrap { width: 100%; height: 50%; border-right: none; border-bottom: 2px solid rgba(0, 243, 255, 0.3); } }
+
+   
+  .ne-editor-wrap .ne-bg {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-image: 
-      radial-gradient(circle at 20% 0%, rgba(0, 243, 255, 0.03) 0%, transparent 60%),
-      radial-gradient(circle at 20% 100%, rgba(255, 0, 85, 0.02) 0%, transparent 60%);
+      radial-gradient(circle at 20% 0%, rgba(0, 243, 255, 0.04) 0%, transparent 70%),
+      radial-gradient(circle at 80% 100%, rgba(255, 0, 85, 0.04) 0%, transparent 70%);
     z-index: 1; pointer-events: none;
   }
-  .grid-overlay {
+  .ne-editor-wrap .ne-grid {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-image: 
-      linear-gradient(rgba(0, 243, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 243, 255, 0.02) 1px, transparent 1px);
-    background-size: 20px 20px; z-index: 2; pointer-events: none;
+      linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px; z-index: 2; pointer-events: none;
   }
-
-  .editor-header {
-    position: relative; z-index: 10; padding: 10px 20px;
-    background: rgba(0, 5, 10, 0.95); border-bottom: 2px solid rgba(0, 243, 255, 0.3);
-    display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
-  }
-  
-  .brand-area { display: flex; align-items: center; gap: 15px; }
-  .brand-title { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); letter-spacing: 2px; }
-  .brand-title span { color: #00f3ff; }
-
-  .toolbar { display: flex; gap: 6px; align-items: center; }
-  .tool-btn {
-    background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.2);
-    color: #00f3ff; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: bold;
-    padding: 6px 12px; cursor: pointer; transition: all 0.2s; border-radius: 2px; letter-spacing: 1px;
-  }
-  .tool-btn:hover { background: #00f3ff; color: #000; box-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
-  
-  .tool-btn.danger { border-color: rgba(255, 0, 85, 0.3); color: #ff0055; background: rgba(255, 0, 85, 0.05); }
-  .tool-btn.danger:hover { background: #ff0055; color: #000; box-shadow: 0 0 10px rgba(255, 0, 85, 0.5); }
-
-  .separator { width: 1px; height: 20px; background: rgba(255, 255, 255, 0.1); margin: 0 5px; }
-
-  select.tool-select {
-    background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 243, 255, 0.2);
-    color: #00f3ff; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: bold;
-    padding: 5px 10px; outline: none; cursor: pointer;
-  }
-  select.tool-select:hover, select.tool-select:focus { border-color: #00f3ff; }
-
-  .exit-btn {
-    padding: 6px 15px; background: transparent; border: 1px solid #ff0055; color: #ff0055;
-    font-family: 'Orbitron', sans-serif; font-size: 0.7rem; cursor: pointer; transition: all 0.3s;
-    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
-  }
-  .exit-btn:hover { background: #ff0055; color: #000; box-shadow: 0 0 15px rgba(255, 0, 85, 0.5); }
-
-  .workspace { position: relative; z-index: 10; flex-grow: 1; display: flex; overflow: hidden; }
-
-  .input-pane {
-    width: 50%; background: rgba(0, 0, 0, 0.7); border-right: 1px solid rgba(0, 243, 255, 0.2);
-    display: flex; flex-direction: column; position: relative;
-  }
-  
-  .crt-scanline {
+  .ne-editor-wrap .ne-scanline {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%);
-    background-size: 100% 4px; z-index: 1; pointer-events: none; opacity: 0.8;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1)); 
+    background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.7;
   }
 
-  .pane-header {
-    background: rgba(0, 243, 255, 0.05); border-bottom: 1px solid rgba(0, 243, 255, 0.1);
-    padding: 5px 15px; font-size: 0.6rem; color: rgba(0, 243, 255, 0.6); letter-spacing: 2px;
-    font-family: 'Orbitron', sans-serif; display: flex; justify-content: space-between;
-    position: relative; z-index: 2;
+  .ne-pane-header {
+    background: rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+    padding: 6px 15px; font-size: 0.65rem; color: rgba(0, 243, 255, 0.6);
+    letter-spacing: 2px; font-family: 'Orbitron', sans-serif;
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative; z-index: 60;  
   }
   
-  textarea.neo-editor {
-    flex-grow: 1; width: 100%; background: transparent; border: none; outline: none;
-    color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 15px; line-height: 1.8;
-    padding: 20px; resize: none; overflow-y: auto; position: relative; z-index: 2;
-  }
-  textarea.neo-editor::-webkit-scrollbar { width: 6px; }
-  textarea.neo-editor::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.3); }
+   
+  .ne-editor-wrap.focus-mode textarea { color: rgba(226, 232, 240, 0.2); }
 
-  .preview-pane {
-    width: 50%; background: #262626; 
-    display: block; position: relative; overflow-y: auto; z-index: 10;
+  textarea.ne-textarea {
+    flex-grow: 1; width: 100%;
+    background: transparent; border: none; outline: none;
+    color: #e2e8f0; font-family: 'JetBrains Mono', monospace;
+    font-size: 15px; line-height: 1.8; padding: 20px;
+    resize: none; overflow-y: auto; position: relative; z-index: 60;
+    transition: color 0.3s;
+  }
+  textarea.ne-textarea::-webkit-scrollbar { width: 6px; }
+  textarea.ne-textarea::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.3); }
+
+   
+  .ne-preview-wrap {
+    width: 50%;
+    background: #111;  
+    display: flex; flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  @media (max-width: 900px) { .ne-preview-wrap { width: 100%; height: 50%; } }
+
+  .ne-preview-scroll {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    scroll-behavior: auto;  
   }
   
-  .a4-paper {
+   
+  .ne-a4-paper {
     box-sizing: border-box !important; 
     background-color: #ffffff !important;
     background-image: none !important;
-    
     color: #000000 !important; 
     margin: 0 auto 40px auto !important; 
-    padding: 25mm 25mm !important; 
-    width: 210mm !important; 
+    padding: 20mm !important; 
+    width: 100% !important; 
+    max-width: 210mm !important;  
     min-height: 297mm !important; 
     height: auto !important;      
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8); position: relative;
-    font-family: 'Zen Kaku Gothic New', "Helvetica Neue", Arial, sans-serif; line-height: 1.8;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    font-family: 'Zen Kaku Gothic New', "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.8;
   }
 
-  .a4-paper h1, .a4-paper h2, .a4-paper h3, .a4-paper h4, .a4-paper h5, .a4-paper h6,
-  .a4-paper p, .a4-paper li, .a4-paper td, .a4-paper th, .a4-paper strong, .a4-paper em {
+   
+  .ne-a4-paper h1, .ne-a4-paper h2, .ne-a4-paper h3, .ne-a4-paper h4, .ne-a4-paper h5, .ne-a4-paper h6,
+  .ne-a4-paper p, .ne-a4-paper li, .ne-a4-paper td, .ne-a4-paper th, .ne-a4-paper strong, .ne-a4-paper em {
     color: #000000 !important; background: transparent !important;
+    text-shadow: none !important; box-shadow: none !important; border: none;
   }
 
-  .a4-paper h1 { font-size: 1.8rem !important; border-bottom: 2px solid #000 !important; padding-bottom: 0.5rem; margin-top: 0 !important; margin-bottom: 1.5rem; }
-  .a4-paper h2 { font-size: 1.4rem !important; border-left: 5px solid #000 !important; padding-left: 12px; margin-top: 2rem; margin-bottom: 1rem; border-bottom: none !important; }
-  .a4-paper h3 { font-size: 1.2rem !important; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-  .a4-paper p { margin-bottom: 1rem; text-align: justify; }
-  .a4-paper ul, .a4-paper ol { margin-bottom: 1rem; padding-left: 1.5rem; }
-  
-  .a4-paper table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; font-size: 0.95rem; }
-  .a4-paper th, .a4-paper td { border: 1px solid #333 !important; padding: 8px 12px !important; }
-  .a4-paper th { background-color: #f0f0f0 !important; font-weight: bold !important; text-align: center !important; }
-  
-  .a4-paper pre { background-color: #f5f5f5 !important; padding: 1.2rem !important; border: 1px solid #ccc !important; overflow-x: auto; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;}
-  .a4-paper code { background-color: #f5f5f5 !important; padding: 0.1rem 0.3rem; border-radius: 3px; font-family: 'JetBrains Mono', monospace; color: #d63384 !important; font-size: 0.9em;}
-  .a4-paper pre code { color: #333 !important; } 
-  .a4-paper blockquote { border-left: 4px solid #aaa !important; padding-left: 1rem; color: #555 !important; margin: 1rem 0; background: transparent !important; }
-  .a4-paper img { max-width: 100%; height: auto; display: block; margin: 1.5rem auto; border: 1px solid #ccc !important; }
-  
-   
-  .math-display {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 100% !important;
-    margin: 1.5rem 0 !important;
+  .ne-a4-paper li::marker,
+  .ne-a4-paper ol,
+  .ne-a4-paper ul {
+    color: #000000 !important;
   }
-  .a4-paper mjx-container { color: #000 !important; margin: 0 !important; padding: 0 !important;}
-  .a4-paper mjx-container:not([display="true"]) { display: inline-block !important; }
   
    
-  mjx-assistive-mml { display: none !important; width: 0 !important; height: 0 !important; overflow: hidden !important; position: absolute !important; }
+  .ne-a4-paper h1 { font-size: 1.8rem !important; border-bottom: 2px solid #000 !important; padding-bottom: 0.5rem; margin-top: 0 !important; margin-bottom: 1.5rem; }
+  .ne-a4-paper h2 { font-size: 1.4rem !important; border-left: 5px solid #000 !important; padding-left: 12px; margin-top: 2rem; margin-bottom: 1rem; }
+  .ne-a4-paper h3 { font-size: 1.2rem !important; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+  .ne-a4-paper p { margin-bottom: 1rem; text-align: justify; }
+  .ne-a4-paper ul, .ne-a4-paper ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+  
+  .ne-a4-paper table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; font-size: 0.95rem; }
+  .ne-a4-paper th, .ne-a4-paper td { border: 1px solid #333 !important; padding: 8px 12px !important; }
+  .ne-a4-paper th { background-color: #f0f0f0 !important; font-weight: bold !important; text-align: center !important; }
+  
+  .ne-a4-paper pre { background-color: #f5f5f5 !important; padding: 1.2rem !important; border: 1px solid #ccc !important; overflow-x: auto; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;}
+  .ne-a4-paper code { background-color: #f5f5f5 !important; padding: 0.1rem 0.3rem; border-radius: 3px; font-family: 'JetBrains Mono', monospace; color: #d63384 !important; font-size: 0.9em;}
+  .ne-a4-paper pre code { color: #333 !important; } 
+  .ne-a4-paper blockquote { border-left: 4px solid #aaa !important; padding-left: 1rem; color: #555 !important; margin: 1rem 0; background: transparent !important; }
+  .ne-a4-paper img { max-width: 100%; height: auto; display: block; margin: 1.5rem auto; border: 1px solid #ccc !important; }
+  
+   
+  .math-display { display: flex !important; justify-content: center !important; align-items: center !important; width: 100% !important; margin: 1.5rem 0 !important; }
+  .ne-a4-paper mjx-container { color: #000 !important; margin: 0 !important; padding: 0 !important;}
+  .ne-a4-paper mjx-container:not([display="true"]) { display: inline-block !important; }
+  mjx-assistive-mml { display: none !important; clip: rect(1px, 1px, 1px, 1px) !important; clip-path: inset(50%) !important; height: 1px !important; width: 1px !important; position: absolute !important; overflow: hidden !important; }
 
-  .editor-footer {
-    position: relative; z-index: 10; height: 25px;
-    background: rgba(0, 0, 0, 0.9); border-top: 1px solid rgba(0, 243, 255, 0.3);
+   
+  .ne-footer {
+    height: 30px; background: rgba(0, 0, 0, 0.9);
+    border-top: 1px solid rgba(0, 243, 255, 0.3);
     display: flex; justify-content: space-between; align-items: center;
-    padding: 0 20px; font-size: 0.65rem; color: #00f3ff; font-family: 'Orbitron', sans-serif;
+    padding: 0 15px; font-size: 0.65rem; color: var(--neon-cyan);
+    font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+  
+  .ne-footer-tools { display: flex; gap: 15px; align-items: center; }
+
+   
+  .ne-particles {
+    position: absolute; top: 0; left: 0; width: 50%; height: 100%;
+    pointer-events: none; z-index: 100; overflow: hidden;
+  }
+  @media(max-width: 900px) { .ne-particles { width: 100%; height: 50%; } }
+  .ne-particle {
+    position: absolute; border-radius: 50%;
+    animation: ne-spark 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    pointer-events: none;
+  }
+  @keyframes ne-spark {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
   }
 
-  .toast-msg {
-    position: absolute; bottom: 40px; right: 20px; background: rgba(0, 243, 255, 0.1);
-    border: 1px solid #00f3ff; color: #00f3ff; padding: 8px 20px;
-    font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: bold;
-    box-shadow: 0 0 10px rgba(0, 243, 255, 0.3); opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100;
+   
+  .ne-history-panel {
+    position: absolute; top: 0; right: -320px; width: 320px; height: 100%;
+    background: rgba(10, 14, 18, 0.98); border-left: 1px solid var(--neon-cyan);
+    z-index: 200; transition: right 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    display: flex; flex-direction: column; padding: 15px; font-family: 'JetBrains Mono', monospace;
   }
-  .toast-msg.show { opacity: 1; }
+  .ne-history-panel.show { right: 0; }
+  .ne-hist-item {
+    background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 243, 255, 0.2);
+    padding: 10px; margin-bottom: 10px; cursor: pointer; font-size: 0.75rem;
+    color: var(--neon-cyan); transition: all 0.2s;
+  }
+  .ne-hist-item:hover { background: rgba(0, 243, 255, 0.1); border-color: var(--neon-cyan); }
+  .ne-hist-time { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: #888; margin-bottom: 4px; }
 
+   
+  .ne-toast {
+    position: absolute; bottom: 40px; right: 20px;
+    background: rgba(0, 243, 255, 0.1); border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan); padding: 10px 24px; font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem; font-weight: bold; box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+    opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 500;
+  }
+  .ne-toast.show { opacity: 1; }
+
+   
   @media print {
-    @page { size: A4; margin: 25mm !important; }
     body * { visibility: hidden !important; }
-    #editor-space-root { position: static !important; height: auto !important; width: auto !important; overflow: visible !important; display: block !important; background: transparent !important; }
-    .editor-header, .editor-footer, .input-pane, .editor-bg, .grid-overlay, .crt-scanline, .pane-header { display: none !important; }
-    .workspace, .preview-pane { display: block !important; position: static !important; width: 100% !important; height: auto !important; overflow: visible !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
-    
-    .a4-paper, .a4-paper * { visibility: visible !important; }
-    .a4-paper { 
-      position: absolute; left: 0; top: 0; 
-      width: 100% !important; margin: 0 !important; 
-      padding: 0 !important;
-      box-shadow: none !important; min-height: auto !important; 
-    }
-    
-    .a4-paper h1, .a4-paper h2, .a4-paper h3 { page-break-after: avoid; break-after: avoid; }
-    .a4-paper table, .a4-paper img, .a4-paper pre { page-break-inside: avoid; break-inside: avoid; }
-  }
-
-  @media (max-width: 900px) {
-    .workspace { flex-direction: column; }
-    .input-pane, .preview-pane { width: 100%; height: 50%; border-right: none; }
-    .input-pane { border-bottom: 2px solid rgba(0, 243, 255, 0.3); }
-    .toolbar { flex-wrap: wrap; }
-    .a4-paper { width: 95% !important; min-height: auto !important; padding: 15px !important; margin: 0 auto 15px auto !important; }
   }
 </style>
 
-<div id="editor-space-root">
-  <div class="editor-bg"></div>
-  <div class="grid-overlay"></div>
-
-  <header class="editor-header">
-    <div class="brand-area">
-      <div class="brand-title">NEURAL<span>_</span>EDITOR</div>
-      <div class="toolbar">
-        <select id="ne-template" class="tool-select" onchange="loadTemplate(this.value)">
-          <option value="">[ LOAD_TEMPLATE ]</option>
-          <option value="report">» 専門実験 報告書 (KOSEN)</option>
-          <option value="math">» 数学ノート (数式特化)</option>
-          <option value="memo">» システム・ログ (コード)</option>
-        </select>
-        <div class="separator"></div>
-        <button class="tool-btn" onclick="insertText('**', '**')" title="Bold">B</button>
-        <button class="tool-btn" onclick="insertText('*', '*')" title="Italic">I</button>
-        <button class="tool-btn" onclick="insertText('## ', '')" title="Header">H2</button>
-        <div class="separator"></div>
-        <button class="tool-btn" onclick="insertText('\n    ', '')" title="Code">CODE</button>
-        <button class="tool-btn" onclick="insertTable()" title="Table">TBL</button>
-        <button class="tool-btn" onclick="insertText('$$\n', '\n$$')" title="Math">MATH</button>
-      </div>
-    </div>
+<div id="ne-root">
+  
+  <header class="ne-header">
+    <div class="ne-brand">NEURAL<span>_</span>EDITOR</div>
     
-    <div class="toolbar">
-      <button class="tool-btn" onclick="downloadFile()">DL .MD</button>
-      <button class="tool-btn" onclick="printPerfectPDF()">PRINT PDF</button>
-      <div class="separator"></div>
-      <button class="tool-btn danger" onclick="clearEditor()">PURGE</button>
-      <button class="exit-btn" onclick="history.back()">DISCONNECT</button>
+    <div class="ne-toolbar">
+      <select id="ne-slot-select" class="ne-select">
+        <option value="1">SLOT 1</option>
+        <option value="2">SLOT 2</option>
+        <option value="3">SLOT 3</option>
+      </select>
+      <div class="ne-separator"></div>
+      <button class="ne-btn" id="btn-focus" title="Zen Typewriter Mode">ZEN_MODE</button>
+      <button class="ne-btn" id="btn-sparks" title="Typing Particles">SPARKS</button>
+      <button class="ne-btn" id="btn-hist" title="Time Travel">HISTORY</button>
+      <div class="ne-separator"></div>
+      <button class="ne-btn danger" onclick="history.back()" title="Return to Portal">DISCONNECT</button>
     </div>
   </header>
 
-  <div class="workspace">
-    <div class="input-pane">
-      <div class="crt-scanline"></div>
-      <div class="pane-header">
+  <div class="ne-workspace">
+
+    
+    <div class="ne-editor-wrap" id="ne-editor-wrap">
+      <div class="ne-bg"></div>
+      <div class="ne-grid"></div>
+      <div class="ne-scanline"></div>
+
+      <div class="ne-pane-header">
         <span>// SOURCE_CODE</span>
-        <span id="ne-word-count">L:0 | C:0</span>
+        <div class="ne-toolbar" style="gap:4px;">
+          <select id="ne-template" class="ne-select" style="padding:2px 6px; font-size:0.6rem;">
+            <option value="">[ TEMPLATE ]</option>
+            <option value="report">Report</option>
+            <option value="mermaid">Diagrams</option>
+          </select>
+          <button class="ne-btn" onclick="neApp.insert('**', '**')" style="padding:2px 6px; font-size:0.6rem;">B</button>
+          <button class="ne-btn" onclick="neApp.insert('## ', '')" style="padding:2px 6px; font-size:0.6rem;">H2</button>
+          <button class="ne-btn" onclick="neApp.insert('$$\n', '\n$$')" style="padding:2px 6px; font-size:0.6rem;">MATH</button>
+          <button class="ne-btn" onclick="neApp.insert('```mermaid\n', '\n```')" style="padding:2px 6px; font-size:0.6rem;">DIAG</button>
+        </div>
       </div>
-      <textarea id="ne-input" class="neo-editor" placeholder="[ SYS_READY ] Awaiting input..."></textarea>
-      <div id="ne-toast" class="toast-msg">SAVED</div>
+      <textarea id="ne-input" class="ne-textarea" placeholder="[ SYS_READY ] Awaiting input..."></textarea>
+      
+      
+      <div class="ne-particles" id="ne-particles"></div>
     </div>
 
-    <div class="preview-pane">
-      <div class="pane-header" style="background: #111; border-bottom: 1px solid #333; padding: 5px 15px; font-size: 0.6rem; color: #888; font-family: 'Orbitron', sans-serif; position: sticky; top: 0; z-index: 20; display: flex; justify-content: space-between;">
-        <span>// RENDER_PREVIEW (A4_SIZE)</span>
+    
+    <div class="ne-preview-wrap">
+      <div class="ne-pane-header" style="background: #111; color: #888; border-bottom: 1px solid #333;">
+        <span>// RENDER_PREVIEW (A4)</span>
+        <div class="ne-toolbar" style="gap:4px;">
+          <button class="ne-btn" onclick="neApp.downloadMd()" style="padding:2px 6px; font-size:0.6rem;">DL .MD</button>
+          <button class="ne-btn" onclick="neApp.printPDF()" style="padding:2px 6px; font-size:0.6rem; color:var(--neon-green); border-color:var(--neon-green);">PRINT PDF</button>
+        </div>
       </div>
-      <div class="a4-paper" id="ne-preview"></div>
+      <div class="ne-preview-scroll" id="ne-preview-scroll">
+        <div class="ne-a4-paper" id="ne-preview"></div>
+      </div>
     </div>
+
+    
+    <div class="ne-history-panel" id="ne-history">
+      <div class="ne-pane-header" style="margin:-15px -15px 15px -15px; padding:15px; background:rgba(0,0,0,0.8);">
+        <span>// TIME_MACHINE</span>
+        <button class="ne-btn" onclick="document.getElementById('ne-history').classList.remove('show')" style="padding:2px 6px; font-size:0.6rem;">CLOSE</button>
+      </div>
+      <div id="ne-hist-list" style="overflow-y:auto; flex-grow:1;"></div>
+    </div>
+
   </div>
 
-  <footer class="editor-footer">
-    <div id="ne-save-status">STATUS: SECURE</div>
-    <div>ENCRYPTION: ENABLED | LATENCY: 4ms</div>
+  <footer class="ne-footer">
+    <div class="ne-footer-tools">
+      <span id="ne-save-status">STATUS: SECURE</span>
+      <span id="ne-word-count">WORDS: 0</span>
+    </div>
+    <div>ENCRYPTION: ENABLED | ENGINE: V2.OVERKILL</div>
   </footer>
+  
+  <div id="ne-toast" class="ne-toast">SYS_MSG</div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+var neApp = (function() {
+  "use strict";
+
+  
+  const root = document.getElementById('ne-root');
   const input = document.getElementById('ne-input');
   const preview = document.getElementById('ne-preview');
-  const previewContainer = document.querySelector('.preview-pane');
+  const previewScroll = document.getElementById('ne-preview-scroll');
   const status = document.getElementById('ne-save-status');
   const wordCount = document.getElementById('ne-word-count');
   const toast = document.getElementById('ne-toast');
-  const templateSelect = document.getElementById('ne-template');
-  const STORAGE_KEY = 'dt_neural_editor_v7_5'; 
+  const particlesCont = document.getElementById('ne-particles');
+  const histPanel = document.getElementById('ne-history');
+  const histList = document.getElementById('ne-hist-list');
+  const slotSelect = document.getElementById('ne-slot-select');
+  
+  
+  let currentSlot = '1';
+  let isSparks = false;
+  let isFocusMode = false;
+  let compileTimer = null;
+  let histTimer = null;
+  
+  
+  let isSyncingLeft = false;
+  let isSyncingRight = false;
+  
+  
+  const getSlotKey = () => `dt_neural_slot_${currentSlot}`;
+  const getHistKey = () => `dt_neural_hist_${currentSlot}`;
 
-  const TEMPLATES = {
-    report: document.getElementById('tpl-report').innerHTML.trim(),
-    math: document.getElementById('tpl-math').innerHTML.trim(),
-    memo: document.getElementById('tpl-memo').innerHTML.trim()
-  };
+  function init() {
+    mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
+    
+    loadSlot(currentSlot);
 
-  const saved = localStorage.getItem(STORAGE_KEY);
-  input.value = saved ? saved : TEMPLATES.report;
+    
+    input.addEventListener('input', handleInput);
+    input.addEventListener('keydown', handleKeydown);
+    
+    
+    input.addEventListener('scroll', handleLeftScroll);
+    previewScroll.addEventListener('scroll', handleRightScroll);
+    
+    slotSelect.addEventListener('change', (e) => {
+      saveHistSnapshot(); 
+      currentSlot = e.target.value;
+      loadSlot(currentSlot);
+      showToast(`SWAPPED TO SLOT ${currentSlot}`);
+    });
 
-  const renderMarkdown = () => {
+    document.getElementById('btn-sparks').addEventListener('click', toggleSparks);
+    document.getElementById('btn-focus').addEventListener('click', toggleFocusMode);
+    document.getElementById('btn-hist').addEventListener('click', toggleHistory);
+    document.getElementById('ne-template').addEventListener('change', loadTemplate);
+
+    
+    histTimer = setInterval(saveHistSnapshot, 3 * 60 * 1000);
+  }
+
+  
+  function handleLeftScroll() {
+    if (isSyncingLeft) { isSyncingLeft = false; return; }
+    isSyncingRight = true;
+    const percentage = input.scrollTop / (input.scrollHeight - input.clientHeight);
+    if(previewScroll.scrollHeight > previewScroll.clientHeight && percentage >= 0) {
+      previewScroll.scrollTop = percentage * (previewScroll.scrollHeight - previewScroll.clientHeight);
+    }
+  }
+
+  function handleRightScroll() {
+    if (isSyncingRight) { isSyncingRight = false; return; }
+    isSyncingLeft = true;
+    const percentage = previewScroll.scrollTop / (previewScroll.scrollHeight - previewScroll.clientHeight);
+    if(input.scrollHeight > input.clientHeight && percentage >= 0) {
+      input.scrollTop = percentage * (input.scrollHeight - input.clientHeight);
+    }
+  }
+
+  
+  function handleInput(e) {
+    status.innerHTML = `<span style="color:#f59e0b;">●</span> COMPILING...`;
+    
+    if (isSparks) createParticle();
+    
+    clearTimeout(compileTimer);
+    compileTimer = setTimeout(() => {
+      compile();
+      saveContent();
+    }, 300);
+  }
+
+  function handleKeydown(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault(); saveContent(); saveHistSnapshot(); showToast("MANUAL_SYNC_COMPLETE"); return;
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+      e.preventDefault(); insert('**', '**'); return;
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'i') {
+      e.preventDefault(); insert('*', '*'); return;
+    }
+    if (e.key === 'Tab') {
+      e.preventDefault(); insert('    ', ''); return;
+    }
+  }
+
+  
+  async function compile() {
     let text = input.value;
     const blockMath = [];
     const inlineMath = [];
+    const mermaids = [];
     
     
-    text = text.replace(/\$\$([\s\S]+?)\$\$/g, (match) => {
-      blockMath.push(match);
-      return `%%%BLOCK_MATH_${blockMath.length - 1}%%%`;
-    });
-    
-    
-    text = text.replace(/\$([\s\S]+?)\$/g, (match) => {
-      inlineMath.push(match);
-      return `%%%INLINE_MATH_${inlineMath.length - 1}%%%`;
+    text = text.replace(/```mermaid([\s\S]+?)```/g, (match, code) => {
+      mermaids.push(code.trim());
+      return `%%%MERMAID_${mermaids.length - 1}%%%`;
     });
 
+    
+    text = text.replace(/\$\$([\s\S]+?)\$\$/g, (match) => { blockMath.push(match); return `%%%BLOCK_MATH_${blockMath.length - 1}%%%`; });
+    text = text.replace(/\$([\s\S]+?)\$/g, (match) => { inlineMath.push(match); return `%%%INLINE_MATH_${inlineMath.length - 1}%%%`; });
+
+    
     let html = marked.parse(text);
 
+    
     html = html.replace(/<p>\s*(%%%BLOCK_MATH_\d+%%%)\s*<\/p>/g, "$1");
-    html = html.replace(/%%%BLOCK_MATH_(\d+)%%%/g, (m, i) => {
-      return `<div class="math-display">${blockMath[i]}</div>`;
-    });
-    html = html.replace(/%%%INLINE_MATH_(\d+)%%%/g, (m, i) => {
-      return `<span class="math-inline-placeholder">${inlineMath[i]}</span>`;
-    });
+    html = html.replace(/%%%BLOCK_MATH_(\d+)%%%/g, (m, i) => `<div class="math-display">${blockMath[i]}</div>`);
+    html = html.replace(/%%%INLINE_MATH_(\d+)%%%/g, (m, i) => `<span class="math-inline-placeholder">${inlineMath[i]}</span>`);
+
+    
+    html = html.replace(/%%%MERMAID_(\d+)%%%/g, (m, i) => `<div class="mermaid-target" data-idx="${i}" style="text-align:center; padding:10px;"></div>`);
 
     preview.innerHTML = html;
 
+    
     if (window.MathJax && window.MathJax.typesetPromise) {
-      window.MathJax.typesetPromise([preview]).catch(err => console.error(err));
+      try { await window.MathJax.typesetPromise([preview]); } catch(e) {}
     }
 
-    const chars = input.value.length;
-    const lines = input.value.split(/\r\n|\r|\n/).length;
-    wordCount.innerText = `L:${lines} | C:${chars}`;
-  };
-
-  const saveContent = () => {
-    localStorage.setItem(STORAGE_KEY, input.value);
-    const time = new Date().toLocaleTimeString();
-    status.innerHTML = `<span style="color:#10b981;">●</span> SYNCED: ${time}`;
-  };
-
-  const showToast = (msg) => {
-    toast.textContent = `> ${msg}`;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2000);
-  };
-
-  let timeoutId;
-  input.addEventListener('input', () => {
-    status.innerHTML = `<span style="color:#f59e0b;">●</span> COMPILING...`;
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      renderMarkdown();
-      saveContent();
-    }, 400);
-  });
-
-  input.addEventListener('scroll', () => {
-    const percentage = input.scrollTop / (input.scrollHeight - input.clientHeight);
-    if(previewContainer.scrollHeight > previewContainer.clientHeight) {
-      previewContainer.scrollTop = percentage * (previewContainer.scrollHeight - previewContainer.clientHeight);
+    
+    if (mermaids.length > 0) {
+      const targets = preview.querySelectorAll('.mermaid-target');
+      targets.forEach(async (target) => {
+        const idx = target.dataset.idx;
+        const code = mermaids[idx];
+        try {
+          const { svg } = await mermaid.render(`mermaid-svg-${Date.now()}-${idx}`, code);
+          target.innerHTML = svg;
+        } catch (err) {
+          target.innerHTML = `<pre style="color:red;font-size:10px;">Mermaid Error: ${err.message}</pre>`;
+        }
+      });
     }
-  });
 
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      const start = input.selectionStart;
-      const end = input.selectionEnd;
-      input.value = input.value.substring(0, start) + '    ' + input.value.substring(end);
-      input.selectionStart = input.selectionEnd = start + 4;
-      renderMarkdown();
-      saveContent();
+    
+    wordCount.innerText = `WORDS: ${input.value.replace(/\s+/g, '').length}`;
+  }
+
+  
+  function loadSlot(slotIdx) {
+    const data = localStorage.getItem(`dt_neural_slot_${slotIdx}`);
+    if (data) {
+      input.value = data;
+    } else {
+      input.value = document.getElementById('tpl-report').innerHTML.trim();
     }
-  });
+    compile();
+  }
 
-  document.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-      e.preventDefault();
-      saveContent();
-      showToast("MANUAL_SYNC_COMPLETE");
+  function saveContent() {
+    localStorage.setItem(getSlotKey(), input.value);
+    status.innerHTML = `<span style="color:#10b981;">●</span> SYNCED: ${new Date().toLocaleTimeString()}`;
+  }
+
+  
+  function toggleSparks() {
+    isSparks = !isSparks;
+    const btn = document.getElementById('btn-sparks');
+    if (isSparks) { btn.classList.add('active'); showToast('PARTICLES ARMED'); }
+    else { btn.classList.remove('active'); particlesCont.innerHTML = ''; }
+  }
+
+  function createParticle() {
+    const wrapRect = document.getElementById('ne-editor-wrap').getBoundingClientRect();
+    for (let i = 0; i < 20; i++) {
+       const p = document.createElement('div');
+       p.className = 'ne-particle';
+       const colors = ['#00f3ff', '#ff0055', '#b026ff', '#fcee0a', '#ffffff'];
+       const color = colors[Math.floor(Math.random() * colors.length)];
+       const size = 3 + Math.random() * 4;
+       p.style.width = `${size}px`; p.style.height = `${size}px`;
+       
+       
+       const x = Math.random() * wrapRect.width;
+       const y = wrapRect.height - 40 + (Math.random() * 20 - 10);
+       
+       p.style.left = `${x}px`; p.style.top = `${y}px`;
+       p.style.background = color;
+       p.style.boxShadow = `0 0 ${size*2}px ${color}`;
+       
+       const tx = (Math.random() - 0.5) * 400; 
+       const ty = - (Math.random() * 500 + 200); 
+       p.style.setProperty('--tx', `${tx}px`);
+       p.style.setProperty('--ty', `${ty}px`);
+       
+       particlesCont.appendChild(p);
+       setTimeout(() => { if (p.parentNode) p.parentNode.removeChild(p); }, 800);
     }
-  });
+  }
 
-  window.insertText = (before, after) => {
+  function toggleFocusMode() {
+    isFocusMode = !isFocusMode;
+    const btn = document.getElementById('btn-focus');
+    const wrap = document.getElementById('ne-editor-wrap');
+    if (isFocusMode) {
+      wrap.classList.add('focus-mode'); btn.classList.add('active'); showToast('ZEN MODE ENGAGED');
+    } else {
+      wrap.classList.remove('focus-mode'); btn.classList.remove('active');
+    }
+  }
+
+  function toggleHistory() {
+    histPanel.classList.toggle('show');
+    if(histPanel.classList.contains('show')) renderHistory();
+  }
+
+  function saveHistSnapshot() {
+    let histJSON = localStorage.getItem(getHistKey());
+    let hist = histJSON ? JSON.parse(histJSON) : [];
+    if (hist.length > 0 && hist[0].text === input.value) return;
+
+    hist.unshift({ time: new Date().getTime(), text: input.value });
+    if (hist.length > 10) hist.pop(); 
+    
+    localStorage.setItem(getHistKey(), JSON.stringify(hist));
+    if(histPanel.classList.contains('show')) renderHistory();
+  }
+
+  function renderHistory() {
+    let histJSON = localStorage.getItem(getHistKey());
+    let hist = histJSON ? JSON.parse(histJSON) : [];
+    histList.innerHTML = '';
+    
+    if(hist.length === 0) {
+      histList.innerHTML = '<div style="color:#666; font-size:10px;">NO SNAPSHOTS YET</div>';
+      return;
+    }
+
+    hist.forEach((h, idx) => {
+      const d = new Date(h.time);
+      const div = document.createElement('div');
+      div.className = 'ne-hist-item';
+      div.innerHTML = `<div class="ne-hist-time">${d.toLocaleString()}</div><div>[${h.text.length} CHARS] Click to restore</div>`;
+      div.onclick = () => {
+        if(confirm('現在のエディタ内容をスナップショットで上書きしますか？')) {
+          saveHistSnapshot(); 
+          input.value = h.text;
+          compile(); saveContent();
+          showToast('TIME_TRAVEL_SUCCESS');
+        }
+      };
+      histList.appendChild(div);
+    });
+  }
+
+  
+  function insert(before, after) {
     const start = input.selectionStart;
     const end = input.selectionEnd;
     const text = input.value;
@@ -1253,40 +1526,34 @@ document.addEventListener('DOMContentLoaded', () => {
     input.focus();
     input.selectionStart = start + before.length;
     input.selectionEnd = end + before.length;
-    renderMarkdown(); saveContent();
-  };
+    compile(); saveContent();
+  }
 
-  window.insertTable = () => { insertText(`\n| 見出し1 | 見出し2 |\n|:---:|:---:|\n| データ | データ |\n`, ''); };
-
-  window.clearEditor = () => {
-    if(confirm('WARNING: すべてのデータが消去されます。よろしいですか？')) {
-      input.value = ''; renderMarkdown(); saveContent(); showToast('DATA_PURGED');
-    }
-  };
-
-  window.loadTemplate = (type) => {
+  function loadTemplate(e) {
+    const type = typeof e === 'object' ? e.target.value : e;
     if (!type) return;
     if (input.value.trim().length > 0 && !confirm('現在の入力内容が上書きされます。よろしいですか？')) {
-      templateSelect.value = ""; return;
+       document.getElementById('ne-template').value = ''; return;
     }
     input.value = document.getElementById(`tpl-${type}`).innerHTML.trim();
-    renderMarkdown(); saveContent(); showToast(`TEMPLATE_LOADED`);
-    templateSelect.value = "";
-  };
+    compile(); saveContent(); showToast(`TEMPLATE_LOADED`);
+    document.getElementById('ne-template').value = '';
+  }
 
-  window.downloadFile = () => {
+  function downloadMd() {
     const blob = new Blob([input.value], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url; a.download = `neural_log_${new Date().getTime()}.md`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
     showToast("FILE_DOWNLOADED");
-  };
+  }
 
-  window.printPerfectPDF = () => {
-    const content = document.getElementById('ne-preview').innerHTML;
-    
+  function printPDF() {
+    showToast('GENERATING RENDER...');
+    const content = preview.innerHTML;
     const mathJaxStyles = document.getElementById('MJX-SVG-styles') ? document.getElementById('MJX-SVG-styles').outerHTML : '';
+    
     
     const iframe = document.createElement('iframe');
     iframe.style.position = 'fixed';
@@ -1299,45 +1566,36 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const doc = iframe.contentWindow.document;
     doc.open();
+    
     doc.write(`
       <html>
       <head>
-        <title>Document</title>
+        <title>Document Print</title>
         ${mathJaxStyles} <style>
           @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
           @page { size: A4; margin: 25mm; } 
           body { 
             font-family: 'Zen Kaku Gothic New', "Helvetica Neue", Arial, sans-serif; 
             line-height: 1.8; color: #000; margin: 0; padding: 0; 
+            background: #fff;
           }
-          .a4-paper { padding: 0 !important; margin: 0 !important; width: 100% !important; box-shadow: none !important; }
           h1 { font-size: 1.8rem; border-bottom: 2px solid #000; padding-bottom: 0.5rem; margin-top: 0; margin-bottom: 1.5rem; page-break-after: avoid; }
           h2 { font-size: 1.4rem; border-left: 5px solid #000; padding-left: 12px; margin-top: 2rem; margin-bottom: 1rem; page-break-after: avoid; }
           h3 { font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.5rem; page-break-after: avoid; }
           p { margin-bottom: 1rem; text-align: justify; }
-          ul, ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+          ul, ol { margin-bottom: 1rem; padding-left: 1.5rem; color: #000; }
+          li::marker { color: #000; }
           table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; font-size: 0.95rem; page-break-inside: avoid; }
-          th, td { border: 1px solid #333; padding: 8px 12px; }
+          th, td { border: 1px solid #333; padding: 8px 12px; color:#000; }
           th { background-color: #f0f0f0; font-weight: bold; text-align: center; }
           pre { background-color: #f5f5f5; padding: 1.2rem; border: 1px solid #ccc; overflow-x: auto; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; page-break-inside: avoid; }
           code { font-family: 'JetBrains Mono', monospace; color: #d63384; font-size: 0.9em; }
           pre code { color: #333; }
           blockquote { border-left: 4px solid #aaa; padding-left: 1rem; color: #555; margin: 1rem 0; }
           img { max-width: 100%; height: auto; display: block; margin: 1.5rem auto; border: 1px solid #ccc; page-break-inside: avoid; }
-          
           .math-display { display: flex; justify-content: center; align-items: center; width: 100%; margin: 1.5rem 0; page-break-inside: avoid; }
           mjx-container { color: #000 !important; }
-          
-          /* 【最重要】PDF出力時に数式が「V=IR V=IR」と二重になるバグを完全に破壊する */
-          mjx-assistive-mml {
-            display: none !important;
-            clip: rect(1px, 1px, 1px, 1px) !important;
-            clip-path: inset(50%) !important;
-            height: 1px !important;
-            width: 1px !important;
-            position: absolute !important;
-            overflow: hidden !important;
-          }
+          mjx-assistive-mml { display: none !important; clip: rect(1px, 1px, 1px, 1px) !important; clip-path: inset(50%) !important; height: 1px !important; width: 1px !important; position: absolute !important; overflow: hidden !important; }
         </style>
       </head>
       <body>
@@ -1350,17 +1608,22 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       iframe.contentWindow.focus();
       iframe.contentWindow.print();
-      
       setTimeout(() => { 
-        if (document.body.contains(iframe)) {
-          document.body.removeChild(iframe); 
-        }
+        if (document.body.contains(iframe)) document.body.removeChild(iframe); 
       }, 3000);
-    }, 500);
-  };
+    }, 1000); 
+  }
 
-  renderMarkdown();
-});
+  function showToast(msg) {
+    toast.textContent = `> ${msg}`;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { setTimeout(init, 50); }
+
+  return { insert, downloadMd, printPDF };
+})();
 </script>
 
     </section>
