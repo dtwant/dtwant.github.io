@@ -15,8 +15,8 @@
 
   
   
-    <title>Cryptography Lab &middot; dt&#39;s world</title>
-    <meta name="title" content="Cryptography Lab &middot; dt&#39;s world">
+    <title>CRYPTOGRAPHY_LAB &middot; dt&#39;s world</title>
+    <meta name="title" content="CRYPTOGRAPHY_LAB &middot; dt&#39;s world">
   
 
   
@@ -46,7 +46,7 @@
   
   <meta property="og:url" content="https://dtwant.github.io/lab/crypto/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="Cryptography Lab">
+  <meta property="og:title" content="CRYPTOGRAPHY_LAB">
   <meta property="og:description" content="暗号あそびば">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
@@ -54,7 +54,7 @@
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Cryptography Lab">
+  <meta name="twitter:title" content="CRYPTOGRAPHY_LAB">
   <meta name="twitter:description" content="暗号あそびば">
 
   
@@ -212,8 +212,8 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "articleSection": "Labs",
-    "name": "Cryptography Lab",
-    "headline": "Cryptography Lab",
+    "name": "CRYPTOGRAPHY_LAB",
+    "headline": "CRYPTOGRAPHY_LAB",
     "description": "暗号あそびば",
     
     "inLanguage": "en",
@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "95"
+    "wordCount": "106"
   }]
   </script>
 
@@ -778,7 +778,7 @@
   
   <li class="hidden">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/crypto/"
-      >Cryptography Lab</a
+      >CRYPTOGRAPHY_LAB</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -787,352 +787,208 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        Cryptography Lab
+        CRYPTOGRAPHY_LAB
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <p>古典暗号と現代の公開鍵暗号，符号化を実験するページ.</p>
-
-<h2 class="relative group">1. RSA暗号 (Visualizer)
-    <div id="1-rsa暗号-visualizer" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#1-rsa%e6%9a%97%e5%8f%b7-visualizer" aria-label="Anchor">#</a>
-    </span>
-    
-</h2>
-<p>RSA暗号の仕組みを，小さな数を使って計算・可視化する.<br>
-「素数」「オイラー関数 $\phi(n)$」「合同式」を用いる.</p>
-
+      
 
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&display=swap');
 
-   
-  .cp-rsa-container {
-    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
-    max-width: 900px;
-    width: 95%;
-    margin: 2rem auto;
-    background-color: #09090b;
-    background-image: 
-      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
-    background-size: 20px 20px;
-    padding: 2.5rem;
-    border: 1px solid #333;
-    border-radius: 4px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
-    color: #e2e8f0;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-    line-height: 1.5;
+  #cyber-rsa-app {
+    --neon-pink: #ff0055; --neon-cyan: #00f3ff; --neon-green: #00ff41;
+    --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #050505;
+    --panel-bg: rgba(10,14,18,0.90);
+    --accent: #d946ef; --accent2: #22d3ee;
+    font-family: 'JetBrains Mono', monospace; color: #e0e0e0;
+    width: 100%; position: relative; margin: 2rem 0; padding: 0; line-height:1.5;
   }
-  .cp-rsa-container * { box-sizing: border-box; }
-
-   
-   
-  .cp-rsa-container p,
-  .cp-rsa-container span,
-  .cp-rsa-container label,
-  .cp-rsa-container h3,
-  .cp-rsa-container h4,
-  .cp-rsa-container a {
-    text-decoration: none !important;
-    border-bottom: none !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    color: inherit;
-  }
-
-   
-  .cp-rsa-container::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #d946ef, #8b5cf6, #d946ef);
-    background-size: 200% 100%;
-    animation: scanline 4s linear infinite;
-    pointer-events: none;
-    z-index: 10;
-  }
-  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
-
-   
-  .cp-rsa-container .cp-header {
-    border-bottom: 1px solid #333 !important;
-    padding-bottom: 1.5rem;
-    margin-bottom: 2.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .cp-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #d946ef !important;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 8px rgba(217, 70, 239, 0.4);
-  }
-  .cp-subtitle {
-    font-size: 0.8rem;
-    color: #64748b !important;
-  }
-
-   
-   
-  .cp-rsa-container .cp-section {
-    margin-bottom: 2.5rem;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.02) !important;
-    border: 1px solid #333 !important;
-    border-left: 2px solid #333 !important;
-    transition: border-color 0.3s;
-  }
-  .cp-section:hover {
-    border-left-color: #d946ef !important;
-  }
-
-  .cp-sec-title {
-    font-size: 0.9rem;
-    color: #94a3b8 !important;
-    margin-bottom: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .cp-sec-title::before { content: '>>'; color: #d946ef; }
-
-   
-  .cp-input-group {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-    align-items: flex-end;
-  }
-  .cp-field {
-    flex: 1;
-    min-width: 150px;
-  }
-  .cp-label {
-    display: block;
-    font-size: 0.8rem;
-    color: #64748b !important;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
+  #cyber-rsa-app * { box-sizing: border-box; }
   
    
-  .cp-rsa-container .cp-input {
-    width: 100%;
-    background: #000 !important;
-    border: 1px solid #444 !important;  
-    color: #e2e8f0 !important;
-    padding: 1rem;
-    font-family: inherit;
-    font-size: 1rem;
-    border-radius: 2px;
-    transition: all 0.2s;
-    box-shadow: none !important;
-  }
-  .cp-input:focus {
-    outline: none;
-    border-color: #d946ef !important;
-    box-shadow: 0 0 8px rgba(217, 70, 239, 0.3) !important;
-  }
+  #cyber-rsa-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:#050505; z-index:-2; }
+  #cyber-rsa-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-image:linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px); background-size:40px 40px; animation:rsa-bg 20s linear infinite; z-index:-1; }
+  #cyber-rsa-app .rsa-scan { position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1)); background-size:100% 4px; pointer-events:none; z-index:50; opacity:0.5; }
+  @keyframes rsa-bg { 0%{background-position:0 0} 100%{background-position:40px 40px} }
 
    
-   
-  .cp-rsa-container .cp-btn {
-    background: transparent !important;
-    border: 1px solid #d946ef !important;  
-    color: #d946ef !important;
-    padding: 1rem 2rem;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    transition: all 0.2s;
-    height: 52px;
-    box-shadow: none !important;
-  }
-  .cp-btn:hover {
-    background: #d946ef !important;
-    color: #000 !important;
-    box-shadow: 0 0 10px rgba(217, 70, 239, 0.5) !important;
-  }
+  #cyber-rsa-app .rsa-glitch { font-family:'Orbitron',sans-serif; position:relative; color:var(--accent); text-shadow:2px 2px var(--neon-pink); }
+  #cyber-rsa-app .rsa-glitch::before,#cyber-rsa-app .rsa-glitch::after { content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%; background:transparent; }
+  #cyber-rsa-app .rsa-glitch::before { left:2px; text-shadow:-1px 0 var(--neon-cyan); clip:rect(24px,550px,90px,0); animation:rsa-g2 3s infinite linear alternate-reverse; }
+  #cyber-rsa-app .rsa-glitch::after { left:-2px; text-shadow:-1px 0 var(--neon-pink); clip:rect(85px,550px,140px,0); animation:rsa-g1 2.5s infinite linear alternate-reverse; }
+  @keyframes rsa-g1 { 0%{clip:rect(14px,9999px,122px,0)} 100%{clip:rect(5px,9999px,133px,0)} }
+  @keyframes rsa-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
 
    
-  .cp-rsa-container .cp-result-box {
-    margin-top: 1.5rem;
-    padding: 1.5rem;
-    background: #0e0e11 !important;
-    border: 1px dashed #444 !important;
-    font-size: 1rem;
-    display: none;
-  }
-  
-  .cp-step {
-    margin-bottom: 0.8rem;
-    font-family: monospace;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.8rem;
-  }
-  .cp-var { color: #64748b !important; }
-  .cp-val { color: #22d3ee !important; font-weight: bold; }
-  .cp-highlight { color: #d946ef !important; font-weight: bold; text-shadow: 0 0 5px rgba(217, 70, 239, 0.3); }
+  #cyber-rsa-app .rsa-panel { background:var(--panel-bg); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 20px rgba(0,0,0,0.8),inset 0 0 30px rgba(0,243,255,0.05); backdrop-filter:blur(5px); clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
 
-  .cp-key-display {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #333 !important;
-    font-size: 0.9rem;
-    color: #94a3b8 !important;
-    line-height: 1.8;
-  }
-
-  .cp-error {
-    color: #ef4444 !important;
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    display: none;
-  }
-
-  .cp-math { font-family: "JetBrains Mono", monospace; }
+  #cyber-rsa-app .rsa-main { width:100%; max-width:900px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
+  @media(min-width:768px) { #cyber-rsa-app .rsa-main { padding:0 0 32px 0; margin-top:32px; } }
 
    
-  @media (max-width: 640px) {
-    .cp-rsa-container {
-      padding: 1.5rem 1rem;
-      width: 100%;
-      margin: 1rem 0;
-      border-left: none; border-right: none; border-radius: 0;
-    }
-    
-    .cp-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
+  #cyber-rsa-app .rsa-hbar { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; padding:0 4px; opacity:0.8; }
+  #cyber-rsa-app .rsa-sysver { font-size:9px; color:var(--accent); font-family:monospace; letter-spacing:2px; }
+  @media(min-width:768px) { #cyber-rsa-app .rsa-sysver { font-size:12px; } }
 
-    .cp-section {
-      padding: 1.25rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .cp-input-group {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 15px;
-    }
-    
-    .cp-btn {
-      width: 100%;
-      height: auto;
-      padding: 1rem;
-    }
+   
+  #cyber-rsa-app .rsa-corner { position:absolute; width:24px; height:24px; border-color:var(--accent); opacity:0.5; }
+  @media(min-width:768px) { #cyber-rsa-app .rsa-corner { width:32px; height:32px; } }
+  #cyber-rsa-app .rsa-c-tl { top:0; left:0; border-top:2px solid; border-left:2px solid; }
+  #cyber-rsa-app .rsa-c-tr { top:0; right:0; border-top:2px solid; border-right:2px solid; }
+  #cyber-rsa-app .rsa-c-bl { bottom:0; left:0; border-bottom:2px solid; border-left:2px solid; }
+  #cyber-rsa-app .rsa-c-br { bottom:0; right:0; border-bottom:2px solid; border-right:2px solid; }
 
-    .cp-step {
-      font-size: 0.9rem;
-    }
+   
+  #cyber-rsa-app .rsa-title-sec { margin-bottom:16px; text-align:center; border-bottom:1px solid #1f2937; padding-bottom:16px; position:relative; padding-top:24px; }
+  @media(min-width:768px) { #cyber-rsa-app .rsa-title-sec { text-align:left; padding-top:0; margin-bottom:24px; padding-bottom:20px; } }
+  #cyber-rsa-app .rsa-title { font-size:20px; font-weight:700; letter-spacing:-0.05em; margin-bottom:4px; margin-top:8px; }
+  @media(min-width:768px) { #cyber-rsa-app .rsa-title { font-size:36px; margin-top:0; } }
+  #cyber-rsa-app .rsa-sub { font-size:9px; color:#9ca3af; font-family:monospace; letter-spacing:0.1em; text-transform:uppercase; }
+  @media(min-width:768px) { #cyber-rsa-app .rsa-sub { font-size:12px; letter-spacing:0.2em; } }
+
+   
+  #cyber-rsa-app p, #cyber-rsa-app span, #cyber-rsa-app label, #cyber-rsa-app h3, #cyber-rsa-app h4, #cyber-rsa-app a {
+    text-decoration:none !important;
+    border-bottom:none !important;
+    background-image:none !important;
+    box-shadow:none !important;
   }
+  #cyber-rsa-app .rsa-main-desc {
+    color:#94a3b8; font-size:13px; margin-bottom:24px; border-left:2px solid var(--accent); padding-left:15px; line-height:1.6;
+    border-bottom:none !important; text-decoration:none !important; box-shadow:none !important; background-image:none !important;
+  }
+   
+  #cyber-rsa-app .rsa-section { margin-bottom:24px; padding:20px; background:rgba(0,0,0,0.4); border:1px solid #1f2937; border-left:2px solid #333; transition:border-color 0.3s; }
+  @media(min-width:768px) { #cyber-rsa-app .rsa-section { padding:24px; } }
+  #cyber-rsa-app .rsa-section:hover { border-left-color:var(--accent); }
 
+  #cyber-rsa-app .rsa-sec-title { font-size:12px; color:#94a3b8; margin-bottom:20px; text-transform:uppercase; letter-spacing:0.05em; display:flex; align-items:center; gap:8px; border-bottom:none !important; text-decoration:none !important; }
+  @media(min-width:768px) { #cyber-rsa-app .rsa-sec-title { font-size:14px; } }
+  #cyber-rsa-app .rsa-sec-title::before { content:'>>'; color:var(--accent); }
+
+   
+  #cyber-rsa-app .rsa-input-group { display:flex; gap:20px; margin-bottom:16px; flex-wrap:wrap; align-items:flex-end; }
+  @media(max-width:640px) { #cyber-rsa-app .rsa-input-group { flex-direction:column; align-items:stretch; gap:15px; } }
+  #cyber-rsa-app .rsa-field { flex:1; min-width:150px; }
+  #cyber-rsa-app .rsa-label { display:block; font-size:11px; color:#64748b; margin-bottom:8px; font-weight:bold; border-bottom:none !important; text-decoration:none !important; box-shadow:none !important; background-image:none !important; }
+  @media(min-width:768px) { #cyber-rsa-app .rsa-label { font-size:12px; } }
+  #cyber-rsa-app .rsa-input { width:100%; background:rgba(0,0,0,0.8) !important; border:1px solid #444 !important; color:#e2e8f0 !important; padding:16px; font-family:inherit; font-size:16px; border-radius:2px; transition:all 0.2s; outline:none; }
+  #cyber-rsa-app .rsa-input:focus { border-color:var(--accent) !important; box-shadow:0 0 8px rgba(217,70,239,0.3) !important; }
+
+   
+  #cyber-rsa-app .rsa-btn { background:linear-gradient(90deg,transparent 0%,rgba(217,70,239,0.1) 50%,transparent 100%); border:1px solid var(--accent); color:var(--accent); padding:16px 32px; font-family:'Orbitron',sans-serif; font-weight:bold; cursor:pointer; text-transform:uppercase; font-size:12px; letter-spacing:1px; transition:all 0.3s; height:52px; position:relative; overflow:hidden; }
+  @media(min-width:768px) { #cyber-rsa-app .rsa-btn { font-size:14px; } }
+  @media(max-width:640px) { #cyber-rsa-app .rsa-btn { width:100%; height:auto; padding:16px; } }
+  #cyber-rsa-app .rsa-btn:hover { background:var(--accent); color:#000; box-shadow:0 0 10px rgba(217,70,239,0.5); }
+  #cyber-rsa-app .rsa-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent); transition:0.5s; }
+  #cyber-rsa-app .rsa-btn:hover::before { left:100%; }
+
+   
+  #cyber-rsa-app .rsa-result-box { margin-top:20px; padding:20px; background:rgba(0,0,0,0.6); border:1px dashed #444; font-size:14px; display:none; }
+  @media(min-width:768px) { #cyber-rsa-app .rsa-result-box { font-size:16px; } }
+
+  #cyber-rsa-app .rsa-step { margin-bottom:12px; font-family:monospace; display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
+  #cyber-rsa-app .rsa-var { color:#64748b; }
+  #cyber-rsa-app .rsa-val { color:var(--accent2); font-weight:bold; }
+  #cyber-rsa-app .rsa-highlight { color:var(--accent); font-weight:bold; text-shadow:0 0 5px rgba(217,70,239,0.3); }
+
+  #cyber-rsa-app .rsa-key-display { margin-top:20px; padding-top:20px; border-top:1px solid #333; font-size:14px; color:#94a3b8; line-height:1.8; }
+
+  #cyber-rsa-app .rsa-error { color:#ef4444; margin-top:16px; font-size:14px; display:none; }
+
+  #cyber-rsa-app .rsa-math { font-family:'JetBrains Mono',monospace; }
 </style>
 
-<div class="cp-rsa-container">
-  <div class="cp-header">
-    <div class="cp-title">RSA_CRYPTO_SYSTEM</div>
-    <div class="cp-subtitle">// 公開鍵暗号プロトコル</div>
-  </div>
-
-  
-  <div class="cp-section">
-    <div class="cp-sec-title">SEQUENCE_01: KEY_GENERATION [鍵生成]</div>
-    
-    <div class="cp-input-group">
-      <div class="cp-field">
-        <label class="cp-label">PRIME_P [素数P]</label>
-        <input type="number" id="rsa-p" class="cp-input" value="11">
-      </div>
-      <div class="cp-field">
-        <label class="cp-label">PRIME_Q [素数Q]</label>
-        <input type="number" id="rsa-q" class="cp-input" value="3">
-      </div>
-      <button class="cp-btn" onclick="generateKeys()">INITIALIZE</button>
+<div id="cyber-rsa-app">
+  <div class="rsa-scan"></div>
+  <div class="rsa-main">
+    <div class="rsa-hbar">
+      <div class="rsa-sysver">SYS.VER.2.0 // RSA_PROTOCOL</div>
     </div>
 
-    <div id="rsa-error" class="cp-error">>> ERROR: INPUT_INVALID</div>
+    <div class="rsa-panel" style="padding:16px; position:relative;">
+      <div class="rsa-corner rsa-c-tl"></div><div class="rsa-corner rsa-c-tr"></div>
+      <div class="rsa-corner rsa-c-bl"></div><div class="rsa-corner rsa-c-br"></div>
 
-    <div id="rsa-key-result" class="cp-result-box">
-      <div class="cp-step">
-        <span class="cp-var">n (p×q) =</span>
-        <span id="val-n" class="cp-highlight"></span>
+      <div class="rsa-title-sec">
+        <h1 class="rsa-title rsa-glitch" data-text="RSA_CRYPTO_SYSTEM">RSA_CRYPTO_SYSTEM</h1>
+        <p class="rsa-sub">Public Key Cryptography Protocol Visualizer</p>
       </div>
-      <div class="cp-step">
-        <span class="cp-var">φ(n) =</span>
-        <span id="val-phi" class="cp-val"></span>
-      </div>
-      <div class="cp-step">
-        <span class="cp-var">e (Public) =</span>
-        <span id="val-e" class="cp-highlight"></span>
-      </div>
-      <div class="cp-step">
-        <span class="cp-var">d (Private) =</span>
-        <span id="val-d" class="cp-highlight"></span>
-      </div>
+
       
-      <div class="cp-key-display">
-        <div>🔑 PUBLIC_KEY: (<span id="pub-e" class="cp-val"></span>, <span id="pub-n" class="cp-val"></span>)</div>
-        <div>🗝 PRIVATE_KEY: (<span id="priv-d" class="cp-val"></span>, <span id="priv-n" class="cp-val"></span>)</div>
+      <div class="rsa-main-desc">
+        >> 古典暗号と現代の公開鍵暗号，符号化を実験する。<br>
+        >> RSA暗号の仕組みを，小さな数を使って計算・可視化する。<br>
+        >> 「素数」「オイラー関数 $\phi(n)$」「合同式」を用いる。
       </div>
-    </div>
-  </div>
 
-  
-  <div id="rsa-calc-box" class="cp-section" style="opacity: 0.5; pointer-events: none;">
-    <div class="cp-sec-title">SEQUENCE_02: TRANSMISSION_TEST [暗号化]</div>
-    
-    <div class="cp-input-group">
-      <div class="cp-field">
-        <label class="cp-label">MESSAGE_INT [数値]</label>
-        <input type="number" id="rsa-msg" class="cp-input" value="9">
-      </div>
-      <button class="cp-btn" onclick="runEncryption()">EXECUTE</button>
-    </div>
+      
+      <div class="rsa-section">
+        <div class="rsa-sec-title">SEQUENCE_01: KEY_GENERATION [鍵生成]</div>
+        
+        <div class="rsa-input-group">
+          <div class="rsa-field">
+            <label class="rsa-label">PRIME_P [素数P]</label>
+            <input type="number" id="rsa-p" class="rsa-input" value="11">
+          </div>
+          <div class="rsa-field">
+            <label class="rsa-label">PRIME_Q [素数Q]</label>
+            <input type="number" id="rsa-q" class="rsa-input" value="3">
+          </div>
+          <button class="rsa-btn" onclick="generateKeys()">INITIALIZE</button>
+        </div>
 
-    <div id="rsa-calc-result" class="cp-result-box">
-      <div class="cp-step">
-        <span class="cp-var">ENCRYPT:</span>
-        <span class="cp-math">
-          <span id="msg-m" class="cp-val"></span>^<span id="msg-e"></span> mod <span id="msg-n"></span> = 
-          <span id="res-c" class="cp-highlight"></span>
-        </span>
+        <div id="rsa-error" class="rsa-error">>> ERROR: INPUT_INVALID</div>
+
+        <div id="rsa-key-result" class="rsa-result-box">
+          <div class="rsa-step"><span class="rsa-var">n (p×q) =</span><span id="val-n" class="rsa-highlight"></span></div>
+          <div class="rsa-step"><span class="rsa-var">φ(n) =</span><span id="val-phi" class="rsa-val"></span></div>
+          <div class="rsa-step"><span class="rsa-var">e (Public) =</span><span id="val-e" class="rsa-highlight"></span></div>
+          <div class="rsa-step"><span class="rsa-var">d (Private) =</span><span id="val-d" class="rsa-highlight"></span></div>
+          <div class="rsa-key-display">
+            <div>🔑 PUBLIC_KEY: (<span id="pub-e" class="rsa-val"></span>, <span id="pub-n" class="rsa-val"></span>)</div>
+            <div>🗝 PRIVATE_KEY: (<span id="priv-d" class="rsa-val"></span>, <span id="priv-n" class="rsa-val"></span>)</div>
+          </div>
+        </div>
       </div>
-      <div class="cp-step">
-        <span class="cp-var">DECRYPT:</span>
-        <span class="cp-math">
-          <span id="res-c2" class="cp-val"></span>^<span id="msg-d"></span> mod <span id="msg-n2"></span> = 
-          <span id="res-m" class="cp-highlight"></span>
-        </span>
+
+      
+      <div id="rsa-calc-box" class="rsa-section" style="opacity: 0.5; pointer-events: none;">
+        <div class="rsa-sec-title">SEQUENCE_02: TRANSMISSION_TEST [暗号化]</div>
+        
+        <div class="rsa-input-group">
+          <div class="rsa-field">
+            <label class="rsa-label">MESSAGE_INT [数値]</label>
+            <input type="number" id="rsa-msg" class="rsa-input" value="9">
+          </div>
+          <button class="rsa-btn" onclick="runEncryption()">EXECUTE</button>
+        </div>
+
+        <div id="rsa-calc-result" class="rsa-result-box">
+          <div class="rsa-step">
+            <span class="rsa-var">ENCRYPT:</span>
+            <span class="rsa-math">
+              <span id="msg-m" class="rsa-val"></span>^<span id="msg-e"></span> mod <span id="msg-n"></span> = 
+              <span id="res-c" class="rsa-highlight"></span>
+            </span>
+          </div>
+          <div class="rsa-step">
+            <span class="rsa-var">DECRYPT:</span>
+            <span class="rsa-math">
+              <span id="res-c2" class="rsa-val"></span>^<span id="msg-d"></span> mod <span id="msg-n2"></span> = 
+              <span id="res-m" class="rsa-highlight"></span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
+   
   function modInverse(a, m) {
     let m0 = m, y = 0, x = 1;
     if (m == 1) return 0;
@@ -1239,342 +1095,195 @@
     document.getElementById('res-m').textContent = decrypted;
   }
 </script>
-<hr>
-
-<h2 class="relative group">2. Cipher &amp; Encoding (Playground)
-    <div id="2-cipher--encoding-playground" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#2-cipher--encoding-playground" aria-label="Anchor">#</a>
-    </span>
-    
-</h2>
-<p>シーザー暗号（古典）と，バイナリ/Hex（基数変換）のツール.<br>
-タブで切り替えて使用できる.</p>
 
 
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&display=swap');
 
-   
-  .cp-cipher-container {
-    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
-    max-width: 900px;
-    width: 95%;
-    margin: 2rem auto;
-    background-color: #09090b;
-    background-image: 
-      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
-    background-size: 20px 20px;
-    padding: 2.5rem;
-    border: 1px solid #333;
-    border-radius: 4px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
-    color: #e2e8f0;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-    line-height: 1.5;
+  #cyber-cipher-app {
+    --neon-pink: #ff0055; --neon-cyan: #00f3ff; --neon-green: #00ff41;
+    --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #050505;
+    --panel-bg: rgba(10,14,18,0.90);
+    --accent: #d946ef; --accent2: #22d3ee;
+    font-family: 'JetBrains Mono', monospace;
+    color: #e0e0e0;
+    width: 100%; position: relative; margin: 2rem 0; padding: 0; line-height:1.5;
   }
-  .cp-cipher-container * { box-sizing: border-box; }
-
-   
-   
-  .cp-cipher-container p,
-  .cp-cipher-container span,
-  .cp-cipher-container label,
-  .cp-cipher-container div,
-  .cp-cipher-container h2,
-  .cp-cipher-container h3,
-  .cp-cipher-container a {
-    text-decoration: none !important;
-    border-bottom: none !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    color: inherit;
-  }
-
-   
-  .cp-cipher-container::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #d946ef, #8b5cf6, #d946ef);
-    background-size: 200% 100%;
-    animation: scanline 4s linear infinite;
-    pointer-events: none;
-    z-index: 10;
-  }
-  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
-
-   
-  .cp-cipher-container .cp-header {
-    margin-bottom: 2.5rem;
-    border-bottom: 1px solid #333 !important;
-    padding-bottom: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .cp-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #d946ef !important;
-    text-shadow: 0 0 8px rgba(217, 70, 239, 0.4);
-    letter-spacing: 0.1em;
-  }
-  .cp-subtitle {
-    font-size: 0.8rem;
-    color: #64748b !important;
-  }
-
-   
-  .cp-cipher-container .cp-tabs {
-    display: flex;
-    gap: 2px;
-    margin-bottom: 2rem;
-    background: #18181b;
-    border: 1px solid #333 !important;
-    padding: 4px;
-  }
-  .cp-cipher-container .cp-tab-btn {
-    flex: 1;
-    background: transparent !important;
-    border: none !important;
-    color: #64748b !important;
-    padding: 12px;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    box-shadow: none !important;
-  }
-  .cp-tab-btn:hover { color: #e2e8f0 !important; background: rgba(255,255,255,0.05) !important; }
-  .cp-tab-btn.active {
-    background: #09090b !important;
-    color: #22d3ee !important;
-    box-shadow: inset 0 0 10px rgba(34, 211, 238, 0.1) !important;
-    border: 1px solid #333 !important;
-    text-shadow: 0 0 5px rgba(34, 211, 238, 0.3);
-  }
-
-   
-  .cp-content { display: none; animation: fadeIn 0.3s ease; }
-  .cp-content.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-  .cp-desc {
-    color: #64748b !important;
-    font-size: 0.85rem;
-    margin-bottom: 1.5rem;
-    border-left: 2px solid #333 !important;
-    padding-left: 15px;
-    line-height: 1.6;
-  }
-
-   
-  .cp-label {
-    display: block;
-    color: #22d3ee !important;
-    font-size: 0.8rem;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    letter-spacing: 0.05em;
-  }
+  #cyber-cipher-app * { box-sizing: border-box; }
   
    
-  .cp-cipher-container .cp-textarea {
-    width: 100%;
-    background: #000 !important;
-    border: 1px solid #444 !important;  
-    color: #e2e8f0 !important;
-    padding: 12px;
-    font-family: inherit;
-    font-size: 1rem;
-    border-radius: 2px;
-    resize: vertical;
-    transition: all 0.2s;
-    box-shadow: none !important;
-    min-height: 80px;
-  }
-  .cp-textarea:focus {
-    outline: none;
-    border-color: #d946ef !important;
-    box-shadow: 0 0 10px rgba(217, 70, 239, 0.2) !important;
-  }
+  #cyber-cipher-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:#050505; z-index:-2; }
+  #cyber-cipher-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-image:linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px); background-size:40px 40px; animation:cp-bg 20s linear infinite; z-index:-1; }
+  #cyber-cipher-app .cp-scan { position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1)); background-size:100% 4px; pointer-events:none; z-index:50; opacity:0.5; }
+  @keyframes cp-bg { 0%{background-position:0 0} 100%{background-position:40px 40px} }
 
    
-  .cp-cipher-container .cp-slider-group {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin: 2rem 0;
-    background: rgba(255,255,255,0.03) !important;
-    padding: 15px;
-    border: 1px solid #333 !important;
-  }
-  .cp-range {
-    flex: 1;
-    height: 4px;
-    background: #333 !important;
-    appearance: none;
-    border-radius: 2px;
-    border: none !important;
-  }
-  .cp-range::-webkit-slider-thumb {
-    appearance: none;
-    width: 20px; height: 20px;
-    background: #d946ef;
-    border-radius: 0;
-    cursor: pointer;
-    box-shadow: 0 0 8px rgba(217, 70, 239, 0.5) !important;
-    border: 1px solid #fff !important;
-  }
-  .cp-val-display {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #d946ef !important;
-    width: 50px;
-    text-align: center;
-  }
-  .cp-cipher-container .cp-action-btn {
-    background: transparent !important;
-    border: 1px solid #d946ef !important;
-    color: #d946ef !important;
-    padding: 8px 16px;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.2s;
-    box-shadow: none !important;
-  }
-  .cp-action-btn:hover {
-    background: #d946ef !important;
-    color: #000 !important;
-    box-shadow: 0 0 10px rgba(217, 70, 239, 0.4) !important;
-  }
+  #cyber-cipher-app .cp-glitch { font-family:'Orbitron',sans-serif; position:relative; color:var(--accent); text-shadow:2px 2px var(--neon-pink); font-size: 20px; font-weight:700; letter-spacing:-0.05em; margin-bottom:4px; margin-top:8px; }
+  @media(min-width:768px) { #cyber-cipher-app .cp-glitch { font-size:36px; margin-top:0; } }
+  #cyber-cipher-app .cp-glitch::before,#cyber-cipher-app .cp-glitch::after { content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%; background:transparent; }
+  #cyber-cipher-app .cp-glitch::before { left:2px; text-shadow:-1px 0 var(--neon-cyan); clip:rect(24px,550px,90px,0); animation:cp-g2 3s infinite linear alternate-reverse; }
+  #cyber-cipher-app .cp-glitch::after { left:-2px; text-shadow:-1px 0 var(--neon-pink); clip:rect(85px,550px,140px,0); animation:cp-g1 2.5s infinite linear alternate-reverse; }
+  @keyframes cp-g1 { 0%{clip:rect(14px,9999px,122px,0)} 100%{clip:rect(5px,9999px,133px,0)} }
+  @keyframes cp-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
 
    
-  .cp-cipher-container .cp-result-box {
-    background: #0e0e11 !important;
-    border: 1px solid #333 !important;
-    padding: 1.5rem;
-    position: relative;
-    min-height: 4rem;
-    margin-top: 1.5rem;
-  }
-  .cp-result-label {
-    position: absolute;
-    top: -12px; left: 15px;
-    background: #09090b !important;
-    padding: 0 8px;
-    color: #10b981 !important;  
-    font-size: 0.75rem;
-    font-weight: bold;
-  }
-  .cp-result-content {
-    color: #10b981 !important;
-    word-break: break-all;
-    line-height: 1.6;
-    font-family: monospace;
-    font-size: 1.1rem;
-  }
+  #cyber-cipher-app .cp-panel { background:var(--panel-bg); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 20px rgba(0,0,0,0.8),inset 0 0 30px rgba(0,243,255,0.05); backdrop-filter:blur(5px); clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
+
+  #cyber-cipher-app .cp-main { width:100%; max-width:900px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
+  @media(min-width:768px) { #cyber-cipher-app .cp-main { padding:0 0 32px 0; margin-top:32px; } }
 
    
-  .cp-grid { display: grid; gap: 2rem; }
+  #cyber-cipher-app .cp-hbar { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; padding:0 4px; opacity:0.8; }
+  #cyber-cipher-app .cp-sysver { font-size:9px; color:var(--accent); font-family:monospace; letter-spacing:2px; }
+  #cyber-cipher-app .cp-status { font-size:9px; color:var(--neon-green); font-family:monospace; letter-spacing:1px; display:flex; align-items:center; gap:4px; }
+  #cyber-cipher-app .cp-pulse { animation:pulse 1.5s infinite; }
+  @keyframes pulse { 0%{opacity:1;} 50%{opacity:0.3;} 100%{opacity:1;} }
+  @media(min-width:768px) { #cyber-cipher-app .cp-sysver, #cyber-cipher-app .cp-status { font-size:12px; } }
 
    
-  @media (max-width: 640px) {
-    .cp-cipher-container {
-      padding: 1.5rem 1rem;
-      width: 100%;
-      margin: 1rem 0;
-      border-left: none; border-right: none; border-radius: 0;
-    }
-    
-    .cp-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .cp-slider-group {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 15px;
-    }
-    
-    .cp-val-display { width: 100%; text-align: center; }
-    
-    .cp-action-btn { width: 100%; padding: 12px; }
-    
-     
-    .cp-textarea, .cp-range { font-size: 16px; }
+  #cyber-cipher-app .cp-corner { position:absolute; width:24px; height:24px; border-color:var(--accent); opacity:0.5; }
+  @media(min-width:768px) { #cyber-cipher-app .cp-corner { width:32px; height:32px; } }
+  #cyber-cipher-app .cp-c-tl { top:0; left:0; border-top:2px solid; border-left:2px solid; }
+  #cyber-cipher-app .cp-c-tr { top:0; right:0; border-top:2px solid; border-right:2px solid; }
+  #cyber-cipher-app .cp-c-bl { bottom:0; left:0; border-bottom:2px solid; border-left:2px solid; }
+  #cyber-cipher-app .cp-c-br { bottom:0; right:0; border-bottom:2px solid; border-right:2px solid; }
+
+   
+  #cyber-cipher-app .cp-title-sec { margin-bottom:16px; text-align:center; border-bottom:1px solid #1f2937; padding-bottom:16px; position:relative; padding-top:24px; }
+  @media(min-width:768px) { #cyber-cipher-app .cp-title-sec { text-align:left; padding-top:0; margin-bottom:24px; padding-bottom:20px; } }
+  #cyber-cipher-app .cp-sub { font-size:9px; color:#9ca3af; font-family:monospace; letter-spacing:0.1em; text-transform:uppercase; margin:0; }
+  @media(min-width:768px) { #cyber-cipher-app .cp-sub { font-size:12px; letter-spacing:0.2em; } }
+
+   
+  #cyber-cipher-app p, #cyber-cipher-app span, #cyber-cipher-app label, #cyber-cipher-app h3, #cyber-cipher-app h4, #cyber-cipher-app a {
+    text-decoration:none !important;
+    border-bottom:none !important;
+    background-image:none !important;
+    box-shadow:none !important;
   }
+  #cyber-cipher-app .cp-desc {
+    color:#64748b; font-size:12px; margin-bottom:24px; border-left:2px solid #333; padding-left:15px; line-height:1.6;
+    border-bottom:none !important; text-decoration:none !important; box-shadow:none !important; background-image:none !important;
+  }
+  @media(min-width:768px) { #cyber-cipher-app .cp-desc { font-size:13px; } }
+  #cyber-cipher-app .cp-label {
+    display:block; color:var(--accent2); font-size:11px; margin-bottom:8px; font-weight:bold; letter-spacing:0.05em;
+    border-bottom:none !important; text-decoration:none !important; box-shadow:none !important; background-image:none !important;
+  }
+
+
+   
+  #cyber-cipher-app .cp-tabs { display:flex; gap:2px; margin-bottom:24px; background:rgba(0,0,0,0.6); border:1px solid rgba(34, 211, 238, 0.2); padding:4px; border-radius:4px; }
+  #cyber-cipher-app .cp-tab-btn { flex:1; background:transparent; border:none; color:#64748b; padding:12px; font-family:inherit; font-weight:bold; cursor:pointer; transition:all 0.2s; font-size:11px; text-transform:uppercase; border-radius:2px; }
+  @media(min-width:768px) { #cyber-cipher-app .cp-tab-btn { font-size:14px; } }
+  #cyber-cipher-app .cp-tab-btn:hover { color:#e2e8f0; background:rgba(255,255,255,0.05); }
+  #cyber-cipher-app .cp-tab-btn.active { background:rgba(0,0,0,0.8); color:#22d3ee; box-shadow:inset 0 0 10px rgba(34,211,238,0.1); border:1px solid #333; text-shadow:0 0 5px rgba(34,211,238,0.3); }
+
+   
+  #cyber-cipher-app .cp-content { display:none; animation:cpFadeIn 0.3s ease; }
+  #cyber-cipher-app .cp-content.active { display:block; }
+  @keyframes cpFadeIn { from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)} }
+
+  #cyber-cipher-app .cp-textarea { width:100%; background:rgba(0,0,0,0.8) !important; border:1px solid #444 !important; color:#e2e8f0; padding:12px; font-family:inherit; font-size:14px; border-radius:2px; resize:vertical; transition:all 0.2s; min-height:80px; outline:none; }
+  @media(min-width:768px) { #cyber-cipher-app .cp-textarea { font-size:16px; } }
+  #cyber-cipher-app .cp-textarea:focus { border-color:var(--accent) !important; box-shadow:0 0 10px rgba(217,70,239,0.2) !important; }
+
+   
+  #cyber-cipher-app .cp-slider-group { display:flex; align-items:center; gap:20px; margin:24px 0; background:rgba(0,0,0,0.5); padding:15px; border:1px solid #1f2937; }
+  @media(max-width:640px) { #cyber-cipher-app .cp-slider-group { flex-direction:column; align-items:stretch; gap:15px; } }
+  #cyber-cipher-app .cp-range { flex:1; height:4px; background:#333; appearance:none; border-radius:2px; border:none; outline:none; width:100%; }
+  #cyber-cipher-app .cp-range::-webkit-slider-thumb { appearance:none; width:20px; height:20px; background:var(--accent); border-radius:0; cursor:pointer; box-shadow:0 0 8px rgba(217,70,239,0.5); border:1px solid #fff; }
+  #cyber-cipher-app .cp-val-display { font-size:24px; font-weight:bold; color:var(--accent); width:50px; text-align:center; }
+  @media(max-width:640px) { #cyber-cipher-app .cp-val-display { width:100%; text-align:center; } }
+
+   
+  #cyber-cipher-app .cp-action-btn { background:linear-gradient(90deg,transparent 0%,rgba(217,70,239,0.1) 50%,transparent 100%); border:1px solid var(--accent); color:var(--accent); padding:8px 16px; font-family:'Orbitron',sans-serif; font-weight:bold; cursor:pointer; font-size:12px; transition:all 0.3s; position:relative; overflow:hidden; }
+  #cyber-cipher-app .cp-action-btn:hover { background:var(--accent); color:#000; box-shadow:0 0 10px rgba(217,70,239,0.4); }
+  #cyber-cipher-app .cp-action-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent); transition:0.5s; }
+  #cyber-cipher-app .cp-action-btn:hover::before { left:100%; }
+  @media(max-width:640px) { #cyber-cipher-app .cp-action-btn { width:100%; padding:12px; } }
+
+   
+  #cyber-cipher-app .cp-result-box { background:rgba(0,0,0,0.6); border:1px solid #333; padding:24px; position:relative; min-height:64px; margin-top:24px; }
+  #cyber-cipher-app .cp-result-label { position:absolute; top:-12px; left:15px; background:rgba(5,5,5,1); padding:0 8px; color:var(--neon-green); font-size:11px; font-weight:bold; font-family:'Orbitron',sans-serif; letter-spacing:1px; }
+  #cyber-cipher-app .cp-result-content { color:var(--neon-green); word-break:break-all; line-height:1.6; font-family:monospace; font-size:16px; }
+  @media(min-width:768px) { #cyber-cipher-app .cp-result-content { font-size:18px; } }
+
+   
+  #cyber-cipher-app .cp-grid { display:grid; gap:24px; }
 </style>
 
-<div class="cp-cipher-container">
-  <div class="cp-header">
-    <div class="cp-title">ENCRYPTION_MODULE</div>
-    <div class="cp-subtitle">// 暗号化・データ変換</div>
-  </div>
-
-  <div class="cp-tabs">
-    <button class="cp-tab-btn active" onclick="showTab('caesar')">CAESAR_CIPHER</button>
-    <button class="cp-tab-btn" onclick="showTab('base')">BASE_CONVERTER</button>
-  </div>
-
-  
-  <div id="tab-caesar" class="cp-content active">
-    <div class="cp-desc">
-      >> シーザー暗号: 指定したキー（数）だけアルファベットをずらして置換します。<br>
-      (例: A + 1 = B)
-    </div>
-    
-    <label class="cp-label">INPUT_TEXT [平文]</label>
-    <textarea id="caesar-input" class="cp-textarea" rows="3" placeholder="HELLO WORLD"></textarea>
-    
-    <div class="cp-slider-group">
-      <label class="cp-label" style="margin:0; min-width:80px;">SHIFT_KEY</label>
-      <input type="range" id="caesar-shift" class="cp-range" min="0" max="25" value="13" oninput="updateCaesar()">
-      <span id="shift-val" class="cp-val-display">13</span>
-      <button onclick="setRot13()" class="cp-action-btn">ROT13</button>
+<div id="cyber-cipher-app">
+  <div class="cp-scan"></div>
+  <div class="cp-main">
+    <div class="cp-hbar">
+      <div class="cp-sysver">SYS.VER.3.0 // CRYPTO_ENGINE</div>
+      <div class="cp-status"><span class="cp-pulse">●</span> CIPHERS READY</div>
     </div>
 
-    <div class="cp-result-box">
-      <span class="cp-result-label">OUTPUT_RESULT [暗号文]</span>
-      <div id="caesar-output" class="cp-result-content">URYYB JBEYQ</div>
-    </div>
-  </div>
+    <div class="cp-panel" style="padding:16px; position:relative;">
+      <div class="cp-corner cp-c-tl"></div><div class="cp-corner cp-c-tr"></div>
+      <div class="cp-corner cp-c-bl"></div><div class="cp-corner cp-c-br"></div>
 
-  
-  <div id="tab-base" class="cp-content">
-    <div class="cp-desc">
-      >> データ変換: テキスト、16進数(Hex)、2進数(Binary)を相互にリアルタイム変換します。
-    </div>
-    
-    <div class="cp-grid">
-      <div>
-        <label class="cp-label">TEXT [ASCII/UTF-8]</label>
-        <textarea id="base-text" class="cp-textarea" rows="2" placeholder="Hello"></textarea>
+      <div class="cp-title-sec">
+        <h1 class="cp-title cp-glitch" data-text="ENCRYPTION_MODULE">ENCRYPTION_MODULE</h1>
+        <p class="cp-sub">Classical Cipher &amp; Data Encoding Toolkit</p>
       </div>
 
-      <div>
-        <label class="cp-label">HEX [16進数]</label>
-        <textarea id="base-hex" class="cp-textarea" rows="2" placeholder="48 65 6c 6c 6f"></textarea>
+      
+      <div class="cp-main-desc">
+        >> シーザー暗号（古典）と，バイナリ/Hex（基数変換）のツール。<br>
+        >> タブで切り替えて使用できる。
+      </div>
+      <div class="cp-tabs">
+        <button class="cp-tab-btn active" onclick="showCipherTab('caesar')">CAESAR_CIPHER</button>
+        <button class="cp-tab-btn" onclick="showCipherTab('base')">BASE_CONVERTER</button>
       </div>
 
-      <div>
-        <label class="cp-label">BINARY [2進数]</label>
-        <textarea id="base-bin" class="cp-textarea" rows="2" placeholder="01001000 ..."></textarea>
+      
+      <div id="tab-caesar" class="cp-content active">
+        <div class="cp-desc">
+          >> シーザー暗号: 指定したキー（数）だけアルファベットをずらして置換します。<br>
+          (例: A + 1 = B)
+        </div>
+        
+        <label class="cp-label">INPUT_TEXT [平文]</label>
+        <textarea id="caesar-input" class="cp-textarea" rows="3" placeholder="HELLO WORLD"></textarea>
+        
+        <div class="cp-slider-group">
+          <label class="cp-label" style="margin:0; min-width:80px;">SHIFT_KEY</label>
+          <input type="range" id="caesar-shift" class="cp-range" min="0" max="25" value="13" oninput="updateCaesar()">
+          <span id="shift-val" class="cp-val-display">13</span>
+          <button onclick="setRot13()" class="cp-action-btn">ROT13</button>
+        </div>
+
+        <div class="cp-result-box">
+          <span class="cp-result-label">OUTPUT_RESULT [暗号文]</span>
+          <div id="caesar-output" class="cp-result-content">URYYB JBEYQ</div>
+        </div>
+      </div>
+
+      
+      <div id="tab-base" class="cp-content">
+        <div class="cp-desc">
+          >> データ変換: テキスト、16進数(Hex)、2進数(Binary)を相互にリアルタイム変換します。
+        </div>
+        
+        <div class="cp-grid">
+          <div>
+            <label class="cp-label">TEXT [ASCII/UTF-8]</label>
+            <textarea id="base-text" class="cp-textarea" rows="2" placeholder="Hello"></textarea>
+          </div>
+          <div>
+            <label class="cp-label">HEX [16進数]</label>
+            <textarea id="base-hex" class="cp-textarea" rows="2" placeholder="48 65 6c 6c 6f"></textarea>
+          </div>
+          <div>
+            <label class="cp-label">BINARY [2進数]</label>
+            <textarea id="base-bin" class="cp-textarea" rows="2" placeholder="01001000 ..."></textarea>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1582,14 +1291,13 @@
 
 <script>
    
-  function showTab(name) {
-    document.querySelectorAll('.cp-content').forEach(d => d.classList.remove('active'));
-    document.querySelectorAll('.cp-tab-btn').forEach(b => b.classList.remove('active'));
+  function showCipherTab(name) {
+    document.querySelectorAll('#cyber-cipher-app .cp-content').forEach(d => d.classList.remove('active'));
+    document.querySelectorAll('#cyber-cipher-app .cp-tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
     event.target.classList.add('active');
   }
 
-   
   const cInput = document.getElementById('caesar-input');
   const cShift = document.getElementById('caesar-shift');
   const cVal = document.getElementById('shift-val');
@@ -1605,7 +1313,6 @@
       let char = text[i];
       if (char.match(/[a-z]/i)) {
         const code = text.charCodeAt(i);
-        
         if (code >= 65 && code <= 90) {
           char = String.fromCharCode(((code - 65 + shift) % 26) + 65);
         } else if (code >= 97 && code <= 122) {
@@ -1623,12 +1330,9 @@
   }
 
   cInput.addEventListener('input', updateCaesar);
-  
   if(cInput.value === "") cInput.value = "HELLO WORLD";
   updateCaesar();
 
-
-   
   const bText = document.getElementById('base-text');
   const bHex = document.getElementById('base-hex');
   const bBin = document.getElementById('base-bin');
@@ -1648,18 +1352,15 @@
     return bin.trim();
   }
 
-  
   bText.addEventListener('input', () => {
     const val = bText.value;
     bHex.value = textToHex(val);
     bBin.value = textToBin(val);
   });
 
-  
   bHex.addEventListener('input', () => {
     const val = bHex.value.replace(/\s+/g, '');
     let str = '';
-    let bin = '';
     if (val.match(/^[0-9a-fA-F]*$/)) {
       for (let i = 0; i < val.length; i += 2) {
         const code = parseInt(val.substr(i, 2), 16);
@@ -1670,7 +1371,6 @@
     }
   });
 
-  
   bBin.addEventListener('input', () => {
     const val = bBin.value.replace(/\s+/g, '');
     let str = '';

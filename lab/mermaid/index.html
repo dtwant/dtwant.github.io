@@ -15,8 +15,8 @@
 
   
   
-    <title>Mermaid Editor &middot; dt&#39;s world</title>
-    <meta name="title" content="Mermaid Editor &middot; dt&#39;s world">
+    <title>MERMAID_EDITOR &middot; dt&#39;s world</title>
+    <meta name="title" content="MERMAID_EDITOR &middot; dt&#39;s world">
   
 
   
@@ -46,7 +46,7 @@
   
   <meta property="og:url" content="https://dtwant.github.io/lab/mermaid/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="Mermaid Editor">
+  <meta property="og:title" content="MERMAID_EDITOR">
   <meta property="og:description" content="テキストからフローチャートやシーケンス図を作成">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
@@ -54,7 +54,7 @@
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Mermaid Editor">
+  <meta name="twitter:title" content="MERMAID_EDITOR">
   <meta name="twitter:description" content="テキストからフローチャートやシーケンス図を作成">
 
   
@@ -212,8 +212,8 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "articleSection": "Labs",
-    "name": "Mermaid Editor",
-    "headline": "Mermaid Editor",
+    "name": "MERMAID_EDITOR",
+    "headline": "MERMAID_EDITOR",
     "description": "テキストからフローチャートやシーケンス図を作成",
     
     "inLanguage": "en",
@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "80"
+    "wordCount": "86"
   }]
   </script>
 
@@ -778,7 +778,7 @@
   
   <li class="hidden">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/mermaid/"
-      >Mermaid Editor</a
+      >MERMAID_EDITOR</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -787,7 +787,7 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        Mermaid Editor
+        MERMAID_EDITOR
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
@@ -795,224 +795,173 @@
 フローチャート、シーケンス図、ガントチャートなどが作成できる.</p>
 
 
-
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
+
+  #cyber-mermaid-app {
+    --neon-pink: #ff0055; --neon-cyan: #00f3ff; --neon-green: #00ff41;
+    --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #050505;
+    --panel-bg: rgba(10,14,18,0.90);
+    font-family: 'JetBrains Mono', monospace; color: #e0e0e0;
+    background-color: var(--bg-dark);
+    background-image: linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px);
+    background-size: 40px 40px; animation: mm-bg 20s linear infinite;
+    min-height: calc(100vh - 100px); width: 100%; position: relative; z-index: 10; margin: 0; padding: 0;
+  }
+  #cyber-mermaid-app * { box-sizing: border-box; }
+  #cyber-mermaid-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:#050505; z-index:-2; }
+  #cyber-mermaid-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-image:linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px); background-size:40px 40px; animation:mm-bg 20s linear infinite; z-index:-1; }
+  #cyber-mermaid-app .mm-scan { position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1)); background-size:100% 4px; pointer-events:none; z-index:50; opacity:0.5; }
+  @keyframes mm-bg { 0%{background-position:0 0}100%{background-position:40px 40px} }
 
    
-  .cp-mermaid-container {
-    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
-    max-width: 1000px;
-    margin: 2rem auto;
-    background-color: #09090b;
-    background-image: 
-      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
-    background-size: 20px 20px;
-    padding: 2rem;
-    border: 1px solid #333;
-    border-radius: 4px;
-    position: relative;
-    box-sizing: border-box;
-    line-height: 1.5;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
-    color: #e2e8f0;
-  }
-  .cp-mermaid-container * { box-sizing: border-box; }
+  #cyber-mermaid-app .mm-ref { margin-top:24px; padding:20px; background:rgba(0,0,0,0.6); border:1px solid #1f2937; border-left:2px solid var(--neon-cyan); }
+  #cyber-mermaid-app .mm-ref h3 { color:var(--neon-cyan); font-family:'Orbitron',sans-serif; font-size:14px; margin-bottom:16px; letter-spacing:1px; }
+  #cyber-mermaid-app .mm-ref h4 { color:#94a3b8; font-size:12px; margin:16px 0 8px; text-transform:uppercase; letter-spacing:0.5px; }
+  #cyber-mermaid-app .mm-ref h4:first-of-type { margin-top:0; }
+  #cyber-mermaid-app .mm-ref pre { background:rgba(0,0,0,0.8); border:1px solid #333; padding:12px; font-size:12px; color:#9ca3af; overflow-x:auto; margin:0 0 8px; white-space:pre; }
+  @media(min-width:768px) { #cyber-mermaid-app .mm-ref pre { font-size:13px; } }
+
+  #cyber-mermaid-app .mm-glitch { font-family:'Orbitron',sans-serif; position:relative; color:var(--neon-cyan); text-shadow:2px 2px var(--neon-pink); }
+  #cyber-mermaid-app .mm-glitch::before,#cyber-mermaid-app .mm-glitch::after { content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%; background:transparent; }
+  #cyber-mermaid-app .mm-glitch::before { left:2px; text-shadow:-1px 0 var(--neon-cyan); clip:rect(24px,550px,90px,0); animation:mm-g2 3s infinite linear alternate-reverse; }
+  #cyber-mermaid-app .mm-glitch::after { left:-2px; text-shadow:-1px 0 var(--neon-pink); clip:rect(85px,550px,140px,0); animation:mm-g1 2.5s infinite linear alternate-reverse; }
+  @keyframes mm-g1 { 0%{clip:rect(14px,9999px,122px,0)} 5%{clip:rect(82px,9999px,92px,0)} 100%{clip:rect(5px,9999px,133px,0)} }
+  @keyframes mm-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
+
+  #cyber-mermaid-app .mm-panel { background:var(--panel-bg); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 20px rgba(0,0,0,0.8),inset 0 0 30px rgba(0,243,255,0.05); backdrop-filter:blur(5px); }
+  #cyber-mermaid-app .mm-clip { clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
+
+  #cyber-mermaid-app .mm-main { width:100%; max-width:1100px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
+  @media(min-width:768px) { #cyber-mermaid-app .mm-main { padding:0 0 32px 0; margin-top:32px; } }
 
    
-   
-  .cp-mermaid-container h3,
-  .cp-mermaid-container p,
-  .cp-mermaid-container div,
-  .cp-mermaid-container span {
-    text-decoration: none !important;
-    border-bottom: none !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    color: inherit;
-  }
+  #cyber-mermaid-app .mm-hbar { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; padding:0 4px; opacity:0.8; }
+  #cyber-mermaid-app .mm-sysver { font-size:9px; color:var(--neon-cyan); font-family:monospace; letter-spacing:2px; }
+  @media(min-width:768px) { #cyber-mermaid-app .mm-sysver { font-size:12px; } }
+  #cyber-mermaid-app .mm-status { font-size:9px; font-family:monospace; display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:4px; border:1px solid rgba(0,255,65,0.3); color:#4ade80; white-space:nowrap; }
+  @media(min-width:768px) { #cyber-mermaid-app .mm-status { font-size:12px; padding:4px 12px; gap:8px; } }
+  #cyber-mermaid-app .mm-pulse { animation:mm-p 1.5s ease-in-out infinite; }
+  @keyframes mm-p { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
    
-  .cp-mermaid-container::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #22d3ee, #10b981, #22d3ee);
-    background-size: 200% 100%;
-    animation: scanline 4s linear infinite;
-    pointer-events: none;
-    z-index: 10;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-  }
-  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+  #cyber-mermaid-app .mm-title-sec { margin-bottom:16px; text-align:center; border-bottom:1px solid #1f2937; padding-bottom:16px; position:relative; padding-top:24px; }
+  @media(min-width:768px) { #cyber-mermaid-app .mm-title-sec { text-align:left; padding-top:0; margin-bottom:24px; padding-bottom:20px; } }
+  #cyber-mermaid-app .mm-title { font-size:20px; font-weight:700; letter-spacing:-0.05em; margin-bottom:4px; margin-top:8px; }
+  @media(min-width:768px) { #cyber-mermaid-app .mm-title { font-size:40px; margin-top:0; } }
+  #cyber-mermaid-app .mm-sub { font-size:9px; color:#9ca3af; font-family:monospace; letter-spacing:0.1em; text-transform:uppercase; }
+  @media(min-width:768px) { #cyber-mermaid-app .mm-sub { font-size:12px; letter-spacing:0.2em; } }
 
    
-  .cp-header {
-    border-bottom: 1px solid #333 !important;
-    padding-bottom: 1rem;
-    margin-bottom: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .cp-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #22d3ee !important;  
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
-  }
-  .cp-subtitle {
-    font-size: 0.7rem;
-    color: #64748b !important;
-  }
+  #cyber-mermaid-app .mm-workspace { display:flex; flex-direction:column; gap:16px; }
+  @media(min-width:900px) { #cyber-mermaid-app .mm-workspace { flex-direction:row; } }
+
+  #cyber-mermaid-app .mm-pane { flex:1; display:flex; flex-direction:column; min-width:0; }
+
+  #cyber-mermaid-app .mm-pane-header { background:rgba(0,0,0,0.8); border:1px solid #1f2937; border-bottom:none; padding:8px 12px; font-size:9px; color:var(--neon-cyan); letter-spacing:2px; font-family:'Orbitron',sans-serif; display:flex; justify-content:space-between; align-items:center; }
+  @media(min-width:768px) { #cyber-mermaid-app .mm-pane-header { font-size:11px; } }
+
+  #cyber-mermaid-app .mm-textarea { width:100%; min-height:300px; background:rgba(0,0,0,0.8); border:1px solid #333; color:#e0e0e0; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.6; padding:16px; resize:vertical; outline:none; transition:all 0.3s; }
+  @media(min-width:768px) { #cyber-mermaid-app .mm-textarea { min-height:400px; font-size:14px; } }
+  #cyber-mermaid-app .mm-textarea:focus { border-color:var(--neon-cyan); box-shadow:inset 0 0 10px rgba(0,243,255,0.1); }
+  #cyber-mermaid-app .mm-textarea::-webkit-scrollbar { width:6px; }
+  #cyber-mermaid-app .mm-textarea::-webkit-scrollbar-track { background:rgba(0,0,0,0.5); }
+  #cyber-mermaid-app .mm-textarea::-webkit-scrollbar-thumb { background:var(--neon-cyan); }
+
+  #cyber-mermaid-app .mm-preview-box { width:100%; min-height:300px; background:rgba(14,14,17,0.95); border:1px solid #333; padding:20px; display:flex; justify-content:center; align-items:center; overflow:auto; position:relative; }
+  @media(min-width:768px) { #cyber-mermaid-app .mm-preview-box { min-height:400px; } }
+  #cyber-mermaid-app .mm-preview-box svg { max-width:100%; height:auto; }
 
    
-  .cp-editor-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  @media (min-width: 768px) {
-    .cp-editor-layout {
-      flex-direction: row;
-      align-items: flex-start;
-    }
-  }
-
-  .cp-pane {
-    flex: 1;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding-bottom: 10px; 
-  }
+  #cyber-mermaid-app .mm-actions { display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+  #cyber-mermaid-app .mm-btn { background:linear-gradient(90deg,transparent 0%,rgba(0,243,255,0.1) 50%,transparent 100%); border:1px solid var(--neon-cyan); color:var(--neon-cyan); font-family:'Orbitron',sans-serif; font-size:12px; font-weight:700; padding:12px 24px; cursor:pointer; transition:all 0.3s; letter-spacing:1px; position:relative; overflow:hidden; flex:1; min-width:120px; text-align:center; }
+  @media(min-width:768px) { #cyber-mermaid-app .mm-btn { font-size:13px; letter-spacing:2px; } }
+  #cyber-mermaid-app .mm-btn:hover { background:var(--neon-cyan); color:#000; box-shadow:0 0 20px var(--neon-cyan); }
+  #cyber-mermaid-app .mm-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent); transition:0.5s; }
+  #cyber-mermaid-app .mm-btn:hover::before { left:100%; }
+  #cyber-mermaid-app .mm-btn-green { border-color:var(--neon-green); color:var(--neon-green); background:linear-gradient(90deg,transparent 0%,rgba(0,255,65,0.1) 50%,transparent 100%); }
+  #cyber-mermaid-app .mm-btn-green:hover { background:var(--neon-green); color:#000; box-shadow:0 0 20px var(--neon-green); }
 
    
-  .cp-textarea {
-    width: 100%;
-    min-height: 350px;
-    height: auto;
-    background: #000 !important;
-    border: 1px solid #444 !important;  
-    color: #e2e8f0 !important;
-    padding: 15px;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.9rem;
-    border-radius: 2px;
-    resize: vertical;
-    transition: border-color 0.2s;
-    box-shadow: none !important;
-  }
-  .cp-textarea:focus {
-    outline: none;
-    border-color: #22d3ee !important;
-    box-shadow: 0 0 10px rgba(34, 211, 238, 0.2) !important;
-  }
+  #cyber-mermaid-app .mm-error { color:#ef4444; font-weight:bold; font-size:11px; margin-top:8px; display:none; border-left:2px solid #ef4444; padding-left:10px; white-space:pre-wrap; }
 
    
-  .cp-preview-box {
-    width: 100%;
-    min-height: 350px;
-    background: #0e0e11 !important;
-    border: 1px dashed #444 !important;
-    border-radius: 2px;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: auto;
-    position: relative;
-  }
-  
-   
-  .cp-btn {
-    background: transparent !important;
-    border: 1px solid #22d3ee !important;  
-    color: #22d3ee !important;
-    padding: 0.6rem 1.2rem;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-    transition: all 0.2s;
-    box-shadow: none !important;
-    display: inline-block;
-  }
-  .cp-btn:hover {
-    background: #22d3ee !important;
-    color: #000 !important;
-    box-shadow: 0 0 10px rgba(34, 211, 238, 0.5) !important;
-  }
-  
-  .cp-btn-secondary {
-    border-color: #10b981 !important;  
-    color: #10b981 !important;
-    display: none;
-    margin-top: 10px;
-  }
-  .cp-btn-secondary:hover {
-    background: #10b981 !important;
-    color: #000 !important;
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5) !important;
-  }
-
-   
-  .cp-error {
-    color: #ef4444 !important;
-    font-weight: bold;
-    font-size: 0.8rem;
-    margin-top: 10px;
-    display: none;
-    border-left: 2px solid #ef4444 !important;
-    padding-left: 10px;
-    white-space: pre-wrap;
-  }
-
-   
-  .cp-preview-box svg {
-    max-width: 100%;
-    height: auto;
-  }
+  #cyber-mermaid-app .mm-corner { position:absolute; width:24px; height:24px; border-color:var(--neon-cyan); opacity:0.5; }
+  @media(min-width:768px) { #cyber-mermaid-app .mm-corner { width:32px; height:32px; } }
+  #cyber-mermaid-app .mm-c-tl { top:0; left:0; border-top:2px solid; border-left:2px solid; }
+  #cyber-mermaid-app .mm-c-tr { top:0; right:0; border-top:2px solid; border-right:2px solid; }
+  #cyber-mermaid-app .mm-c-bl { bottom:0; left:0; border-bottom:2px solid; border-left:2px solid; }
+  #cyber-mermaid-app .mm-c-br { bottom:0; right:0; border-bottom:2px solid; border-right:2px solid; }
 </style>
 
-<div class="cp-mermaid-container">
-  <div class="cp-header">
-    <div class="cp-title">DIAGRAM_EDITOR</div>
-    <div class="cp-subtitle">MERMAID.JS INTEGRATION</div>
-  </div>
+<div id="cyber-mermaid-app">
+  <div class="mm-scan"></div>
+  <div class="mm-main">
+    <div class="mm-hbar">
+      <div class="mm-sysver">SYS.VER.2.0 // DIAGRAM_ENGINE</div>
+      <div class="mm-status" id="mmStatus"><span class="mm-pulse">●</span> SYSTEM READY</div>
+    </div>
 
-  <div class="cp-editor-layout">
-    
-    <div class="cp-pane">
-      <div style="font-size:0.75rem; color:#64748b; margin-bottom:5px;">INPUT_SOURCE [CODE]</div>
-<textarea id="mermaidCode" class="cp-textarea" spellcheck="false">
+    <div class="mm-panel mm-clip" style="padding:16px; position:relative;">
+      <div class="mm-corner mm-c-tl"></div><div class="mm-corner mm-c-tr"></div>
+      <div class="mm-corner mm-c-bl"></div><div class="mm-corner mm-c-br"></div>
+
+      <div class="mm-title-sec">
+        <h1 class="mm-title mm-glitch" data-text="MERMAID_EDITOR">MERMAID_EDITOR</h1>
+        <p class="mm-sub">Diagram Visualization Engine — Mermaid.js Integration</p>
+      </div>
+
+      <div class="mm-workspace">
+        
+        <div class="mm-pane">
+          <div class="mm-pane-header">
+            <span>INPUT_SOURCE [CODE]</span>
+          </div>
+<textarea id="mermaidCode" class="mm-textarea" spellcheck="false">
 graph TD
     A[START] --> B{CHECK_SYSTEM}
     B -- OK --> C[PROCEED]
     B -- FAIL --> D[DEBUG_MODE]
     D --> B
 </textarea>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-        <button class="cp-btn" id="renderBtn">RENDER_GRAPH</button>
-      </div>
-      <div id="errorDisplay" class="cp-error"></div>
-    </div>
+          <div id="mmErrorDisplay" class="mm-error"></div>
+        </div>
 
-    
-    <div class="cp-pane">
-      <div style="font-size:0.75rem; color:#64748b; margin-bottom:5px;">VISUAL_OUTPUT [SVG]</div>
-      <div id="mermaidPreview" class="cp-preview-box">
-        <span style="color:#444; font-size:0.8rem;">// AWAITING_RENDER...</span>
+        
+        <div class="mm-pane">
+          <div class="mm-pane-header">
+            <span>VISUAL_OUTPUT [SVG]</span>
+          </div>
+          <div id="mermaidPreview" class="mm-preview-box">
+            <span style="color:#444; font-size:0.8rem;">// AWAITING_RENDER...</span>
+          </div>
+        </div>
       </div>
-      <button class="cp-btn cp-btn-secondary" id="downloadBtn">DOWNLOAD_SVG</button>
+
+      <div class="mm-actions">
+        <button class="mm-btn mm-btn-green" id="mmRenderBtn">RENDER_GRAPH</button>
+        <button class="mm-btn" id="mmDownloadBtn" style="display:none;">DOWNLOAD_SVG</button>
+      </div>
+
+      
+      <div class="mm-ref">
+        <h3>>> SYNTAX_REFERENCE [記法例]</h3>
+        <h4>Flowchart</h4>
+        <pre>graph TD
+    A[開始] --> B{条件}
+    B -- Yes --> C[処理1]
+    B -- No --> D[処理2]</pre>
+        <h4>Sequence Diagram</h4>
+        <pre>sequenceDiagram
+    Alice->>John: Hello John, how are you?
+    John-->>Alice: Great!</pre>
+        <h4>Gantt Chart</h4>
+        <pre>gantt
+    title プロジェクト計画
+    section 開発
+    設計 :a1, 2025-01-01, 30d
+    実装 :after a1, 20d</pre>
+      </div>
     </div>
   </div>
 </div>
@@ -1020,55 +969,51 @@ graph TD
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
 
-  
-  mermaid.initialize({ 
+  mermaid.initialize({
     startOnLoad: false,
     theme: 'dark',
     securityLevel: 'loose',
     fontFamily: 'JetBrains Mono, monospace'
   });
 
-  const renderBtn = document.getElementById('renderBtn');
-  const downloadBtn = document.getElementById('downloadBtn');
+  const renderBtn = document.getElementById('mmRenderBtn');
+  const downloadBtn = document.getElementById('mmDownloadBtn');
   const input = document.getElementById('mermaidCode');
   const output = document.getElementById('mermaidPreview');
-  const errorDisplay = document.getElementById('errorDisplay');
+  const errorDisplay = document.getElementById('mmErrorDisplay');
+  const statusEl = document.getElementById('mmStatus');
 
-  
+  function setStatus(text, color) {
+    statusEl.innerHTML = '<span class="mm-pulse" style="color:' + color + '">●</span> ' + text;
+  }
+
   async function renderMermaid() {
     const code = input.value;
     errorDisplay.style.display = 'none';
-    output.style.opacity = '0.5'; 
-    
-    try {
-      
-      if (!await mermaid.parse(code)) {
-        throw new Error("Syntax Error");
-      }
+    output.style.opacity = '0.5';
+    setStatus('RENDERING...', '#fcee0a');
 
-      
+    try {
       const id = 'mermaid-graph-' + Date.now();
       const { svg } = await mermaid.render(id, code);
-      
       output.innerHTML = svg;
       output.style.opacity = '1';
       downloadBtn.style.display = 'inline-block';
-
+      setStatus('RENDER COMPLETE', '#00ff41');
     } catch (error) {
       errorDisplay.style.display = 'block';
       errorDisplay.innerText = ">> SYNTAX_ERROR: " + error.message;
       output.style.opacity = '1';
+      setStatus('SYNTAX ERROR', '#ff0055');
       console.error(error);
     }
   }
 
-  
   function downloadSVG() {
     const svgData = output.innerHTML;
     const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    
     link.href = url;
     link.download = "diagram_cyberpunk.svg";
     document.body.appendChild(link);
@@ -1076,67 +1021,11 @@ graph TD
     document.body.removeChild(link);
   }
 
-  
   renderBtn.addEventListener('click', renderMermaid);
   downloadBtn.addEventListener('click', downloadSVG);
-
-  
   setTimeout(renderMermaid, 500);
 </script>
-<hr>
 
-<h3 class="relative group">記法例
-    <div id="記法例" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%a8%98%e6%b3%95%e4%be%8b" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-
-<h4 class="relative group">フローチャート (Flowchart)
-    <div id="フローチャート-flowchart" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e3%83%95%e3%83%ad%e3%83%bc%e3%83%81%e3%83%a3%e3%83%bc%e3%83%88-flowchart" aria-label="Anchor">#</a>
-    </span>
-    
-</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">graph TD
-</span></span><span class="line"><span class="cl">    A[開始] --&gt; B{条件}
-</span></span><span class="line"><span class="cl">    B -- Yes --&gt; C[処理1]
-</span></span><span class="line"><span class="cl">    B -- No --&gt; D[処理2]
-</span></span></code></pre></div>
-<h4 class="relative group">シーケンス図 (Sequence Diagram)
-    <div id="シーケンス図-sequence-diagram" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e3%82%b7%e3%83%bc%e3%82%b1%e3%83%b3%e3%82%b9%e5%9b%b3-sequence-diagram" aria-label="Anchor">#</a>
-    </span>
-    
-</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">sequenceDiagram
-</span></span><span class="line"><span class="cl">    Alice-&gt;&gt;John: Hello John, how are you?
-</span></span><span class="line"><span class="cl">    John--&gt;&gt;Alice: Great!
-</span></span></code></pre></div>
-<h4 class="relative group">ガントチャート (Gantt)
-    <div id="ガントチャート-gantt" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e3%82%ac%e3%83%b3%e3%83%88%e3%83%81%e3%83%a3%e3%83%bc%e3%83%88-gantt" aria-label="Anchor">#</a>
-    </span>
-    
-</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">gantt
-</span></span><span class="line"><span class="cl">    title プロジェクト計画
-</span></span><span class="line"><span class="cl">    section 開発
-</span></span><span class="line"><span class="cl">    設計 :a1, 2025-01-01, 30d
-</span></span><span class="line"><span class="cl">    実装 :after a1, 20d
-</span></span></code></pre></div>
     </section>
     <footer class="pt-8">
       

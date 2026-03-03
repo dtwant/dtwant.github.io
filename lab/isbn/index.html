@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "47"
+    "wordCount": "46"
   }]
   </script>
 
@@ -792,256 +792,275 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       
-<script src="https://cdn.tailwindcss.com"></script>
 
 
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
 
-<div id="cyber-isbn-app" class="text-[#e0e0e0] font-sans antialiased w-full relative z-10 m-0 p-0" style="min-height: calc(100vh - 100px);">
-    <style>
-        #cyber-isbn-app {
-            --neon-pink: #ff0055;
-            --neon-cyan: #00f3ff;
-            --neon-green: #00ff41;
-            --neon-yellow: #fcee0a;
-            --bg-dark: #050505;
-            --panel-bg: rgba(10, 14, 18, 0.90);
-            font-family: 'JetBrains Mono', 'Zen Kaku Gothic New', sans-serif;
-            background-color: var(--bg-dark);
-            background-image: 
-                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: bg-scroll 20s linear infinite;
-        }
+  #cyber-isbn-app {
+    --neon-pink: #ff0055; --neon-cyan: #00f3ff; --neon-green: #00ff41;
+    --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #050505;
+    --panel-bg: rgba(10,14,18,0.90);
+    font-family: 'JetBrains Mono', 'Zen Kaku Gothic New', sans-serif; color: #e0e0e0;
+    background-color: var(--bg-dark);
+    background-image: linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px);
+    background-size: 40px 40px; animation: isbn-bg 20s linear infinite;
+    min-height: calc(100vh - 100px); width: 100%; position: relative; z-index: 10; margin: 0; padding: 0;
+  }
+  #cyber-isbn-app * { box-sizing: border-box; margin: 0; }
+  #cyber-isbn-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:#050505; z-index:-2; }
+  #cyber-isbn-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-image:linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px); background-size:40px 40px; animation:isbn-bg 20s linear infinite; z-index:-1; }
+  #cyber-isbn-app .isbn-scan { position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1)); background-size:100% 4px; pointer-events:none; z-index:50; opacity:0.6; }
+  @keyframes isbn-bg { 0%{background-position:0 0}100%{background-position:40px 40px} }
 
-        #cyber-isbn-app::before {
-            content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #050505; z-index: -2;
-        }
-        
-        #cyber-isbn-app::after {
-            content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-image: linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px; animation: bg-scroll 20s linear infinite; z-index: -1;
-        }
+   
+  #cyber-isbn-app .isbn-glitch { font-family:'Orbitron',sans-serif; position:relative; color:var(--neon-cyan); text-shadow:2px 2px var(--neon-pink); }
+  #cyber-isbn-app .isbn-glitch::before,#cyber-isbn-app .isbn-glitch::after { content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%; background:transparent; }
+  #cyber-isbn-app .isbn-glitch::before { left:2px; text-shadow:-1px 0 var(--neon-pink); clip:rect(24px,550px,90px,0); animation:isbn-g2 3s infinite linear alternate-reverse; }
+  #cyber-isbn-app .isbn-glitch::after { left:-2px; text-shadow:-1px 0 var(--neon-green); clip:rect(85px,550px,140px,0); animation:isbn-g1 2.5s infinite linear alternate-reverse; }
+  @keyframes isbn-g1 { 0%{clip:rect(14px,9999px,122px,0)} 5%{clip:rect(82px,9999px,92px,0)} 100%{clip:rect(5px,9999px,133px,0)} }
+  @keyframes isbn-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
 
-        #cyber-isbn-app .scanline-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
-            background-size: 100% 4px; pointer-events: none; z-index: 50; opacity: 0.6;
-        }
+   
+  #cyber-isbn-app .isbn-panel { background:var(--panel-bg); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 20px rgba(0,0,0,0.8),inset 0 0 30px rgba(0,243,255,0.05); backdrop-filter:blur(5px); clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
 
-        @keyframes bg-scroll { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+  #cyber-isbn-app .isbn-main { width:100%; max-width:900px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-main { padding:0 0 32px 0; margin-top:32px; } }
 
-        #cyber-isbn-app .clip-corner { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%); }
-        #cyber-isbn-app .clip-corner-top { clip-path: polygon(15px 0, 100% 0, 100% 100%, 0 100%, 0 15px); }
+   
+  #cyber-isbn-app .isbn-hbar { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; padding:0 4px; opacity:0.8; }
+  #cyber-isbn-app .isbn-sysver { font-size:9px; color:var(--neon-cyan); font-family:monospace; letter-spacing:2px; white-space:nowrap; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-sysver { font-size:12px; } }
+  #cyber-isbn-app .isbn-status { font-size:9px; font-family:monospace; display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:4px; border:1px solid rgba(0,255,65,0.3); color:#4ade80; white-space:nowrap; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-status { font-size:12px; padding:4px 12px; gap:8px; } }
+  #cyber-isbn-app .isbn-pulse { animation:isbn-p 1.5s ease-in-out infinite; }
+  @keyframes isbn-p { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-        #cyber-isbn-app .glitch-text {
-            font-family: 'Orbitron', sans-serif; position: relative; color: var(--neon-cyan); text-shadow: 2px 2px var(--neon-pink);
-        }
-        #cyber-isbn-app .glitch-text::before, #cyber-isbn-app .glitch-text::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent;
-        }
-        #cyber-isbn-app .glitch-text::before {
-            left: 2px; text-shadow: -1px 0 var(--neon-pink); clip: rect(24px, 550px, 90px, 0); animation: glitch-anim-2 3s infinite linear alternate-reverse;
-        }
-        #cyber-isbn-app .glitch-text::after {
-            left: -2px; text-shadow: -1px 0 var(--neon-green); clip: rect(85px, 550px, 140px, 0); animation: glitch-anim 2.5s infinite linear alternate-reverse;
-        }
-        @keyframes glitch-anim { 0% { clip: rect(14px, 9999px, 122px, 0); } 5% { clip: rect(82px, 9999px, 92px, 0); } 100% { clip: rect(5px, 9999px, 133px, 0); } }
-        @keyframes glitch-anim-2 { 0% { clip: rect(65px, 9999px, 100px, 0); } 100% { clip: rect(10px, 9999px, 111px, 0); } }
+   
+  #cyber-isbn-app .isbn-corner { position:absolute; width:24px; height:24px; border-color:var(--neon-cyan); opacity:0.5; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-corner { width:32px; height:32px; } }
+  #cyber-isbn-app .isbn-c-tl { top:0; left:0; border-top:2px solid; border-left:2px solid; }
+  #cyber-isbn-app .isbn-c-tr { top:0; right:0; border-top:2px solid; border-right:2px solid; }
+  #cyber-isbn-app .isbn-c-bl { bottom:0; left:0; border-bottom:2px solid; border-left:2px solid; }
+  #cyber-isbn-app .isbn-c-br { bottom:0; right:0; border-bottom:2px solid; border-right:2px solid; }
 
-        #cyber-isbn-app .cyber-panel {
-            background: var(--panel-bg); border: 1px solid rgba(0, 243, 255, 0.3);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 243, 255, 0.05); backdrop-filter: blur(5px);
-        }
+   
+  #cyber-isbn-app .isbn-title-sec { margin-bottom:16px; text-align:center; border-bottom:1px solid #1f2937; padding-bottom:16px; position:relative; padding-top:24px; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-title-sec { text-align:left; padding-top:0; margin-bottom:24px; padding-bottom:20px; } }
+  #cyber-isbn-app .isbn-title { font-size:24px; font-weight:700; letter-spacing:-0.05em; margin-bottom:4px; margin-top:8px; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-title { font-size:48px; margin-top:0; } }
+  #cyber-isbn-app .isbn-sub { font-size:10px; color:#9ca3af; font-family:monospace; letter-spacing:0.1em; text-transform:uppercase; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-sub { font-size:14px; letter-spacing:0.2em; } }
 
-        #cyber-isbn-app .input-wrapper { background: rgba(0, 0, 0, 0.7); border: 1px solid #444; transition: all 0.3s; }
-        #cyber-isbn-app .input-wrapper:focus-within { border-color: var(--neon-green); box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); }
-        #cyber-isbn-app .input-area { font-size: 1rem; }
-        @media (min-width: 768px) { #cyber-isbn-app .input-area { font-size: 1.25rem; } }
+   
+  #cyber-isbn-app .isbn-input-wrap { background:rgba(0,0,0,0.7); border:1px solid #444; transition:all 0.3s; display:flex; align-items:center; padding:4px 12px; margin-bottom:8px; clip-path:polygon(15px 0,100% 0,100% 100%,0 100%,0 15px); }
+  #cyber-isbn-app .isbn-input-wrap:focus-within { border-color:var(--neon-green); box-shadow:0 0 20px rgba(0,255,65,0.2); }
+  #cyber-isbn-app .isbn-prompt { color:var(--neon-pink); font-weight:bold; font-size:14px; margin-right:8px; font-family:monospace; animation:isbn-p 1.5s ease-in-out infinite; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-prompt { font-size:18px; } }
+  #cyber-isbn-app .isbn-input { width:100%; background:transparent; border:none; color:#4ade80; padding:12px 0; font-family:'JetBrains Mono',monospace; font-size:16px; outline:none; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-input { font-size:20px; padding:20px 0; } }
+  #cyber-isbn-app .isbn-input::placeholder { color:#374151; }
+  #cyber-isbn-app .isbn-input-info { display:flex; justify-content:space-between; padding:0 4px; margin-bottom:24px; }
+  #cyber-isbn-app .isbn-input-info span { font-size:9px; font-family:monospace; color:#6b7280; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-input-info span { font-size:10px; } }
+  #cyber-isbn-app .isbn-mode { color:var(--neon-pink) !important; font-weight:bold; }
 
-        #cyber-isbn-app .execute-btn {
-            background: linear-gradient(90deg, transparent 0%, rgba(0, 255, 65, 0.1) 50%, transparent 100%);
-            border: 1px solid var(--neon-green); color: var(--neon-green); font-family: 'Orbitron', sans-serif;
-            letter-spacing: 2px; transition: all 0.3s; position: relative; overflow: hidden;
-            font-size: 1rem;
-        }
-        @media (min-width: 768px) { #cyber-isbn-app .execute-btn { letter-spacing: 3px; font-size: 1.25rem; } }
-        #cyber-isbn-app .execute-btn:hover:not(:disabled) { background: var(--neon-green); color: #000; box-shadow: 0 0 25px var(--neon-green); }
-        #cyber-isbn-app .execute-btn::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent); transition: 0.5s;
-        }
-        #cyber-isbn-app .execute-btn:hover::before { left: 100%; }
-        #cyber-isbn-app .execute-btn:disabled { border-color: #333; color: #444; background: transparent; cursor: not-allowed; }
+   
+  #cyber-isbn-app .isbn-mobile-btn { display:block; color:var(--neon-cyan); padding:8px; border:1px solid rgba(0,243,255,0.3); background:rgba(0,243,255,0.1); border-radius:4px; margin-left:4px; flex-shrink:0; cursor:pointer; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-mobile-btn { display:none; } }
+  #cyber-isbn-app .isbn-mobile-btn svg { width:24px; height:24px; }
 
-        #cyber-isbn-app .cover-image-container {
-            border: 1px solid #444; background: #111; display: flex; align-items: center; justify-content: center;
-            position: relative; box-shadow: 0 0 15px rgba(0, 0, 0, 0.8); flex-shrink: 0;
-            width: 120px; height: 180px; margin: 0 auto;
-        }
-        @media (min-width: 768px) { #cyber-isbn-app .cover-image-container { width: 160px; height: 230px; margin: 0; } }
+   
+  #cyber-isbn-app .isbn-exec-btn { display:none; width:100%; padding:16px; margin-bottom:32px; font-family:'Orbitron',sans-serif; font-weight:700; font-size:16px; letter-spacing:2px; background:linear-gradient(90deg,transparent 0%,rgba(0,255,65,0.1) 50%,transparent 100%); border:1px solid var(--neon-green); color:var(--neon-green); cursor:pointer; transition:all 0.3s; position:relative; overflow:hidden; clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-exec-btn { display:block; font-size:20px; letter-spacing:3px; } }
+  #cyber-isbn-app .isbn-exec-btn:hover:not(:disabled) { background:var(--neon-green); color:#000; box-shadow:0 0 25px var(--neon-green); }
+  #cyber-isbn-app .isbn-exec-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent); transition:0.5s; }
+  #cyber-isbn-app .isbn-exec-btn:hover::before { left:100%; }
+  #cyber-isbn-app .isbn-exec-btn:disabled { border-color:#333; color:#444; background:transparent; cursor:not-allowed; }
 
-        #cyber-isbn-app .cover-image { max-width: 100%; max-height: 100%; object-fit: contain; }
-        #cyber-isbn-app .terminal-log { font-family: 'JetBrains Mono', monospace; overflow-y: auto; }
-        
-        #cyber-isbn-app .loader {
-            display: none; width: 40px; height: 40px; border: 3px solid rgba(0, 243, 255, 0.3);
-            border-radius: 50%; border-top-color: #00f3ff; animation: spin 1s ease-in-out infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        #cyber-isbn-app .detail-row {
-            display: flex; flex-direction: column; border-bottom: 1px dashed rgba(255,255,255,0.1);
-            padding-bottom: 0.4rem; margin-bottom: 0.5rem; word-break: break-word;
-        }
-        #cyber-isbn-app .detail-label {
-            font-size: 0.65rem; color: var(--neon-cyan); text-transform: uppercase;
-            font-family: 'Orbitron', sans-serif; margin-bottom: 0.1rem;
-        }
-        #cyber-isbn-app .detail-value { font-size: 0.9rem; color: #fff; line-height: 1.3; }
-        @media (min-width: 768px) { #cyber-isbn-app .detail-value { font-size: 1rem; } }
-        
-        .data-hidden { display: none !important; }
-        .data-flex { display: flex !important; }
-        .data-block { display: block !important; }
+   
+  #cyber-isbn-app .isbn-output-sec { position:relative; margin-top:40px; margin-bottom:16px; }
+  #cyber-isbn-app .isbn-output-label { position:absolute; top:-12px; left:8px; background:rgba(0,0,0,0.9); padding:0 8px; font-size:10px; color:var(--neon-cyan); font-weight:bold; text-transform:uppercase; letter-spacing:0.15em; font-family:'Orbitron',sans-serif; border:1px solid rgba(0,243,255,0.2); backdrop-filter:blur(5px); transform:skewX(12deg); z-index:20; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-output-label { font-size:12px; left:16px; top:-14px; } }
 
-         
-        #cyber-isbn-app .terminal-log::-webkit-scrollbar { width: 6px; }
-        #cyber-isbn-app .terminal-log::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); }
-        #cyber-isbn-app .terminal-log::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 3px; }
-    </style>
+  #cyber-isbn-app .isbn-output-box { border:1px solid #1f2937; background:rgba(0,0,0,0.4); padding:16px; min-height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; width:100%; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-output-box { padding:24px; min-height:220px; } }
+  #cyber-isbn-app .isbn-output-box::before { content:''; position:absolute; inset:0; opacity:0.1; background-image:radial-gradient(#333 1px,transparent 1px); background-size:10px 10px; pointer-events:none; }
 
-    <div class="scanline-overlay"></div>
+   
+  #cyber-isbn-app .isbn-loader { display:none; width:40px; height:40px; border:3px solid rgba(0,243,255,0.3); border-radius:50%; border-top-color:var(--neon-cyan); animation:isbn-spin 1s ease-in-out infinite; position:relative; z-index:10; }
+  @keyframes isbn-spin { to{transform:rotate(360deg)} }
 
-    <div class="w-full max-w-4xl relative z-10 mx-auto px-2 md:px-0 mt-2 md:mt-8 mb-8">
-        <div class="flex justify-between items-end mb-2 px-1 opacity-80">
-            <div class="text-[9px] md:text-xs text-cyan-500 font-mono tracking-widest whitespace-nowrap">SYS.VER.3.0 // SCANNER</div>
-            <div id="kernel-status" class="text-[9px] md:text-xs text-green-400 font-mono flex items-center gap-1 md:gap-2 bg-black/50 px-2 md:px-3 py-1 rounded border border-green-900/50 shadow-[0_0_10px_rgba(0,255,65,0.2)] whitespace-nowrap">
-                <span class="animate-pulse">●</span> SYSTEM READY
-            </div>
-        </div>
+   
+  #cyber-isbn-app .isbn-no-result { color:#4b5563; font-size:12px; font-family:monospace; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; z-index:10; text-align:center; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-no-result { font-size:14px; } }
+  #cyber-isbn-app .isbn-divider { height:1px; width:64px; background:#1f2937; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-divider { width:80px; } }
 
-        <div class="cyber-panel clip-corner p-3 md:p-8 relative">
-            <div class="absolute top-0 left-0 w-6 md:w-8 h-6 md:h-8 border-t-2 border-l-2 border-cyan-500 opacity-50"></div>
-            <div class="absolute top-0 right-0 w-6 md:w-8 h-6 md:h-8 border-t-2 border-r-2 border-cyan-500 opacity-50"></div>
-            <div class="absolute bottom-0 left-0 w-6 md:w-8 h-6 md:h-8 border-b-2 border-l-2 border-cyan-500 opacity-50"></div>
-            <div class="absolute bottom-0 right-0 w-6 md:w-8 h-6 md:h-8 border-b-2 border-r-2 border-cyan-500 opacity-50"></div>
+   
+  #cyber-isbn-app .isbn-book-data { width:100%; display:none; flex-direction:column; gap:16px; position:relative; z-index:10; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-book-data { flex-direction:row; gap:24px; } }
 
-            <div class="mb-6 md:mb-8 text-center md:text-left border-b border-gray-800 pb-4 md:pb-6 relative mt-2 md:mt-0 pt-6 md:pt-0">
-                <a href="/lab" class="absolute top-0 right-0 text-cyan-500 hover:text-pink-500 font-mono text-[10px] md:text-xs border border-cyan-900 bg-black/80 px-2 py-1 transition-colors z-20">
-                    [RETURN]
-                </a>
-                <h1 class="text-2xl md:text-5xl font-bold glitch-text tracking-tighter mb-1 mt-2 md:mt-0" data-text="ISBN_DECODER">ISBN_DECODER</h1>
-                <p class="text-[10px] md:text-sm text-gray-400 font-mono tracking-[0.1em] md:tracking-[0.2em] uppercase">Global Book Registry Interface</p>
-            </div>
+   
+  #cyber-isbn-app .isbn-cover-wrap { border:1px solid #444; background:#111; display:flex; align-items:center; justify-content:center; position:relative; box-shadow:0 0 15px rgba(0,0,0,0.8); flex-shrink:0; width:120px; height:180px; margin:0 auto; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-cover-wrap { width:160px; height:230px; margin:0; } }
+  #cyber-isbn-app .isbn-cover-img { max-width:100%; max-height:100%; object-fit:contain; }
+  #cyber-isbn-app .isbn-cover-placeholder { color:#4b5563; font-size:10px; text-align:center; font-family:monospace; padding:8px; }
 
-            <div class="mb-6 md:mb-8 relative">
-                <div class="input-wrapper clip-corner-top p-1 pl-3 md:pl-4 pr-1 md:pr-2 flex items-center bg-black">
-                    <span class="text-pink-500 font-bold text-sm md:text-lg mr-2 font-mono animate-pulse">>></span>
-                    <input type="tel" id="isbn-input" 
-                           class="input-area w-full bg-transparent border-none text-green-400 py-3 md:py-5 focus:outline-none font-mono placeholder-gray-700"
-                           placeholder="Enter ISBN (e.g., 9784...)" 
-                           autocomplete="off"
-                           onkeydown="if(event.key === 'Enter') isbnApp.searchISBN()">
-                    <button onclick="isbnApp.searchISBN()" id="mobile-solve-btn" class="md:hidden text-cyan-500 p-2 border border-cyan-900 bg-cyan-900/20 rounded ml-1 flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="flex justify-between mt-2 px-1">
-                    <span class="text-[9px] md:text-[10px] text-gray-500 font-mono">SUPPORT: OpenBD, Google Books</span>
-                    <span id="mode-indicator" class="text-[9px] md:text-[10px] text-pink-500 font-bold font-mono">READY</span>
-                </div>
-            </div>
+   
+  #cyber-isbn-app .isbn-details { flex-grow:1; display:flex; flex-direction:column; justify-content:center; width:100%; }
+  #cyber-isbn-app .isbn-detail-row { display:flex; flex-direction:column; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:6px; margin-bottom:8px; word-break:break-word; }
+  #cyber-isbn-app .isbn-detail-label { font-size:10px; color:var(--neon-cyan); text-transform:uppercase; font-family:'Orbitron',sans-serif; margin-bottom:2px; letter-spacing:1px; }
+  #cyber-isbn-app .isbn-detail-value { font-size:14px; color:#fff; line-height:1.3; font-family:monospace; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-detail-value { font-size:16px; } }
+  #cyber-isbn-app .isbn-detail-title { color:var(--neon-pink); font-weight:bold; font-size:18px; text-shadow:0 0 8px rgba(255,0,85,0.4); }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-detail-title { font-size:24px; } }
+  #cyber-isbn-app .isbn-meta-grid { display:grid; grid-template-columns:1fr; gap:8px; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-meta-grid { grid-template-columns:1fr 1fr; gap:16px; } }
 
-            <button id="search-btn" onclick="isbnApp.searchISBN()" class="hidden md:block execute-btn w-full py-4 mb-8 font-bold rounded-sm clip-corner">
-                INITIATE SCAN PROTOCOL
-            </button>
+   
+  #cyber-isbn-app .isbn-log-sec { border-top:1px solid rgba(31,41,55,0.5); padding-top:12px; margin-top:24px; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-log-sec { padding-top:16px; margin-top:32px; } }
+  #cyber-isbn-app .isbn-log-header { font-size:9px; color:#6b7280; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.15em; display:flex; justify-content:space-between; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-log-header { font-size:10px; } }
+  #cyber-isbn-app .isbn-log-path { color:#374151; display:none; }
+  @media(min-width:640px) { #cyber-isbn-app .isbn-log-path { display:inline; } }
+  #cyber-isbn-app .isbn-terminal { font-family:'JetBrains Mono',monospace; overflow-y:auto; height:80px; padding:8px; background:rgba(0,0,0,0.5); border:1px solid rgba(17,24,39,1); font-size:10px; white-space:pre-wrap; word-break:break-all; }
+  @media(min-width:768px) { #cyber-isbn-app .isbn-terminal { height:96px; font-size:12px; } }
+  #cyber-isbn-app .isbn-terminal::-webkit-scrollbar { width:6px; }
+  #cyber-isbn-app .isbn-terminal::-webkit-scrollbar-track { background:rgba(0,0,0,0.5); }
+  #cyber-isbn-app .isbn-terminal::-webkit-scrollbar-thumb { background:var(--neon-cyan); border-radius:3px; }
 
-            <div class="mb-4 md:mb-6 relative mt-10 md:mt-12">
-                <div class="absolute -top-3 left-2 md:-top-4 md:left-4 bg-black/90 px-2 text-[10px] md:text-xs text-cyan-500 font-bold uppercase tracking-wider backdrop-blur border border-cyan-900/50 transform skew-x-12 z-20">
-                    DATA OUTPUT
-                </div>
-                <div class="border border-gray-800 bg-black/40 p-4 md:p-6 min-h-[160px] md:min-h-[220px] flex flex-col items-center justify-center relative rounded-sm w-full">
-                    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#333 1px, transparent 1px); background-size: 10px 10px; pointer-events: none;"></div>
-                    
-                    <div id="search-loader" class="loader relative z-10"></div>
-                    
-                    <div id="no-result-msg" class="text-gray-600 text-xs md:text-sm font-mono flex flex-col items-center gap-2 relative z-10 text-center">
-                        <span>WAITING FOR INPUT STREAM...</span>
-                        <span class="h-px w-16 md:w-20 bg-gray-800"></span>
-                    </div>
+   
+  #cyber-isbn-app .log-info { color:#9ca3af; }
+  #cyber-isbn-app .log-success { color:#4ade80; }
+  #cyber-isbn-app .log-error { color:var(--neon-pink); }
+  #cyber-isbn-app .log-warn { color:#facc15; }
 
-                    <div id="book-data" class="w-full flex-col md:flex-row gap-4 md:gap-6 relative z-10 data-hidden">
-                        <div class="cover-image-container">
-                            <div id="cover-placeholder" class="text-gray-600 text-[10px] text-center font-mono px-2">NO IMAGE DATA</div>
-                            <img id="book-cover" class="cover-image data-hidden" alt="Book Cover" onload="document.getElementById('cover-placeholder').classList.add('data-hidden'); this.classList.remove('data-hidden'); this.classList.add('data-block');">
-                        </div>
-                        
-                        <div class="flex-grow flex flex-col justify-center w-full">
-                            <div class="detail-row">
-                                <span class="detail-label">TITLE</span>
-                                <span id="book-title" class="detail-value text-pink-500 font-bold text-lg md:text-2xl drop-shadow-[0_0_8px_rgba(255,0,85,0.4)]">Unknown</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">AUTHOR</span>
-                                <span id="book-author" class="detail-value font-mono">Unknown</span>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
-                                <div class="detail-row mb-2 md:mb-0">
-                                    <span class="detail-label">PUBLISHER</span>
-                                    <span id="book-publisher" class="detail-value font-mono">Unknown</span>
-                                </div>
-                                <div class="detail-row mb-0">
-                                    <span class="detail-label">PUBLISHED DATE</span>
-                                    <span id="book-date" class="detail-value font-mono">Unknown</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+   
+  .isbn-data-hidden { display:none !important; }
+  .isbn-data-flex { display:flex !important; }
+  .isbn-data-block { display:block !important; }
+</style>
 
-            <div class="border-t border-gray-800/50 pt-3 md:pt-4 mt-6 md:mt-8">
-                <div class="text-[9px] md:text-[10px] text-gray-500 mb-2 uppercase tracking-widest flex justify-between">
-                    <span>System Log</span>
-                    <span class="text-gray-700 hidden sm:inline">/var/log/isbn_scan.log</span>
-                </div>
-                <div id="terminal-log" class="terminal-log h-20 md:h-24 p-2 bg-black/50 border border-gray-900 text-[10px] md:text-xs rounded break-all whitespace-pre-wrap">
-                    <div class="log-entry text-gray-600">> Terminals locked and loaded...</div>
-                </div>
-            </div>
-        </div>
+<div id="cyber-isbn-app">
+  <div class="isbn-scan"></div>
+  <div class="isbn-main">
+    <div class="isbn-hbar">
+      <div class="isbn-sysver">SYS.VER.3.0 // SCANNER</div>
+      <div id="kernel-status" class="isbn-status"><span class="isbn-pulse">●</span> SYSTEM READY</div>
     </div>
+
+    <div class="isbn-panel" style="padding:12px; position:relative;">
+      <div class="isbn-corner isbn-c-tl"></div><div class="isbn-corner isbn-c-tr"></div>
+      <div class="isbn-corner isbn-c-bl"></div><div class="isbn-corner isbn-c-br"></div>
+
+      <div class="isbn-title-sec">
+        <h1 class="isbn-title isbn-glitch" data-text="ISBN_DECODER">ISBN_DECODER</h1>
+        <p class="isbn-sub">Global Book Registry Interface</p>
+      </div>
+
+      
+      <div style="margin-bottom:24px; position:relative;">
+        <div class="isbn-input-wrap">
+          <span class="isbn-prompt">&gt;&gt;</span>
+          <input type="tel" id="isbn-input" class="isbn-input"
+                 placeholder="Enter ISBN (e.g., 9784...)"
+                 autocomplete="off"
+                 onkeydown="if(event.key === 'Enter') isbnApp.searchISBN()">
+          <button onclick="isbnApp.searchISBN()" id="mobile-solve-btn" class="isbn-mobile-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </button>
+        </div>
+        <div class="isbn-input-info">
+          <span>SUPPORT: OpenBD, Google Books</span>
+          <span id="mode-indicator" class="isbn-mode">READY</span>
+        </div>
+      </div>
+
+      <button id="search-btn" onclick="isbnApp.searchISBN()" class="isbn-exec-btn">
+        INITIATE SCAN PROTOCOL
+      </button>
+
+      
+      <div class="isbn-output-sec">
+        <div class="isbn-output-label">DATA OUTPUT</div>
+        <div class="isbn-output-box">
+          <div id="search-loader" class="isbn-loader"></div>
+
+          <div id="no-result-msg" class="isbn-no-result">
+            <span>WAITING FOR INPUT STREAM...</span>
+            <span class="isbn-divider"></span>
+          </div>
+
+          <div id="book-data" class="isbn-book-data isbn-data-hidden">
+            <div class="isbn-cover-wrap">
+              <div id="cover-placeholder" class="isbn-cover-placeholder">NO IMAGE DATA</div>
+              <img id="book-cover" class="isbn-cover-img isbn-data-hidden" alt="Book Cover"
+                   onload="document.getElementById('cover-placeholder').classList.add('isbn-data-hidden'); this.classList.remove('isbn-data-hidden'); this.classList.add('isbn-data-block');">
+            </div>
+
+            <div class="isbn-details">
+              <div class="isbn-detail-row">
+                <span class="isbn-detail-label">TITLE</span>
+                <span id="book-title" class="isbn-detail-value isbn-detail-title">Unknown</span>
+              </div>
+              <div class="isbn-detail-row">
+                <span class="isbn-detail-label">AUTHOR</span>
+                <span id="book-author" class="isbn-detail-value">Unknown</span>
+              </div>
+              <div class="isbn-meta-grid">
+                <div class="isbn-detail-row">
+                  <span class="isbn-detail-label">PUBLISHER</span>
+                  <span id="book-publisher" class="isbn-detail-value">Unknown</span>
+                </div>
+                <div class="isbn-detail-row">
+                  <span class="isbn-detail-label">PUBLISHED DATE</span>
+                  <span id="book-date" class="isbn-detail-value">Unknown</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="isbn-log-sec">
+        <div class="isbn-log-header">
+          <span>System Log</span>
+          <span class="isbn-log-path">/var/log/isbn_scan.log</span>
+        </div>
+        <div id="terminal-log" class="isbn-terminal">
+          <div class="log-entry log-info">&gt; Terminals locked and loaded...</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
+     
     console.log("ISBN Script Intialization...");
     const isbnApp = (function() {
         if (typeof document === 'undefined') return {searchISBN:()=>{}};
 
-        const formState = {
-            loading: false
-        };
+        const formState = { loading: false };
 
-        function getEl(id) {
-            return document.getElementById(id);
-        }
+        function getEl(id) { return document.getElementById(id); }
 
         function addLog(msg, type = 'info') {
             const logEl = getEl('terminal-log');
             if(!logEl) return;
             const entry = document.createElement('div');
-            let colorClass = 'text-gray-400';
-            if (type === 'success') colorClass = 'text-green-400';
-            if (type === 'error') colorClass = 'text-pink-500';
-            if (type === 'warn') colorClass = 'text-yellow-400';
+            let colorClass = 'log-info';
+            if (type === 'success') colorClass = 'log-success';
+            if (type === 'error') colorClass = 'log-error';
+            if (type === 'warn') colorClass = 'log-warn';
             
-            entry.className = `log-entry ${colorClass} mb-1`;
+            entry.className = `log-entry ${colorClass}`;
+            entry.style.marginBottom = '4px';
             const time = new Date().toLocaleTimeString('en-US', {hour12: false});
             entry.innerText = `[${time}] ${msg}`;
             logEl.appendChild(entry);
@@ -1053,19 +1072,24 @@
             const statusInd = getEl('kernel-status');
             if(!statusInd) return;
             let icon = '●';
-            let classes = 'text-[9px] md:text-xs font-mono flex items-center gap-1 md:gap-2 bg-black/50 px-2 md:px-3 py-1 rounded border whitespace-nowrap ';
+            let style = '';
             
             if (state === 'loading') {
-                classes += 'text-yellow-500 border-yellow-900/50 shadow-[0_0_10px_rgba(252,238,10,0.2)]';
+                statusInd.style.color = '#eab308';
+                statusInd.style.borderColor = 'rgba(234,179,8,0.3)';
+                statusInd.style.boxShadow = '0 0 10px rgba(252,238,10,0.2)';
             } else if (state === 'error') {
-                classes += 'text-pink-500 border-pink-900/50 shadow-[0_0_10px_rgba(255,0,85,0.2)]';
+                statusInd.style.color = '#ff0055';
+                statusInd.style.borderColor = 'rgba(255,0,85,0.3)';
+                statusInd.style.boxShadow = '0 0 10px rgba(255,0,85,0.2)';
                 icon = '✖';
             } else {
-                classes += 'text-green-400 border-green-900/50 shadow-[0_0_10px_rgba(0,255,65,0.2)]';
+                statusInd.style.color = '#4ade80';
+                statusInd.style.borderColor = 'rgba(0,255,65,0.3)';
+                statusInd.style.boxShadow = '0 0 10px rgba(0,255,65,0.2)';
             }
             
-            statusInd.className = classes;
-            statusInd.innerHTML = `<span class="${state !== 'error' ? 'animate-pulse' : ''}">${icon}</span> ${text}`;
+            statusInd.innerHTML = `<span class="${state !== 'error' ? 'isbn-pulse' : ''}">${icon}</span> ${text}`;
         }
 
         function resetUI() {
@@ -1075,19 +1099,19 @@
             const coverPlaceholder = getEl('cover-placeholder');
             
             if(bookData) {
-                bookData.classList.remove('data-flex');
-                bookData.classList.add('data-hidden');
+                bookData.classList.remove('isbn-data-flex');
+                bookData.classList.add('isbn-data-hidden');
             }
             if(noResultMsg) {
-                noResultMsg.classList.add('data-hidden');
+                noResultMsg.classList.add('isbn-data-hidden');
             }
             if(bCover) {
-                bCover.classList.remove('data-block');
-                bCover.classList.add('data-hidden');
+                bCover.classList.remove('isbn-data-block');
+                bCover.classList.add('isbn-data-hidden');
                 bCover.src = '';
             }
             if(coverPlaceholder) {
-                coverPlaceholder.classList.remove('data-hidden');
+                coverPlaceholder.classList.remove('isbn-data-hidden');
                 coverPlaceholder.innerText = 'WAITING FOR DATA...';
             }
             
@@ -1103,33 +1127,33 @@
             const loader = getEl('search-loader');
 
             if(loader) {
-                loader.classList.remove('data-block');
-                loader.classList.add('data-hidden');
+                loader.classList.remove('isbn-data-block');
+                loader.classList.add('isbn-data-hidden');
             }
             
             if(noResultMsg) {
-                noResultMsg.classList.remove('data-block');
-                noResultMsg.classList.remove('data-flex');
-                noResultMsg.classList.add('data-hidden');
+                noResultMsg.classList.remove('isbn-data-block');
+                noResultMsg.classList.remove('isbn-data-flex');
+                noResultMsg.classList.add('isbn-data-hidden');
             }
 
             if (success) {
                 if(bookData) {
-                    bookData.classList.remove('data-hidden');
-                    bookData.classList.add('data-flex');
+                    bookData.classList.remove('isbn-data-hidden');
+                    bookData.classList.add('isbn-data-flex');
                     console.log("Setting bookData to flex (visible)");
                 } else {
                     console.error("book-data element not found");
                 }
             } else {
                 if(bookData) {
-                    bookData.classList.remove('data-flex');
-                    bookData.classList.add('data-hidden');
+                    bookData.classList.remove('isbn-data-flex');
+                    bookData.classList.add('isbn-data-hidden');
                 }
                 if(noResultMsg) {
                     noResultMsg.innerHTML = messageHtml;
-                    noResultMsg.classList.remove('data-hidden');
-                    noResultMsg.classList.add('data-flex');
+                    noResultMsg.classList.remove('isbn-data-hidden');
+                    noResultMsg.classList.add('isbn-data-flex');
                 }
             }
         }
@@ -1153,7 +1177,6 @@
                     return;
                 }
                 
-                
                 if (inputEl) inputEl.blur();
                 
                 console.log(`Starting search for ISBN: ${isbn}`);
@@ -1170,17 +1193,16 @@
                 resetUI();
                 
                 const noResultMsg = getEl('no-result-msg');
-                if(noResultMsg) noResultMsg.classList.add('data-hidden');
+                if(noResultMsg) noResultMsg.classList.add('isbn-data-hidden');
 
                 if(loader) {
-                    loader.classList.remove('data-hidden');
-                    loader.classList.add('data-block');
+                    loader.classList.remove('isbn-data-hidden');
+                    loader.classList.add('isbn-data-block');
                 }
                 
                 addLog(`Initiating lookup protocol for ISBN: ${isbn}`, 'info');
 
                 try {
-                    
                     addLog(`Querying OpenBD database cluster...`, 'info');
                     const openbdRes = await fetch(`https://api.openbd.jp/v1/get?isbn=${isbn}`);
                     const openbdData = await openbdRes.json();
@@ -1205,7 +1227,6 @@
                         setFinalResultVisibility(true);
                         setStatus("DATA RETRIEVED", "success");
                     } else {
-                        
                         addLog(`OpenBD returned null. Failing over to Google Data Centers...`, 'warn');
                         const gbRes = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
                         const gbData = await gbRes.json();
@@ -1238,7 +1259,7 @@
                 } catch (error) {
                     addLog(`Scan Failed: ${error.message}`, 'error');
                     setStatus("SCAN FAILED", "error");
-                    let errorHtml = `<span class="text-pink-500 block text-center mb-1 md:mb-2 text-xs md:text-sm">ERROR 404: DATA NOT FOUND</span><span class="text-[10px] md:text-xs text-gray-500 font-mono text-center max-w-sm px-2">The requested ISBN sequence could not be matched against any connected global database registries.</span>`;
+                    let errorHtml = `<span style="color:#ff0055; display:block; text-align:center; margin-bottom:4px; font-size:12px;">ERROR 404: DATA NOT FOUND</span><span style="font-size:10px; color:#6b7280; font-family:monospace; text-align:center; max-width:320px; padding:0 8px;">The requested ISBN sequence could not be matched against any connected global database registries.</span>`;
                     setFinalResultVisibility(false, errorHtml);
                     console.error("ISBN Search Error:", error);
                 } finally {
@@ -1247,7 +1268,7 @@
                     if(mBtn) mBtn.disabled = false;
                     
                     const statusInd = getEl('kernel-status');
-                    if(statusInd && statusInd.className.includes('loading')) {
+                    if(statusInd && statusInd.style.color === 'rgb(234, 179, 8)') {
                         setStatus("SYSTEM READY", "success");
                     }
                 }

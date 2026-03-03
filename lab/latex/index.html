@@ -15,8 +15,8 @@
 
   
   
-    <title>LaTeX Editor &middot; dt&#39;s world</title>
-    <meta name="title" content="LaTeX Editor &middot; dt&#39;s world">
+    <title>LATEX_RENDERER &middot; dt&#39;s world</title>
+    <meta name="title" content="LATEX_RENDERER &middot; dt&#39;s world">
   
 
   
@@ -44,14 +44,14 @@
   
   <meta property="og:url" content="https://dtwant.github.io/lab/latex/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="LaTeX Editor">
+  <meta property="og:title" content="LATEX_RENDERER">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="lab">
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="LaTeX Editor">
+  <meta name="twitter:title" content="LATEX_RENDERER">
 
   
   
@@ -208,8 +208,8 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "articleSection": "Labs",
-    "name": "LaTeX Editor",
-    "headline": "LaTeX Editor",
+    "name": "LATEX_RENDERER",
+    "headline": "LATEX_RENDERER",
     
     
     "inLanguage": "en",
@@ -227,7 +227,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "35"
+    "wordCount": "50"
   }]
   </script>
 
@@ -774,7 +774,7 @@
   
   <li class="hidden">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/latex/"
-      >LaTeX Editor</a
+      >LATEX_RENDERER</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -783,12 +783,11 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        LaTeX Editor
+        LATEX_RENDERER
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <p>LaTeX記法で数式を入力すると、リアルタイムでプレビューされる.</p>
-
+      
 
 
 <script>
@@ -807,352 +806,186 @@
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
+
+  #cyber-latex-app {
+    --neon-pink: #ff0055; --neon-cyan: #00f3ff; --neon-green: #00ff41;
+    --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #050505;
+    --panel-bg: rgba(10,14,18,0.90);
+    --accent: #f472b6; --accent2: #a78bfa;
+    font-family: 'JetBrains Mono', monospace; color: #e0e0e0;
+    background-color: var(--bg-dark);
+    background-image: linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px);
+    background-size: 40px 40px; animation: lx-bg 20s linear infinite;
+    min-height: calc(100vh - 100px); width: 100%; position: relative; z-index: 10; margin: 0; padding: 0;
+  }
+  #cyber-latex-app * { box-sizing: border-box; }
+  #cyber-latex-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:#050505; z-index:-2; }
+  #cyber-latex-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-image:linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px); background-size:40px 40px; animation:lx-bg 20s linear infinite; z-index:-1; }
+  #cyber-latex-app .lx-scan { position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1)); background-size:100% 4px; pointer-events:none; z-index:50; opacity:0.5; }
+  @keyframes lx-bg { 0%{background-position:0 0}100%{background-position:40px 40px} }
 
    
-  .cp-latex-container {
-    font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
-    max-width: 900px;
-    margin: 2rem auto;
-    background-color: #09090b;
-    background-image: 
-      linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px);
-    background-size: 20px 20px;
-    padding: 2.5rem;
-    border: 1px solid #333;
-    border-radius: 4px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
-    color: #e2e8f0;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-    line-height: 1.5;
-  }
-  .cp-latex-container * { box-sizing: border-box; }
+  #cyber-latex-app .lx-glitch { font-family:'Orbitron',sans-serif; position:relative; color:var(--accent); text-shadow:2px 2px var(--neon-pink); }
+  #cyber-latex-app .lx-glitch::before,#cyber-latex-app .lx-glitch::after { content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%; background:transparent; }
+  #cyber-latex-app .lx-glitch::before { left:2px; text-shadow:-1px 0 var(--neon-cyan); clip:rect(24px,550px,90px,0); animation:lx-g2 3s infinite linear alternate-reverse; }
+  #cyber-latex-app .lx-glitch::after { left:-2px; text-shadow:-1px 0 var(--neon-pink); clip:rect(85px,550px,140px,0); animation:lx-g1 2.5s infinite linear alternate-reverse; }
+  @keyframes lx-g1 { 0%{clip:rect(14px,9999px,122px,0)} 5%{clip:rect(82px,9999px,92px,0)} 100%{clip:rect(5px,9999px,133px,0)} }
+  @keyframes lx-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
 
    
-   
-  .cp-latex-container h3,
-  .cp-latex-container p,
-  .cp-latex-container div,
-  .cp-latex-container span,
-  .cp-latex-container label {
-    text-decoration: none !important;
-    border-bottom: none !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    color: inherit;
-  }
+  #cyber-latex-app .lx-panel { background:var(--panel-bg); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 20px rgba(0,0,0,0.8),inset 0 0 30px rgba(0,243,255,0.05); backdrop-filter:blur(5px); }
+  #cyber-latex-app .lx-clip { clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
+
+  #cyber-latex-app .lx-main { width:100%; max-width:1100px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
+  @media(min-width:768px) { #cyber-latex-app .lx-main { padding:0 0 32px 0; margin-top:32px; } }
 
    
-  .cp-latex-container::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #f472b6, #a78bfa, #f472b6);
-    background-size: 200% 100%;
-    animation: scanline 4s linear infinite;
-    pointer-events: none;
-    z-index: 10;
-  }
-  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+  #cyber-latex-app .lx-hbar { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; padding:0 4px; opacity:0.8; }
+  #cyber-latex-app .lx-sysver { font-size:9px; color:var(--accent); font-family:monospace; letter-spacing:2px; }
+  @media(min-width:768px) { #cyber-latex-app .lx-sysver { font-size:12px; } }
+  #cyber-latex-app .lx-status { font-size:9px; font-family:monospace; display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:4px; border:1px solid rgba(0,255,65,0.3); color:#4ade80; white-space:nowrap; }
+  @media(min-width:768px) { #cyber-latex-app .lx-status { font-size:12px; padding:4px 12px; gap:8px; } }
+  #cyber-latex-app .lx-pulse { animation:lx-p 1.5s ease-in-out infinite; }
+  @keyframes lx-p { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
    
-  .cp-latex-container .cp-header {
-    border-bottom: 1px solid #333 !important;
-    padding-bottom: 1.5rem;
-    margin-bottom: 2.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .cp-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #f472b6 !important;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 8px rgba(244, 114, 182, 0.4);
-  }
-  .cp-subtitle {
-    font-size: 0.8rem;
-    color: #64748b !important;
-  }
+  #cyber-latex-app .lx-title-sec { margin-bottom:16px; text-align:center; border-bottom:1px solid #1f2937; padding-bottom:16px; position:relative; padding-top:24px; }
+  @media(min-width:768px) { #cyber-latex-app .lx-title-sec { text-align:left; padding-top:0; margin-bottom:24px; padding-bottom:20px; } }
+  #cyber-latex-app .lx-title { font-size:20px; font-weight:700; letter-spacing:-0.05em; margin-bottom:4px; margin-top:8px; }
+  @media(min-width:768px) { #cyber-latex-app .lx-title { font-size:40px; margin-top:0; } }
+  #cyber-latex-app .lx-sub { font-size:9px; color:#9ca3af; font-family:monospace; letter-spacing:0.1em; text-transform:uppercase; }
+  @media(min-width:768px) { #cyber-latex-app .lx-sub { font-size:12px; letter-spacing:0.2em; } }
 
    
-  .cp-textarea {
-    width: 100%;
-    height: 120px;
-    background: #000 !important;
-    border: 1px solid #444 !important;  
-    color: #f472b6 !important;
-    padding: 1rem;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 1rem;
-    border-radius: 2px;
-    resize: vertical;
-    transition: all 0.2s;
-    box-shadow: none !important;
-    margin-bottom: 2rem;
-  }
-  .cp-textarea:focus {
-    outline: none;
-    border-color: #f472b6 !important;
-    box-shadow: 0 0 10px rgba(244, 114, 182, 0.2) !important;
-  }
+  #cyber-latex-app .lx-corner { position:absolute; width:24px; height:24px; border-color:var(--accent); opacity:0.5; }
+  @media(min-width:768px) { #cyber-latex-app .lx-corner { width:32px; height:32px; } }
+  #cyber-latex-app .lx-c-tl { top:0; left:0; border-top:2px solid; border-left:2px solid; }
+  #cyber-latex-app .lx-c-tr { top:0; right:0; border-top:2px solid; border-right:2px solid; }
+  #cyber-latex-app .lx-c-bl { bottom:0; left:0; border-bottom:2px solid; border-left:2px solid; }
+  #cyber-latex-app .lx-c-br { bottom:0; right:0; border-bottom:2px solid; border-right:2px solid; }
 
    
-  .cp-latex-container .cp-controls {
-    background: rgba(255, 255, 255, 0.02) !important;
-    border: 1px solid #333 !important;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
+  #cyber-latex-app .lx-sec-header { background:rgba(0,0,0,0.8); border:1px solid #1f2937; border-bottom:none; padding:8px 12px; font-size:9px; color:var(--accent); letter-spacing:2px; font-family:'Orbitron',sans-serif; }
+  @media(min-width:768px) { #cyber-latex-app .lx-sec-header { font-size:11px; } }
 
    
-  .cp-control-panel {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  
-  .cp-control-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .cp-label {
-    font-size: 0.8rem;
-    color: #a78bfa !important;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-  }
-  .cp-val { color: #f472b6 !important; }
+  #cyber-latex-app .lx-textarea { width:100%; min-height:100px; background:rgba(0,0,0,0.8) !important; border:1px solid #333 !important; color:var(--accent) !important; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.6; padding:16px; resize:vertical; outline:none; transition:all 0.3s; margin-bottom:16px; }
+  @media(min-width:768px) { #cyber-latex-app .lx-textarea { font-size:14px; } }
+  #cyber-latex-app .lx-textarea:focus { border-color:var(--accent) !important; box-shadow:inset 0 0 10px rgba(244,114,182,0.1) !important; }
+  #cyber-latex-app .lx-textarea::-webkit-scrollbar { width:6px; }
+  #cyber-latex-app .lx-textarea::-webkit-scrollbar-track { background:rgba(0,0,0,0.5); }
+  #cyber-latex-app .lx-textarea::-webkit-scrollbar-thumb { background:var(--accent); }
 
    
-  .cp-range {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 4px;
-    background: #333 !important;
-    border-radius: 2px;
-    outline: none;
-    margin-top: 5px;
-    border: none !important;
-  }
-  .cp-range::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 16px; height: 16px;
-    background: #f472b6;
-    border-radius: 0;
-    cursor: pointer;
-    box-shadow: 0 0 5px rgba(244, 114, 182, 0.5);
-    border: 1px solid #fff;
-  }
+  #cyber-latex-app .lx-controls { background:rgba(0,0,0,0.5); border:1px solid #1f2937; padding:16px; margin-bottom:16px; }
+  #cyber-latex-app .lx-control-panel { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  @media(max-width:640px) { #cyber-latex-app .lx-control-panel { grid-template-columns:1fr; } }
+
+  #cyber-latex-app .lx-control-group { display:flex; flex-direction:column; gap:8px; }
+  #cyber-latex-app .lx-label { font-size:0.8rem; color:var(--accent2) !important; font-weight:bold; display:flex; justify-content:space-between; }
+  #cyber-latex-app .lx-val { color:var(--accent) !important; }
 
    
-  .cp-aspect-btns {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-  }
-  
-   
-  .cp-latex-container .cp-aspect-btn {
-    flex: 1;
-    background: transparent !important;
-    border: 1px solid #444 !important;  
-    color: #64748b !important;
-    padding: 0.8rem;
-    font-family: inherit;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    box-shadow: none !important;
-    font-weight: bold;
-  }
-  .cp-aspect-btn:hover {
-    border-color: #a78bfa !important;
-    color: #a78bfa !important;
-  }
-  .cp-aspect-btn.active {
-    background: rgba(167, 139, 250, 0.1) !important;
-    border-color: #a78bfa !important;
-    color: #f472b6 !important;
-    box-shadow: 0 0 10px rgba(167, 139, 250, 0.2) !important;
-  }
+  #cyber-latex-app .lx-range { -webkit-appearance:none; width:100%; height:4px; background:#333 !important; border-radius:2px; outline:none; margin-top:5px; border:none !important; }
+  #cyber-latex-app .lx-range::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:16px; height:16px; background:var(--accent); border-radius:0; cursor:pointer; box-shadow:0 0 5px rgba(244,114,182,0.5); border:1px solid #fff; }
 
    
-  .cp-actions {
-    text-align: right;
-    margin-bottom: 1.5rem;
-  }
-
-  .cp-latex-container .cp-btn {
-    background: transparent !important;
-    border: 1px solid #f472b6 !important;  
-    color: #f472b6 !important;
-    padding: 0.8rem 2rem;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    transition: all 0.2s;
-    box-shadow: none !important;
-  }
-  .cp-btn:hover {
-    background: #f472b6 !important;
-    color: #000 !important;
-    box-shadow: 0 0 15px rgba(244, 114, 182, 0.6) !important;
-  }
+  #cyber-latex-app .lx-aspect-btns { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+  @media(max-width:640px) { #cyber-latex-app .lx-aspect-btns { flex-direction:column; } }
+  #cyber-latex-app .lx-aspect-btn { flex:1; background:transparent !important; border:1px solid #444 !important; color:#64748b !important; padding:12px; font-family:'JetBrains Mono',monospace; font-size:11px; cursor:pointer; transition:all 0.3s; text-transform:uppercase; font-weight:bold; letter-spacing:1px; }
+  @media(min-width:768px) { #cyber-latex-app .lx-aspect-btn { font-size:12px; } }
+  #cyber-latex-app .lx-aspect-btn:hover { border-color:var(--accent2) !important; color:var(--accent2) !important; }
+  #cyber-latex-app .lx-aspect-btn.active { background:rgba(167,139,250,0.1) !important; border-color:var(--accent2) !important; color:var(--accent) !important; box-shadow:0 0 10px rgba(167,139,250,0.2) !important; }
 
    
-  .cp-latex-container .cp-preview-container {
-    background: #18181b !important;
-    border: 1px dashed #444 !important;
-    min-height: 150px;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .cp-preview-box {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-     
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-    
-     
-    font-size: 20px !important;
-    line-height: normal !important;
-    
-     
-    box-shadow: none !important;
-    border: 1px solid #ddd;
-    
-    transform-origin: center center;
-    transition: transform 0.2s ease;
-  }
-  
-  .cp-preview-box svg {
-    display: block;
-  }
-
-  .cp-badge {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.8) !important;
-    border: 1px solid #333 !important;
-    color: #a78bfa !important;
-    font-size: 0.7rem;
-    font-family: monospace;
-    padding: 4px 8px;
-    pointer-events: none;
-    user-select: none;
-    z-index: 10;
-  }
+  #cyber-latex-app .lx-btn { background:linear-gradient(90deg,transparent 0%,rgba(244,114,182,0.1) 50%,transparent 100%); border:1px solid var(--accent); color:var(--accent); font-family:'Orbitron',sans-serif; font-size:12px; font-weight:700; padding:14px 28px; cursor:pointer; transition:all 0.3s; letter-spacing:1px; position:relative; overflow:hidden; text-transform:uppercase; }
+  @media(min-width:768px) { #cyber-latex-app .lx-btn { font-size:13px; letter-spacing:2px; } }
+  #cyber-latex-app .lx-btn:hover { background:var(--accent); color:#000; box-shadow:0 0 20px var(--accent); }
+  #cyber-latex-app .lx-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent); transition:0.5s; }
+  #cyber-latex-app .lx-btn:hover::before { left:100%; }
+  #cyber-latex-app .lx-actions { margin-bottom:16px; display:flex; justify-content:flex-end; }
 
    
-  @media (max-width: 640px) {
-    .cp-latex-container {
-      padding: 1.5rem 1rem;
-      width: 100%;
-      margin: 1rem 0;
-      border-left: none; border-right: none; border-radius: 0;
-    }
+  #cyber-latex-app .lx-preview-container { background:rgba(24,24,27,0.95) !important; border:1px solid #333 !important; min-height:150px; padding:20px; display:flex; justify-content:center; align-items:center; position:relative; overflow:hidden; }
 
-    .cp-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
+   
+  #cyber-latex-app .lx-preview-box { background-color:#ffffff !important; color:#000000 !important; display:inline-flex; justify-content:center; align-items:center; padding:30px; font-size:20px !important; line-height:normal !important; box-shadow:none !important; border:1px solid #ddd; transform-origin:center center; transition:transform 0.2s ease; }
+  #cyber-latex-app .lx-preview-box svg { display:block; }
 
-    .cp-control-panel {
-      grid-template-columns: 1fr;  
-    }
-
-    .cp-aspect-btns {
-      flex-direction: column;
-    }
-    
-    .cp-btn {
-      width: 100%;
-      padding: 1rem;
-    }
-    
-    .cp-controls {
-      padding: 1.25rem;
-    }
-  }
-
+  #cyber-latex-app .lx-badge { position:absolute; bottom:10px; right:10px; background:rgba(0,0,0,0.8) !important; border:1px solid #333 !important; color:var(--accent2) !important; font-size:0.7rem; font-family:monospace; padding:4px 8px; pointer-events:none; user-select:none; z-index:10; }
 </style>
 
-<div class="cp-latex-container">
-  <div class="cp-header">
-    <div class="cp-title">LATEX_RENDERER</div>
-    <div class="cp-subtitle">// 数式画像生成モジュール</div>
-  </div>
-  
-  <textarea id="latex-input" class="cp-textarea" placeholder="INSERT_LATEX_CODE (ここにLaTeX数式を入力)">\sum_{n=0}^{\infty} x^{2n} \zeta(2+2n) = \frac{1 - \pi x \cot(\pi x)}{2x^2} \quad (|x| &lt; 1)</textarea>
-  
-  <div class="cp-controls">
-    
-    <div id="manual-controls" class="cp-control-panel">
-      <div class="cp-control-group">
-        <label class="cp-label">PADDING_X (横余白) <span id="val-x" class="cp-val">30</span>px</label>
-        <input type="range" id="slider-x" class="cp-range" min="0" max="200" value="30">
-      </div>
-      <div class="cp-control-group">
-        <label class="cp-label">PADDING_Y (縦余白) <span id="val-y" class="cp-val">30</span>px</label>
-        <input type="range" id="slider-y" class="cp-range" min="0" max="200" value="30">
-      </div>
+<div id="cyber-latex-app">
+  <div class="lx-scan"></div>
+  <div class="lx-main">
+    <div class="lx-hbar">
+      <div class="lx-sysver">SYS.VER.3.0 // FORMULA_ENGINE</div>
+      <div class="lx-status" id="lxStatus"><span class="lx-pulse">●</span> MATHJAX LOADING</div>
     </div>
 
-    
-    <div id="aspect-controls" class="cp-control-panel" style="display:none; grid-template-columns: 1fr;">
-      <div class="cp-control-group">
-        <label class="cp-label">SCALE (拡大率) <span id="val-scale" class="cp-val">1.2x</span></label>
-        <input type="range" id="slider-scale" class="cp-range" min="1" max="2.5" step="0.1" value="1.2">
+    <div class="lx-panel lx-clip" style="padding:16px; position:relative;">
+      <div class="lx-corner lx-c-tl"></div><div class="lx-corner lx-c-tr"></div>
+      <div class="lx-corner lx-c-bl"></div><div class="lx-corner lx-c-br"></div>
+
+      <div class="lx-title-sec">
+        <h1 class="lx-title lx-glitch" data-text="LATEX_RENDERER">LATEX_RENDERER</h1>
+        <p class="lx-sub">Real-time LaTeX Formula Typesetting Interface</p>
       </div>
-    </div>
-  </div>
-
-  <div class="cp-aspect-btns">
-    <button class="cp-aspect-btn active" id="btn-free">FREE (MANUAL)</button>
-    <button class="cp-aspect-btn" id="btn-thumb">THUMB [16:9]</button>
-    <button class="cp-aspect-btn" id="btn-slide">SLIDE [128:59]</button>
-  </div>
-
-  <div class="cp-actions">
-    <button id="save-btn" class="cp-btn">DOWNLOAD_PNG</button>
-  </div>
-
-  <div id="latex-preview-container" class="cp-preview-container">
-    <div id="latex-preview" class="cp-preview-box">
       
+      
+      <div style="color:#94a3b8; font-size:13px; margin-bottom:24px; border-left:2px solid var(--accent); padding-left:15px; line-height:1.6;">
+        >> LaTeX記法で数式を入力すると、リアルタイムでプレビューされる.
+      </div>
+
+      
+      <div class="lx-sec-header">INPUT_SOURCE [LaTeX CODE]</div>
+      <textarea id="latex-input" class="lx-textarea" spellcheck="false" placeholder="INSERT_LATEX_CODE (ここにLaTeX数式を入力)">\sum_{n=0}^{\infty} x^{2n} \zeta(2+2n) = \frac{1 - \pi x \cot(\pi x)}{2x^2} \quad (|x| &lt; 1)</textarea>
+
+      
+      <div class="lx-controls">
+        <div id="manual-controls" class="lx-control-panel">
+          <div class="lx-control-group">
+            <label class="lx-label">PADDING_X (横余白) <span id="val-x" class="lx-val">30</span>px</label>
+            <input type="range" id="slider-x" class="lx-range" min="0" max="200" value="30">
+          </div>
+          <div class="lx-control-group">
+            <label class="lx-label">PADDING_Y (縦余白) <span id="val-y" class="lx-val">30</span>px</label>
+            <input type="range" id="slider-y" class="lx-range" min="0" max="200" value="30">
+          </div>
+        </div>
+        <div id="aspect-controls" class="lx-control-panel" style="display:none; grid-template-columns: 1fr;">
+          <div class="lx-control-group">
+            <label class="lx-label">SCALE (拡大率) <span id="val-scale" class="lx-val">1.2x</span></label>
+            <input type="range" id="slider-scale" class="lx-range" min="1" max="2.5" step="0.1" value="1.2">
+          </div>
+        </div>
+      </div>
+
+      <div class="lx-aspect-btns">
+        <button class="lx-aspect-btn active" id="btn-free">FREE (MANUAL)</button>
+        <button class="lx-aspect-btn" id="btn-thumb">THUMB [16:9]</button>
+        <button class="lx-aspect-btn" id="btn-slide">SLIDE [128:59]</button>
+      </div>
+
+      <div class="lx-actions">
+        <button id="save-btn" class="lx-btn">DOWNLOAD_PNG</button>
+      </div>
+
+      <div class="lx-sec-header">VISUAL_OUTPUT [PREVIEW]</div>
+      <div id="latex-preview-container" class="lx-preview-container">
+        <div id="latex-preview" class="lx-preview-box">
+          
+        </div>
+        <div id="resolution-badge" class="lx-badge">INITIALIZING...</div>
+      </div>
     </div>
-    <div id="resolution-badge" class="cp-badge">INITIALIZING...</div>
   </div>
 </div>
 
 <script>
+   
+   
   (function() {
     const input = document.getElementById('latex-input');
     const preview = document.getElementById('latex-preview');
@@ -1179,6 +1012,12 @@
     let currentAspect = null; 
     let preciseW = 0;
     let preciseH = 0;
+
+    
+    const statusEl = document.getElementById('lxStatus');
+    function setStatus(text, color) {
+      statusEl.innerHTML = '<span class="lx-pulse" style="color:' + color + '">●</span> ' + text;
+    }
 
     
 
@@ -1268,7 +1107,11 @@
       if (window.MathJax && window.MathJax.typesetPromise) {
         window.MathJax.typesetPromise([preview]).then(() => {
           applyPadding();
-        }).catch(err => console.log('MathJax typeset failed: ', err));
+          setStatus('RENDER COMPLETE', '#00ff41');
+        }).catch(err => {
+          console.log('MathJax typeset failed: ', err);
+          setStatus('RENDER ERROR', '#ff0055');
+        });
       }
     };
 
@@ -1365,8 +1208,8 @@
         const style = window.getComputedStyle(preview);
         
         if (currentAspect === null) {
-           dx = parseFloat(style.paddingLeft) * OUTPUT_SCALE;
-           dy = parseFloat(style.paddingTop) * OUTPUT_SCALE;
+           dx = (canvas.width - (svgW * OUTPUT_SCALE)) / 2;
+           dy = (canvas.height - (svgH * OUTPUT_SCALE)) / 2;
         } else {
            dx = (canvas.width - (svgW * OUTPUT_SCALE)) / 2;
            dy = (canvas.height - (svgH * OUTPUT_SCALE)) / 2;
@@ -1383,8 +1226,10 @@
           document.body.appendChild(downloadLink);
           downloadLink.click();
           document.body.removeChild(downloadLink);
+          setStatus('PNG EXPORTED', '#00ff41');
         } catch (e) {
           alert(">> ERROR: SAVE_FAILED");
+          setStatus('EXPORT FAILED', '#ff0055');
         }
       };
       img.src = url;

@@ -15,8 +15,8 @@
 
   
   
-    <title>Logic Circuit Simulator &middot; dt&#39;s world</title>
-    <meta name="title" content="Logic Circuit Simulator &middot; dt&#39;s world">
+    <title>LOGIC_CIRCUIT &middot; dt&#39;s world</title>
+    <meta name="title" content="LOGIC_CIRCUIT &middot; dt&#39;s world">
   
 
   
@@ -46,7 +46,7 @@
   
   <meta property="og:url" content="https://dtwant.github.io/lab/logic/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="Logic Circuit Simulator">
+  <meta property="og:title" content="LOGIC_CIRCUIT">
   <meta property="og:description" content="論理回路解析">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
@@ -54,7 +54,7 @@
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Logic Circuit Simulator">
+  <meta name="twitter:title" content="LOGIC_CIRCUIT">
   <meta name="twitter:description" content="論理回路解析">
 
   
@@ -212,8 +212,8 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "articleSection": "Labs",
-    "name": "Logic Circuit Simulator",
-    "headline": "Logic Circuit Simulator",
+    "name": "LOGIC_CIRCUIT",
+    "headline": "LOGIC_CIRCUIT",
     "description": "論理回路解析",
     
     "inLanguage": "en",
@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "119"
+    "wordCount": "133"
   }]
   </script>
 
@@ -778,7 +778,7 @@
   
   <li class="hidden">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/logic/"
-      >Logic Circuit Simulator</a
+      >LOGIC_CIRCUIT</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -787,183 +787,283 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        Logic Circuit Simulator
+        LOGIC_CIRCUIT
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       <p>論理式を入力するとそれに対応する真理値表を自動生成する.</p>
+
+
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
 
-   
-  .cp-logic-container { font-family: "JetBrains Mono", "Consolas", "Monaco", monospace; max-width: 900px; width: 95%; margin: 2rem auto; background-color: #09090b; background-image: linear-gradient(rgba(18, 18, 18, 0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(18, 18, 18, 0.8) 1px, transparent 1px); background-size: 20px 20px; padding: 2.5rem; border: 1px solid #333; border-radius: 4px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important; color: #e2e8f0; position: relative; overflow: hidden; box-sizing: border-box; line-height: 1.5; }
-  .cp-logic-container * { box-sizing: border-box; }
-  
-   
-  .cp-logic-container, .cp-logic-container * { text-decoration: none !important; }
-  .cp-logic-container span, .cp-logic-container label, .cp-logic-container button, .cp-logic-container text { background-image: none !important; border-bottom: none !important; }
-  
-   
-  .cp-logic-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #10b981, #34d399, #10b981); background-size: 200% 100%; animation: scanline 4s linear infinite; pointer-events: none; z-index: 10; }
-  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
-
-  .cp-header { border-bottom: 1px solid #333 !important; padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
-  .cp-title { font-size: 1.5rem; font-weight: 700; color: #10b981 !important; text-transform: uppercase; letter-spacing: 0.1em; text-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
-  .cp-subtitle { font-size: 0.8rem; color: #64748b !important; }
-
-  .cp-input-area { margin-bottom: 1rem; display: flex; gap: 15px; align-items: stretch; }
-  .cp-logic-container .cp-input { flex: 1; background: #000 !important; border: 1px solid #444 !important; color: #10b981 !important; padding: 1rem; font-family: inherit; font-size: 1.1rem; border-radius: 2px; transition: all 0.2s; box-shadow: none !important; min-width: 0; }
-  .cp-input:focus { outline: none; border-color: #10b981 !important; box-shadow: 0 0 10px rgba(16, 185, 129, 0.2) !important; }
-
-  .cp-input-pad { display: flex; gap: 8px; margin-bottom: 2rem; flex-wrap: wrap; }
-  .cp-logic-container .cp-pad-btn { background: #18181b !important; border: 1px solid #333 !important; color: #a78bfa !important; padding: 6px 12px; font-family: inherit; font-weight: bold; font-size: 0.85rem; cursor: pointer; border-radius: 2px; transition: all 0.2s; box-shadow: none !important; }
-  .cp-pad-btn:hover { background: #222 !important; border-color: #a78bfa !important; color: #e2e8f0 !important; }
-  .cp-pad-btn span { color: #64748b; font-size: 0.75rem; font-weight: normal; margin-left: 4px; }
-  
-  .cp-logic-container .cp-btn { background: transparent !important; border: 1px solid #10b981 !important; color: #10b981 !important; padding: 0 2rem; font-family: inherit; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; justify-content: center; }
-  .cp-btn:hover { background: #10b981 !important; color: #000 !important; box-shadow: 0 0 10px rgba(16, 185, 129, 0.5) !important; }
-
-  .cp-error { color: #ef4444 !important; font-size: 0.9rem; margin-bottom: 1.5rem; display: none; border-left: 2px solid #ef4444 !important; background: rgba(239, 68, 68, 0.05); padding: 10px; }
-
-  .cp-tabs { display: flex; border-bottom: 1px solid #333 !important; margin-bottom: 2rem; flex-wrap: wrap; }
-  .cp-logic-container .cp-tab-btn { padding: 10px 20px; background: transparent !important; border-bottom: 2px solid transparent !important; color: #64748b !important; cursor: pointer; font-family: inherit; font-weight: bold; font-size: 0.9rem; transition: all 0.2s; box-shadow: none !important; }
-  .cp-tab-btn:hover { color: #e2e8f0 !important; }
-  .cp-tab-btn.active { color: #10b981 !important; border-bottom-color: #10b981 !important; background: rgba(16, 185, 129, 0.05) !important; }
-
-  .cp-content { display: none; }
-  .cp-content.active { display: block; animation: fadeIn 0.3s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-  .cp-sim-box { background: rgba(255, 255, 255, 0.02) !important; border: 1px solid #333 !important; padding: 2rem; text-align: center; }
-  .cp-switch-container { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 2rem; justify-content: center; }
-  .cp-logic-container .cp-switch { display: flex; flex-direction: column; align-items: center; cursor: pointer; user-select: none; background: #0e0e11 !important; border: 1px solid #333 !important; padding: 15px; min-width: 80px; transition: all 0.2s; box-shadow: none !important; }
-  .cp-switch:hover { border-color: #666 !important; }
-  .cp-switch.active { border-color: #10b981 !important; box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.1) !important; }
-  .cp-switch-label { font-weight: bold; color: #e2e8f0 !important; margin-bottom: 5px; font-size: 1.2rem; }
-  .cp-switch-val { font-size: 0.8rem; color: #64748b !important; }
-  .cp-switch.active .cp-switch-val { color: #10b981 !important; font-weight: bold; }
-
-  .cp-result-display { display: inline-flex; align-items: center; justify-content: center; gap: 15px; padding: 1rem 2rem; border: 1px solid #333 !important; background: #000 !important; border-radius: 30px; }
-  .cp-led { width: 24px; height: 24px; border-radius: 50%; background-color: #333 !important; border: 2px solid #555 !important; transition: all 0.2s; }
-  .cp-led.on { background-color: #22c55e !important; border-color: #166534 !important; box-shadow: 0 0 15px #22c55e, inset 0 0 5px rgba(255,255,255,0.8) !important; }
-  .cp-led-text { font-size: 1.2rem; font-weight: bold; color: #64748b !important; }
-  .cp-led.on + .cp-led-text { color: #22c55e !important; text-shadow: 0 0 5px rgba(34, 197, 94, 0.5); }
-
-  .cp-table-wrapper, .cp-kmap-wrapper { overflow-x: auto; border: 1px solid #333 !important; margin-bottom: 2rem; -webkit-overflow-scrolling: touch; }
-  .cp-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: center; }
-  .cp-table th { background-color: #18181b !important; color: #10b981 !important; padding: 12px; border-bottom: 1px solid #333 !important; border-right: 1px solid #333 !important; text-transform: uppercase; }
-  .cp-table td { padding: 10px; color: #e2e8f0 !important; border-bottom: 1px solid #333 !important; border-right: 1px solid #333 !important; }
-  .cp-table tr:hover td { background-color: rgba(255,255,255,0.05) !important; }
-  .cp-res-true { color: #22c55e !important; font-weight: bold; background: rgba(34, 197, 94, 0.1) !important; }
-  .cp-res-false { color: #ef4444 !important; opacity: 0.7; }
-  
-  .cp-kmap { border-collapse: collapse; margin: 0 auto; }
-  .cp-kmap td, .cp-kmap th { border: 1px solid #444 !important; padding: 15px; text-align: center; min-width: 40px; }
-  .cp-kmap-header { background: #18181b !important; color: #a78bfa !important; font-weight: bold; }
-  .cp-kmap-cell { color: #e2e8f0 !important; font-size: 1.1rem; }
-  .cp-kmap-cell.one { color: #10b981 !important; background: rgba(16, 185, 129, 0.1) !important; font-weight: bold; }
-
-  .cp-analysis-box { background: #0e0e11 !important; border: 1px solid #333 !important; padding: 1rem; margin-bottom: 2rem; }
-  .cp-analysis-label { color: #64748b; font-size: 0.8rem; margin-bottom: 5px; }
-  .cp-analysis-val { color: #facc15 !important; font-size: 1rem; }
-
-  .cp-svg-container { overflow-x: auto; padding: 2.5rem 1rem; background: #09090b; border: 1px solid #333; min-height: 250px; -webkit-overflow-scrolling: touch; }
-
-  .cp-toggle-container { display: flex; align-items: center; gap: 8px; background: #18181b; padding: 8px 12px; border: 1px solid #333; border-radius: 4px; cursor: pointer; transition: all 0.2s; user-select: none; }
-  .cp-toggle-container:hover { border-color: #10b981; }
-  .cp-toggle-container.active { border-color: #0ea5e9; background: rgba(14, 165, 233, 0.1); }
-  .cp-toggle-text { font-size: 0.8rem; font-weight: bold; color: #64748b; }
-  .cp-toggle-container.active .cp-toggle-text { color: #0ea5e9; text-shadow: 0 0 5px rgba(14, 165, 233, 0.5); }
-
-  @media (max-width: 640px) {
-    .cp-logic-container { padding: 1.5rem 1rem; width: 100%; margin: 1rem 0; border: none; }
-    .cp-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-    .cp-input-area { flex-direction: column; }
-    .cp-btn { width: 100%; padding: 1rem; }
-    .cp-pad-btn { flex: 1; text-align: center; }
+  #cyber-logic-app {
+    --neon-pink: #ff0055; --neon-cyan: #00f3ff; --neon-green: #00ff41;
+    --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #050505;
+    --panel-bg: rgba(10,14,18,0.90);
+    --accent: #10b981; --accent2: #a78bfa;
+    font-family: 'JetBrains Mono', monospace; color: #e0e0e0;
+    background-color: var(--bg-dark);
+    background-image: linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px);
+    background-size: 40px 40px; animation: lc-bg 20s linear infinite;
+    min-height: calc(100vh - 100px); width: 100%; position: relative; z-index: 10; margin: 0; padding: 0;
+    line-height: 1.5;
   }
+  #cyber-logic-app * { box-sizing: border-box; }
+  #cyber-logic-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:#050505; z-index:-2; }
+  #cyber-logic-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-image:linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px); background-size:40px 40px; animation:lc-bg 20s linear infinite; z-index:-1; }
+  #cyber-logic-app .lc-scan { position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1)); background-size:100% 4px; pointer-events:none; z-index:50; opacity:0.5; }
+  @keyframes lc-bg { 0%{background-position:0 0}100%{background-position:40px 40px} }
+
+   
+  #cyber-logic-app .lc-ref { margin-top:24px; padding:20px; background:rgba(0,0,0,0.6); border:1px solid #1f2937; border-left:2px solid var(--accent); }
+  #cyber-logic-app .lc-ref h3 { color:var(--accent); font-family:'Orbitron',sans-serif; font-size:14px; margin-bottom:16px; letter-spacing:1px; }
+  #cyber-logic-app .lc-ref-item { color:#9ca3af; font-size:13px; margin-bottom:6px; line-height:1.6; }
+  #cyber-logic-app .lc-ref-item code { background:rgba(0,0,0,0.8); border:1px solid #333; padding:2px 6px; color:var(--accent); font-size:12px; }
+  #cyber-logic-app .lc-ref ol { padding-left:20px; margin:0; }
+  #cyber-logic-app .lc-ref ol li { color:#9ca3af; font-size:12px; margin-bottom:10px; line-height:1.5; }
+  #cyber-logic-app .lc-ref ol li code { background:rgba(0,0,0,0.8); border:1px solid #333; padding:2px 6px; color:var(--accent2); font-size:11px; }
+
+   
+  #cyber-logic-app .lc-glitch { font-family:'Orbitron',sans-serif; position:relative; color:var(--accent); text-shadow:2px 2px var(--neon-pink); }
+  #cyber-logic-app .lc-glitch::before,#cyber-logic-app .lc-glitch::after { content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%; background:transparent; }
+  #cyber-logic-app .lc-glitch::before { left:2px; text-shadow:-1px 0 var(--neon-cyan); clip:rect(24px,550px,90px,0); animation:lc-g2 3s infinite linear alternate-reverse; }
+  #cyber-logic-app .lc-glitch::after { left:-2px; text-shadow:-1px 0 var(--neon-pink); clip:rect(85px,550px,140px,0); animation:lc-g1 2.5s infinite linear alternate-reverse; }
+  @keyframes lc-g1 { 0%{clip:rect(14px,9999px,122px,0)} 5%{clip:rect(82px,9999px,92px,0)} 100%{clip:rect(5px,9999px,133px,0)} }
+  @keyframes lc-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
+
+   
+  #cyber-logic-app .lc-panel { background:var(--panel-bg); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 20px rgba(0,0,0,0.8),inset 0 0 30px rgba(0,243,255,0.05); backdrop-filter:blur(5px); }
+  #cyber-logic-app .lc-clip { clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
+
+  #cyber-logic-app .lc-main { width:100%; max-width:1100px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
+  @media(min-width:768px) { #cyber-logic-app .lc-main { padding:0 0 32px 0; margin-top:32px; } }
+
+   
+  #cyber-logic-app .lc-hbar { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; padding:0 4px; opacity:0.8; }
+  #cyber-logic-app .lc-sysver { font-size:9px; color:var(--accent); font-family:monospace; letter-spacing:2px; }
+  @media(min-width:768px) { #cyber-logic-app .lc-sysver { font-size:12px; } }
+  #cyber-logic-app .lc-status { font-size:9px; font-family:monospace; display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:4px; border:1px solid rgba(0,255,65,0.3); color:#4ade80; white-space:nowrap; }
+  @media(min-width:768px) { #cyber-logic-app .lc-status { font-size:12px; padding:4px 12px; gap:8px; } }
+  #cyber-logic-app .lc-pulse { animation:lc-p 1.5s ease-in-out infinite; }
+  @keyframes lc-p { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+   
+  #cyber-logic-app .lc-title-sec { margin-bottom:16px; text-align:center; border-bottom:1px solid #1f2937; padding-bottom:16px; position:relative; padding-top:24px; }
+  @media(min-width:768px) { #cyber-logic-app .lc-title-sec { text-align:left; padding-top:0; margin-bottom:24px; padding-bottom:20px; } }
+  #cyber-logic-app .lc-title { font-size:20px; font-weight:700; letter-spacing:-0.05em; margin-bottom:4px; margin-top:8px; }
+  @media(min-width:768px) { #cyber-logic-app .lc-title { font-size:36px; margin-top:0; } }
+  #cyber-logic-app .lc-sub { font-size:9px; color:#9ca3af; font-family:monospace; letter-spacing:0.1em; text-transform:uppercase; }
+  @media(min-width:768px) { #cyber-logic-app .lc-sub { font-size:12px; letter-spacing:0.2em; } }
+
+   
+  #cyber-logic-app .lc-corner { position:absolute; width:24px; height:24px; border-color:var(--accent); opacity:0.5; }
+  @media(min-width:768px) { #cyber-logic-app .lc-corner { width:32px; height:32px; } }
+  #cyber-logic-app .lc-c-tl { top:0; left:0; border-top:2px solid; border-left:2px solid; }
+  #cyber-logic-app .lc-c-tr { top:0; right:0; border-top:2px solid; border-right:2px solid; }
+  #cyber-logic-app .lc-c-bl { bottom:0; left:0; border-bottom:2px solid; border-left:2px solid; }
+  #cyber-logic-app .lc-c-br { bottom:0; right:0; border-bottom:2px solid; border-right:2px solid; }
+
+   
+  #cyber-logic-app, #cyber-logic-app * { text-decoration: none !important; }
+  #cyber-logic-app span, #cyber-logic-app label, #cyber-logic-app button, #cyber-logic-app text { background-image: none !important; border-bottom: none !important; }
+
+   
+  #cyber-logic-app .cp-input-area { margin-bottom:1rem; display:flex; gap:15px; align-items:stretch; }
+  @media(max-width:640px) { #cyber-logic-app .cp-input-area { flex-direction:column; } }
+  #cyber-logic-app .cp-input { flex:1; background:rgba(0,0,0,0.8) !important; border:1px solid #333 !important; color:var(--accent) !important; padding:1rem; font-family:inherit; font-size:1.1rem; border-radius:2px; transition:all 0.2s; box-shadow:none !important; min-width:0; }
+  #cyber-logic-app .cp-input:focus { outline:none; border-color:var(--accent) !important; box-shadow:0 0 10px rgba(16,185,129,0.2) !important; }
+
+   
+  #cyber-logic-app .cp-input-pad { display:flex; gap:8px; margin-bottom:2rem; flex-wrap:wrap; }
+  #cyber-logic-app .cp-pad-btn { background:rgba(0,0,0,0.6) !important; border:1px solid #333 !important; color:var(--accent2) !important; padding:6px 12px; font-family:inherit; font-weight:bold; font-size:0.85rem; cursor:pointer; border-radius:2px; transition:all 0.2s; box-shadow:none !important; }
+  #cyber-logic-app .cp-pad-btn:hover { background:#222 !important; border-color:var(--accent2) !important; color:#e2e8f0 !important; }
+  #cyber-logic-app .cp-pad-btn span { color:#64748b; font-size:0.75rem; font-weight:normal; margin-left:4px; }
+
+   
+  #cyber-logic-app .cp-btn { background:linear-gradient(90deg,transparent 0%,rgba(16,185,129,0.1) 50%,transparent 100%) !important; border:1px solid var(--accent) !important; color:var(--accent) !important; padding:0 2rem; font-family:'Orbitron',sans-serif; font-weight:bold; cursor:pointer; text-transform:uppercase; font-size:0.9rem; letter-spacing:1px; transition:all 0.2s; white-space:nowrap; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  #cyber-logic-app .cp-btn:hover { background:var(--accent) !important; color:#000 !important; box-shadow:0 0 20px rgba(16,185,129,0.5) !important; }
+  #cyber-logic-app .cp-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent); transition:0.5s; }
+  #cyber-logic-app .cp-btn:hover::before { left:100%; }
+  @media(max-width:640px) { #cyber-logic-app .cp-btn { width:100%; padding:1rem; }
+    #cyber-logic-app .cp-pad-btn { flex:1; text-align:center; } }
+
+   
+  #cyber-logic-app .cp-error { color:#ef4444 !important; font-size:0.9rem; margin-bottom:1.5rem; display:none; border-left:2px solid #ef4444 !important; background:rgba(239,68,68,0.05); padding:10px; }
+
+   
+  #cyber-logic-app .cp-tabs { display:flex; border-bottom:1px solid #333 !important; margin-bottom:2rem; flex-wrap:wrap; }
+  #cyber-logic-app .cp-tab-btn { padding:10px 20px; background:transparent !important; border-bottom:2px solid transparent !important; color:#64748b !important; cursor:pointer; font-family:inherit; font-weight:bold; font-size:0.9rem; transition:all 0.2s; box-shadow:none !important; border:none !important; border-bottom:2px solid transparent !important; }
+  #cyber-logic-app .cp-tab-btn:hover { color:#e2e8f0 !important; }
+  #cyber-logic-app .cp-tab-btn.active { color:var(--accent) !important; border-bottom-color:var(--accent) !important; background:rgba(16,185,129,0.05) !important; }
+
+   
+  #cyber-logic-app .cp-content { display:none; }
+  #cyber-logic-app .cp-content.active { display:block; animation:lcFadeIn 0.3s ease; }
+  @keyframes lcFadeIn { from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)} }
+
+   
+  #cyber-logic-app .cp-sim-box { background:rgba(255,255,255,0.02) !important; border:1px solid #333 !important; padding:2rem; text-align:center; }
+  #cyber-logic-app .cp-switch-container { display:flex; flex-wrap:wrap; gap:20px; margin-bottom:2rem; justify-content:center; }
+  #cyber-logic-app .cp-switch { display:flex; flex-direction:column; align-items:center; cursor:pointer; user-select:none; background:rgba(0,0,0,0.6) !important; border:1px solid #333 !important; padding:15px; min-width:80px; transition:all 0.2s; box-shadow:none !important; }
+  #cyber-logic-app .cp-switch:hover { border-color:#666 !important; }
+  #cyber-logic-app .cp-switch.active { border-color:var(--accent) !important; box-shadow:inset 0 0 10px rgba(16,185,129,0.1) !important; }
+  #cyber-logic-app .cp-switch-label { font-weight:bold; color:#e2e8f0 !important; margin-bottom:5px; font-size:1.2rem; }
+  #cyber-logic-app .cp-switch-val { font-size:0.8rem; color:#64748b !important; }
+  #cyber-logic-app .cp-switch.active .cp-switch-val { color:var(--accent) !important; font-weight:bold; }
+
+   
+  #cyber-logic-app .cp-result-display { display:inline-flex; align-items:center; justify-content:center; gap:15px; padding:1rem 2rem; border:1px solid #333 !important; background:rgba(0,0,0,0.8) !important; border-radius:30px; }
+  #cyber-logic-app .cp-led { width:24px; height:24px; border-radius:50%; background-color:#333 !important; border:2px solid #555 !important; transition:all 0.2s; }
+  #cyber-logic-app .cp-led.on { background-color:#22c55e !important; border-color:#166534 !important; box-shadow:0 0 15px #22c55e,inset 0 0 5px rgba(255,255,255,0.8) !important; }
+  #cyber-logic-app .cp-led-text { font-size:1.2rem; font-weight:bold; color:#64748b !important; }
+  #cyber-logic-app .cp-led.on + .cp-led-text { color:#22c55e !important; text-shadow:0 0 5px rgba(34,197,94,0.5); }
+
+   
+  #cyber-logic-app .cp-table-wrapper, #cyber-logic-app .cp-kmap-wrapper { overflow-x:auto; border:1px solid #333 !important; margin-bottom:2rem; -webkit-overflow-scrolling:touch; }
+  #cyber-logic-app .cp-table { width:100%; border-collapse:collapse; font-size:0.9rem; text-align:center; }
+  #cyber-logic-app .cp-table th { background-color:rgba(0,0,0,0.6) !important; color:var(--accent) !important; padding:12px; border-bottom:1px solid #333 !important; border-right:1px solid #333 !important; text-transform:uppercase; }
+  #cyber-logic-app .cp-table td { padding:10px; color:#e2e8f0 !important; border-bottom:1px solid #333 !important; border-right:1px solid #333 !important; }
+  #cyber-logic-app .cp-table tr:hover td { background-color:rgba(255,255,255,0.05) !important; }
+  #cyber-logic-app .cp-res-true { color:#22c55e !important; font-weight:bold; background:rgba(34,197,94,0.1) !important; }
+  #cyber-logic-app .cp-res-false { color:#ef4444 !important; opacity:0.7; }
+
+   
+  #cyber-logic-app .cp-kmap { border-collapse:collapse; margin:0 auto; }
+  #cyber-logic-app .cp-kmap td, #cyber-logic-app .cp-kmap th { border:1px solid #444 !important; padding:15px; text-align:center; min-width:40px; }
+  #cyber-logic-app .cp-kmap-header { background:rgba(0,0,0,0.6) !important; color:var(--accent2) !important; font-weight:bold; }
+  #cyber-logic-app .cp-kmap-cell { color:#e2e8f0 !important; font-size:1.1rem; }
+  #cyber-logic-app .cp-kmap-cell.one { color:var(--accent) !important; background:rgba(16,185,129,0.1) !important; font-weight:bold; }
+
+   
+  #cyber-logic-app .cp-analysis-box { background:rgba(0,0,0,0.6) !important; border:1px solid #333 !important; padding:1rem; margin-bottom:2rem; }
+  #cyber-logic-app .cp-analysis-label { color:#64748b; font-size:0.8rem; margin-bottom:5px; }
+  #cyber-logic-app .cp-analysis-val { color:#facc15 !important; font-size:1rem; }
+
+   
+  #cyber-logic-app .cp-svg-container { overflow-x:auto; padding:2.5rem 1rem; background:rgba(0,0,0,0.5); border:1px solid #333; min-height:250px; -webkit-overflow-scrolling:touch; }
+
+   
+  #cyber-logic-app .cp-toggle-container { display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.6); padding:8px 12px; border:1px solid #333; border-radius:4px; cursor:pointer; transition:all 0.2s; user-select:none; }
+  #cyber-logic-app .cp-toggle-container:hover { border-color:var(--accent); }
+  #cyber-logic-app .cp-toggle-container.active { border-color:#0ea5e9; background:rgba(14,165,233,0.1); }
+  #cyber-logic-app .cp-toggle-text { font-size:0.8rem; font-weight:bold; color:#64748b; }
+  #cyber-logic-app .cp-toggle-container.active .cp-toggle-text { color:#0ea5e9; text-shadow:0 0 5px rgba(14,165,233,0.5); }
 </style>
 
-<div class="cp-logic-container">
-  <div class="cp-header">
-    <div class="cp-title">LOGIC_CIRCUIT_SIM</div>
-    <div class="cp-subtitle">// 論理回路解析・シミュレータ v10.1 (FINAL)</div>
-  </div>
+<div id="cyber-logic-app">
+  <div class="lc-scan"></div>
+  <div class="lc-main">
+    <div class="lc-hbar">
+      <div class="lc-sysver">SYS.VER.10.1 // LOGIC_ENGINE</div>
+      <div class="lc-status" id="lcStatus"><span class="lc-pulse">●</span> SYSTEM READY</div>
+    </div>
 
-  <div class="cp-input-area">
-    <input type="text" id="logicInput" class="cp-input" placeholder="論理式を入力 (例: !(A & B) | C)" value="!(A & B) | C">
-    <button onclick="runAnalysis()" class="cp-btn">ANALYZE (解析)</button>
-  </div>
+    <div class="lc-panel lc-clip" style="padding:16px; position:relative;">
+      <div class="lc-corner lc-c-tl"></div><div class="lc-corner lc-c-tr"></div>
+      <div class="lc-corner lc-c-bl"></div><div class="lc-corner lc-c-br"></div>
 
-  <div class="cp-input-pad">
-    <button class="cp-pad-btn" onclick="insertSymbol('&')">& <span>AND</span></button>
-    <button class="cp-pad-btn" onclick="insertSymbol('|')">| <span>OR</span></button>
-    <button class="cp-pad-btn" onclick="insertSymbol('!')">! <span>NOT</span></button>
-    <button class="cp-pad-btn" onclick="insertSymbol('^')">^ <span>XOR</span></button>
-    <button class="cp-pad-btn" onclick="insertSymbol('(')">(</button>
-    <button class="cp-pad-btn" onclick="insertSymbol(')')">)</button>
-  </div>
-  
-  <div id="logicError" class="cp-error"></div>
-
-  <div class="cp-tabs">
-    <button id="btn-sim" class="cp-tab-btn active" onclick="switchTab('sim')">SIMULATOR</button>
-    <button id="btn-table" class="cp-tab-btn" onclick="switchTab('table')">TRUTH TABLE</button>
-    <button id="btn-kmap" class="cp-tab-btn" onclick="switchTab('kmap')">K-MAP</button>
-    <button id="btn-svg" class="cp-tab-btn" onclick="switchTab('svg')">SCHEMATIC</button>
-  </div>
-
-  <div id="tab-sim" class="cp-content active">
-    <div class="cp-sim-box">
-      <div style="margin-bottom:1rem; color:#64748b; font-size:0.9rem; font-weight:bold;">>> INTERACTIVE_MODE [スイッチを操作してください]</div>
-      <div id="switchArea" class="cp-switch-container"><span style="color:#666;">// WAITING FOR ANALYSIS...</span></div>
-      <div class="cp-result-display">
-        <div id="resultLed" class="cp-led"></div>
-        <div class="cp-led-text">OUTPUT: <span id="resultText">-</span></div>
+      <div class="lc-title-sec">
+        <h1 class="lc-title lc-glitch" data-text="LOGIC_CIRCUIT_SIM">LOGIC_CIRCUIT_SIM</h1>
+        <p class="lc-sub">Boolean Logic Analysis &amp; Simulation Module</p>
       </div>
-    </div>
-  </div>
 
-  <div id="tab-table" class="cp-content">
-    <div class="cp-analysis-box">
-      <div class="cp-analysis-label">SOP (主加法標準形):</div>
-      <div id="sopResult" class="cp-analysis-val">// NOT AVAILABLE</div>
-    </div>
-    <div class="cp-table-wrapper">
-      <table id="truthTable" class="cp-table">
-        <thead><tr id="tableHeader"></tr></thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div id="tab-kmap" class="cp-content">
-    <div style="text-align:center; padding:1rem;">
-      <div id="kmapContainer" class="cp-kmap-wrapper" style="border:none; margin:0;">
-        <span style="color:#666;">// 2〜4変数の論理式に対応しています</span>
+      <div class="cp-input-area">
+        <input type="text" id="logicInput" class="cp-input" placeholder="論理式を入力 (例: !(A & B) | C)" value="!(A & B) | C">
+        <button onclick="runAnalysis()" class="cp-btn">ANALYZE (解析)</button>
       </div>
-    </div>
-  </div>
 
-  <div id="tab-svg" class="cp-content">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
+      <div class="cp-input-pad">
+        <button class="cp-pad-btn" onclick="insertSymbol('&')">&amp; <span>AND</span></button>
+        <button class="cp-pad-btn" onclick="insertSymbol('|')">| <span>OR</span></button>
+        <button class="cp-pad-btn" onclick="insertSymbol('!')">! <span>NOT</span></button>
+        <button class="cp-pad-btn" onclick="insertSymbol('^')">^ <span>XOR</span></button>
+        <button class="cp-pad-btn" onclick="insertSymbol('(')">(</button>
+        <button class="cp-pad-btn" onclick="insertSymbol(')')">)</button>
+      </div>
+
+      <div id="logicError" class="cp-error"></div>
+
+      <div class="cp-tabs">
+        <button id="btn-sim" class="cp-tab-btn active" onclick="switchTab('sim')">SIMULATOR</button>
+        <button id="btn-table" class="cp-tab-btn" onclick="switchTab('table')">TRUTH TABLE</button>
+        <button id="btn-kmap" class="cp-tab-btn" onclick="switchTab('kmap')">K-MAP</button>
+        <button id="btn-svg" class="cp-tab-btn" onclick="switchTab('svg')">SCHEMATIC</button>
+      </div>
+
+      <div id="tab-sim" class="cp-content active">
+        <div class="cp-sim-box">
+          <div style="margin-bottom:1rem; color:#64748b; font-size:0.9rem; font-weight:bold;">>> INTERACTIVE_MODE [スイッチを操作してください]</div>
+          <div id="switchArea" class="cp-switch-container"><span style="color:#666;">// WAITING FOR ANALYSIS...</span></div>
+          <div class="cp-result-display">
+            <div id="resultLed" class="cp-led"></div>
+            <div class="cp-led-text">OUTPUT: <span id="resultText">-</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-table" class="cp-content">
+        <div class="cp-analysis-box">
+          <div class="cp-analysis-label">SOP (主加法標準形):</div>
+          <div id="sopResult" class="cp-analysis-val">// NOT AVAILABLE</div>
+        </div>
+        <div class="cp-table-wrapper">
+          <table id="truthTable" class="cp-table">
+            <thead><tr id="tableHeader"></tr></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="tab-kmap" class="cp-content">
+        <div style="text-align:center; padding:1rem;">
+          <div id="kmapContainer" class="cp-kmap-wrapper" style="border:none; margin:0;">
+            <span style="color:#666;">// 2〜4変数の論理式に対応しています</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-svg" class="cp-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
+          <label id="nandToggleWrapper" class="cp-toggle-container">
+            <input type="checkbox" id="nandModeToggle" onchange="toggleNandMode()" style="display:none;">
+            <div style="width:12px; height:12px; border-radius:50%; background:#444; border:1px solid #666;" id="nandIndicator"></div>
+            <span class="cp-toggle-text">NAND ONLY MODE</span>
+          </label>
+          <button onclick="downloadSVGAsPNG()" class="cp-btn" style="padding: 0.5rem 1rem; font-size: 0.8rem; height: auto;">SAVE AS PNG</button>
+        </div>
+        <div id="svgContainer" class="cp-svg-container">
+          <span style="color:#666;">// WAITING FOR ANALYSIS...</span>
+        </div>
+      </div>
+      </div>
+
       
-      <label id="nandToggleWrapper" class="cp-toggle-container">
-        <input type="checkbox" id="nandModeToggle" onchange="toggleNandMode()" style="display:none;">
-        <div style="width:12px; height:12px; border-radius:50%; background:#444; border:1px solid #666;" id="nandIndicator"></div>
-        <span class="cp-toggle-text">NAND ONLY MODE</span>
-      </label>
-
-      <button onclick="downloadSVGAsPNG()" class="cp-btn" style="padding: 0.5rem 1rem; font-size: 0.8rem; height: auto;">SAVE AS PNG</button>
-    </div>
-    <div id="svgContainer" class="cp-svg-container">
-      <span style="color:#666;">// WAITING FOR ANALYSIS...</span>
+      <div class="lc-ref">
+        <h3>>> SYNTAX_REFERENCE [記法例]</h3>
+        <div class="lc-ref-item"><code>A & B</code> : AND</div>
+        <div class="lc-ref-item"><code>A | B</code> : OR</div>
+        <div class="lc-ref-item"><code>!A</code> : NOT</div>
+        <div class="lc-ref-item"><code>(A | B) & !C</code> : 組み合わせ</div>
+        
+        <h3 style="margin-top:20px;">>> TEST_CASES [テスト用]</h3>
+        <ol>
+          <li><strong>多数決回路 (3入力)</strong> 3人のうち2人以上が賛成(ON)ならTrue:<br><code>((A & B) | (B & C)) | (C & A)</code></li>
+          <li><strong>4ビットパリティチェック</strong> ONの数が奇数個ならTrue，偶数個ならFalse:<br><code>A ^ B ^ C ^ D</code></li>
+          <li><strong>複雑なネストと否定</strong> 括弧の優先順位とNOTの動作確認用:<br><code>!((A & !B) | (C ^ !D))</code></li>
+          <li><strong>ド・モルガンの法則</strong> 左辺と右辺は論理的に等価なため，XORをとると結果は常にFalse:<br><code>!(A | B) ^ (!A & !B)</code></li>
+          <li><strong>マルチプレクサ</strong> Sが0ならAを出力，Sが1ならBを出力:<br><code>(!S & A) | (S & B)</code></li>
+        </ol>
+      </div>
     </div>
   </div>
-
 </div>
 
 <script>
+   
+   
+
   let currentVariables = [];
   let currentExpression = "";
   let truthTableData = [];
@@ -1321,10 +1421,6 @@
 
     const pad = 40;
     const maxCy = Math.max((leafY - 1) * rowH, 10) + 40;
-    
-    
-    
-    
     const width = ast.cx + 180; 
     const height = maxCy + 60;
 
@@ -1457,51 +1553,6 @@
     img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
   }
 </script>
-<hr>
-
-<h3 class="relative group">記法例
-    <div id="記法例" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%a8%98%e6%b3%95%e4%be%8b" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-<ul>
-<li><strong>AND</strong>: <code>A &amp; B</code></li>
-<li><strong>OR</strong>: <code>A | B</code></li>
-<li><strong>NOT</strong>: <code>!A</code></li>
-<li><strong>組み合わせ</strong>: <code>(A | B) &amp; !C</code></li>
-</ul>
-<hr>
-
-<h3 class="relative group">テスト用
-    <div id="テスト用" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e3%83%86%e3%82%b9%e3%83%88%e7%94%a8" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-<ol>
-<li>
-<p>多数決回路 (3入力) 3人のうち2人以上が賛成(ON)ならTrue: <code>((A &amp; B) | (B &amp; C)) | (C &amp; A)</code></p>
-</li>
-<li>
-<p>4ビットパリティチェック ONの数が奇数個ならTrue，偶数個ならFalse: <code>A ^ B ^ C ^ D</code></p>
-</li>
-<li>
-<p>複雑なネストと否定 括弧の優先順位とNOTの動作確認用: <code>!((A &amp; !B) | (C ^ !D))</code></p>
-</li>
-<li>
-<p>ド・モルガンの法則 左辺と右辺は論理的に等価なため，XORをとると結果は常にFalse:  <code>!(A | B) ^ (!A &amp; !B)</code></p>
-</li>
-<li>
-<p>マルチプレクサ Sが0ならAを出力，Sが1ならBを出力: <code>(!S &amp; A) | (S &amp; B)</code></p>
-</li>
-</ol>
 
     </section>
     <footer class="pt-8">
