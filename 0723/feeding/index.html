@@ -1319,11 +1319,11 @@
   }
   .fl-animal-controls {
     display: flex;
-    gap: 4px;
+    gap: 8px;
     align-items: center;
     flex-shrink: 0;
   }
-  .fl-animal-btn {
+  .fl-animal-btn.del {
     background: transparent;
     border: 1px solid #333;
     color: #555;
@@ -1337,22 +1337,29 @@
     justify-content: center;
     transition: all 0.2s;
   }
-  .fl-animal-btn:hover {
-    border-color: #06b6d4;
-    color: #06b6d4;
-  }
   .fl-animal-btn.del:hover {
     border-color: #ef4444;
     color: #ef4444;
   }
-  .fl-animal-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-    border-color: #222;
-    color: #333;
+  .fl-animal-drag-handle {
+    color: #475569;
+    cursor: grab;
+    padding: 0 4px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
   }
-  .fl-animal-btn:active:not(:disabled) {
-    transform: scale(0.9);
+  .fl-animal-item.dragging {
+    opacity: 0.5;
+    transform: scale(0.98);
+    border-color: #10b981;
+    z-index: 100;
+  }
+  .fl-animal-item.drag-over {
+    border-top: 2px solid #10b981;
   }
 
    
@@ -2202,7 +2209,8 @@
       animalListEl.innerHTML = animals
         .map(
           (a, index) => `
-      <div class="fl-animal-item">
+      <div class="fl-animal-item" data-id="${a.id}" data-index="${index}">
+        <div class="fl-animal-drag-handle" title="長押ししてドラッグで移動">⠿</div>
         <span class="fl-animal-emoji">${a.emoji}</span>
         <div class="fl-animal-info">
           <div class="fl-animal-name">${a.name}</div>
@@ -2210,38 +2218,109 @@
         </div>
         <span class="fl-animal-alert-badge">×${a.alertDays || 3}日</span>
         <div class="fl-animal-controls">
-          <button class="fl-animal-btn move-up" data-id="${a.id}" data-index="${index}" ${index === 0 ? 'disabled' : ''} title="上に移動">↑</button>
-          <button class="fl-animal-btn move-down" data-id="${a.id}" data-index="${index}" ${index === animals.length - 1 ? 'disabled' : ''} title="下に移動">↓</button>
           <button class="fl-animal-btn del" data-id="${a.id}" title="削除">×</button>
         </div>
       </div>
-    `,
+    `
         )
         .join("");
 
       
-      animalListEl.querySelectorAll(".move-up, .move-down").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          if (btn.disabled) return;
-          const index = parseInt(btn.dataset.index);
-          const isUp = btn.classList.contains("move-up");
-          const targetIndex = isUp ? index - 1 : index + 1;
+
+      let dragTimer = null;
+      let draggedItem = null;
+      let draggedIndex = null;
+      let startY = 0;
+      let isDragging = false;
+
+      const items = animalListEl.querySelectorAll('.fl-animal-item');
+
+      items.forEach(item => {
+        const handle = item.querySelector('.fl-animal-drag-handle');
+        
+        const startDrag = (e) => {
+          if (e.touches && e.touches.length > 1) return;
+          const t = e.touches ? e.touches[0] : e;
+          startY = t.clientY;
           
-          if (targetIndex >= 0 && targetIndex < animals.length) {
-            const currentAnimal = animals[index];
-            const targetAnimal = animals[targetIndex];
+          dragTimer = setTimeout(() => {
+            isDragging = true;
+            draggedItem = item;
+            draggedIndex = parseInt(item.dataset.index);
+            item.classList.add('dragging');
+            
+            if (e.touches) document.body.style.overflow = 'hidden'; 
+          }, 300); 
+        };
+
+        const moveDrag = (e) => {
+          if (!isDragging) {
+             if (dragTimer) { 
+                const t = e.touches ? e.touches[0] : e;
+                if (Math.abs(t.clientY - startY) > 10) clearTimeout(dragTimer);
+             }
+             return;
+          }
+          if (e.cancelable) e.preventDefault(); 
+          const t = e.touches ? e.touches[0] : e;
+          
+          let overItem = null;
+          let minDist = Infinity;
+          
+          items.forEach(otherItem => {
+            if (otherItem === draggedItem) return;
+            otherItem.classList.remove('drag-over');
+            const rect = otherItem.getBoundingClientRect();
+            
+            if (t.clientY > rect.top && t.clientY < rect.bottom) {
+                overItem = otherItem;
+            }
+          });
+
+          if (overItem) {
+            overItem.classList.add('drag-over');
+          }
+        };
+
+        const endDrag = (e) => {
+          clearTimeout(dragTimer);
+          if (!isDragging) return;
+          isDragging = false;
+          draggedItem.classList.remove('dragging');
+          document.body.style.overflow = '';
+          
+          const overItem = Array.from(items).find(i => i.classList.contains('drag-over'));
+          items.forEach(i => i.classList.remove('drag-over'));
+
+          if (overItem && overItem !== draggedItem) {
+            const targetIndex = parseInt(overItem.dataset.index);
             
             
-            const currentOrder = currentAnimal.order !== undefined ? currentAnimal.order : index;
-            const targetOrder = targetAnimal.order !== undefined ? targetAnimal.order : targetIndex;
+            const newAnimals = [...animals];
+            const moved = newAnimals.splice(draggedIndex, 1)[0];
+            newAnimals.splice(targetIndex, 0, moved);
             
-            data.animals[currentAnimal.id].order = targetOrder;
-            data.animals[targetAnimal.id].order = currentOrder;
+            newAnimals.forEach((a, i) => {
+              data.animals[a.id].order = i;
+            });
             
             pushData();
             render();
           }
-        });
+          draggedItem = null;
+        };
+
+        handle.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', moveDrag, { passive: false });
+        document.addEventListener('mouseup', endDrag);
+
+        handle.addEventListener('touchstart', startDrag, { passive: true });
+        document.addEventListener('touchmove', moveDrag, { passive: false });
+        document.addEventListener('touchend', endDrag);
+        handle.addEventListener('touchcancel', () => clearTimeout(dragTimer));
+        
+        
+        handle.addEventListener("contextmenu", e => e.preventDefault());
       });
 
       
