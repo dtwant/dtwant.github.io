@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "93"
+    "wordCount": "50"
   }]
   </script>
 
@@ -791,31 +791,7 @@
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      
-<h1 class="relative group">PROBABILITY_SIM <span style="font-size:12px;color:#00ff41;">// STOCHASTIC_ENGINE</span>
-    <div id="probability_sim--stochastic_engine" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#probability_sim--stochastic_engine" aria-label="Anchor">#</a>
-    </span>
-    
-</h1>
-<p>高度な乱数生成器を用いて、統計的振る舞いをリアルタイムに可視化するシミュレータ。</p>
-<blockquote>
-<p>[!NOTE]
-<strong>6 SIMULATION MODULES:</strong></p>
-<ul>
-<li><strong>[ COIN_TOSS ]</strong> 二項分布・大数の法則</li>
-<li><strong>[ MULTI_DICE ]</strong> 中心極限定理・正規分布（理論曲線オーバーレイ）</li>
-<li><strong>[ MONTE_CARLO_PI ]</strong> モンテカルロ法による π 推定</li>
-<li><strong>[ BIRTHDAY_PARADOX ]</strong> 誕生日の重複確率</li>
-<li><strong>[ BUFFON_NEEDLE ]</strong> ビュフォンの針による π 推定</li>
-<li><strong>[ RANDOM_WALK ]</strong> 1Dランダムウォーク・拡散</li>
-</ul>
-<p><strong>±2σ信頼区間表示 · 収束アラート · 正規分布理論曲線</strong> 搭載</p></blockquote>
-<hr>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
   #ps-app {
@@ -824,6 +800,7 @@
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     z-index: 99999; background: var(--bg-dark); margin: 0; padding: 0;
     box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
   #ps-app * { box-sizing: inherit; text-decoration: none !important; }
   .ps-bg-grid {
@@ -841,39 +818,48 @@
   .ps-container { position: relative; z-index: 10; display: flex; flex-direction: column; width: 100%; height: 100%; }
   .ps-header {
     background: rgba(0,0,0,0.95); border-bottom: 2px solid rgba(0, 255, 65, 0.4);
-    padding: 8px 15px; display: flex; justify-content: space-between; align-items: center;
-    flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,0.8); gap: 8px; min-height: 44px;
   }
   .ps-title {
-    font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
+    font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 900;
     color: var(--neon-green); text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-    letter-spacing: 2px; display: flex; align-items: center; gap: 12px;
+    letter-spacing: 1px; display: flex; align-items: center; gap: 8px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
   }
+  @media(min-width: 768px) { .ps-title { font-size: 1.1rem; letter-spacing: 2px; gap: 12px; } }
   .ps-sys-status {
-    font-size: 0.7rem; color: var(--neon-cyan); display: flex; align-items: center; gap: 6px;
-    background: rgba(0, 243, 255, 0.05); padding: 4px 10px; border: 1px solid rgba(0, 243, 255, 0.2);
-    font-family: 'JetBrains Mono', monospace; font-weight: bold;
+    font-size: 0.6rem; color: var(--neon-cyan); display: flex; align-items: center; gap: 4px;
+    background: rgba(0, 243, 255, 0.05); padding: 3px 8px; border: 1px solid rgba(0, 243, 255, 0.2);
+    font-family: 'JetBrains Mono', monospace; font-weight: bold; white-space: nowrap;
   }
+  @media(min-width: 768px) { .ps-sys-status { font-size: 0.7rem; padding: 4px 10px; gap: 6px; } }
+  .ps-header-right { display: flex; align-items: center; flex-shrink: 0; }
   .ps-exit-btn {
     background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
-    font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.7rem; font-weight: bold;
-    padding: 5px 12px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px; margin-left:10px;
+    font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.65rem; font-weight: bold;
+    padding: 5px 10px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px; margin-left: 6px;
+    min-height: 32px; min-width: 32px; display: flex; align-items: center; justify-content: center;
   }
+  @media(min-width: 768px) { .ps-exit-btn { font-size: 0.7rem; padding: 5px 12px; margin-left: 10px; } }
   .ps-exit-btn:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px rgba(255,0,85,0.5); }
-  .ps-workspace { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
-  @media(min-width: 1000px) { .ps-workspace { flex-direction: row; } }
+  .ps-workspace { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+  @media(min-width: 1000px) { .ps-workspace { flex-direction: row; overflow: hidden; } }
   .ps-sidebar {
-    width: 100%; background: rgba(5,5,5,0.9); border-right: 1px solid rgba(0, 255, 65, 0.2);
-    display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0;
-    box-shadow: inset -10px 0 20px rgba(0,0,0,0.5); padding: 15px; gap: 12px;
+    width: 100%; background: rgba(5,5,5,0.9); border-right: none;
+    display: flex; flex-direction: column; flex-shrink: 0;
+    padding: 10px; gap: 8px; border-bottom: 1px solid rgba(0, 255, 65, 0.2);
   }
-  @media(min-width: 1000px) { .ps-sidebar { width: 320px; } }
+  @media(min-width: 1000px) {
+    .ps-sidebar { width: 320px; overflow-y: auto; border-right: 1px solid rgba(0, 255, 65, 0.2); border-bottom: none; box-shadow: inset -10px 0 20px rgba(0,0,0,0.5); padding: 15px; gap: 12px; }
+  }
   .ps-sidebar::-webkit-scrollbar { width: 4px; }
   .ps-sidebar::-webkit-scrollbar-thumb { background: rgba(0, 255, 65, 0.3); }
   .ps-control-group {
-    background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 12px;
+    background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 10px;
     border-left: 3px solid #333; transition: border-color 0.3s;
   }
+  @media(min-width: 768px) { .ps-control-group { padding: 12px; } }
   .ps-control-group:hover { border-left-color: var(--neon-green); background: rgba(0, 255, 65, 0.02); }
   .ps-label-eng { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; color: var(--neon-cyan); letter-spacing: 1px; display: block; }
   .ps-label-jp { font-size: 0.8rem; color: #fff; font-weight: bold; margin-bottom: 6px; display: block; }
@@ -896,32 +882,43 @@
   .ps-btn.stop { border-color: var(--neon-pink); color: var(--neon-pink); }
   .ps-btn.stop:hover { background: rgba(255,0,85,0.2); }
   .ps-panel {
-    flex-grow: 1; padding: 15px; overflow-y: auto;
-    display: flex; flex-direction: column; background: transparent; position: relative; gap: 15px;
+    flex-grow: 1; padding: 12px; overflow-y: visible;
+    display: flex; flex-direction: column; background: transparent; position: relative; gap: 12px;
   }
-  .ps-telemetry { display: flex; gap: 10px; flex-wrap: wrap; }
+  @media(min-width: 1000px) { .ps-panel { padding: 15px; overflow-y: auto; gap: 15px; } }
+  .ps-telemetry { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  @media(min-width: 768px) { .ps-telemetry { grid-template-columns: repeat(4, 1fr); gap: 10px; } }
   .ps-stat-box {
     background: rgba(0,0,0,0.8); border: 1px solid rgba(0,243,255,0.3);
-    padding: 10px 15px; flex: 1; min-width: 140px; position: relative;
-    display: flex; flex-direction: column; justify-content: flex-end; backdrop-filter: blur(4px);
+    padding: 8px 10px; position: relative;
+    display: flex; flex-direction: column; justify-content: flex-end; backdrop-filter: blur(4px); overflow: hidden;
   }
+  @media(min-width: 768px) { .ps-stat-box { padding: 10px 15px; } }
   .ps-stat-box::before { content: ''; position: absolute; top:0; left:0; width:3px; height:100%; background: var(--neon-cyan); opacity: 0.5; }
   .ps-stat-box.highlight { border-color: var(--neon-yellow); }
   .ps-stat-box.highlight::before { background: var(--neon-yellow); opacity: 1; }
-  .ps-stat-label-en { font-family: 'Orbitron', sans-serif; font-size: 0.55rem; color: #888; letter-spacing: 1px; }
-  .ps-stat-label-jp { font-size: 0.75rem; color: #bbb; font-weight: bold; margin-bottom: 3px; }
-  .ps-stat-value { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+  .ps-stat-label-en { font-family: 'Orbitron', sans-serif; font-size: 0.45rem; color: #888; letter-spacing: 0.5px; }
+  @media(min-width: 768px) { .ps-stat-label-en { font-size: 0.55rem; letter-spacing: 1px; } }
+  .ps-stat-label-jp { font-size: 0.65rem; color: #bbb; font-weight: bold; margin-bottom: 2px; }
+  @media(min-width: 768px) { .ps-stat-label-jp { font-size: 0.75rem; margin-bottom: 3px; } }
+  .ps-stat-value { font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); word-break: break-all; }
+  @media(min-width: 768px) { .ps-stat-value { font-size: 1.5rem; } }
   .ps-stat-value.highlight { color: var(--neon-yellow); text-shadow: 0 0 10px rgba(252,238,10,0.5); }
-  .ps-charts-container { flex-grow: 1; display: flex; flex-direction: column; gap: 15px; min-height: 400px; }
+  .ps-charts-container { flex-grow: 1; display: flex; flex-direction: column; gap: 12px; min-height: 300px; }
+  @media(min-width: 768px) { .ps-charts-container { gap: 15px; min-height: 400px; } }
   @media(min-width: 1200px) { .ps-charts-container { flex-direction: row; } }
-  .ps-chart-card { flex: 1; background: rgba(0,0,0,0.6); border: 1px solid #333; display: flex; flex-direction: column; backdrop-filter: blur(5px); }
+  .ps-chart-card { flex: 1; background: rgba(0,0,0,0.6); border: 1px solid #333; display: flex; flex-direction: column; backdrop-filter: blur(5px); overflow: hidden; }
   .ps-chart-header {
-    background: rgba(0,0,0,0.8); border-bottom: 1px solid #333; padding: 8px 12px;
+    background: rgba(0,0,0,0.8); border-bottom: 1px solid #333; padding: 6px 10px;
     display: flex; justify-content: space-between; align-items: center;
   }
-  .ps-chart-title { font-size: 0.8rem; font-weight: bold; color: #fff; display: flex; gap: 8px; align-items: center; }
-  .ps-chart-title-en { font-family: 'Orbitron', sans-serif; font-size: 0.6rem; color: var(--neon-green); }
-  .ps-chart-wrapper { flex-grow: 1; padding: 10px; position: relative; min-height: 200px; }
+  @media(min-width: 768px) { .ps-chart-header { padding: 8px 12px; } }
+  .ps-chart-title { font-size: 0.75rem; font-weight: bold; color: #fff; display: flex; gap: 6px; align-items: center; }
+  @media(min-width: 768px) { .ps-chart-title { font-size: 0.8rem; gap: 8px; } }
+  .ps-chart-title-en { font-family: 'Orbitron', sans-serif; font-size: 0.5rem; color: var(--neon-green); }
+  @media(min-width: 768px) { .ps-chart-title-en { font-size: 0.6rem; } }
+  .ps-chart-wrapper { flex-grow: 1; padding: 8px; position: relative; min-height: 180px; }
+  @media(min-width: 768px) { .ps-chart-wrapper { padding: 10px; min-height: 200px; } }
   canvas { width: 100% !important; height: 100% !important; }
    
   .ps-converged {
@@ -942,7 +939,7 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83M22 12A10 10 0 0 0 12 2v10z"/></svg>
         PROBABILITY_SIM
       </div>
-      <div style="display:flex; align-items:center;">
+      <div class="ps-header-right">
         <div class="ps-sys-status" id="ps-indicator"><span style="color:#f59e0b;">&bull;</span> IDLE</div>
         <button class="ps-exit-btn" onclick="history.back()">DISCONNECT</button>
       </div>
