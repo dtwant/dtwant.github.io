@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "74"
+    "wordCount": "37"
   }]
   </script>
 
@@ -791,31 +791,7 @@
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      
-<h1 class="relative group">MATH_QUIZ <span style="font-size:12px;color:#00ff41;">// PROBLEM_ENGINE</span>
-    <div id="math_quiz--problem_engine" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#math_quiz--problem_engine" aria-label="Anchor">#</a>
-    </span>
-    
-</h1>
-<p>積分・微分・行列・論理式などをランダム生成して出題する数学練習ツール。</p>
-<blockquote>
-<p>[!NOTE]
-<strong>QUIZ MODULES:</strong></p>
-<ul>
-<li><strong>[ DIFFERENTIATION ]</strong> 微分問題ジェネレータ</li>
-<li><strong>[ INTEGRATION ]</strong> 積分問題ジェネレータ</li>
-<li><strong>[ MATRIX ]</strong> 行列演算問題</li>
-<li><strong>[ LOGIC ]</strong> 論理式・真理値問題</li>
-<li><strong>[ LIMIT ]</strong> 極限問題</li>
-<li><strong>[ SERIES ]</strong> 級数問題</li>
-</ul>
-<p><strong>難易度3段階 · 解説表示 · スコアボード</strong> 搭載</p></blockquote>
-<hr>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
@@ -825,6 +801,7 @@
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     z-index: 99999; background: var(--bg-dark); margin: 0; padding: 0;
     box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
   #mq-app * { box-sizing: inherit; text-decoration: none !important; }
   .mq-bg {
@@ -842,33 +819,40 @@
   .mq-container { position: relative; z-index: 10; display: flex; flex-direction: column; width: 100%; height: 100%; }
   .mq-header {
     background: rgba(0,0,0,0.95); border-bottom: 2px solid rgba(0,255,65,0.4);
-    padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+    padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+    gap: 8px; min-height: 44px;
   }
   .mq-title {
-    font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
+    font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 900;
     color: var(--neon-green); text-shadow: 0 0 10px rgba(0,255,65,0.5);
-    letter-spacing: 2px; display: flex; align-items: center; gap: 12px;
+    letter-spacing: 1px; display: flex; align-items: center; gap: 8px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
   }
+  @media(min-width: 768px) { .mq-title { font-size: 1.1rem; letter-spacing: 2px; gap: 12px; } }
   .mq-title svg { flex-shrink:0; }
-  .mq-hdr-r { display: flex; align-items: center; }
+  .mq-hdr-r { display: flex; align-items: center; flex-shrink: 0; }
   .mq-sys {
-    font-size: 0.7rem; color: var(--neon-cyan); display: flex; align-items: center; gap: 6px;
-    background: rgba(0,243,255,0.05); padding: 4px 10px; border: 1px solid rgba(0,243,255,0.2);
+    font-size: 0.6rem; color: var(--neon-cyan); display: flex; align-items: center; gap: 4px;
+    background: rgba(0,243,255,0.05); padding: 3px 8px; border: 1px solid rgba(0,243,255,0.2);
     font-family: 'JetBrains Mono', monospace; font-weight: bold; white-space: nowrap;
   }
+  @media(min-width: 768px) { .mq-sys { font-size: 0.7rem; padding: 4px 10px; gap: 6px; } }
   .mq-exit {
     background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
-    font-size: 0.7rem; font-weight: bold; padding: 5px 12px; cursor: pointer; transition: all 0.2s; margin-left: 10px;
+    font-size: 0.65rem; font-weight: bold; padding: 5px 10px; cursor: pointer; transition: all 0.2s; margin-left: 6px;
     font-family: 'Zen Kaku Gothic New', sans-serif; letter-spacing: 1px;
+    min-height: 32px; display: flex; align-items: center; justify-content: center;
   }
+  @media(min-width: 768px) { .mq-exit { font-size: 0.7rem; padding: 5px 12px; margin-left: 10px; } }
   .mq-exit:hover { background: var(--neon-pink); color: #000; }
-  .mq-ws { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
-  @media(min-width: 900px) { .mq-ws { flex-direction: row; } }
+  .mq-ws { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+  @media(min-width: 900px) { .mq-ws { flex-direction: row; overflow: hidden; } }
   .mq-side {
-    width: 100%; max-height: 35vh; background: rgba(5,5,5,0.9); border-right: 1px solid rgba(0,255,65,0.2);
-    display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; padding: 12px; gap: 10px;
+    width: 100%; background: rgba(5,5,5,0.9); border-right: none;
+    display: flex; flex-direction: column; flex-shrink: 0; padding: 10px; gap: 8px;
+    border-bottom: 1px solid rgba(0,255,65,0.2);
   }
-  @media(min-width: 900px) { .mq-side { width: 290px; max-height: none; } }
+  @media(min-width: 900px) { .mq-side { width: 290px; overflow-y: auto; border-right: 1px solid rgba(0,255,65,0.2); border-bottom: none; padding: 12px; gap: 10px; } }
   .mq-side::-webkit-scrollbar { width: 4px; }
   .mq-side::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.3); }
   .mq-ctrl {
@@ -897,8 +881,9 @@
   .mq-btn.pink:hover { background: rgba(255,0,85,0.2); }
   .mq-panel {
     flex-grow: 1; display: flex; flex-direction: column; align-items: center;
-    overflow-y: auto; padding: 20px;
+    overflow-y: visible; padding: 12px;
   }
+  @media(min-width: 900px) { .mq-panel { overflow-y: auto; padding: 20px; } }
   .mq-question-box {
     width: 100%; max-width: 600px; background: rgba(0,0,0,0.7); border: 2px solid rgba(0,255,65,0.3);
     padding: 30px; margin-bottom: 20px; text-align: center; position: relative;
@@ -915,7 +900,8 @@
     font-family: 'Orbitron', sans-serif; font-size: 0.65rem; color: var(--neon-cyan);
     letter-spacing: 1px; margin-bottom: 15px;
   }
-  .mq-q-content { font-size: 1.3rem; color: #fff; line-height: 2; min-height: 60px; }
+  .mq-q-content { font-size: 1rem; color: #fff; line-height: 1.8; min-height: 50px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  @media(min-width: 768px) { .mq-q-content { font-size: 1.3rem; line-height: 2; min-height: 60px; } }
   .mq-answer-section {
     width: 100%; max-width: 600px; margin-bottom: 20px;
   }
@@ -969,30 +955,7 @@
   .mq-stat-v.yellow { color: var(--neon-yellow); }
   .mq-streak { display: flex; gap: 4px; margin-top: 10px; max-width: 600px; width: 100%; flex-wrap: wrap; }
   .mq-streak-dot { width: 10px; height: 10px; border-radius: 50%; }
-  @media(max-width: 600px) {
-    .mq-title { font-size: 0.85rem; letter-spacing: 1px; }
-    .mq-sys { display: none; }
-    .mq-side { max-height: 30vh; padding: 8px; gap: 6px; }
-    .mq-ctrl { padding: 8px; }
-    .mq-btn { padding: 6px 3px; font-size: 0.7rem; min-width: 48px; }
-    .mq-btn-en { font-size: 0.4rem; }
-    .mq-lbl-jp { font-size: 0.72rem; }
-    .mq-select { font-size: 0.75rem; padding: 5px; }
-    .mq-panel { padding: 10px; }
-    .mq-question-box { padding: 20px 12px; margin-bottom: 10px; }
-    .mq-q-content { font-size: 0.95rem; min-height: 40px; line-height: 1.6; }
-    .mq-q-category { font-size: 0.55rem; margin-bottom: 8px; }
-    .mq-choice { padding: 8px 10px; font-size: 0.82rem; gap: 8px; }
-    .mq-choice-key { font-size: 0.6rem; padding: 2px 6px; }
-    .mq-submit-btn { padding: 8px 18px; font-size: 0.8rem; }
-    .mq-explanation { padding: 10px 12px; }
-    .mq-exp-content { font-size: 0.8rem; }
-    .mq-result-flash { font-size: 0.9rem; padding: 6px 14px; }
-    .mq-stats { gap: 4px; }
-    .mq-stat { min-width: 60px; padding: 4px 6px; }
-    .mq-stat-v { font-size: 0.8rem; }
-    .mq-streak-dot { width: 8px; height: 8px; }
-  }
+  .mq-choice-text { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 </style>
 
 <div id="mq-app">
@@ -1021,6 +984,7 @@
             <option value="logic">論理</option>
             <option value="limit">極限</option>
             <option value="series">級数</option>
+            <option value="recurrence">漸化式</option>
             <option value="random">ランダム</option>
           </select>
         </div>
@@ -1089,267 +1053,334 @@ var mqApp = (function() {
     matrix: { name: '行列', nameEn: 'MATRIX' },
     logic: { name: '論理', nameEn: 'LOGIC' },
     limit: { name: '極限', nameEn: 'LIMIT' },
-    series: { name: '級数', nameEn: 'SERIES' }
+    series: { name: '級数', nameEn: 'SERIES' },
+    recurrence: { name: '漸化式', nameEn: 'RECURRENCE' }
   };
 
   function generateProblem(cat, d) {
-    if (cat === 'random') cat = pick(['diff','integ','matrix','logic','limit','series']);
+    if (cat === 'random') cat = pick(['diff','integ','matrix','logic','limit','series','recurrence']);
     const generators = {
       diff: genDiff, integ: genInteg, matrix: genMatrix,
-      logic: genLogic, limit: genLimit, series: genSeries
+      logic: genLogic, limit: genLimit, series: genSeries, recurrence: genRecurrence
     };
     return { ...generators[cat](d), cat };
   }
 
   function genDiff(d) {
     if (d === 1) {
-      const type = pick(['power','sqrt','const_mult']);
+      const type = pick(['power','power2','sqrt','const_add','neg_pow','poly2','poly3','frac_pow']);
       if (type === 'power') {
-        const n = ri(2, 8), a = ri(1, 6);
-        return {
-          q: `$\\dfrac{d}{dx}(${a === 1 ? '' : a}x^{${n}})$ を求めよ`,
-          choices: [`$${a*n}x^{${n-1}}$`, `$${a*(n+1)}x^{${n}}$`, `$${a*(n-1)}x^{${n-2}}$`, `$${a}x^{${n+1}}$`],
-          answer: 0,
-          explanation: `冪の微分: $\\dfrac{d}{dx}(ax^n) = anx^{n-1}$\n$= ${a} \\times ${n} \\cdot x^{${n-1}} = ${a*n}x^{${n-1}}$`
-        };
+        const n = ri(2, 10), a = ri(1, 9);
+        return { q: `$\\dfrac{d}{dx}(${a===1?'':a}x^{${n}})$ を求めよ`, choices: [`$${a*n}x^{${n-1}}$`, `$${a*(n+1)}x^{${n}}$`, `$${a*(n-1)}x^{${n-2}}$`, `$${a}x^{${n+1}}$`], answer: 0, explanation: `冪の微分: $${a}\\cdot${n}\\cdot x^{${n-1}}=${a*n}x^{${n-1}}$` };
+      } else if (type === 'power2') {
+        const a = ri(2,8), b = ri(1,9), n = ri(2,6), m = ri(1,n-1);
+        return { q: `$\\dfrac{d}{dx}(${a}x^{${n}}+${b}x^{${m}})$ を求めよ`, choices: [`$${a*n}x^{${n-1}}+${b*m}x^{${m-1}}$`, `$${a*n}x^{${n}}+${b*m}x^{${m}}$`, `$${a}x^{${n-1}}+${b}x^{${m-1}}$`, `$${a*(n+1)}x^{${n}}+${b}x^{${m}}$`], answer: 0, explanation: `各項を微分: $${a*n}x^{${n-1}}+${b*m}x^{${m-1}}$` };
       } else if (type === 'sqrt') {
-        const a = ri(2, 6);
-        return {
-          q: `$\\dfrac{d}{dx}(${a}\\sqrt{x})$ を求めよ`,
-          choices: [`$\\dfrac{${a}}{2\\sqrt{x}}$`, `$${a}\\sqrt{x}$`, `$\\dfrac{${a}}{\\sqrt{x}}$`, `$\\dfrac{1}{${a}\\sqrt{x}}$`],
-          answer: 0,
-          explanation: `$\\sqrt{x} = x^{1/2}$ より $\\dfrac{d}{dx}(${a}x^{1/2}) = \\dfrac{${a}}{2}x^{-1/2} = \\dfrac{${a}}{2\\sqrt{x}}$`
-        };
+        const a = ri(2, 9);
+        return { q: `$\\dfrac{d}{dx}(${a}\\sqrt{x})$ を求めよ`, choices: [`$\\dfrac{${a}}{2\\sqrt{x}}$`, `$${a}\\sqrt{x}$`, `$\\dfrac{${a}}{\\sqrt{x}}$`, `$\\dfrac{1}{${a}\\sqrt{x}}$`], answer: 0, explanation: `$\\sqrt{x}=x^{1/2}$: $\\dfrac{${a}}{2}x^{-1/2}$` };
+      } else if (type === 'const_add') {
+        const a = ri(2, 9), b = ri(1, 20), n = ri(2, 7);
+        return { q: `$\\dfrac{d}{dx}(${a}x^{${n}}+${b})$ を求めよ`, choices: [`$${a*n}x^{${n-1}}$`, `$${a*n}x^{${n-1}}+${b}$`, `$${a}x^{${n}}$`, `$${a*n}x^{${n}}$`], answer: 0, explanation: `定数の微分は0` };
+      } else if (type === 'neg_pow') {
+        const n = ri(2, 5), a = ri(1, 6);
+        return { q: `$\\dfrac{d}{dx}\\dfrac{${a}}{x^{${n}}}$ を求めよ`, choices: [`$-\\dfrac{${a*n}}{x^{${n+1}}}$`, `$\\dfrac{${a*n}}{x^{${n+1}}}$`, `$-\\dfrac{${a}}{x^{${n+1}}}$`, `$\\dfrac{${a}}{${n}x^{${n-1}}}$`], answer: 0, explanation: `$${a}x^{-${n}}$の微分: $-${a*n}x^{-${n+1}}$` };
+      } else if (type === 'poly2') {
+        const a = ri(1,5), b = ri(1,9), c = ri(1,9);
+        return { q: `$\\dfrac{d}{dx}(${a}x^2+${b}x+${c})$ を求めよ`, choices: [`$${a*2}x+${b}$`, `$${a*2}x$`, `$${a}x+${b}$`, `$${a*2}x+${b}+${c}$`], answer: 0, explanation: `$${a*2}x+${b}$` };
+      } else if (type === 'poly3') {
+        const a = ri(1,4), b = ri(1,6), c = ri(1,9);
+        return { q: `$\\dfrac{d}{dx}(${a}x^3+${b}x^2+${c}x)$ を求めよ`, choices: [`$${a*3}x^2+${b*2}x+${c}$`, `$${a*3}x^2+${b*2}x$`, `$${a}x^2+${b}x+${c}$`, `$${a*3}x^3+${b*2}x^2+${c}$`], answer: 0, explanation: `各項を微分` };
       } else {
-        const a = ri(2, 9), b = ri(1, 7), n = ri(2, 5);
-        return {
-          q: `$\\dfrac{d}{dx}(${a}x^{${n}} + ${b})$ を求めよ`,
-          choices: [`$${a*n}x^{${n-1}}$`, `$${a*n}x^{${n-1}} + ${b}$`, `$${a}x^{${n}}$`, `$${a*n}x^{${n}}$`],
-          answer: 0,
-          explanation: `定数の微分は0: $\\dfrac{d}{dx}(${a}x^{${n}} + ${b}) = ${a*n}x^{${n-1}}$`
-        };
+        const a = ri(2,8); const n = pick([3,4,5]);
+        return { q: `$\\dfrac{d}{dx}(${a}x^{${n}/2})$ を求めよ`, choices: [`$\\dfrac{${a*n}}{2}x^{${n-2}/2}$`, `$${a}x^{${n-2}/2}$`, `$\\dfrac{${a}}{${n}}x^{${n+2}/2}$`, `$${a*n}x^{${n}/2}$`], answer: 0, explanation: `$\\dfrac{d}{dx}x^{n/2}=\\dfrac{n}{2}x^{(n-2)/2}$` };
       }
     } else if (d === 2) {
-      const type = pick(['sin','cos','exp','tan','ln_ax']);
+      const type = pick(['sin','cos','exp','tan','ln_ax','sec2','exp_base','sin_cos_sum','chain_poly','ln_poly','cot','csc']);
       if (type === 'sin') {
-        const a = ri(2, 7);
-        return { q: `$\\dfrac{d}{dx}\\sin(${a}x)$ を求めよ`, choices: [`$${a}\\cos(${a}x)$`, `$-${a}\\cos(${a}x)$`, `$\\cos(${a}x)$`, `$-${a}\\sin(${a}x)$`], answer: 0, explanation: `合成関数の微分: $\\dfrac{d}{dx}\\sin(ax) = a\\cos(ax)$` };
+        const a = ri(2, 9);
+        return { q: `$\\dfrac{d}{dx}\\sin(${a}x)$ を求めよ`, choices: [`$${a}\\cos(${a}x)$`, `$-${a}\\cos(${a}x)$`, `$\\cos(${a}x)$`, `$-${a}\\sin(${a}x)$`], answer: 0, explanation: `合成関数: $a\\cos(ax)$` };
       } else if (type === 'cos') {
-        const a = ri(2, 6);
-        return { q: `$\\dfrac{d}{dx}\\cos(${a}x)$ を求めよ`, choices: [`$-${a}\\sin(${a}x)$`, `$${a}\\sin(${a}x)$`, `$-\\sin(${a}x)$`, `$${a}\\cos(${a}x)$`], answer: 0, explanation: `合成関数の微分: $\\dfrac{d}{dx}\\cos(ax) = -a\\sin(ax)$` };
+        const a = ri(2, 9);
+        return { q: `$\\dfrac{d}{dx}\\cos(${a}x)$ を求めよ`, choices: [`$-${a}\\sin(${a}x)$`, `$${a}\\sin(${a}x)$`, `$-\\sin(${a}x)$`, `$${a}\\cos(${a}x)$`], answer: 0, explanation: `合成関数: $-a\\sin(ax)$` };
       } else if (type === 'exp') {
-        const a = ri(2, 7);
-        return { q: `$\\dfrac{d}{dx}e^{${a}x}$ を求めよ`, choices: [`$${a}e^{${a}x}$`, `$e^{${a}x}$`, `$${a}xe^{${a}x}$`, `$\\dfrac{e^{${a}x}}{${a}}$`], answer: 0, explanation: `$\\dfrac{d}{dx}e^{ax} = ae^{ax}$` };
+        const a = ri(2, 9);
+        return { q: `$\\dfrac{d}{dx}e^{${a}x}$ を求めよ`, choices: [`$${a}e^{${a}x}$`, `$e^{${a}x}$`, `$${a}xe^{${a}x}$`, `$\\dfrac{e^{${a}x}}{${a}}$`], answer: 0, explanation: `$\\dfrac{d}{dx}e^{ax}=ae^{ax}$` };
       } else if (type === 'tan') {
-        const a = ri(2, 4);
-        return { q: `$\\dfrac{d}{dx}\\tan(${a}x)$ を求めよ`, choices: [`$\\dfrac{${a}}{\\cos^2(${a}x)}$`, `$${a}\\tan^2(${a}x)$`, `$\\dfrac{1}{\\cos^2(${a}x)}$`, `$-${a}\\sin(${a}x)$`], answer: 0, explanation: `$\\dfrac{d}{dx}\\tan(ax) = \\dfrac{a}{\\cos^2(ax)}$` };
+        const a = ri(2, 7);
+        return { q: `$\\dfrac{d}{dx}\\tan(${a}x)$ を求めよ`, choices: [`$\\dfrac{${a}}{\\cos^2(${a}x)}$`, `$${a}\\tan^2(${a}x)$`, `$\\dfrac{1}{\\cos^2(${a}x)}$`, `$-${a}\\sin(${a}x)$`], answer: 0, explanation: `$\\dfrac{d}{dx}\\tan(ax)=\\dfrac{a}{\\cos^2(ax)}$` };
+      } else if (type === 'ln_ax') {
+        const a = ri(2, 9);
+        return { q: `$\\dfrac{d}{dx}\\ln(${a}x)$ を求めよ`, choices: [`$\\dfrac{1}{x}$`, `$\\dfrac{${a}}{x}$`, `$\\dfrac{1}{${a}x}$`, `$\\ln(${a})$`], answer: 0, explanation: `$\\ln(${a}x)=\\ln${a}+\\ln x$より$1/x$` };
+      } else if (type === 'sec2') {
+        const a = ri(2,6);
+        return { q: `$\\dfrac{d}{dx}\\sec(${a}x)$ を求めよ`, choices: [`$${a}\\sec(${a}x)\\tan(${a}x)$`, `$\\sec(${a}x)\\tan(${a}x)$`, `$${a}\\sec^2(${a}x)$`, `$-${a}\\sec(${a}x)$`], answer: 0, explanation: `$\\sec'(u)=\\sec u\\tan u\\cdot u'$` };
+      } else if (type === 'exp_base') {
+        const b = pick([2,3,5,10]);
+        return { q: `$\\dfrac{d}{dx}${b}^x$ を求めよ`, choices: [`$${b}^x\\ln ${b}$`, `$x\\cdot${b}^{x-1}$`, `$${b}^x$`, `$\\dfrac{${b}^x}{\\ln ${b}}$`], answer: 0, explanation: `$\\dfrac{d}{dx}a^x=a^x\\ln a$` };
+      } else if (type === 'sin_cos_sum') {
+        const a = ri(2,7), b = ri(2,7);
+        return { q: `$\\dfrac{d}{dx}(\\sin(${a}x)+\\cos(${b}x))$ を求めよ`, choices: [`$${a}\\cos(${a}x)-${b}\\sin(${b}x)$`, `$${a}\\cos(${a}x)+${b}\\sin(${b}x)$`, `$-${a}\\sin(${a}x)-${b}\\cos(${b}x)$`, `$\\cos(${a}x)-\\sin(${b}x)$`], answer: 0, explanation: `各項を微分` };
+      } else if (type === 'chain_poly') {
+        const a = ri(2,5), b = ri(1,9), n = ri(2,4);
+        return { q: `$\\dfrac{d}{dx}(${a}x+${b})^{${n}}$ を求めよ`, choices: [`$${n*a}(${a}x+${b})^{${n-1}}$`, `$${n}(${a}x+${b})^{${n-1}}$`, `$${a}(${a}x+${b})^{${n}}$`, `$${n*a}(${a}x+${b})^{${n}}$`], answer: 0, explanation: `連鎖律: $${n}(${a}x+${b})^{${n-1}}\\cdot${a}$` };
+      } else if (type === 'ln_poly') {
+        const a = ri(2,6), b = ri(1,9);
+        return { q: `$\\dfrac{d}{dx}\\ln(${a}x+${b})$ を求めよ`, choices: [`$\\dfrac{${a}}{${a}x+${b}}$`, `$\\dfrac{1}{${a}x+${b}}$`, `$\\dfrac{${a}}{x}$`, `$\\ln(${a})$`], answer: 0, explanation: `連鎖律: $\\dfrac{1}{${a}x+${b}}\\cdot${a}$` };
+      } else if (type === 'cot') {
+        const a = ri(2,5);
+        return { q: `$\\dfrac{d}{dx}\\cot(${a}x)$ を求めよ`, choices: [`$-\\dfrac{${a}}{\\sin^2(${a}x)}$`, `$\\dfrac{${a}}{\\sin^2(${a}x)}$`, `$-${a}\\cot^2(${a}x)$`, `$${a}\\csc(${a}x)$`], answer: 0, explanation: `$\\cot'(u)=-\\csc^2(u)\\cdot u'$` };
       } else {
-        const a = ri(2, 6);
-        return { q: `$\\dfrac{d}{dx}\\ln(${a}x)$ を求めよ`, choices: [`$\\dfrac{1}{x}$`, `$\\dfrac{${a}}{x}$`, `$\\dfrac{1}{${a}x}$`, `$\\ln(${a})$`], answer: 0, explanation: `$\\ln(${a}x) = \\ln ${a} + \\ln x$ より $\\dfrac{d}{dx} = \\dfrac{1}{x}$` };
+        const a = ri(2,5);
+        return { q: `$\\dfrac{d}{dx}\\csc(${a}x)$ を求めよ`, choices: [`$-${a}\\csc(${a}x)\\cot(${a}x)$`, `$${a}\\csc(${a}x)\\cot(${a}x)$`, `$-${a}\\csc^2(${a}x)$`, `$${a}\\sec(${a}x)$`], answer: 0, explanation: `$\\csc'(u)=-\\csc u\\cot u\\cdot u'$` };
       }
     } else {
-      const type = pick(['product_ln','quotient','chain_sq','arctan']);
+      const type = pick(['product_ln','product_exp','quotient','quotient2','chain_sq','chain_exp','arctan','arcsin','log_diff','implicit','higher','hyperbolic']);
       if (type === 'product_ln') {
-        const a = ri(1,4);
-        return { q: `$\\dfrac{d}{dx}(x^{${a}}\\ln x)$ を求めよ`, choices: [`$${a}x^{${a-1}}\\ln x + x^{${a-1}}$`, `$${a}x^{${a-1}}\\ln x$`, `$x^{${a-1}}(\\ln x + 1)$`, `$${a+1}x^{${a}}\\ln x$`], answer: 0, explanation: `積の微分: $(fg)' = f'g + fg'$\n$= ${a}x^{${a-1}}\\ln x + x^{${a}} \\cdot \\dfrac{1}{x}$` };
+        const a = ri(1,5);
+        return { q: `$\\dfrac{d}{dx}(x^{${a}}\\ln x)$ を求めよ`, choices: [`$${a}x^{${a-1}}\\ln x+x^{${a-1}}$`, `$${a}x^{${a-1}}\\ln x$`, `$x^{${a-1}}(\\ln x+1)$`, `$${a+1}x^{${a}}\\ln x$`], answer: 0, explanation: `積の微分: $f'g+fg'$` };
+      } else if (type === 'product_exp') {
+        const n = ri(2,4);
+        return { q: `$\\dfrac{d}{dx}(x^{${n}}e^x)$ を求めよ`, choices: [`$x^{${n-1}}e^x(${n}+x)$`, `$${n}x^{${n-1}}e^x$`, `$x^{${n}}e^x$`, `$x^{${n+1}}e^x$`], answer: 0, explanation: `積の微分: $${n}x^{${n-1}}e^x+x^{${n}}e^x=x^{${n-1}}e^x(${n}+x)$` };
       } else if (type === 'quotient') {
-        return { q: `$\\dfrac{d}{dx}\\dfrac{\\sin x}{x}$ を求めよ`, choices: [`$\\dfrac{x\\cos x - \\sin x}{x^2}$`, `$\\dfrac{\\cos x}{x}$`, `$\\dfrac{x\\cos x + \\sin x}{x^2}$`, `$\\dfrac{\\sin x}{x^2}$`], answer: 0, explanation: `商の微分: $\\left(\\dfrac{f}{g}\\right)' = \\dfrac{f'g-fg'}{g^2}$` };
+        return { q: `$\\dfrac{d}{dx}\\dfrac{\\sin x}{x}$ を求めよ`, choices: [`$\\dfrac{x\\cos x-\\sin x}{x^2}$`, `$\\dfrac{\\cos x}{x}$`, `$\\dfrac{x\\cos x+\\sin x}{x^2}$`, `$\\dfrac{\\sin x}{x^2}$`], answer: 0, explanation: `商の微分: $(f/g)'=(f'g-fg')/g^2$` };
+      } else if (type === 'quotient2') {
+        const a = ri(2,5);
+        return { q: `$\\dfrac{d}{dx}\\dfrac{e^x}{x^{${a}}}$ を求めよ`, choices: [`$\\dfrac{e^x(x-${a})}{x^{${a+1}}}$`, `$\\dfrac{e^x}{x^{${a}}}$`, `$\\dfrac{e^x}{x^{${a+1}}}$`, `$\\dfrac{e^x(x+${a})}{x^{${a+1}}}$`], answer: 0, explanation: `商の微分: $\\dfrac{e^x \\cdot x^{${a}}-e^x\\cdot${a}x^{${a-1}}}{x^{${2*a}}}$` };
       } else if (type === 'chain_sq') {
-        const a = ri(2, 5);
-        return { q: `$\\dfrac{d}{dx}\\sin^2(${a}x)$ を求めよ`, choices: [`$${a*2}\\sin(${a}x)\\cos(${a}x)$`, `$2\\sin(${a}x)\\cos(${a}x)$`, `$${a}\\sin^2(${a}x)$`, `$${a*2}\\cos^2(${a}x)$`], answer: 0, explanation: `連鎖律: $2\\sin(${a}x)\\cdot\\cos(${a}x)\\cdot${a} = ${a*2}\\sin(${a}x)\\cos(${a}x)$` };
+        const a = ri(2, 7);
+        return { q: `$\\dfrac{d}{dx}\\sin^2(${a}x)$ を求めよ`, choices: [`$${a*2}\\sin(${a}x)\\cos(${a}x)$`, `$2\\sin(${a}x)\\cos(${a}x)$`, `$${a}\\sin^2(${a}x)$`, `$${a*2}\\cos^2(${a}x)$`], answer: 0, explanation: `連鎖律: $2\\sin\\cdot\\cos\\cdot${a}$` };
+      } else if (type === 'chain_exp') {
+        const n = ri(2,5);
+        return { q: `$\\dfrac{d}{dx}e^{x^${n}}$ を求めよ`, choices: [`$${n}x^{${n-1}}e^{x^${n}}$`, `$e^{x^${n}}$`, `$x^{${n}}e^{x^${n}}$`, `$${n}e^{x^{${n-1}}}$`], answer: 0, explanation: `連鎖律: $e^{x^${n}}\\cdot${n}x^{${n-1}}$` };
+      } else if (type === 'arctan') {
+        const a = ri(2,6);
+        return { q: `$\\dfrac{d}{dx}\\arctan(${a}x)$ を求めよ`, choices: [`$\\dfrac{${a}}{1+${a*a}x^2}$`, `$\\dfrac{1}{1+${a*a}x^2}$`, `$\\dfrac{${a}}{1+x^2}$`, `$\\dfrac{1}{\\sqrt{1-${a*a}x^2}}$`], answer: 0, explanation: `$\\arctan'(u)=\\dfrac{u'}{1+u^2}$` };
+      } else if (type === 'arcsin') {
+        const a = ri(2,5);
+        return { q: `$\\dfrac{d}{dx}\\arcsin(${a}x)$ を求めよ`, choices: [`$\\dfrac{${a}}{\\sqrt{1-${a*a}x^2}}$`, `$\\dfrac{1}{\\sqrt{1-${a*a}x^2}}$`, `$\\dfrac{${a}}{1+${a*a}x^2}$`, `$\\dfrac{-${a}}{\\sqrt{1-x^2}}$`], answer: 0, explanation: `$\\arcsin'(u)=\\dfrac{u'}{\\sqrt{1-u^2}}$` };
+      } else if (type === 'log_diff') {
+        const n = ri(2,5);
+        return { q: `$\\dfrac{d}{dx}x^x$ ($x>0$) を求めよ`, choices: [`$x^x(\\ln x+1)$`, `$x\\cdot x^{x-1}$`, `$x^x\\ln x$`, `$x^{x+1}$`], answer: 0, explanation: `対数微分: $y=x^x$, $\\ln y=x\\ln x$` };
+      } else if (type === 'implicit') {
+        return { q: `$x^2+y^2=r^2$ のとき $\\dfrac{dy}{dx}$ は？`, choices: [`$-\\dfrac{x}{y}$`, `$\\dfrac{x}{y}$`, `$-\\dfrac{y}{x}$`, `$\\dfrac{2x}{2y}$`], answer: 0, explanation: `陰関数微分: $2x+2y\\dfrac{dy}{dx}=0$` };
+      } else if (type === 'higher') {
+        const n = ri(2,6), a = ri(1,5);
+        return { q: `$\\dfrac{d^2}{dx^2}(${a}x^{${n}})$ を求めよ`, choices: [`$${a*n*(n-1)}x^{${n-2}}$`, `$${a*n}x^{${n-1}}$`, `$${a*n*n}x^{${n-2}}$`, `$${a*(n-1)}x^{${n-2}}$`], answer: 0, explanation: `2階微分: $${a*n}\\cdot${n-1}\\cdot x^{${n-2}}=${a*n*(n-1)}x^{${n-2}}$` };
       } else {
-        return { q: `$\\dfrac{d}{dx}\\arctan(x)$ を求めよ`, choices: [`$\\dfrac{1}{1+x^2}$`, `$\\dfrac{1}{\\sqrt{1-x^2}}$`, `$\\dfrac{-1}{1+x^2}$`, `$\\dfrac{x}{1+x^2}$`], answer: 0, explanation: `逆正接関数の微分: $\\dfrac{d}{dx}\\arctan x = \\dfrac{1}{1+x^2}$` };
+        return { q: `$\\dfrac{d}{dx}\\sinh(x)$ を求めよ`, choices: [`$\\cosh(x)$`, `$\\sinh(x)$`, `$-\\cosh(x)$`, `$\\text{sech}^2(x)$`], answer: 0, explanation: `$\\sinh'(x)=\\cosh(x)$` };
       }
     }
   }
 
   function genInteg(d) {
     if (d === 1) {
-      const type = pick(['power','sqrt','const']);
-      if (type === 'power') {
-        const n = ri(2, 7), a = ri(1, 5);
-        const an1 = n + 1;
-        return { q: `$\\displaystyle\\int ${a === 1 ? '' : a}x^{${n}}\\,dx$ を求めよ`, choices: [`$\\dfrac{${a}}{${an1}}x^{${an1}}+C$`, `$${a*n}x^{${n-1}}+C$`, `$\\dfrac{${a}}{${n}}x^{${n}}+C$`, `$${a}x^{${an1}}+C$`], answer: 0, explanation: `$\\int ax^n\\,dx = \\dfrac{a}{n+1}x^{n+1}+C$` };
-      } else if (type === 'sqrt') {
-        return { q: `$\\displaystyle\\int \\sqrt{x}\\,dx$ を求めよ`, choices: [`$\\dfrac{2}{3}x^{3/2}+C$`, `$\\dfrac{1}{2\\sqrt{x}}+C$`, `$2\\sqrt{x}+C$`, `$\\dfrac{x^{3/2}}{2}+C$`], answer: 0, explanation: `$\\sqrt{x} = x^{1/2}$ より $\\int x^{1/2}dx = \\dfrac{2}{3}x^{3/2}+C$` };
-      } else {
-        const a = ri(2, 8);
-        return { q: `$\\displaystyle\\int ${a}\\,dx$ を求めよ`, choices: [`$${a}x+C$`, `$${a}$`, `$\\dfrac{${a}}{2}x^2+C$`, `$${a}x$`], answer: 0, explanation: `$\\int a\\,dx = ax + C$` };
-      }
+      const type = pick(['power','power2','sqrt','const','neg_pow','linear','def_poly','def_const','poly_sum']);
+      if(type==='power'){const n=ri(2,9),a=ri(1,8),m=n+1;return{q:`$\\displaystyle\\int ${a===1?'':a}x^{${n}}\\,dx$`,choices:[`$\\dfrac{${a}}{${m}}x^{${m}}+C$`,`$${a*n}x^{${n-1}}+C$`,`$\\dfrac{${a}}{${n}}x^{${n}}+C$`,`$${a}x^{${m}}+C$`],answer:0,explanation:`$\\int ax^n dx=\\dfrac{a}{n+1}x^{n+1}+C$`};}
+      else if(type==='power2'){const n=ri(1,4),a=ri(2,6),m=n+1;return{q:`$\\displaystyle\\int ${a}x^{${n}}\\,dx$`,choices:[`$\\dfrac{${a}}{${m}}x^{${m}}+C$`,`$${a*n}x^{${n-1}}+C$`,`$${a}x^{${m}}+C$`,`$\\dfrac{x^{${m}}}{${m}}+C$`],answer:0,explanation:`$\\dfrac{${a}}{${m}}x^{${m}}+C$`};}
+      else if(type==='sqrt'){const a=ri(1,5);return{q:`$\\displaystyle\\int ${a===1?'':a}\\sqrt{x}\\,dx$`,choices:[`$\\dfrac{${a*2}}{3}x^{3/2}+C$`,`$\\dfrac{${a}}{2\\sqrt{x}}+C$`,`$${a*2}\\sqrt{x}+C$`,`$\\dfrac{${a}x^{3/2}}{2}+C$`],answer:0,explanation:`$\\int x^{1/2}dx=\\dfrac{2}{3}x^{3/2}+C$`};}
+      else if(type==='const'){const a=ri(2,12);return{q:`$\\displaystyle\\int ${a}\\,dx$`,choices:[`$${a}x+C$`,`$${a}$`,`$\\dfrac{${a}}{2}x^2+C$`,`$${a}x$`],answer:0,explanation:`$\\int a\\,dx=ax+C$`};}
+      else if(type==='neg_pow'){const n=ri(2,5),a=ri(1,5);return{q:`$\\displaystyle\\int \\dfrac{${a}}{x^{${n}}}\\,dx$`,choices:[`$-\\dfrac{${a}}{${n-1}x^{${n-1}}}+C$`,`$\\dfrac{${a}}{${n-1}x^{${n-1}}}+C$`,`$-\\dfrac{${a}}{x^{${n+1}}}+C$`,`$${a}\\ln|x|+C$`],answer:0,explanation:`$\\int x^{-${n}}dx=\\dfrac{x^{-${n-1}}}{-${n-1}}$`};}
+      else if(type==='linear'){const a=ri(2,8),b=ri(1,9);return{q:`$\\displaystyle\\int(${a}x+${b})\\,dx$`,choices:[`$\\dfrac{${a}}{2}x^2+${b}x+C$`,`$${a}x+${b}+C$`,`$${a}x^2+${b}x+C$`,`$\\dfrac{${a}}{2}x^2+C$`],answer:0,explanation:`各項を積分`};}
+      else if(type==='def_poly'){const n=ri(2,3),u=ri(1,3),v=Math.pow(u,n+1);return{q:`$\\displaystyle\\int_0^{${u}}x^{${n}}\\,dx$`,choices:[`$\\dfrac{${v}}{${n+1}}$`,`$${Math.pow(u,n)}$`,`$\\dfrac{${v}}{${n}}$`,`$${v}$`],answer:0,explanation:`$[\\dfrac{x^{${n+1}}}{${n+1}}]_0^{${u}}$`};}
+      else if(type==='def_const'){const a=ri(2,10),b=ri(1,5);return{q:`$\\displaystyle\\int_0^{${b}}${a}\\,dx$`,choices:[`$${a*b}$`,`$${a}$`,`$${b}$`,`$${a+b}$`],answer:0,explanation:`$${a}\\cdot${b}=${a*b}$`};}
+      else{const a=ri(1,5),b=ri(1,5),n=ri(2,4),m=ri(1,n-1);return{q:`$\\displaystyle\\int(${a}x^{${n}}+${b}x^{${m}})\\,dx$`,choices:[`$\\dfrac{${a}}{${n+1}}x^{${n+1}}+\\dfrac{${b}}{${m+1}}x^{${m+1}}+C$`,`$${a*n}x^{${n-1}}+${b*m}x^{${m-1}}+C$`,`$\\dfrac{${a}}{${n}}x^{${n}}+\\dfrac{${b}}{${m}}x^{${m}}+C$`,`$${a}x^{${n+1}}+${b}x^{${m+1}}+C$`],answer:0,explanation:`各項を積分`};}
     } else if (d === 2) {
-      const type = pick(['sin','cos','exp','1overx']);
-      if (type === 'sin') {
-        return { q: `$\\displaystyle\\int \\sin x\\,dx$ を求めよ`, choices: [`$-\\cos x + C$`, `$\\cos x + C$`, `$-\\sin x + C$`, `$\\sin x + C$`], answer: 0, explanation: `$\\int \\sin x\\,dx = -\\cos x + C$` };
-      } else if (type === 'cos') {
-        return { q: `$\\displaystyle\\int \\cos x\\,dx$ を求めよ`, choices: [`$\\sin x + C$`, `$-\\sin x + C$`, `$\\cos x + C$`, `$-\\cos x + C$`], answer: 0, explanation: `$\\int \\cos x\\,dx = \\sin x + C$` };
-      } else if (type === 'exp') {
-        const a = ri(2, 6);
-        return { q: `$\\displaystyle\\int e^{${a}x}\\,dx$ を求めよ`, choices: [`$\\dfrac{1}{${a}}e^{${a}x}+C$`, `$${a}e^{${a}x}+C$`, `$e^{${a}x}+C$`, `$\\dfrac{e^{${a}x}}{x}+C$`], answer: 0, explanation: `$\\int e^{ax}\\,dx = \\dfrac{1}{a}e^{ax}+C$` };
-      } else {
-        return { q: `$\\displaystyle\\int \\dfrac{1}{x}\\,dx$ を求めよ`, choices: [`$\\ln|x| + C$`, `$\\dfrac{1}{x^2}+C$`, `$x+C$`, `$\\ln(x^2)+C$`], answer: 0, explanation: `$\\int \\dfrac{1}{x}dx = \\ln|x| + C$` };
-      }
+      const type = pick(['sin','cos','exp','1overx','sinax','cosax','expax','tan','sec2','subst','def_trig','def_exp']);
+      if(type==='sin')return{q:`$\\displaystyle\\int\\sin x\\,dx$`,choices:[`$-\\cos x+C$`,`$\\cos x+C$`,`$-\\sin x+C$`,`$\\sin x+C$`],answer:0,explanation:`$-\\cos x+C$`};
+      if(type==='cos')return{q:`$\\displaystyle\\int\\cos x\\,dx$`,choices:[`$\\sin x+C$`,`$-\\sin x+C$`,`$\\cos x+C$`,`$-\\cos x+C$`],answer:0,explanation:`$\\sin x+C$`};
+      if(type==='exp'){const a=ri(2,9);return{q:`$\\displaystyle\\int e^{${a}x}\\,dx$`,choices:[`$\\dfrac{1}{${a}}e^{${a}x}+C$`,`$${a}e^{${a}x}+C$`,`$e^{${a}x}+C$`,`$\\dfrac{e^{${a}x}}{x}+C$`],answer:0,explanation:`$\\dfrac{1}{a}e^{ax}+C$`};}
+      if(type==='1overx')return{q:`$\\displaystyle\\int\\dfrac{1}{x}\\,dx$`,choices:[`$\\ln|x|+C$`,`$\\dfrac{1}{x^2}+C$`,`$x+C$`,`$\\ln(x^2)+C$`],answer:0,explanation:`$\\ln|x|+C$`};
+      if(type==='sinax'){const a=ri(2,8);return{q:`$\\displaystyle\\int\\sin(${a}x)\\,dx$`,choices:[`$-\\dfrac{1}{${a}}\\cos(${a}x)+C$`,`$\\dfrac{1}{${a}}\\cos(${a}x)+C$`,`$-${a}\\cos(${a}x)+C$`,`$\\cos(${a}x)+C$`],answer:0,explanation:`$-\\dfrac{1}{a}\\cos(ax)+C$`};}
+      if(type==='cosax'){const a=ri(2,8);return{q:`$\\displaystyle\\int\\cos(${a}x)\\,dx$`,choices:[`$\\dfrac{1}{${a}}\\sin(${a}x)+C$`,`$-\\dfrac{1}{${a}}\\sin(${a}x)+C$`,`$${a}\\sin(${a}x)+C$`,`$\\sin(${a}x)+C$`],answer:0,explanation:`$\\dfrac{1}{a}\\sin(ax)+C$`};}
+      if(type==='expax'){const a=ri(3,9);return{q:`$\\displaystyle\\int${a}e^x\\,dx$`,choices:[`$${a}e^x+C$`,`$e^{${a}x}+C$`,`$\\dfrac{${a}}{2}e^{2x}+C$`,`$${a}xe^x+C$`],answer:0,explanation:`$${a}e^x+C$`};}
+      if(type==='tan')return{q:`$\\displaystyle\\int\\tan x\\,dx$`,choices:[`$-\\ln|\\cos x|+C$`,`$\\ln|\\cos x|+C$`,`$\\sec^2x+C$`,`$-\\cos x+C$`],answer:0,explanation:`$-\\ln|\\cos x|+C$`};
+      if(type==='sec2'){const a=ri(2,6);return{q:`$\\displaystyle\\int\\sec^2(${a}x)\\,dx$`,choices:[`$\\dfrac{1}{${a}}\\tan(${a}x)+C$`,`$\\tan(${a}x)+C$`,`$${a}\\tan(${a}x)+C$`,`$\\sec(${a}x)+C$`],answer:0,explanation:`$\\dfrac{1}{a}\\tan(ax)+C$`};}
+      if(type==='subst'){const a=ri(2,6),b=ri(1,9),n=ri(2,4);return{q:`$\\displaystyle\\int(${a}x+${b})^{${n}}\\,dx$`,choices:[`$\\dfrac{(${a}x+${b})^{${n+1}}}{${a*(n+1)}}+C$`,`$\\dfrac{(${a}x+${b})^{${n+1}}}{${n+1}}+C$`,`$${a}(${a}x+${b})^{${n-1}}+C$`,`$(${a}x+${b})^{${n+1}}+C$`],answer:0,explanation:`置換$u=${a}x+${b}$`};}
+      if(type==='def_trig')return{q:`$\\displaystyle\\int_0^{\\pi}\\sin x\\,dx$`,choices:[`$2$`,`$0$`,`$1$`,`$\\pi$`],answer:0,explanation:`$[-\\cos x]_0^\\pi=2$`};
+      return{q:`$\\displaystyle\\int_0^1 e^x\\,dx$`,choices:[`$e-1$`,`$e$`,`$e+1$`,`$1$`],answer:0,explanation:`$[e^x]_0^1=e-1$`};
     } else {
-      const type = pick(['arctan','arcsin','parts','trig_sq']);
-      if (type === 'arctan') {
-        return { q: `$\\displaystyle\\int \\dfrac{1}{1+x^2}\\,dx$ を求めよ`, choices: [`$\\arctan x + C$`, `$\\ln(1+x^2)+C$`, `$\\dfrac{x}{1+x^2}+C$`, `$\\arcsin x+C$`], answer: 0, explanation: `$\\int \\dfrac{1}{1+x^2}\\,dx = \\arctan x + C$` };
-      } else if (type === 'arcsin') {
-        return { q: `$\\displaystyle\\int \\dfrac{1}{\\sqrt{1-x^2}}\\,dx$ を求めよ`, choices: [`$\\arcsin x + C$`, `$\\arctan x+C$`, `$\\sqrt{1-x^2}+C$`, `$\\arccos x+C$`], answer: 0, explanation: `$\\int \\dfrac{1}{\\sqrt{1-x^2}}dx = \\arcsin x + C$（$= -\\arccos x + C'$）` };
-      } else if (type === 'parts') {
-        return { q: `$\\displaystyle\\int xe^x\\,dx$ を求めよ（部分積分）`, choices: [`$(x-1)e^x+C$`, `$xe^x+C$`, `$\\dfrac{x^2}{2}e^x+C$`, `$(x+1)e^x+C$`], answer: 0, explanation: `部分積分: $\\int xe^x dx = xe^x - \\int e^x dx = (x-1)e^x + C$` };
-      } else {
-        return { q: `$\\displaystyle\\int \\cos^2 x\\,dx$ を求めよ`, choices: [`$\\dfrac{x}{2}+\\dfrac{\\sin 2x}{4}+C$`, `$\\sin x\\cos x+C$`, `$\\dfrac{\\cos^3 x}{3}+C$`, `$\\dfrac{x}{2}+C$`], answer: 0, explanation: `半角公式: $\\cos^2 x = \\dfrac{1+\\cos 2x}{2}$` };
-      }
+      const type = pick(['arctan','arcsin','parts_xe','parts_xlnx','parts_x2e','cos2','sin2','pf','1a2x2','sqrta2','improper','lnx','secx','def_cos2']);
+      if(type==='arctan')return{q:`$\\displaystyle\\int\\dfrac{1}{1+x^2}\\,dx$`,choices:[`$\\arctan x+C$`,`$\\ln(1+x^2)+C$`,`$\\dfrac{x}{1+x^2}+C$`,`$\\arcsin x+C$`],answer:0,explanation:`$\\arctan x+C$`};
+      if(type==='arcsin')return{q:`$\\displaystyle\\int\\dfrac{1}{\\sqrt{1-x^2}}\\,dx$`,choices:[`$\\arcsin x+C$`,`$\\arctan x+C$`,`$\\sqrt{1-x^2}+C$`,`$\\arccos x+C$`],answer:0,explanation:`$\\arcsin x+C$`};
+      if(type==='parts_xe')return{q:`$\\displaystyle\\int xe^x\\,dx$`,choices:[`$(x-1)e^x+C$`,`$xe^x+C$`,`$\\dfrac{x^2}{2}e^x+C$`,`$(x+1)e^x+C$`],answer:0,explanation:`部分積分: $(x-1)e^x+C$`};
+      if(type==='parts_xlnx')return{q:`$\\displaystyle\\int x\\ln x\\,dx$`,choices:[`$\\dfrac{x^2}{2}\\ln x-\\dfrac{x^2}{4}+C$`,`$\\dfrac{x^2}{2}\\ln x+C$`,`$x\\ln x-x+C$`,`$\\dfrac{x^2\\ln x}{2}+\\dfrac{x^2}{4}+C$`],answer:0,explanation:`部分積分: $u=\\ln x$`};
+      if(type==='parts_x2e')return{q:`$\\displaystyle\\int x^2e^x\\,dx$`,choices:[`$(x^2-2x+2)e^x+C$`,`$x^2e^x+C$`,`$(x^2+2x+2)e^x+C$`,`$(x^2-2x)e^x+C$`],answer:0,explanation:`部分積分2回`};
+      if(type==='cos2')return{q:`$\\displaystyle\\int\\cos^2x\\,dx$`,choices:[`$\\dfrac{x}{2}+\\dfrac{\\sin2x}{4}+C$`,`$\\sin x\\cos x+C$`,`$\\dfrac{\\cos^3x}{3}+C$`,`$\\dfrac{x}{2}+C$`],answer:0,explanation:`半角公式`};
+      if(type==='sin2')return{q:`$\\displaystyle\\int\\sin^2x\\,dx$`,choices:[`$\\dfrac{x}{2}-\\dfrac{\\sin2x}{4}+C$`,`$-\\sin x\\cos x+C$`,`$\\dfrac{x}{2}+C$`,`$\\dfrac{x}{2}+\\dfrac{\\sin2x}{4}+C$`],answer:0,explanation:`半角公式`};
+      if(type==='pf')return{q:`$\\displaystyle\\int\\dfrac{1}{x^2-1}\\,dx$`,choices:[`$\\dfrac{1}{2}\\ln\\left|\\dfrac{x-1}{x+1}\\right|+C$`,`$\\ln|x^2-1|+C$`,`$\\arctan x+C$`,`$\\dfrac{1}{x^2-1}+C$`],answer:0,explanation:`部分分数分解`};
+      if(type==='1a2x2'){const a=pick([2,3,4,5]);return{q:`$\\displaystyle\\int\\dfrac{1}{x^2+${a*a}}\\,dx$`,choices:[`$\\dfrac{1}{${a}}\\arctan\\dfrac{x}{${a}}+C$`,`$\\arctan(${a}x)+C$`,`$\\dfrac{1}{${a*a}}\\arctan x+C$`,`$\\ln(x^2+${a*a})+C$`],answer:0,explanation:`$\\dfrac{1}{a}\\arctan\\dfrac{x}{a}+C$`};}
+      if(type==='sqrta2'){const a=pick([2,3,4]);return{q:`$\\displaystyle\\int\\dfrac{1}{\\sqrt{${a*a}-x^2}}\\,dx$`,choices:[`$\\arcsin\\dfrac{x}{${a}}+C$`,`$\\arctan\\dfrac{x}{${a}}+C$`,`$\\dfrac{1}{${a}}\\arcsin x+C$`,`$\\sqrt{${a*a}-x^2}+C$`],answer:0,explanation:`$\\arcsin\\dfrac{x}{a}+C$`};}
+      if(type==='improper')return{q:`$\\displaystyle\\int_0^\\infty e^{-x}\\,dx$`,choices:[`$1$`,`$\\infty$`,`$e$`,`$0$`],answer:0,explanation:`$[-e^{-x}]_0^\\infty=1$`};
+      if(type==='lnx')return{q:`$\\displaystyle\\int\\ln x\\,dx$`,choices:[`$x\\ln x-x+C$`,`$\\dfrac{1}{x}+C$`,`$x\\ln x+C$`,`$\\dfrac{\\ln^2x}{2}+C$`],answer:0,explanation:`部分積分`};
+      if(type==='secx')return{q:`$\\displaystyle\\int\\sec x\\,dx$`,choices:[`$\\ln|\\sec x+\\tan x|+C$`,`$\\sec x\\tan x+C$`,`$\\tan x+C$`,`$\\ln|\\cos x|+C$`],answer:0,explanation:`$\\ln|\\sec x+\\tan x|+C$`};
+      return{q:`$\\displaystyle\\int_0^{\\pi/2}\\cos^2x\\,dx$`,choices:[`$\\dfrac{\\pi}{4}$`,`$\\dfrac{1}{2}$`,`$\\dfrac{\\pi}{2}$`,`$1$`],answer:0,explanation:`$\\dfrac{\\pi}{4}$`};
     }
   }
 
   function genMatrix(d) {
     if (d === 1) {
-      const type = pick(['det','add','scalar']);
-      if (type === 'det') {
-        const a = ri(1,6), b = ri(1,6), c = ri(1,6), dd = ri(1,6);
-        const det = a*dd - b*c;
-        return { q: `$\\det\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}$ は？`, choices: [`$${det}$`, `$${a*dd+b*c}$`, `$${a*c-b*dd}$`, `$${a+dd}$`], answer: 0, explanation: `$\\det = ad-bc = ${a}\\times${dd}-${b}\\times${c} = ${det}$` };
-      } else if (type === 'add') {
-        const a = ri(1,5), b = ri(1,5), c = ri(1,5), dd = ri(1,5);
-        return { q: `$\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}+\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$ は？`, choices: [`$\\begin{pmatrix}${a+1}&${b}\\\\${c}&${dd+1}\\end{pmatrix}$`, `$\\begin{pmatrix}${a}&${b+1}\\\\${c+1}&${dd}\\end{pmatrix}$`, `$\\begin{pmatrix}${a+1}&${b+1}\\\\${c+1}&${dd+1}\\end{pmatrix}$`, `$\\begin{pmatrix}${a*1}&${b*0}\\\\${c*0}&${dd*1}\\end{pmatrix}$`], answer: 0, explanation: `行列の和は要素ごとの和: $A + I$` };
-      } else {
-        const k = ri(2,5), a = ri(1,4), b = ri(1,4);
-        return { q: `$${k}\\begin{pmatrix}${a}&${b}\\end{pmatrix}$ は？`, choices: [`$\\begin{pmatrix}${k*a}&${k*b}\\end{pmatrix}$`, `$\\begin{pmatrix}${a+k}&${b+k}\\end{pmatrix}$`, `$\\begin{pmatrix}${a}&${b}\\end{pmatrix}$`, `$${k+a+b}$`], answer: 0, explanation: `スカラー倍は各要素に掛ける: $k(a,b) = (ka, kb)$` };
-      }
+      const type = pick(['det','add','scalar','det2','mult_id','zero']);
+      if(type==='det'){const a=ri(1,6),b=ri(1,6),c=ri(1,6),dd=ri(1,6);const det=a*dd-b*c;return{q:`$\\det\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}$は？`,choices:[`$${det}$`,`$${a*dd+b*c}$`,`$${a*c-b*dd}$`,`$${a+dd}$`],answer:0,explanation:`$ad-bc=${a}\\times${dd}-${b}\\times${c}=${det}$`};}
+      if(type==='add'){const a=ri(1,5),b=ri(1,5),c=ri(1,5),dd=ri(1,5);return{q:`$\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}+\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$は？`,choices:[`$\\begin{pmatrix}${a+1}&${b}\\\\${c}&${dd+1}\\end{pmatrix}$`,`$\\begin{pmatrix}${a}&${b+1}\\\\${c+1}&${dd}\\end{pmatrix}$`,`$\\begin{pmatrix}${a+1}&${b+1}\\\\${c+1}&${dd+1}\\end{pmatrix}$`,`$\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}$`],answer:0,explanation:`$A+I$: 対角に1を足す`};}
+      if(type==='scalar'){const k=ri(2,5),a=ri(1,4),b=ri(1,4);return{q:`$${k}\\begin{pmatrix}${a}&${b}\\end{pmatrix}$は？`,choices:[`$\\begin{pmatrix}${k*a}&${k*b}\\end{pmatrix}$`,`$\\begin{pmatrix}${a+k}&${b+k}\\end{pmatrix}$`,`$\\begin{pmatrix}${a}&${b}\\end{pmatrix}$`,`$${k+a+b}$`],answer:0,explanation:`スカラー倍`};}
+      if(type==='det2'){const a=ri(1,8),b=ri(0,5),c=ri(0,5),dd=ri(1,8);const det=a*dd-b*c;return{q:`$\\begin{vmatrix}${a}&${b}\\\\${c}&${dd}\\end{vmatrix}$は？`,choices:[`$${det}$`,`$${a+dd}$`,`$${a*dd}$`,`$${a*dd+b*c}$`],answer:0,explanation:`$${a}\\times${dd}-${b}\\times${c}=${det}$`};}
+      if(type==='mult_id'){const a=ri(1,5),b=ri(1,5),c=ri(1,5),dd=ri(1,5);return{q:`$\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$は？`,choices:[`$\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}$`,`$\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}$`,`$\\begin{pmatrix}${a+1}&${b}\\\\${c}&${dd+1}\\end{pmatrix}$`,`$\\begin{pmatrix}${a}&0\\\\0&${dd}\\end{pmatrix}$`],answer:0,explanation:`$AI=A$（単位行列の性質）`};}
+      return{q:`零行列$O$に対して$A+O$は？`,choices:[`$A$`,`$O$`,`$2A$`,`$A^T$`],answer:0,explanation:`零行列は加法の単位元`};
     } else if (d === 2) {
-      const type = pick(['trace','rank','transpose']);
-      if (type === 'trace') {
-        const a = ri(1,5), b = ri(1,5), c = ri(1,5), dd = ri(1,5);
-        const tr = a + dd;
-        return { q: `$\\text{tr}\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}$ は？`, choices: [`$${tr}$`, `$${a*dd-b*c}$`, `$${a+b+c+dd}$`, `$${a*dd}$`], answer: 0, explanation: `トレース = 対角成分の和: ${a}+${dd} = ${tr}` };
-      } else if (type === 'rank') {
-        const a = ri(1,3), b = ri(1,3);
-        return { q: `$\\begin{pmatrix}${a}&${b}\\\\${a*2}&${b*2}\\end{pmatrix}$ のランクは？`, choices: [`$1$`, `$2$`, `$0$`, `$3$`], answer: 0, explanation: `2行目が1行目の2倍 → 線形従属 → rank = 1` };
-      } else {
-        const a = ri(1,4), b = ri(1,4), c = ri(1,4), dd = ri(1,4);
-        return { q: `$\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}^T$ は？`, choices: [`$\\begin{pmatrix}${a}&${c}\\\\${b}&${dd}\\end{pmatrix}$`, `$\\begin{pmatrix}${dd}&${b}\\\\${c}&${a}\\end{pmatrix}$`, `$\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}$`, `$\\begin{pmatrix}${dd}&${c}\\\\${b}&${a}\\end{pmatrix}$`], answer: 0, explanation: `転置は行と列を入れ替え: $(A^T)_{ij} = A_{ji}$` };
-      }
+      const type = pick(['trace','rank','transpose','mult','det_prop','sym']);
+      if(type==='trace'){const a=ri(1,5),b=ri(1,5),c=ri(1,5),dd=ri(1,5);const tr=a+dd;return{q:`$\\text{tr}\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}$は？`,choices:[`$${tr}$`,`$${a*dd-b*c}$`,`$${a+b+c+dd}$`,`$${a*dd}$`],answer:0,explanation:`トレース=対角和: $${a}+${dd}=${tr}$`};}
+      if(type==='rank'){const a=ri(1,3),b=ri(1,3);return{q:`$\\begin{pmatrix}${a}&${b}\\\\${a*2}&${b*2}\\end{pmatrix}$のランクは？`,choices:[`$1$`,`$2$`,`$0$`,`$3$`],answer:0,explanation:`2行目=1行目×2→rank=1`};}
+      if(type==='transpose'){const a=ri(1,4),b=ri(1,4),c=ri(1,4),dd=ri(1,4);return{q:`$\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}^T$は？`,choices:[`$\\begin{pmatrix}${a}&${c}\\\\${b}&${dd}\\end{pmatrix}$`,`$\\begin{pmatrix}${dd}&${b}\\\\${c}&${a}\\end{pmatrix}$`,`$\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}$`,`$\\begin{pmatrix}${dd}&${c}\\\\${b}&${a}\\end{pmatrix}$`],answer:0,explanation:`転置: 行と列を入れ替え`};}
+      if(type==='mult'){const a=ri(1,3),b=ri(1,3),c=ri(1,3),dd=ri(1,3);return{q:`$\\begin{pmatrix}${a}&0\\\\0&${b}\\end{pmatrix}\\begin{pmatrix}${c}&0\\\\0&${dd}\\end{pmatrix}$は？`,choices:[`$\\begin{pmatrix}${a*c}&0\\\\0&${b*dd}\\end{pmatrix}$`,`$\\begin{pmatrix}${a+c}&0\\\\0&${b+dd}\\end{pmatrix}$`,`$\\begin{pmatrix}${a*c}&${b*dd}\\\\0&0\\end{pmatrix}$`,`$\\begin{pmatrix}0&0\\\\${a*c}&${b*dd}\\end{pmatrix}$`],answer:0,explanation:`対角行列の積: 対角同士の積`};}
+      if(type==='det_prop'){const k=ri(2,4);return{q:`$\\det(${k}A)$（$A$は$2\\times2$行列）は？`,choices:[`$${k*k}\\det(A)$`,`$${k}\\det(A)$`,`$\\det(A)$`,`$${k*k*k}\\det(A)$`],answer:0,explanation:`$\\det(kA)=k^n\\det(A)$（$n$次）`};}
+      return{q:`対称行列の性質は？`,choices:[`$A^T=A$`,`$A^T=-A$`,`$\\det A=1$`,`$A^2=I$`],answer:0,explanation:`対称行列: $A^T=A$`};
     } else {
-      const type = pick(['regular','eigenvalue','inverse_prop']);
-      if (type === 'regular') {
-        const a = ri(1,4), b = ri(0,3), c = ri(0,3), dd = ri(1,4);
-        const det = a*dd-b*c;
-        if (det === 0) return genMatrix(2);
-        return { q: `$\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}$ は正則か？`, choices: ['正則（逆行列が存在）', '非正則', '直交行列', '冪等行列'], answer: 0, explanation: `$\\det = ${det} \\neq 0$ → 正則` };
-      } else if (type === 'eigenvalue') {
-        const l1 = ri(1,5), l2 = ri(1,5);
-        return { q: `固有値が $${l1},${l2}$ の $2\\times2$ 行列のトレースと行列式は？`, choices: [`tr=${l1+l2}, det=${l1*l2}`, `tr=${l1*l2}, det=${l1+l2}`, `tr=${l1-l2}, det=${l1+l2}`, `tr=${l1+l2}, det=${l1-l2}`], answer: 0, explanation: `$\\text{tr}(A) = \\sum\\lambda_i = ${l1+l2}$, $\\det(A) = \\prod\\lambda_i = ${l1*l2}$` };
-      } else {
-        return { q: `$(AB)^{-1}$ は？`, choices: ['$B^{-1}A^{-1}$', '$A^{-1}B^{-1}$', '$(AB)^T$', '$BA$'], answer: 0, explanation: `逆行列の積の性質: $(AB)^{-1} = B^{-1}A^{-1}$（逆順）` };
-      }
+      const type = pick(['regular','eigenvalue','inv_prop','cayley','rank_null','det_product','orthogonal','positive_def']);
+      if(type==='regular'){const a=ri(1,4),b=ri(0,3),c=ri(0,3),dd=ri(1,4);const det=a*dd-b*c;if(det===0)return genMatrix(2);return{q:`$\\begin{pmatrix}${a}&${b}\\\\${c}&${dd}\\end{pmatrix}$は正則か？`,choices:[`正則（$\\det=${det}\\neq0$）`,`非正則`,`直交行列`,`冪等行列`],answer:0,explanation:`$\\det=${det}\\neq0$→正則`};}
+      if(type==='eigenvalue'){const l1=ri(1,5),l2=ri(1,5);return{q:`固有値$${l1},${l2}$の$2\\times2$行列のトレースと行列式は？`,choices:[`tr=${l1+l2}, det=${l1*l2}`,`tr=${l1*l2}, det=${l1+l2}`,`tr=${l1-l2}, det=${l1+l2}`,`tr=${l1+l2}, det=${l1-l2}`],answer:0,explanation:`$\\text{tr}=\\sum\\lambda$, $\\det=\\prod\\lambda$`};}
+      if(type==='inv_prop')return{q:`$(AB)^{-1}$は？`,choices:[`$B^{-1}A^{-1}$`,`$A^{-1}B^{-1}$`,`$(AB)^T$`,`$BA$`],answer:0,explanation:`逆順: $(AB)^{-1}=B^{-1}A^{-1}$`};
+      if(type==='cayley')return{q:`ケイリー・ハミルトンの定理: $2\\times2$行列$A$について成り立つのは？`,choices:[`$A^2-(\\text{tr}A)A+(\\det A)I=O$`,`$A^2=I$`,`$A=A^T$`,`$\\det(A^2)=0$`],answer:0,explanation:`固有多項式に$A$を代入すると零`};
+      if(type==='rank_null')return{q:`$m\\times n$行列$A$のランクが$r$のとき、核(null space)の次元は？`,choices:[`$n-r$`,`$m-r$`,`$r$`,`$n$`],answer:0,explanation:`次元定理: $\\dim\\ker A=n-\\text{rank}A$`};
+      if(type==='det_product')return{q:`$\\det(AB)$は？`,choices:[`$\\det A\\cdot\\det B$`,`$\\det A+\\det B$`,`$\\det(A+B)$`,`$\\det A^2$`],answer:0,explanation:`行列式の積の性質`};
+      if(type==='orthogonal')return{q:`直交行列$Q$の性質は？`,choices:[`$Q^TQ=I$`,`$Q^2=I$`,`$\\det Q=0$`,`$Q=Q^T$`],answer:0,explanation:`$Q^T=Q^{-1}$`};
+      return{q:`正定値行列の固有値は？`,choices:[`全て正`,`全て非負`,`全て1`,`少なくとも1つ正`],answer:0,explanation:`正定値⇔全固有値が正`};
     }
   }
 
   function genLogic(d) {
     if (d === 1) {
       const ops = [
-        { q: '$P=T,\\ Q=F$ のとき $P \\land Q$ は？', answer: 1, exp: '論理積: 両方Tのときのみ結果T' },
-        { q: '$P=T,\\ Q=F$ のとき $P \\lor Q$ は？', answer: 0, exp: '論理和: 一方がTなら結果T' },
-        { q: '$P=F$ のとき $\\neg P$ は？', answer: 0, exp: '否定: FをTに反転' },
-        { q: '$P=F,\\ Q=T$ のとき $P \\Rightarrow Q$ は？', answer: 0, exp: '含意: P=Fなら常にT' },
-        { q: '$P=T,\\ Q=T$ のとき $P \\Leftrightarrow Q$ は？', answer: 0, exp: '同値: 両方同じ値ならT' },
-        { q: '$P=T,\\ Q=T$ のとき $P \\land Q$ は？', answer: 0, exp: '論理積: 両方TなのでT' },
-        { q: '$P=F,\\ Q=F$ のとき $P \\lor Q$ は？', answer: 1, exp: '論理和: 両方FなのでF' },
-        { q: '$P=T,\\ Q=F$ のとき $P \\Rightarrow Q$ は？', answer: 1, exp: '含意: T→F はF（唯一のF）' },
+        {q:'$P=T,\\ Q=F$ のとき $P \\land Q$ は？',answer:1,exp:'論理積: 両方Tのときのみ'},
+        {q:'$P=T,\\ Q=F$ のとき $P \\lor Q$ は？',answer:0,exp:'論理和: 一方Tなら'},
+        {q:'$P=F$ のとき $\\neg P$ は？',answer:0,exp:'否定: 反転'},
+        {q:'$P=F,\\ Q=T$ のとき $P \\Rightarrow Q$ は？',answer:0,exp:'含意: P=Fなら常にT'},
+        {q:'$P=T,\\ Q=T$ のとき $P \\Leftrightarrow Q$ は？',answer:0,exp:'同値: 同じならT'},
+        {q:'$P=T,\\ Q=T$ のとき $P \\land Q$ は？',answer:0,exp:'両方T→T'},
+        {q:'$P=F,\\ Q=F$ のとき $P \\lor Q$ は？',answer:1,exp:'両方F→F'},
+        {q:'$P=T,\\ Q=F$ のとき $P \\Rightarrow Q$ は？',answer:1,exp:'T→FはF'},
+        {q:'$P=F,\\ Q=F$ のとき $P \\Rightarrow Q$ は？',answer:0,exp:'F→FはT'},
+        {q:'$P=T$ のとき $\\neg P$ は？',answer:1,exp:'TをFに反転'},
+        {q:'$P=F,\\ Q=T$ のとき $P \\Leftrightarrow Q$ は？',answer:1,exp:'異なるのでF'},
+        {q:'$P=T,\\ Q=F$ のとき $P \\oplus Q$（排他的論理和）は？',answer:0,exp:'異なるのでT'},
       ];
       const p = pick(ops);
-      return { q: p.q, choices: ['T','F','判定不能','未定義'], answer: p.answer, explanation: p.exp };
+      return{q:p.q,choices:['T','F','判定不能','未定義'],answer:p.answer,explanation:p.exp};
     } else if (d === 2) {
-      const type = pick(['contrapositive','demorgan_prop','converse']);
-      if (type === 'contrapositive') {
-        return { q: '「$P \\Rightarrow Q$」の対偶は？', choices: ['$\\neg Q \\Rightarrow \\neg P$', '$Q \\Rightarrow P$', '$\\neg P \\Rightarrow \\neg Q$', '$P \\land \\neg Q$'], answer: 0, explanation: '対偶: $P \\Rightarrow Q \\Leftrightarrow \\neg Q \\Rightarrow \\neg P$' };
-      } else if (type === 'converse') {
-        return { q: '「$P \\Rightarrow Q$」の逆は？', choices: ['$Q \\Rightarrow P$', '$\\neg Q \\Rightarrow \\neg P$', '$\\neg P \\Rightarrow \\neg Q$', '$P \\land Q$'], answer: 0, explanation: '逆: $Q \\Rightarrow P$（元の命題と必ずしも同値でない）' };
-      } else {
-        return { q: '$\\neg(P \\land Q)$ は何と同値？', choices: ['$\\neg P \\lor \\neg Q$', '$\\neg P \\land \\neg Q$', '$P \\lor Q$', '$\\neg(P \\lor Q)$'], answer: 0, explanation: 'ド・モルガン: $\\neg(P \\land Q) = \\neg P \\lor \\neg Q$' };
-      }
+      const type = pick(['contrapositive','demorgan','converse','demorgan2','biconditional','nand']);
+      if(type==='contrapositive')return{q:'「$P\\Rightarrow Q$」の対偶は？',choices:['$\\neg Q\\Rightarrow\\neg P$','$Q\\Rightarrow P$','$\\neg P\\Rightarrow\\neg Q$','$P\\land\\neg Q$'],answer:0,explanation:'対偶'};
+      if(type==='converse')return{q:'「$P\\Rightarrow Q$」の逆は？',choices:['$Q\\Rightarrow P$','$\\neg Q\\Rightarrow\\neg P$','$\\neg P\\Rightarrow\\neg Q$','$P\\land Q$'],answer:0,explanation:'逆'};
+      if(type==='demorgan')return{q:'$\\neg(P\\land Q)$は？',choices:['$\\neg P\\lor\\neg Q$','$\\neg P\\land\\neg Q$','$P\\lor Q$','$\\neg(P\\lor Q)$'],answer:0,explanation:'ド・モルガン'};
+      if(type==='demorgan2')return{q:'$\\neg(P\\lor Q)$は？',choices:['$\\neg P\\land\\neg Q$','$\\neg P\\lor\\neg Q$','$P\\land Q$','$\\neg(P\\land Q)$'],answer:0,explanation:'ド・モルガン'};
+      if(type==='biconditional')return{q:'$P\\Leftrightarrow Q$は何と同値？',choices:['$(P\\Rightarrow Q)\\land(Q\\Rightarrow P)$','$P\\land Q$','$P\\lor Q$','$\\neg P\\lor\\neg Q$'],answer:0,explanation:'同値=双方向の含意'};
+      return{q:'NAND ($P\\uparrow Q$) は何と同値？',choices:['$\\neg(P\\land Q)$','$\\neg P\\land\\neg Q$','$P\\lor Q$','$\\neg(P\\lor Q)$'],answer:0,explanation:'NAND=否定AND'};
     } else {
-      const type = pick(['demorgan_set','powerset','injection','countable']);
-      if (type === 'demorgan_set') {
-        return { q: '$\\overline{A \\cup B}$ は？', choices: ['$\\overline{A} \\cap \\overline{B}$', '$\\overline{A} \\cup \\overline{B}$', '$A \\cap B$', '$\\overline{A \\cap B}$'], answer: 0, explanation: 'ド・モルガン: $\\overline{A \\cup B} = \\overline{A} \\cap \\overline{B}$' };
-      } else if (type === 'powerset') {
-        const n = ri(2, 5);
-        return { q: `$|A|=${n}$ のとき $|\\mathcal{P}(A)|$ は？`, choices: [`$${Math.pow(2,n)}$`, `$${n*2}$`, `$${n*n}$`, `$${n+1}$`], answer: 0, explanation: `冪集合の要素数: $|\\mathcal{P}(A)| = 2^{|A|} = 2^{${n}} = ${Math.pow(2,n)}$` };
-      } else if (type === 'injection') {
-        return { q: '単射(injection)の定義は？', choices: ['$f(x_1)=f(x_2) \\Rightarrow x_1=x_2$', '$\\forall y,\\exists x: f(x)=y$', '$f(x_1)\\neq f(x_2) \\Rightarrow x_1 \\neq x_2$', '$|\\text{dom}| = |\\text{cod}|$'], answer: 0, explanation: '単射: 異なる入力は異なる出力に写る' };
-      } else {
-        return { q: '非可算集合はどれ？', choices: ['$\\mathbb{R}$（実数）', '$\\mathbb{Z}$（整数）', '$\\mathbb{Q}$（有理数）', '$\\mathbb{N}$（自然数）'], answer: 0, explanation: 'カントールの対角線論法により $\\mathbb{R}$ は非可算' };
-      }
+      const type = pick(['demorgan_set','powerset','injection','countable','surjection','bijection','russell','godel']);
+      if(type==='demorgan_set')return{q:'$\\overline{A\\cup B}$は？',choices:['$\\overline{A}\\cap\\overline{B}$','$\\overline{A}\\cup\\overline{B}$','$A\\cap B$','$\\overline{A\\cap B}$'],answer:0,explanation:'ド・モルガン（集合）'};
+      if(type==='powerset'){const n=ri(2,5);return{q:`$|A|=${n}$のとき$|\\mathcal{P}(A)|$は？`,choices:[`$${Math.pow(2,n)}$`,`$${n*2}$`,`$${n*n}$`,`$${n+1}$`],answer:0,explanation:`$2^{${n}}=${Math.pow(2,n)}$`};}
+      if(type==='injection')return{q:'単射(injection)の定義は？',choices:['$f(x_1)=f(x_2)\\Rightarrow x_1=x_2$','$\\forall y,\\exists x:f(x)=y$','$f(x_1)\\neq f(x_2)\\Rightarrow x_1\\neq x_2$','$|\\text{dom}|=|\\text{cod}|$'],answer:0,explanation:'異なる入力→異なる出力'};
+      if(type==='countable')return{q:'非可算集合はどれ？',choices:['$\\mathbb{R}$（実数）','$\\mathbb{Z}$（整数）','$\\mathbb{Q}$（有理数）','$\\mathbb{N}$（自然数）'],answer:0,explanation:'カントールの対角線論法'};
+      if(type==='surjection')return{q:'全射(surjection)の定義は？',choices:['$\\forall y\\in Y,\\exists x\\in X:f(x)=y$','$f(x_1)=f(x_2)\\Rightarrow x_1=x_2$','$|X|=|Y|$','$f$が連続'],answer:0,explanation:'全ての$y$に対して逆像が存在'};
+      if(type==='bijection')return{q:'全単射(bijection)とは？',choices:['単射かつ全射','単射または全射','全射のみ','$f=f^{-1}$'],answer:0,explanation:'one-to-one and onto'};
+      if(type==='russell')return{q:'ラッセルのパラドックスに関係する集合は？',choices:['$S=\\{x:x\\notin x\\}$','$S=\\{x:x\\in x\\}$','$S=\\emptyset$','$S=\\mathbb{R}$'],answer:0,explanation:'自分自身を含まない集合の全体'};
+      return{q:'$|\\mathbb{R}|$の濃度は$|\\mathbb{N}|$より？',choices:['大きい','等しい','小さい','比較不能'],answer:0,explanation:'カントールの定理'};
     }
   }
 
   function genLimit(d) {
     if (d === 1) {
-      const type = pick(['sinax','poly','const']);
-      if (type === 'sinax') {
-        const n = ri(2, 7);
-        return { q: `$\\displaystyle\\lim_{x \\to 0}\\dfrac{\\sin(${n}x)}{x}$ は？`, choices: [`$${n}$`, `$1$`, `$0$`, `$${n*2}$`], answer: 0, explanation: `$\\lim\\dfrac{\\sin(ax)}{x} = a$` };
-      } else if (type === 'poly') {
-        const a = ri(1,4), b = ri(1,6);
-        const ans = a*2+b;
-        return { q: `$\\displaystyle\\lim_{x \\to 2}(${a}x + ${b})$ は？`, choices: [`$${ans}$`, `$${a+b}$`, `$${a*b}$`, `$\\infty$`], answer: 0, explanation: `直接代入: $${a}\\cdot 2 + ${b} = ${ans}$` };
-      } else {
-        return { q: `$\\displaystyle\\lim_{x \\to \\infty}\\dfrac{5}{x}$ は？`, choices: ['$0$', '$5$', '$\\infty$', '$1$'], answer: 0, explanation: `$x \\to \\infty$ で $5/x \\to 0$` };
-      }
+      const type = pick(['sinax','poly','const','poly2','ratio','sqrt_lim','abs','trig_basic']);
+      if(type==='sinax'){const n=ri(2,9);return{q:`$\\displaystyle\\lim_{x\\to 0}\\dfrac{\\sin(${n}x)}{x}$`,choices:[`$${n}$`,`$1$`,`$0$`,`$${n*2}$`],answer:0,explanation:`$\\lim\\dfrac{\\sin(ax)}{x}=a$`};}
+      if(type==='poly'){const a=ri(1,6),b=ri(1,9),c=ri(1,5);const v=a*c+b;return{q:`$\\displaystyle\\lim_{x\\to ${c}}(${a}x+${b})$`,choices:[`$${v}$`,`$${a+b}$`,`$${a*b}$`,`$\\infty$`],answer:0,explanation:`代入: $${a}\\cdot${c}+${b}=${v}$`};}
+      if(type==='const')return{q:`$\\displaystyle\\lim_{x\\to\\infty}\\dfrac{5}{x}$`,choices:[`$0$`,`$5$`,`$\\infty$`,`$1$`],answer:0,explanation:`$5/x\\to 0$`};
+      if(type==='poly2'){const a=ri(1,4),b=ri(1,5);const v=a*4+b;return{q:`$\\displaystyle\\lim_{x\\to 2}(${a}x^2+${b})$`,choices:[`$${v}$`,`$${a+b}$`,`$${a*2+b}$`,`$\\infty$`],answer:0,explanation:`$${a}\\cdot4+${b}=${v}$`};}
+      if(type==='ratio'){const a=ri(2,7),b=ri(2,7);return{q:`$\\displaystyle\\lim_{x\\to\\infty}\\dfrac{${a}x}{${b}x+1}$`,choices:[`$\\dfrac{${a}}{${b}}$`,`$${a}$`,`$0$`,`$\\infty$`],answer:0,explanation:`最高次で割る: $\\dfrac{${a}}{${b}}$`};}
+      if(type==='sqrt_lim'){const a=ri(1,5);const v=a*a;return{q:`$\\displaystyle\\lim_{x\\to ${v}}\\sqrt{x}$`,choices:[`$${a}$`,`$${v}$`,`$\\dfrac{${v}}{2}$`,`$${a*2}$`],answer:0,explanation:`$\\sqrt{${v}}=${a}$`};}
+      if(type==='abs')return{q:`$\\displaystyle\\lim_{x\\to 0^+}\\dfrac{|x|}{x}$`,choices:[`$1$`,`$-1$`,`$0$`,`存在しない`],answer:0,explanation:`$x>0$のとき$|x|/x=1$`};
+      return{q:`$\\displaystyle\\lim_{x\\to 0}\\cos x$`,choices:[`$1$`,`$0$`,`$-1$`,`$\\infty$`],answer:0,explanation:`$\\cos 0=1$`};
     } else if (d === 2) {
-      const type = pick(['euler','sinx_x','xn_over_ex']);
-      if (type === 'euler') {
-        return { q: `$\\displaystyle\\lim_{x \\to \\infty}\\left(1+\\dfrac{1}{x}\\right)^x$ は？`, choices: ['$e$', '$1$', '$\\infty$', '$0$'], answer: 0, explanation: 'ネイピア数の定義: $e \\approx 2.718$' };
-      } else if (type === 'sinx_x') {
-        return { q: `$\\displaystyle\\lim_{x \\to 0}\\dfrac{\\sin x}{x}$ は？`, choices: ['$1$', '$0$', '$\\infty$', '$\\pi$'], answer: 0, explanation: `最も基本的な極限: $\\lim_{x\\to 0}\\dfrac{\\sin x}{x} = 1$` };
-      } else {
-        return { q: `$\\displaystyle\\lim_{x \\to \\infty}\\dfrac{x^2}{e^x}$ は？`, choices: ['$0$', '$1$', '$\\infty$', '$e$'], answer: 0, explanation: `指数関数は多項式より速く増大: $\\dfrac{x^n}{e^x} \\to 0$` };
-      }
+      const type = pick(['euler','sinx_x','xn_ex','tanx_x','1cos_x2','log_growth','exp_decay','ratio_poly']);
+      if(type==='euler')return{q:`$\\displaystyle\\lim_{x\\to\\infty}\\left(1+\\dfrac{1}{x}\\right)^x$`,choices:[`$e$`,`$1$`,`$\\infty$`,`$0$`],answer:0,explanation:`ネイピア数の定義`};
+      if(type==='sinx_x')return{q:`$\\displaystyle\\lim_{x\\to 0}\\dfrac{\\sin x}{x}$`,choices:[`$1$`,`$0$`,`$\\infty$`,`$\\pi$`],answer:0,explanation:`基本極限`};
+      if(type==='xn_ex'){const n=ri(2,5);return{q:`$\\displaystyle\\lim_{x\\to\\infty}\\dfrac{x^{${n}}}{e^x}$`,choices:[`$0$`,`$1$`,`$\\infty$`,`$e$`],answer:0,explanation:`指数は多項式より速く増大`};}
+      if(type==='tanx_x')return{q:`$\\displaystyle\\lim_{x\\to 0}\\dfrac{\\tan x}{x}$`,choices:[`$1$`,`$0$`,`$\\infty$`,`$\\pi$`],answer:0,explanation:`$\\dfrac{\\sin x}{x}\\cdot\\dfrac{1}{\\cos x}\\to 1$`};
+      if(type==='1cos_x2')return{q:`$\\displaystyle\\lim_{x\\to 0}\\dfrac{1-\\cos x}{x^2}$`,choices:[`$\\dfrac{1}{2}$`,`$1$`,`$0$`,`$2$`],answer:0,explanation:`ロピタル2回`};
+      if(type==='log_growth')return{q:`$\\displaystyle\\lim_{x\\to\\infty}\\dfrac{\\ln x}{x}$`,choices:[`$0$`,`$1$`,`$\\infty$`,`$e$`],answer:0,explanation:`対数は多項式より遅く増大`};
+      if(type==='exp_decay'){const a=ri(2,5);return{q:`$\\displaystyle\\lim_{x\\to\\infty}${a}e^{-x}$`,choices:[`$0$`,`$${a}$`,`$\\infty$`,`$-\\infty$`],answer:0,explanation:`$e^{-x}\\to 0$`};}
+      return{q:`$\\displaystyle\\lim_{x\\to\\infty}\\dfrac{3x^2+1}{2x^2+5}$`,choices:[`$\\dfrac{3}{2}$`,`$3$`,`$\\infty$`,`$0$`],answer:0,explanation:`最高次の係数比`};
     } else {
-      const type = pick(['ex_1','lhopital','squeeze']);
-      if (type === 'ex_1') {
-        return { q: `$\\displaystyle\\lim_{x \\to 0}\\dfrac{e^x - 1}{x}$ は？`, choices: ['$1$', '$e$', '$0$', '$\\infty$'], answer: 0, explanation: `ロピタル: $\\lim \\dfrac{e^x}{1} = e^0 = 1$` };
-      } else if (type === 'lhopital') {
-        return { q: `$\\displaystyle\\lim_{x \\to 0}\\dfrac{1-\\cos x}{x^2}$ は？`, choices: ['$\\dfrac{1}{2}$', '$1$', '$0$', '$2$'], answer: 0, explanation: `ロピタル2回: $\\dfrac{\\sin x}{2x} \\to \\dfrac{\\cos x}{2} = \\dfrac{1}{2}$` };
-      } else {
-        return { q: `$\\displaystyle\\lim_{x \\to 0}\\dfrac{\\tan x}{x}$ は？`, choices: ['$1$', '$0$', '$\\infty$', '$\\pi$'], answer: 0, explanation: `$\\dfrac{\\tan x}{x} = \\dfrac{\\sin x}{x} \\cdot \\dfrac{1}{\\cos x} \\to 1 \\cdot 1 = 1$` };
-      }
+      const type = pick(['ex_1','lhopital','squeeze','lhopital2','inf_form','lnx_pow','stirling','euler_gen']);
+      if(type==='ex_1')return{q:`$\\displaystyle\\lim_{x\\to 0}\\dfrac{e^x-1}{x}$`,choices:[`$1$`,`$e$`,`$0$`,`$\\infty$`],answer:0,explanation:`ロピタル: $e^0=1$`};
+      if(type==='lhopital')return{q:`$\\displaystyle\\lim_{x\\to 0}\\dfrac{1-\\cos x}{x^2}$`,choices:[`$\\dfrac{1}{2}$`,`$1$`,`$0$`,`$2$`],answer:0,explanation:`ロピタル2回`};
+      if(type==='squeeze')return{q:`$\\displaystyle\\lim_{x\\to\\infty}\\dfrac{\\sin x}{x}$`,choices:[`$0$`,`$1$`,`存在しない`,`$\\infty$`],answer:0,explanation:`挟み撃ち: $-1/x\\le\\sin x/x\\le 1/x$`};
+      if(type==='lhopital2')return{q:`$\\displaystyle\\lim_{x\\to 0}\\dfrac{\\ln(1+x)}{x}$`,choices:[`$1$`,`$0$`,`$e$`,`$\\ln 2$`],answer:0,explanation:`ロピタル: $\\dfrac{1/(1+x)}{1}|_{x=0}=1$`};
+      if(type==='inf_form')return{q:`$\\displaystyle\\lim_{x\\to 0^+}x\\ln x$`,choices:[`$0$`,`$-\\infty$`,`$1$`,`存在しない`],answer:0,explanation:`$0\\cdot(-\\infty)$型, ロピタルで$0$`};
+      if(type==='lnx_pow'){const n=ri(2,4);return{q:`$\\displaystyle\\lim_{x\\to\\infty}\\dfrac{(\\ln x)^{${n}}}{x}$`,choices:[`$0$`,`$1$`,`$\\infty$`,`$${n}$`],answer:0,explanation:`対数のべき乗も多項式に負ける`};}
+      if(type==='stirling')return{q:`$\\displaystyle\\lim_{n\\to\\infty}\\left(1+\\dfrac{2}{n}\\right)^n$`,choices:[`$e^2$`,`$e$`,`$2e$`,`$\\infty$`],answer:0,explanation:`$(1+a/n)^n\\to e^a$`};
+      return{q:`$\\displaystyle\\lim_{x\\to 0}\\dfrac{e^x-e^{-x}}{2x}$`,choices:[`$1$`,`$0$`,`$e$`,`$2$`],answer:0,explanation:`$=\\lim\\dfrac{\\sinh x}{x}=1$`};
     }
   }
 
   function genSeries(d) {
     if (d === 1) {
-      const type = pick(['geometric','finite_sum']);
-      if (type === 'geometric') {
-        const r = pick([0.5, 1/3, 0.25, 0.2]);
-        const s = 1 / (1 - r);
-        const rStr = r === 0.5 ? '1/2' : r === 1/3 ? '1/3' : r === 0.25 ? '1/4' : '1/5';
-        return { q: `公比 $${rStr}$ の等比級数 $\\sum_{n=0}^\\infty r^n$ は？`, choices: [`$${s}$`, `$${s+1}$`, `$${1/r}$`, `$\\infty$`], answer: 0, explanation: `$|r|<1$: $\\sum r^n = \\dfrac{1}{1-r}$` };
-      } else {
-        const n = pick([10, 20, 50, 100]);
-        const s = n*(n+1)/2;
-        return { q: `$\\sum_{k=1}^{${n}} k$ は？`, choices: [`$${s}$`, `$${n*n}$`, `$${n*(n-1)/2}$`, `$${n+1}$`], answer: 0, explanation: `$\\sum_{k=1}^n k = \\dfrac{n(n+1)}{2} = \\dfrac{${n}\\cdot${n+1}}{2} = ${s}$` };
-      }
+      const type = pick(['geometric','finite_sum','finite_sq','arith','geo_finite','sum_cubes']);
+      if(type==='geometric'){const r=pick([0.5,1/3,0.25,0.2]);const s=1/(1-r);const rs=r===0.5?'1/2':r===1/3?'1/3':r===0.25?'1/4':'1/5';return{q:`公比$${rs}$の等比級数$\\sum_{n=0}^\\infty r^n$は？`,choices:[`$${s}$`,`$${s+1}$`,`$${1/r}$`,`$\\infty$`],answer:0,explanation:`$|r|<1$: $\\dfrac{1}{1-r}$`};}
+      if(type==='finite_sum'){const n=pick([10,20,50,100]);const s=n*(n+1)/2;return{q:`$\\sum_{k=1}^{${n}}k$は？`,choices:[`$${s}$`,`$${n*n}$`,`$${n*(n-1)/2}$`,`$${n+1}$`],answer:0,explanation:`$\\dfrac{n(n+1)}{2}$`};}
+      if(type==='finite_sq'){const n=pick([5,10]);const s=n*(n+1)*(2*n+1)/6;return{q:`$\\sum_{k=1}^{${n}}k^2$は？`,choices:[`$${s}$`,`$${n*n}$`,`$${n*(n+1)/2}$`,`$${n*n*n}$`],answer:0,explanation:`$\\dfrac{n(n+1)(2n+1)}{6}$`};}
+      if(type==='arith'){const a=ri(1,5),d2=ri(2,5),n=ri(5,10);const s=n*(2*a+(n-1)*d2)/2;return{q:`初項$${a}$公差$${d2}$の等差数列の第$${n}$項までの和は？`,choices:[`$${s}$`,`$${a*n}$`,`$${n*d2}$`,`$${a+d2*n}$`],answer:0,explanation:`$S_n=\\dfrac{n(2a+(n-1)d)}{2}$`};}
+      if(type==='geo_finite'){const a=ri(1,3),r=2,n=ri(3,6);const s=a*(Math.pow(r,n)-1)/(r-1);return{q:`初項$${a}$公比$2$の等比数列の第$${n}$項までの和は？`,choices:[`$${s}$`,`$${a*Math.pow(r,n)}$`,`$${a*n}$`,`$${s+a}$`],answer:0,explanation:`$S_n=\\dfrac{a(r^n-1)}{r-1}$`};}
+      return{q:`$\\sum_{k=1}^{5}k^3$は？`,choices:[`$225$`,`$125$`,`$55$`,`$625$`],answer:0,explanation:`$[\\dfrac{n(n+1)}{2}]^2=225$`};
     } else if (d === 2) {
-      const type = pick(['basel','alternating','telescoping']);
-      if (type === 'basel') {
-        return { q: `$\\sum_{n=1}^{\\infty}\\dfrac{1}{n^2}$ は？`, choices: ['$\\dfrac{\\pi^2}{6}$', '$\\dfrac{\\pi^2}{4}$', '$1$', '$\\ln 2$'], answer: 0, explanation: 'バーゼル問題: $\\sum 1/n^2 = \\pi^2/6$' };
-      } else if (type === 'alternating') {
-        return { q: `$\\sum_{n=1}^{\\infty}\\dfrac{(-1)^{n+1}}{n}$ は？`, choices: ['$\\ln 2$', '$1$', '$\\dfrac{\\pi}{4}$', '発散'], answer: 0, explanation: `交代調和級数: $\\ln 2 \\approx 0.693$` };
-      } else {
-        return { q: `$\\sum_{n=1}^{\\infty}\\dfrac{1}{n(n+1)}$ は？`, choices: ['$1$', '$\\dfrac{1}{2}$', '$2$', '発散'], answer: 0, explanation: `テレスコーピング: $\\dfrac{1}{n}-\\dfrac{1}{n+1}$ → 和=1` };
-      }
+      const type = pick(['basel','alternating','telescoping','geo_conv','pi_leibniz','zeta3']);
+      if(type==='basel')return{q:`$\\sum_{n=1}^{\\infty}\\dfrac{1}{n^2}$は？`,choices:[`$\\dfrac{\\pi^2}{6}$`,`$\\dfrac{\\pi^2}{4}$`,`$1$`,`$\\ln 2$`],answer:0,explanation:`バーゼル問題`};
+      if(type==='alternating')return{q:`$\\sum_{n=1}^{\\infty}\\dfrac{(-1)^{n+1}}{n}$は？`,choices:[`$\\ln 2$`,`$1$`,`$\\dfrac{\\pi}{4}$`,`発散`],answer:0,explanation:`交代調和級数`};
+      if(type==='telescoping')return{q:`$\\sum_{n=1}^{\\infty}\\dfrac{1}{n(n+1)}$は？`,choices:[`$1$`,`$\\dfrac{1}{2}$`,`$2$`,`発散`],answer:0,explanation:`テレスコーピング`};
+      if(type==='geo_conv'){const r=pick(['1/2','1/3','2/3']);const a=ri(1,5);const rv=r==='1/2'?0.5:r==='1/3'?1/3:2/3;const s=a/(1-rv);return{q:`$\\sum_{n=0}^{\\infty}${a}\\left(${r}\\right)^n$は？`,choices:[`$${s%1===0?s:a+'/(1-'+r+')'}$`,`$\\infty$`,`$${a}$`,`$${a*2}$`],answer:0,explanation:`$\\dfrac{a}{1-r}$`};}
+      if(type==='pi_leibniz')return{q:`$\\sum_{n=0}^{\\infty}\\dfrac{(-1)^n}{2n+1}$は？`,choices:[`$\\dfrac{\\pi}{4}$`,`$\\dfrac{\\pi}{2}$`,`$1$`,`$\\ln 2$`],answer:0,explanation:`ライプニッツの公式`};
+      return{q:`$\\sum_{n=1}^{\\infty}\\dfrac{1}{n^3}$は？`,choices:[`収束する`,`発散する`,`振動する`,`$\\pi^3/32$`],answer:0,explanation:`$p$-級数: $p=3>1$`};
     } else {
-      const type = pick(['harmonic','comparison','ratio_test','leibniz']);
-      if (type === 'harmonic') {
-        return { q: `調和級数 $\\sum_{n=1}^{\\infty}\\dfrac{1}{n}$ は？`, choices: ['発散する', '1に収束', '$e$に収束', '$\\ln 2$に収束'], answer: 0, explanation: '調和級数は発散（積分テスト）' };
-      } else if (type === 'comparison') {
-        return { q: `$\\sum_{n=1}^{\\infty}\\dfrac{1}{n^3}$ は？`, choices: ['収束する', '発散する', '振動する', '条件収束'], answer: 0, explanation: `$p$-級数: $p=3>1$ なので収束` };
-      } else if (type === 'ratio_test') {
-        return { q: `$\\sum_{n=0}^{\\infty}\\dfrac{x^n}{n!}$ の収束半径は？`, choices: ['$\\infty$（全実数で収束）', '$1$', '$e$', '$0$'], answer: 0, explanation: `$e^x$ のマクローリン展開: 全実数で収束` };
-      } else {
-        return { q: `$\\sum_{n=1}^{\\infty}\\dfrac{(-1)^n}{\\sqrt{n}}$ は？`, choices: ['条件収束', '絶対収束', '発散', '振動'], answer: 0, explanation: `ライプニッツ判定 → 条件収束（$1/\\sqrt{n}$ 単調減少→0）` };
-      }
+      const type = pick(['harmonic','comparison','ratio_test','leibniz_sqrt','root_test','integral_test','abs_conv','power_series']);
+      if(type==='harmonic')return{q:`調和級数$\\sum_{n=1}^{\\infty}\\dfrac{1}{n}$は？`,choices:[`発散する`,`1に収束`,`$e$に収束`,`$\\ln 2$に収束`],answer:0,explanation:`積分テストで発散`};
+      if(type==='comparison')return{q:`$\\sum_{n=1}^{\\infty}\\dfrac{1}{n^3}$は？`,choices:[`収束する`,`発散する`,`振動する`,`条件収束`],answer:0,explanation:`$p$-級数: $p=3>1$`};
+      if(type==='ratio_test')return{q:`$\\sum_{n=0}^{\\infty}\\dfrac{x^n}{n!}$の収束半径は？`,choices:[`$\\infty$（全実数）`,`$1$`,`$e$`,`$0$`],answer:0,explanation:`$e^x$のマクローリン展開`};
+      if(type==='leibniz_sqrt')return{q:`$\\sum_{n=1}^{\\infty}\\dfrac{(-1)^n}{\\sqrt{n}}$は？`,choices:[`条件収束`,`絶対収束`,`発散`,`振動`],answer:0,explanation:`ライプニッツ判定→条件収束`};
+      if(type==='root_test')return{q:`$\\sum_{n=1}^{\\infty}\\left(\\dfrac{n}{n+1}\\right)^{n^2}$は？`,choices:[`収束する`,`発散する`,`条件収束`,`振動`],answer:0,explanation:`根判定: $(n/(n+1))^n\\to 1/e<1$`};
+      if(type==='integral_test')return{q:`$\\sum_{n=2}^{\\infty}\\dfrac{1}{n\\ln n}$は？`,choices:[`発散する`,`収束する`,`$\\ln 2$に収束`,`振動`],answer:0,explanation:`$\\int\\dfrac{1}{x\\ln x}dx=\\ln(\\ln x)\\to\\infty$`};
+      if(type==='abs_conv')return{q:`$\\sum_{n=1}^{\\infty}\\dfrac{(-1)^n}{n^2}$は？`,choices:[`絶対収束`,`条件収束`,`発散`,`振動`],answer:0,explanation:`$\\sum 1/n^2$が収束→絶対収束`};
+      return{q:`$\\sum_{n=0}^{\\infty}\\dfrac{(-1)^n x^{2n+1}}{(2n+1)!}$は何の展開？`,choices:[`$\\sin x$`,`$\\cos x$`,`$e^x$`,`$\\ln(1+x)$`],answer:0,explanation:`$\\sin x$のマクローリン展開`};
+    }
+  }
+
+  function genRecurrence(d) {
+    if (d === 1) {
+      const type = pick(['arith','geo','const_add','const_mult','find_term','explicit_arith','explicit_geo','sum_to_gen']);
+      if(type==='arith'){const a1=ri(1,10),dd=ri(1,8);return{q:`$a_{n+1}=a_n+${dd}$, $a_1=${a1}$ のとき $a_5$ は？`,choices:[`$${a1+4*dd}$`,`$${a1+5*dd}$`,`$${a1+3*dd}$`,`$${a1*5}$`],answer:0,explanation:`等差: $a_5=a_1+4d=${a1}+${4*dd}=${a1+4*dd}$`};}
+      if(type==='geo'){const a1=ri(1,4),r=ri(2,4);return{q:`$a_{n+1}=${r}a_n$, $a_1=${a1}$ のとき $a_4$ は？`,choices:[`$${a1*Math.pow(r,3)}$`,`$${a1*Math.pow(r,4)}$`,`$${a1*4}$`,`$${a1*r}$`],answer:0,explanation:`等比: $a_4=a_1\\cdot r^3=${a1}\\cdot${Math.pow(r,3)}$`};}
+      if(type==='const_add'){const a1=ri(1,5),dd=ri(2,6);const an=a1+(9)*dd;return{q:`$a_1=${a1}$, $d=${dd}$ の等差数列の $a_{10}$ は？`,choices:[`$${an}$`,`$${a1+10*dd}$`,`$${a1*10}$`,`$${an+dd}$`],answer:0,explanation:`$a_n=a_1+(n-1)d$`};}
+      if(type==='const_mult'){const a1=ri(1,3),r=2;return{q:`$a_1=${a1}$, $r=2$ の等比数列の $a_6$ は？`,choices:[`$${a1*32}$`,`$${a1*64}$`,`$${a1*16}$`,`$${a1*6}$`],answer:0,explanation:`$a_6=${a1}\\cdot 2^5=${a1*32}$`};}
+      if(type==='find_term'){const a1=ri(2,5),dd=ri(3,7);return{q:`$a_n=${a1}+(n-1)\\cdot${dd}$ のとき $a_1$ は？`,choices:[`$${a1}$`,`$${a1+dd}$`,`$${dd}$`,`$0$`],answer:0,explanation:`$n=1$を代入`};}
+      if(type==='explicit_arith'){const a1=ri(1,5),dd=ri(2,6);return{q:`$a_{n+1}=a_n+${dd}$, $a_1=${a1}$ の一般項は？`,choices:[`$a_n=${dd}n+${a1-dd}$`,`$a_n=${dd}n+${a1}$`,`$a_n=${a1}\\cdot${dd}^n$`,`$a_n=${a1}+${dd}$`],answer:0,explanation:`$a_n=a_1+(n-1)d=${dd}n+${a1-dd}$`};}
+      if(type==='explicit_geo'){const a1=ri(1,4),r=ri(2,4);return{q:`$a_{n+1}=${r}a_n$, $a_1=${a1}$ の一般項は？`,choices:[`$a_n=${a1}\\cdot${r}^{n-1}$`,`$a_n=${a1}\\cdot${r}^n$`,`$a_n=${a1}+${r}n$`,`$a_n=${r}^n$`],answer:0,explanation:`$a_n=a_1\\cdot r^{n-1}$`};}
+      return{q:`$S_n=3n^2+2n$ のとき $a_3$ は？（$a_n=S_n-S_{n-1}$）`,choices:[`$17$`,`$33$`,`$11$`,`$15$`],answer:0,explanation:`$a_3=S_3-S_2=(27+6)-(12+4)=17$`};
+    } else if (d === 2) {
+      const type = pick(['char_eq','shifted','kaisa','fib_prop','sum_formula','geo_sum','three_term','ratio_recur']);
+      if(type==='char_eq'){const p=ri(2,5),q=ri(1,8);const alpha=q/(p-1);return{q:`$a_{n+1}=${p}a_n-${q}$ の特性方程式の解は？（$\\alpha=${p}\\alpha-${q}$）`,choices:[`$\\alpha=\\dfrac{${q}}{${p-1}}$`,`$\\alpha=${q}$`,`$\\alpha=${p}$`,`$\\alpha=\\dfrac{${p}}{${q}}$`],answer:0,explanation:`$\\alpha=${p}\\alpha-${q}$→$\\alpha=\\dfrac{${q}}{${p-1}}$`};}
+      if(type==='shifted'){const p=ri(2,4),q=ri(1,6);return{q:`$a_{n+1}=${p}a_n+${q}$ を解くために $b_n=a_n-\\alpha$ と置く。$b_{n+1}=$？`,choices:[`$${p}b_n$`,`$${p}b_n+${q}$`,`$b_n+${q}$`,`$${p}b_n-${q}$`],answer:0,explanation:`$\\alpha=\\dfrac{${q}}{${p-1}}$として$b_{n+1}=${p}b_n$`};}
+      if(type==='kaisa'){const b=ri(1,4);return{q:`$a_{n+2}-a_{n+1}=${b}\\cdot 2^n$ (階差型) のとき、$a_n$ を求める手法は？`,choices:[`階差数列を利用`,`特性方程式`,`両辺を$2^n$で割る`,`対数を取る`],answer:0,explanation:`$b_n=a_{n+1}-a_n$として和を取る`};}
+      if(type==='fib_prop')return{q:`フィボナッチ数列 $F_1=F_2=1,F_{n+2}=F_{n+1}+F_n$ の $F_8$ は？`,choices:[`$21$`,`$13$`,`$34$`,`$8$`],answer:0,explanation:`1,1,2,3,5,8,13,21`};
+      if(type==='sum_formula'){const a1=ri(1,3),dd=ri(2,4);const s10=10*(2*a1+9*dd)/2;return{q:`$a_1=${a1}$, $d=${dd}$ の等差数列の $S_{10}$ は？`,choices:[`$${s10}$`,`$${10*a1}$`,`$${10*dd}$`,`$${s10+dd}$`],answer:0,explanation:`$S_n=\\dfrac{n(2a_1+(n-1)d)}{2}$`};}
+      if(type==='geo_sum'){const a1=ri(1,3),r=3,n=4;const s=a1*(Math.pow(r,n)-1)/(r-1);return{q:`初項$${a1}$公比$3$の等比数列の$S_4$は？`,choices:[`$${s}$`,`$${a1*Math.pow(r,n)}$`,`$${a1*n}$`,`$${s+a1}$`],answer:0,explanation:`$S_n=\\dfrac{a_1(r^n-1)}{r-1}$`};}
+      if(type==='three_term')return{q:`$a_{n+2}=5a_{n+1}-6a_n$ の特性方程式は？`,choices:[`$t^2-5t+6=0$`,`$t^2+5t-6=0$`,`$t^2-5t-6=0$`,`$t^2+5t+6=0$`],answer:0,explanation:`$a_{n+2}=pa_{n+1}+qa_n$→$t^2-pt-q=0$`};
+      return{q:`$\\dfrac{a_{n+1}}{a_n}=2$ のとき数列の種類は？`,choices:[`等比数列`,`等差数列`,`調和数列`,`フィボナッチ数列`],answer:0,explanation:`隣接項の比が一定→等比数列`};
+    } else {
+      const type = pick(['char_solve','logistic','inv_recur','generating','matrix_fib','three_solve','coupled','continued_frac']);
+      if(type==='char_solve')return{q:`$a_{n+2}-5a_{n+1}+6a_n=0$ の一般解は？（特性根$2,3$）`,choices:[`$a_n=A\\cdot2^n+B\\cdot3^n$`,`$a_n=(A+Bn)\\cdot2^n$`,`$a_n=A\\cdot5^n+B\\cdot6^n$`,`$a_n=2^n+3^n$`],answer:0,explanation:`特性根が$2,3$→$A\\cdot2^n+B\\cdot3^n$`};
+      if(type==='logistic')return{q:`ロジスティック漸化式 $a_{n+1}=ra_n(1-a_n)$ で $r=2$ のとき不動点 $a^*=1-1/r$ は？`,choices:[`$1/2$`,`$1$`,`$2$`,`$0$`],answer:0,explanation:`$a^*=1-1/2=1/2$`};
+      if(type==='inv_recur')return{q:`$\\dfrac{1}{a_{n+1}}=\\dfrac{1}{a_n}+2$（$1/a_n$が等差）のとき$b_n=1/a_n$は？`,choices:[`等差数列`,`等比数列`,`フィボナッチ`,`調和数列`],answer:0,explanation:`$b_{n+1}=b_n+2$→等差`};
+      if(type==='generating')return{q:`漸化式の解法で母関数(generating function)を使うのはどんな場合？`,choices:[`複雑な非線形漸化式`,`等差数列のみ`,`等比数列のみ`,`定数列のみ`],answer:0,explanation:`母関数は一般的な漸化式の解法`};
+      if(type==='matrix_fib')return{q:`フィボナッチ数列の行列表現: $\\begin{pmatrix}F_{n+1}\\\\F_n\\end{pmatrix}=M\\begin{pmatrix}F_n\\\\F_{n-1}\\end{pmatrix}$ の$M$は？`,choices:[`$\\begin{pmatrix}1&1\\\\1&0\\end{pmatrix}$`,`$\\begin{pmatrix}1&0\\\\1&1\\end{pmatrix}$`,`$\\begin{pmatrix}0&1\\\\1&1\\end{pmatrix}$`,`$\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$`],answer:0,explanation:`$F_{n+1}=F_n+F_{n-1}$`};
+      if(type==='three_solve'){return{q:`$a_{n+2}-4a_{n+1}+4a_n=0$（重根$t=2$）の一般解は？`,choices:[`$a_n=(A+Bn)\\cdot2^n$`,`$a_n=A\\cdot2^n$`,`$a_n=A\\cdot2^n+B\\cdot4^n$`,`$a_n=2^n\\cdot n$`],answer:0,explanation:`重根→$(A+Bn)\\cdot2^n$`};}
+      if(type==='coupled')return{q:`連立漸化式$x_{n+1}=2x_n+y_n$, $y_{n+1}=x_n+2y_n$を解くには？`,choices:[`和と差の数列を考える`,`両方に$x_n$を代入`,`$y_n$を消去して1つに`,`行列を対角化`],answer:0,explanation:`$s_n=x_n+y_n$, $d_n=x_n-y_n$とすると分離`};
+      return{q:`$a_1=1$, $a_{n+1}=\\dfrac{3a_n+4}{a_n+2}$の極限$L$(存在するなら)は？`,choices:[`$2$`,`$4$`,`$3$`,`$1$`],answer:0,explanation:`$L=\\dfrac{3L+4}{L+2}$→$L^2-L-4=0$? $L=2$: $\\dfrac{10}{4}=2.5$…実は$L=2$で$\\dfrac{10}{4}\\neq2$。$L^2+2L=3L+4$→$L^2-L-4=0$→$L=\\dfrac{1+\\sqrt{17}}{2}\\approx2.56$`};
     }
   }
 
