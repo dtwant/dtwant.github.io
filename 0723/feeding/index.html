@@ -2255,12 +2255,17 @@
     function prepareForCapture(tableWrap) {
       const table = tableWrap.querySelector('table');
       const stickyCells = tableWrap.querySelectorAll('.fl-date-col, .fl-table th');
+      const allCells = tableWrap.querySelectorAll('th, td');
       const saved = {
         wrapOverflow: tableWrap.style.overflow,
         wrapMaxWidth: tableWrap.style.maxWidth,
         wrapWidth: tableWrap.style.width,
+        wrapBorder: tableWrap.style.border,
+        tableWidth: table ? table.style.width : '',
         stickyStyles: [],
+        cellStyles: []
       };
+
       
       stickyCells.forEach((cell) => {
         saved.stickyStyles.push({
@@ -2272,26 +2277,63 @@
         });
         cell.style.position = 'static';
       });
+
+      
+      allCells.forEach((cell) => {
+        const rect = cell.getBoundingClientRect();
+        if (rect.width === 0) return;
+        saved.cellStyles.push({
+          el: cell,
+          w: cell.style.width, h: cell.style.height,
+          mw: cell.style.minWidth, mh: cell.style.minHeight,
+          maw: cell.style.maxWidth, mah: cell.style.maxHeight,
+          boxSizing: cell.style.boxSizing
+        });
+        cell.style.boxSizing = 'border-box';
+        cell.style.width = rect.width + 'px';
+        cell.style.height = rect.height + 'px';
+        cell.style.minWidth = rect.width + 'px';
+        cell.style.minHeight = rect.height + 'px';
+        cell.style.maxWidth = rect.width + 'px';
+        cell.style.maxHeight = rect.height + 'px';
+      });
+
       tableWrap.style.overflow = 'visible';
       tableWrap.style.maxWidth = 'none';
-      tableWrap.style.width = tableWrap.scrollWidth + 'px';
-      
+      tableWrap.style.width = 'max-content';
+      tableWrap.style.border = 'none';
       if (table) {
-        table.style.tableLayout = 'auto';
+        table.style.width = 'max-content';
       }
+
       return saved;
     }
+    
     function restoreAfterCapture(tableWrap, saved) {
       tableWrap.style.overflow = saved.wrapOverflow;
       tableWrap.style.maxWidth = saved.wrapMaxWidth;
       tableWrap.style.width = saved.wrapWidth;
+      tableWrap.style.border = saved.wrapBorder;
       const table = tableWrap.querySelector('table');
-      if (table) table.style.tableLayout = 'fixed';
+      if (table) {
+        table.style.width = saved.tableWidth;
+      }
+
       saved.stickyStyles.forEach(({ el, position, left, top, zIndex }) => {
         el.style.position = position;
         el.style.left = left;
         el.style.top = top;
         el.style.zIndex = zIndex;
+      });
+
+      saved.cellStyles.forEach(({ el, w, h, mw, mh, maw, mah, boxSizing }) => {
+        el.style.width = w;
+        el.style.height = h;
+        el.style.minWidth = mw;
+        el.style.minHeight = mh;
+        el.style.maxWidth = maw;
+        el.style.maxHeight = mah;
+        el.style.boxSizing = boxSizing;
       });
     }
 
@@ -2313,9 +2355,28 @@
             useCORS: true,
             scrollX: 0,
             scrollY: -window.scrollY,
-            windowWidth: tableWrap.scrollWidth + 100,
-            width: tableWrap.scrollWidth,
-            height: tableWrap.scrollHeight,
+            onclone: (clonedDoc) => {
+              
+              clonedDoc.querySelectorAll('.fl-th-name').forEach(el => {
+                el.style.maxWidth = 'none';
+                el.style.overflow = 'visible';
+                el.style.textOverflow = 'clip';
+                el.style.letterSpacing = 'normal';
+                el.style.whiteSpace = 'normal';
+                el.style.lineHeight = '1.2';
+              });
+              clonedDoc.querySelectorAll('.fl-cell').forEach(el => {
+                
+                el.style.display = 'table-cell';
+                el.style.lineHeight = el.style.height || '44px';
+                el.style.textAlign = 'center';
+                el.style.verticalAlign = 'middle';
+              });
+              clonedDoc.querySelectorAll('.fl-cell, th, td, .fl-date-col').forEach(el => {
+                el.style.letterSpacing = 'normal';
+                el.style.fontFamily = '"Zen Kaku Gothic New", "Helvetica Neue", Arial, sans-serif'; 
+              });
+            }
           });
           restoreAfterCapture(tableWrap, saved);
           const link = document.createElement("a");
@@ -2347,9 +2408,28 @@
             useCORS: true,
             scrollX: 0,
             scrollY: -window.scrollY,
-            windowWidth: tableWrap.scrollWidth + 100,
-            width: tableWrap.scrollWidth,
-            height: tableWrap.scrollHeight,
+            onclone: (clonedDoc) => {
+              
+              clonedDoc.querySelectorAll('.fl-th-name').forEach(el => {
+                el.style.maxWidth = 'none';
+                el.style.overflow = 'visible';
+                el.style.textOverflow = 'clip';
+                el.style.letterSpacing = 'normal';
+                el.style.whiteSpace = 'normal';
+                el.style.lineHeight = '1.2';
+              });
+              clonedDoc.querySelectorAll('.fl-cell').forEach(el => {
+                
+                el.style.display = 'table-cell';
+                el.style.lineHeight = el.style.height || '44px';
+                el.style.textAlign = 'center';
+                el.style.verticalAlign = 'middle';
+              });
+              clonedDoc.querySelectorAll('.fl-cell, th, td, .fl-date-col').forEach(el => {
+                el.style.letterSpacing = 'normal';
+                el.style.fontFamily = '"Zen Kaku Gothic New", "Helvetica Neue", Arial, sans-serif'; 
+              });
+            }
           });
           restoreAfterCapture(tableWrap, saved);
           const imgData = canvas.toDataURL("image/png");
