@@ -1988,58 +1988,78 @@
       tableEl.querySelectorAll(".fl-cell").forEach((cell) => {
         let pressTimer = null;
         let didLongPress = false;
+        let startX = 0, startY = 0;
+        const THRESHOLD = 15; 
 
-        
-        const aid = cell.dataset.aid;
-        const day = cell.dataset.day;
+        const aid = cell.dataset.aid, day = cell.dataset.day;
         const memoKey = `${monthKey}:${aid}:${day}`;
-        if (data.memos && data.memos[memoKey]) {
+        if (data.memos?.[memoKey]) {
           cell.classList.add('has-memo');
           cell.title = data.memos[memoKey];
         }
 
-        const startPress = (e) => {
+        const onStart = (e) => {
+          if (e.touches && e.touches.length > 1) { onCancel(); return; }
+          const t = e.touches ? e.touches[0] : e;
+          startX = t.clientX; startY = t.clientY;
           didLongPress = false;
+          clearTimeout(pressTimer);
           pressTimer = setTimeout(() => {
             didLongPress = true;
-            const animal = data.animals[aid];
-            if (animal) openMemo(aid, day, animal.name, animal.emoji);
-          }, 500);
+            const a = data.animals[aid];
+            if (a) openMemo(aid, day, a.name, a.emoji);
+          }, 850); 
         };
-        const endPress = () => {
-          clearTimeout(pressTimer);
-        };
-        const doTap = () => {
-          if (didLongPress) return;
-          const current = cell.dataset.v;
-          const idx = MARKS.indexOf(current);
-          const next = MARKS[(idx + 1) % MARKS.length];
 
+        const onMove = (e) => {
+          if (!pressTimer) return;
+          const t = e.touches ? e.touches[0] : e;
+          const dist = Math.sqrt(Math.pow(t.clientX - startX, 2) + Math.pow(t.clientY - startY, 2));
+          if (dist > THRESHOLD || (e.touches && e.touches.length > 1)) onCancel();
+        };
+
+        const onEnd = (e) => {
+          if (!pressTimer && !didLongPress) return;
+          const t = e.changedTouches ? e.changedTouches[0] : (e.touches ? e.touches[0] : e);
+          const dist = Math.sqrt(Math.pow(t.clientX - startX, 2) + Math.pow(t.clientY - startY, 2));
+          
+          if (!didLongPress && dist < THRESHOLD) {
+            
+            e.preventDefault(); 
+            doTap();
+          }
+          onCancel();
+        };
+
+        const onCancel = () => { clearTimeout(pressTimer); pressTimer = null; };
+
+        const doTap = () => {
+          const cur = cell.dataset.v || "";
+          const next = MARKS[(MARKS.indexOf(cur) + 1) % MARKS.length];
           if (!data.records[monthKey]) data.records[monthKey] = {};
           if (!data.records[monthKey][aid]) data.records[monthKey][aid] = {};
 
           if (next === "") {
             delete data.records[monthKey][aid][day];
-            if (Object.keys(data.records[monthKey][aid]).length === 0)
-              delete data.records[monthKey][aid];
-            if (Object.keys(data.records[monthKey]).length === 0)
-              delete data.records[monthKey];
+            if (!Object.keys(data.records[monthKey][aid]).length) delete data.records[monthKey][aid];
+            if (!Object.keys(data.records[monthKey]).length) delete data.records[monthKey];
           } else {
             data.records[monthKey][aid][day] = next;
           }
-
           pushData();
-          cell.textContent = next;
-          cell.dataset.v = next;
+          cell.textContent = cell.dataset.v = next;
         };
 
-        cell.addEventListener("touchstart", startPress, { passive: true });
-        cell.addEventListener("touchend", (e) => { endPress(); doTap(); });
-        cell.addEventListener("mousedown", startPress);
-        cell.addEventListener("mouseup", (e) => { endPress(); doTap(); });
-        cell.addEventListener("mouseleave", endPress);
-        
-        cell.addEventListener("contextmenu", (e) => e.preventDefault());
+        cell.addEventListener("touchstart", onStart, { passive: false }); 
+        cell.addEventListener("touchmove", onMove, { passive: true });
+        cell.addEventListener("touchend", onEnd);
+        cell.addEventListener("touchcancel", onCancel);
+
+        cell.addEventListener("mousedown", onStart);
+        cell.addEventListener("mousemove", onMove);
+        cell.addEventListener("mouseup", onEnd);
+        cell.addEventListener("mouseleave", onCancel);
+        cell.addEventListener("contextmenu", e => e.preventDefault());
       });
     }
 
