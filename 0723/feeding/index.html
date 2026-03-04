@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "31"
+    "wordCount": "37"
   }]
   </script>
 
@@ -792,7 +792,8 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       <p>生体の給餌記録ツール.
-タップで ○×△ を切り替えて、毎日の餌やりを記録する.</p>
+タップで ○×△ を切り替えて、餌やりを記録する.
+長押しでメモを残せる.</p>
 
 
 
@@ -1473,6 +1474,130 @@
       font-size: 0.75rem;
     }
   }
+
+   
+  .fl-cell.has-memo::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 6px;
+    height: 6px;
+    background: #06b6d4;
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(6,182,212,0.6);
+  }
+
+   
+  .fl-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .fl-modal-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .fl-modal {
+    background: #0e0e14;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    padding: 1.5rem;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8);
+  }
+  .fl-modal-title {
+    font-family: "Orbitron", sans-serif;
+    font-size: 0.8rem;
+    color: #06b6d4;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .fl-modal-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.7rem;
+    color: #64748b;
+    margin-bottom: 0.8rem;
+  }
+  .fl-modal textarea {
+    width: 100%;
+    min-height: 100px;
+    background: #000;
+    border: 1px solid #333;
+    color: #e2e8f0;
+    padding: 0.7rem;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-size: 0.9rem;
+    border-radius: 3px;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+  .fl-modal textarea:focus {
+    border-color: #06b6d4;
+    box-shadow: 0 0 8px rgba(6,182,212,0.2);
+  }
+  .fl-modal-btns {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .fl-modal-btn {
+    flex: 1;
+    padding: 0.7rem;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+  .fl-modal-btn.save {
+    background: transparent;
+    border: 1px solid #10b981;
+    color: #10b981;
+  }
+  .fl-modal-btn.save:hover {
+    background: #10b981;
+    color: #000;
+  }
+  .fl-modal-btn.del {
+    background: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    flex: 0 0 auto;
+    width: 80px;
+  }
+  .fl-modal-btn.del:hover {
+    background: #ef4444;
+    color: #000;
+  }
+  .fl-modal-btn.cancel {
+    background: transparent;
+    border: 1px solid #555;
+    color: #888;
+    flex: 0 0 auto;
+    width: 80px;
+  }
+  .fl-modal-btn.cancel:hover {
+    border-color: #888;
+    color: #ccc;
+  }
 </style>
 
 <div class="fl-root" id="fl-root">
@@ -1576,6 +1701,21 @@
 
 <div class="fl-toast" id="fl-toast"></div>
 
+
+<div class="fl-modal-overlay" id="fl-memo-overlay">
+  <div class="fl-modal">
+    <div class="fl-modal-title">📝 MEMO</div>
+    <div class="fl-modal-meta" id="fl-memo-meta"></div>
+    <textarea id="fl-memo-text" placeholder="メモを入力..."></textarea>
+    <div class="fl-modal-btns">
+      <button class="fl-modal-btn save" id="fl-memo-save">保存</button>
+      <button class="fl-modal-btn del" id="fl-memo-del">削除</button>
+      <button class="fl-modal-btn cancel" id="fl-memo-cancel">閉じる</button>
+    </div>
+  </div>
+</div>
+
+
 <script>
   (function () {
     "use strict";
@@ -1637,7 +1777,8 @@
         const val = await res.json();
         data = {
           animals: val.animals || {},
-          records: val.records || {}
+          records: val.records || {},
+          memos: val.memos || {}
         };
         saveToLocal();
         syncOk = true;
@@ -1663,7 +1804,7 @@
           updateSyncBadge();
           const res = await fetch(BLOB_URL, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify(data)
           });
           syncOk = res.ok;
@@ -1711,6 +1852,7 @@
       } catch (e) {}
       if (!data.animals) data.animals = {};
       if (!data.records) data.records = {};
+      if (!data.memos) data.memos = {};
     }
 
     
@@ -1841,14 +1983,35 @@
 
       
       tableEl.querySelectorAll(".fl-cell").forEach((cell) => {
-        cell.addEventListener("click", () => {
-          const aid = cell.dataset.aid;
-          const day = cell.dataset.day;
+        let pressTimer = null;
+        let didLongPress = false;
+
+        
+        const aid = cell.dataset.aid;
+        const day = cell.dataset.day;
+        const memoKey = `${monthKey}:${aid}:${day}`;
+        if (data.memos && data.memos[memoKey]) {
+          cell.classList.add('has-memo');
+          cell.title = data.memos[memoKey];
+        }
+
+        const startPress = (e) => {
+          didLongPress = false;
+          pressTimer = setTimeout(() => {
+            didLongPress = true;
+            const animal = data.animals[aid];
+            if (animal) openMemo(aid, day, animal.name, animal.emoji);
+          }, 500);
+        };
+        const endPress = () => {
+          clearTimeout(pressTimer);
+        };
+        const doTap = () => {
+          if (didLongPress) return;
           const current = cell.dataset.v;
           const idx = MARKS.indexOf(current);
           const next = MARKS[(idx + 1) % MARKS.length];
 
-          
           if (!data.records[monthKey]) data.records[monthKey] = {};
           if (!data.records[monthKey][aid]) data.records[monthKey][aid] = {};
 
@@ -1863,11 +2026,17 @@
           }
 
           pushData();
-
-          
           cell.textContent = next;
           cell.dataset.v = next;
-        });
+        };
+
+        cell.addEventListener("touchstart", startPress, { passive: true });
+        cell.addEventListener("touchend", (e) => { endPress(); doTap(); });
+        cell.addEventListener("mousedown", startPress);
+        cell.addEventListener("mouseup", (e) => { endPress(); doTap(); });
+        cell.addEventListener("mouseleave", endPress);
+        
+        cell.addEventListener("contextmenu", (e) => e.preventDefault());
       });
     }
 
@@ -2084,20 +2253,46 @@
     
     
     function prepareForCapture(tableWrap) {
+      const table = tableWrap.querySelector('table');
+      const stickyCells = tableWrap.querySelectorAll('.fl-date-col, .fl-table th');
       const saved = {
         wrapOverflow: tableWrap.style.overflow,
         wrapMaxWidth: tableWrap.style.maxWidth,
         wrapWidth: tableWrap.style.width,
+        stickyStyles: [],
       };
+      
+      stickyCells.forEach((cell) => {
+        saved.stickyStyles.push({
+          el: cell,
+          position: cell.style.position,
+          left: cell.style.left,
+          top: cell.style.top,
+          zIndex: cell.style.zIndex,
+        });
+        cell.style.position = 'static';
+      });
       tableWrap.style.overflow = 'visible';
       tableWrap.style.maxWidth = 'none';
       tableWrap.style.width = tableWrap.scrollWidth + 'px';
+      
+      if (table) {
+        table.style.tableLayout = 'auto';
+      }
       return saved;
     }
     function restoreAfterCapture(tableWrap, saved) {
       tableWrap.style.overflow = saved.wrapOverflow;
       tableWrap.style.maxWidth = saved.wrapMaxWidth;
       tableWrap.style.width = saved.wrapWidth;
+      const table = tableWrap.querySelector('table');
+      if (table) table.style.tableLayout = 'fixed';
+      saved.stickyStyles.forEach(({ el, position, left, top, zIndex }) => {
+        el.style.position = position;
+        el.style.left = left;
+        el.style.top = top;
+        el.style.zIndex = zIndex;
+      });
     }
 
     
@@ -2193,13 +2388,66 @@
         btn.textContent = "📄 PDF保存";
       });
 
+
+    
+    if (!data.memos) data.memos = {};
+
+    const memoOverlay = document.getElementById('fl-memo-overlay');
+    const memoMeta = document.getElementById('fl-memo-meta');
+    const memoText = document.getElementById('fl-memo-text');
+    let currentMemoKey = null;
+
+    function openMemo(animalId, day, animalName, animalEmoji) {
+      const monthKey = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
+      currentMemoKey = `${monthKey}:${animalId}:${day}`;
+      memoMeta.textContent = `${animalEmoji} ${animalName} — ${currentYear}/${currentMonth}/${day}`;
+      memoText.value = (data.memos || {})[currentMemoKey] || '';
+      memoOverlay.classList.add('show');
+      setTimeout(() => memoText.focus(), 100);
+    }
+
+    function closeMemo() {
+      memoOverlay.classList.remove('show');
+      currentMemoKey = null;
+    }
+
+    document.getElementById('fl-memo-save').addEventListener('click', () => {
+      if (!currentMemoKey) return;
+      const text = memoText.value.trim();
+      if (!data.memos) data.memos = {};
+      if (text) {
+        data.memos[currentMemoKey] = text;
+      } else {
+        delete data.memos[currentMemoKey];
+      }
+      pushData();
+      toast('メモを保存しました');
+      closeMemo();
+      render();
+    });
+
+    document.getElementById('fl-memo-del').addEventListener('click', () => {
+      if (!currentMemoKey) return;
+      if (!data.memos) data.memos = {};
+      delete data.memos[currentMemoKey];
+      pushData();
+      toast('メモを削除しました');
+      closeMemo();
+      render();
+    });
+
+    document.getElementById('fl-memo-cancel').addEventListener('click', closeMemo);
+    memoOverlay.addEventListener('click', (e) => {
+      if (e.target === memoOverlay) closeMemo();
+    });
+
     
     fetchFromBlob();
   })();
 </script>
 
 <hr>
-<p><small>※ Firebase未設定時はブラウザ(localStorage)にのみ保存される. Firebase設定後は複数デバイス間でリアルタイム同期.</small></p>
+<p><small>※ 記録はJSONBlob経由でクラウド同期される. ステータスバッジが「SYNCED」ならオンライン同期中.</small></p>
 
     </section>
     <footer class="pt-8">
