@@ -15,21 +15,18 @@
 
   
   
-    <title>Labs &middot; dt&#39;s world</title>
-    <meta name="title" content="Labs &middot; dt&#39;s world">
+    <title>DIMENSION_CHECKER &middot; dt&#39;s world</title>
+    <meta name="title" content="DIMENSION_CHECKER &middot; dt&#39;s world">
   
 
   
   
-    <meta name="description" content="ツール集。">
+    <meta name="description" content="次元解析・単位整合性チェッカー">
   
   
   
   
-  <link rel="canonical" href="https://dtwant.github.io/lab/">
-  
-    
-      <link rel="alternate" type="application/rss+xml" href="/lab/index.xml" title="dt's world" />
+  <link rel="canonical" href="https://dtwant.github.io/lab/dimension/">
   
 
   
@@ -47,17 +44,18 @@
   
 
   
-  <meta property="og:url" content="https://dtwant.github.io/lab/">
+  <meta property="og:url" content="https://dtwant.github.io/lab/dimension/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="Labs">
-  <meta property="og:description" content="らぼらとりぃ">
+  <meta property="og:title" content="DIMENSION_CHECKER">
+  <meta property="og:description" content="次元解析・単位整合性チェッカー">
   <meta property="og:locale" content="en">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="lab">
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Labs">
-  <meta name="twitter:description" content="らぼらとりぃ">
+  <meta name="twitter:title" content="DIMENSION_CHECKER">
+  <meta name="twitter:description" content="次元解析・単位整合性チェッカー">
 
   
   
@@ -117,6 +115,12 @@
   
   
   
+  
+    
+    <script
+      type="text/javascript"
+      src="/js/zen-mode.min.9814dee9614d32aeb56239d118edfe20acd6231424f9b19c2dd48835038414130a5e946c0d1c9087d60e60e31840c9babfd217e3d4b95643dc8d651a71ccdf4a.js"
+      integrity="sha512-mBTe6WFNMq61YjnRGO3&#43;IKzWIxQk&#43;bGcLdSINQOEFBMKXpRsDRyQh9YOYOMYQMm6v9IX49S5VkPcjWUacczfSg=="></script>
   
   
     
@@ -203,7 +207,34 @@
   
 
   
-  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Labs",
+    "name": "DIMENSION_CHECKER",
+    "headline": "DIMENSION_CHECKER",
+    "description": "次元解析・単位整合性チェッカー",
+    
+    "inLanguage": "en",
+    "url" : "https:\/\/dtwant.github.io\/lab\/dimension\/",
+    "author" : {
+      "@type": "Person",
+      "name": "dt"
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "78"
+  }]
+  </script>
+
 
 
   
@@ -729,6 +760,8 @@
   
     
   
+    
+  
   <li class="hidden">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/"
       >dt</a
@@ -736,9 +769,16 @@
   </li>
 
   
-  <li class="hidden">
+  <li class="inline">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/"
       >Labs</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/dimension/"
+      >DIMENSION_CHECKER</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -747,450 +787,521 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        Labs
+        DIMENSION_CHECKER
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=M+PLUS+1+Code:wght@400;700&display=swap" rel="stylesheet">
+      
+<h1 class="relative group">DIMENSION_CHECKER <span style="font-size:12px;color:#ff0055;">// SYNTAX_VALIDATOR</span>
+    <div id="dimension_checker--syntax_validator" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#dimension_checker--syntax_validator" aria-label="Anchor">#</a>
+    </span>
+    
+</h1>
+<p>物理方程式の各項の次元（Dimension）を解析し、等式が次元的に成立しているか（Homogeneity）を検証するツール。力学・電磁気学で用いる主要な物理量に対応し、式変形の誤りや公式忘れのチェックに役立ちます。</p>
+<blockquote>
+<p>[!NOTE]
+<strong>HOW TO USE:</strong></p>
+<ol>
+<li>入力欄に検証したい物理方程式を入力します。（例: <code>F = m * a</code>, <code>E = m * c^2</code>）</li>
+<li>対応している物理シンボルは自動認識され、次元マトリクスに変換されます。</li>
+<li>各項の次元が一致すれば <strong>[ VALID ]</strong>、不一致なら <strong>[ DIMENSION MISMATCH ]</strong> と判定されます。</li>
+</ol>
+<p><strong>M L T I Θ 系による強力な次元分解エンジン</strong> 搭載</p></blockquote>
+<hr>
 <style>
-/* --- ベース設定 --- */
-.lab-container {
-font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace;
-color: #e0f8ff;
-margin-top: 2rem;
-}
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
 
-/* --- ターミナル風のイントロ --- */
-.lab-intro-box {
-background: rgba(5, 5, 5, 0.8);
-border: 1px solid rgba(0, 243, 255, 0.3);
-border-left: 4px solid #00f3ff;
-padding: 1rem 1.5rem;
-margin-bottom: 2.5rem;
-box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
-}
-.lab-intro-text {
-margin: 0;
-line-height: 1.6;
-color: #00f3ff;
-text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
-font-size: 0.95rem;
-}
-.lab-intro-text .blink {
-animation: blink-cursor 1s infinite;
-}
-@keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+   
+  #dc-app {
+    --neon-cyan: #00f3ff;
+    --neon-pink: #ff0055;
+    --neon-yellow: #fcee0a;
+    --neon-green: #00ff41;
+    --bg-dark: #050505;
+    
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    color: #e2e8f0;
+    
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 99999;
+    background: var(--bg-dark);
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #dc-app * { box-sizing: inherit; }
 
-/* --- ツールグリッド (カードレイアウト) --- */
-.lab-grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-gap: 1.5rem;
-}
+   
+  .dc-bg-grid {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background-image: 
+      radial-gradient(circle at 50% 50%, rgba(255, 0, 85, 0.05) 0%, transparent 60%),
+      linear-gradient(rgba(255, 0, 85, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 0, 85, 0.03) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px; 
+    z-index: 1; pointer-events: none;
+  }
+  .dc-scanline {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%);
+    background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.6;
+  }
 
-/* --- ツールカード --- */
-.tool-card {
-display: flex;
-flex-direction: column;
-background: rgba(5, 5, 5, 0.6);
-border: 1px solid rgba(0, 243, 255, 0.2);
-border-radius: 4px;
-padding: 1.5rem;
-text-decoration: none !important;
-transition: all 0.3s ease;
-position: relative;
-overflow: hidden;
-backdrop-filter: blur(4px);
--webkit-backdrop-filter: blur(4px);
-}
+   
+  .dc-container {
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column;
+    width: 100%; height: 100%;
+  }
 
-.tool-card:hover {
-border-color: #ff0055;
-box-shadow: 0 0 20px rgba(255, 0, 85, 0.15), inset 0 0 10px rgba(255, 0, 85, 0.05);
-transform: translateY(-3px);
-background: rgba(255, 0, 85, 0.05);
-}
+   
+  .dc-header {
+    background: rgba(0,0,0,0.95);
+    border-bottom: 2px solid rgba(255, 0, 85, 0.4);
+    padding: 10px 15px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,0.8);
+  }
+  .dc-title {
+    font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
+    color: var(--neon-pink); text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+    letter-spacing: 2px; display: flex; align-items: center; gap: 10px;
+  }
+  .dc-header-right { display: flex; align-items: center; gap: 10px; }
+  .dc-sys-status {
+    font-size: 0.65rem; color: var(--neon-cyan);
+    background: rgba(0, 243, 255, 0.05); padding: 4px 8px; border: 1px solid rgba(0, 243, 255, 0.2);
+    font-family: 'Orbitron', sans-serif;
+  }
+  .dc-exit-btn {
+    background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
+    font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: bold;
+    padding: 5px 12px; cursor: pointer; transition: all 0.2s;
+  }
+  .dc-exit-btn:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px rgba(255,0,85,0.5); }
 
-.tool-card::before {
-content: '';
-position: absolute;
-top: 0; left: 0; bottom: 0;
-width: 3px;
-background: #00f3ff;
-box-shadow: 0 0 8px #00f3ff;
-transition: all 0.3s ease;
-}
-.tool-card:hover::before {
-background: #ff0055;
-box-shadow: 0 0 8px #ff0055;
-}
+   
+  .dc-workspace {
+    flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;
+  }
 
-/* --- カード内の要素 --- */
-.tool-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 1rem;
-border-bottom: 1px dashed rgba(0, 243, 255, 0.2);
-padding-bottom: 0.5rem;
-}
+   
+  .dc-panel-input {
+    width: 100%; background: rgba(5,5,5,0.9);
+    border-bottom: 1px solid rgba(255, 0, 85, 0.2);
+    padding: 20px 15px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center;
+  }
+  
+  .dc-equation-input-wrapper {
+    width: 100%; max-width: 800px; display: flex; gap: 10px;
+    align-items: stretch; margin-bottom: 15px; position: relative;
+  }
+  .dc-equation-input {
+    flex-grow: 1; background: #000; border: 2px solid #333; color: var(--neon-yellow);
+    font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; padding: 15px 20px;
+    outline: none; transition: 0.3s; letter-spacing: 2px;
+  }
+  .dc-equation-input:focus { border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255,0,85,0.3); }
+  .dc-equation-input::placeholder { color: #444; }
 
-.tool-id {
-font-family: 'Orbitron', sans-serif;
-font-size: 0.75rem;
-color: rgba(0, 243, 255, 0.6);
-letter-spacing: 2px;
-}
+  .dc-btn-check {
+    background: rgba(255, 0, 85, 0.1); border: 2px solid var(--neon-pink);
+    color: var(--neon-pink); font-family: 'Orbitron', sans-serif; font-size: 1.1rem;
+    font-weight: bold; padding: 0 30px; cursor: pointer; transition: all 0.2s;
+    text-shadow: 0 0 5px rgba(255, 0, 85, 0.4); text-transform: uppercase;
+  }
+  .dc-btn-check:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 20px rgba(255,0,85,0.5); }
 
-.tool-status {
-font-family: 'Orbitron', sans-serif;
-font-size: 0.7rem;
-font-weight: bold;
-padding: 2px 6px;
-border-radius: 2px;
-letter-spacing: 1px;
-}
-.status-active {
-color: #00ff66;
-background: rgba(0, 255, 102, 0.1);
-border: 1px solid rgba(0, 255, 102, 0.3);
-text-shadow: 0 0 5px #00ff66;
-}
-.status-maintenance {
-color: #fde047;
-background: rgba(253, 224, 71, 0.1);
-border: 1px solid rgba(253, 224, 71, 0.3);
-text-shadow: 0 0 5px #fde047;
-}
+  .dc-syntax-help {
+    width: 100%; max-width: 800px; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem; color: #666; display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 5px;
+  }
+  .dc-syntax-help span { background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 2px; }
 
-.tool-title {
-font-family: 'Orbitron', sans-serif;
-font-size: 1.2rem;
-font-weight: 700;
-color: #00f3ff;
-margin: 0 0 0.5rem 0;
-text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
-transition: color 0.3s ease;
-}
-.tool-card:hover .tool-title {
-color: #ff0055;
-text-shadow: 0 0 5px rgba(255, 0, 85, 0.4);
-}
+   
+  .dc-panel-output {
+    flex-grow: 1; padding: 20px; overflow-y: auto; background: transparent;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .dc-panel-output::-webkit-scrollbar { width: 6px; }
+  .dc-panel-output::-webkit-scrollbar-thumb { background: rgba(255, 0, 85, 0.2); }
 
-.tool-desc {
-font-size: 0.85rem;
-color: #a0c0d0;
-line-height: 1.5;
-margin: 0;
-}
+  .dc-placeholder {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100%; color: #444; font-family: 'JetBrains Mono', monospace; text-align: center;
+    max-width: 600px; line-height: 1.8;
+  }
+  .dc-placeholder svg { width: 64px; height: 64px; stroke: #333; margin-bottom: 15px; }
+
+   
+  .dc-result-wrapper { width: 100%; max-width: 800px; display: none; }
+  
+  .dc-verdict-box {
+    padding: 15px 20px; border-left: 5px solid #444; background: rgba(10,10,10,0.8);
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;
+    border-radius: 2px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  }
+  .dc-verdict-box.valid { border-left-color: var(--neon-green); background: rgba(0,255,65,0.05); }
+  .dc-verdict-box.invalid { border-left-color: var(--neon-pink); background: rgba(255,0,85,0.05); }
+  
+  .dc-verdict-title { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: bold; }
+  .dc-verdict-box.valid .dc-verdict-title { color: var(--neon-green); text-shadow: 0 0 10px rgba(0,255,65,0.3); }
+  .dc-verdict-box.invalid .dc-verdict-title { color: var(--neon-pink); text-shadow: 0 0 10px rgba(255,0,85,0.3); }
+  
+  .dc-verdict-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #aaa; margin-top: 5px; }
+  
+   
+  .dc-term-card {
+    background: rgba(0,0,0,0.6); border: 1px solid #222; margin-bottom: 15px;
+    display: flex; flex-direction: column; font-family: 'JetBrains Mono', monospace;
+  }
+  .dc-term-header {
+    background: #111; padding: 10px 15px; border-bottom: 1px solid #222;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--neon-cyan); font-weight: bold; font-size: 1.1rem;
+  }
+  .dc-term-body { padding: 15px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  
+  .dc-dim-badge {
+    padding: 8px 15px; background: rgba(252,238,10,0.05); border: 1px solid rgba(252,238,10,0.3);
+    color: var(--neon-yellow); font-size: 1.1rem; font-weight: bold; letter-spacing: 2px;
+  }
+
+   
+  .dc-symbols-dict {
+    width: 100%; max-width: 800px; margin-top: 40px; background: rgba(0,0,0,0.4);
+    border: 1px solid #222; padding: 15px; font-family: 'JetBrains Mono', monospace;
+  }
+  .dc-dict-title { font-size: 0.8rem; color: #888; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px;}
+  .dc-dict-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 5px; font-size: 0.7rem; color: #aaa; }
+  .dc-dict-item { background: rgba(255,255,255,0.02); padding: 4px 8px; }
+  .dc-dict-sym { color: var(--neon-cyan); font-weight: bold; display: inline-block; width: 25px;}
+
+   
+  @media(max-width: 640px) {
+    .dc-equation-input-wrapper { flex-direction: column; }
+    .dc-equation-input { font-size: 1.2rem; padding: 10px; }
+    .dc-btn-check { padding: 12px; }
+    .dc-term-body { flex-direction: column; align-items: flex-start; }
+    .dc-verdict-box { flex-direction: column; align-items: flex-start; gap: 10px; }
+  }
 </style>
-<div class="lab-container">
-<div class="lab-intro-box">
-<p class="lab-intro-text">> INITIALIZING LABORATORY MODULES...</p>
-<p class="lab-intro-text">> LOADING CUSTOM TOOLS AND UTILITIES...</p>
-<p class="lab-intro-text">> ALL SYSTEMS SECURE. READY FOR OPERATION<span class="blink">_</span></p>
+
+<div id="dc-app">
+  <div class="dc-bg-grid"></div>
+  <div class="dc-scanline"></div>
+
+  <div class="dc-container">
+    <div class="dc-header">
+      <div class="dc-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--neon-pink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+        DIMENSION_CHECKER
+      </div>
+      <div class="dc-header-right">
+        <div class="dc-sys-status"><span style="color:var(--neon-cyan);">&#x25CF;</span> MLT-ENGINE</div>
+        <button class="dc-exit-btn" onclick="history.back()">EXIT_</button>
+      </div>
+    </div>
+
+    <div class="dc-workspace">
+      
+      <div class="dc-panel-input">
+        <div class="dc-equation-input-wrapper">
+          <input type="text" id="dc-equation" class="dc-equation-input" placeholder="e.g. F = m * a" autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter') dcApp.analyze()">
+          <button class="dc-btn-check" onclick="dcApp.analyze()">ANALYZE</button>
+        </div>
+        <div class="dc-syntax-help">
+          <span>Supported ops: <b>*</b> <b>/</b> <b>^</b> <b>()</b></span>
+          <span>Try: <b>E = m*c^2</b></span>
+          <span>Try: <b>T = 2*pi*sqrt(L/g)</b></span>
+          <span>Try: <b>F = G*M*m/r^2</b></span>
+        </div>
+      </div>
+
+      
+      <div class="dc-panel-output">
+        <div class="dc-placeholder" id="dc-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+          <p>等式の両辺の次元 [M, L, T, I, Θ] が一致（Homogeneous）しているかを解析します。無次元量（定数やpiなど）は自動で無視されます。</p>
+        </div>
+
+        <div class="dc-result-wrapper" id="dc-result">
+          <div class="dc-verdict-box" id="dc-verdict-box">
+            <div>
+              <div class="dc-verdict-title" id="dc-verdict-title">VALID / MATCH</div>
+              <div class="dc-verdict-sub" id="dc-verdict-sub">Equation is dimensionally consistent.</div>
+            </div>
+            <div id="dc-verdict-dim" class="dc-dim-badge">[M][L][T]^-2</div>
+          </div>
+
+          <div id="dc-terms-container">
+            
+          </div>
+        </div>
+
+        <div class="dc-symbols-dict">
+          <div class="dc-dict-title">RECOGNIZED SYMBOLS (DICT)</div>
+          <div class="dc-dict-grid" id="dc-dict-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="lab-grid">
 
-<a href="/lab/mdeditor/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-01</span>
+<script>
+var dcApp = (function() {
+  "use strict";
+
+  
+  const DICT = {
+    
+    'm': [1,0,0,0,0], 'M': [1,0,0,0,0], 
+    'l': [0,1,0,0,0], 'L': [0,1,0,0,0], 'x': [0,1,0,0,0], 'y': [0,1,0,0,0], 'z': [0,1,0,0,0], 'h': [0,1,0,0,0], 'r': [0,1,0,0,0], 'd': [0,1,0,0,0], 
+    't': [0,0,1,0,0], 
+    'i': [0,0,0,1,0], 'I': [0,0,0,1,0], 
+    'T': [0,0,0,0,1], 
+    
+    
+    'v': [0,1,-1,0,0], 'c': [0,1,-1,0,0], 'u': [0,1,-1,0,0], 
+    'a': [0,1,-2,0,0], 'g': [0,1,-2,0,0], 
+    'F': [1,1,-2,0,0], 'f': [1,1,-2,0,0], 'N': [1,1,-2,0,0], 'W': [1,1,-2,0,0], 
+    'p': [1,1,-1,0,0], 
+    'E': [1,2,-2,0,0], 'K': [1,2,-2,0,0], 'U': [1,2,-2,0,0], 'W_': [1,2,-2,0,0], 
+    'P': [1,2,-3,0,0], 
+    'P_p': [1,-1,-2,0,0], 
+    'rho': [1,-3,0,0,0], 
+    'A': [0,2,0,0,0], 'S': [0,2,0,0,0], 
+    'V': [0,3,0,0,0], 
+    'omega': [0,0,-1,0,0], 'f_req': [0,0,-1,0,0], 
+    'tau': [1,2,-2,0,0], 
+    'L_ang': [1,2,-1,0,0], 
+    'k': [1,0,-2,0,0], 
+    
+    
+    'q': [0,0,1,1,0], 'Q': [0,0,1,1,0], 
+    'V_e': [1,2,-3,-1,0], 
+    'E_e': [1,1,-3,-1,0], 
+    'B': [1,0,-2,-1,0], 
+    'C': [-1,-2,4,2,0], 
+    'R': [1,2,-3,-2,0], 
+    'L_ind': [1,2,-2,-2,0], 
+    
+    
+    'G': [-1,3,-2,0,0], 
+    'k_e': [1,3,-4,-2,0], 
+    'e0': [-1,-3,4,2,0], 
+    'mu0': [1,1,-2,-2,0], 
+    'h_p': [1,2,-1,0,0], 
+    'k_b': [1,2,-2,0,-1], 
+    'R_gas': [1,2,-2,0,-1], 
+    
+    
+    'theta': [0,0,0,0,0], 'phi': [0,0,0,0,0], 'pi': [0,0,0,0,0], 'e': [0,0,0,0,0],
+    'mu': [0,0,0,0,0] 
+  };
+
+  const SYMBOL_NAMES = {
+    'm': 'Mass', 'l': 'Length', 't': 'Time', 'v': 'Velocity', 'a': 'Acceleration', 'F': 'Force', 'E':'Energy/Work', 'c': 'Speed of Light', 'g': 'Gravity Accel', 'G': 'Gravitational Const', 'rho': 'Density', 'p': 'Momentum', 'P': 'Power', 'Q': 'Charge', 'I': 'Current', 'V_e': 'Voltage', 'B': 'Magnetic Field', 'R': 'Resistance', 'k': 'Spring Const', 'pi': 'Pi (Dimless)'
+  };
+
+  function init() {
+    const grid = document.getElementById('dc-dict-grid');
+    Object.keys(SYMBOL_NAMES).forEach(sys => {
+      grid.innerHTML += `<div class="dc-dict-item"><span class="dc-dict-sym">${sys}</span> ${SYMBOL_NAMES[sys]}</div>`;
+    });
+  }
+
+  
+  function add(d1, d2) { return d1.map((v, i) => v + d2[i]); }
+  function sub(d1, d2) { return d1.map((v, i) => v - d2[i]); }
+  function mul(d, p) { return d.map(v => v * p); }
+  function isSame(d1, d2) { return d1.every((v, i) => v === d2[i]); }
+  
+  function formatDim(d) {
+    const chars = ['M', 'L', 'T', 'I', 'Θ'];
+    let str = "";
+    d.forEach((v, i) => {
+      if (v !== 0) str += `[${chars[i]}]${v===1?'':'^'+v}`;
+    });
+    return str || "[1] (Dimensionless)";
+  }
+
+  
+  function tokenize(expr) {
+    expr = expr.replace(/\s+/g, ''); 
+    expr = expr.replace(/sqrt\(([^)]+)\)/g, '($1)^0.5'); 
+    
+    const tokens = [];
+    let i = 0;
+    while (i < expr.length) {
+      let char = expr[i];
+      if ("()=*/+-^".includes(char)) {
+        
+        
+        
+        tokens.push(char); i++;
+      } else if (/[a-zA-Z_]/.test(char)) {
+        let sym = char; i++;
+        while (i < expr.length && /[a-zA-Z0-9_]/.test(expr[i])) { sym += expr[i]; i++; }
+        tokens.push({ type: 'sym', val: sym });
+      } else if (/[0-9.]/.test(char)) {
+        let num = char; i++;
+        while (i < expr.length && /[0-9.]/.test(expr[i])) { num += expr[i]; i++; }
+        tokens.push({ type: 'num', val: parseFloat(num) });
+      } else {
+        i++;
+      }
+    }
+    return tokens;
+  }
+
+  
+  function parsePrimary(tokens, idx) {
+    if (idx >= tokens.length) return { dim: [0,0,0,0,0], idx };
+    const t = tokens[idx];
+    
+    let baseDim;
+    if (t === '(') {
+      const res = parseExpr(tokens, idx + 1);
+      idx = res.idx + 1; 
+      baseDim = res.dim;
+    } else if (t.type === 'num') {
+      idx++; baseDim = [0,0,0,0,0]; 
+    } else if (t.type === 'sym') {
+      idx++;
+      baseDim = DICT[t.val] || [0,0,0,0,0]; 
+    } else {
+      return { dim: [0,0,0,0,0], idx: idx+1 }; 
+    }
+
+    
+    if (idx < tokens.length && tokens[idx] === '^') {
+      let power = 1;
+      let nextToken = tokens[idx+1];
+      if (nextToken === '-') { power = -1; nextToken = tokens[idx+2]; idx += 2; }
+      else { idx += 1; }
+      
+      if (nextToken && nextToken.type === 'num') {
+        baseDim = mul(baseDim, power * nextToken.val);
+        idx++;
+      } else if (nextToken && nextToken.type === 'sym') { 
+        idx++;
+      }
+    }
+    return { dim: baseDim, idx };
+  }
+
+  function parseExpr(tokens, idx) {
+    let res = parsePrimary(tokens, idx);
+    let leftDim = res.dim;
+    idx = res.idx;
+
+    while (idx < tokens.length) {
+      const op = tokens[idx];
+      if (op === '*' || op === '/') {
+        idx++;
+        let rightRes = parsePrimary(tokens, idx);
+        if (op === '*') leftDim = add(leftDim, rightRes.dim);
+        if (op === '/') leftDim = sub(leftDim, rightRes.dim);
+        idx = rightRes.idx;
+      } else {
+        break; 
+      }
+    }
+    return { dim: leftDim, idx };
+  }
+
+  function getDimOfTermString(termStr) {
+    const tokens = tokenize(termStr);
+    return parseExpr(tokens, 0).dim;
+  }
+
+  function analyze() {
+    const rawEq = document.getElementById('dc-equation').value;
+    if (!rawEq) return;
+
+    document.getElementById('dc-placeholder').style.display = 'none';
+    const resWrap = document.getElementById('dc-result');
+    resWrap.style.display = 'block';
+
+    const container = document.getElementById('dc-terms-container');
+    container.innerHTML = '';
+
+    
+    const rawSides = rawEq.split('=');
+    const termsStr = [];
+    rawSides.forEach(side => {
+      
+      
+      let parts = side.split(/\+|-/);
+      parts.forEach(p => { if(p.trim()) termsStr.push(p.trim()); });
+    });
+
+    if (termsStr.length === 0) return;
+
+    let targetDim = null;
+    let allValid = true;
+
+    termsStr.forEach((term, i) => {
+      const dim = getDimOfTermString(term);
+      if (i === 0) targetDim = dim;
+      else if (!isSame(targetDim, dim)) allValid = false;
+      
+      const dimStr = formatDim(dim);
+      
+      container.innerHTML += `
+        <div class="dc-term-card">
+          <div class="dc-term-header">TERM ${i+1}: ${term}</div>
+          <div class="dc-term-body">
+            <span class="dc-dim-badge">${dimStr}</span>
+            <span style="color:#888; font-size: 0.8rem;">Parsed Matrix: [${dim.join(', ')}]</span>
+          </div>
+        </div>
+      `;
+    });
+
+    const vBox = document.getElementById('dc-verdict-box');
+    const vTitle = document.getElementById('dc-verdict-title');
+    const vSub = document.getElementById('dc-verdict-sub');
+    const vDim = document.getElementById('dc-verdict-dim');
+
+    if (allValid && termsStr.length > 1) {
+      vBox.className = "dc-verdict-box valid";
+      vTitle.textContent = "VALID / HOMOGENEOUS";
+      vSub.textContent = "All terms have strictly identical dimensions.";
+      vDim.textContent = formatDim(targetDim);
+    } else if (allValid && termsStr.length === 1) {
+      vBox.className = "dc-verdict-box valid";
+      vTitle.textContent = "DIMENSION ANALYZED";
+      vSub.textContent = "Single term evaluated.";
+      vDim.textContent = formatDim(targetDim);
+    } else {
+      vBox.className = "dc-verdict-box invalid";
+      vTitle.textContent = "DIMENSION MISMATCH";
+      vSub.textContent = "Terms in the equation do not share the same dimensions. Check formula!";
+      vDim.textContent = "[ERROR]";
+    }
+  }
+
+  
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } 
+  else { setTimeout(init, 50); }
+
+  return { analyze };
+})();
+</script>
 
-<span class="tool-status status-active">ACTIVE</span>
 
-</div>
-<h3 class="tool-title">Markdown Editor</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/report/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-02</span>
-
-<span class="tool-status status-maintenance">MAINTENANCE</span>
-
-</div>
-<h3 class="tool-title">Report Generator</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/latex/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-03</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">LATEX_RENDERER</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/mermaid/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-04</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MERMAID_EDITOR</h3>
-<p class="tool-desc">テキストからフローチャートやシーケンス図を作成</p>
-</a>
-
-<a href="/lab/unit/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-05</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">UNIT_CONVERTER</h3>
-<p class="tool-desc">⚡ 物理単位変換・次元解析ツール</p>
-</a>
-
-<a href="/lab/physics/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-06</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">PHYSICS_SOLVER</h3>
-<p class="tool-desc">高校物理ステップ解法エンジン</p>
-</a>
-
-<a href="/lab/probability/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-07</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">PROBABILITY_SIM</h3>
-<p class="tool-desc">確率・統計リアルタイムシミュレータ</p>
-</a>
-
-<a href="/lab/lagrangian/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-08</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">LAGRANGIAN_SOLVER</h3>
-<p class="tool-desc">解析力学・ラグランジュ形式解法ツール</p>
-</a>
-
-<a href="/lab/sequence/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-09</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">SEQUENCE_ANALYZER</h3>
-<p class="tool-desc">🔢 数列解析・一般項推論・階差テーブル</p>
-</a>
-
-<a href="/lab/coord/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-10</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">COORD_TRANSFORM</h3>
-<p class="tool-desc">座標変換・テンソル計算ツール</p>
-</a>
-
-<a href="/lab/dimension/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-11</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">DIMENSION_CHECKER</h3>
-<p class="tool-desc">次元解析・単位整合性チェッカー</p>
-</a>
-
-<a href="/lab/math/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-12</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">FRAC_SOLVER // SYS.VER.2.0</h3>
-<p class="tool-desc">部分分数分解ツール</p>
-</a>
-
-<a href="/lab/mathcore1/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-13</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MathCore Calculator</h3>
-<p class="tool-desc">演算いろいろ</p>
-</a>
-
-<a href="/lab/matrix/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-14</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MATRIX_LAB</h3>
-<p class="tool-desc">行列計算</p>
-</a>
-
-<a href="/lab/graph/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-15</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">GRAPH_PLOTTER</h3>
-<p class="tool-desc">関数グラフプロッター</p>
-</a>
-
-<a href="/lab/logic/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-16</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">LOGIC_CIRCUIT</h3>
-<p class="tool-desc">論理回路解析</p>
-</a>
-
-<a href="/lab/deadline/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-17</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Deadline Manager</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/topology/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-18</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">TOPOLOGY_EXPLORER</h3>
-<p class="tool-desc">位相空間トポロジーエクスプローラー</p>
-</a>
-
-<a href="/lab/attendance/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-19</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Attendance Monitor</h3>
-<p class="tool-desc">欠課時数管理ツール</p>
-</a>
-
-<a href="/lab/mechanics/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-20</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MECHANICS_SIM</h3>
-<p class="tool-desc">解析力学シミュレータ</p>
-</a>
-
-<a href="/lab/circuit/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-21</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">CIRCUIT_SIM</h3>
-<p class="tool-desc">電気回路シミュレータ</p>
-</a>
-
-<a href="/lab/isbn/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-22</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">ISBN_DECODER // SYS.VER.3.0</h3>
-<p class="tool-desc">ISBNスキャナー</p>
-</a>
-
-<a href="/lab/automaton/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-23</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">AUTOMATON_VIZ</h3>
-<p class="tool-desc">オートマトン/正規表現ビジュアライザー</p>
-</a>
-
-<a href="/lab/crypto/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-24</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">CRYPTOGRAPHY_LAB</h3>
-<p class="tool-desc">暗号あそびば</p>
-</a>
-
-<a href="/lab/flashcard/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-25</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">FLASH_CARD</h3>
-<p class="tool-desc">単語・公式フラッシュカード</p>
-</a>
-
-<a href="/lab/stamp/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-26</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">切手組み合わせ計算機</h3>
-<p class="tool-desc">郵便料金を入力すると，現在販売中の普通切手で最小枚数になる組み合わせを計算する.</p>
-</a>
-
-<a href="/lab/quiz/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-27</span>
-
-<span class="tool-status status-maintenance">MAINTENANCE</span>
-
-</div>
-<h3 class="tool-title">MATH_QUIZ</h3>
-<p class="tool-desc">数学問題ジェネレータ</p>
-</a>
-
-</div>
-</div>
     </section>
     <footer class="pt-8">
       

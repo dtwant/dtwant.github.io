@@ -15,21 +15,18 @@
 
   
   
-    <title>Labs &middot; dt&#39;s world</title>
-    <meta name="title" content="Labs &middot; dt&#39;s world">
+    <title>LAGRANGIAN_SOLVER &middot; dt&#39;s world</title>
+    <meta name="title" content="LAGRANGIAN_SOLVER &middot; dt&#39;s world">
   
 
   
   
-    <meta name="description" content="ツール集。">
+    <meta name="description" content="解析力学・ラグランジュ形式解法ツール">
   
   
   
   
-  <link rel="canonical" href="https://dtwant.github.io/lab/">
-  
-    
-      <link rel="alternate" type="application/rss+xml" href="/lab/index.xml" title="dt's world" />
+  <link rel="canonical" href="https://dtwant.github.io/lab/lagrangian/">
   
 
   
@@ -47,17 +44,18 @@
   
 
   
-  <meta property="og:url" content="https://dtwant.github.io/lab/">
+  <meta property="og:url" content="https://dtwant.github.io/lab/lagrangian/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="Labs">
-  <meta property="og:description" content="らぼらとりぃ">
+  <meta property="og:title" content="LAGRANGIAN_SOLVER">
+  <meta property="og:description" content="解析力学・ラグランジュ形式解法ツール">
   <meta property="og:locale" content="en">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="lab">
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Labs">
-  <meta name="twitter:description" content="らぼらとりぃ">
+  <meta name="twitter:title" content="LAGRANGIAN_SOLVER">
+  <meta name="twitter:description" content="解析力学・ラグランジュ形式解法ツール">
 
   
   
@@ -117,6 +115,12 @@
   
   
   
+  
+    
+    <script
+      type="text/javascript"
+      src="/js/zen-mode.min.9814dee9614d32aeb56239d118edfe20acd6231424f9b19c2dd48835038414130a5e946c0d1c9087d60e60e31840c9babfd217e3d4b95643dc8d651a71ccdf4a.js"
+      integrity="sha512-mBTe6WFNMq61YjnRGO3&#43;IKzWIxQk&#43;bGcLdSINQOEFBMKXpRsDRyQh9YOYOMYQMm6v9IX49S5VkPcjWUacczfSg=="></script>
   
   
     
@@ -203,7 +207,34 @@
   
 
   
-  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Labs",
+    "name": "LAGRANGIAN_SOLVER",
+    "headline": "LAGRANGIAN_SOLVER",
+    "description": "解析力学・ラグランジュ形式解法ツール",
+    
+    "inLanguage": "en",
+    "url" : "https:\/\/dtwant.github.io\/lab\/lagrangian\/",
+    "author" : {
+      "@type": "Person",
+      "name": "dt"
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "58"
+  }]
+  </script>
+
 
 
   
@@ -729,6 +760,8 @@
   
     
   
+    
+  
   <li class="hidden">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/"
       >dt</a
@@ -736,9 +769,16 @@
   </li>
 
   
-  <li class="hidden">
+  <li class="inline">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/"
       >Labs</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/lagrangian/"
+      >LAGRANGIAN_SOLVER</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -747,450 +787,453 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        Labs
+        LAGRANGIAN_SOLVER
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=M+PLUS+1+Code:wght@400;700&display=swap" rel="stylesheet">
+      
+<h1 class="relative group">LAGRANGIAN_SOLVER <span style="font-size:12px;color:#fcee0a;">// ANALYTICAL_MECHANICS</span>
+    <div id="lagrangian_solver--analytical_mechanics" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#lagrangian_solver--analytical_mechanics" aria-label="Anchor">#</a>
+    </span>
+    
+</h1>
+<p>ニュートン力学の問題を、あえて「ラグランジュ形式」で解く過程をステップバイステップで表示する学部レベル向けの物理学習ツール。一般化座標の選択から、ラグランジアンの構成、オイラー・ラグランジュ方程式の導出までをナビゲートします。</p>
+<blockquote>
+<p>[!NOTE]
+<strong>SIMULATION PRESETS:</strong></p>
+<ul>
+<li><strong>[ SIMPLE_PENDULUM ]</strong> 単振り子（極座標系における導出）</li>
+<li><strong>[ ATWOOD_MACHINE ]</strong> アトウッドの機械（拘束条件のある系）</li>
+<li><strong>[ SPRING_PENDULUM ]</strong> ばね振り子（自由度2の系）</li>
+<li><strong>[ BEAD_ON_WIRE ]</strong> 放物線ワイヤー上のビーズ</li>
+</ul>
+<p><strong>エネルギー表現 ・ オイラー=ラグランジュ方程式の展開</strong> 搭載</p></blockquote>
+<hr>
 <style>
-/* --- ベース設定 --- */
-.lab-container {
-font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace;
-color: #e0f8ff;
-margin-top: 2rem;
-}
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
 
-/* --- ターミナル風のイントロ --- */
-.lab-intro-box {
-background: rgba(5, 5, 5, 0.8);
-border: 1px solid rgba(0, 243, 255, 0.3);
-border-left: 4px solid #00f3ff;
-padding: 1rem 1.5rem;
-margin-bottom: 2.5rem;
-box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
-}
-.lab-intro-text {
-margin: 0;
-line-height: 1.6;
-color: #00f3ff;
-text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
-font-size: 0.95rem;
-}
-.lab-intro-text .blink {
-animation: blink-cursor 1s infinite;
-}
-@keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+   
+  .katex { font-size: 1.15em !important; color: #e2e8f0; }
+  .katex-display { margin: 0.5em 0 !important; color: #fcee0a; text-shadow: 0 0 5px rgba(252, 238, 10, 0.3); }
 
-/* --- ツールグリッド (カードレイアウト) --- */
-.lab-grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-gap: 1.5rem;
-}
+   
+  #ls-app {
+    --neon-cyan: #00f3ff;
+    --neon-pink: #ff0055;
+    --neon-yellow: #fcee0a;
+    --neon-green: #00ff41;
+    --bg-dark: #050505;
+    
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    color: #e2e8f0;
+    
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 99999;
+    background: var(--bg-dark);
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #ls-app * { box-sizing: inherit; }
 
-/* --- ツールカード --- */
-.tool-card {
-display: flex;
-flex-direction: column;
-background: rgba(5, 5, 5, 0.6);
-border: 1px solid rgba(0, 243, 255, 0.2);
-border-radius: 4px;
-padding: 1.5rem;
-text-decoration: none !important;
-transition: all 0.3s ease;
-position: relative;
-overflow: hidden;
-backdrop-filter: blur(4px);
--webkit-backdrop-filter: blur(4px);
-}
+   
+  .ls-bg-grid {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background-image: 
+      radial-gradient(circle at 50% 50%, rgba(252, 238, 10, 0.05) 0%, transparent 60%),
+      linear-gradient(rgba(252, 238, 10, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(252, 238, 10, 0.03) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px; 
+    z-index: 1; pointer-events: none;
+  }
+  .ls-scanline {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%);
+    background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.6;
+  }
 
-.tool-card:hover {
-border-color: #ff0055;
-box-shadow: 0 0 20px rgba(255, 0, 85, 0.15), inset 0 0 10px rgba(255, 0, 85, 0.05);
-transform: translateY(-3px);
-background: rgba(255, 0, 85, 0.05);
-}
+   
+  .ls-container {
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column;
+    width: 100%; height: 100%;
+  }
 
-.tool-card::before {
-content: '';
-position: absolute;
-top: 0; left: 0; bottom: 0;
-width: 3px;
-background: #00f3ff;
-box-shadow: 0 0 8px #00f3ff;
-transition: all 0.3s ease;
-}
-.tool-card:hover::before {
-background: #ff0055;
-box-shadow: 0 0 8px #ff0055;
-}
+   
+  .ls-header {
+    background: rgba(0,0,0,0.95);
+    border-bottom: 2px solid rgba(252, 238, 10, 0.4);
+    padding: 10px 15px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,0.8);
+  }
+  .ls-title {
+    font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
+    color: var(--neon-yellow); text-shadow: 0 0 10px rgba(252, 238, 10, 0.5);
+    letter-spacing: 2px; display: flex; align-items: center; gap: 10px;
+  }
+  .ls-header-right { display: flex; align-items: center; gap: 10px; }
+  .ls-sys-status {
+    font-size: 0.65rem; color: var(--neon-cyan);
+    background: rgba(0, 243, 255, 0.05); padding: 4px 8px; border: 1px solid rgba(0, 243, 255, 0.2);
+    font-family: 'Orbitron', sans-serif;
+  }
+  .ls-exit-btn {
+    background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
+    font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: bold;
+    padding: 5px 12px; cursor: pointer; transition: all 0.2s;
+  }
+  .ls-exit-btn:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px rgba(255,0,85,0.5); }
 
-/* --- カード内の要素 --- */
-.tool-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 1rem;
-border-bottom: 1px dashed rgba(0, 243, 255, 0.2);
-padding-bottom: 0.5rem;
-}
+   
+  .ls-workspace {
+    flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;
+  }
+  @media(min-width: 800px) { .ls-workspace { flex-direction: row; } }
 
-.tool-id {
-font-family: 'Orbitron', sans-serif;
-font-size: 0.75rem;
-color: rgba(0, 243, 255, 0.6);
-letter-spacing: 2px;
-}
+   
+  .ls-panel-left {
+    width: 100%; background: rgba(5,5,5,0.9);
+    border-bottom: 1px solid rgba(252, 238, 10, 0.2);
+    display: flex; flex-direction: column; padding: 15px; overflow-y: auto;
+    flex-shrink: 0;
+  }
+  @media(min-width: 800px) { 
+    .ls-panel-left { width: 320px; border-bottom: none; border-right: 1px solid rgba(252, 238, 10, 0.2); } 
+  }
+  .ls-panel-left::-webkit-scrollbar { width: 4px; }
+  .ls-panel-left::-webkit-scrollbar-thumb { background: rgba(252, 238, 10, 0.3); }
 
-.tool-status {
-font-family: 'Orbitron', sans-serif;
-font-size: 0.7rem;
-font-weight: bold;
-padding: 2px 6px;
-border-radius: 2px;
-letter-spacing: 1px;
-}
-.status-active {
-color: #00ff66;
-background: rgba(0, 255, 102, 0.1);
-border: 1px solid rgba(0, 255, 102, 0.3);
-text-shadow: 0 0 5px #00ff66;
-}
-.status-maintenance {
-color: #fde047;
-background: rgba(253, 224, 71, 0.1);
-border: 1px solid rgba(253, 224, 71, 0.3);
-text-shadow: 0 0 5px #fde047;
-}
+  .ls-section-title {
+    font-family: 'Orbitron', sans-serif; font-size: 0.85rem; color: #888;
+    margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px; letter-spacing: 1px;
+  }
 
-.tool-title {
-font-family: 'Orbitron', sans-serif;
-font-size: 1.2rem;
-font-weight: 700;
-color: #00f3ff;
-margin: 0 0 0.5rem 0;
-text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
-transition: color 0.3s ease;
-}
-.tool-card:hover .tool-title {
-color: #ff0055;
-text-shadow: 0 0 5px rgba(255, 0, 85, 0.4);
-}
+  .ls-select {
+    width: 100%; background: #000; border: 1px solid #444; color: var(--neon-yellow);
+    padding: 10px; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: bold;
+    font-size: 0.9rem; outline: none; margin-bottom: 20px; cursor: pointer;
+  }
+  .ls-select:focus { border-color: var(--neon-yellow); box-shadow: 0 0 10px rgba(252,238,10,0.2); }
 
-.tool-desc {
-font-size: 0.85rem;
-color: #a0c0d0;
-line-height: 1.5;
-margin: 0;
-}
+  .ls-btn-solve {
+    background: rgba(252, 238, 10, 0.1); border: 1px solid var(--neon-yellow);
+    color: var(--neon-yellow); font-family: 'Orbitron', sans-serif; font-size: 0.9rem;
+    font-weight: bold; padding: 12px; margin-top: auto; cursor: pointer; transition: all 0.2s;
+    text-shadow: 0 0 5px rgba(252, 238, 10, 0.4); text-transform: uppercase; letter-spacing: 2px;
+  }
+  .ls-btn-solve:hover {
+    background: var(--neon-yellow); color: #000; box-shadow: 0 0 20px rgba(252,238,10,0.5);
+  }
+  
+  .ls-info {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #aaa;
+    line-height: 1.6; margin-bottom: 15px; padding: 10px; background: rgba(255,255,255,0.02);
+    border-left: 2px solid #555;
+  }
+
+   
+  .ls-panel-right {
+    flex-grow: 1; padding: 20px; overflow-y: auto; background: transparent; position: relative;
+  }
+  .ls-panel-right::-webkit-scrollbar { width: 6px; }
+  .ls-panel-right::-webkit-scrollbar-thumb { background: rgba(252, 238, 10, 0.2); }
+
+  .ls-output-title {
+    font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: #fff;
+    margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1);
+    letter-spacing: 2px; display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  
+  .ls-output-badge {
+    font-size: 0.65rem; background: rgba(255,0,85,0.1); color: var(--neon-pink);
+    padding: 3px 8px; border: 1px solid rgba(255,0,85,0.3); border-radius: 2px;
+  }
+
+  .ls-placeholder {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100%; color: #444; font-family: 'JetBrains Mono', monospace; text-align: center;
+  }
+  .ls-placeholder svg { width: 64px; height: 64px; stroke: #333; margin-bottom: 15px; }
+
+   
+  .ls-step {
+    background: rgba(10, 15, 20, 0.8); border: 1px solid #222; border-left: 3px solid #444;
+    padding: 15px 20px; margin-bottom: 15px; border-radius: 2px; backdrop-filter: blur(4px);
+    opacity: 0; transform: translateY(10px); animation: fadeInUp 0.4s forwards;
+  }
+  .ls-step:hover { border-color: #333; }
+  .ls-step.important { border-left-color: var(--neon-yellow); background: rgba(252,238,10,0.03); }
+  .ls-step.result { border-left-color: var(--neon-cyan); background: rgba(0,243,255,0.03); }
+
+  @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+  .ls-step-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+  }
+  .ls-step-badge {
+    background: #000; border: 1px solid #555; color: #aaa;
+    font-family: 'Orbitron', sans-serif; font-size: 0.65rem; padding: 2px 6px;
+  }
+  .ls-step.important .ls-step-badge { border-color: var(--neon-yellow); color: var(--neon-yellow); }
+  .ls-step.result .ls-step-badge { border-color: var(--neon-cyan); color: var(--neon-cyan); font-weight: bold; }
+  
+  .ls-step-title { font-weight: bold; font-size: 0.95rem; color: #e2e8f0; }
+  .ls-step-desc { font-size: 0.85rem; color: #a0aec0; line-height: 1.6; margin-bottom: 10px; }
+
+   
+  @media(max-width: 640px) {
+    .ls-header { padding: 8px 10px; }
+    .ls-title { font-size: 0.9rem; }
+    .ls-sys-status { display: none; }
+    .ls-panel-left { padding: 12px; }
+    .ls-panel-right { padding: 12px; }
+    .ls-step { padding: 12px 15px; }
+  }
 </style>
-<div class="lab-container">
-<div class="lab-intro-box">
-<p class="lab-intro-text">> INITIALIZING LABORATORY MODULES...</p>
-<p class="lab-intro-text">> LOADING CUSTOM TOOLS AND UTILITIES...</p>
-<p class="lab-intro-text">> ALL SYSTEMS SECURE. READY FOR OPERATION<span class="blink">_</span></p>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+<div id="ls-app">
+  <div class="ls-bg-grid"></div>
+  <div class="ls-scanline"></div>
+
+  <div class="ls-container">
+    <div class="ls-header">
+      <div class="ls-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--neon-yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        LAGRANGIAN_SOLVER
+      </div>
+      <div class="ls-header-right">
+        <div class="ls-sys-status"><span style="color:var(--neon-cyan);">&#x25CF;</span> DERIVATION ENGINE</div>
+        <button class="ls-exit-btn" onclick="history.back()">EXIT_</button>
+      </div>
+    </div>
+
+    <div class="ls-workspace">
+      
+      <div class="ls-panel-left">
+        <div class="ls-section-title">PHYSICAL SYSTEM PRESETS</div>
+        
+        <select class="ls-select" id="ls-problem-type" onchange="lsApp.updateInfo()">
+          <option value="pendulum">単振り子 (Simple Pendulum)</option>
+          <option value="atwood">アトウッドの機械 (Atwood Machine)</option>
+          <option value="spring">ばね振り子 (Spring Pendulum)</option>
+          <option value="bead">放物線ワイヤー上のビーズ (Bead on Wire)</option>
+        </select>
+
+        <div class="ls-info" id="ls-sys-info">
+          
+        </div>
+
+        <button class="ls-btn-solve" onclick="lsApp.solve()">GENERATE DERIVATION</button>
+      </div>
+
+      
+      <div class="ls-panel-right" id="ls-output-panel">
+        <div class="ls-placeholder" id="ls-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 14 10 14 10 20"></polyline>
+            <polyline points="20 10 14 10 14 4"></polyline>
+            <line x1="14" y1="10" x2="21" y2="3"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+          <p>解析対象の系を選択し、[GENERATE DERIVATION] を実行してください</p>
+        </div>
+        
+        <div id="ls-solution-container" style="display:none;">
+          <div class="ls-output-title">
+            <span id="ls-solution-title">DERIVATION TRACE</span>
+            <span class="ls-output-badge" id="ls-dof-badge">DOF: 1</span>
+          </div>
+          <div id="ls-steps"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="lab-grid">
 
-<a href="/lab/mdeditor/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-01</span>
+<script>
+var lsApp = (function() {
+  "use strict";
+
+  const db = {
+    pendulum: {
+      title: "単振り子",
+      info: "質量 $m$ のおもりが長さ $l$ の軽い糸に吊るされて重力場 $g$ 中で振動する系。紐の長さが変わらない拘束条件から、自由度は1となります。",
+      dof: "1 (Angle θ)",
+      steps: [
+        { type: 'normal', title: '1. 一般化座標の選択', desc: '質点の位置をデカルト座標 $(x,y)$ ではなく、極座標の角度 $\\theta$ を一般化座標（Generalized Coordinate）として選びます。支点を原点とし、下向きをy軸正方向とします。',
+          form: `\\begin{aligned} x &= l \\sin\\theta \\\\ y &= l \\cos\\theta \\end{aligned}` },
+        { type: 'normal', title: '2. 速度の導出', desc: '座標を時間 $t$ で微分し、速度 $v$ を各成分で表します（$\\dot{\\theta}$ は角速度）。',
+          form: `\\begin{aligned} \\dot{x} &= l \\dot{\\theta} \\cos\\theta \\\\ \\dot{y} &= -l \\dot{\\theta} \\sin\\theta \\end{aligned}` },
+        { type: 'normal', title: '3. 運動エネルギー $T$ とポテンシャルエネルギー $U$', desc: '系の運動エネルギー $T = \\frac{1}{2}m v^2 = \\frac{1}{2}m(\\dot{x}^2 + \\dot{y}^2)$ と、ポテンシャルエネルギー $U = -mgy$ を一般化座標で表します。',
+          form: `\\begin{aligned} T &= \\frac{1}{2}m \\left( l^2 \\dot{\\theta}^2 \\cos^2\\theta + l^2 \\dot{\\theta}^2 \\sin^2\\theta \\right) = \\frac{1}{2}ml^2 \\dot{\\theta}^2 \\\\ U &= -mgl \\cos\\theta \\end{aligned}` },
+        { type: 'important', title: '4. ラグランジアン $L$', desc: 'ラグランジアン $L \\equiv T - U$ を構成します。',
+          form: `L(\\theta, \\dot{\\theta}) = \\frac{1}{2}ml^2 \\dot{\\theta}^2 + mgl \\cos\\theta` },
+        { type: 'normal', title: '5. オイラー＝ラグランジュ方程式の各項', desc: '変数 $\\theta$ についてのオイラー＝ラグランジュ方程式 $\\frac{d}{dt}\\left( \\frac{\\partial L}{\\partial \\dot{\\theta}} \\right) - \\frac{\\partial L}{\\partial \\theta} = 0$ を計算します。',
+          form: `\\begin{aligned} \\frac{\\partial L}{\\partial \\dot{\\theta}} &= ml^2 \\dot{\\theta} \\quad \\Rightarrow \\quad \\frac{d}{dt}\\left( \\frac{\\partial L}{\\partial \\dot{\\theta}} \\right) = ml^2 \\ddot{\\theta} \\\\ \\frac{\\partial L}{\\partial \\theta} &= -mgl \\sin\\theta \\end{aligned}` },
+        { type: 'result', title: '6. 運動方程式 (Equation of Motion)', desc: 'これらを代入して整理すると、ニュートンの運動方程式と同じ形が導かれます。',
+          form: `ml^2 \\ddot{\\theta} + mgl \\sin\\theta = 0 \\quad \\Rightarrow \\quad \\ddot{\\theta} = -\\frac{g}{l}\\sin\\theta` }
+      ]
+    },
+    atwood: {
+      title: "アトウッドの機械",
+      info: "滑車に繋がれた質量 $m_1, m_2$ の2つのおもりが鉛直方向に運動する系。糸の長さが $l$ で一定というホロノミック拘束の存在により、独立な変数は1つになります。",
+      dof: "1 (Position x)",
+      steps: [
+        { type: 'normal', title: '1. 一般化座標の選択', desc: '左側のおもり $m_1$ の高さを基準点から下向きに $x$ とします。糸の長さが $l$ で一定であるという拘束条件 $x + y = l$ から、右側のおもり $m_2$ の位置は $y = l - x$ と表せます。',
+          form: `q = x \\quad ( \\text{Generalised Coordinate} )` },
+        { type: 'normal', title: '2. 速度の導出', desc: 'それぞれの速度は、時間微分により求まります。',
+          form: `\\begin{aligned} v_1 &= \\dot{x} \\\\ v_2 &= \\dot{y} = -\\dot{x} \\end{aligned}` },
+        { type: 'normal', title: '3. 運動エネルギー $T$ とポテンシャルエネルギー $U$', desc: '滑車と糸の質量を無視し、座標を代入して全系のエネルギーを記述します。(下向きを正にとっているので $U = -mgz$)',
+          form: `\\begin{aligned} T &= \\frac{1}{2}m_1 \\dot{x}^2 + \\frac{1}{2}m_2 (-\\dot{x})^2 = \\frac{1}{2}(m_1 + m_2)\\dot{x}^2 \\\\ U &= -m_1 g x - m_2 g (l - x) \\end{aligned}` },
+        { type: 'important', title: '4. ラグランジアン $L$', desc: 'ラグランジアン $L = T - U$ を記述し、定数項 $-m_2gl$ を取り除いて整理します。（定数項は運動方程式に影響しないため無視できる）',
+          form: `L(x, \\dot{x}) = \\frac{1}{2}(m_1 + m_2)\\dot{x}^2 + (m_1 - m_2)gx` },
+        { type: 'normal', title: '5. オイラー＝ラグランジュ方程式の各項', desc: '$\\frac{d}{dt}\\left( \\frac{\\partial L}{\\partial \\dot{x}} \\right) - \\frac{\\partial L}{\\partial x} = 0$',
+          form: `\\begin{aligned} \\frac{\\partial L}{\\partial \\dot{x}} &= (m_1 + m_2)\\dot{x} \\quad \\Rightarrow \\quad \\frac{d}{dt}\\left( \\frac{\\partial L}{\\partial \\dot{x}} \\right) = (m_1 + m_2)\\ddot{x} \\\\ \\frac{\\partial L}{\\partial x} &= (m_1 - m_2)g \\end{aligned}` },
+        { type: 'result', title: '6. 運動方程式 (Equation of Motion)', desc: 'これを $x$ の加速度 $\\ddot{x}$ について解きます。',
+          form: `(m_1 + m_2)\\ddot{x} - (m_1 - m_2)g = 0 \\quad \\Rightarrow \\quad a = \\ddot{x} = \\frac{m_1 - m_2}{m_1 + m_2}g` }
+      ]
+    },
+    spring: {
+      title: "ばね振り子 (2D Spring Pendulum)",
+      info: "自然長 $R_0$、ばね定数 $k$ のばねに質量 $m$ のおもりが繋がれ、重力場中で自由に揺れる系。長さも角度も変わるため、自由度は2になります。",
+      dof: "2 (r, θ)",
+      steps: [
+        { type: 'normal', title: '1. 一般化座標の選択', desc: 'ばねの現在の長さ $r$ と、鉛直方向からの角度 $\\theta$ の2つを独立な極座標として選びます。',
+          form: `x = r \\sin\\theta, \\quad y = -r \\cos\\theta` },
+        { type: 'normal', title: '2. 速度成分', desc: '時間微分により極座標の速度ベクトル成分を求めます。',
+          form: `v^2 = \\dot{r}^2 + (r\\dot{\\theta})^2` },
+        { type: 'important', title: '3. ラグランジアン $L$', desc: '運動エネルギー $T$ と、重力・弾性による位置エネルギー $U$ を記述します。',
+          form: `\\begin{aligned} T &= \\frac{1}{2}m(\\dot{r}^2 + r^2\\dot{\\theta}^2) \\\\ U &= -mgr\\cos\\theta + \\frac{1}{2}k(r - R_0)^2 \\\\ L &= T - U \\\\ &= \\frac{1}{2}m(\\dot{r}^2 + r^2\\dot{\\theta}^2) + mgr\\cos\\theta - \\frac{1}{2}k(r - R_0)^2 \\end{aligned}` },
+        { type: 'normal', title: '4. $r$ に関する方程式', desc: '\\frac{d}{dt}\\left( \\frac{\\partial L}{\\partial \\dot{r}} \\right) - \\frac{\\partial L}{\\partial r} = 0 を解きます。',
+          form: `\\begin{aligned} \\frac{d}{dt}(m\\dot{r}) - (mr\\dot{\\theta}^2 + mg\\cos\\theta - k(r - R_0)) &= 0 \\\\ m\\ddot{r} &= mr\\dot{\\theta}^2 + mg\\cos\\theta - k(r - R_0) \\end{aligned}` },
+        { type: 'result', title: '5. $\\theta$ に関する方程式', desc: '\\frac{d}{dt}\\left( \\frac{\\partial L}{\\partial \\dot{\\theta}} \\right) - \\frac{\\partial L}{\\partial \\theta} = 0 を解き、連立運動方程式を得ます。',
+          form: `\\begin{aligned} \\frac{d}{dt}(mr^2\\dot{\\theta}) - (-mgr\\sin\\theta) &= 0 \\\\ mr^2\\ddot{\\theta} + 2mr\\dot{r}\\dot{\\theta} + mgr\\sin\\theta &= 0 \\end{aligned}` }
+      ]
+    },
+    bead: {
+      title: "放物線ワイヤー上のビーズ",
+      info: "方程式 $y = ax^2$ で表される形状に固定された滑らかなワイヤー上を、質量 $m$ のビーズが重力中を滑る系。2次元運動に見えますが、拘束により自由度は1です。",
+      dof: "1 (x)",
+      steps: [
+        { type: 'normal', title: '1. 一般化座標の選択', desc: '拘束条件 $y = ax^2$ より、水平方向の座標 $x$ を唯一の独立変数とします。',
+          form: `x = q, \\quad y = aq^2` },
+        { type: 'normal', title: '2. 速度の計算', desc: '$x$ と $y$ を微分します。合成関数の微分則 $(\\dot{y} = 2ax\\dot{x})$ を用います。',
+          form: `v^2 = \\dot{x}^2 + \\dot{y}^2 = \\dot{x}^2 + (2ax\\dot{x})^2 = \\dot{x}^2(1 + 4a^2x^2)` },
+        { type: 'important', title: '3. ラグランジアン $L$', desc: '$T$ と重力ポテンシャル $U = mgy = mgax^2$ から $L$ を構成します。',
+          form: `L = \\frac{1}{2}m\\dot{x}^2(1 + 4a^2x^2) - mgax^2` },
+        { type: 'normal', title: '4. オイラー＝ラグランジュ方程式 (1)', desc: '第一項の偏微分を求めます。ここで $\\dot{x}$ の項に注意。',
+          form: `\\begin{aligned} \\frac{\\partial L}{\\partial \\dot{x}} &= m\\dot{x}(1 + 4a^2x^2) \\\\ \\frac{d}{dt}\\left( \\frac{\\partial L}{\\partial \\dot{x}} \\right) &= m\\ddot{x}(1 + 4a^2x^2) + m\\dot{x}(8a^2x\\dot{x}) \\\\ &= m\\ddot{x}(1 + 4a^2x^2) + 8ma^2x\\dot{x}^2 \\end{aligned}` },
+        { type: 'normal', title: '5. オイラー＝ラグランジュ方程式 (2)', desc: '位置 $x$ での偏微分を求めます。',
+          form: `\\frac{\\partial L}{\\partial x} = \\frac{1}{2}m\\dot{x}^2(8a^2x) - 2mgax = 4ma^2x\\dot{x}^2 - 2mgax` },
+        { type: 'result', title: '6. 運動方程式 (Equation of Motion)', desc: '上記を等置し、共通する質量 $m$ を約分して整理します。非線形な方程式になります。',
+          form: `\\ddot{x}(1 + 4a^2x^2) + 4a^2x\\dot{x}^2 + 2gax = 0` }
+      ]
+    }
+  };
+
+  function updateInfo() {
+    const type = document.getElementById('ls-problem-type').value;
+    const sys = db[type];
+    const infoContainer = document.getElementById('ls-sys-info');
+    
+    
+    document.getElementById('ls-placeholder').style.display = 'flex';
+    document.getElementById('ls-solution-container').style.display = 'none';
+
+    
+    let desc = sys.info;
+    const matches = desc.match(/\$(.+?)\$/g);
+    if(matches) {
+       matches.forEach(m => {
+          let tex = m.replace(/\$/g, '');
+          try {
+            const html = katex.renderToString(tex, { throwOnError: false, displayMode: false });
+            desc = desc.replace(m, html);
+          } catch(e) {}
+       });
+    }
+    infoContainer.innerHTML = desc;
+  }
+
+  function renderStep(container, delay, type, title, desc, formula) {
+    const step = document.createElement('div');
+    step.className = `ls-step ${type}`;
+    step.style.animationDelay = `${delay}s`;
+    
+    let badgeText = "DERIVATION";
+    if (type === 'important') badgeText = "LAGRANGIAN";
+    if (type === 'result') badgeText = "EQUATION OF MOTION";
+
+    let parsedDesc = desc;
+    const matches = parsedDesc.match(/\$(.+?)\$/g);
+    if(matches) {
+       matches.forEach(m => {
+          let tex = m.replace(/\$/g, '');
+          try {
+            const h = katex.renderToString(tex, { throwOnError: false, displayMode: false });
+            parsedDesc = parsedDesc.replace(m, h);
+          } catch(e) {}
+       });
+    }
+
+    step.innerHTML = `
+      <div class="ls-step-header">
+        <span class="ls-step-badge">${badgeText}</span>
+        <span class="ls-step-title">${title}</span>
+      </div>
+      <div class="ls-step-desc">${parsedDesc}</div>
+      ${formula ? `<div class="ls-formula"></div>` : ''}
+    `;
+    container.appendChild(step);
+
+    if(formula) {
+      katex.render(formula, step.querySelector('.ls-formula'), { displayMode: true, throwOnError: false });
+    }
+  }
+
+  function solve() {
+    const type = document.getElementById('ls-problem-type').value;
+    const sys = db[type];
+    
+    document.getElementById('ls-placeholder').style.display = 'none';
+    const solContainer = document.getElementById('ls-solution-container');
+    const stepsDiv = document.getElementById('ls-steps');
+    
+    document.getElementById('ls-solution-title').innerText = `${sys.title} の導出過程`;
+    document.getElementById('ls-dof-badge').innerText = `DOF: ${sys.dof}`;
+    
+    solContainer.style.display = 'block';
+    stepsDiv.innerHTML = '';
+    
+    let delay = 0;
+    sys.steps.forEach(s => {
+      renderStep(stepsDiv, delay, s.type, s.title, s.desc, s.form);
+      delay += 0.2;
+    });
+  }
+
+  
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', updateInfo); } 
+  else { setTimeout(updateInfo, 50); }
+
+  return { updateInfo, solve };
+})();
+</script>
 
-<span class="tool-status status-active">ACTIVE</span>
 
-</div>
-<h3 class="tool-title">Markdown Editor</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/report/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-02</span>
-
-<span class="tool-status status-maintenance">MAINTENANCE</span>
-
-</div>
-<h3 class="tool-title">Report Generator</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/latex/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-03</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">LATEX_RENDERER</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/mermaid/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-04</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MERMAID_EDITOR</h3>
-<p class="tool-desc">テキストからフローチャートやシーケンス図を作成</p>
-</a>
-
-<a href="/lab/unit/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-05</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">UNIT_CONVERTER</h3>
-<p class="tool-desc">⚡ 物理単位変換・次元解析ツール</p>
-</a>
-
-<a href="/lab/physics/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-06</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">PHYSICS_SOLVER</h3>
-<p class="tool-desc">高校物理ステップ解法エンジン</p>
-</a>
-
-<a href="/lab/probability/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-07</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">PROBABILITY_SIM</h3>
-<p class="tool-desc">確率・統計リアルタイムシミュレータ</p>
-</a>
-
-<a href="/lab/lagrangian/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-08</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">LAGRANGIAN_SOLVER</h3>
-<p class="tool-desc">解析力学・ラグランジュ形式解法ツール</p>
-</a>
-
-<a href="/lab/sequence/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-09</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">SEQUENCE_ANALYZER</h3>
-<p class="tool-desc">🔢 数列解析・一般項推論・階差テーブル</p>
-</a>
-
-<a href="/lab/coord/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-10</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">COORD_TRANSFORM</h3>
-<p class="tool-desc">座標変換・テンソル計算ツール</p>
-</a>
-
-<a href="/lab/dimension/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-11</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">DIMENSION_CHECKER</h3>
-<p class="tool-desc">次元解析・単位整合性チェッカー</p>
-</a>
-
-<a href="/lab/math/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-12</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">FRAC_SOLVER // SYS.VER.2.0</h3>
-<p class="tool-desc">部分分数分解ツール</p>
-</a>
-
-<a href="/lab/mathcore1/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-13</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MathCore Calculator</h3>
-<p class="tool-desc">演算いろいろ</p>
-</a>
-
-<a href="/lab/matrix/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-14</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MATRIX_LAB</h3>
-<p class="tool-desc">行列計算</p>
-</a>
-
-<a href="/lab/graph/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-15</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">GRAPH_PLOTTER</h3>
-<p class="tool-desc">関数グラフプロッター</p>
-</a>
-
-<a href="/lab/logic/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-16</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">LOGIC_CIRCUIT</h3>
-<p class="tool-desc">論理回路解析</p>
-</a>
-
-<a href="/lab/deadline/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-17</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Deadline Manager</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/topology/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-18</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">TOPOLOGY_EXPLORER</h3>
-<p class="tool-desc">位相空間トポロジーエクスプローラー</p>
-</a>
-
-<a href="/lab/attendance/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-19</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Attendance Monitor</h3>
-<p class="tool-desc">欠課時数管理ツール</p>
-</a>
-
-<a href="/lab/mechanics/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-20</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MECHANICS_SIM</h3>
-<p class="tool-desc">解析力学シミュレータ</p>
-</a>
-
-<a href="/lab/circuit/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-21</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">CIRCUIT_SIM</h3>
-<p class="tool-desc">電気回路シミュレータ</p>
-</a>
-
-<a href="/lab/isbn/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-22</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">ISBN_DECODER // SYS.VER.3.0</h3>
-<p class="tool-desc">ISBNスキャナー</p>
-</a>
-
-<a href="/lab/automaton/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-23</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">AUTOMATON_VIZ</h3>
-<p class="tool-desc">オートマトン/正規表現ビジュアライザー</p>
-</a>
-
-<a href="/lab/crypto/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-24</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">CRYPTOGRAPHY_LAB</h3>
-<p class="tool-desc">暗号あそびば</p>
-</a>
-
-<a href="/lab/flashcard/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-25</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">FLASH_CARD</h3>
-<p class="tool-desc">単語・公式フラッシュカード</p>
-</a>
-
-<a href="/lab/stamp/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-26</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">切手組み合わせ計算機</h3>
-<p class="tool-desc">郵便料金を入力すると，現在販売中の普通切手で最小枚数になる組み合わせを計算する.</p>
-</a>
-
-<a href="/lab/quiz/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-27</span>
-
-<span class="tool-status status-maintenance">MAINTENANCE</span>
-
-</div>
-<h3 class="tool-title">MATH_QUIZ</h3>
-<p class="tool-desc">数学問題ジェネレータ</p>
-</a>
-
-</div>
-</div>
     </section>
     <footer class="pt-8">
       

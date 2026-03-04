@@ -15,21 +15,18 @@
 
   
   
-    <title>Labs &middot; dt&#39;s world</title>
-    <meta name="title" content="Labs &middot; dt&#39;s world">
+    <title>COORD_TRANSFORM &middot; dt&#39;s world</title>
+    <meta name="title" content="COORD_TRANSFORM &middot; dt&#39;s world">
   
 
   
   
-    <meta name="description" content="ツール集。">
+    <meta name="description" content="座標変換・テンソル計算ツール">
   
   
   
   
-  <link rel="canonical" href="https://dtwant.github.io/lab/">
-  
-    
-      <link rel="alternate" type="application/rss+xml" href="/lab/index.xml" title="dt's world" />
+  <link rel="canonical" href="https://dtwant.github.io/lab/coord/">
   
 
   
@@ -47,17 +44,18 @@
   
 
   
-  <meta property="og:url" content="https://dtwant.github.io/lab/">
+  <meta property="og:url" content="https://dtwant.github.io/lab/coord/">
   <meta property="og:site_name" content="dt&#39;s world">
-  <meta property="og:title" content="Labs">
-  <meta property="og:description" content="らぼらとりぃ">
+  <meta property="og:title" content="COORD_TRANSFORM">
+  <meta property="og:description" content="座標変換・テンソル計算ツール">
   <meta property="og:locale" content="en">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="lab">
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Labs">
-  <meta name="twitter:description" content="らぼらとりぃ">
+  <meta name="twitter:title" content="COORD_TRANSFORM">
+  <meta name="twitter:description" content="座標変換・テンソル計算ツール">
 
   
   
@@ -117,6 +115,12 @@
   
   
   
+  
+    
+    <script
+      type="text/javascript"
+      src="/js/zen-mode.min.9814dee9614d32aeb56239d118edfe20acd6231424f9b19c2dd48835038414130a5e946c0d1c9087d60e60e31840c9babfd217e3d4b95643dc8d651a71ccdf4a.js"
+      integrity="sha512-mBTe6WFNMq61YjnRGO3&#43;IKzWIxQk&#43;bGcLdSINQOEFBMKXpRsDRyQh9YOYOMYQMm6v9IX49S5VkPcjWUacczfSg=="></script>
   
   
     
@@ -203,7 +207,34 @@
   
 
   
-  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Labs",
+    "name": "COORD_TRANSFORM",
+    "headline": "COORD_TRANSFORM",
+    "description": "座標変換・テンソル計算ツール",
+    
+    "inLanguage": "en",
+    "url" : "https:\/\/dtwant.github.io\/lab\/coord\/",
+    "author" : {
+      "@type": "Person",
+      "name": "dt"
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "74"
+  }]
+  </script>
+
 
 
   
@@ -729,6 +760,8 @@
   
     
   
+    
+  
   <li class="hidden">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/"
       >dt</a
@@ -736,9 +769,16 @@
   </li>
 
   
-  <li class="hidden">
+  <li class="inline">
     <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/"
       >Labs</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/coord/"
+      >COORD_TRANSFORM</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -747,450 +787,435 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        Labs
+        COORD_TRANSFORM
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=M+PLUS+1+Code:wght@400;700&display=swap" rel="stylesheet">
+      
+<h1 class="relative group">COORD_TRANSFORM <span style="font-size:12px;color:#00ff41;">// TENSOR_CALCULUS</span>
+    <div id="coord_transform--tensor_calculus" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#coord_transform--tensor_calculus" aria-label="Anchor">#</a>
+    </span>
+    
+</h1>
+<p>デカルト座標（直交座標）、極座標、円筒座標、球座標間の変換式と、それぞれの系における軽量テンソル、ヤコビアン、微分演算子（勾配・発散・回転・ラプラシアン）の表示を行う学部生向けの数学・物理ツール。</p>
+<blockquote>
+<p>[!NOTE]
+<strong>COORDINATE SYSTEMS:</strong></p>
+<ul>
+<li><strong>[ CARTESIAN ]</strong> デカルト座標 $(x, y, z)$</li>
+<li><strong>[ POLAR ]</strong> 極座標 (2D) $(r, \theta)$</li>
+<li><strong>[ CYLINDRICAL ]</strong> 円筒座標 $(r, \theta, z)$</li>
+<li><strong>[ SPHERICAL ]</strong> 球座標 $(r, \theta, \phi)$</li>
+</ul>
+<p><strong>ベクトル解析演算子の導出・表示</strong> 搭載</p></blockquote>
+<hr>
 <style>
-/* --- ベース設定 --- */
-.lab-container {
-font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace;
-color: #e0f8ff;
-margin-top: 2rem;
-}
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
 
-/* --- ターミナル風のイントロ --- */
-.lab-intro-box {
-background: rgba(5, 5, 5, 0.8);
-border: 1px solid rgba(0, 243, 255, 0.3);
-border-left: 4px solid #00f3ff;
-padding: 1rem 1.5rem;
-margin-bottom: 2.5rem;
-box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
-}
-.lab-intro-text {
-margin: 0;
-line-height: 1.6;
-color: #00f3ff;
-text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
-font-size: 0.95rem;
-}
-.lab-intro-text .blink {
-animation: blink-cursor 1s infinite;
-}
-@keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+   
+  .katex { font-size: 1.15em !important; color: #e2e8f0; }
+  .katex-display { margin: 0.5em 0 !important; color: #00ff41; text-shadow: 0 0 5px rgba(0, 255, 65, 0.3); }
 
-/* --- ツールグリッド (カードレイアウト) --- */
-.lab-grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-gap: 1.5rem;
-}
+   
+  #ct-app {
+    --neon-cyan: #00f3ff;
+    --neon-pink: #ff0055;
+    --neon-yellow: #fcee0a;
+    --neon-green: #00ff41;
+    --bg-dark: #050505;
+    
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    color: #e2e8f0;
+    
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 99999;
+    background: var(--bg-dark);
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #ct-app * { box-sizing: inherit; }
 
-/* --- ツールカード --- */
-.tool-card {
-display: flex;
-flex-direction: column;
-background: rgba(5, 5, 5, 0.6);
-border: 1px solid rgba(0, 243, 255, 0.2);
-border-radius: 4px;
-padding: 1.5rem;
-text-decoration: none !important;
-transition: all 0.3s ease;
-position: relative;
-overflow: hidden;
-backdrop-filter: blur(4px);
--webkit-backdrop-filter: blur(4px);
-}
+   
+  .ct-bg-grid {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background-image: 
+      radial-gradient(circle at 50% 50%, rgba(0, 255, 65, 0.05) 0%, transparent 60%),
+      linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px; 
+    z-index: 1; pointer-events: none;
+  }
+  .ct-scanline {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%);
+    background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.6;
+  }
 
-.tool-card:hover {
-border-color: #ff0055;
-box-shadow: 0 0 20px rgba(255, 0, 85, 0.15), inset 0 0 10px rgba(255, 0, 85, 0.05);
-transform: translateY(-3px);
-background: rgba(255, 0, 85, 0.05);
-}
+   
+  .ct-container {
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column;
+    width: 100%; height: 100%;
+  }
 
-.tool-card::before {
-content: '';
-position: absolute;
-top: 0; left: 0; bottom: 0;
-width: 3px;
-background: #00f3ff;
-box-shadow: 0 0 8px #00f3ff;
-transition: all 0.3s ease;
-}
-.tool-card:hover::before {
-background: #ff0055;
-box-shadow: 0 0 8px #ff0055;
-}
+   
+  .ct-header {
+    background: rgba(0,0,0,0.95);
+    border-bottom: 2px solid rgba(0, 255, 65, 0.4);
+    padding: 10px 15px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,0.8);
+  }
+  .ct-title {
+    font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
+    color: var(--neon-green); text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+    letter-spacing: 2px; display: flex; align-items: center; gap: 10px;
+  }
+  .ct-header-right { display: flex; align-items: center; gap: 10px; }
+  .ct-sys-status {
+    font-size: 0.65rem; color: var(--neon-cyan);
+    background: rgba(0, 243, 255, 0.05); padding: 4px 8px; border: 1px solid rgba(0, 243, 255, 0.2);
+    font-family: 'Orbitron', sans-serif;
+  }
+  .ct-exit-btn {
+    background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
+    font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: bold;
+    padding: 5px 12px; cursor: pointer; transition: all 0.2s;
+  }
+  .ct-exit-btn:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px rgba(255,0,85,0.5); }
 
-/* --- カード内の要素 --- */
-.tool-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 1rem;
-border-bottom: 1px dashed rgba(0, 243, 255, 0.2);
-padding-bottom: 0.5rem;
-}
+   
+  .ct-workspace {
+    flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;
+  }
+  @media(min-width: 800px) { .ct-workspace { flex-direction: row; } }
 
-.tool-id {
-font-family: 'Orbitron', sans-serif;
-font-size: 0.75rem;
-color: rgba(0, 243, 255, 0.6);
-letter-spacing: 2px;
-}
+   
+  .ct-panel-left {
+    width: 100%; background: rgba(5,5,5,0.9);
+    border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+    display: flex; flex-direction: column; padding: 15px; overflow-y: auto;
+    flex-shrink: 0;
+  }
+  @media(min-width: 800px) { 
+    .ct-panel-left { width: 320px; border-bottom: none; border-right: 1px solid rgba(0, 255, 65, 0.2); } 
+  }
+  .ct-panel-left::-webkit-scrollbar { width: 4px; }
+  .ct-panel-left::-webkit-scrollbar-thumb { background: rgba(0, 255, 65, 0.3); }
 
-.tool-status {
-font-family: 'Orbitron', sans-serif;
-font-size: 0.7rem;
-font-weight: bold;
-padding: 2px 6px;
-border-radius: 2px;
-letter-spacing: 1px;
-}
-.status-active {
-color: #00ff66;
-background: rgba(0, 255, 102, 0.1);
-border: 1px solid rgba(0, 255, 102, 0.3);
-text-shadow: 0 0 5px #00ff66;
-}
-.status-maintenance {
-color: #fde047;
-background: rgba(253, 224, 71, 0.1);
-border: 1px solid rgba(253, 224, 71, 0.3);
-text-shadow: 0 0 5px #fde047;
-}
+  .ct-section-title {
+    font-family: 'Orbitron', sans-serif; font-size: 0.85rem; color: #888;
+    margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; letter-spacing: 1px;
+  }
 
-.tool-title {
-font-family: 'Orbitron', sans-serif;
-font-size: 1.2rem;
-font-weight: 700;
-color: #00f3ff;
-margin: 0 0 0.5rem 0;
-text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
-transition: color 0.3s ease;
-}
-.tool-card:hover .tool-title {
-color: #ff0055;
-text-shadow: 0 0 5px rgba(255, 0, 85, 0.4);
-}
+  .ct-system-btn {
+    width: 100%; background: rgba(0,0,0,0.6); border: 1px solid #444; color: #aaa;
+    padding: 12px 15px; font-family: 'Orbitron', sans-serif; font-weight: bold;
+    font-size: 0.8rem; outline: none; margin-bottom: 10px; cursor: pointer;
+    text-align: left; transition: 0.2s; position: relative; overflow: hidden;
+  }
+  .ct-system-btn:hover { background: rgba(0, 255, 65, 0.05); border-color: rgba(0, 255, 65, 0.4); color: #fff; }
+  .ct-system-btn.active {
+    background: rgba(0, 255, 65, 0.1); border-color: var(--neon-green); color: var(--neon-green);
+    text-shadow: 0 0 5px rgba(0,255,65,0.4);
+  }
+  .ct-system-btn.active::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--neon-green);
+  }
 
-.tool-desc {
-font-size: 0.85rem;
-color: #a0c0d0;
-line-height: 1.5;
-margin: 0;
-}
+   
+  .ct-panel-right {
+    flex-grow: 1; padding: 20px; overflow-y: auto; background: transparent; position: relative;
+  }
+  .ct-panel-right::-webkit-scrollbar { width: 6px; }
+  .ct-panel-right::-webkit-scrollbar-thumb { background: rgba(0, 255, 65, 0.2); }
+
+  .ct-output-title {
+    font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: #fff;
+    margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1);
+    letter-spacing: 2px;
+  }
+
+   
+  .ct-card {
+    background: rgba(10, 15, 20, 0.8); border: 1px solid #222; border-left: 3px solid #444;
+    padding: 20px; margin-bottom: 20px; border-radius: 2px; backdrop-filter: blur(4px);
+    opacity: 0; transform: translateY(10px); animation: fadeInUp 0.4s forwards;
+  }
+  .ct-card:hover { border-color: #333; }
+  .ct-card.primary { border-left-color: var(--neon-green); }
+  .ct-card.operator { border-left-color: var(--neon-cyan); }
+
+  @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+  .ct-card-header {
+    display: flex; align-items: center; margin-bottom: 15px; font-family: 'Orbitron', sans-serif;
+  }
+  .ct-card-icon {
+    width: 24px; height: 24px; background: #000; border: 1px solid #555;
+    display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #fff;
+    margin-right: 12px;
+  }
+  .ct-card.primary .ct-card-icon { border-color: var(--neon-green); color: var(--neon-green); }
+  .ct-card.operator .ct-card-icon { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+
+  .ct-card-title { font-weight: bold; font-size: 1.05rem; color: #e2e8f0; letter-spacing: 1px; text-transform: uppercase; }
+  
+  .ct-grid {
+    display: grid; grid-template-columns: 1fr; gap: 15px;
+  }
+  @media(min-width: 1000px) { .ct-grid { grid-template-columns: 1fr 1fr; } }
+
+  .ct-math-box {
+    background: rgba(0,0,0,0.5); border: 1px solid #222; padding: 15px;
+    display: flex; flex-direction: column; justify-content: center; overflow-x: auto;
+  }
+  .ct-math-box::-webkit-scrollbar { height: 4px; }
+  .ct-math-box::-webkit-scrollbar-thumb { background: #333; }
+  .ct-math-title { font-size: 0.7rem; color: #888; margin-bottom: 10px; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+
+   
+  @media(max-width: 640px) {
+    .ct-header { padding: 8px 10px; }
+    .ct-title { font-size: 0.9rem; }
+    .ct-sys-status { display: none; }
+    .ct-panel-left { padding: 12px; height: 250px; overflow-y: auto; }
+    .ct-panel-right { padding: 12px; }
+    .ct-card { padding: 15px; }
+  }
 </style>
-<div class="lab-container">
-<div class="lab-intro-box">
-<p class="lab-intro-text">> INITIALIZING LABORATORY MODULES...</p>
-<p class="lab-intro-text">> LOADING CUSTOM TOOLS AND UTILITIES...</p>
-<p class="lab-intro-text">> ALL SYSTEMS SECURE. READY FOR OPERATION<span class="blink">_</span></p>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+<div id="ct-app">
+  <div class="ct-bg-grid"></div>
+  <div class="ct-scanline"></div>
+
+  <div class="ct-container">
+    <div class="ct-header">
+      <div class="ct-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3L3 21"/><path d="M21 21L3 3"/><path d="M12 2v20"/><path d="M2 12h20"/></svg>
+        COORD_TRANSFORM
+      </div>
+      <div class="ct-header-right">
+        <div class="ct-sys-status"><span style="color:var(--neon-cyan);">&#x25CF;</span> TENSOR ENGINE</div>
+        <button class="ct-exit-btn" onclick="history.back()">EXIT_</button>
+      </div>
+    </div>
+
+    <div class="ct-workspace">
+      
+      <div class="ct-panel-left">
+        <div class="ct-section-title">COORDINATE SYSTEM</div>
+        
+        <button class="ct-system-btn" id="btn-cartesian" onclick="ctApp.loadSystem('cartesian')">
+          [ 1 ] CARTESIAN (x, y, z)
+        </button>
+        <button class="ct-system-btn" id="btn-polar" onclick="ctApp.loadSystem('polar')">
+          [ 2 ] POLAR (r, θ)
+        </button>
+        <button class="ct-system-btn" id="btn-cylindrical" onclick="ctApp.loadSystem('cylindrical')">
+          [ 3 ] CYLINDRICAL (r, θ, z)
+        </button>
+        <button class="ct-system-btn" id="btn-spherical" onclick="ctApp.loadSystem('spherical')">
+          [ 4 ] SPHERICAL (r, θ, φ)
+        </button>
+
+      </div>
+
+      
+      <div class="ct-panel-right" id="ct-output-panel">
+        <div class="ct-output-title" id="ct-system-title">SYSTEM DATA</div>
+        <div id="ct-data-container">
+          
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="lab-grid">
 
-<a href="/lab/mdeditor/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-01</span>
+<script>
+var ctApp = (function() {
+  "use strict";
+
+  const db = {
+    cartesian: {
+      title: "CARTESIAN COORDINATES (x, y, z)",
+      cards: [
+        { type: 'primary', icon: 'g', title: 'Metric & Limits',
+          items: [
+            { label: '計量テンソル (Metric Tensor)', tex: `g_{ij} = \\begin{pmatrix} 1 & 0 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 1 \\end{pmatrix} = \\delta_{ij}` },
+            { label: '線素 (Line Element)', tex: `ds^2 = dx^2 + dy^2 + dz^2` },
+            { label: '体積要素 (Volume Element)', tex: `dV = dx \\, dy \\, dz` },
+            { label: '変域 (Domain)', tex: `-\\infty < x, y, z < \\infty` }
+          ]
+        },
+        { type: 'operator', icon: '∇', title: 'Vector Operators',
+          items: [
+            { label: '勾配 (Gradient)', tex: `\\nabla f = \\frac{\\partial f}{\\partial x}\\mathbf{i} + \\frac{\\partial f}{\\partial y}\\mathbf{j} + \\frac{\\partial f}{\\partial z}\\mathbf{k}` },
+            { label: '発散 (Divergence)', tex: `\\nabla \\cdot \\mathbf{A} = \\frac{\\partial A_x}{\\partial x} + \\frac{\\partial A_y}{\\partial y} + \\frac{\\partial A_z}{\\partial z}` },
+            { label: '回転 (Curl)', tex: `\\nabla \\times \\mathbf{A} = \\left(\\frac{\\partial A_z}{\\partial y}-\\frac{\\partial A_y}{\\partial z}\\right)\\mathbf{i} + \\left(\\frac{\\partial A_x}{\\partial z}-\\frac{\\partial A_z}{\\partial x}\\right)\\mathbf{j} + \\left(\\frac{\\partial A_y}{\\partial x}-\\frac{\\partial A_x}{\\partial y}\\right)\\mathbf{k}` },
+            { label: 'ラプラシアン (Laplacian)', tex: `\\Delta f = \\nabla^2 f = \\frac{\\partial^2 f}{\\partial x^2} + \\frac{\\partial^2 f}{\\partial y^2} + \\frac{\\partial^2 f}{\\partial z^2}` }
+          ]
+        }
+      ]
+    },
+    polar: {
+      title: "POLAR COORDINATES (r, θ) [2D]",
+      cards: [
+        { type: 'primary', icon: 'T', title: 'Transformation (Cartesian ↔ Polar)',
+          items: [
+            { label: '極座標 → デカルト座標', tex: `\\begin{aligned} x &= r \\cos\\theta \\\\ y &= r \\sin\\theta \\end{aligned}` },
+            { label: 'デカルト座標 → 極座標', tex: `\\begin{aligned} r &= \\sqrt{x^2 + y^2} \\\\ \\theta &= \\arctan\\left(\\frac{y}{x}\\right) \\end{aligned}` },
+            { label: 'ヤコビアン (Jacobian)', tex: `J = \\left| \\frac{\\partial(x,y)}{\\partial(r,\\theta)} \\right| = \\begin{vmatrix} \\cos\\theta & -r\\sin\\theta \\\\ \\sin\\theta & r\\cos\\theta \\end{vmatrix} = r` }
+          ]
+        },
+        { type: 'primary', icon: 'g', title: 'Metric & Limits',
+          items: [
+            { label: '計量テンソル (Metric Tensor)', tex: `g_{ij} = \\begin{pmatrix} 1 & 0 \\\\ 0 & r^2 \\end{pmatrix}` },
+            { label: '線素 (Line Element)', tex: `ds^2 = dr^2 + r^2 d\\theta^2` },
+            { label: '面積要素 (Area Element)', tex: `dA = r \\, dr \\, d\\theta` },
+            { label: '変域 (Domain)', tex: `\\begin{aligned} 0 &\\le r < \\infty \\\\ 0 &\\le \\theta < 2\\pi \\end{aligned}` }
+          ]
+        },
+        { type: 'operator', icon: '∇', title: 'Vector Operators (2D)',
+          items: [
+            { label: '勾配 (Gradient)', tex: `\\nabla f = \\frac{\\partial f}{\\partial r}\\hat{\\mathbf{r}} + \\frac{1}{r}\\frac{\\partial f}{\\partial \\theta}\\hat{\\boldsymbol{\\theta}}` },
+            { label: '発散 (Divergence)', tex: `\\nabla \\cdot \\mathbf{A} = \\frac{1}{r}\\frac{\\partial}{\\partial r}(r A_r) + \\frac{1}{r}\\frac{\\partial A_\\theta}{\\partial \\theta}` },
+            { label: 'ラプラシアン (Laplacian)', tex: `\\nabla^2 f = \\frac{1}{r}\\frac{\\partial}{\\partial r}\\left(r\\frac{\\partial f}{\\partial r}\\right) + \\frac{1}{r^2}\\frac{\\partial^2 f}{\\partial \\theta^2}` }
+          ]
+        }
+      ]
+    },
+    cylindrical: {
+      title: "CYLINDRICAL COORDINATES (r, θ, z)",
+      cards: [
+        { type: 'primary', icon: 'T', title: 'Transformation (Cartesian ↔ Cylindrical)',
+          items: [
+            { label: '円筒座標 → デカルト座標', tex: `\\begin{aligned} x &= r \\cos\\theta \\\\ y &= r \\sin\\theta \\\\ z &= z \\end{aligned}` },
+            { label: 'デカルト座標 → 円筒座標', tex: `\\begin{aligned} r &= \\sqrt{x^2 + y^2} \\\\ \\theta &= \\arctan\\left(\\frac{y}{x}\\right) \\\\ z &= z \\end{aligned}` },
+            { label: 'ヤコビアン (Jacobian)', tex: `J = \\left| \\frac{\\partial(x,y,z)}{\\partial(r,\\theta,z)} \\right| = r` }
+          ]
+        },
+        { type: 'primary', icon: 'g', title: 'Metric & Limits',
+          items: [
+            { label: '計量テンソル (Metric Tensor)', tex: `g_{ij} = \\begin{pmatrix} 1 & 0 & 0 \\\\ 0 & r^2 & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}` },
+            { label: 'スケール因子 (Scale Factors)', tex: `h_r = 1, \\quad h_\\theta = r, \\quad h_z = 1` },
+            { label: '線素 (Line Element)', tex: `ds^2 = dr^2 + r^2 d\\theta^2 + dz^2` },
+            { label: '体積要素 (Volume Element)', tex: `dV = r \\, dr \\, d\\theta \\, dz` },
+          ]
+        },
+        { type: 'operator', icon: '∇', title: 'Vector Operators',
+          items: [
+            { label: '勾配 (Gradient)', tex: `\\nabla f = \\frac{\\partial f}{\\partial r}\\hat{\\mathbf{r}} + \\frac{1}{r}\\frac{\\partial f}{\\partial \\theta}\\hat{\\boldsymbol{\\theta}} + \\frac{\\partial f}{\\partial z}\\hat{\\mathbf{z}}` },
+            { label: '発散 (Divergence)', tex: `\\nabla \\cdot \\mathbf{A} = \\frac{1}{r}\\frac{\\partial}{\\partial r}(r A_r) + \\frac{1}{r}\\frac{\\partial A_\\theta}{\\partial \\theta} + \\frac{\\partial A_z}{\\partial z}` },
+            { label: '回転 (Curl)', tex: `\\nabla \\times \\mathbf{A} = \\left(\\frac{1}{r}\\frac{\\partial A_z}{\\partial \\theta} - \\frac{\\partial A_\\theta}{\\partial z}\\right)\\hat{\\mathbf{r}} + \\left(\\frac{\\partial A_r}{\\partial z} - \\frac{\\partial A_z}{\\partial r}\\right)\\hat{\\boldsymbol{\\theta}} + \\frac{1}{r}\\left(\\frac{\\partial(r A_\\theta)}{\\partial r} - \\frac{\\partial A_r}{\\partial \\theta}\\right)\\hat{\\mathbf{z}}` },
+            { label: 'ラプラシアン (Laplacian)', tex: `\\nabla^2 f = \\frac{1}{r}\\frac{\\partial}{\\partial r}\\left(r\\frac{\\partial f}{\\partial r}\\right) + \\frac{1}{r^2}\\frac{\\partial^2 f}{\\partial \\theta^2} + \\frac{\\partial^2 f}{\\partial z^2}` }
+          ]
+        }
+      ]
+    },
+    spherical: {
+      title: "SPHERICAL COORDINATES (r, θ, φ)",
+      cards: [
+        { type: 'primary', icon: 'T', title: 'Transformation (Cartesian ↔ Spherical)',
+          items: [
+            { label: '球座標 → デカルト座標 (物理学の表記)', tex: `\\begin{aligned} x &= r \\sin\\theta \\cos\\phi \\\\ y &= r \\sin\\theta \\sin\\phi \\\\ z &= r \\cos\\theta \\end{aligned}` },
+            { label: 'デカルト座標 → 球座標', tex: `\\begin{aligned} r &= \\sqrt{x^2 + y^2 + z^2} \\\\ \\theta &= \\arccos\\left(\\frac{z}{r}\\right) \\\\ \\phi &= \\arctan\\left(\\frac{y}{x}\\right) \\end{aligned}` },
+            { label: 'ヤコビアン (Jacobian)', tex: `J = \\left| \\frac{\\partial(x,y,z)}{\\partial(r,\\theta,\\phi)} \\right| = r^2 \\sin\\theta` }
+          ]
+        },
+        { type: 'primary', icon: 'g', title: 'Metric & Limits',
+          items: [
+            { label: '計量テンソル (Metric Tensor)', tex: `g_{ij} = \\begin{pmatrix} 1 & 0 & 0 \\\\ 0 & r^2 & 0 \\\\ 0 & 0 & r^2\\sin^2\\theta \\end{pmatrix}` },
+            { label: 'スケール因子 (Scale Factors)', tex: `h_r = 1, \\quad h_\\theta = r, \\quad h_\\phi = r\\sin\\theta` },
+            { label: '線素 (Line Element)', tex: `ds^2 = dr^2 + r^2 d\\theta^2 + r^2\\sin^2\\theta d\\phi^2` },
+            { label: '体積要素 (Volume Element)', tex: `dV = r^2 \\sin\\theta \\, dr \\, d\\theta \\, d\\phi` },
+            { label: '変域 (Domain)', tex: `0 \\le r < \\infty, \\quad 0 \\le \\theta \\le \\pi, \\quad 0 \\le \\phi < 2\\pi` }
+          ]
+        },
+        { type: 'operator', icon: '∇', title: 'Vector Operators',
+          items: [
+            { label: '勾配 (Gradient)', tex: `\\nabla f = \\frac{\\partial f}{\\partial r}\\hat{\\mathbf{r}} + \\frac{1}{r}\\frac{\\partial f}{\\partial \\theta}\\hat{\\boldsymbol{\\theta}} + \\frac{1}{r\\sin\\theta}\\frac{\\partial f}{\\partial \\phi}\\hat{\\boldsymbol{\\phi}}` },
+            { label: '発散 (Divergence)', tex: `\\nabla \\cdot \\mathbf{A} = \\frac{1}{r^2}\\frac{\\partial}{\\partial r}(r^2 A_r) + \\frac{1}{r\\sin\\theta}\\frac{\\partial}{\\partial \\theta}(\\sin\\theta A_\\theta) + \\frac{1}{r\\sin\\theta}\\frac{\\partial A_\\phi}{\\partial \\phi}` },
+            { label: '回転 (Curl)', tex: `\\nabla \\times \\mathbf{A} = \\frac{1}{r\\sin\\theta} \\left( \\frac{\\partial}{\\partial \\theta}(\\sin\\theta A_\\phi) - \\frac{\\partial A_\\theta}{\\partial \\phi} \\right) \\hat{\\mathbf{r}} + \\frac{1}{r} \\left( \\frac{1}{\\sin\\theta}\\frac{\\partial A_r}{\\partial \\phi} - \\frac{\\partial}{\\partial r}(r A_\\phi) \\right) \\hat{\\boldsymbol{\\theta}} + \\frac{1}{r} \\left( \\frac{\\partial}{\\partial r}(r A_\\theta) - \\frac{\\partial A_r}{\\partial \\theta} \\right) \\hat{\\boldsymbol{\\phi}}` },
+            { label: 'ラプラシアン (Laplacian)', tex: `\\nabla^2 f = \\frac{1}{r^2}\\frac{\\partial}{\\partial r}\\left(r^2\\frac{\\partial f}{\\partial r}\\right) + \\frac{1}{r^2\\sin\\theta}\\frac{\\partial}{\\partial \\theta}\\left(\\sin\\theta\\frac{\\partial f}{\\partial \\theta}\\right) + \\frac{1}{r^2\\sin^2\\theta}\\frac{\\partial^2 f}{\\partial \\phi^2}` }
+          ]
+        }
+      ]
+    }
+  };
+
+  function loadSystem(sysKey) {
+    document.querySelectorAll('.ct-system-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`btn-${sysKey}`).classList.add('active');
+
+    const data = db[sysKey];
+    document.getElementById('ct-system-title').textContent = data.title;
+    
+    const container = document.getElementById('ct-data-container');
+    container.innerHTML = '';
+
+    let delay = 0;
+    data.cards.forEach(card => {
+      const cardEl = document.createElement('div');
+      cardEl.className = `ct-card ${card.type}`;
+      cardEl.style.animationDelay = `${delay}s`;
+      
+      const header = `
+        <div class="ct-card-header">
+          <div class="ct-card-icon">${card.icon}</div>
+          <div class="ct-card-title">${card.title}</div>
+        </div>
+      `;
+
+      let gridItems = '';
+      card.items.forEach((item, idx) => {
+        gridItems += `
+          <div class="ct-math-box">
+            <div class="ct-math-title">${item.label}</div>
+            <div id="math-${sysKey}-${delay}-${idx}"></div>
+          </div>
+        `;
+      });
+
+      cardEl.innerHTML = header + `<div class="ct-grid">${gridItems}</div>`;
+      container.appendChild(cardEl);
+
+      
+      setTimeout(() => {
+        card.items.forEach((item, idx) => {
+          const el = document.getElementById(`math-${sysKey}-${delay}-${idx}`);
+          if(el) {
+            katex.render(item.tex, el, { displayMode: true, throwOnError: false });
+          }
+        });
+      }, 50);
+
+      delay += 0.15;
+    });
+  }
+
+  
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', () => loadSystem('spherical')); } 
+  else { setTimeout(() => loadSystem('spherical'), 50); }
+
+  return { loadSystem };
+})();
+</script>
 
-<span class="tool-status status-active">ACTIVE</span>
 
-</div>
-<h3 class="tool-title">Markdown Editor</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/report/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-02</span>
-
-<span class="tool-status status-maintenance">MAINTENANCE</span>
-
-</div>
-<h3 class="tool-title">Report Generator</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/latex/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-03</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">LATEX_RENDERER</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/mermaid/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-04</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MERMAID_EDITOR</h3>
-<p class="tool-desc">テキストからフローチャートやシーケンス図を作成</p>
-</a>
-
-<a href="/lab/unit/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-05</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">UNIT_CONVERTER</h3>
-<p class="tool-desc">⚡ 物理単位変換・次元解析ツール</p>
-</a>
-
-<a href="/lab/physics/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-06</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">PHYSICS_SOLVER</h3>
-<p class="tool-desc">高校物理ステップ解法エンジン</p>
-</a>
-
-<a href="/lab/probability/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-07</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">PROBABILITY_SIM</h3>
-<p class="tool-desc">確率・統計リアルタイムシミュレータ</p>
-</a>
-
-<a href="/lab/lagrangian/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-08</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">LAGRANGIAN_SOLVER</h3>
-<p class="tool-desc">解析力学・ラグランジュ形式解法ツール</p>
-</a>
-
-<a href="/lab/sequence/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-09</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">SEQUENCE_ANALYZER</h3>
-<p class="tool-desc">🔢 数列解析・一般項推論・階差テーブル</p>
-</a>
-
-<a href="/lab/coord/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-10</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">COORD_TRANSFORM</h3>
-<p class="tool-desc">座標変換・テンソル計算ツール</p>
-</a>
-
-<a href="/lab/dimension/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-11</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">DIMENSION_CHECKER</h3>
-<p class="tool-desc">次元解析・単位整合性チェッカー</p>
-</a>
-
-<a href="/lab/math/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-12</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">FRAC_SOLVER // SYS.VER.2.0</h3>
-<p class="tool-desc">部分分数分解ツール</p>
-</a>
-
-<a href="/lab/mathcore1/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-13</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MathCore Calculator</h3>
-<p class="tool-desc">演算いろいろ</p>
-</a>
-
-<a href="/lab/matrix/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-14</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MATRIX_LAB</h3>
-<p class="tool-desc">行列計算</p>
-</a>
-
-<a href="/lab/graph/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-15</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">GRAPH_PLOTTER</h3>
-<p class="tool-desc">関数グラフプロッター</p>
-</a>
-
-<a href="/lab/logic/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-16</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">LOGIC_CIRCUIT</h3>
-<p class="tool-desc">論理回路解析</p>
-</a>
-
-<a href="/lab/deadline/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-17</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Deadline Manager</h3>
-<p class="tool-desc"></p>
-</a>
-
-<a href="/lab/topology/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-18</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">TOPOLOGY_EXPLORER</h3>
-<p class="tool-desc">位相空間トポロジーエクスプローラー</p>
-</a>
-
-<a href="/lab/attendance/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-19</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">Attendance Monitor</h3>
-<p class="tool-desc">欠課時数管理ツール</p>
-</a>
-
-<a href="/lab/mechanics/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-20</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">MECHANICS_SIM</h3>
-<p class="tool-desc">解析力学シミュレータ</p>
-</a>
-
-<a href="/lab/circuit/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-21</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">CIRCUIT_SIM</h3>
-<p class="tool-desc">電気回路シミュレータ</p>
-</a>
-
-<a href="/lab/isbn/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-22</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">ISBN_DECODER // SYS.VER.3.0</h3>
-<p class="tool-desc">ISBNスキャナー</p>
-</a>
-
-<a href="/lab/automaton/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-23</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">AUTOMATON_VIZ</h3>
-<p class="tool-desc">オートマトン/正規表現ビジュアライザー</p>
-</a>
-
-<a href="/lab/crypto/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-24</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">CRYPTOGRAPHY_LAB</h3>
-<p class="tool-desc">暗号あそびば</p>
-</a>
-
-<a href="/lab/flashcard/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-25</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">FLASH_CARD</h3>
-<p class="tool-desc">単語・公式フラッシュカード</p>
-</a>
-
-<a href="/lab/stamp/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-26</span>
-
-<span class="tool-status status-active">ACTIVE</span>
-
-</div>
-<h3 class="tool-title">切手組み合わせ計算機</h3>
-<p class="tool-desc">郵便料金を入力すると，現在販売中の普通切手で最小枚数になる組み合わせを計算する.</p>
-</a>
-
-<a href="/lab/quiz/" class="tool-card">
-<div class="tool-header">
-<span class="tool-id">MOD-27</span>
-
-<span class="tool-status status-maintenance">MAINTENANCE</span>
-
-</div>
-<h3 class="tool-title">MATH_QUIZ</h3>
-<p class="tool-desc">数学問題ジェネレータ</p>
-</a>
-
-</div>
-</div>
     </section>
     <footer class="pt-8">
       
