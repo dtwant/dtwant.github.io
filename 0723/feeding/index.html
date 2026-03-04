@@ -1317,7 +1317,13 @@
     border-radius: 2px;
     white-space: nowrap;
   }
-  .fl-animal-del {
+  .fl-animal-controls {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .fl-animal-btn {
     background: transparent;
     border: 1px solid #333;
     color: #555;
@@ -1330,11 +1336,23 @@
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
-    flex-shrink: 0;
   }
-  .fl-animal-del:hover {
+  .fl-animal-btn:hover {
+    border-color: #06b6d4;
+    color: #06b6d4;
+  }
+  .fl-animal-btn.del:hover {
     border-color: #ef4444;
     color: #ef4444;
+  }
+  .fl-animal-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    border-color: #222;
+    color: #333;
+  }
+  .fl-animal-btn:active:not(:disabled) {
+    transform: scale(0.9);
   }
 
    
@@ -2183,7 +2201,7 @@
 
       animalListEl.innerHTML = animals
         .map(
-          (a) => `
+          (a, index) => `
       <div class="fl-animal-item">
         <span class="fl-animal-emoji">${a.emoji}</span>
         <div class="fl-animal-info">
@@ -2191,14 +2209,43 @@
           <div class="fl-animal-species">${a.species || "-"}</div>
         </div>
         <span class="fl-animal-alert-badge">×${a.alertDays || 3}日</span>
-        <button class="fl-animal-del" data-id="${a.id}" title="削除">×</button>
+        <div class="fl-animal-controls">
+          <button class="fl-animal-btn move-up" data-id="${a.id}" data-index="${index}" ${index === 0 ? 'disabled' : ''} title="上に移動">↑</button>
+          <button class="fl-animal-btn move-down" data-id="${a.id}" data-index="${index}" ${index === animals.length - 1 ? 'disabled' : ''} title="下に移動">↓</button>
+          <button class="fl-animal-btn del" data-id="${a.id}" title="削除">×</button>
+        </div>
       </div>
     `,
         )
         .join("");
 
       
-      animalListEl.querySelectorAll(".fl-animal-del").forEach((btn) => {
+      animalListEl.querySelectorAll(".move-up, .move-down").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (btn.disabled) return;
+          const index = parseInt(btn.dataset.index);
+          const isUp = btn.classList.contains("move-up");
+          const targetIndex = isUp ? index - 1 : index + 1;
+          
+          if (targetIndex >= 0 && targetIndex < animals.length) {
+            const currentAnimal = animals[index];
+            const targetAnimal = animals[targetIndex];
+            
+            
+            const currentOrder = currentAnimal.order !== undefined ? currentAnimal.order : index;
+            const targetOrder = targetAnimal.order !== undefined ? targetAnimal.order : targetIndex;
+            
+            data.animals[currentAnimal.id].order = targetOrder;
+            data.animals[targetAnimal.id].order = currentOrder;
+            
+            pushData();
+            render();
+          }
+        });
+      });
+
+      
+      animalListEl.querySelectorAll(".fl-animal-btn.del").forEach((btn) => {
         btn.addEventListener("click", () => {
           const id = btn.dataset.id;
           const animal = data.animals[id];
