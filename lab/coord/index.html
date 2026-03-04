@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "74"
+    "wordCount": "112"
   }]
   </script>
 
@@ -801,17 +801,21 @@
     </span>
     
 </h1>
-<p>デカルト座標（直交座標）、極座標、円筒座標、球座標間の変換式と、それぞれの系における軽量テンソル、ヤコビアン、微分演算子（勾配・発散・回転・ラプラシアン）の表示を行う学部生向けの数学・物理ツール。</p>
+<p>入力された座標値やベクトル場成分を、Nerdamer（数式処理システム）を用いて別の座標系へリアルタイムかつ厳密に変換する動力学計算機です。</p>
+<ul>
+<li><strong>[ POINT TRANSFORM ]</strong> <code>x=1, y=1, z=0</code> を極座標へ変換するなどの点変換。</li>
+<li><strong>[ VECTOR TRANSFORM ]</strong> ベクトル場 $A(x,y) = -y \hat{i} + x \hat{j}$ を極座標ベクトル $A(r,\theta)$ の成分へ代数的（シンボリック）に変換・簡約化。</li>
+</ul>
 <blockquote>
 <p>[!NOTE]
-<strong>COORDINATE SYSTEMS:</strong></p>
+<strong>AVAILABLE SYSTEMS:</strong></p>
 <ul>
 <li><strong>[ CARTESIAN ]</strong> デカルト座標 $(x, y, z)$</li>
 <li><strong>[ POLAR ]</strong> 極座標 (2D) $(r, \theta)$</li>
 <li><strong>[ CYLINDRICAL ]</strong> 円筒座標 $(r, \theta, z)$</li>
 <li><strong>[ SPHERICAL ]</strong> 球座標 $(r, \theta, \phi)$</li>
 </ul>
-<p><strong>ベクトル解析演算子の導出・表示</strong> 搭載</p></blockquote>
+<p>（旧バージョンの各系における微積分公式や計量テンソルは、画面下部の <strong>REFERENCE_DB</strong> から確認できます。）</p></blockquote>
 <hr>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
@@ -842,7 +846,7 @@
     flex-direction: column;
     overflow: hidden;
   }
-  #ct-app * { box-sizing: inherit; }
+  #ct-app *, #ct-app *::before, #ct-app *::after { box-sizing: border-box !important; }
 
    
   .ct-bg-grid {
@@ -864,14 +868,14 @@
   .ct-container {
     position: relative; z-index: 10;
     display: flex; flex-direction: column;
-    width: 100%; height: 100%;
+    width: 100%; height: 100%; min-height: 0;
   }
 
    
   .ct-header {
     background: rgba(0,0,0,0.95);
     border-bottom: 2px solid rgba(0, 255, 65, 0.4);
-    padding: 10px 15px;
+    padding: 10px 15px; height: 46px;  
     display: flex; justify-content: space-between; align-items: center;
     flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,0.8);
   }
@@ -895,7 +899,8 @@
 
    
   .ct-workspace {
-    flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;
+    position: absolute; top: 46px; bottom: 0; left: 0; right: 0;  
+    display: flex; flex-direction: column; overflow: hidden;
   }
   @media(min-width: 800px) { .ct-workspace { flex-direction: row; } }
 
@@ -903,18 +908,18 @@
   .ct-panel-left {
     width: 100%; background: rgba(5,5,5,0.9);
     border-bottom: 1px solid rgba(0, 255, 65, 0.2);
-    display: flex; flex-direction: column; padding: 15px; overflow-y: auto;
-    flex-shrink: 0;
+    display: flex; flex-direction: column; padding: 12px; overflow-y: auto;
+    flex-shrink: 0; min-height: 0;
   }
   @media(min-width: 800px) { 
-    .ct-panel-left { width: 320px; border-bottom: none; border-right: 1px solid rgba(0, 255, 65, 0.2); } 
+    .ct-panel-left { width: 340px; border-bottom: none; border-right: 1px solid rgba(0, 255, 65, 0.2); height: 100%; } 
   }
   .ct-panel-left::-webkit-scrollbar { width: 4px; }
   .ct-panel-left::-webkit-scrollbar-thumb { background: rgba(0, 255, 65, 0.3); }
 
   .ct-section-title {
     font-family: 'Orbitron', sans-serif; font-size: 0.85rem; color: #888;
-    margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; letter-spacing: 1px;
+    margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 3px; letter-spacing: 1px;
   }
 
   .ct-system-btn {
@@ -984,19 +989,72 @@
   .ct-math-title { font-size: 0.7rem; color: #888; margin-bottom: 10px; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
 
    
-  @media(max-width: 640px) {
+  .ct-top-bar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .ct-mode-btn {
+    flex: 1; min-width: 140px; background: rgba(0,0,0,0.6); border: 1px solid #444; color: #aaa;
+    padding: 8px; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; cursor: pointer; transition: 0.2s;
+  }
+  .ct-mode-btn.active { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); text-shadow: 0 0 5px rgba(0,243,255,0.5); }
+  
+  .ct-system-selector { display: flex; gap: 10px; margin-bottom: 12px; align-items: center; }
+  .ct-select-group { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+  .ct-select-label { font-size: 0.7rem; color: #888; font-family: 'Orbitron', sans-serif; }
+  .ct-select { 
+    background: rgba(0,0,0,0.8); border: 1px solid #333; color: var(--neon-green); 
+    padding: 6px 10px; font-family: 'Orbitron', sans-serif; outline: none; transition: 0.2s; font-size: 0.85rem;
+  }
+  .ct-select:focus { border-color: var(--neon-green); box-shadow: 0 0 10px rgba(0,255,65,0.2); }
+  .ct-arrow { color: #555; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+
+  .ct-input-container {
+    background: rgba(10,15,20,0.8); border: 1px solid #222; border-left: 3px solid var(--neon-pink);
+    padding: 12px 15px; margin-bottom: 12px;
+  }
+  .ct-input-row { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+  .ct-input-row:last-child { margin-bottom: 0; }
+  .ct-input-label { width: 40px; font-weight: bold; font-family: 'Orbitron', sans-serif; color: #aaa; text-align: right; }
+  .ct-input { flex: 1; background: #000; border: 1px solid #444; color: #fff; padding: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;}
+  .ct-input:focus { border-color: var(--neon-pink); outline: none; box-shadow: 0 0 8px rgba(255,0,85,0.3); }
+
+  .ct-btn-transform {
+    width: 100%; background: transparent; border: 1px solid var(--neon-green); color: var(--neon-green);
+    padding: 12px; font-family: 'Orbitron', sans-serif; font-size: 0.95rem; font-weight: bold;
+    cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s;
+    margin-bottom: 10px;
+  }
+  .ct-btn-transform:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 20px rgba(0,255,65,0.5); }
+
+  .ct-output-box {
+    background: rgba(0,0,0,0.7); border: 1px solid #333; padding: 20px; min-height: 150px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .ct-output-step { margin-bottom: 15px; border-left: 2px solid #555; padding-left: 15px; }
+  .ct-output-step.final { border-left-color: var(--neon-cyan); background: rgba(0,243,255,0.05); padding: 15px; }
+
+  .ct-legacy-btn {
+    width: 100%; background: #111; border: 1px dashed #444; color: #888; padding: 10px;
+    font-family: 'Orbitron', sans-serif; cursor: pointer; margin-top: 30px; transition: 0.2s;
+  }
+   
+  @media(max-width: 800px) {
     .ct-header { padding: 8px 10px; }
     .ct-title { font-size: 0.9rem; }
     .ct-sys-status { display: none; }
-    .ct-panel-left { padding: 12px; height: 250px; overflow-y: auto; }
+    .ct-panel-left { padding: 12px; height: auto; max-height: 45vh; overflow-y: auto; }
     .ct-panel-right { padding: 12px; }
     .ct-card { padding: 15px; }
+    .ct-mode-btn { min-width: 120px; padding: 8px; font-size: 0.75rem; }
   }
 </style>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
 
 <div id="ct-app">
   <div class="ct-bg-grid"></div>
@@ -1009,7 +1067,7 @@
         COORD_TRANSFORM
       </div>
       <div class="ct-header-right">
-        <div class="ct-sys-status"><span style="color:var(--neon-cyan);">&#x25CF;</span> TENSOR ENGINE</div>
+        <div class="ct-sys-status"><span style="color:var(--neon-cyan);">&#x25CF;</span> TENSOR ENGINE 3.0</div>
         <button class="ct-exit-btn" onclick="history.back()">EXIT_</button>
       </div>
     </div>
@@ -1017,28 +1075,56 @@
     <div class="ct-workspace">
       
       <div class="ct-panel-left">
-        <div class="ct-section-title">COORDINATE SYSTEM</div>
-        
-        <button class="ct-system-btn" id="btn-cartesian" onclick="ctApp.loadSystem('cartesian')">
-          [ 1 ] CARTESIAN (x, y, z)
-        </button>
-        <button class="ct-system-btn" id="btn-polar" onclick="ctApp.loadSystem('polar')">
-          [ 2 ] POLAR (r, θ)
-        </button>
-        <button class="ct-system-btn" id="btn-cylindrical" onclick="ctApp.loadSystem('cylindrical')">
-          [ 3 ] CYLINDRICAL (r, θ, z)
-        </button>
-        <button class="ct-system-btn" id="btn-spherical" onclick="ctApp.loadSystem('spherical')">
-          [ 4 ] SPHERICAL (r, θ, φ)
-        </button>
+        <div class="ct-section-title">OPERATION MODE</div>
+        <div class="ct-top-bar">
+          <button class="ct-mode-btn active" id="mode-point" onclick="ctApp.setMode('point')">POINT TRANSFORM<br><small>(点座標の変換)</small></button>
+          <button class="ct-mode-btn" id="mode-vector" onclick="ctApp.setMode('vector')">VECTOR FIELD<br><small>(ベクトル場の変換)</small></button>
+        </div>
 
+        <div class="ct-section-title">SYSTEM MAPPING</div>
+        <div class="ct-system-selector">
+          <div class="ct-select-group">
+            <span class="ct-select-label">SOURCE (変換元)</span>
+            <select class="ct-select" id="ct-src-sys" onchange="ctApp.updateInputs()">
+              <option value="cartesian">Cartesian (x,y,z)</option>
+              <option value="polar">Polar (r,θ)</option>
+              <option value="cylindrical">Cylindrical (r,θ,z)</option>
+              <option value="spherical">Spherical (r,θ,φ)</option>
+            </select>
+          </div>
+          <div class="ct-arrow">→</div>
+          <div class="ct-select-group">
+            <span class="ct-select-label">TARGET (変換先)</span>
+            <select class="ct-select" id="ct-tgt-sys" onchange="ctApp.updateInputs()">
+              <option value="polar">Polar (r,θ)</option>
+              <option value="cartesian">Cartesian (x,y,z)</option>
+              <option value="cylindrical">Cylindrical (r,θ,z)</option>
+              <option value="spherical">Spherical (r,θ,φ)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="ct-section-title">INPUT PARAMETERS</div>
+        <div class="ct-input-container" id="ct-inputs">
+          
+        </div>
+
+        <button class="ct-btn-transform" onclick="ctApp.executeTransform()">EXECUTE TRANSFORM</button>
       </div>
 
       
       <div class="ct-panel-right" id="ct-output-panel">
-        <div class="ct-output-title" id="ct-system-title">SYSTEM DATA</div>
-        <div id="ct-data-container">
-          
+        <div class="ct-output-title">TRANSFORMATION RESULT</div>
+        
+        <div class="ct-output-box" id="ct-results">
+           <div style="text-align:center; color:#555; font-family:'Orbitron';">AWAITING EXECUTION...</div>
+        </div>
+
+        <button class="ct-legacy-btn" onclick="ctApp.toggleLegacy()">[+] OPEN REFERENCE DATABASE (Legacy)</button>
+        <div id="ct-legacy-container">
+           
+           <div class="ct-top-bar" id="ct-legacy-buttons" style="margin-bottom: 20px;"></div>
+           <div id="ct-data-container"></div>
         </div>
       </div>
     </div>
@@ -1049,169 +1135,395 @@
 var ctApp = (function() {
   "use strict";
 
+  
+  let currentMode = 'point'; 
+  
+  
+  const sysVars = {
+    cartesian: ['x', 'y', 'z'],
+    polar: ['r', 'theta', 'z'], 
+    cylindrical: ['r', 'theta', 'z'],
+    spherical: ['r', 'theta', 'phi']
+  };
+
+  
+  
+  
+  const transforms = {
+    polar: {
+      toCartesian: { x: 'r*cos(theta)', y: 'r*sin(theta)', z: 'z' },
+      fromCartesian: { r: 'sqrt(x^2 + y^2)', theta: 'atan(y/x)', z: 'z' }
+    },
+    cylindrical: {
+      toCartesian: { x: 'r*cos(theta)', y: 'r*sin(theta)', z: 'z' },
+      fromCartesian: { r: 'sqrt(x^2 + y^2)', theta: 'atan(y/x)', z: 'z' }
+    },
+    spherical: {
+      toCartesian: { x: 'r*sin(theta)*cos(phi)', y: 'r*sin(theta)*sin(phi)', z: 'r*cos(theta)' },
+      fromCartesian: { r: 'sqrt(x^2 + y^2 + z^2)', theta: 'acos(z/sqrt(x^2+y^2+z^2))', phi: 'atan(y/x)' }
+    },
+    cartesian: {
+      toCartesian: { x: 'x', y: 'y', z: 'z' },
+      fromCartesian: { x: 'x', y: 'y', z: 'z' }
+    }
+  };
+
+  
+  
+  const R_matrix = {
+    polar: [
+      ['cos(theta)', 'sin(theta)', '0'],
+      ['-sin(theta)', 'cos(theta)', '0'],
+      ['0', '0', '1']
+    ],
+    cylindrical: [
+      ['cos(theta)', 'sin(theta)', '0'],
+      ['-sin(theta)', 'cos(theta)', '0'],
+      ['0', '0', '1']
+    ],
+    spherical: [
+      ['sin(theta)*cos(phi)', 'sin(theta)*sin(phi)', 'cos(theta)'],
+      ['cos(theta)*cos(phi)', 'cos(theta)*sin(phi)', '-sin(theta)'],
+      ['-sin(phi)', 'cos(phi)', '0']
+    ],
+    cartesian: [
+      ['1', '0', '0'],
+      ['0', '1', '0'],
+      ['0', '0', '1']
+    ]
+  };
+
+  
   const db = {
     cartesian: {
-      title: "CARTESIAN COORDINATES (x, y, z)",
+      title: "CARTESIAN (x, y, z)",
       cards: [
-        { type: 'primary', icon: 'g', title: 'Metric & Limits',
-          items: [
-            { label: '計量テンソル (Metric Tensor)', tex: `g_{ij} = \\begin{pmatrix} 1 & 0 & 0 \\\\ 0 & 1 & 0 \\\\ 0 & 0 & 1 \\end{pmatrix} = \\delta_{ij}` },
-            { label: '線素 (Line Element)', tex: `ds^2 = dx^2 + dy^2 + dz^2` },
-            { label: '体積要素 (Volume Element)', tex: `dV = dx \\, dy \\, dz` },
-            { label: '変域 (Domain)', tex: `-\\infty < x, y, z < \\infty` }
-          ]
-        },
-        { type: 'operator', icon: '∇', title: 'Vector Operators',
-          items: [
-            { label: '勾配 (Gradient)', tex: `\\nabla f = \\frac{\\partial f}{\\partial x}\\mathbf{i} + \\frac{\\partial f}{\\partial y}\\mathbf{j} + \\frac{\\partial f}{\\partial z}\\mathbf{k}` },
-            { label: '発散 (Divergence)', tex: `\\nabla \\cdot \\mathbf{A} = \\frac{\\partial A_x}{\\partial x} + \\frac{\\partial A_y}{\\partial y} + \\frac{\\partial A_z}{\\partial z}` },
-            { label: '回転 (Curl)', tex: `\\nabla \\times \\mathbf{A} = \\left(\\frac{\\partial A_z}{\\partial y}-\\frac{\\partial A_y}{\\partial z}\\right)\\mathbf{i} + \\left(\\frac{\\partial A_x}{\\partial z}-\\frac{\\partial A_z}{\\partial x}\\right)\\mathbf{j} + \\left(\\frac{\\partial A_y}{\\partial x}-\\frac{\\partial A_x}{\\partial y}\\right)\\mathbf{k}` },
-            { label: 'ラプラシアン (Laplacian)', tex: `\\Delta f = \\nabla^2 f = \\frac{\\partial^2 f}{\\partial x^2} + \\frac{\\partial^2 f}{\\partial y^2} + \\frac{\\partial^2 f}{\\partial z^2}` }
-          ]
-        }
+        { type: 'primary', icon: 'g', title: 'Metric', items: [{label: '線素', tex: 'ds^2 = dx^2 + dy^2 + dz^2'}] }
       ]
     },
     polar: {
-      title: "POLAR COORDINATES (r, θ) [2D]",
+      title: "POLAR (r, θ)",
       cards: [
-        { type: 'primary', icon: 'T', title: 'Transformation (Cartesian ↔ Polar)',
-          items: [
-            { label: '極座標 → デカルト座標', tex: `\\begin{aligned} x &= r \\cos\\theta \\\\ y &= r \\sin\\theta \\end{aligned}` },
-            { label: 'デカルト座標 → 極座標', tex: `\\begin{aligned} r &= \\sqrt{x^2 + y^2} \\\\ \\theta &= \\arctan\\left(\\frac{y}{x}\\right) \\end{aligned}` },
-            { label: 'ヤコビアン (Jacobian)', tex: `J = \\left| \\frac{\\partial(x,y)}{\\partial(r,\\theta)} \\right| = \\begin{vmatrix} \\cos\\theta & -r\\sin\\theta \\\\ \\sin\\theta & r\\cos\\theta \\end{vmatrix} = r` }
-          ]
-        },
-        { type: 'primary', icon: 'g', title: 'Metric & Limits',
-          items: [
-            { label: '計量テンソル (Metric Tensor)', tex: `g_{ij} = \\begin{pmatrix} 1 & 0 \\\\ 0 & r^2 \\end{pmatrix}` },
-            { label: '線素 (Line Element)', tex: `ds^2 = dr^2 + r^2 d\\theta^2` },
-            { label: '面積要素 (Area Element)', tex: `dA = r \\, dr \\, d\\theta` },
-            { label: '変域 (Domain)', tex: `\\begin{aligned} 0 &\\le r < \\infty \\\\ 0 &\\le \\theta < 2\\pi \\end{aligned}` }
-          ]
-        },
-        { type: 'operator', icon: '∇', title: 'Vector Operators (2D)',
-          items: [
-            { label: '勾配 (Gradient)', tex: `\\nabla f = \\frac{\\partial f}{\\partial r}\\hat{\\mathbf{r}} + \\frac{1}{r}\\frac{\\partial f}{\\partial \\theta}\\hat{\\boldsymbol{\\theta}}` },
-            { label: '発散 (Divergence)', tex: `\\nabla \\cdot \\mathbf{A} = \\frac{1}{r}\\frac{\\partial}{\\partial r}(r A_r) + \\frac{1}{r}\\frac{\\partial A_\\theta}{\\partial \\theta}` },
-            { label: 'ラプラシアン (Laplacian)', tex: `\\nabla^2 f = \\frac{1}{r}\\frac{\\partial}{\\partial r}\\left(r\\frac{\\partial f}{\\partial r}\\right) + \\frac{1}{r^2}\\frac{\\partial^2 f}{\\partial \\theta^2}` }
-          ]
-        }
+        { type: 'primary', icon: 'T', title: 'Jacobian', items: [{label: 'J', tex: 'J = r'}] }
       ]
     },
     cylindrical: {
-      title: "CYLINDRICAL COORDINATES (r, θ, z)",
+      title: "CYLINDRICAL (r, θ, z)",
       cards: [
-        { type: 'primary', icon: 'T', title: 'Transformation (Cartesian ↔ Cylindrical)',
-          items: [
-            { label: '円筒座標 → デカルト座標', tex: `\\begin{aligned} x &= r \\cos\\theta \\\\ y &= r \\sin\\theta \\\\ z &= z \\end{aligned}` },
-            { label: 'デカルト座標 → 円筒座標', tex: `\\begin{aligned} r &= \\sqrt{x^2 + y^2} \\\\ \\theta &= \\arctan\\left(\\frac{y}{x}\\right) \\\\ z &= z \\end{aligned}` },
-            { label: 'ヤコビアン (Jacobian)', tex: `J = \\left| \\frac{\\partial(x,y,z)}{\\partial(r,\\theta,z)} \\right| = r` }
-          ]
-        },
-        { type: 'primary', icon: 'g', title: 'Metric & Limits',
-          items: [
-            { label: '計量テンソル (Metric Tensor)', tex: `g_{ij} = \\begin{pmatrix} 1 & 0 & 0 \\\\ 0 & r^2 & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}` },
-            { label: 'スケール因子 (Scale Factors)', tex: `h_r = 1, \\quad h_\\theta = r, \\quad h_z = 1` },
-            { label: '線素 (Line Element)', tex: `ds^2 = dr^2 + r^2 d\\theta^2 + dz^2` },
-            { label: '体積要素 (Volume Element)', tex: `dV = r \\, dr \\, d\\theta \\, dz` },
-          ]
-        },
-        { type: 'operator', icon: '∇', title: 'Vector Operators',
-          items: [
-            { label: '勾配 (Gradient)', tex: `\\nabla f = \\frac{\\partial f}{\\partial r}\\hat{\\mathbf{r}} + \\frac{1}{r}\\frac{\\partial f}{\\partial \\theta}\\hat{\\boldsymbol{\\theta}} + \\frac{\\partial f}{\\partial z}\\hat{\\mathbf{z}}` },
-            { label: '発散 (Divergence)', tex: `\\nabla \\cdot \\mathbf{A} = \\frac{1}{r}\\frac{\\partial}{\\partial r}(r A_r) + \\frac{1}{r}\\frac{\\partial A_\\theta}{\\partial \\theta} + \\frac{\\partial A_z}{\\partial z}` },
-            { label: '回転 (Curl)', tex: `\\nabla \\times \\mathbf{A} = \\left(\\frac{1}{r}\\frac{\\partial A_z}{\\partial \\theta} - \\frac{\\partial A_\\theta}{\\partial z}\\right)\\hat{\\mathbf{r}} + \\left(\\frac{\\partial A_r}{\\partial z} - \\frac{\\partial A_z}{\\partial r}\\right)\\hat{\\boldsymbol{\\theta}} + \\frac{1}{r}\\left(\\frac{\\partial(r A_\\theta)}{\\partial r} - \\frac{\\partial A_r}{\\partial \\theta}\\right)\\hat{\\mathbf{z}}` },
-            { label: 'ラプラシアン (Laplacian)', tex: `\\nabla^2 f = \\frac{1}{r}\\frac{\\partial}{\\partial r}\\left(r\\frac{\\partial f}{\\partial r}\\right) + \\frac{1}{r^2}\\frac{\\partial^2 f}{\\partial \\theta^2} + \\frac{\\partial^2 f}{\\partial z^2}` }
-          ]
-        }
+        { type: 'primary', icon: 'g', title: 'Line Element', items: [{label: 'ds^2', tex: 'ds^2 = dr^2 + r^2 d\\theta^2 + dz^2'}] }
       ]
     },
     spherical: {
-      title: "SPHERICAL COORDINATES (r, θ, φ)",
+      title: "SPHERICAL (r, θ, φ)",
       cards: [
-        { type: 'primary', icon: 'T', title: 'Transformation (Cartesian ↔ Spherical)',
-          items: [
-            { label: '球座標 → デカルト座標 (物理学の表記)', tex: `\\begin{aligned} x &= r \\sin\\theta \\cos\\phi \\\\ y &= r \\sin\\theta \\sin\\phi \\\\ z &= r \\cos\\theta \\end{aligned}` },
-            { label: 'デカルト座標 → 球座標', tex: `\\begin{aligned} r &= \\sqrt{x^2 + y^2 + z^2} \\\\ \\theta &= \\arccos\\left(\\frac{z}{r}\\right) \\\\ \\phi &= \\arctan\\left(\\frac{y}{x}\\right) \\end{aligned}` },
-            { label: 'ヤコビアン (Jacobian)', tex: `J = \\left| \\frac{\\partial(x,y,z)}{\\partial(r,\\theta,\\phi)} \\right| = r^2 \\sin\\theta` }
-          ]
-        },
-        { type: 'primary', icon: 'g', title: 'Metric & Limits',
-          items: [
-            { label: '計量テンソル (Metric Tensor)', tex: `g_{ij} = \\begin{pmatrix} 1 & 0 & 0 \\\\ 0 & r^2 & 0 \\\\ 0 & 0 & r^2\\sin^2\\theta \\end{pmatrix}` },
-            { label: 'スケール因子 (Scale Factors)', tex: `h_r = 1, \\quad h_\\theta = r, \\quad h_\\phi = r\\sin\\theta` },
-            { label: '線素 (Line Element)', tex: `ds^2 = dr^2 + r^2 d\\theta^2 + r^2\\sin^2\\theta d\\phi^2` },
-            { label: '体積要素 (Volume Element)', tex: `dV = r^2 \\sin\\theta \\, dr \\, d\\theta \\, d\\phi` },
-            { label: '変域 (Domain)', tex: `0 \\le r < \\infty, \\quad 0 \\le \\theta \\le \\pi, \\quad 0 \\le \\phi < 2\\pi` }
-          ]
-        },
-        { type: 'operator', icon: '∇', title: 'Vector Operators',
-          items: [
-            { label: '勾配 (Gradient)', tex: `\\nabla f = \\frac{\\partial f}{\\partial r}\\hat{\\mathbf{r}} + \\frac{1}{r}\\frac{\\partial f}{\\partial \\theta}\\hat{\\boldsymbol{\\theta}} + \\frac{1}{r\\sin\\theta}\\frac{\\partial f}{\\partial \\phi}\\hat{\\boldsymbol{\\phi}}` },
-            { label: '発散 (Divergence)', tex: `\\nabla \\cdot \\mathbf{A} = \\frac{1}{r^2}\\frac{\\partial}{\\partial r}(r^2 A_r) + \\frac{1}{r\\sin\\theta}\\frac{\\partial}{\\partial \\theta}(\\sin\\theta A_\\theta) + \\frac{1}{r\\sin\\theta}\\frac{\\partial A_\\phi}{\\partial \\phi}` },
-            { label: '回転 (Curl)', tex: `\\nabla \\times \\mathbf{A} = \\frac{1}{r\\sin\\theta} \\left( \\frac{\\partial}{\\partial \\theta}(\\sin\\theta A_\\phi) - \\frac{\\partial A_\\theta}{\\partial \\phi} \\right) \\hat{\\mathbf{r}} + \\frac{1}{r} \\left( \\frac{1}{\\sin\\theta}\\frac{\\partial A_r}{\\partial \\phi} - \\frac{\\partial}{\\partial r}(r A_\\phi) \\right) \\hat{\\boldsymbol{\\theta}} + \\frac{1}{r} \\left( \\frac{\\partial}{\\partial r}(r A_\\theta) - \\frac{\\partial A_r}{\\partial \\theta} \\right) \\hat{\\boldsymbol{\\phi}}` },
-            { label: 'ラプラシアン (Laplacian)', tex: `\\nabla^2 f = \\frac{1}{r^2}\\frac{\\partial}{\\partial r}\\left(r^2\\frac{\\partial f}{\\partial r}\\right) + \\frac{1}{r^2\\sin\\theta}\\frac{\\partial}{\\partial \\theta}\\left(\\sin\\theta\\frac{\\partial f}{\\partial \\theta}\\right) + \\frac{1}{r^2\\sin^2\\theta}\\frac{\\partial^2 f}{\\partial \\phi^2}` }
-          ]
-        }
+        { type: 'primary', icon: 'g', title: 'Volume Element', items: [{label: 'dV', tex: 'dV = r^2 \\sin\\theta \\, dr \\, d\\theta \\, d\\phi'}] }
       ]
     }
   };
 
-  function loadSystem(sysKey) {
-    document.querySelectorAll('.ct-system-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(`btn-${sysKey}`).classList.add('active');
+  function setMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.ct-mode-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`mode-${mode}`).classList.add('active');
+    updateInputs();
+  }
 
-    const data = db[sysKey];
-    document.getElementById('ct-system-title').textContent = data.title;
+  function updateInputs() {
+    const srcSys = document.getElementById('ct-src-sys').value;
+    const inputsContainer = document.getElementById('ct-inputs');
+    const vars = sysVars[srcSys];
     
-    const container = document.getElementById('ct-data-container');
-    container.innerHTML = '';
+    
+    let toShow = 3;
+    if (srcSys === 'polar') toShow = 2;
 
-    let delay = 0;
-    data.cards.forEach(card => {
-      const cardEl = document.createElement('div');
-      cardEl.className = `ct-card ${card.type}`;
-      cardEl.style.animationDelay = `${delay}s`;
-      
-      const header = `
-        <div class="ct-card-header">
-          <div class="ct-card-icon">${card.icon}</div>
-          <div class="ct-card-title">${card.title}</div>
+    let html = '';
+    for(let i=0; i<toShow; i++) {
+      let label = currentMode === 'point' ? vars[i] : `A_{${vars[i]}}`;
+      let placeholder = currentMode === 'point' ? 'e.g. 1 or sqrt(2)' : `e.g. ${vars[i]} or cos(${vars[i]})`;
+      html += `
+        <div class="ct-input-row">
+          <div class="ct-input-label" id="lbl-${i}"></div>
+          <input type="text" class="ct-input" id="inp-${i}" placeholder="${placeholder}">
         </div>
       `;
+    }
+    inputsContainer.innerHTML = html;
 
-      let gridItems = '';
-      card.items.forEach((item, idx) => {
-        gridItems += `
-          <div class="ct-math-box">
-            <div class="ct-math-title">${item.label}</div>
-            <div id="math-${sysKey}-${delay}-${idx}"></div>
-          </div>
-        `;
-      });
+    
+    setTimeout(() => {
+      for(let i=0; i<toShow; i++) {
+        let label = currentMode === 'point' ? vars[i] : `A_{${vars[i]}}`;
+        
+        label = label.replace('theta', '\\theta').replace('phi', '\\phi');
+        katex.render(label, document.getElementById(`lbl-${i}`));
+      }
+    }, 50);
+  }
 
-      cardEl.innerHTML = header + `<div class="ct-grid">${gridItems}</div>`;
-      container.appendChild(cardEl);
+  function printOutput(html) {
+    document.getElementById('ct-results').innerHTML = html;
+  }
 
-      
-      setTimeout(() => {
-        card.items.forEach((item, idx) => {
-          const el = document.getElementById(`math-${sysKey}-${delay}-${idx}`);
-          if(el) {
-            katex.render(item.tex, el, { displayMode: true, throwOnError: false });
-          }
-        });
-      }, 50);
-
-      delay += 0.15;
-    });
+  function getTeX(exprStr) {
+    try { return nerdamer(exprStr).toTeX(); } catch(e) { return exprStr; }
   }
 
   
-  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', () => loadSystem('spherical')); } 
-  else { setTimeout(() => loadSystem('spherical'), 50); }
+  
+  function executeTransform() {
+    const srcSys = document.getElementById('ct-src-sys').value;
+    const tgtSys = document.getElementById('ct-tgt-sys').value;
+    
+    let isSrc2D = srcSys === 'polar';
+    let isTgt2D = tgtSys === 'polar';
 
-  return { loadSystem };
+    
+    const v1 = document.getElementById('inp-0') ? document.getElementById('inp-0').value || '0' : '0';
+    const v2 = document.getElementById('inp-1') ? document.getElementById('inp-1').value || '0' : '0';
+    const v3 = document.getElementById('inp-2') ? document.getElementById('inp-2').value || '0' : '0';
+    
+    try {
+      if (currentMode === 'point') {
+        transformPoint(srcSys, tgtSys, v1, v2, v3, isSrc2D, isTgt2D);
+      } else {
+        transformVector(srcSys, tgtSys, v1, v2, v3, isSrc2D, isTgt2D);
+      }
+    } catch (e) {
+      console.error(e);
+      printOutput(`<div style="color:var(--neon-pink); padding: 10px;">[ERROR] Invalid Syntax or Transformation Error. Check your input expressions.<br><small>${e.message}</small></div>`);
+    }
+  }
+
+  function transformPoint(srcSys, tgtSys, p1, p2, p3, isSrc2D, isTgt2D) {
+    if (srcSys === tgtSys) {
+      printOutput(`<div style="color:var(--neon-cyan);">[INFO] Source and Target systems are the same. No transformation needed.</div>`);
+      return;
+    }
+
+    let outHtml = '';
+    
+    
+    let cx = p1, cy = p2, cz = p3;
+    if (srcSys !== 'cartesian') {
+       let eqX = transforms[srcSys].toCartesian.x.replace(/r/g, `(${p1})`).replace(/theta/g, `(${p2})`).replace(/phi/g, `(${p3})`);
+       let eqY = transforms[srcSys].toCartesian.y.replace(/r/g, `(${p1})`).replace(/theta/g, `(${p2})`).replace(/phi/g, `(${p3})`);
+       let eqZ = transforms[srcSys].toCartesian.z.replace(/r/g, `(${p1})`).replace(/theta/g, `(${p2})`).replace(/phi/g, `(${p3})`);
+       if(srcSys === 'polar') eqZ = '0';
+       
+       cx = nerdamer(eqX).evaluate().text();
+       cy = nerdamer(eqY).evaluate().text();
+       cz = nerdamer(eqZ).evaluate().text();
+       
+       outHtml += `<div class="ct-output-step">
+         <small style="color:#888;">Step 1: Convert to Cartesian (x, y, z)</small>
+         <div id="out-step1"></div>
+       </div>`;
+    }
+
+    
+    let tx = cx, ty = cy, tz = cz;
+    if (tgtSys !== 'cartesian') {
+      let eqR = transforms[tgtSys].fromCartesian.r.replace(/x/g, `(${cx})`).replace(/y/g, `(${cy})`).replace(/z/g, `(${cz})`);
+      let eqT = transforms[tgtSys].fromCartesian.theta.replace(/x/g, `(${cx})`).replace(/y/g, `(${cy})`).replace(/z/g, `(${cz})`);
+      let eqP = tgtSys === 'spherical' ? transforms[tgtSys].fromCartesian.phi.replace(/x/g, `(${cx})`).replace(/y/g, `(${cy})`).replace(/z/g, `(${cz})`) : cz;
+      if(tgtSys === 'polar') eqP = '0';
+
+      tx = nerdamer(eqR).evaluate().text();
+      ty = nerdamer(eqT).evaluate().text();
+      tz = tgtSys === 'spherical' ? nerdamer(eqP).evaluate().text() : eqP;
+    }
+    
+    outHtml += `<div class="ct-output-step final">
+       <small style="color:var(--neon-green); font-weight:bold;">Final Result: ${tgtSys.toUpperCase()}</small>
+       <div id="out-step2"></div>
+    </div>`;
+
+    printOutput(outHtml);
+    
+    
+    setTimeout(() => {
+      let varsSrc = sysVars[srcSys];
+      let varsTgt = sysVars[tgtSys];
+
+      if (srcSys !== 'cartesian' && document.getElementById('out-step1')) {
+        let texC = `\\begin{pmatrix} x \\\\ y \\\\ z \\end{pmatrix} = \\begin{pmatrix} ${getTeX(cx)} \\\\ ${getTeX(cy)} \\\\ ${getTeX(cz)} \\end{pmatrix}`;
+        katex.render(texC, document.getElementById('out-step1'), { displayMode: true, throwOnError: false });
+      }
+
+      const sym1 = varsTgt[0].replace('theta','\\theta');
+      const sym2 = varsTgt[1].replace('theta','\\theta');
+      const sym3 = varsTgt[2].replace('phi','\\phi');
+
+      let texT = '';
+      if(isTgt2D) {
+         texT = `\\begin{pmatrix} ${sym1} \\\\ ${sym2} \\end{pmatrix} = \\begin{pmatrix} ${getTeX(tx)} \\\\ ${getTeX(ty)} \\end{pmatrix}`;
+      } else {
+         texT = `\\begin{pmatrix} ${sym1} \\\\ ${sym2} \\\\ ${sym3} \\end{pmatrix} = \\begin{pmatrix} ${getTeX(tx)} \\\\ ${getTeX(ty)} \\\\ ${getTeX(tz)} \\end{pmatrix}`;
+      }
+      katex.render(texT, document.getElementById('out-step2'), { displayMode: true, throwOnError: false });
+    }, 50);
+  }
+
+  function transformVector(srcSys, tgtSys, v1, v2, v3, isSrc2D, isTgt2D) {
+    if (srcSys === tgtSys) {
+       printOutput(`<div style="color:var(--neon-cyan);">[INFO] Identical systems.</div>`);
+       return;
+    }
+    
+    let outHtml = `<div class="ct-output-step"><small style="color:#888;">Engine Processing Tensor Transformation...</small></div>`;
+    
+    
+    
+    
+    
+    
+    
+    
+    let Asrc = [ nerdamer(v1), nerdamer(v2), nerdamer(isSrc2D ? '0': v3) ];
+    
+    
+    let Rsrc = R_matrix[srcSys];
+    let Acart = [nerdamer('0'), nerdamer('0'), nerdamer('0')];
+    
+    for(let i=0; i<3; i++) {
+       let sum = nerdamer('0');
+       for(let j=0; j<3; j++) {
+          
+          let term = nerdamer(`(${Rsrc[j][i]}) * (${Asrc[j].text()})`);
+          sum = nerdamer(`(${sum.text()}) + (${term.text()})`);
+       }
+       Acart[i] = nerdamer(sum.text());
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    const x_tgt = transforms[tgtSys].toCartesian.x;
+    const y_tgt = transforms[tgtSys].toCartesian.y;
+    const z_tgt = transforms[tgtSys].toCartesian.z;
+    
+    
+    const r_src = transforms[srcSys].fromCartesian.r;
+    const theta_src = transforms[srcSys].fromCartesian.theta;
+    const phi_src = transforms[srcSys].fromCartesian.phi || 'z';
+    
+    for(let i=0; i<3; i++) {
+        let eq = Acart[i].text();
+        
+        
+        
+        if (srcSys !== 'cartesian') {
+            
+            
+            eq = nerdamer(eq).sub('r', r_src).text();
+            eq = nerdamer(eq).sub('theta', theta_src).text();
+            if(srcSys === 'spherical') eq = nerdamer(eq).sub('phi', phi_src).text();
+        }
+        
+        if (tgtSys !== 'cartesian') {
+            eq = nerdamer(eq).sub('x', x_tgt).text();
+            eq = nerdamer(eq).sub('y', y_tgt).text();
+            eq = nerdamer(eq).sub('z', z_tgt).text();
+        }
+        
+        Acart[i] = nerdamer(eq).expand(); 
+    }
+    
+    
+    let Rtgt = R_matrix[tgtSys];
+    let Atgt = [nerdamer('0'), nerdamer('0'), nerdamer('0')];
+    
+    for(let i=0; i<3; i++) {
+       let sum = nerdamer('0');
+       for(let j=0; j<3; j++) {
+          let term = nerdamer(`(${Rtgt[i][j]}) * (${Acart[j].text()})`);
+          sum = nerdamer(`(${sum.text()}) + (${term.text()})`);
+       }
+       Atgt[i] = nerdamer(sum.text()).expand(); 
+    }
+    
+    outHtml += `<div class="ct-output-step final">
+       <small style="color:var(--neon-green); font-weight:bold;">Final Field: ${tgtSys.toUpperCase()}</small>
+       <div id="out-vec-final"></div>
+    </div>`;
+
+    printOutput(outHtml);
+    
+    
+    setTimeout(() => {
+      let varsTgt = sysVars[tgtSys];
+      const sym1 = varsTgt[0].replace('theta','\\theta');
+      const sym2 = varsTgt[1].replace('theta','\\theta');
+      const sym3 = varsTgt[2].replace('phi','\\phi');
+
+      let texT = '';
+      if(isTgt2D) {
+         texT = `\\begin{pmatrix} A_{${sym1}} \\\\ A_{${sym2}} \\end{pmatrix} = \\begin{pmatrix} ${getTeX(Atgt[0].text())} \\\\ ${getTeX(Atgt[1].text())} \\end{pmatrix}`;
+      } else {
+         texT = `\\begin{pmatrix} A_{${sym1}} \\\\ A_{${sym2}} \\\\ A_{${sym3}} \\end{pmatrix} = \\begin{pmatrix} ${getTeX(Atgt[0].text())} \\\\ ${getTeX(Atgt[1].text())} \\\\ ${getTeX(Atgt[2].text())} \\end{pmatrix}`;
+      }
+      katex.render(texT, document.getElementById('out-vec-final'), { displayMode: true, throwOnError: false });
+    }, 50);
+
+  }
+  
+  
+  let isLegacyOpen = false;
+  function toggleLegacy() {
+    isLegacyOpen = !isLegacyOpen;
+    document.getElementById('ct-legacy-container').style.display = isLegacyOpen ? 'block' : 'none';
+    if(isLegacyOpen) {
+       
+       let btnHtml = '';
+       Object.keys(db).forEach(k => {
+          btnHtml += `<button class="ct-mode-btn" onclick="ctApp.loadLegacy('${k}')" style="min-width:100px;">${db[k].title.split(' ')[0]}</button>`;
+       });
+       document.getElementById('ct-legacy-buttons').innerHTML = btnHtml;
+       loadLegacy('spherical'); 
+    }
+  }
+
+  function loadLegacy(sysKey) {
+     
+     
+     let h = `<div style="color:var(--neon-cyan); margin-bottom: 15px; font-family:'Orbitron';">DATABASE RECORD: ${sysKey.toUpperCase()}</div>`;
+     let delay=0;
+     db[sysKey].cards.forEach(c => {
+        h += `<div class="ct-card ${c.type}" style="animation-delay:${delay}s">
+                <div class="ct-card-header"><div class="ct-card-icon">${c.icon}</div><div class="ct-card-title">${c.title}</div></div>
+                <div class="ct-grid">`;
+        c.items.forEach((item, idx) => {
+           h += `<div class="ct-math-box"><div class="ct-math-title">${item.label}</div><div id="leg-${sysKey}-${delay}-${idx}"></div></div>`;
+        });
+        h += `</div></div>`;
+        delay += 0.1;
+     });
+     document.getElementById('ct-data-container').innerHTML = h;
+     
+     
+     setTimeout(() => {
+        let d=0;
+        db[sysKey].cards.forEach(c => {
+           c.items.forEach((item, idx) => {
+              katex.render(item.tex, document.getElementById(`leg-${sysKey}-${d}-${idx}`), { displayMode: true, throwOnError: false });
+           });
+           d += 0.1;
+        });
+     }, 100);
+  }
+
+  
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', () => setMode('point')); } 
+  else { setTimeout(() => setMode('point'), 50); }
+
+  return { setMode, updateInputs, executeTransform, toggleLegacy, loadLegacy };
 })();
 </script>
 

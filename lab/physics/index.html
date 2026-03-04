@@ -1020,6 +1020,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
 
+
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js"></script>
+
 <div id="ps-app">
   <div class="ps-bg-grid"></div>
   <div class="ps-scanline"></div>
@@ -1174,7 +1180,7 @@ var psApp = (function() {
             <span class="sym" id="tex-${inp.id}"></span>
           </div>
           <div class="ps-input-row">
-            <input type="number" id="inp-${inp.id}" class="ps-input" value="${inp.val}" step="0.1">
+            <input type="text" id="inp-${inp.id}" class="ps-input" value="${inp.val}">
             ${inp.unit ? `<div class="ps-unit">${inp.unit}</div>` : ''}
           </div>
         </div>
@@ -1197,8 +1203,25 @@ var psApp = (function() {
     return Math.round(n * 1000) / 1000;
   }
 
-  function getVal(id) {
-    return parseFloat(document.getElementById(`inp-${id}`).value) || 0;
+  
+  function getSym(id) {
+    const raw = document.getElementById(`inp-${id}`).value;
+    try {
+      return nerdamer(raw);
+    } catch (e) {
+      console.error("Invalid math input:", raw);
+      return nerdamer("0");
+    }
+  }
+
+  
+  function getTeX(expr) {
+    return nerdamer(expr).toTeX();
+  }
+
+  
+  function getDec(expr) {
+    return formatNum(Number(nerdamer(expr).evaluate().text()));
   }
 
   function renderStep(container, delay, type, title, desc, formula) {
@@ -1256,13 +1279,17 @@ var psApp = (function() {
 
     try {
       if (type === 'projectile') {
-        const v0 = getVal('v0'), thetaStr = getVal('theta'), h0 = getVal('h0'), g = getVal('g');
-        const rad = thetaStr * Math.PI / 180;
-        const v0x = v0 * Math.cos(rad);
-        const v0y = v0 * Math.sin(rad);
+        const v0 = getSym('v0'), thetaStr = getSym('theta'), h0 = getSym('h0'), g = getSym('g');
+        
+        
+        
+        nerdamer.set('RADIAN', false); 
+        const rad = `(${thetaStr.text()} * pi / 180)`;
+        const v0x = nerdamer(`${v0.text()} * cos(${rad})`);
+        const v0y = nerdamer(`${v0.text()} * sin(${rad})`);
 
         addStep('normal', '1. 初期条件と速度の分解', '初速度 $v_0$ を水平方向（x）と鉛直方向（y）に分解する。', 
-          `\\begin{aligned} v_{0x} &= v_0 \\cos\\theta = ${formatNum(v0x)} \\text{ m/s} \\\\ v_{0y} &= v_0 \\sin\\theta = ${formatNum(v0y)} \\text{ m/s} \\end{aligned}`);
+          `\\begin{aligned} v_{0x} &= v_0 \\cos\\theta = ${getTeX(v0x)} \\approx ${getDec(v0x)} \\text{ m/s} \\\\ v_{0y} &= v_0 \\sin\\theta = ${getTeX(v0y)} \\approx ${getDec(v0y)} \\text{ m/s} \\end{aligned}`);
         
         addStep('important', '2. 運動方程式', '水平方向には力が働かず等速直線運動、鉛直方向には重力 $-mg$ が働き等加速度運動をする。',
           `\\begin{aligned} m a_x &= 0 \\quad \\Rightarrow \\quad a_x = 0 \\\\ m a_y &= -mg \\quad \\Rightarrow \\quad a_y = -g \\end{aligned}`);
@@ -1270,87 +1297,98 @@ var psApp = (function() {
         addStep('normal', '3. 任意時刻 $t$ での位置と速度', '加速度を積分して、時刻 $t$ における速度 $v$ と位置 $(x, y)$ を求める。',
           `\\begin{aligned} v_x(t) &= v_{0x} \\\\ v_y(t) &= v_{0y} - gt \\\\ x(t) &= v_{0x} t \\\\ y(t) &= h_0 + v_{0y} t - \\frac{1}{2}gt^2 \\end{aligned}`);
         
-        const t_top = v0y / g;
-        const y_max = h0 + v0y * t_top - 0.5 * g * t_top * t_top;
+        const t_top = nerdamer(`${v0y.text()} / ${g.text()}`);
+        const y_max = nerdamer(`${h0.text()} + ${v0y.text()} * (${t_top.text()}) - 1/2 * ${g.text()} * (${t_top.text()})^2`);
         addStep('normal', '4. 最高点に達する時間と高さ', '最高点では鉛直方向の速度が $v_y = 0$ になる。',
-          `0 = v_{0y} - g t_{top} \\quad \\Rightarrow \\quad t_{top} = \\frac{v_{0y}}{g} = ${formatNum(t_top)} \\text{ s}`);
+          `0 = v_{0y} - g t_{top} \\quad \\Rightarrow \\quad t_{top} = \\frac{v_{0y}}{g} = ${getTeX(t_top)} \\approx ${getDec(t_top)} \\text{ s}`);
         addStep('result', '最高点 (Maximum Height)', '求めた $t_{top}$ を $y(t)$ に代入する。',
-          `H = h_0 + \\frac{v_{0y}^2}{2g} = ${formatNum(y_max)} \\text{ m}`);
+          `H = h_0 + \\frac{v_{0y}^2}{2g} = ${getTeX(y_max)} \\approx ${getDec(y_max)} \\text{ m}`);
 
-        if (h0 === 0) {
-          const t_end = 2 * t_top;
-          const x_max = v0x * t_end;
-          addStep('normal', '5. 水平到達距離', '再び $y=0$ になるのは $t = 2 t_{top}$ のときである。',
-            `t_{end} = \\frac{2v_{0y}}{g} = ${formatNum(t_end)} \\text{ s}`);
-          addStep('result', '水平到達距離 (Range)', 'この時間を水平位置の式に代入する。',
-            `L = v_{0x} t_{end} = \\frac{v_0^2 \\sin(2\\theta)}{g} = ${formatNum(x_max)} \\text{ m}`);
-        } else {
-           addStep('normal', '5. 水平到達距離', '$y(t) = 0$ となる解（二次方程式）を求める。',
-            `0 = ${h0} + ${formatNum(v0y)} t - ${formatNum(0.5*g)} t^2`);
+        addStep('normal', '5. 水平到達距離', '$y(t) = 0$ となる解を求める。',
+          `0 = ${getTeX(h0)} + (${getTeX(v0y)}) t - \\frac{1}{2}(${getTeX(g)}) t^2`);
+          
+        
+        
+        const roots = nerdamer.solve(`-1/2 * (${g.text()}) * t^2 + (${v0y.text()}) * t + (${h0.text()}) = 0`, 't');
+        
+        if (roots && roots.elements && roots.elements.length > 0) {
            
-           const a = -0.5*g, b = v0y, c = h0;
-           const D = b*b - 4*a*c;
-           if (D >= 0) {
-             const t_end1 = (-b + Math.sqrt(D)) / (2*a);
-             const t_end2 = (-b - Math.sqrt(D)) / (2*a);
-             const t_end = Math.max(t_end1, t_end2);
-             const x_max = v0x * t_end;
-             addStep('result', '水平到達距離 (Range)', `着地時間は $t \\approx ${formatNum(t_end)}\\text{ s}$`,
-              `L = v_{0x} t = ${formatNum(x_max)} \\text{ m}`);
+           let t_end_sym = null;
+           let t_end_val = -Infinity;
+           roots.elements.forEach(r => {
+             const val = Number(r.evaluate().text());
+             if (val > 0 && val > t_end_val) {
+               t_end_val = val;
+               t_end_sym = r;
+             }
+           });
+           
+           if (t_end_sym) {
+             const x_max = nerdamer(`(${v0x.text()}) * (${t_end_sym.text()})`);
+             addStep('result', '水平到達距離 (Range)', `着地時間は $t = ${getTeX(t_end_sym)} \\approx ${getDec(t_end_sym)}\\text{ s}$`,
+              `L = v_{0x} t = ${getTeX(x_max)} \\approx ${getDec(x_max)} \\text{ m}`);
+           } else {
+             addStep('result', '水平到達距離 (Range)', '有効な着地時間が見つかりません。', '');
            }
         }
       } 
       else if (type === 'incline') {
-        const m = getVal('m'), thetaStr = getVal('theta'), mu = getVal('mu'), g = getVal('g');
-        const rad = thetaStr * Math.PI / 180;
-        const Wx = m * g * Math.sin(rad);
-        const Wy = m * g * Math.cos(rad);
+        const m = getSym('m'), thetaStr = getSym('theta'), mu = getSym('mu'), g = getSym('g');
+        const rad = `(${thetaStr.text()} * pi / 180)`;
+        const Wx = nerdamer(`${m.text()} * ${g.text()} * sin(${rad})`);
+        const Wy = nerdamer(`${m.text()} * ${g.text()} * cos(${rad})`);
 
         addStep('normal', '1. 重力の分解', '重力 $mg$ を斜面に平行な成分(x)と垂直な成分(y)に分解する。',
-          `\\begin{aligned} W_x &= mg \\sin\\theta = ${formatNum(Wx)} \\text{ N} \\\\ W_y &= mg \\cos\\theta = ${formatNum(Wy)} \\text{ N} \\end{aligned}`);
+          `\\begin{aligned} W_x &= mg \\sin\\theta = ${getTeX(Wx)} \\approx ${getDec(Wx)} \\text{ N} \\\\ W_y &= mg \\cos\\theta = ${getTeX(Wy)} \\approx ${getDec(Wy)} \\text{ N} \\end{aligned}`);
         
-        addStep('important', '2. 垂直抗力', '斜面に垂直な方向(y)では力のつりあいが成り立ちる。',
-          `N - W_y = 0 \\quad \\Rightarrow \\quad N = mg \\cos\\theta = ${formatNum(Wy)} \\text{ N}`);
+        addStep('important', '2. 垂直抗力', '斜面に垂直な方向(y)では力のつりあいが成り立つ。',
+          `N - W_y = 0 \\quad \\Rightarrow \\quad N = mg \\cos\\theta = ${getTeX(Wy)} \\approx ${getDec(Wy)} \\text{ N}`);
         
-        let f_k = mu * Wy;
+        const f_k = nerdamer(`(${mu.text()}) * (${Wy.text()})`);
         addStep('normal', '3. 動摩擦力', '滑り降りているため、運動の逆向き（斜面上向き）に動摩擦力が働く。',
-          `f_k = \\mu N = \\mu mg \\cos\\theta = ${formatNum(f_k)} \\text{ N}`);
+          `f_k = \\mu N = \\mu mg \\cos\\theta = ${getTeX(f_k)} \\approx ${getDec(f_k)} \\text{ N}`);
         
-        const F_net = Wx - f_k;
+        const F_net = nerdamer(`(${Wx.text()}) - (${f_k.text()})`);
         addStep('important', '4. 斜面方向の運動方程式', '斜面下向きを正としてニュートンの運動方程式を立てる。',
           `ma = W_x - f_k \\quad \\Rightarrow \\quad ma = mg \\sin\\theta - \\mu mg \\cos\\theta`);
         
-        const a = F_net / m;
-        if (a > 0) {
+        const a = nerdamer(`(${F_net.text()}) / (${m.text()})`);
+        const a_val = Number(a.evaluate().text());
+        
+        if (a_val > 0) {
           addStep('result', '物体の加速度 (Acceleration)', '方程式を $a$ について解く。質量 $m$ は両辺で約分される。',
-            `a = g(\\sin\\theta - \\mu \\cos\\theta) = ${formatNum(a)} \\text{ m/s}^2`);
+            `a = g(\\sin\\theta - \\mu \\cos\\theta) = ${getTeX(a)} \\approx ${getDec(a)} \\text{ m/s}^2`);
         } else {
-          addStep('result', '物体の加速度 (Acceleration)', '計算上の加速度が0以下のため、物体は滑り出さない（静かに置いた場合）か、減速して止まりる。',
-            `a = ${formatNum(a)} \\text{ m/s}^2 \\quad (\\text{Deceleration})`);
+          addStep('result', '物体の加速度 (Acceleration)', '計算上の加速度が0以下のため、物体は滑り出さない（静かに置いた場合）か、減速して止まる。',
+            `a = ${getTeX(a)} \\approx ${getDec(a)} \\text{ m/s}^2 \\quad (\\text{Deceleration})`);
         }
       }
       else if (type === 'energy') {
-        const m = getVal('m'), h = getVal('h'), v0 = getVal('v0'), g = getVal('g');
-        const E_init = 0.5 * m * v0 * v0 + m * g * h;
+        const m = getSym('m'), h = getSym('h'), v0 = getSym('v0'), g = getSym('g');
+        const E_init = nerdamer(`1/2 * (${m.text()}) * (${v0.text()})^2 + (${m.text()}) * (${g.text()}) * (${h.text()})`);
         
         addStep('normal', '1. 初期状態の力学的エネルギー', '高さ $h$ にあるときの運動エネルギー $K$ と位置エネルギー $U$ の和を求める。',
-          `E_1 = \\frac{1}{2}mv_0^2 + mgh = ${formatNum(E_init)} \\text{ J}`);
+          `E_1 = \\frac{1}{2}mv_0^2 + mgh = ${getTeX(E_init)} \\approx ${getDec(E_init)} \\text{ J}`);
         
         addStep('important', '2. 力学的エネルギー保存則', '空気抵抗等の非保存力が働かない場合、どの地点でも力学的エネルギーの和は一定である。着地点（高さ0）での速度を $v_1$ とする。',
           `E_1 = E_2 \\quad \\Rightarrow \\quad \\frac{1}{2}mv_0^2 + mgh = \\frac{1}{2}mv_1^2 + 0`);
         
-        const v1 = Math.sqrt(Math.max(0, 2 * (E_init / m)));
+        
+        const v1_sq = nerdamer(`2 * (${E_init.text()}) / (${m.text()})`);
+        const v1_val = Number(v1_sq.evaluate().text());
+        const v1 = v1_val > 0 ? nerdamer(`sqrt(${v1_sq.text()})`) : nerdamer('0');
+        
         addStep('result', '着地時の速度 (Final Velocity)', '式を $v_1$ について解く。質量 $m$ は両辺で約分される。',
-          `v_1 = \\sqrt{v_0^2 + 2gh} = ${formatNum(v1)} \\text{ m/s}`);
+          `v_1 = \\sqrt{v_0^2 + 2gh} = ${getTeX(v1)} \\approx ${getDec(v1)} \\text{ m/s}`);
       }
       else if (type === 'circular') {
-        const m = getVal('m'), r = getVal('r'), v0 = getVal('v0'), g = getVal('g');
+        const m = getSym('m'), r = getSym('r'), v0 = getSym('v0'), g = getSym('g');
         
         addStep('normal', '1. 最下点での張力', '最下点での速さが $v_0$ のとき、円運動の中心（上向き）に向かう向心力が必要である。',
           `T_{bottom} - mg = m\\frac{v_0^2}{r}`);
-        const T0 = m * g + m * (v0 * v0) / r;
+        const T0 = nerdamer(`(${m.text()}) * (${g.text()}) + (${m.text()}) * (${v0.text()})^2 / (${r.text()})`);
         addStep('result', '最下点の張力 (Tension at bottom)', '',
-          `T_{bottom} = m\\left(g + \\frac{v_0^2}{r}\\right) = ${formatNum(T0)} \\text{ N}`);
+          `T_{bottom} = m\\left(g + \\frac{v_0^2}{r}\\right) = ${getTeX(T0)} \\approx ${getDec(T0)} \\text{ N}`);
 
         addStep('important', '2. 力学的エネルギー保存則', '角度 $\\theta$（最下点から測る）の位置にあるときの速さ $v$ をエネルギー保存から求める。高さの変化は $r(1-\\cos\\theta)$ である。',
           `\\frac{1}{2}mv_0^2 = \\frac{1}{2}mv^2 + mgr(1-\\cos\\theta)`);
@@ -1359,30 +1397,35 @@ var psApp = (function() {
           `T(\\theta) - mg\\cos\\theta = m\\frac{v^2}{r}`);
         
         
-        const v_top_sq = v0*v0 - 4*g*r;
-        if (v_top_sq > 0) {
-          const v_top = Math.sqrt(v_top_sq);
-          const T_top = m * v_top_sq / r - m * g;
+        const v_top_sq = nerdamer(`(${v0.text()})^2 - 4 * (${g.text()}) * (${r.text()})`);
+        const v_top_sq_val = Number(v_top_sq.evaluate().text());
+        
+        if (v_top_sq_val > 0) {
+          const v_top = nerdamer(`sqrt(${v_top_sq.text()})`);
+          const T_top = nerdamer(`(${m.text()}) * (${v_top_sq.text()}) / (${r.text()}) - (${m.text()}) * (${g.text()})`);
+          const T_top_val = Number(T_top.evaluate().text());
+          
           addStep('normal', '4. 最上点への到達判定', '最上点で $v > 0$ かつ張力 $T > 0$ となるか確認する（糸がたるまない条件）。',
-            `v_{top}^2 = v_0^2 - 4gr = ${formatNum(v_top_sq)} > 0`);
-          if (T_top >= 0) {
+             `v_{top}^2 = v_0^2 - 4gr = ${getTeX(v_top_sq)} \\approx ${getDec(v_top_sq)} > 0`);
+          if (T_top_val >= 0) {
              addStep('result', '最上点の張力 (Tension at top)', '物体は糸がたるむことなく円運動を一周する。',
-              `T_{top} = m\\frac{v_{top}^2}{r} - mg = ${formatNum(T_top)} \\text{ N}`);
+              `T_{top} = m\\frac{v_{top}^2}{r} - mg = ${getTeX(T_top)} \\approx ${getDec(T_top)} \\text{ N}`);
           } else {
-             addStep('result', '結果', '最上点に達する前に張力が0になり、糸がたるんで放物運動に移りる。',
+             addStep('result', '結果', '最上点に達する前に張力が0になり、糸がたるんで放物運動に移る。',
               `T_{top} < 0 \\text{ (Tension goes negative)}`);
           }
         } else {
-          addStep('result', '結果', '初速度が足りません。最上点に達する前に速度が0になり、振り子運動をするか、途中で糸がたるみる。',
+          addStep('result', '結果', '初速度が足りません。最上点に達する前に速度が0になり、振り子運動をするか、途中で糸がたるむ。',
             `v_{top}^2 \\le 0`);
         }
       }
 
       else if (type === 'momentum') {
-        const m1 = getVal('m1'), v1 = getVal('v1'), m2 = getVal('m2'), v2 = getVal('v2'), e = getVal('e');
+        const m1 = getSym('m1'), v1 = getSym('v1'), m2 = getSym('m2'), v2 = getSym('v2'), e = getSym('e');
         
+        const P_init = nerdamer(`(${m1.text()}) * (${v1.text()}) + (${m2.text()}) * (${v2.text()})`);
         addStep('normal', '1. 衝突前の全運動量', '各物体の運動量の和を求める。',
-          `P_{init} = m_1 v_1 + m_2 v_2 = ${formatNum(m1*v1 + m2*v2)} \\text{ kg} \\cdot \\text{m/s}`);
+          `P_{init} = m_1 v_1 + m_2 v_2 = ${getTeX(P_init)} \\approx ${getDec(P_init)} \\text{ kg} \\cdot \\text{m/s}`);
           
         addStep('important', '2. 運動量保存則', '外力が働かない場合、衝突前後で系の全運動量は保存される（衝突後の速度を $v_1^\\prime, v_2^\\prime$ とする）。',
           `m_1 v_1 + m_2 v_2 = m_1 v_1^\\prime + m_2 v_2^\\prime`);
@@ -1390,65 +1433,71 @@ var psApp = (function() {
         addStep('important', '3. 反発係数（はねかえり係数）の式', '近づく速さと遠ざかる速さの比 $e$ の関係式を立てる。',
           `e = -\\frac{v_1^\\prime - v_2^\\prime}{v_1 - v_2} \\quad \\Rightarrow \\quad v_1^\\prime - v_2^\\prime = -e(v_1 - v_2)`);
           
-        const P_init = m1*v1 + m2*v2;
-        const delta_v = -e * (v1 - v2); 
+        const delta_v = nerdamer(`-(${e.text()}) * ((${v1.text()}) - (${v2.text()}))`); 
         
-        const v1_post = (P_init + m2*delta_v) / (m1 + m2);
-        const v2_post = v1_post - delta_v;
+        const v1_post = nerdamer(`(${P_init.text()} + (${m2.text()}) * (${delta_v.text()})) / ((${m1.text()}) + (${m2.text()}))`);
+        const v2_post = nerdamer(`(${v1_post.text()}) - (${delta_v.text()})`);
         
         addStep('result', '4. 衝突後の速度', '連立方程式を解いて、それぞれの衝突後の速度を求める。',
-          `\\begin{aligned} v_1^\\prime &= ${formatNum(v1_post)} \\text{ m/s} \\\\ v_2^\\prime &= ${formatNum(v2_post)} \\text{ m/s} \\end{aligned}`);
+          `\\begin{aligned} v_1^\\prime &= ${getTeX(v1_post)} \\approx ${getDec(v1_post)} \\text{ m/s} \\\\ v_2^\\prime &= ${getTeX(v2_post)} \\approx ${getDec(v2_post)} \\text{ m/s} \\end{aligned}`);
           
-        const E_init = 0.5*m1*v1*v1 + 0.5*m2*v2*v2;
-        const E_post = 0.5*m1*v1_post*v1_post + 0.5*m2*v2_post*v2_post;
+        const E_init = nerdamer(`1/2 * (${m1.text()}) * (${v1.text()})^2 + 1/2 * (${m2.text()}) * (${v2.text()})^2`);
+        const E_post = nerdamer(`1/2 * (${m1.text()}) * (${v1_post.text()})^2 + 1/2 * (${m2.text()}) * (${v2_post.text()})^2`);
+        const dE = nerdamer(`(${E_post.text()}) - (${E_init.text()})`);
+        
         addStep('normal', '5. 力学的エネルギーの損失', '弾性衝突（$e=1$）以外では、衝突によりエネルギーが失われる。',
-          `\\Delta E = E_{post} - E_{init} = ${formatNum(E_post - E_init)} \\text{ J}`);
+          `\\Delta E = E_{post} - E_{init} = ${getTeX(dE)} \\approx ${getDec(dE)} \\text{ J}`);
       }
       else if (type === 'spring') {
-        const m = getVal('m'), k = getVal('k'), A = getVal('A');
+        const m = getSym('m'), k = getSym('k'), A = getSym('A');
         
-        const omega = Math.sqrt(k / m);
+        const omega = nerdamer(`sqrt((${k.text()}) / (${m.text()}))`);
         addStep('normal', '1. 角振動数 $\\omega$', 'ばね定数 $k$ と質量 $m$ から単振動の角振動数を求める。',
-          `\\omega = \\sqrt{\\frac{k}{m}} = ${formatNum(omega)} \\text{ rad/s}`);
+          `\\omega = \\sqrt{\\frac{k}{m}} = ${getTeX(omega)} \\approx ${getDec(omega)} \\text{ rad/s}`);
           
-        const T = 2 * Math.PI / omega;
+        const T = nerdamer(`2 * pi / (${omega.text()})`);
+        const f = nerdamer(`1 / (${T.text()})`);
         addStep('result', '2. 周期 $T$ と振動数 $f$', '1往復する時間と、1秒あたりの振動回数を求める。',
-          `\\begin{aligned} T &= \\frac{2\\pi}{\\omega} = ${formatNum(T)} \\text{ s} \\\\ f &= \\frac{1}{T} = ${formatNum(1/T)} \\text{ Hz} \\end{aligned}`);
+          `\\begin{aligned} T &= \\frac{2\\pi}{\\omega} = ${getTeX(T)} \\approx ${getDec(T)} \\text{ s} \\\\ f &= \\frac{1}{T} = ${getTeX(f)} \\approx ${getDec(f)} \\text{ Hz} \\end{aligned}`);
           
-        const vmax = A * omega;
-        const amax = A * omega * omega;
+        const vmax = nerdamer(`(${A.text()}) * (${omega.text()})`);
+        const amax = nerdamer(`(${A.text()}) * (${omega.text()})^2`);
         addStep('normal', '3. 最大速度と最大加速度', '速度は振動の中心で最大となり、加速度は両端（振幅の位置）で最大となる。',
-          `\\begin{aligned} v_{max} &= A\\omega = ${formatNum(vmax)} \\text{ m/s} \\\\ a_{max} &= A\\omega^2 = ${formatNum(amax)} \\text{ m/s}^2 \\end{aligned}`);
+          `\\begin{aligned} v_{max} &= A\\omega = ${getTeX(vmax)} \\approx ${getDec(vmax)} \\text{ m/s} \\\\ a_{max} &= A\\omega^2 = ${getTeX(amax)} \\approx ${getDec(amax)} \\text{ m/s}^2 \\end{aligned}`);
           
-        const E = 0.5 * k * A * A;
+        const E = nerdamer(`1/2 * (${k.text()}) * (${A.text()})^2`);
         addStep('important', '4. 力学的エネルギー', '単振動における力学的エネルギーは常に一定であり、振幅の端での弾性エネルギーに等しい。',
-          `E = \\frac{1}{2}kA^2 = \\frac{1}{2}mv_{max}^2 = ${formatNum(E)} \\text{ J}`);
+          `E = \\frac{1}{2}kA^2 = \\frac{1}{2}mv_{max}^2 = ${getTeX(E)} \\approx ${getDec(E)} \\text{ J}`);
       }
       else if (type === 'doppler') {
-        const f0 = getVal('f0'), V = getVal('V'), vs = getVal('vs'), vo = getVal('vo');
+        const f0 = getSym('f0'), V = getSym('V'), vs = getSym('vs'), vo = getSym('vo');
         
         addStep('important', '1. ドップラー効果の基本公式', '音源と観測者が動く場合の観測振動数 $f$ の公式を立てる。音源から観測者に向かう向きを正とするのが一般的だが、ここでは右向きを正とする。',
           `f = f_0 \\frac{V - v_o}{V - v_s}`);
           
-        if (V <= Math.abs(vs) || V <= Math.abs(vo)) {
+        const V_val = Number(V.evaluate().text());
+        const vs_val = Number(vs.evaluate().text());
+        const vo_val = Number(vo.evaluate().text());
+        
+        if (V_val <= Math.abs(vs_val) || V_val <= Math.abs(vo_val)) {
           addStep('important', '警告: 音速超え', '音速を超える設定になっているため、通常のドップラー効果の公式は適用できない衝撃波の領域となる。', '');
         } else {
-          const f_obs = f0 * (V - vo) / (V - vs);
+          const f_obs = nerdamer(`(${f0.text()}) * ((${V.text()}) - (${vo.text()})) / ((${V.text()}) - (${vs.text()}))`);
           addStep('result', '2. 観測される振動数', '公式に値を代入して計算する。',
-            `f = ${formatNum(f0)} \\times \\frac{${formatNum(V)} - ${formatNum(vo)}}{${formatNum(V)} - ${formatNum(vs)}} = ${formatNum(f_obs)} \\text{ Hz}`);
+            `f = ${getTeX(f0)} \\times \\frac{${getTeX(V)} - ${getTeX(vo)}}{${getTeX(V)} - ${getTeX(vs)}} = ${getTeX(f_obs)} \\approx ${getDec(f_obs)} \\text{ Hz}`);
             
-          const lambda_front = (V - vs) / f0;
-          const lambda_back = (V + vs) / f0;
+          const lambda_front = nerdamer(`((${V.text()}) - (${vs.text()})) / (${f0.text()})`);
+          const lambda_back = nerdamer(`((${V.text()}) + (${vs.text()})) / (${f0.text()})`);
           addStep('normal', '3. 音源の前方と後方の波長', '音源が動くことで、前方の波長は短縮され、後方の波長は引き伸ばされる。',
-            `\\begin{aligned} \\lambda_{front} &= \\frac{V - v_s}{f_0} = ${formatNum(lambda_front)} \\text{ m} \\\\ \\lambda_{back} &= \\frac{V + v_s}{f_0} = ${formatNum(lambda_back)} \\text{ m} \\end{aligned}`);
+            `\\begin{aligned} \\lambda_{front} &= \\frac{V - v_s}{f_0} = ${getTeX(lambda_front)} \\approx ${getDec(lambda_front)} \\text{ m} \\\\ \\lambda_{back} &= \\frac{V + v_s}{f_0} = ${getTeX(lambda_back)} \\approx ${getDec(lambda_back)} \\text{ m} \\end{aligned}`);
         }
       }
       else if (type === 'two_body') {
+        const mA = getSym('mA'), mB = getSym('mB'), mu = getSym('mu'), g = getSym('g');
         
-        const mA = getVal('mA'), mB = getVal('mB'), mu = getVal('mu'), g = getVal('g');
-        
+        const f_k = nerdamer(`(${mu.text()}) * (${mA.text()}) * (${g.text()})`);
         addStep('normal', '1. 摩擦力の計算', '台上の物体A（質量 $m_A$）に働く動摩擦力 $f_k$ を求める。',
-          `f_k = \\mu N = \\mu m_A g = ${formatNum(mu * mA * g)} \\text{ N}`);
+          `f_k = \\mu N = \\mu m_A g = ${getTeX(f_k)} \\approx ${getDec(f_k)} \\text{ N}`);
           
         addStep('important', '2. 運動方程式の立式', '2つの物体が同じ加速度 $a$ で動くとし、糸の張力を $T$ としてそれぞれの運動方程式を立てる。',
           `\\begin{aligned} \\text{A:} \\quad m_A a &= T - \\mu m_A g \\\\ \\text{B:} \\quad m_B a &= m_B g - T \\end{aligned}`);
@@ -1456,14 +1505,16 @@ var psApp = (function() {
         addStep('normal', '3. 加速度 $a$ の導出', '2式を足し合わせると張力 $T$ が消去され、系全体の運動方程式となる。',
           `(m_A + m_B)a = m_B g - \\mu m_A g`);
           
-        const a = (mB * g - mu * mA * g) / (mA + mB);
-        if (a > 0) {
+        const a = nerdamer(`((${mB.text()}) * (${g.text()}) - (${mu.text()}) * (${mA.text()}) * (${g.text()})) / ((${mA.text()}) + (${mB.text()}))`);
+        const a_val = Number(a.evaluate().text());
+        
+        if (a_val > 0) {
           addStep('result', '系の加速度 (Acceleration)', '方程式を解く。',
-            `a = \\frac{m_B - \\mu m_A}{m_A + m_B}g = ${formatNum(a)} \\text{ m/s}^2`);
+            `a = \\frac{m_B - \\mu m_A}{m_A + m_B}g = ${getTeX(a)} \\approx ${getDec(a)} \\text{ m/s}^2`);
             
-          const T_tension = mB * (g - a);
+          const T_tension = nerdamer(`(${mB.text()}) * ((${g.text()}) - (${a.text()}))`);
           addStep('result', '糸の張力 (Tension)', '求めた $a$ を元の運動方程式に代入する。',
-            `T = m_B (g - a) = ${formatNum(T_tension)} \\text{ N}`);
+            `T = m_B (g - a) = ${getTeX(T_tension)} \\approx ${getDec(T_tension)} \\text{ N}`);
         } else {
           addStep('result', '系の加速度 (Acceleration)', '物体Bの重力よりも物体Aの最大静止摩擦力の方が大きいため、系は動かない（$a=0$）。',
             `a = 0 \\text{ m/s}^2`);
