@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "58"
+    "wordCount": "78"
   }]
   </script>
 
@@ -1042,10 +1042,14 @@
         <div class="ps-section-title">PROBLEM SETUP</div>
         
         <select class="ps-select" id="ps-problem-type" onchange="psApp.loadInputs()">
-          <option value="projectile">斜方投射 (Projectile Motion)</option>
-          <option value="incline">斜面上の運動 (Inclined Plane)</option>
-          <option value="energy">力学的エネルギー保存 (Energy Conservation)</option>
-          <option value="circular">鉛直面内の円運動 (Vertical Circular)</option>
+          <option value="projectile">1. 斜方投射 (Projectile Motion)</option>
+          <option value="incline">2. 斜面上の運動 (Inclined Plane)</option>
+          <option value="energy">3. 力学的エネルギー保存 (Energy Conservation)</option>
+          <option value="circular">4. 鉛直面内の円運動 (Vertical Circular)</option>
+          <option value="momentum">5. 1次元衝突と運動量保存 (1D Collision)</option>
+          <option value="spring">6. 水平ばね振り子 (Spring Oscillator)</option>
+          <option value="doppler">7. ドップラー効果 (Doppler Effect)</option>
+          <option value="two_body">8. 糸で結ばれた2物体の運動 (Connected Bodies)</option>
         </select>
 
         <div id="ps-inputs-container">
@@ -1064,7 +1068,7 @@
             <line x1="14" y1="10" x2="21" y2="3"></line>
             <line x1="3" y1="21" x2="10" y2="14"></line>
           </svg>
-          <p>条件を入力し、[ANALYZE & SOLVE] を実行してください</p>
+          <p>条件を入力し、[ANALYZE & SOLVE] を実行する</p>
           <span style="font-size:0.7rem; color:#333;">AWAITING PARAMETERS...</span>
         </div>
         
@@ -1115,6 +1119,42 @@ var psApp = (function() {
         { id: "m", sym: "m", name: "質量", unit: "kg", val: "0.5" },
         { id: "r", sym: "r", name: "糸の長さ(半径)", unit: "m", val: "1.0" },
         { id: "v0", sym: "v_0", name: "最下点での速度", unit: "m/s", val: "5.0" },
+        { id: "g", sym: "g", name: "重力加速度", unit: "m/s²", val: "9.8" }
+      ]
+    },
+    momentum: {
+      title: "1次元衝突と運動量保存 (1D Collision)",
+      inputs: [
+        { id: "m1", sym: "m_1", name: "物体1の質量", unit: "kg", val: "2.0" },
+        { id: "v1", sym: "v_1", name: "物体1の初速度", unit: "m/s", val: "5.0" },
+        { id: "m2", sym: "m_2", name: "物体2の質量", unit: "kg", val: "3.0" },
+        { id: "v2", sym: "v_2", name: "物体2の初速度", unit: "m/s", val: "-2.0" },
+        { id: "e", sym: "e", name: "反発係数", unit: "", val: "0.5" }
+      ]
+    },
+    spring: {
+      title: "水平ばね振り子の単振動 (Spring Oscillator)",
+      inputs: [
+        { id: "m", sym: "m", name: "質量", unit: "kg", val: "1.5" },
+        { id: "k", sym: "k", name: "ばね定数", unit: "N/m", val: "60.0" },
+        { id: "A", sym: "A", name: "振幅", unit: "m", val: "0.2" }
+      ]
+    },
+    doppler: {
+      title: "ドップラー効果 (Doppler Effect)",
+      inputs: [
+        { id: "f0", sym: "f_0", name: "音源の振動数", unit: "Hz", val: "500" },
+        { id: "V", sym: "V", name: "音速", unit: "m/s", val: "340" },
+        { id: "vs", sym: "v_s", name: "音源の速度(右向+)", unit: "m/s", val: "20" },
+        { id: "vo", sym: "v_o", name: "観測者の速度(右向+)", unit: "m/s", val: "0" }
+      ]
+    },
+    two_body: {
+      title: "糸で結ばれた2物体の運動 (Connected Bodies)",
+      inputs: [
+        { id: "mA", sym: "m_A", name: "台上の物体A質量", unit: "kg", val: "3.0" },
+        { id: "mB", sym: "m_B", name: "宙吊り物体B質量", unit: "kg", val: "2.0" },
+        { id: "mu", sym: "\\mu", name: "Aと台の動摩擦係数", unit: "", val: "0.2" },
         { id: "g", sym: "g", name: "重力加速度", unit: "m/s²", val: "9.8" }
       ]
     }
@@ -1170,12 +1210,29 @@ var psApp = (function() {
     if (type === 'important') typeLabel = "LAW / EQUATION";
     if (type === 'result') typeLabel = "FINAL ANSWER";
 
+    const parseMath = (text) => {
+      let t = text;
+      const matches = t.match(/\$(.+?)\$/g);
+      if(matches) {
+         matches.forEach(m => {
+            try {
+              const h = katex.renderToString(m.replace(/\$/g, ''), { throwOnError: false, displayMode: false });
+              t = t.replace(m, h);
+            } catch(e) {}
+         });
+      }
+      return t;
+    };
+
+    let parsedTitle = parseMath(title);
+    let parsedDesc = parseMath(desc);
+
     step.innerHTML = `
       <div class="ps-step-header">
         <span class="ps-step-badge">${typeLabel}</span>
-        <span class="ps-step-title">${title}</span>
+        <span class="ps-step-title">${parsedTitle}</span>
       </div>
-      <div class="ps-step-desc">${desc}</div>
+      <div class="ps-step-desc">${parsedDesc}</div>
       ${formula ? `<div class="ps-formula"></div>` : ''}
     `;
     container.appendChild(step);
@@ -1204,31 +1261,31 @@ var psApp = (function() {
         const v0x = v0 * Math.cos(rad);
         const v0y = v0 * Math.sin(rad);
 
-        addStep('normal', '1. 初期条件と速度の分解', '初速度 $v_0$ を水平方向（x）と鉛直方向（y）に分解します。', 
+        addStep('normal', '1. 初期条件と速度の分解', '初速度 $v_0$ を水平方向（x）と鉛直方向（y）に分解する。', 
           `\\begin{aligned} v_{0x} &= v_0 \\cos\\theta = ${formatNum(v0x)} \\text{ m/s} \\\\ v_{0y} &= v_0 \\sin\\theta = ${formatNum(v0y)} \\text{ m/s} \\end{aligned}`);
         
-        addStep('important', '2. 運動方程式', '水平方向には力が働かず等速直線運動、鉛直方向には重力 $-mg$ が働き等加速度運動をします。',
+        addStep('important', '2. 運動方程式', '水平方向には力が働かず等速直線運動、鉛直方向には重力 $-mg$ が働き等加速度運動をする。',
           `\\begin{aligned} m a_x &= 0 \\quad \\Rightarrow \\quad a_x = 0 \\\\ m a_y &= -mg \\quad \\Rightarrow \\quad a_y = -g \\end{aligned}`);
         
-        addStep('normal', '3. 任意時刻 $t$ での位置と速度', '加速度を積分して、時刻 $t$ における速度 $v$ と位置 $(x, y)$ を求めます。',
+        addStep('normal', '3. 任意時刻 $t$ での位置と速度', '加速度を積分して、時刻 $t$ における速度 $v$ と位置 $(x, y)$ を求める。',
           `\\begin{aligned} v_x(t) &= v_{0x} \\\\ v_y(t) &= v_{0y} - gt \\\\ x(t) &= v_{0x} t \\\\ y(t) &= h_0 + v_{0y} t - \\frac{1}{2}gt^2 \\end{aligned}`);
         
         const t_top = v0y / g;
         const y_max = h0 + v0y * t_top - 0.5 * g * t_top * t_top;
-        addStep('normal', '4. 最高点に達する時間と高さ', '最高点では鉛直方向の速度が $v_y = 0$ になります。',
+        addStep('normal', '4. 最高点に達する時間と高さ', '最高点では鉛直方向の速度が $v_y = 0$ になる。',
           `0 = v_{0y} - g t_{top} \\quad \\Rightarrow \\quad t_{top} = \\frac{v_{0y}}{g} = ${formatNum(t_top)} \\text{ s}`);
-        addStep('result', '最高点 (Maximum Height)', '求めた $t_{top}$ を $y(t)$ に代入します。',
+        addStep('result', '最高点 (Maximum Height)', '求めた $t_{top}$ を $y(t)$ に代入する。',
           `H = h_0 + \\frac{v_{0y}^2}{2g} = ${formatNum(y_max)} \\text{ m}`);
 
         if (h0 === 0) {
           const t_end = 2 * t_top;
           const x_max = v0x * t_end;
-          addStep('normal', '5. 水平到達距離', '再び $y=0$ になるのは $t = 2 t_{top}$ のときです。',
+          addStep('normal', '5. 水平到達距離', '再び $y=0$ になるのは $t = 2 t_{top}$ のときである。',
             `t_{end} = \\frac{2v_{0y}}{g} = ${formatNum(t_end)} \\text{ s}`);
-          addStep('result', '水平到達距離 (Range)', 'この時間を水平位置の式に代入します。',
+          addStep('result', '水平到達距離 (Range)', 'この時間を水平位置の式に代入する。',
             `L = v_{0x} t_{end} = \\frac{v_0^2 \\sin(2\\theta)}{g} = ${formatNum(x_max)} \\text{ m}`);
         } else {
-           addStep('normal', '5. 水平到達距離', '$y(t) = 0$ となる解（二次方程式）を求めます。',
+           addStep('normal', '5. 水平到達距離', '$y(t) = 0$ となる解（二次方程式）を求める。',
             `0 = ${h0} + ${formatNum(v0y)} t - ${formatNum(0.5*g)} t^2`);
            
            const a = -0.5*g, b = v0y, c = h0;
@@ -1249,26 +1306,26 @@ var psApp = (function() {
         const Wx = m * g * Math.sin(rad);
         const Wy = m * g * Math.cos(rad);
 
-        addStep('normal', '1. 重力の分解', '重力 $mg$ を斜面に平行な成分(x)と垂直な成分(y)に分解します。',
+        addStep('normal', '1. 重力の分解', '重力 $mg$ を斜面に平行な成分(x)と垂直な成分(y)に分解する。',
           `\\begin{aligned} W_x &= mg \\sin\\theta = ${formatNum(Wx)} \\text{ N} \\\\ W_y &= mg \\cos\\theta = ${formatNum(Wy)} \\text{ N} \\end{aligned}`);
         
-        addStep('important', '2. 垂直抗力', '斜面に垂直な方向(y)では力のつりあいが成り立ちます。',
+        addStep('important', '2. 垂直抗力', '斜面に垂直な方向(y)では力のつりあいが成り立ちる。',
           `N - W_y = 0 \\quad \\Rightarrow \\quad N = mg \\cos\\theta = ${formatNum(Wy)} \\text{ N}`);
         
         let f_k = mu * Wy;
-        addStep('normal', '3. 動摩擦力', '滑り降りているため、運動の逆向き（斜面上向き）に動摩擦力が働きます。',
+        addStep('normal', '3. 動摩擦力', '滑り降りているため、運動の逆向き（斜面上向き）に動摩擦力が働く。',
           `f_k = \\mu N = \\mu mg \\cos\\theta = ${formatNum(f_k)} \\text{ N}`);
         
         const F_net = Wx - f_k;
-        addStep('important', '4. 斜面方向の運動方程式', '斜面下向きを正としてニュートンの運動方程式を立てます。',
+        addStep('important', '4. 斜面方向の運動方程式', '斜面下向きを正としてニュートンの運動方程式を立てる。',
           `ma = W_x - f_k \\quad \\Rightarrow \\quad ma = mg \\sin\\theta - \\mu mg \\cos\\theta`);
         
         const a = F_net / m;
         if (a > 0) {
-          addStep('result', '物体の加速度 (Acceleration)', '方程式を $a$ について解きます。質量 $m$ は両辺で約分されます。',
+          addStep('result', '物体の加速度 (Acceleration)', '方程式を $a$ について解く。質量 $m$ は両辺で約分される。',
             `a = g(\\sin\\theta - \\mu \\cos\\theta) = ${formatNum(a)} \\text{ m/s}^2`);
         } else {
-          addStep('result', '物体の加速度 (Acceleration)', '計算上の加速度が0以下のため、物体は滑り出さない（静かに置いた場合）か、減速して止まります。',
+          addStep('result', '物体の加速度 (Acceleration)', '計算上の加速度が0以下のため、物体は滑り出さない（静かに置いた場合）か、減速して止まりる。',
             `a = ${formatNum(a)} \\text{ m/s}^2 \\quad (\\text{Deceleration})`);
         }
       }
@@ -1276,29 +1333,29 @@ var psApp = (function() {
         const m = getVal('m'), h = getVal('h'), v0 = getVal('v0'), g = getVal('g');
         const E_init = 0.5 * m * v0 * v0 + m * g * h;
         
-        addStep('normal', '1. 初期状態の力学的エネルギー', '高さ $h$ にあるときの運動エネルギー $K$ と位置エネルギー $U$ の和を求めます。',
+        addStep('normal', '1. 初期状態の力学的エネルギー', '高さ $h$ にあるときの運動エネルギー $K$ と位置エネルギー $U$ の和を求める。',
           `E_1 = \\frac{1}{2}mv_0^2 + mgh = ${formatNum(E_init)} \\text{ J}`);
         
-        addStep('important', '2. 力学的エネルギー保存則', '空気抵抗等の非保存力が働かない場合、どの地点でも力学的エネルギーの和は一定です。着地点（高さ0）での速度を $v_1$ とします。',
+        addStep('important', '2. 力学的エネルギー保存則', '空気抵抗等の非保存力が働かない場合、どの地点でも力学的エネルギーの和は一定である。着地点（高さ0）での速度を $v_1$ とする。',
           `E_1 = E_2 \\quad \\Rightarrow \\quad \\frac{1}{2}mv_0^2 + mgh = \\frac{1}{2}mv_1^2 + 0`);
         
         const v1 = Math.sqrt(Math.max(0, 2 * (E_init / m)));
-        addStep('result', '着地時の速度 (Final Velocity)', '式を $v_1$ について解きます。質量 $m$ は両辺で約分されます。',
+        addStep('result', '着地時の速度 (Final Velocity)', '式を $v_1$ について解く。質量 $m$ は両辺で約分される。',
           `v_1 = \\sqrt{v_0^2 + 2gh} = ${formatNum(v1)} \\text{ m/s}`);
       }
       else if (type === 'circular') {
         const m = getVal('m'), r = getVal('r'), v0 = getVal('v0'), g = getVal('g');
         
-        addStep('normal', '1. 最下点での張力', '最下点での速さが $v_0$ のとき、円運動の中心（上向き）に向かう向心力が必要です。',
+        addStep('normal', '1. 最下点での張力', '最下点での速さが $v_0$ のとき、円運動の中心（上向き）に向かう向心力が必要である。',
           `T_{bottom} - mg = m\\frac{v_0^2}{r}`);
         const T0 = m * g + m * (v0 * v0) / r;
         addStep('result', '最下点の張力 (Tension at bottom)', '',
           `T_{bottom} = m\\left(g + \\frac{v_0^2}{r}\\right) = ${formatNum(T0)} \\text{ N}`);
 
-        addStep('important', '2. 力学的エネルギー保存則', '角度 $\\theta$（最下点から測る）の位置にあるときの速さ $v$ をエネルギー保存から求めます。高さの変化は $r(1-\\cos\\theta)$ です。',
+        addStep('important', '2. 力学的エネルギー保存則', '角度 $\\theta$（最下点から測る）の位置にあるときの速さ $v$ をエネルギー保存から求める。高さの変化は $r(1-\\cos\\theta)$ である。',
           `\\frac{1}{2}mv_0^2 = \\frac{1}{2}mv^2 + mgr(1-\\cos\\theta)`);
         
-        addStep('normal', '3. 任意の角度 $\\theta$ での張力', '半径方向の運動方程式を立てます。',
+        addStep('normal', '3. 任意の角度 $\\theta$ での張力', '半径方向の運動方程式を立てる。',
           `T(\\theta) - mg\\cos\\theta = m\\frac{v^2}{r}`);
         
         
@@ -1306,43 +1363,117 @@ var psApp = (function() {
         if (v_top_sq > 0) {
           const v_top = Math.sqrt(v_top_sq);
           const T_top = m * v_top_sq / r - m * g;
-          addStep('normal', '4. 最上点への到達判定', '最上点で $v > 0$ かつ張力 $T > 0$ となるか確認します（糸がたるまない条件）。',
+          addStep('normal', '4. 最上点への到達判定', '最上点で $v > 0$ かつ張力 $T > 0$ となるか確認する（糸がたるまない条件）。',
             `v_{top}^2 = v_0^2 - 4gr = ${formatNum(v_top_sq)} > 0`);
           if (T_top >= 0) {
-             addStep('result', '最上点の張力 (Tension at top)', '物体は糸がたるむことなく円運動を一周します。',
+             addStep('result', '最上点の張力 (Tension at top)', '物体は糸がたるむことなく円運動を一周する。',
               `T_{top} = m\\frac{v_{top}^2}{r} - mg = ${formatNum(T_top)} \\text{ N}`);
           } else {
-             addStep('result', '結果', '最上点に達する前に張力が0になり、糸がたるんで放物運動に移ります。',
+             addStep('result', '結果', '最上点に達する前に張力が0になり、糸がたるんで放物運動に移りる。',
               `T_{top} < 0 \\text{ (Tension goes negative)}`);
           }
         } else {
-          addStep('result', '結果', '初速度が足りません。最上点に達する前に速度が0になり、振り子運動をするか、途中で糸がたるみます。',
+          addStep('result', '結果', '初速度が足りません。最上点に達する前に速度が0になり、振り子運動をするか、途中で糸がたるみる。',
             `v_{top}^2 \\le 0`);
+        }
+      }
+
+      else if (type === 'momentum') {
+        const m1 = getVal('m1'), v1 = getVal('v1'), m2 = getVal('m2'), v2 = getVal('v2'), e = getVal('e');
+        
+        addStep('normal', '1. 衝突前の全運動量', '各物体の運動量の和を求める。',
+          `P_{init} = m_1 v_1 + m_2 v_2 = ${formatNum(m1*v1 + m2*v2)} \\text{ kg} \\cdot \\text{m/s}`);
+          
+        addStep('important', '2. 運動量保存則', '外力が働かない場合、衝突前後で系の全運動量は保存される（衝突後の速度を $v_1^\\prime, v_2^\\prime$ とする）。',
+          `m_1 v_1 + m_2 v_2 = m_1 v_1^\\prime + m_2 v_2^\\prime`);
+          
+        addStep('important', '3. 反発係数（はねかえり係数）の式', '近づく速さと遠ざかる速さの比 $e$ の関係式を立てる。',
+          `e = -\\frac{v_1^\\prime - v_2^\\prime}{v_1 - v_2} \\quad \\Rightarrow \\quad v_1^\\prime - v_2^\\prime = -e(v_1 - v_2)`);
+          
+        const P_init = m1*v1 + m2*v2;
+        const delta_v = -e * (v1 - v2); 
+        
+        const v1_post = (P_init + m2*delta_v) / (m1 + m2);
+        const v2_post = v1_post - delta_v;
+        
+        addStep('result', '4. 衝突後の速度', '連立方程式を解いて、それぞれの衝突後の速度を求める。',
+          `\\begin{aligned} v_1^\\prime &= ${formatNum(v1_post)} \\text{ m/s} \\\\ v_2^\\prime &= ${formatNum(v2_post)} \\text{ m/s} \\end{aligned}`);
+          
+        const E_init = 0.5*m1*v1*v1 + 0.5*m2*v2*v2;
+        const E_post = 0.5*m1*v1_post*v1_post + 0.5*m2*v2_post*v2_post;
+        addStep('normal', '5. 力学的エネルギーの損失', '弾性衝突（$e=1$）以外では、衝突によりエネルギーが失われる。',
+          `\\Delta E = E_{post} - E_{init} = ${formatNum(E_post - E_init)} \\text{ J}`);
+      }
+      else if (type === 'spring') {
+        const m = getVal('m'), k = getVal('k'), A = getVal('A');
+        
+        const omega = Math.sqrt(k / m);
+        addStep('normal', '1. 角振動数 $\\omega$', 'ばね定数 $k$ と質量 $m$ から単振動の角振動数を求める。',
+          `\\omega = \\sqrt{\\frac{k}{m}} = ${formatNum(omega)} \\text{ rad/s}`);
+          
+        const T = 2 * Math.PI / omega;
+        addStep('result', '2. 周期 $T$ と振動数 $f$', '1往復する時間と、1秒あたりの振動回数を求める。',
+          `\\begin{aligned} T &= \\frac{2\\pi}{\\omega} = ${formatNum(T)} \\text{ s} \\\\ f &= \\frac{1}{T} = ${formatNum(1/T)} \\text{ Hz} \\end{aligned}`);
+          
+        const vmax = A * omega;
+        const amax = A * omega * omega;
+        addStep('normal', '3. 最大速度と最大加速度', '速度は振動の中心で最大となり、加速度は両端（振幅の位置）で最大となる。',
+          `\\begin{aligned} v_{max} &= A\\omega = ${formatNum(vmax)} \\text{ m/s} \\\\ a_{max} &= A\\omega^2 = ${formatNum(amax)} \\text{ m/s}^2 \\end{aligned}`);
+          
+        const E = 0.5 * k * A * A;
+        addStep('important', '4. 力学的エネルギー', '単振動における力学的エネルギーは常に一定であり、振幅の端での弾性エネルギーに等しい。',
+          `E = \\frac{1}{2}kA^2 = \\frac{1}{2}mv_{max}^2 = ${formatNum(E)} \\text{ J}`);
+      }
+      else if (type === 'doppler') {
+        const f0 = getVal('f0'), V = getVal('V'), vs = getVal('vs'), vo = getVal('vo');
+        
+        addStep('important', '1. ドップラー効果の基本公式', '音源と観測者が動く場合の観測振動数 $f$ の公式を立てる。音源から観測者に向かう向きを正とするのが一般的だが、ここでは右向きを正とする。',
+          `f = f_0 \\frac{V - v_o}{V - v_s}`);
+          
+        if (V <= Math.abs(vs) || V <= Math.abs(vo)) {
+          addStep('important', '警告: 音速超え', '音速を超える設定になっているため、通常のドップラー効果の公式は適用できない衝撃波の領域となる。', '');
+        } else {
+          const f_obs = f0 * (V - vo) / (V - vs);
+          addStep('result', '2. 観測される振動数', '公式に値を代入して計算する。',
+            `f = ${formatNum(f0)} \\times \\frac{${formatNum(V)} - ${formatNum(vo)}}{${formatNum(V)} - ${formatNum(vs)}} = ${formatNum(f_obs)} \\text{ Hz}`);
+            
+          const lambda_front = (V - vs) / f0;
+          const lambda_back = (V + vs) / f0;
+          addStep('normal', '3. 音源の前方と後方の波長', '音源が動くことで、前方の波長は短縮され、後方の波長は引き伸ばされる。',
+            `\\begin{aligned} \\lambda_{front} &= \\frac{V - v_s}{f_0} = ${formatNum(lambda_front)} \\text{ m} \\\\ \\lambda_{back} &= \\frac{V + v_s}{f_0} = ${formatNum(lambda_back)} \\text{ m} \\end{aligned}`);
+        }
+      }
+      else if (type === 'two_body') {
+        
+        const mA = getVal('mA'), mB = getVal('mB'), mu = getVal('mu'), g = getVal('g');
+        
+        addStep('normal', '1. 摩擦力の計算', '台上の物体A（質量 $m_A$）に働く動摩擦力 $f_k$ を求める。',
+          `f_k = \\mu N = \\mu m_A g = ${formatNum(mu * mA * g)} \\text{ N}`);
+          
+        addStep('important', '2. 運動方程式の立式', '2つの物体が同じ加速度 $a$ で動くとし、糸の張力を $T$ としてそれぞれの運動方程式を立てる。',
+          `\\begin{aligned} \\text{A:} \\quad m_A a &= T - \\mu m_A g \\\\ \\text{B:} \\quad m_B a &= m_B g - T \\end{aligned}`);
+          
+        addStep('normal', '3. 加速度 $a$ の導出', '2式を足し合わせると張力 $T$ が消去され、系全体の運動方程式となる。',
+          `(m_A + m_B)a = m_B g - \\mu m_A g`);
+          
+        const a = (mB * g - mu * mA * g) / (mA + mB);
+        if (a > 0) {
+          addStep('result', '系の加速度 (Acceleration)', '方程式を解く。',
+            `a = \\frac{m_B - \\mu m_A}{m_A + m_B}g = ${formatNum(a)} \\text{ m/s}^2`);
+            
+          const T_tension = mB * (g - a);
+          addStep('result', '糸の張力 (Tension)', '求めた $a$ を元の運動方程式に代入する。',
+            `T = m_B (g - a) = ${formatNum(T_tension)} \\text{ N}`);
+        } else {
+          addStep('result', '系の加速度 (Acceleration)', '物体Bの重力よりも物体Aの最大静止摩擦力の方が大きいため、系は動かない（$a=0$）。',
+            `a = 0 \\text{ m/s}^2`);
         }
       }
 
     } catch(e) {
       console.error(e);
-      addStep('important', 'ERROR', '計算中にエラーが発生しました。', '');
+      addStep('important', 'ERROR', '計算中にエラーが発生した。', '');
     }
-    
-    
-    setTimeout(() => {
-      solContainer.querySelectorAll('.ps-step-desc').forEach(el => {
-        let html = el.innerHTML;
-        const matches = html.match(/\$(.+?)\$/g);
-        if (matches) {
-          matches.forEach(m => {
-            const tex = m.replace(/\$/g, '');
-            try {
-              const r = katex.renderToString(tex, { throwOnError: false });
-              html = html.replace(m, r);
-            } catch(e){}
-          });
-          el.innerHTML = html;
-        }
-      });
-    }, 100);
   }
 
   
