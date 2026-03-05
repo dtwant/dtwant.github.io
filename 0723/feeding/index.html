@@ -1746,8 +1746,15 @@
     "use strict";
 
     
-    const BLOB_ID = '019cb583-43b9-7eda-b982-4fd4681a8178';
-    const BLOB_URL = `https://corsproxy.io/?https://jsonblob.com/api/jsonBlob/${BLOB_ID}`;
+    
+    const LS_BLOB_KEY = 'dt_feeding_log_blob_id';
+    let BLOB_ID = localStorage.getItem(LS_BLOB_KEY) || '019cb583-43b9-7eda-b982-4fd4681a8178';
+
+    
+    const getBlobUrl = () =>
+      `https://corsproxy.io/?url=${encodeURIComponent(`https://jsonblob.com/api/jsonBlob/${BLOB_ID}`)}`;
+    const getCreateUrl = () =>
+      `https://corsproxy.io/?url=${encodeURIComponent('https://jsonblob.com/api/jsonBlob')}`;
 
     const LS_KEY = 'dt_feeding_log_v1';
     const MARKS = ['', '\u25cb', '\u00d7', '\u25b3'];
@@ -1794,10 +1801,18 @@
       try {
         isSyncing = true;
         updateSyncBadge();
-        const res = await fetch(BLOB_URL, {
+        const res = await fetch(getBlobUrl(), {
           headers: { 'Accept': 'application/json' },
           cache: 'no-store'
         });
+
+        
+        if (res.status === 404) {
+          console.warn('[FEEDING_LOG] Blob expired (404). Creating new blob...');
+          await createNewBlob();
+          return;
+        }
+
         if (!res.ok) throw new Error('fetch failed: ' + res.status);
         const val = await res.json();
         data = {
@@ -1807,11 +1822,54 @@
         };
         saveToLocal();
         syncOk = true;
-        console.log('[FEEDING_LOG] Synced from jsonblob');
+        console.log('[FEEDING_LOG] Synced from jsonblob. BLOB_ID:', BLOB_ID);
       } catch(e) {
         console.error('[FEEDING_LOG] Fetch failed, using localStorage:', e);
         loadFromLocal();
         syncOk = false;
+      }
+      isSyncing = false;
+      updateSyncBadge();
+      render();
+    }
+
+    
+    async function createNewBlob() {
+      try {
+        const res = await fetch(getCreateUrl(), {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+        if (!res.ok) throw new Error('create failed: ' + res.status);
+
+        
+        
+        const location = res.headers.get('Location') || res.headers.get('location') || '';
+        const match = location.match(/([0-9a-f-]{30,})$/i) || location.match(/jsonBlob\/(\w+)/i);
+        if (match) {
+          BLOB_ID = match[1];
+          localStorage.setItem(LS_BLOB_KEY, BLOB_ID);
+          console.log('[FEEDING_LOG] New blob created! BLOB_ID:', BLOB_ID);
+          toast('✓ 新しいBlobを作成しました');
+        } else {
+          
+          try {
+            const body = await res.json();
+            console.log('[FEEDING_LOG] Create response body:', body);
+          } catch(_) {}
+          
+          console.warn('[FEEDING_LOG] Could not extract new BLOB_ID from Location header. Staying local.');
+          toast('⚠ Blob作成済・ID取得失敗 — ローカルで継続');
+        }
+        syncOk = true;
+      } catch(e) {
+        console.error('[FEEDING_LOG] createNewBlob failed:', e);
+        syncOk = false;
+        toast('✗ Blob作成に失敗しました');
       }
       isSyncing = false;
       updateSyncBadge();
@@ -1827,7 +1885,7 @@
         try {
           isSyncing = true;
           updateSyncBadge();
-          const res = await fetch(BLOB_URL, {
+          const res = await fetch(getBlobUrl(), {
             method: 'PUT',
             headers: { 
               'Accept': 'application/json',
@@ -1835,6 +1893,14 @@
             },
             body: JSON.stringify(data)
           });
+
+          
+          if (res.status === 404) {
+            console.warn('[FEEDING_LOG] PUT 404 — blob gone, recreating...');
+            await createNewBlob();
+            return;
+          }
+
           syncOk = res.ok;
           if (!res.ok) console.error('[FEEDING_LOG] Push failed:', res.status);
         } catch(e) {
@@ -2264,22 +2330,15 @@
           if (e.cancelable) e.preventDefault(); 
           const t = e.touches ? e.touches[0] : e;
           
-          let overItem = null;
-          let minDist = Infinity;
-          
           items.forEach(otherItem => {
             if (otherItem === draggedItem) return;
             otherItem.classList.remove('drag-over');
             const rect = otherItem.getBoundingClientRect();
             
             if (t.clientY > rect.top && t.clientY < rect.bottom) {
-                overItem = otherItem;
+                otherItem.classList.add('drag-over');
             }
           });
-
-          if (overItem) {
-            overItem.classList.add('drag-over');
-          }
         };
 
         const endDrag = (e) => {
@@ -2576,7 +2635,7 @@
               });
               clonedDoc.querySelectorAll('.fl-cell, th, td, .fl-date-col').forEach(el => {
                 el.style.letterSpacing = 'normal';
-                el.style.fontFamily = '"Zen Kaku Gothic New", "Helvetica Neue", Arial, sans-serif'; 
+                el.style.fontFamily = '"Zen Kaku Gothic New", "Helvetice Neue", Arial, sans-serif'; 
               });
             }
           });
@@ -2674,7 +2733,6 @@
     fetchFromBlob();
   })();
 </script>
-
 <hr>
 <p><small>※ 記録はJSONBlob経由でクラウド同期される. ステータスバッジが「SYNCED」ならオンライン同期中.</small></p>
 
