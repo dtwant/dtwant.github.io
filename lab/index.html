@@ -752,14 +752,14 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=M+PLUS+1+Code:wght@400;700&display=swap" rel="stylesheet">
-<!-- cyberpunk bg -->
+<!-- cyberpunk bg (fixed, z-index: -10) -->
 <div class="cyber-background">
   <div class="cyber-bg-image"></div>
   <div class="cyber-grid"></div>
   <div class="scanlines"></div>
   <div class="vignette"></div>
 </div>
-<!-- full width wrapper bypassing prose zooming -->
+<!-- コンテンツ本体 -->
 <div class="lab-full-width-wrapper not-prose">
   <div class="lab-container">
     <div class="cyber-terminal-box">
@@ -775,7 +775,6 @@
         <p class="typewriter-line3">> ALL SYSTEMS SECURE. READY FOR OPERATION<span class="blink">_</span></p>
       </div>
     </div>
-    <!-- grid -->
     <div class="lab-grid">
       
       <a href="/lab/mdeditor/" class="tool-card">
@@ -1078,47 +1077,64 @@
     </div>
   </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // mainとfooterを非表示（パンくず・h1・著作権をすべて消す）
+  const main   = document.querySelector('main');
+  const footer = document.querySelector('footer');
+  if (main)   main.style.display   = 'none';
+  if (footer) footer.style.display = 'none';
+
+  // body直下に移動
+  const bg      = document.querySelector('.cyber-background');
+  const wrapper = document.querySelector('.lab-full-width-wrapper');
+  if (bg)      document.body.appendChild(bg);
+  if (wrapper) document.body.appendChild(wrapper);
+});
+</script>
 <style>
-/* --- 空間・背景エフェクト --- */
-body {
+html, body {
   margin: 0;
+  padding: 0;
   background-color: #050510;
-  color: #e0f8ff;
+  overflow-x: hidden;
 }
+
+/* =============================================
+   背景エフェクト（固定、全画面）
+   ============================================= */
 .cyber-background {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
   z-index: -10;
   pointer-events: none;
   overflow: hidden;
-  background-color: #020205; /* Fallback */
+  background-color: #020205;
 }
 .cyber-bg-image {
   position: absolute;
-  top: -5%; left: -5%; width: 110%; height: 110%; /* 少し大きめにしてぼかす */
+  top: -5%; left: -5%; width: 110%; height: 110%;
   background-image: url('/img/cybercity_bg.png');
   background-size: cover;
   background-position: center;
-  filter: brightness(0.4) contrast(1.2) saturate(1.5) blur(3px); /* 背景を暗くして色を濃く、少しぼかす */
+  filter: brightness(0.4) contrast(1.2) saturate(1.5) blur(3px);
 }
 .cyber-grid {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 243, 255, 0.15) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 0, 85, 0.1) 1px, transparent 1px);
   background-size: 50px 50px;
   background-position: center top;
   transform: perspective(600px) rotateX(60deg) translateY(-100px) translateZ(-200px);
-  animation: grid-move 10s linear infinite; /* 少し速く */
+  animation: grid-move 10s linear infinite;
   opacity: 0.8;
   mix-blend-mode: color-dodge;
 }
 @keyframes grid-move {
-  0% { transform: perspective(600px) rotateX(60deg) translateY(0) translateZ(-200px); }
+  0%   { transform: perspective(600px) rotateX(60deg) translateY(0)   translateZ(-200px); }
   100% { transform: perspective(600px) rotateX(60deg) translateY(50px) translateZ(-200px); }
 }
 .scanlines {
@@ -1126,10 +1142,8 @@ body {
   top: 0; left: 0; width: 100%; height: 100%;
   background: linear-gradient(
     to bottom,
-    rgba(255,255,255,0),
-    rgba(255,255,255,0) 50%,
-    rgba(0,0,0,0.3) 50%,
-    rgba(0,0,0,0.3)
+    rgba(255,255,255,0), rgba(255,255,255,0) 50%,
+    rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.3)
   );
   background-size: 100% 4px;
   opacity: 0.3;
@@ -1143,35 +1157,47 @@ body {
   pointer-events: none;
   z-index: 2;
 }
-/* Themes container override */
+
+/* =============================================
+   ★ フル幅ラッパー（固定レイヤー、スクロール自前）
+   
+   position: fixed で Blowfish のすべての
+   レイアウト制約を完全に無視する。
+   Blowfish の header の z-index は通常 30 なので
+   ここは 20 にしてナビバーが上に来るようにする。
+   overflow-y: auto で自前スクロール。
+   top: 64px はナビバーの高さ分。
+   ============================================= */
 .lab-full-width-wrapper {
+  position: fixed;
+  top: 64px;          /* ナビバーの高さ */
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 20;        /* Blowfish header(z:30) より下 */
   box-sizing: border-box;
-  width: 100vw !important;
-  max-width: 100vw !important;
-  position: relative !important;
-  left: 50% !important;
-  transform: translateX(-50%);
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  padding: 3rem 0;
+  padding: 3rem 0 5rem;
 }
+
 .lab-container {
   font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace;
-  max-width: 1400px; /* 以前よりかなり広く */
-  width: 90%; /* 余白を確保 */
-  margin: 0 auto !important; /* 中央寄せを強制 */
+  max-width: 1400px;
+  width: 90%;
+  margin: 0 auto;
   position: relative;
-  z-index: 5; /* 背景の上に配置 */
 }
-/* --- ターミナル風ボックス (ウルトラワイド) --- */
+
+/* =============================================
+   ターミナルボックス
+   ============================================= */
 .cyber-terminal-box {
   background: rgba(5, 5, 20, 0.6);
-  border: 1px solid rgba(255, 0, 85, 0.4); /* マゼンタボーダー */
+  border: 1px solid rgba(255, 0, 85, 0.4);
   border-radius: 4px;
   margin-bottom: 4rem;
-  box-shadow: 
-    0 0 20px rgba(255, 0, 85, 0.2), 
-    inset 0 0 20px rgba(0, 243, 255, 0.1);
+  box-shadow: 0 0 20px rgba(255, 0, 85, 0.2), inset 0 0 20px rgba(0, 243, 255, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   overflow: hidden;
@@ -1184,7 +1210,6 @@ body {
   background: linear-gradient(to right, transparent, rgba(0, 243, 255, 0.05));
   pointer-events: none;
 }
-/* ターミナル上部のバー */
 .terminal-header {
   background: rgba(255, 0, 85, 0.2);
   padding: 0.5rem 1.5rem;
@@ -1193,14 +1218,13 @@ body {
   border-bottom: 1px solid rgba(255, 0, 85, 0.5);
 }
 .terminal-header .dot {
-  width: 12px;
-  height: 12px;
+  width: 12px; height: 12px;
   border-radius: 50%;
   margin-right: 8px;
 }
-.dot.red { background: #ff0055; box-shadow: 0 0 8px #ff0055; }
-.dot.yellow { background: #00f3ff; box-shadow: 0 0 8px #00f3ff;}
-.dot.green { background: #cc00ff; box-shadow: 0 0 8px #cc00ff;}
+.dot.red    { background: #ff0055; box-shadow: 0 0 8px #ff0055; }
+.dot.yellow { background: #00f3ff; box-shadow: 0 0 8px #00f3ff; }
+.dot.green  { background: #cc00ff; box-shadow: 0 0 8px #cc00ff; }
 .header-title {
   font-family: 'Orbitron', sans-serif;
   color: #fff;
@@ -1209,94 +1233,86 @@ body {
   margin-left: auto;
   text-shadow: 0 0 10px #ff0055;
 }
-/* ターミナル本体 */
 .terminal-body {
   padding: 2rem 2.5rem;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 243, 255, 0.03) 2px, rgba(0, 243, 255, 0.03) 4px);
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 2px,
+    rgba(0, 243, 255, 0.03) 2px, rgba(0, 243, 255, 0.03) 4px
+  );
 }
 .terminal-body p {
   margin: 0 0 0.8rem 0;
   color: #00f3ff;
-  font-size: 0.95rem; /* 1.1rem → 0.95rem */
+  font-size: 0.95rem;
   font-weight: 700;
   text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.4);
   white-space: nowrap;
   overflow: hidden;
 }
-/* タイプライターアニメーション */
-.typewriter-line1 {
-  width: 0;
-  animation: typing 1s steps(30, end) forwards;
-}
-.typewriter-line2 {
-  width: 0;
-  animation: typing 1s steps(30, end) 1s forwards;
-  opacity: 0;
-}
+.typewriter-line1 { width: 0; animation: typing 1s steps(30, end) forwards; }
+.typewriter-line2 { width: 0; opacity: 0; animation: typing 1s steps(30, end) 1s forwards; }
 .typewriter-line3 {
-  width: 0;
+  width: 0; opacity: 0;
   animation: typing 1s steps(30, end) 2s forwards;
-  opacity: 0;
   color: #ff0055 !important;
   text-shadow: 0 0 10px rgba(255, 0, 85, 0.8), 0 0 20px rgba(255, 0, 85, 0.4) !important;
 }
 @keyframes typing {
-  0% { width: 0; opacity: 1; }
+  0%   { width: 0;    opacity: 1; }
   100% { width: 100%; opacity: 1; }
 }
 .blink {
-  animation: blink-cursor 0.8s step-end infinite;
   opacity: 0;
-  animation-delay: 3s; /* 文言が出た後に点滅開始 */
+  animation: blink-cursor 0.8s step-end infinite;
+  animation-delay: 3s;
 }
 @keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-/* --- ツールグリッド --- */
+
+/* =============================================
+   グリッド & カード
+   ============================================= */
 .lab-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* カードサイズを縮小 */
-  gap: 2rem; /* 余白も調整 */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
 }
-/* --- グラスモーフィズム カード (Vibrant) --- */
 .tool-card {
   display: flex;
   flex-direction: column;
-  background: rgba(10, 5, 25, 0.6); /* より深い紫がかった半透明 */
+  background: rgba(10, 5, 25, 0.6);
   border: 1px solid rgba(0, 243, 255, 0.3);
-  border-radius: 4px; /* シャープさを出すために角丸を小さく */
+  border-radius: 4px;
   padding: 2rem;
   text-decoration: none !important;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(15px); /* かなり強めのぼかし */
+  backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
-/* カードの光るエッジ効果 (ホログラムスキャン風) */
 .tool-card::before {
   content: '';
   position: absolute;
   top: 0; left: -100%;
   width: 50%; height: 100%;
-  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
   transform: skewX(-20deg);
   transition: all 0.6s ease;
   z-index: 10;
   mix-blend-mode: overlay;
 }
-.tool-card:hover::before {
-  left: 200%;
-}
+.tool-card:hover::before { left: 200%; }
 .tool-card:hover {
   transform: translateY(-12px) scale(1.03);
   border-color: #ff0055;
-  box-shadow: 
+  box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.6),
-    0 0 30px rgba(255, 0, 85, 0.3), 
+    0 0 30px rgba(255, 0, 85, 0.3),
     inset 0 0 20px rgba(255, 0, 85, 0.15);
   background: rgba(255, 0, 85, 0.1);
 }
-/* 左端と右端のネオンストライプ (ツイン) */
 .tool-card::after {
   content: '';
   position: absolute;
@@ -1310,7 +1326,6 @@ body {
   background: #ff0055;
   box-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055;
 }
-/* --- カード内要素 --- */
 .tool-header {
   display: flex;
   justify-content: space-between;
@@ -1318,11 +1333,8 @@ body {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(0, 243, 255, 0.2);
-  position: relative;
 }
-.tool-card:hover .tool-header {
-  border-bottom-color: rgba(255, 0, 85, 0.4);
-}
+.tool-card:hover .tool-header { border-bottom-color: rgba(255, 0, 85, 0.4); }
 .tool-id {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.9rem;
@@ -1368,12 +1380,12 @@ body {
   animation: pulse-warn 2s infinite alternate;
 }
 @keyframes pulse-warn {
-  0% { opacity: 0.8; box-shadow: 0 0 5px rgba(255, 234, 0, 0.3); }
-  100% { opacity: 1; box-shadow: 0 0 15px rgba(255, 234, 0, 0.6); }
+  0%   { opacity: 0.8; box-shadow: 0 0 5px  rgba(255, 234, 0, 0.3); }
+  100% { opacity: 1;   box-shadow: 0 0 15px rgba(255, 234, 0, 0.6); }
 }
 .tool-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 1.3rem; /* 1.6rem → 1.3rem */
+  font-size: 1.3rem;
   font-weight: 900;
   color: #fff;
   margin: 0 0 1rem 0;
@@ -1383,12 +1395,11 @@ body {
   transition: all 0.3s ease;
 }
 .tool-card:hover .tool-title {
-  color: #fff;
   text-shadow: 0 0 15px rgba(255, 0, 85, 1), 0 0 30px rgba(255, 0, 85, 0.6);
   transform: translateX(8px);
 }
 .tool-desc {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #b0e0ff;
   line-height: 1.7;
   margin: 0;
@@ -1401,20 +1412,16 @@ body {
   opacity: 1;
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
-/* メディアクエリ制約 */
+
+/* =============================================
+   レスポンシブ
+   ============================================= */
 @media (max-width: 1024px) {
-  .lab-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  }
-  .lab-container {
-    padding: 0 2rem;
-  }
+  .lab-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .lab-container { padding: 0 2rem; }
 }
 @media (max-width: 768px) {
-  .lab-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
+  .lab-grid { grid-template-columns: 1fr; gap: 1.5rem; }
 }
 </style>
 
