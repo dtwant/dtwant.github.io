@@ -806,19 +806,52 @@
    
   .fl-root {
     font-family: "Zen Kaku Gothic New", "JetBrains Mono", sans-serif;
-    max-width: 960px;
-    width: 100%;
-    margin: 0 auto;
-    background: #09090b;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    margin: 0;
+    padding: 2.5rem 1.5rem;
+    background-color: #050508;
+    background-image:
+      linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+      radial-gradient(ellipse at 15% 15%, rgba(6, 182, 212, 0.1), transparent 50%),
+      radial-gradient(ellipse at 85% 85%, rgba(16, 185, 129, 0.1), transparent 50%),
+      radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.75) 120%);
+    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% 100%;
     color: #e2e8f0;
-    padding: 1.5rem;
-    border: 1px solid #1e293b;
-    border-radius: 8px;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
-    position: relative;
-    overflow: hidden;
+    border: none;
+    border-radius: 0;
+    z-index: 999990;
+    overflow-y: auto;
+    overflow-x: hidden;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+  }
+   
+  .fl-root::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    pointer-events: none;
+    z-index: 10;
+  }
+  .fl-root > * {
+    position: relative;
+    z-index: 2;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
   }
   .fl-root *,
   .fl-root *::before,
@@ -832,15 +865,16 @@
    
   .fl-root::before {
     content: "";
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #10b981, #06b6d4, #10b981);
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #10b981, #06b6d4, #10b981, transparent);
     background-size: 200% 100%;
-    animation: fl-scanline 3s linear infinite;
-    z-index: 10;
+    animation: fl-scanline 2.5s linear infinite;
+    z-index: 999999;
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.7);
   }
   @keyframes fl-scanline {
     0% {
@@ -864,9 +898,14 @@
     font-weight: 700;
     color: #10b981;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    text-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.6), 0 0 40px rgba(16, 185, 129, 0.3);
     margin: 0 0 0.3rem 0;
+    animation: fl-glow 3s ease-in-out infinite;
+  }
+  @keyframes fl-glow {
+    0%, 100% { text-shadow: 0 0 20px rgba(16,185,129,0.6), 0 0 40px rgba(16,185,129,0.3); }
+    50%       { text-shadow: 0 0 30px rgba(16,185,129,0.9), 0 0 60px rgba(16,185,129,0.5), 0 0 80px rgba(16,185,129,0.2); }
   }
   .fl-desc {
     font-family: "JetBrains Mono", monospace;
@@ -901,11 +940,20 @@
     margin-bottom: 1.5rem;
   }
   .fl-stat {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid #1e293b;
+    background: rgba(6, 182, 212, 0.03);
+    border: 1px solid rgba(6, 182, 212, 0.15);
     padding: 1rem 0.5rem;
     text-align: center;
     border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .fl-stat::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.6), transparent);
   }
   .fl-stat-label {
     font-family: "JetBrains Mono", monospace;
@@ -1418,9 +1466,11 @@
     font-family: "JetBrains Mono", monospace;
     font-size: 0.8rem;
     font-weight: 700;
-    z-index: 9999;
-    transition: transform 0.3s ease;
+    z-index: 9999999;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: none;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+    letter-spacing: 0.05em;
   }
   .fl-toast.show {
     transform: translateX(-50%) translateY(0);
@@ -1533,12 +1583,21 @@
   }
   .fl-modal {
     background: #0e0e14;
-    border: 1px solid #1e293b;
+    border: 1px solid rgba(6, 182, 212, 0.25);
     border-radius: 8px;
     max-width: 400px;
     width: 100%;
     padding: 1.5rem;
-    box-shadow: 0 0 40px rgba(0,0,0,0.8);
+    box-shadow: 0 0 50px rgba(6, 182, 212, 0.12), 0 0 80px rgba(0,0,0,0.8);
+    position: relative;
+  }
+  .fl-modal::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #06b6d4, transparent);
+    box-shadow: 0 0 6px #06b6d4;
   }
   .fl-modal-title {
     font-family: "Orbitron", sans-serif;
@@ -1747,14 +1806,17 @@
 
     
     
-    const LS_BLOB_KEY = 'dt_feeding_log_blob_id';
-    let BLOB_ID = localStorage.getItem(LS_BLOB_KEY) || '019cb583-43b9-7eda-b982-4fd4681a8178';
-
     
-    const getBlobUrl = () =>
-      `https://corsproxy.io/?url=${encodeURIComponent(`https://jsonblob.com/api/jsonBlob/${BLOB_ID}`)}`;
-    const getCreateUrl = () =>
-      `https://corsproxy.io/?url=${encodeURIComponent('https://jsonblob.com/api/jsonBlob')}`;
+    const JSONBIN_KEY = '$2a$10$KRBx9wql2J0zWuk5rBiVvOqkniGghgb.7Z.Q.Ir22CWmFyZ.lcJ6W'; 
+    const LS_BIN_KEY  = 'dt_feeding_log_bin_id';
+    let BIN_ID = localStorage.getItem(LS_BIN_KEY) || '';
+    const JSONBIN_HEADERS = () => ({
+      'X-Master-Key': JSONBIN_KEY,
+      'Content-Type': 'application/json',
+    });
+    const getBinUrl    = () => `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
+    const getBinPutUrl = () => `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+    const BIN_CREATE_URL = 'https://api.jsonbin.io/v3/b';
 
     const LS_KEY = 'dt_feeding_log_v1';
     const MARKS = ['', '\u25cb', '\u00d7', '\u25b3'];
@@ -1798,31 +1860,38 @@
 
     
     async function fetchFromBlob() {
+      
+      if (!JSONBIN_KEY || JSONBIN_KEY === '$2a$10$KRBx9wql2J0zWuk5rBiVvOqkniGghgb.7Z.Q.Ir22CWmFyZ.lcJ6W') {
+        loadFromLocal(); syncOk = false; isSyncing = false; updateSyncBadge(); render(); return;
+      }
       try {
         isSyncing = true;
         updateSyncBadge();
-        const res = await fetch(getBlobUrl(), {
-          headers: { 'Accept': 'application/json' },
-          cache: 'no-store'
-        });
-
         
-        if (res.status === 404) {
-          console.warn('[FEEDING_LOG] Blob expired (404). Creating new blob...');
-          await createNewBlob();
+        if (!BIN_ID) {
+          await createNewBin();
           return;
         }
-
+        const res = await fetch(getBinUrl(), {
+          headers: { 'X-Master-Key': JSONBIN_KEY },
+          cache: 'no-store'
+        });
+        if (res.status === 404) {
+          
+          await createNewBin();
+          return;
+        }
         if (!res.ok) throw new Error('fetch failed: ' + res.status);
-        const val = await res.json();
+        const json = await res.json();
+        const val  = json.record || {};
         data = {
           animals: val.animals || {},
           records: val.records || {},
-          memos: val.memos || {}
+          memos:   val.memos   || {}
         };
         saveToLocal();
         syncOk = true;
-        console.log('[FEEDING_LOG] Synced from jsonblob. BLOB_ID:', BLOB_ID);
+        console.log('[FEEDING_LOG] Synced. BIN_ID:', BIN_ID);
       } catch(e) {
         console.error('[FEEDING_LOG] Fetch failed, using localStorage:', e);
         loadFromLocal();
@@ -1834,42 +1903,24 @@
     }
 
     
-    async function createNewBlob() {
+    async function createNewBin() {
       try {
-        const res = await fetch(getCreateUrl(), {
+        const res = await fetch(BIN_CREATE_URL, {
           method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
+          headers: { ...JSONBIN_HEADERS(), 'X-Bin-Name': 'feeding_log' },
           body: JSON.stringify(data)
         });
         if (!res.ok) throw new Error('create failed: ' + res.status);
-
-        
-        
-        const location = res.headers.get('Location') || res.headers.get('location') || '';
-        const match = location.match(/([0-9a-f-]{30,})$/i) || location.match(/jsonBlob\/(\w+)/i);
-        if (match) {
-          BLOB_ID = match[1];
-          localStorage.setItem(LS_BLOB_KEY, BLOB_ID);
-          console.log('[FEEDING_LOG] New blob created! BLOB_ID:', BLOB_ID);
-          toast('✓ 新しいBlobを作成しました');
-        } else {
-          
-          try {
-            const body = await res.json();
-            console.log('[FEEDING_LOG] Create response body:', body);
-          } catch(_) {}
-          
-          console.warn('[FEEDING_LOG] Could not extract new BLOB_ID from Location header. Staying local.');
-          toast('⚠ Blob作成済・ID取得失敗 — ローカルで継続');
-        }
+        const json = await res.json();
+        BIN_ID = json.metadata.id;
+        localStorage.setItem(LS_BIN_KEY, BIN_ID);
+        console.log('[FEEDING_LOG] New bin created! BIN_ID:', BIN_ID);
+        toast('✓ Binを自動作成しました');
         syncOk = true;
       } catch(e) {
-        console.error('[FEEDING_LOG] createNewBlob failed:', e);
+        console.error('[FEEDING_LOG] createNewBin failed:', e);
         syncOk = false;
-        toast('✗ Blob作成に失敗しました');
+        toast('✗ Bin作成に失敗しました');
       }
       isSyncing = false;
       updateSyncBadge();
@@ -1879,28 +1930,25 @@
     let pushTimer = null;
     function pushData() {
       saveToLocal();
-      
       clearTimeout(pushTimer);
       pushTimer = setTimeout(async () => {
+        if (!JSONBIN_KEY || JSONBIN_KEY === '$2a$10$KRBx9wql2J0zWuk5rBiVvOqkniGghgb.7Z.Q.Ir22CWmFyZ.lcJ6W') return;
         try {
           isSyncing = true;
           updateSyncBadge();
-          const res = await fetch(getBlobUrl(), {
-            method: 'PUT',
-            headers: { 
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-          });
-
-          
-          if (res.status === 404) {
-            console.warn('[FEEDING_LOG] PUT 404 — blob gone, recreating...');
-            await createNewBlob();
+          if (!BIN_ID) {
+            await createNewBin();
             return;
           }
-
+          const res = await fetch(getBinPutUrl(), {
+            method: 'PUT',
+            headers: JSONBIN_HEADERS(),
+            body: JSON.stringify(data)
+          });
+          if (res.status === 404) {
+            await createNewBin();
+            return;
+          }
           syncOk = res.ok;
           if (!res.ok) console.error('[FEEDING_LOG] Push failed:', res.status);
         } catch(e) {
