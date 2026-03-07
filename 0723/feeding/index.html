@@ -1568,7 +1568,7 @@
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0,0,0,0.75);
-    z-index: 99999;
+    z-index: 9999999;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2067,6 +2067,26 @@
 
     function getDayOfWeek(y, m, d) {
       return new Date(y, m - 1, d).getDay();
+    }
+
+    
+    const memoOverlay = document.getElementById('fl-memo-overlay');
+    const memoMeta    = document.getElementById('fl-memo-meta');
+    const memoText    = document.getElementById('fl-memo-text');
+    let currentMemoKey = null;
+
+    function openMemo(animalId, day, animalName, animalEmoji) {
+      const mk = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
+      currentMemoKey = `${mk}:${animalId}:${day}`;
+      memoMeta.textContent = `${animalEmoji} ${animalName} — ${currentYear}/${currentMonth}/${day}`;
+      memoText.value = (data.memos || {})[currentMemoKey] || '';
+      memoOverlay.classList.add('show');
+      setTimeout(() => memoText.focus(), 100);
+    }
+
+    function closeMemo() {
+      memoOverlay.classList.remove('show');
+      currentMemoKey = null;
     }
 
     const DOW = ["日", "月", "火", "水", "木", "金", "土"];
@@ -2725,25 +2745,6 @@
 
     
     if (!data.memos) data.memos = {};
-
-    const memoOverlay = document.getElementById('fl-memo-overlay');
-    const memoMeta = document.getElementById('fl-memo-meta');
-    const memoText = document.getElementById('fl-memo-text');
-    let currentMemoKey = null;
-
-    function openMemo(animalId, day, animalName, animalEmoji) {
-      const monthKey = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
-      currentMemoKey = `${monthKey}:${animalId}:${day}`;
-      memoMeta.textContent = `${animalEmoji} ${animalName} — ${currentYear}/${currentMonth}/${day}`;
-      memoText.value = (data.memos || {})[currentMemoKey] || '';
-      memoOverlay.classList.add('show');
-      setTimeout(() => memoText.focus(), 100);
-    }
-
-    function closeMemo() {
-      memoOverlay.classList.remove('show');
-      currentMemoKey = null;
-    }
 
     document.getElementById('fl-memo-save').addEventListener('click', () => {
       if (!currentMemoKey) return;
