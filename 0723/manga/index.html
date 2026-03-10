@@ -239,7 +239,7 @@
     "keywords": ["manga","tracker","library","tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "247"
+    "wordCount": "191"
   }]
   </script>
 
@@ -933,7 +933,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>247 words</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <span>191 words</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -2251,11 +2251,19 @@
 (function(){
 const LS_DATA = 'ms_data_v1';
 const LS_BLOB = 'ms_blob_id';
+const SHORTCODE_BLOB = '69b0373a8d9bd565842d399b';
+
 let db=[], blobId=null, activeFilter='all', formRating=0, formTags=[], detailId=null;
 
 function init(){
   try{ db=JSON.parse(localStorage.getItem(LS_DATA)||'[]'); }catch(e){ db=[]; }
-  try{ blobId=localStorage.getItem(LS_BLOB)||null; }catch(e){}
+  
+  
+  blobId = SHORTCODE_BLOB || localStorage.getItem(LS_BLOB) || null;
+  if (blobId) {
+    try{ localStorage.setItem(LS_BLOB, blobId); }catch(e){}
+  }
+
   msRender(); updateBlobDisplay();
   if(blobId) msSync(true);
 }
@@ -2288,9 +2296,9 @@ async function msSync(silent){
     } else {
       const r=await fetch(getBinUrl(),{headers:{'X-Master-Key': JSONBIN_KEY}, cache: 'no-store'});
       if(!r.ok){
-        if(r.status===404){
+        if(r.status===404 || r.status===400 || r.status===422){
           blobId=null; try{localStorage.removeItem(LS_BLOB);}catch(e){}
-          if(!silent) toast('Binが見つかりません。新規作成します','info');
+          if(!silent) toast('無効・古いBinが見つかりました。新規作成します','info');
           return msSync(silent);
         }
         throw new Error(`get failed: ${r.status}`);
@@ -2301,7 +2309,7 @@ async function msSync(silent){
       save();
       const p=await fetch(getBinPutUrl(),{method:'PUT',headers:JSONBIN_HEADERS(),body:JSON.stringify({manga:db})});
       if(!p.ok){
-        if(p.status===404){
+        if(p.status===404 || p.status===400 || p.status===422){
           blobId=null; try{localStorage.removeItem(LS_BLOB);}catch(e){}
           return msSync(silent);
         }
@@ -2322,7 +2330,7 @@ async function pushBlob(silent=true){
   try{
     const p=await fetch(getBinPutUrl(),{method:'PUT',headers:JSONBIN_HEADERS(),body:JSON.stringify({manga:db})});
     if(!p.ok){
-      if(p.status===404){
+      if(p.status===404 || p.status===400 || p.status===422){
         blobId=null; try{localStorage.removeItem(LS_BLOB);}catch(e){}
         return msSync(silent);
       }
@@ -2585,38 +2593,7 @@ init();
 })();
 </script>
 <hr>
-
-<h3 class="relative group">仕様および運用手順
-    <div id="仕様および運用手順" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e4%bb%95%e6%a7%98%e3%81%8a%e3%82%88%e3%81%b3%e9%81%8b%e7%94%a8%e6%89%8b%e9%a0%86" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-<p><strong>基本操作</strong></p>
-<ul>
-<li><strong>＋ 追加</strong> : タイトル、作者、ステータス、評価、タグ、メモなどの各種メタデータを入力し、「SAVE」にて登録を実行する。</li>
-<li><strong>カードの選択</strong> : 当該漫画の詳細情報を表示する。詳細画面より「編集（✎ 編集）」および「削除（🗑 削除）」の操作が可能である。</li>
-<li><strong>フィルタ・ソート機能</strong> : 画面上部のタブ（読了・読中など）や検索窓よりデータを絞り込む。また、更新順や評価順での並び替えに対応する。</li>
-</ul>
-<p><strong>クラウド同期 (jsonbin.io)</strong></p>
-<ol>
-<li>初期状態において、自動的に新規の <strong>Bin (ストレージ領域)</strong> が作成される。</li>
-<li>画面右上部の <strong>⚙ CONFIG</strong> を選択し、表示される <strong>Blob ID (Bin ID)</strong> を必ず控えること。</li>
-<li>他端末へデータを引き継ぐ際は、CONFIG 画面の入力欄に該当の Blob ID を入力のうえ「APPLY」を実行する。</li>
-<li>設定後は <strong>⇅ SYNC</strong> を押下し、最新のデータを同期する。</li>
-</ol>
-<blockquote>
-<p>データは <a
-  href="https://jsonbin.io"
-    target="_blank"
-  >jsonbin.io</a> 上に保存される。
-認証キーと連動した単一のIDで管理されるため、Blob ID を紛失した場合、既存データへのアクセスは不可能となる。厳重に管理すること。</p></blockquote>
-<p><strong>ローカルバックアップ</strong></p>
-<p>CONFIG 画面より <strong>JSON EXPORT</strong> を実行することで、現在のデータをローカルデバイスへ保存可能である。
-復元の際は <strong>JSON IMPORT</strong> より該当の JSON ファイルを読み込み、再度 SYNC を実行すること。</p>
+<p><small>※ 記録はjsonbin.io経由でクラウド同期される. ステータスバッジが「SYNCED」ならオンライン同期中.</small></p>
 
           
           
