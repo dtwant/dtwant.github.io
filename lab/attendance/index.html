@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "43"
+    "wordCount": "44"
   }]
   </script>
 
@@ -791,49 +791,123 @@
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <p>出席管理ツール.
-ブラウザにデータが保存される.</p>
-
+      
 
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
+
+   
+  .ag-root {
+    font-family: "Zen Kaku Gothic New", "JetBrains Mono", sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    margin: 0;
+    padding: 2rem 1rem;
+    background-color: #050508;
+    background-image:
+      linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+      radial-gradient(ellipse at 15% 15%, rgba(59, 130, 246, 0.1), transparent 50%),
+      radial-gradient(ellipse at 85% 85%, rgba(16, 185, 129, 0.1), transparent 50%),
+      radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.75) 120%);
+    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% 100%;
+    color: #e2e8f0;
+    border: none;
+    border-radius: 0;
+    z-index: 999990;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    animation: crt-flicker 0.15s infinite;
+  }
+  @keyframes crt-flicker {
+    0% { opacity: 0.98; }
+    50% { opacity: 1; }
+    100% { opacity: 0.99; }
+  }
+
+  .ag-root > * {
+    position: relative;
+    z-index: 2;
+  }
+  .ag-root *, .ag-root *::before, .ag-root *::after {
+    box-sizing: border-box;
+  }
+
+   
+  .ag-root::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+     
+    background: 
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px),
+      radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+    pointer-events: none;
+    z-index: 10;
+  }
+
+   
+  .ag-root::before {
+    content: "";
+    position: fixed;
+    top: -10%; left: 0; right: 0;
+    height: 10vh;
+    background: linear-gradient(to bottom, rgba(16, 185, 129, 0) 0%, rgba(16, 185, 129, 0.1) 50%, rgba(16, 185, 129, 0.5) 100%);
+    border-bottom: 2px solid rgba(16, 185, 129, 0.8);
+    animation: scan-laser 8s linear infinite;
+    pointer-events: none;
+    z-index: 999999;
+    box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+  }
+
+  @keyframes scan-laser {
+    0% { transform: translateY(-100%); opacity: 0; }
+    5% { opacity: 1; }
+    95% { opacity: 1; }
+    100% { transform: translateY(1100%); opacity: 0; }
+  }
 
   .ag-container {
     font-family: "JetBrains Mono", "Consolas", "Monaco", "Courier New", monospace;
     max-width: 900px;
-    width: 95%;
-    margin: 2rem auto;
+    width: 100%;
+    margin: 0 auto;
     background-color: rgba(9, 9, 11, 0.95);
-    background-image: 
-      linear-gradient(rgba(18, 18, 18, 0.6) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(18, 18, 18, 0.6) 1px, transparent 1px);
-    background-size: 20px 20px;
     padding: 2.5rem;
-    border: 1px solid rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.4);
     border-radius: 4px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(16, 185, 129, 0.03);
-    backdrop-filter: blur(3px);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(16, 185, 129, 0.05);
+    backdrop-filter: blur(4px);
     color: #e2e8f0;
     position: relative;
     overflow: hidden;
-    box-sizing: border-box;
   }
-  .ag-container * { box-sizing: border-box; }
 
    
-  .ag-container::before {
+  .ag-container::before, .ag-container::after {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #10b981, #3b82f6, #10b981);
-    background-size: 200% 100%;
-    animation: scanline 4s linear infinite;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #10b981;
+    z-index: 100;
     pointer-events: none;
-    z-index: 10;
   }
-  @keyframes scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+  .ag-container::before {
+    top: 5px; left: 5px;
+    border-right: none; border-bottom: none;
+  }
+  .ag-container::after {
+    bottom: 5px; right: 5px;
+    border-left: none; border-top: none;
+  }
 
    
   .ag-header {
@@ -844,13 +918,60 @@
   }
   .ag-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 700;
     color: #10b981;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 12px rgba(16, 185, 129, 0.5), 0 0 4px rgba(16, 185, 129, 0.3);
+    letter-spacing: 0.15em;
+    position: relative;
+     
+    text-shadow: 0 0 12px rgba(16, 185, 129, 0.8), 2px 2px 0px rgba(59, 130, 246, 0.4), -2px -2px 0px rgba(16, 185, 129, 0.4);
     margin-bottom: 0.5rem;
+    animation: ag-glow 3s ease-in-out infinite;
+  }
+
+   
+  .ag-title::before, .ag-title::after {
+    content: "ATTENDANCE_MONITOR";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    color: #f1f5f9;
+    background: transparent;
+    overflow: hidden;
+    clip-path: inset(0 0 0 0);
+    pointer-events: none;
+  }
+  .ag-title::before {
+    left: 2px;
+    text-shadow: -2px 0 #3b82f6;  
+    animation: text-glitch-1 2s infinite linear alternate-reverse;
+  }
+  .ag-title::after {
+    left: -2px;
+    text-shadow: -2px 0 #10b981;  
+    animation: text-glitch-2 3s infinite linear alternate-reverse;
+  }
+  
+  @keyframes text-glitch-1 {
+    0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
+    20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+    40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
+    60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
+    80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 1px); }
+    100% { clip-path: inset(30% 0 50% 0); transform: translate(1px, -1px); }
+  }
+  @keyframes text-glitch-2 {
+    0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -1px); }
+    20% { clip-path: inset(30% 0 20% 0); transform: translate(-2px, 1px); }
+    40% { clip-path: inset(70% 0 10% 0); transform: translate(2px, -2px); }
+    60% { clip-path: inset(20% 0 50% 0); transform: translate(-2px, 2px); }
+    80% { clip-path: inset(50% 0 30% 0); transform: translate(1px, -1px); }
+    100% { clip-path: inset(10% 0 80% 0); transform: translate(-1px, 1px); }
+  }
+
+  @keyframes ag-glow {
+    0%, 100% { filter: brightness(1); }
+    50%       { filter: brightness(1.2); }
   }
   .ag-desc {
     font-size: 0.8rem;
@@ -889,12 +1010,13 @@
   .ag-list { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 3rem; }
   
   .ag-item {
-    background: #0e0e11;
+    background: rgba(14, 14, 17, 0.8);
     border: 1px solid #333;
     padding: 1.5rem;
     position: relative;
     border-left: 4px solid #333;
     transition: all 0.2s;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
   }
   .ag-item:hover {
     border-color: #555;
@@ -967,6 +1089,7 @@
     transition: all 0.2s;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     line-height: 1.2;
+    clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
   }
   .ag-btn-sub { font-size: 0.7rem; opacity: 0.7; font-weight: normal; }
 
@@ -992,11 +1115,15 @@
   
   .ag-input {
     width: 100%; min-width: 0;
-    background: #000; border: 1px solid #444; color: #10b981;
-    padding: 0.8rem; font-family: inherit; border-radius: 2px;
+    background: rgba(0, 0, 0, 0.6); 
+    border: 1px solid #333; 
+    border-bottom: 2px solid #10b981;
+    color: #10b981;
+    padding: 0.8rem; font-family: inherit; border-radius: 0;
     font-size: 1rem;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
   }
-  .ag-input:focus { outline: none; border-color: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.3); }
+  .ag-input:focus { outline: none; border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
 
    
   .ag-radio-group { display: flex; gap: 15px; margin-bottom: 1.5rem; }
@@ -1022,19 +1149,99 @@
   .ag-submit {
     width: 100%; background: transparent; color: #10b981;
     border: 1px solid #10b981; padding: 1rem;
-    font-family: inherit; font-weight: bold; cursor: pointer;
+    font-family: 'Orbitron', sans-serif; font-weight: 700; cursor: pointer;
     text-transform: uppercase; letter-spacing: 2px; transition: all 0.2s;
     font-size: 1rem;
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
   }
-  .ag-submit:hover { background: #10b981; color: #000; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+  .ag-submit::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.4), transparent);
+    transition: all 0.4s;
+  }
+  .ag-submit:hover::before {
+    left: 100%;
+  }
+  .ag-submit:hover { 
+    background: rgba(16, 185, 129, 0.2); 
+    color: #fff; 
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.8), inset 0 0 10px rgba(16, 185, 129, 0.4); 
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  }
+
+   
+  .ag-guide {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px dashed #333;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+  }
+  .ag-guide-desc {
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #a1a1aa;
+    letter-spacing: 0.05em;
+  }
+  .ag-guide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  .ag-guide-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    color: #10b981;
+    margin-bottom: 1rem;
+    margin-top: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .ag-guide-list {
+    margin: 0;
+    padding-left: 1.5rem;
+    line-height: 1.8;
+  }
+  .ag-guide-list li {
+    margin-bottom: 0.5rem;
+  }
+  .ag-guide-list strong {
+    color: #e2e8f0;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .ag-guide-highlight {
+    color: #10b981;
+    font-weight: bold;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .ag-guide-danger {
+    color: #ef4444;
+    font-weight: bold;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .ag-guide-footer {
+    text-align: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.75rem;
+    color: #64748b;
+  }
 
 
    
   @media (max-width: 640px) {
+    .ag-root {
+      padding: 1rem 0.5rem;
+    }
     .ag-container {
       padding: 1.25rem 1rem;  
       width: 100%;
-      margin: 1rem 0;
+      margin: 0;
       border-radius: 0;
       border-left: none;
       border-right: none;
@@ -1076,10 +1283,16 @@
     
     .ag-radio-group { gap: 10px; }
     .ag-radio-label { padding: 0.6rem; font-size: 0.8rem; }
+    
+    .ag-guide-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
   }
 
 </style>
 
+<div class="ag-root">
 <div class="ag-container">
   <header class="ag-header">
     <div class="ag-title">ATTENDANCE_MONITOR</div>
@@ -1116,6 +1329,42 @@
       <button type="submit" class="ag-submit">INITIALIZE</button>
     </form>
   </div>
+
+  <div class="ag-guide">
+    <div class="ag-guide-desc">出席管理ツール. ブラウザにデータが保存される.</div>
+    
+    <div class="ag-guide-grid">
+      <div class="ag-guide-col">
+        <h3 class="ag-guide-title">🛡️ 設定 / 落単ライン</h3>
+        <ul class="ag-guide-list" style="list-style: none; padding-left: 0;">
+          <li><span style="display:inline-block; width:20px;">迟</span><strong>遅刻</strong>: <span class="ag-guide-highlight">-1</span> 点</li>
+          <li><span style="display:inline-block; width:20px;">欠</span><strong>欠席</strong>: <span class="ag-guide-danger">-2</span> 点</li>
+        </ul>
+        <div style="margin-top: 1rem;">
+          <strong>⚠️ 落単ライン</strong>
+          <ul class="ag-guide-list">
+            <li><strong>半期科目</strong>: <span class="ag-guide-danger">-7</span> でアウト（-6まではセーフ）</li>
+            <li><strong>通年科目</strong>: <span class="ag-guide-danger">-13</span> でアウト（-12まではセーフ）</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ag-guide-col">
+        <h3 class="ag-guide-title">📝 使い方</h3>
+        <ol class="ag-guide-list">
+          <li><strong>科目追加</strong>: 上のフォームに「科目名」と「単位数」を入力し、半期か通年かを選んで追加する.</li>
+          <li><strong>記録</strong>: 遅刻あるいは欠席したら，その科目の対応するボタンを押して記録する.</li>
+          <li><strong>修正</strong>: 間違えてボタンを押した場合は「↺」ボタンで1ポイント修正できる.</li>
+          <li><strong>削除</strong>: 科目の右上の「×」ボタンでリストから削除できる.</li>
+        </ol>
+      </div>
+    </div>
+    
+    <div class="ag-guide-footer">
+      &gt; ※ このデータはあなたのブラウザ(localStorage)にのみ保存される.キャッシュをクリアすると消える場合があるので注意.
+    </div>
+  </div>
+
+</div>
 </div>
 
 <script>
@@ -1299,52 +1548,6 @@
 
   })();
 </script>
-
-<h3 class="relative group">🛡️設定
-    <div id="設定" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%a8%ad%e5%ae%9a" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-<ul>
-<li><strong>遅刻</strong>: <code>-1</code> 点</li>
-<li><strong>欠席</strong>: <code>-2</code> 点</li>
-</ul>
-
-<h4 class="relative group">⚠️ 落単ライン
-    <div id="-落単ライン" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#-%e8%90%bd%e5%8d%98%e3%83%a9%e3%82%a4%e3%83%b3" aria-label="Anchor">#</a>
-    </span>
-    
-</h4>
-<ul>
-<li><strong>半期科目</strong>: <code>-7</code> でアウト（-6まではセーフ）</li>
-<li><strong>通年科目</strong>: <code>-13</code> でアウト（-12まではセーフ）</li>
-</ul>
-
-<h3 class="relative group">📝 使い方
-    <div id="-使い方" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#-%e4%bd%bf%e3%81%84%e6%96%b9" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-<ol>
-<li><strong>科目追加</strong>: 下のフォームに「科目名」と「単位数」を入力し、半期か通年かを選んで追加する.</li>
-<li><strong>記録</strong>: 遅刻あるいは欠席したら，その科目の対応するボタンを押して記録する.</li>
-<li><strong>修正</strong>: 間違えてボタンを押した場合は「↺」ボタンで1ポイント修正できる.</li>
-<li><strong>削除</strong>: 科目の右上の「×」ボタンでリストから削除できる.</li>
-</ol>
-<hr>
-<p><small>※ このデータはあなたのブラウザ(localStorage)にのみ保存される.キャッシュをクリアすると消える場合があるので注意.</small></p>
 
     </section>
     <footer class="pt-8">

@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "46"
+    "wordCount": "44"
   }]
   </script>
 
@@ -791,48 +791,121 @@
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <p>提出期限と推定所要時間を入力し，締め切りまでの時間を管理する.</p>
-
+      
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
+
+   
+  .dm-root {
+    font-family: "Zen Kaku Gothic New", "JetBrains Mono", sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    margin: 0;
+    padding: 2rem 1rem;
+    background-color: #050508;
+    background-image:
+      linear-gradient(rgba(217, 70, 239, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(217, 70, 239, 0.05) 1px, transparent 1px),
+      radial-gradient(ellipse at 15% 15%, rgba(6, 182, 212, 0.1), transparent 50%),
+      radial-gradient(ellipse at 85% 85%, rgba(217, 70, 239, 0.1), transparent 50%),
+      radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.75) 120%);
+    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% 100%;
+    color: #e2e8f0;
+    border: none;
+    border-radius: 0;
+    z-index: 999990;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    animation: crt-flicker 0.15s infinite;
+  }
+  @keyframes crt-flicker {
+    0% { opacity: 0.98; }
+    50% { opacity: 1; }
+    100% { opacity: 0.99; }
+  }
+
+  .dm-root > * {
+    position: relative;
+    z-index: 2;
+  }
+  .dm-root *, .dm-root *::before, .dm-root *::after {
+    box-sizing: border-box;
+  }
+
+   
+  .dm-root::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+     
+    background: 
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px),
+      radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+    pointer-events: none;
+    z-index: 10;
+  }
+
+   
+  .dm-root::before {
+    content: "";
+    position: fixed;
+    top: -10%; left: 0; right: 0;
+    height: 10vh;
+    background: linear-gradient(to bottom, rgba(34, 211, 238, 0) 0%, rgba(34, 211, 238, 0.1) 50%, rgba(34, 211, 238, 0.5) 100%);
+    border-bottom: 2px solid rgba(34, 211, 238, 0.8);
+    animation: scan-laser 8s linear infinite;
+    pointer-events: none;
+    z-index: 999999;
+    box-shadow: 0 5px 20px rgba(34, 211, 238, 0.4);
+  }
+
+  @keyframes scan-laser {
+    0% { transform: translateY(-100%); opacity: 0; }
+    5% { opacity: 1; }
+    95% { opacity: 1; }
+    100% { transform: translateY(1100%); opacity: 0; }
+  }
 
   .dm-container {
     font-family: "JetBrains Mono", "Consolas", "Monaco", "Courier New", monospace;
     max-width: 900px;
-    width: 95%;
-    margin: 2rem auto;
+    width: 100%;
+    margin: 0 auto;
     background-color: rgba(9, 9, 11, 0.95);
-    background-image: 
-      linear-gradient(rgba(18, 18, 18, 0.6) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(18, 18, 18, 0.6) 1px, transparent 1px);
-    background-size: 20px 20px;
     padding: 2.5rem;
-    border: 1px solid rgba(34, 211, 238, 0.2);
+    border: 1px solid rgba(34, 211, 238, 0.4);
     border-radius: 4px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(34, 211, 238, 0.03);
-    backdrop-filter: blur(3px);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(34, 211, 238, 0.05);
+    backdrop-filter: blur(4px);
     color: #e2e8f0;
     position: relative;
     overflow: hidden;
-    box-sizing: border-box;
   }
-  .dm-container * { box-sizing: border-box; }
 
    
-  .dm-container::before {
+  .dm-container::before, .dm-container::after {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #06b6d4, #d946ef, #06b6d4);
-    background-size: 200% 100%;
-    animation: scanline 4s linear infinite;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #06b6d4;
+    z-index: 100;
+    pointer-events: none;
   }
-
-  @keyframes scanline {
-    0% { background-position: 100% 0; }
-    100% { background-position: -100% 0; }
+  .dm-container::before {
+    top: 5px; left: 5px;
+    border-right: none; border-bottom: none;
+  }
+  .dm-container::after {
+    bottom: 5px; right: 5px;
+    border-left: none; border-top: none;
   }
 
   .dm-header {
@@ -846,15 +919,62 @@
 
   .dm-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 700;
     color: #22d3ee;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 12px rgba(34, 211, 238, 0.5), 0 0 4px rgba(34, 211, 238, 0.3);
+    letter-spacing: 0.15em;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    position: relative;
+     
+    text-shadow: 0 0 12px rgba(34, 211, 238, 0.8), 2px 2px 0px rgba(217, 70, 239, 0.4), -2px -2px 0px rgba(6, 182, 212, 0.4);
+    animation: dm-glow 3s ease-in-out infinite;
+  }
+  
+   
+  .dm-title::before, .dm-title::after {
+    content: "_DEADLINE_SURVIVAL";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    color: #f1f5f9;
+    background: transparent;
+    overflow: hidden;
+    clip-path: inset(0 0 0 0);
+    pointer-events: none;
+  }
+  .dm-title::before {
+    left: 2px;
+    text-shadow: -2px 0 #ef4444;  
+    animation: text-glitch-1 2s infinite linear alternate-reverse;
+  }
+  .dm-title::after {
+    left: -2px;
+    text-shadow: -2px 0 #06b6d4;  
+    animation: text-glitch-2 3s infinite linear alternate-reverse;
+  }
+  
+  @keyframes text-glitch-1 {
+    0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
+    20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+    40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
+    60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
+    80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 1px); }
+    100% { clip-path: inset(30% 0 50% 0); transform: translate(1px, -1px); }
+  }
+  @keyframes text-glitch-2 {
+    0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -1px); }
+    20% { clip-path: inset(30% 0 20% 0); transform: translate(-2px, 1px); }
+    40% { clip-path: inset(70% 0 10% 0); transform: translate(2px, -2px); }
+    60% { clip-path: inset(20% 0 50% 0); transform: translate(-2px, 2px); }
+    80% { clip-path: inset(50% 0 30% 0); transform: translate(1px, -1px); }
+    100% { clip-path: inset(10% 0 80% 0); transform: translate(-1px, 1px); }
+  }
+
+  @keyframes dm-glow {
+    0%, 100% { filter: brightness(1); }
+    50%       { filter: brightness(1.2); }
   }
   
   .dm-clock-display {
@@ -876,26 +996,29 @@
     border: 1px solid #333;
   }
   
+   
   .dm-input, .dm-select {
     width: 100%;
     min-width: 0;
-    background: #000;
-    border: 1px solid #444;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #333;
+    border-bottom: 2px solid #22d3ee;
     color: #22d3ee;
     padding: 0.8rem;
     font-family: inherit;
     font-size: 0.9rem;
-    border-radius: 2px;
+    border-radius: 0;
     transition: all 0.2s;
-     
     text-overflow: ellipsis;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
   }
   .dm-input::placeholder { color: #4b5563; }
   
   .dm-input:focus, .dm-select:focus {
     outline: none;
-    border-color: #22d3ee;
-    box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+    border-color: #d946ef;
+    background: rgba(217, 70, 239, 0.05);
+    box-shadow: 0 0 15px rgba(217, 70, 239, 0.4);
   }
 
   .dm-btn-add {
@@ -907,102 +1030,32 @@
     font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     transition: all 0.2s;
     white-space: nowrap; 
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  }
+  .dm-btn-add::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.4), transparent);
+    transition: all 0.4s;
+  }
+  .dm-btn-add:hover::before {
+    left: 100%;
   }
   .dm-btn-add:hover {
-    background: #22d3ee;
-    color: #000;
-    box-shadow: 0 0 15px rgba(34, 211, 238, 0.6);
+    background: rgba(217, 70, 239, 0.2);
+    border-color: #d946ef;
+    color: #fff;
+    box-shadow: 0 0 25px rgba(217, 70, 239, 0.9), inset 0 0 15px rgba(217, 70, 239, 0.5);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
   }
 
    
-  .dm-list { display: flex; flex-direction: column; gap: 1rem; }
-  
-  .dm-task { 
-    display: grid; 
-    grid-template-columns: 1fr auto; 
-    gap: 1.5rem; 
-    align-items: center;
-    padding: 1.5rem; 
-    background: #0e0e11;
-    border: 1px solid #333;
-    border-left-width: 4px;  
-    position: relative;
-    transition: transform 0.2s;
-  }
-  .dm-task:hover {
-    border-color: #555;
-    transform: translateX(4px);
-  }
-
-   
-  .status-safe { border-left-color: #22c55e; }  
-  .status-safe .dm-countdown { color: #22c55e; }
-
-  .status-warn { border-left-color: #facc15; }  
-  .status-warn .dm-countdown { color: #facc15; }
-
-  .status-danger { 
-    border-left-color: #f97316;  
-    box-shadow: inset 10px 0 20px -10px rgba(249, 115, 22, 0.1);
-  } 
-  .status-danger .dm-countdown { color: #f97316; }
-
-  .status-critical { 
-    border-left-color: #ef4444;  
-    box-shadow: inset 10px 0 20px -10px rgba(239, 68, 68, 0.2);
-    animation: border-pulse 2s infinite;
-  } 
-  .status-critical .dm-countdown { 
-    color: #ef4444; 
-    text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
-  }
-  
-  .status-over { border-left-color: #64748b; opacity: 0.7; }
-
-  @keyframes border-pulse {
-    0% { border-left-color: #ef4444; }
-    50% { border-left-color: #7f1d1d; }
-    100% { border-left-color: #ef4444; }
-  }
-
-   
-  .dm-info { display: flex; flex-direction: column; gap: 0.5rem; }
-  .dm-task-title { 
-    font-weight: 700; 
-    font-size: 1.1rem; 
-    color: #f1f5f9;
-    letter-spacing: 0.02em;
-  }
-  .dm-meta { 
-    font-size: 0.8rem; 
-    color: #94a3b8; 
-    display: flex; 
-    gap: 1.5rem; 
-  }
-  .dm-meta span { display: flex; align-items: center; gap: 0.3rem; }
-
-  .dm-right-col { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.75rem; }
-  
-  .dm-time-label { 
-    font-size: 0.7rem; 
-    text-transform: uppercase; 
-    color: #64748b; 
-    letter-spacing: 1px;
-  }
-  .dm-countdown { 
-    font-size: 1.6rem; 
-    font-weight: 700; 
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-  }
-
-   
-  .dm-actions { display: flex; gap: 0.75rem; opacity: 0.6; transition: opacity 0.2s; }
-  .dm-task:hover .dm-actions { opacity: 1; }
-
   .dm-btn-icon {
     background: #18181b;
     border: 1px solid #333;
@@ -1012,14 +1065,16 @@
     cursor: pointer;
     font-family: inherit;
     font-size: 1.2rem;
-    border-radius: 2px;
+    border-radius: 0;
+    clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
   }
   .dm-btn-icon:hover {
     border-color: #fff;
     color: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   }
-  .dm-btn-check:hover { border-color: #22c55e; color: #22c55e; }
-  .dm-btn-del:hover { border-color: #ef4444; color: #ef4444; }
+  .dm-btn-check:hover { border-color: #22c55e; color: #22c55e; box-shadow: 0 0 12px rgba(34, 197, 94, 0.5); }
+  .dm-btn-del:hover { border-color: #ef4444; color: #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.5); }
 
   .dm-empty { 
     text-align: center; 
@@ -1032,11 +1087,79 @@
   }
 
    
+  .dm-guide {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px dashed #333;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+  }
+  .dm-guide-desc {
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #a1a1aa;
+    letter-spacing: 0.05em;
+  }
+  .dm-guide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  .dm-guide-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+    margin-top: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .dm-guide-list, .dm-guide-list-status {
+    margin: 0;
+    padding-left: 1.5rem;
+    line-height: 1.8;
+  }
+  .dm-guide-list-status {
+    list-style: none;
+    padding-left: 0;
+  }
+  .dm-guide-list li, .dm-guide-list-status li {
+    margin-bottom: 0.5rem;
+  }
+  .dm-guide-list strong, .dm-guide-list-status strong {
+    color: #e2e8f0;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .dm-status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+  .dm-status-dot.status-safe { background: #22c55e; box-shadow: 0 0 8px rgba(34, 197, 94, 0.6); }
+  .dm-status-dot.status-warn { background: #facc15; box-shadow: 0 0 8px rgba(250, 204, 21, 0.6); }
+  .dm-status-dot.status-danger { background: #f97316; box-shadow: 0 0 8px rgba(249, 115, 22, 0.6); }
+  .dm-status-dot.status-critical { background: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.6); animation: border-pulse 2s infinite; }
+  
+  .dm-guide-footer {
+    text-align: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+
+   
   @media (max-width: 768px) {
+    .dm-root {
+      padding: 1rem 0.5rem;
+    }
     .dm-container {
       padding: 1.25rem 1rem;
       width: 100%;
-      margin: 1rem 0;
+      margin: 0;
       border-radius: 0;
       border-left: none; border-right: none;
     }
@@ -1090,10 +1213,16 @@
     
     .dm-time-label { display: block; text-align: left; }
     .dm-countdown { font-size: 1.4rem; }
+
+    .dm-guide-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
   }
 
 </style>
 
+<div class="dm-root">
 <div class="dm-container">
   <header class="dm-header">
     <div class="dm-title">
@@ -1124,6 +1253,36 @@
   <div id="dm-list" class="dm-list">
     
   </div>
+
+  <div class="dm-guide">
+    <div class="dm-guide-desc">提出期限と推定所要時間を入力し，締め切りまでの時間を管理する.</div>
+    
+    <div class="dm-guide-grid">
+      <div class="dm-guide-col">
+        <h3 class="dm-guide-title">SYSTEM_GUIDE</h3>
+        <ol class="dm-guide-list">
+          <li><strong>TASK_NAME</strong>: 課題名を入力</li>
+          <li><strong>DATE / PERIOD</strong>: 提出日と時限（1〜4限）を選択</li>
+          <li><strong>EST (MIN)</strong>: 完了にかかる推定時間を「分」で入力</li>
+          <li><strong>ADD</strong>: タスク登録</li>
+        </ol>
+      </div>
+      <div class="dm-guide-col">
+        <h3 class="dm-guide-title">STATUS_CODE</h3>
+        <ul class="dm-guide-list-status">
+          <li><span class="dm-status-dot status-safe"></span> <strong>GREEN</strong>: 安全圏.</li>
+          <li><span class="dm-status-dot status-warn"></span> <strong>YELLOW</strong>: 猶予 24時間未満.</li>
+          <li><span class="dm-status-dot status-danger"></span> <strong>ORANGE</strong>: 猶予 3時間未満.</li>
+          <li><span class="dm-status-dot status-critical"></span> <strong>RED (BLINKING)</strong>: <strong>CRITICAL WARNING</strong>. 残り時間が作業時間を下回っているため，着手推奨.</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="dm-guide-footer">
+      &gt; LOCAL_STORAGE_CONNECTED. DATA_PERSISTENCE_ACTIVE.
+    </div>
+  </div>
+</div>
 </div>
 
 <script>
@@ -1282,40 +1441,6 @@
     render();
   })();
 </script>
-
-<h3 class="relative group">SYSTEM_GUIDE
-    <div id="system_guide" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#system_guide" aria-label="Anchor">#</a>
-    </span>
-    
-</h3>
-<ol>
-<li><strong>TASK_NAME</strong>: 課題名を入力</li>
-<li><strong>DATE / PERIOD</strong>: 提出日と時限（1〜4限）を選択</li>
-<li><strong>EST (MIN)</strong>: 完了にかかる推定時間を「分」で入力</li>
-<li><strong>ADD</strong>: タスク登録</li>
-</ol>
-
-<h4 class="relative group">STATUS_CODE
-    <div id="status_code" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#status_code" aria-label="Anchor">#</a>
-    </span>
-    
-</h4>
-<ul>
-<li><strong>GREEN</strong>: 安全圏.</li>
-<li><strong>YELLOW</strong>: 猶予 24時間未満.</li>
-<li><strong>ORANGE</strong>: 猶予 3時間未満.</li>
-<li><strong>RED (BLINKING)</strong>: <strong>CRITICAL WARNING</strong>. 残り時間が作業時間を下回っているため，着手推奨.</li>
-</ul>
-<hr>
-<p><small style="color:#64748b; font-family:monospace;">&gt; LOCAL_STORAGE_CONNECTED. DATA_PERSISTENCE_ACTIVE.</small></p>
 
     </section>
     <footer class="pt-8">
