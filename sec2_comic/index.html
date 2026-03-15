@@ -751,590 +751,678 @@
     <section class="max-w-full mt-6 prose dark:prose-invert">
       <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
 <style>
-header, #dt-nav, .nav-container, .header-container {
-background: rgba(255, 255, 255, 0.4) !important;
-backdrop-filter: blur(8px) !important;
-border-bottom: 2px solid #fff !important;
-box-shadow: none !important;
+ 
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
-header a, .nav-link, .logo, .search-btn, .theme-toggle, header span {
-color: #8d6e63 !important;
-font-family: 'Zen Maru Gothic', sans-serif !important;
-text-shadow: none !important;
-font-weight: bold !important;
+
+#ym-root {
+  position: fixed;
+  inset: 0;
+  z-index: 9010;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  color: #5d4a4a;
+  background: #f6cde3;  
+  overflow-y: auto;  
+  align-items: center;  
 }
-header a:hover, .nav-link:hover {
-color: #d18290 !important;
-background: transparent !important;
-}
-.toggle-icon, .toggle-icon::before, .toggle-icon::after {
-background-color: #8d6e63 !important;
-}
-body {
-background: #f6cde3 !important;
-color: #5d4a4a !important;
-font-family: 'Zen Maru Gothic', sans-serif !important;
-min-height: 100vh;
-margin: 0;
-}
+
+ 
 #kawaii-container {
-max-width: 900px;
-margin: 2rem auto;
-padding: 2rem;
-background: rgba(255, 255, 255, 0.7);
-border-radius: 30px;
-border: 4px solid #fff;
-box-shadow: 0 10px 30px rgba(219, 112, 147, 0.2);
+  max-width: 900px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 30px;
+  border: 4px solid #fff;
+  box-shadow: 0 10px 30px rgba(219, 112, 147, 0.2);
+  box-sizing: border-box;
 }
 .room-title {
-text-align: center;
-color: #d18290;
-font-size: 2rem;
-font-weight: 700;
-margin-bottom: 2rem;
-letter-spacing: 0.1em;
+  text-align: center;
+  color: #d18290;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  letter-spacing: 0.1em;
 }
 .input-area {
-background: #fff;
-padding: 2rem;
-border-radius: 24px;
-border: 2px dashed #f6cde3;
-margin-bottom: 2.5rem;
-box-sizing: border-box;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 24px;
+  border: 2px dashed #f6cde3;
+  margin-bottom: 2.5rem;
+  box-sizing: border-box;
 }
 .radio-group {
-display: flex;
-gap: 15px;
-justify-content: center;
-margin-bottom: 15px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 15px;
 }
 .radio-group input[type="radio"] { display: none; }
 .radio-label {
-padding: 10px 25px;
-background: #fff;
-border: 2px solid #ecdce0;
-border-radius: 50px;
-font-weight: bold;
-color: #aaa;
-cursor: pointer;
-transition: all 0.3s;
-font-size: 1rem;
+  padding: 10px 25px;
+  background: #fff;
+  border: 2px solid #ecdce0;
+  border-radius: 50px;
+  font-weight: bold;
+  color: #aaa;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1rem;
 }
 #cat-shonen:checked + .radio-label {
-background: #e3f2fd; border-color: #90caf9; color: #42a5f5;
-transform: scale(1.05);
+  background: #e3f2fd; border-color: #90caf9; color: #42a5f5;
+  transform: scale(1.05);
 }
 #cat-shojo:checked + .radio-label {
-background: #fce4ec; border-color: #f48fb1; color: #ec407a;
-transform: scale(1.05);
+  background: #fce4ec; border-color: #f48fb1; color: #ec407a;
+  transform: scale(1.05);
 }
-/* ▼▼▼ 追加：サイト選択用のボタンスタイル ▼▼▼ */
 #site-cmoa:checked + .radio-label {
-background: #e0f7fa; border-color: #4dd0e1; color: #00bcd4;
-transform: scale(1.05);
+  background: #e0f7fa; border-color: #4dd0e1; color: #00bcd4;
+  transform: scale(1.05);
 }
 #site-piccoma:checked + .radio-label {
-background: #fff8e1; border-color: #ffd54f; color: #fbc02d;
-transform: scale(1.05);
+  background: #fff8e1; border-color: #ffd54f; color: #fbc02d;
+  transform: scale(1.05);
 }
 .rating-input-group {
-display: flex;
-gap: 15px;
-justify-content: center;
-margin-bottom: 20px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 .rating-input-group input[type="radio"] { display: none; }
 .rating-label {
-font-size: 1.5rem;
-padding: 5px 15px;
-border-radius: 50px;
-cursor: pointer;
-border: 2px solid transparent;
-transition: 0.2s;
-opacity: 0.5;
-filter: grayscale(80%);
+  font-size: 1.5rem;
+  padding: 5px 15px;
+  border-radius: 50px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.2s;
+  opacity: 0.5;
+  filter: grayscale(80%);
 }
 .rating-input-group input:checked + .rating-label {
-opacity: 1;
-filter: grayscale(0%);
-background: #fff0f5;
-border-color: #f48fb1;
-transform: scale(1.1);
-box-shadow: 0 4px 10px rgba(244, 143, 177, 0.3);
+  opacity: 1;
+  filter: grayscale(0%);
+  background: #fff0f5;
+  border-color: #f48fb1;
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(244, 143, 177, 0.3);
 }
 .input-group {
-display: flex;
-gap: 12px;
-margin-bottom: 20px;
-flex-wrap: wrap;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 .cute-input {
-flex: 1;
-min-width: 200px;
-padding: 14px;
-border: 2px solid #eee;
-border-radius: 15px;
-font-family: 'Zen Maru Gothic', sans-serif;
-font-size: 1rem;
-color: #5d4a4a;
-outline: none;
-transition: 0.3s;
-text-align: center;
-box-sizing: border-box;
+  flex: 1;
+  min-width: 200px;
+  padding: 14px;
+  border: 2px solid #eee;
+  border-radius: 15px;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1rem;
+  color: #5d4a4a;
+  outline: none;
+  transition: 0.3s;
+  text-align: center;
+  box-sizing: border-box;
 }
 .cute-input::placeholder { text-align: center; color: #aaa; }
 .cute-input:focus {
-border-color: #f48fb1;
-box-shadow: 0 0 10px rgba(244, 143, 177, 0.3);
+  border-color: #f48fb1;
+  box-shadow: 0 0 10px rgba(244, 143, 177, 0.3);
 }
 .add-btn {
-width: 100%;
-padding: 15px;
-background: linear-gradient(135deg, #f5cad8, #f4bed0);
-color: #fff;
-border: none;
-border-radius: 50px;
-font-size: 1.1rem;
-font-weight: bold;
-cursor: pointer;
-box-shadow: 0 4px 15px rgba(255, 64, 129, 0.3);
-transition: 0.2s;
-font-family: 'Zen Maru Gothic', sans-serif;
-box-sizing: border-box;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #f5cad8, #f4bed0);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 64, 129, 0.3);
+  transition: 0.2s;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  box-sizing: border-box;
 }
 .add-btn:active { transform: scale(0.98); }
 .search-area {
-margin-bottom: 2rem;
-text-align: center;
+  margin-bottom: 2rem;
+  text-align: center;
 }
 .cmoa-btn {
-display: block;
-width: 95%;
-max-width: 550px;
-margin: 0 auto 20px;
-padding: 12px;
-background: #fff;
-color: #8d6e63;
-border: 3px solid #b2dfdb;
-border-radius: 50px;
-text-align: center;
-text-decoration: none;
-font-weight: bold;
-font-family: 'Zen Maru Gothic', sans-serif;
-box-shadow: 0 4px 10px rgba(178, 223, 219, 0.4);
-transition: 0.2s;
-box-sizing: border-box;
+  display: block;
+  width: 95%;
+  max-width: 550px;
+  margin: 0 auto 20px;
+  padding: 12px;
+  background: #fff;
+  color: #8d6e63;
+  border: 3px solid #b2dfdb;
+  border-radius: 50px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  box-shadow: 0 4px 10px rgba(178, 223, 219, 0.4);
+  transition: 0.2s;
+  box-sizing: border-box;
 }
 .cmoa-btn:hover {
-background: #e0f2f1;
-transform: translateY(-2px);
-color: #00838f;
+  background: #e0f2f1;
+  transform: translateY(-2px);
+  color: #00838f;
 }
 .search-input {
-width: 100%;
-max-width: 500px;
-margin: 0 auto 1rem;
-display: block;
-text-align: center;
-background: rgba(255,255,255,0.8);
-box-sizing: border-box;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 1rem;
+  display: block;
+  text-align: center;
+  background: rgba(255,255,255,0.8);
+  box-sizing: border-box;
 }
 .filter-buttons {
-display: flex;
-justify-content: center;
-gap: 10px;
-flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 .filter-btn {
-background: rgba(255, 255, 255, 0.6);
-border: 2px solid #fff;
-color: #8d6e63;
-padding: 8px 16px;
-border-radius: 20px;
-cursor: pointer;
-font-family: 'Zen Maru Gothic', sans-serif;
-font-weight: bold;
-transition: 0.2s;
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px solid #fff;
+  color: #8d6e63;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: bold;
+  transition: 0.2s;
 }
 .filter-btn:hover { background: #fff; }
 .filter-btn.active {
-background: #fce4ec;
-border-color: #f48fb1;
-color: #d81b60;
-box-shadow: 0 2px 8px rgba(244, 143, 177, 0.4);
+  background: #fce4ec;
+  border-color: #f48fb1;
+  color: #d81b60;
+  box-shadow: 0 2px 8px rgba(244, 143, 177, 0.4);
 }
 .tables-container {
-display: flex;
-gap: 2rem;
-align-items: flex-start;
-width: 100%;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  width: 100%;
 }
 .table-wrapper {
-flex: 1;
-background: #fff;
-border-radius: 20px;
-overflow: hidden;
-box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-padding-bottom: 10px;
-width: 100%;
+  flex: 1;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  padding-bottom: 10px;
+  width: 100%;
 }
 .table-title {
-padding: 15px;
-text-align: center;
-font-weight: bold;
-font-size: 1.1rem;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
 }
 .title-shonen { background: #e3f2fd; color: #1e88e5; }
 .title-shojo { background: #fce4ec; color: #d81b60; }
 .kawaii-table {
-display: table !important;
-width: 100% !important;
-max-width: 100% !important;
-border-collapse: collapse !important;
-table-layout: fixed !important;
-margin: 0 !important;
-padding: 0 !important;
+  display: table !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  border-collapse: collapse !important;
+  table-layout: fixed !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 .kawaii-table th {
-padding: 10px 5px;
-color: #8d6e63;
-font-size: 0.9rem;
-border-bottom: 2px solid #f0f0f0;
-white-space: nowrap;
-text-align: center !important;
-box-sizing: border-box !important;
+  padding: 10px 5px;
+  color: #8d6e63;
+  font-size: 0.9rem;
+  border-bottom: 2px solid #f0f0f0;
+  white-space: nowrap;
+  text-align: center !important;
+  box-sizing: border-box !important;
 }
 .kawaii-table th:first-child, .kawaii-table td:first-child {
-padding-left: 15px !important;
+  padding-left: 15px !important;
 }
-/* ▼▼▼ 修正：サイト列が追加されたためのPC用幅再計算 ▼▼▼ */
 .col-comp { width: 6% !important; }
 .col-title { width: 34% !important; }
 .col-vol { width: 12% !important; }
 .col-rate { width: 20% !important; }
-.col-site { width: 18% !important; } /* 追加 */
+.col-site { width: 18% !important; }
 .col-del { width: 10% !important; }
 .kawaii-table td {
-padding: 12px 2px;
-border-bottom: 1px solid #f9f9f9;
-text-align: center;
-vertical-align: middle;
-font-size: 0.95rem;
-color: #5d4a4a;
+  padding: 12px 2px;
+  border-bottom: 1px solid #f9f9f9;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 0.95rem;
+  color: #5d4a4a;
 }
 .cell-title {
-white-space: normal;
-word-break: break-word;
-text-align: center !important;
-color: #efacde !important;
-font-weight: bold;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center !important;
+  color: #efacde !important;
+  font-weight: bold;
 }
 .cell-rate {
-text-align: center !important;
+  text-align: center !important;
 }
 .cell-site {
-font-size: 0.85rem;
-font-weight: bold;
-color: #8d6e63;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #8d6e63;
 }
 .rate-select {
-border: none !important;
-background: transparent !important;
-padding: 2px 0;
-color: #5d4a4a;
-font-family: 'Zen Maru Gothic', sans-serif;
-font-size: 1rem;
-cursor: pointer;
-outline: none;
-width: 100%;
-text-align: center !important;
-text-align-last: center !important;
--moz-text-align-last: center !important;
-appearance: none;
--webkit-appearance: none;
+  border: none !important;
+  background: transparent !important;
+  padding: 2px 0;
+  color: #5d4a4a;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+  width: 100%;
+  text-align: center !important;
+  text-align-last: center !important;
+  -moz-text-align-last: center !important;
+  appearance: none;
+  -webkit-appearance: none;
 }
 .rate-select:hover {
-background-color: rgba(255, 240, 245, 0.5);
+  background-color: rgba(255, 240, 245, 0.5);
 }
 .comp-check {
-appearance: none;
--webkit-appearance: none;
-width: 22px;
-height: 22px;
-border: 2px solid #f48fb1;
-border-radius: 50%;
-cursor: pointer;
-position: relative;
-vertical-align: middle;
-transition: 0.2s;
-background: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #f48fb1;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+  transition: 0.2s;
+  background: #fff;
 }
 .comp-check:checked {
-background-color: #f48fb1;
-border-color: #f48fb1;
+  background-color: #f48fb1;
+  border-color: #f48fb1;
 }
 .comp-check:checked::after {
-content: '';
-position: absolute;
-top: 50%;
-left: 50%;
-width: 10px;
-height: 5px;
-border-left: 2px solid #fff;
-border-bottom: 2px solid #fff;
-transform: translate(-50%, -60%) rotate(-45deg);
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 5px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: translate(-50%, -60%) rotate(-45deg);
 }
 .delete-btn {
-background: #ffcdd2; color: #c62828;
-border: none; border-radius: 50%;
-width: 28px; height: 28px;
-cursor: pointer; font-weight: bold;
-transition: 0.2s;
-display: flex; justify-content: center; align-items: center;
-margin: 0 auto;
+  background: #ffcdd2; color: #c62828;
+  border: none; border-radius: 50%;
+  width: 28px; height: 28px;
+  cursor: pointer; font-weight: bold;
+  transition: 0.2s;
+  display: flex; justify-content: center; align-items: center;
+  margin: 0 auto;
 }
 .delete-btn:hover { background: #ef9a9a; }
-/* ▼▼▼ スマホ用調整（縦並び強制 ＋ 列幅再計算） ▼▼▼ */
+
+ 
 @media (max-width: 768px) {
-#kawaii-container {
-width: 96% !important;
-margin: 10px auto !important;
-padding: 15px 10px !important;
-}
-.room-title { font-size: 1.5rem !important; }
-.input-area {
-padding: 15px !important;
-}
-.input-group {
-flex-direction: column;
-gap: 10px;
-}
-.cute-input {
-width: 100% !important;
-min-width: 0 !important;
-}
-.tables-container {
-flex-direction: column !important;
-display: flex !important;
-gap: 2rem !important;
-}
-.table-wrapper {
-width: 100% !important;
-flex: none !important;
-}
-.kawaii-table th, .kawaii-table td {
-font-size: 0.75rem !important;
-padding: 6px 1px !important;
-}
-.rate-select { font-size: 0.75rem !important; }
-.cell-site { font-size: 0.65rem !important; } /* スマホではサイト名を少し小さめに */
-/* スマホ時の列幅微調整（6項目あるのでギリギリに詰めます） */
-.col-comp { width: 8% !important; }
-.col-title { width: 28% !important; }
-.col-vol { width: 10% !important; }
-.col-rate { width: 25% !important; }
-.col-site { width: 19% !important; } /* 追加 */
-.col-del { width: 10% !important; }
-.delete-btn {
-width: 22px; height: 22px;
-font-size: 0.8rem;
-}
-.comp-check {
-width: 18px; height: 18px;
-}
+  #kawaii-container {
+    width: 96% !important;
+    margin: 10px auto !important;
+    padding: 15px 10px !important;
+  }
+  .room-title { font-size: 1.5rem !important; }
+  .input-area {
+    padding: 15px !important;
+  }
+  .input-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cute-input {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  .tables-container {
+    flex-direction: column !important;
+    display: flex !important;
+    gap: 2rem !important;
+  }
+  .table-wrapper {
+    width: 100% !important;
+    flex: none !important;
+  }
+  .kawaii-table th, .kawaii-table td {
+    font-size: 0.75rem !important;
+    padding: 6px 1px !important;
+  }
+  .rate-select { font-size: 0.75rem !important; }
+  .cell-site { font-size: 0.65rem !important; }
+  .col-comp { width: 8% !important; }
+  .col-title { width: 28% !important; }
+  .col-vol { width: 10% !important; }
+  .col-rate { width: 25% !important; }
+  .col-site { width: 19% !important; }
+  .col-del { width: 10% !important; }
+  .delete-btn {
+    width: 22px; height: 22px;
+    font-size: 0.8rem;
+  }
+  .comp-check {
+    width: 18px; height: 18px;
+  }
 }
 </style>
-<div id="kawaii-container">
-<h1 class="room-title">わたしの本棚</h1>
-<div class="input-area">
-<div class="radio-group">
-<input type="radio" id="cat-shonen" name="category" value="shonen" checked>
-<label for="cat-shonen" class="radio-label">少年漫画</label>
-<input type="radio" id="cat-shojo" name="category" value="shojo">
-<label for="cat-shojo" class="radio-label">少女漫画</label>
+
+<div id="ym-root">
+  <div id="kawaii-container">
+    <h1 class="room-title">わたしの本棚</h1>
+    <div class="input-area">
+      <div class="radio-group">
+        <input type="radio" id="cat-shonen" name="category" value="shonen" checked>
+        <label for="cat-shonen" class="radio-label">少年漫画</label>
+        <input type="radio" id="cat-shojo" name="category" value="shojo">
+        <label for="cat-shojo" class="radio-label">少女漫画</label>
+      </div>
+      <div class="radio-group">
+        <input type="radio" id="site-cmoa" name="site" value="シーモア" checked>
+        <label for="site-cmoa" class="radio-label">シーモア</label>
+        <input type="radio" id="site-piccoma" name="site" value="ピッコマ">
+        <label for="site-piccoma" class="radio-label">ピッコマ</label>
+      </div>
+      <div class="rating-input-group">
+        <input type="radio" id="rate-good" name="rating" value="👍" checked>
+        <label for="rate-good" class="rating-label">👍</label>
+        <input type="radio" id="rate-meh" name="rating" value="😑">
+        <label for="rate-meh" class="rating-label">😑</label>
+        <input type="radio" id="rate-bad" name="rating" value="👎">
+        <label for="rate-bad" class="rating-label">👎</label>
+      </div>
+      <div class="input-group">
+        <input type="text" id="manga-title" class="cute-input" placeholder="タイトル">
+        <input type="text" id="manga-furi" class="cute-input" placeholder="フリガナ">
+        <input type="number" id="manga-vol" class="cute-input" placeholder="巻数">
+      </div>
+      <button class="add-btn" onclick="addManga()">🎀 ほんだなに追加する 🎀</button>
+    </div>
+    
+    <div class="search-area">
+      <a href="https://www.cmoa.jp/mypage/mypage_top/" target="_blank" class="cmoa-btn">📖 コミックシーモアの本棚</a>
+      <input type="text" id="search-box" class="cute-input search-input" placeholder="🔍 タイトルやフリガナで探す..." oninput="renderTables()">
+      <div class="filter-buttons">
+        <button class="filter-btn active" onclick="setFilter('all', this)">全部</button>
+        <button class="filter-btn" onclick="setFilter('👍', this)">👍</button>
+        <button class="filter-btn" onclick="setFilter('😑', this)">😑</button>
+        <button class="filter-btn" onclick="setFilter('👎', this)">👎</button>
+      </div>
+    </div>
+
+    <div class="tables-container">
+      <div class="table-wrapper">
+        <div class="table-title title-shonen">📘 少年漫画</div>
+        <table class="kawaii-table shonen-table">
+          <thead>
+            <tr>
+              <th class="col-comp">完</th>
+              <th class="col-title">タイトル</th>
+              <th class="col-vol">巻</th>
+              <th class="col-rate">評価</th>
+              <th class="col-site">サイト</th> <th class="col-del">×</th>
+            </tr>
+          </thead>
+          <tbody id="shonen-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="table-wrapper">
+        <div class="table-title title-shojo">🌸 少女漫画</div>
+        <table class="kawaii-table shojo-table">
+          <thead>
+            <tr>
+              <th class="col-comp">完</th>
+              <th class="col-title">タイトル</th>
+              <th class="col-vol">巻</th>
+              <th class="col-rate">評価</th>
+              <th class="col-site">サイト</th> <th class="col-del">×</th>
+            </tr>
+          </thead>
+          <tbody id="shojo-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="radio-group">
-<input type="radio" id="site-cmoa" name="site" value="シーモア" checked>
-<label for="site-cmoa" class="radio-label">シーモア</label>
-<input type="radio" id="site-piccoma" name="site" value="ピッコマ">
-<label for="site-piccoma" class="radio-label">ピッコマ</label>
-</div>
-<div class="rating-input-group">
-<input type="radio" id="rate-good" name="rating" value="👍" checked>
-<label for="rate-good" class="rating-label">👍</label>
-<input type="radio" id="rate-meh" name="rating" value="😑">
-<label for="rate-meh" class="rating-label">😑</label>
-<input type="radio" id="rate-bad" name="rating" value="👎">
-<label for="rate-bad" class="rating-label">👎</label>
-</div>
-<div class="input-group">
-<input type="text" id="manga-title" class="cute-input" placeholder="タイトル">
-<input type="text" id="manga-furi" class="cute-input" placeholder="フリガナ">
-<input type="number" id="manga-vol" class="cute-input" placeholder="巻数">
-</div>
-<button class="add-btn" onclick="addManga()">🎀 ほんだなに追加する 🎀</button>
-</div>
-<div class="search-area">
-<a href="https://www.cmoa.jp/mypage/mypage_top/" target="_blank" class="cmoa-btn">📖 コミックシーモアの本棚</a>
-<input type="text" id="search-box" class="cute-input search-input" placeholder="🔍 タイトルやフリガナで探す..." oninput="renderTables()">
-<div class="filter-buttons">
-<button class="filter-btn active" onclick="setFilter('all', this)">全部</button>
-<button class="filter-btn" onclick="setFilter('👍', this)">👍</button>
-<button class="filter-btn" onclick="setFilter('😑', this)">😑</button>
-<button class="filter-btn" onclick="setFilter('👎', this)">👎</button>
-</div>
-</div>
-<div class="tables-container">
-<div class="table-wrapper">
-<div class="table-title title-shonen">📘 少年漫画</div>
-<table class="kawaii-table shonen-table">
-<thead>
-<tr>
-<th class="col-comp">完</th>
-<th class="col-title">タイトル</th>
-<th class="col-vol">巻</th>
-<th class="col-rate">評価</th>
-<th class="col-site">サイト</th> <th class="col-del">×</th>
-</tr>
-</thead>
-<tbody id="shonen-tbody"></tbody>
-</table>
-</div>
-<div class="table-wrapper">
-<div class="table-title title-shojo">🌸 少女漫画</div>
-<table class="kawaii-table shojo-table">
-<thead>
-<tr>
-<th class="col-comp">完</th>
-<th class="col-title">タイトル</th>
-<th class="col-vol">巻</th>
-<th class="col-rate">評価</th>
-<th class="col-site">サイト</th> <th class="col-del">×</th>
-</tr>
-</thead>
-<tbody id="shojo-tbody"></tbody>
-</table>
-</div>
-</div>
-</div>
+
 <script>
-let mangaList = JSON.parse(localStorage.getItem('dt_manga_list')) || [];
+ 
+(function(){
+  function hideChrome(){
+    document.body.style.overflow = 'hidden';
+    document.body.style.background = '#f6cde3'; 
+
+    let el = document.getElementById('ym-root');
+    while(el && el !== document.body){
+      const parent = el.parentElement;
+      if(parent){
+        Array.from(parent.children).forEach(child => {
+          if(child !== el &&
+             !['SCRIPT','STYLE','LINK','META','canvas'].includes(child.tagName) &&
+             child.id !== 'ym-root' &&
+             child.id !== 'ms-toast' &&
+             !child.classList.contains('ms-overlay')){
+            child.style.setProperty('display','none','important');
+          }
+        });
+      }
+      el = parent;
+    }
+
+    const hideSelectors = [
+      'header','footer','nav',
+      '.site-header','.site-footer','.site-nav',
+      '[id*="header"]:not(#ym-root)',
+      '[id*="navbar"]','[id*="nav-bar"]',
+      '.navbar','.breadcrumbs','.toc-wrapper',
+      '.scroll-to-top','#top-scroller',
+      '[class*="header"]:not([class*="ym-"])',
+      '[class*="navbar"]','[class*="footer"]',
+    ];
+    document.querySelectorAll(hideSelectors.join(',')).forEach(n => {
+      if(!n.closest('#ym-root')){
+        n.style.setProperty('display','none','important');
+      }
+    });
+
+    const stripSelectors = 'main,article,.content,.container,[class*="prose"],[class*="max-w-"]';
+    document.querySelectorAll(stripSelectors).forEach(n => {
+      if(!n.closest('#ym-root')){
+        n.style.setProperty('padding','0','important');
+        n.style.setProperty('margin','0','important');
+        n.style.setProperty('max-width','none','important');
+        n.style.setProperty('background','transparent','important');
+      }
+    });
+  }
+
+  hideChrome();
+  document.addEventListener('DOMContentLoaded', hideChrome);
+  window.addEventListener('load', hideChrome);
+  new MutationObserver(hideChrome).observe(document.body, {childList:true, subtree:false});
+})();
+
+ 
+let mangaList = [];
+try {
+  
+  mangaList = JSON.parse(localStorage.getItem('dt_manga_list')) || [];
+} catch (e) {
+  mangaList = [];
+}
+
 let currentFilter = 'all'; 
+
 function addManga() {
-const title = document.getElementById('manga-title').value.trim();
-const furigana = document.getElementById('manga-furi').value.trim();
-const volume = document.getElementById('manga-vol').value.trim();
-const category = document.querySelector('input[name="category"]:checked').value;
-const site = document.querySelector('input[name="site"]:checked').value; // サイトを取得
-const rating = document.querySelector('input[name="rating"]:checked').value;
-if (!title || !furigana || !volume) {
-alert("全部入力してね！");
-return;
+  const title = document.getElementById('manga-title').value.trim();
+  const furigana = document.getElementById('manga-furi').value.trim();
+  const volume = document.getElementById('manga-vol').value.trim();
+  const categoryElement = document.querySelector('input[name="category"]:checked');
+  const siteElement = document.querySelector('input[name="site"]:checked');
+  const ratingElement = document.querySelector('input[name="rating"]:checked');
+  
+  const category = categoryElement ? categoryElement.value : 'shonen';
+  const site = siteElement ? siteElement.value : 'シーモア';
+  const rating = ratingElement ? ratingElement.value : '👍';
+
+  if (!title || !furigana || !volume) {
+    alert("全部入力してね！");
+    return;
+  }
+
+  const kana = furigana.replace(/[\u3041-\u3096]/g, function(match) {
+    return String.fromCharCode(match.charCodeAt(0) + 0x60);
+  });
+
+  const newManga = {
+    id: Date.now(),
+    title: title,
+    furigana: kana,
+    volume: volume,
+    category: category,
+    site: site,
+    rating: rating,
+    completed: false
+  };
+
+  mangaList.push(newManga);
+  saveData();
+  renderTables();
+
+  document.getElementById('manga-title').value = "";
+  document.getElementById('manga-furi').value = "";
+  document.getElementById('manga-vol').value = "";
+  document.getElementById('site-cmoa').checked = true;
+  document.getElementById('rate-good').checked = true;
 }
-const kana = furigana.replace(/[\u3041-\u3096]/g, function(match) {
-return String.fromCharCode(match.charCodeAt(0) + 0x60);
-});
-const newManga = {
-id: Date.now(),
-title: title,
-furigana: kana,
-volume: volume,
-category: category,
-site: site, // サイトを保存
-rating: rating,
-completed: false
-};
-mangaList.push(newManga);
-saveData();
-renderTables();
-document.getElementById('manga-title').value = "";
-document.getElementById('manga-furi').value = "";
-document.getElementById('manga-vol').value = "";
-document.getElementById('site-cmoa').checked = true; // 追加後にシーモアへ戻す
-document.getElementById('rate-good').checked = true;
-}
+
 function updateRating(id, newRating) {
-const target = mangaList.find(m => m.id === id);
-if(target) {
-target.rating = newRating;
-saveData();
-renderTables();
+  const target = mangaList.find(m => m.id === id);
+  if(target) {
+    target.rating = newRating;
+    saveData();
+    renderTables();
+  }
 }
-}
+
 function toggleCompletion(id) {
-const target = mangaList.find(m => m.id === id);
-if(target) {
-target.completed = !target.completed;
-saveData();
+  const target = mangaList.find(m => m.id === id);
+  if(target) {
+    target.completed = !target.completed;
+    saveData();
+  }
 }
-}
+
 function deleteManga(id) {
-if(confirm("本当に消す？")) {
-mangaList = mangaList.filter(manga => manga.id !== id);
-saveData();
-renderTables();
+  if(confirm("本当に消す？")) {
+    mangaList = mangaList.filter(manga => manga.id !== id);
+    saveData();
+    renderTables();
+  }
 }
-}
+
 function saveData() {
-localStorage.setItem('dt_manga_list', JSON.stringify(mangaList));
+  try {
+    localStorage.setItem('dt_manga_list', JSON.stringify(mangaList));
+  } catch (e) {
+    console.error("Local storage save failed", e);
+  }
 }
+
 function setFilter(filterType, btnElement) {
-currentFilter = filterType;
-renderTables();
-const buttons = document.querySelectorAll('.filter-btn');
-buttons.forEach(btn => btn.classList.remove('active'));
-if(btnElement) btnElement.classList.add('active');
+  currentFilter = filterType;
+  renderTables();
+  const buttons = document.querySelectorAll('.filter-btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  if(btnElement) btnElement.classList.add('active');
 }
+
 function renderTables() {
-const searchTerm = document.getElementById('search-box').value.toLowerCase();
-const shonenTbody = document.getElementById('shonen-tbody');
-const shojoTbody = document.getElementById('shojo-tbody');
-shonenTbody.innerHTML = "";
-shojoTbody.innerHTML = "";
-const filteredList = mangaList.filter(manga => {
-const matchesSearch = manga.title.toLowerCase().includes(searchTerm) || manga.furigana.includes(searchTerm);
-const matchesFilter = (currentFilter === 'all') || (manga.rating === currentFilter);
-return matchesSearch && matchesFilter;
-}).sort((a, b) => a.furigana.localeCompare(b.furigana, 'ja'));
-filteredList.forEach(manga => {
-const row = document.createElement('tr');
-const rating = manga.rating ? manga.rating : "👍";
-const siteName = manga.site ? manga.site : "-"; // 過去のデータ用
-const isChecked = manga.completed ? "checked" : "";
-row.innerHTML = `
-<td><input type="checkbox" class="comp-check" ${isChecked} onchange="toggleCompletion(${manga.id})"></td>
-<td class="cell-title">${manga.title}</td>
-<td>${manga.volume}</td>
-<td class="cell-rate">
-<select class="rate-select" onchange="updateRating(${manga.id}, this.value)">
-<option value="👍" ${rating === '👍' ? 'selected' : ''}>👍</option>
-<option value="😑" ${rating === '😑' ? 'selected' : ''}>😑</option>
-<option value="👎" ${rating === '👎' ? 'selected' : ''}>👎</option>
-</select>
-</td>
-<td class="cell-site">${siteName}</td> <td><button class="delete-btn" onclick="deleteManga(${manga.id})">×</button></td>
-`;
-if (manga.category === 'shonen') {
-shonenTbody.appendChild(row);
-} else {
-shojoTbody.appendChild(row);
+  const searchTerm = document.getElementById('search-box').value.toLowerCase();
+  const shonenTbody = document.getElementById('shonen-tbody');
+  const shojoTbody = document.getElementById('shojo-tbody');
+  
+  if (!shonenTbody || !shojoTbody) return; 
+  
+  shonenTbody.innerHTML = "";
+  shojoTbody.innerHTML = "";
+
+  const filteredList = mangaList.filter(manga => {
+    const matchesSearch = manga.title.toLowerCase().includes(searchTerm) || manga.furigana.includes(searchTerm);
+    const matchesFilter = (currentFilter === 'all') || (manga.rating === currentFilter);
+    return matchesSearch && matchesFilter;
+  }).sort((a, b) => a.furigana.localeCompare(b.furigana, 'ja'));
+
+  filteredList.forEach(manga => {
+    const row = document.createElement('tr');
+    const rating = manga.rating ? manga.rating : "👍";
+    const siteName = manga.site ? manga.site : "-"; 
+    const isChecked = manga.completed ? "checked" : "";
+
+    row.innerHTML = `
+      <td><input type="checkbox" class="comp-check" ${isChecked} onchange="toggleCompletion(${manga.id})"></td>
+      <td class="cell-title">${manga.title}</td>
+      <td>${manga.volume}</td>
+      <td class="cell-rate">
+        <select class="rate-select" onchange="updateRating(${manga.id}, this.value)">
+          <option value="👍" ${rating === '👍' ? 'selected' : ''}>👍</option>
+          <option value="😑" ${rating === '😑' ? 'selected' : ''}>😑</option>
+          <option value="👎" ${rating === '👎' ? 'selected' : ''}>👎</option>
+        </select>
+      </td>
+      <td class="cell-site">${siteName}</td> <td><button class="delete-btn" onclick="deleteManga(${manga.id})">×</button></td>
+    `;
+    
+    if (manga.category === 'shonen') {
+      shonenTbody.appendChild(row);
+    } else {
+      shojoTbody.appendChild(row);
+    }
+  });
+
+  if(shonenTbody.innerHTML === "") shonenTbody.innerHTML = "<tr><td colspan='6' style='color:#ccc; padding:20px;'>まだないよ</td></tr>";
+  if(shojoTbody.innerHTML === "") shojoTbody.innerHTML = "<tr><td colspan='6' style='color:#ccc; padding:20px;'>まだないよ</td></tr>";
 }
-});
-if(shonenTbody.innerHTML === "") shonenTbody.innerHTML = "<tr><td colspan='6' style='color:#ccc; padding:20px;'>まだないよ</td></tr>";
-if(shojoTbody.innerHTML === "") shojoTbody.innerHTML = "<tr><td colspan='6' style='color:#ccc; padding:20px;'>まだないよ</td></tr>";
-}
+
 window.onload = renderTables;
-<p>// ▼▼▼ 今回追加した、親要素（Hugoの枠）を強制的に中央へ寄せるハック ▼▼▼
-document.addEventListener(&ldquo;DOMContentLoaded&rdquo;, () =&gt; {
-const container = document.getElementById(&ldquo;kawaii-container&rdquo;);
-if (container &amp;&amp; container.parentElement) {
-container.parentElement.style.width = &ldquo;100%&rdquo;;
-container.parentElement.style.maxWidth = &ldquo;100%&rdquo;;
-container.parentElement.style.display = &ldquo;flex&rdquo;;
-container.parentElement.style.justifyContent = &ldquo;center&rdquo;;
-}
-});
-</script></p>
+
+</script>
+
 
     </section>
     <footer class="pt-8">
