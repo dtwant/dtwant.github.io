@@ -757,17 +757,17 @@
 #ym-root, #ym-root *,
 .ym-overlay, .ym-overlay * {
   box-sizing: border-box; margin: 0; padding: 0;
-  --ym-bg:        #f8daea;  
+  --ym-bg:        #f8daea;
   --ym-card-bg:   rgba(255, 255, 255, 0.85);
   --ym-border:    #fbcfe8;
   --ym-border2:   #f8bfdf;
-  --ym-pink-main: #f5b6d6;  
-  --ym-pink-dark: #f5b2c8;  
+  --ym-pink-main: #f5b6d6;
+  --ym-pink-dark: #f5b2c8;
   --ym-blue-light:#e0f7fa;
   --ym-blue-main: #64b5f6;
   --ym-yellow:    #ffd54f;
   --ym-purple:    #ce93d8;
-  --ym-text:      #8d6e63;  
+  --ym-text:      #8d6e63;
   --ym-text-mut:  #a1887f;
   --ym-shadow:    rgba(244, 114, 182, 0.15);
   --ym-font:      'Zen Maru Gothic', sans-serif;
@@ -793,7 +793,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 3rem;  
+  padding: 1rem 3rem;
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
   border-bottom: 2px dashed #fff;
@@ -814,14 +814,12 @@
   color: var(--ym-text-mut);
   font-weight: 700;
 }
-
 .ym-header-right {
   display: flex;
   align-items: center;
   gap: 1.0rem;
   flex-wrap: wrap;
 }
-
 .ym-hbtn {
   font-family: var(--ym-font);
   font-size: 0.8rem;
@@ -909,10 +907,10 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.7rem 3rem 0.5rem;  
+  padding: 0.7rem 3rem 0.5rem;
 }
 .ym-toolbar-row2 {
-  padding: 0 3rem 0.6rem;  
+  padding: 0 3rem 0.6rem;
 }
 .ym-search-wrap {
   position: relative;
@@ -937,7 +935,7 @@
   font-family: var(--ym-font);
   font-size: 0.95rem;
   font-weight: 700;
-  padding: 0.5rem 1rem 0.5rem 3.5rem;  
+  padding: 0.5rem 1rem 0.5rem 3.5rem;
   outline: none;
   transition: all 0.2s;
 }
@@ -994,15 +992,17 @@
   z-index: 10;
   scrollbar-width: thin;
   scrollbar-color: var(--ym-pink-main) transparent;
+   
+  -webkit-overflow-scrolling: touch;
 }
 .ym-body::-webkit-scrollbar { width: 8px; }
 .ym-body::-webkit-scrollbar-thumb { background: var(--ym-pink-main); border-radius: 4px; }
 
  
 .ym-grid {
-  padding: 2rem 3rem;  
+  padding: 2rem 3rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));  
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   grid-auto-rows: max-content;
   gap: 1.5rem;
   align-content: start;
@@ -1029,6 +1029,12 @@
 }
 
  
+.ym-card.s-done    { border-top: 3px solid var(--ym-blue-main); }
+.ym-card.s-reading { border-top: 3px solid var(--ym-pink-main); }
+.ym-card.s-backlog { border-top: 3px solid var(--ym-purple); }
+.ym-card.s-unread  { border-top: 3px solid var(--ym-border2); }
+
+ 
 .ym-card-cat {
   position: absolute;
   top: -4px; left: 10px;
@@ -1041,7 +1047,7 @@
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 .cat-shonen { background: var(--ym-blue-main); }
-.cat-shojo { background: var(--ym-pink-main); }
+.cat-shojo  { background: var(--ym-pink-main); }
 
  
 .ym-card-status {
@@ -1055,11 +1061,12 @@
   transform: rotate(45deg);
   z-index: 2;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  white-space: nowrap;
 }
-.ym-card.s-done .ym-card-status { background: var(--ym-blue-main); }
+.ym-card.s-done .ym-card-status    { background: var(--ym-blue-main); }
 .ym-card.s-reading .ym-card-status { background: var(--ym-pink-main); }
 .ym-card.s-backlog .ym-card-status { background: var(--ym-purple); }
-.ym-card.s-unread .ym-card-status { background: var(--ym-text-mut); }
+.ym-card.s-unread .ym-card-status  { background: var(--ym-text-mut); }
 
 .ym-cover {
   width: 100%;
@@ -1105,7 +1112,7 @@
   background: #fff;
 }
 .ym-card-title {
-  font-size: 1.05rem;  
+  font-size: 1.05rem;
   font-weight: 900;
   color: var(--ym-pink-dark);
   line-height: 1.3;
@@ -1125,6 +1132,22 @@
 .ym-card-foot {
   display:flex; justify-content:space-between; align-items:center; margin-top: auto; padding-top: 0.4rem;
 }
+
+ 
+.ym-card-badge {
+  display: none;
+  font-size: 0.55rem;
+  font-weight: 900;
+  padding: 0.15rem 0.45rem;
+  border-radius: 50px;
+  color: #fff;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.ym-card.s-done    .ym-card-badge { background: var(--ym-blue-main); }
+.ym-card.s-reading .ym-card-badge { background: var(--ym-pink-main); }
+.ym-card.s-backlog .ym-card-badge { background: var(--ym-purple); }
+.ym-card.s-unread  .ym-card-badge { background: var(--ym-text-mut); }
 
 .ym-stars-small { font-size: 0.9rem; letter-spacing: -2px; }
 .ym-star-filled { color: var(--ym-yellow); text-shadow: 0 0 2px rgba(251, 191, 36, 0.5); }
@@ -1146,17 +1169,17 @@
 
  
 .ym-fab {
-  display: flex;
+  display: none;  
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  right: 1.5rem;
   z-index: 9020;
-  width: 60px; height: 60px;
+  width: 58px; height: 58px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--ym-pink-main), var(--ym-border2));
   color: #fff;
   border: 4px solid #fff;
-  font-size: 2rem;
+  font-size: 1.9rem;
   font-weight: 900;
   cursor: pointer;
   box-shadow: 0 8px 20px var(--ym-shadow);
@@ -1165,14 +1188,14 @@
   justify-content: center;
 }
 .ym-fab:hover { transform: scale(1.1) rotate(90deg); }
-.ym-fab:active { transform: scale(0.95); }
+.ym-fab:active { transform: scale(0.92); }
 
  
 .ym-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(246, 205, 227, 0.8);  
+  background: rgba(246, 205, 227, 0.8);
   backdrop-filter: blur(8px);
   z-index: 99999;
   align-items: center;
@@ -1183,7 +1206,7 @@
 
 .ym-modal {
   background: #fff;
-  border: 4px solid #fff;  
+  border: 4px solid #fff;
   border-radius: 24px;
   width: 100%;
   max-width: 550px;
@@ -1191,7 +1214,7 @@
   max-height: 90dvh;
   display: flex;
   flex-direction: column;
-  min-height: 0;  
+  min-height: 0;
   overflow: hidden;
   box-shadow: 0 15px 40px var(--ym-shadow);
   animation: ym-modal-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -1208,7 +1231,7 @@
   font-size: 1.2rem;
   font-weight: 900;
   color: var(--ym-pink-dark);
-  flex: 0 0 auto;  
+  flex: 0 0 auto;
 }
 .ym-modal-close {
   background: #fff; border: 2px solid var(--ym-border2);
@@ -1220,11 +1243,12 @@
 }
 .ym-modal-close:hover { background: var(--ym-pink-dark); color: #fff; transform: rotate(90deg); }
 
-.ym-modal-body { 
+.ym-modal-body {
   padding: 1.5rem; display: flex; flex-direction: column; gap: 1.2rem;
   overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--ym-border2) transparent;
-  flex: 1 1 auto;  
-  min-height: 0;  
+  flex: 1 1 auto;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
 }
 .ym-modal-body::-webkit-scrollbar { width: 8px; }
 .ym-modal-body::-webkit-scrollbar-thumb { background: var(--ym-border2); border-radius: 4px; }
@@ -1235,7 +1259,6 @@
   font-weight: 900;
   color: var(--ym-text-mut);
 }
-
 .ym-input, .ym-textarea, .ym-select {
   font-family: var(--ym-font);
   font-size: 1rem;
@@ -1258,7 +1281,6 @@
 
 .ym-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
- 
 .ym-radio-row { display: flex; gap: 10px; }
 .ym-radio-row input[type="radio"] { display: none; }
 .ym-radio-label {
@@ -1272,13 +1294,10 @@
   cursor: pointer;
   transition: all 0.2s;
 }
- 
 input[id^="f-cat-shonen"]:checked + .ym-radio-label { background: var(--ym-blue-light); border-color: var(--ym-blue-main); color: var(--ym-blue-main); }
-input[id^="f-cat-shojo"]:checked + .ym-radio-label { background: #fce4ec; border-color: var(--ym-pink-main); color: var(--ym-pink-main); }
- 
-input[value="シーモア"]:checked + .ym-radio-label { background: #e0f7fa; border-color: #00bcd4; color: #00bcd4; }
-input[value="ピッコマ"]:checked + .ym-radio-label { background: #fff8e1; border-color: #ffc107; color: #ffc107; }
-
+input[id^="f-cat-shojo"]:checked + .ym-radio-label  { background: #fce4ec; border-color: var(--ym-pink-main); color: var(--ym-pink-main); }
+input[value="シーモア"]:checked + .ym-radio-label   { background: #e0f7fa; border-color: #00bcd4; color: #00bcd4; }
+input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; border-color: #ffc107; color: #ffc107; }
 
 .ym-star-row { display:flex; gap:0.5rem; justify-content: center; background:#fff; border: 2px solid var(--ym-border); border-radius:12px; padding: 0.5rem; }
 .ym-star-btn {
@@ -1329,7 +1348,6 @@ input[value="ピッコマ"]:checked + .ym-radio-label { background: #fff8e1; bor
 .ym-detail-info { font-size:0.8rem; font-weight:900; color:var(--ym-border2); }
 .ym-detail-info span { color:var(--ym-text-mut); margin-left: 0.3rem;}
 
-
  
 @media (max-width: 1100px) {
   .ym-grid { grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap:1.2rem; padding: 1.5rem 2rem; }
@@ -1337,48 +1355,173 @@ input[value="ピッコマ"]:checked + .ym-radio-label { background: #fff8e1; bor
   .ym-toolbar-row1 { padding: 0.7rem 2rem 0.5rem; }
   .ym-toolbar-row2 { padding: 0 2rem 0.6rem; }
 }
+
 @media (max-width: 900px) {
   .ym-grid { grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); gap:1rem; padding: 1rem; }
 }
-@media (max-width: 768px) {
-  .ym-header { flex-direction:column; padding:1rem; gap:0.8rem; text-align: center; }
-  .ym-header-right { width:100%; justify-content:center; }
-  
-  .ym-stats { 
-      flex-wrap: wrap; 
+
+ 
+@media (max-width: 640px) {
+
+   
+  .ym-header {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 0.65rem 1rem;
+    gap: 0.5rem;
+    align-items: center;
   }
-  .ym-stat { 
-      flex: 1 1 33.333%;  
-      padding:0.6rem 0.5rem; 
-      border-right: none; 
-      border-bottom: 2px dashed #fff; 
+  .ym-logo-title { font-size: 1.05rem; letter-spacing: 0.05em; }
+  .ym-logo-sub   { display: none; }
+   
+  .ym-hbtn.primary { display: none; }
+   
+  .ym-fab { display: flex; }
+
+   
+  .ym-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    flex-wrap: unset;
+  }
+  .ym-stat {
+    flex: unset;
+    padding: 0.45rem 0.3rem;
+    border-right: 2px dashed #fff;
+    border-bottom: 2px dashed #fff;
   }
    
   .ym-stat:nth-child(3n) { border-right: none; }
-  .ym-stat:nth-child(n+4) { border-bottom: none; border-top: 2px dashed #fff;}
-  .ym-stat:nth-child(1), .ym-stat:nth-child(2), .ym-stat:nth-child(4), .ym-stat:nth-child(5) {
-      border-right: 2px dashed #fff;
+   
+  .ym-stat:nth-child(4),
+  .ym-stat:nth-child(5),
+  .ym-stat:nth-child(6) { border-bottom: none; }
+  .ym-stat-num   { font-size: 1.15rem; }
+  .ym-stat-label { font-size: 0.58rem; }
+
+   
+  .ym-toolbar-row1 {
+    padding: 0.5rem 0.75rem 0.4rem;
+    gap: 0.5rem;
   }
-  
-  .ym-toolbar-row1 { padding: 0.8rem; flex-direction: column; align-items: stretch; gap: 0.8rem; }
-  .ym-toolbar-row2 { padding: 0 0.8rem 0.8rem; }
-  .ym-search-wrap { max-width: 100%; width: 100%; }
-  .ym-sort-sel { width: 100%; text-align: center; }
-  .ym-grid { grid-template-columns:repeat(2,1fr); gap:1rem; padding:1rem; padding-bottom: 6rem; }
-  
-  .ym-overlay { align-items:center; padding:1rem; }
-  .ym-modal { max-width:100%; border-radius:24px; border: 4px solid #fff; max-height: 85vh; max-height: 85dvh; min-height: 0; flex-shrink: 1; }
-  .ym-detail-cover { width:90px; }
-  .ym-detail-title { font-size: 1.2rem; }
-  
-  .ym-row { grid-template-columns: 1fr; gap:0.6rem; }
+  .ym-toolbar-row2 { padding: 0 0.75rem 0.5rem; }
+  .ym-search-wrap { max-width: 100%; }
+  .ym-search { font-size: 0.85rem; padding: 0.4rem 0.8rem 0.4rem 3rem; }
+  .ym-sort-sel { font-size: 0.72rem; padding: 0.4rem 0.6rem; }
+  .ym-tab { font-size: 0.68rem; padding: 0.3rem 0.7rem; }
+
+   
+  .ym-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.55rem;
+    padding: 0.75rem;
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+   
+  .ym-card { border-radius: 12px; border-width: 3px; }
+   
+  .ym-card-status { display: none; }
+   
+  .ym-card-badge { display: inline-block; }
+
+  .ym-card-cat {
+    font-size: 0.5rem;
+    padding: 3px 6px;
+    left: 6px;
+  }
+
+   
+  .ym-cover-gen {
+    font-size: 1.4rem;
+    padding: 0.5rem;
+  }
+  .ym-cover-site {
+    font-size: 0.5rem;
+    padding: 0.15rem 0.35rem;
+    bottom: 0.3rem; right: 0.3rem;
+  }
+
+   
+  .ym-card-body {
+    padding: 0.45rem 0.5rem 0.4rem;
+    gap: 0.2rem;
+    background: #fff;
+  }
+  .ym-card-title {
+    font-size: 0.75rem;
+    -webkit-line-clamp: 2;
+  }
+  .ym-card-author-vol {
+    font-size: 0.58rem;
+    flex-direction: column;
+    gap: 0;
+  }
+  .ym-card-foot {
+    padding-top: 0.25rem;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+  }
+  .ym-stars-small { font-size: 0.7rem; letter-spacing: -1px; }
+
+   
+  .ym-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .ym-modal {
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    border-bottom: none;
+    max-height: 92dvh;
+    animation: ym-sheet-in 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @keyframes ym-sheet-in {
+    from { transform: translateY(100%); opacity: 0.6; }
+    to   { transform: translateY(0);    opacity: 1;   }
+  }
+   
+  .ym-modal-header { position: relative; }
+  .ym-modal-header::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem; left: 50%;
+    transform: translateX(-50%);
+    width: 36px; height: 4px;
+    background: var(--ym-border2);
+    border-radius: 4px;
+  }
+
+  .ym-row { grid-template-columns: 1fr; gap: 0.6rem; }
+  .ym-modal-body { padding: 1rem; gap: 0.9rem; }
+  .ym-modal-header { padding: 1.1rem 1rem 0.85rem; font-size: 1rem; }
+
+   
+  .ym-detail-cover { width: 90px; }
+  .ym-detail-title { font-size: 1.1rem; }
 }
 
-@media (max-width: 400px) {
-   .ym-stat { flex: 1 1 50%; }  
-   .ym-stat:nth-child(2n) { border-right: none; }
-   .ym-stat:nth-child(odd) { border-right: 2px dashed #fff; }
-   .ym-stat:nth-child(n+3) { border-top: 2px dashed #fff; border-bottom: none;}
+ 
+@media (max-width: 360px) {
+  .ym-grid { grid-template-columns: repeat(3, 1fr); gap: 0.4rem; padding: 0.5rem; }
+  .ym-card-title { font-size: 0.68rem; }
+  .ym-cover-gen  { font-size: 1.1rem; }
+  .ym-stat-num   { font-size: 0.95rem; }
+  .ym-stat-label { font-size: 0.5rem; }
+  .ym-logo-title { font-size: 0.9rem; }
+}
+
+ 
+@media (max-height: 500px) and (max-width: 900px) {
+  .ym-overlay { align-items: center; padding: 0.5rem; }
+  .ym-modal { max-width: 480px; border-radius: 16px; animation: ym-modal-in 0.2s ease; }
+  .ym-stats { grid-template-columns: repeat(6, 1fr); }
+  .ym-stat:nth-child(3n) { border-right: 2px dashed #fff; }
+  .ym-stat:nth-child(4),
+  .ym-stat:nth-child(5),
+  .ym-stat:nth-child(6) { border-bottom: none; border-top: none; }
+  .ym-stat:nth-child(6) { border-right: none; }
 }
 </style>
 
@@ -1392,7 +1535,7 @@ input[value="ピッコマ"]:checked + .ym-radio-label { background: #fff8e1; bor
     </div>
     <div class="ym-header-right">
       <a href="https://www.cmoa.jp/mypage/mypage_top/" target="_blank" class="ym-hbtn">📖 シーモア</a>
-      <button class="ym-hbtn primary" onclick="document.getElementById('ym-root').scrollTo(0, 0); ymOpenAdd()">＋ ついかする</button>
+      <button class="ym-hbtn primary" onclick="ymOpenAdd()">＋ ついかする</button>
     </div>
   </div>
 
@@ -1426,7 +1569,7 @@ input[value="ピッコマ"]:checked + .ym-radio-label { background: #fff8e1; bor
   <div class="ym-toolbar">
     <div class="ym-toolbar-row1">
       <div class="ym-search-wrap">
-        <span class="ym-search-icon"></span>
+        <span class="ym-search-icon">🔍</span>
         <input type="text" class="ym-search" id="ym-search" placeholder="タイトル・さくしゃ・タグでさがす..." oninput="ymRender()">
       </div>
       <select class="ym-sort-sel" id="ym-sort" onchange="ymRender()">
@@ -1450,7 +1593,8 @@ input[value="ピッコマ"]:checked + .ym-radio-label { background: #fff8e1; bor
     <div class="ym-grid" id="ym-grid"></div>
   </div>
 
-  <button class="ym-fab" onclick="document.getElementById('ym-root').scrollTo(0, 0); ymOpenAdd()">＋</button>
+  
+  <button class="ym-fab" onclick="ymOpenAdd()">＋</button>
 
 </div>
 
@@ -1579,8 +1723,7 @@ input[value="ピッコマ"]:checked + .ym-radio-label { background: #fff8e1; bor
 (function(){
   function hideChrome(){
     document.body.style.overflow = 'hidden';
-    document.body.style.background = '#f6cde3'; 
-
+    document.body.style.background = '#f6cde3';
     let el = document.getElementById('ym-root');
     while(el && el !== document.body){
       const parent = el.parentElement;
@@ -1596,23 +1739,15 @@ input[value="ピッコマ"]:checked + .ym-radio-label { background: #fff8e1; bor
       }
       el = parent;
     }
-
     const hideSelectors = [
-      'header','footer','nav',
-      '.site-header','.site-footer','.site-nav',
-      '[id*="header"]:not(#ym-root)',
-      '[id*="navbar"]','[id*="nav-bar"]',
-      '.navbar','.breadcrumbs','.toc-wrapper',
-      '.scroll-to-top','#top-scroller',
-      '[class*="header"]:not([class*="ym-"])',
-      '[class*="navbar"]','[class*="footer"]',
+      'header','footer','nav','.site-header','.site-footer','.site-nav',
+      '[id*="header"]:not(#ym-root)','[id*="navbar"]','[id*="nav-bar"]',
+      '.navbar','.breadcrumbs','.toc-wrapper','.scroll-to-top','#top-scroller',
+      '[class*="header"]:not([class*="ym-"])','[class*="navbar"]','[class*="footer"]',
     ];
     document.querySelectorAll(hideSelectors.join(',')).forEach(n => {
-      if(!n.closest('#ym-root')){
-        n.style.setProperty('display','none','important');
-      }
+      if(!n.closest('#ym-root')) n.style.setProperty('display','none','important');
     });
-
     const stripSelectors = 'main,article,.content,.container,[class*="prose"],[class*="max-w-"]';
     document.querySelectorAll(stripSelectors).forEach(n => {
       if(!n.closest('#ym-root')){
@@ -1631,7 +1766,7 @@ input[value="ピッコマ"]:checked + .ym-radio-label { background: #fff8e1; bor
 
  
 const LS_KEY = 'dt_yume_manga_list';
-const OLD_LS_KEY = 'dt_manga_list'; 
+const OLD_LS_KEY = 'dt_manga_list';
 
 let db = [];
 let activeFilter = 'all';
@@ -1640,25 +1775,22 @@ let formTags = [];
 let detailId = null;
 
 const STATUS_LABEL = {done:'よみおわり✨', reading:'よんでる！', backlog:'つんどく...', unread:'まだ'};
-const STATUS_CLASS = {done:'s-done', reading:'s-reading', backlog:'s-backlog', unread:'s-unread'};
-
+const STATUS_CLASS  = {done:'s-done', reading:'s-reading', backlog:'s-backlog', unread:'s-unread'};
 
 const PALETTES = [
-  ['#fbcfe8', '#f472b6'], 
-  ['#bfdbfe', '#60a5fa'], 
-  ['#e9d5ff', '#c084fc'], 
-  ['#fde68a', '#fbbf24'], 
-  ['#a7f3d0', '#34d399'], 
+  ['#fbcfe8', '#f472b6'],
+  ['#bfdbfe', '#60a5fa'],
+  ['#e9d5ff', '#c084fc'],
+  ['#fde68a', '#fbbf24'],
+  ['#a7f3d0', '#34d399'],
 ];
 
 function init() {
-  
   try {
     const raw = localStorage.getItem(LS_KEY);
     if (raw) {
       db = JSON.parse(raw);
     } else {
-      
       const oldRaw = localStorage.getItem(OLD_LS_KEY);
       if (oldRaw) {
         const oldDb = JSON.parse(oldRaw);
@@ -1666,37 +1798,26 @@ function init() {
         save();
       }
     }
-  } catch (e) {
-    db = [];
-  }
+  } catch (e) { db = []; }
   ymRender();
 }
 
 function translateOldToNew(old) {
-  
   let rating = 0;
   if (old.rating === '👍') rating = 5;
   else if (old.rating === '😑') rating = 3;
   else if (old.rating === '👎') rating = 1;
-
-  
-  let status = old.completed ? 'done' : 'unread';
-
   return {
     id: old.id || Date.now().toString(36),
     title: old.title || "なまえなし",
     furigana: old.furigana || "",
     author: "",
     volumes: old.volume || "",
-    status: status,
-    rating: rating,
-    tags: [],
-    note: "",
-    cover: "",
-    category: old.category || "shonen",
+    status: old.completed ? 'done' : 'unread',
+    rating, tags: [], note: "",
+    cover: "", category: old.category || "shonen",
     site: old.site || "シーモア",
-    addedAt: Date.now(),
-    updatedAt: Date.now()
+    addedAt: Date.now(), updatedAt: Date.now()
   };
 }
 
@@ -1704,36 +1825,28 @@ function save() {
   try { localStorage.setItem(LS_KEY, JSON.stringify(db)); } catch(e){}
 }
 
- 
 window.ymSave = function() {
   const title = document.getElementById('ym-f-title').value.trim();
   if (!title) { alert("タイトルはいれてね！"); return; }
-  
-  const furiStr = document.getElementById('ym-f-furi').value.trim();
-  const kana = furiStr.replace(/[\u3041-\u3096]/g, match => String.fromCharCode(match.charCodeAt(0) + 0x60));
-
   const id = document.getElementById('ym-edit-id').value || Date.now().toString(36) + Math.random().toString(36).slice(2,5);
   const now = Date.now();
-  
   const entry = {
     id, title,
-    furigana: kana,
-    author: document.getElementById('ym-f-author').value.trim(),
+    furigana: document.getElementById('ym-f-furi').value.trim(),
+    author:   document.getElementById('ym-f-author').value.trim(),
     category: document.querySelector('input[name="f-category"]:checked').value,
-    site: document.querySelector('input[name="f-site"]:checked').value,
-    status: document.getElementById('ym-f-status').value,
-    volumes: document.getElementById('ym-f-vol').value.trim(),
-    rating: formRating,
-    tags: [...formTags],
-    note: document.getElementById('ym-f-note').value.trim(),
-    cover: document.getElementById('ym-f-cover').value.trim(),
-    addedAt: db.find(m => m.id === id)?.addedAt || now,
+    site:     document.querySelector('input[name="f-site"]:checked').value,
+    status:   document.getElementById('ym-f-status').value,
+    volumes:  document.getElementById('ym-f-vol').value.trim(),
+    rating:   formRating,
+    tags:     [...formTags],
+    note:     document.getElementById('ym-f-note').value.trim(),
+    cover:    document.getElementById('ym-f-cover').value.trim(),
+    addedAt:  db.find(m => m.id === id)?.addedAt || now,
     updatedAt: now
   };
-
   const idx = db.findIndex(m => m.id === id);
   if (idx >= 0) db[idx] = entry; else db.unshift(entry);
-  
   save(); ymCloseForm(); ymRender();
 };
 
@@ -1744,10 +1857,7 @@ window.ymDelete = function() {
   save(); ymCloseForm(); ymRender();
 };
 
-window.ymFilter = function(f) {
-  activeFilter = f;
-  ymRender();
-};
+window.ymFilter = function(f) { activeFilter = f; ymRender(); };
 
 window.ymSetRating = function(v) {
   formRating = (formRating === v) ? 0 : v;
@@ -1770,35 +1880,27 @@ function updateTagUI() {
   });
 }
 
- 
 function getFiltered() {
   const q = document.getElementById('ym-search').value.trim().toLowerCase();
   const sort = document.getElementById('ym-sort').value;
   let arr = db.slice();
-  
   if (activeFilter !== 'all') arr = arr.filter(m => m.status === activeFilter);
-  if (q) {
-    arr = arr.filter(m => 
-      m.title.toLowerCase().includes(q) || 
-      (m.furigana||'').toLowerCase().includes(q) ||
-      (m.author||'').toLowerCase().includes(q) ||
-      (m.tags||[]).some(t => t.toLowerCase().includes(q))
-    );
-  }
-  
+  if (q) arr = arr.filter(m =>
+    m.title.toLowerCase().includes(q) ||
+    (m.furigana||'').toLowerCase().includes(q) ||
+    (m.author||'').toLowerCase().includes(q) ||
+    (m.tags||[]).some(t => t.toLowerCase().includes(q))
+  );
   arr.sort((a,b) => {
-    if (sort === 'title') {
-      const aK = a.furigana || a.title; const bK = b.furigana || b.title;
-      return aK.localeCompare(bK, 'ja');
-    }
-    if (sort === 'rating') return (b.rating || 0) - (a.rating || 0);
-    return (b.updatedAt || 0) - (a.updatedAt || 0);
+    if (sort === 'title')  { const aK = a.furigana||a.title, bK = b.furigana||b.title; return aK.localeCompare(bK,'ja'); }
+    if (sort === 'rating') return (b.rating||0) - (a.rating||0);
+    return (b.updatedAt||0) - (a.updatedAt||0);
   });
   return arr;
 }
 
 function getCoverBg(title) {
-  let h = 0; for(let i=0; i<title.length; i++) h = (h*31 + title.charCodeAt(i)) & 0x7fffffff;
+  let h = 0; for(let i=0;i<title.length;i++) h=(h*31+title.charCodeAt(i))&0x7fffffff;
   const p = PALETTES[h % PALETTES.length];
   return `linear-gradient(135deg, ${p[0]}, ${p[1]})`;
 }
@@ -1808,19 +1910,17 @@ window.ymRender = function() {
   const arr = getFiltered();
   const counts = {done:0, reading:0, backlog:0, unread:0};
   let rsum = 0, rcnt = 0;
-  
-  db.forEach(m => { 
-    counts[m.status] = (counts[m.status] || 0) + 1; 
-    if (m.rating) { rsum += m.rating; rcnt++; } 
+  db.forEach(m => {
+    counts[m.status] = (counts[m.status]||0) + 1;
+    if (m.rating) { rsum += m.rating; rcnt++; }
   });
-  
-  document.getElementById('ym-n-total').textContent = db.length;
-  document.getElementById('ym-n-done').textContent = counts.done || 0;
-  document.getElementById('ym-n-reading').textContent = counts.reading || 0;
-  document.getElementById('ym-n-backlog').textContent = counts.backlog || 0;
-  document.getElementById('ym-n-unread').textContent = counts.unread || 0;
+  document.getElementById('ym-n-total').textContent   = db.length;
+  document.getElementById('ym-n-done').textContent    = counts.done   || 0;
+  document.getElementById('ym-n-reading').textContent = counts.reading|| 0;
+  document.getElementById('ym-n-backlog').textContent = counts.backlog|| 0;
+  document.getElementById('ym-n-unread').textContent  = counts.unread || 0;
   document.getElementById('ym-avg-stars').textContent = rcnt ? (rsum/rcnt).toFixed(1) : '—';
-  
+
   ['all','done','reading','backlog','unread'].forEach(k => {
     const el = document.getElementById('ym-tab-'+k);
     if(el) el.className = 'ym-tab' + (k === activeFilter ? ' active-'+k : '');
@@ -1834,19 +1934,17 @@ window.ymRender = function() {
 
   grid.innerHTML = arr.map((m, i) => {
     const bg = getCoverBg(m.title);
-    const coverHtml = m.cover 
-      ? `<img class="ym-cover-art" src="${esc(m.cover)}" onerror="this.style.display='none'">` 
+    const coverHtml = m.cover
+      ? `<img class="ym-cover-art" src="${esc(m.cover)}" onerror="this.style.display='none'">`
       : `<div class="ym-cover-gen" style="background:${bg}">${esc(m.title.slice(0,3))}</div>`;
-    
-    const stars = m.rating 
-      ? [1,2,3,4,5].map(n => `<span class="${n<=m.rating?'ym-star-filled':'ym-star-empty'}">★</span>`).join('') 
+    const stars = m.rating
+      ? [1,2,3,4,5].map(n => `<span class="${n<=m.rating?'ym-star-filled':'ym-star-empty'}">★</span>`).join('')
       : '';
-      
     const catLabel = m.category === 'shojo' ? '少女' : '少年';
-    const catClass = m.category === 'shojo' ? 'cat-shojo' : 'cat-shonen';
+    const catClass  = m.category === 'shojo' ? 'cat-shojo' : 'cat-shonen';
 
     return `
-<div class="ym-card ${STATUS_CLASS[m.status] || 's-unread'}" onclick="ymOpenDetail('${m.id}')" style="animation-delay:${i*0.03}s">
+<div class="ym-card ${STATUS_CLASS[m.status]||'s-unread'}" onclick="ymOpenDetail('${m.id}')" style="animation-delay:${i*0.03}s">
   <div class="ym-card-status">${STATUS_LABEL[m.status]}</div>
   <div class="ym-cover">
     <div class="ym-card-cat ${catClass}">${catLabel}</div>
@@ -1860,6 +1958,7 @@ window.ymRender = function() {
       <span>${esc(m.volumes)}</span>
     </div>
     <div class="ym-card-foot">
+      <span class="ym-card-badge">${STATUS_LABEL[m.status]}</span>
       <span class="ym-stars-small">${stars}</span>
     </div>
   </div>
@@ -1867,7 +1966,6 @@ window.ymRender = function() {
   }).join('');
 };
 
- 
 window.ymOpenAdd = function() {
   document.getElementById('ym-form-title').textContent = '🎀 あたらしくついか 🎀';
   document.getElementById('ym-edit-id').value = '';
@@ -1893,22 +1991,20 @@ window.ymOpenDetail = function(id) {
   const m = db.find(x => x.id === id); if (!m) return;
   detailId = id;
   const bg = getCoverBg(m.title);
-  const ci = m.cover 
-    ? `<img class="ym-cover-art" src="${esc(m.cover)}" onerror="this.style.display='none'">` 
+  const ci = m.cover
+    ? `<img class="ym-cover-art" src="${esc(m.cover)}" onerror="this.style.display='none'">`
     : `<div class="ym-cover-gen" style="background:${bg}">${esc(m.title.slice(0,3))}</div>`;
-    
-  const tags = (m.tags||[]).map(t => `<span class="ym-detail-tag">${esc(t)}</span>`).join('');
-  const stars = m.rating 
-    ? [1,2,3,4,5].map(n => `<span class="${n<=m.rating?'ym-star-filled':'ym-star-empty'}">★</span>`).join('') 
+  const tags  = (m.tags||[]).map(t => `<span class="ym-detail-tag">${esc(t)}</span>`).join('');
+  const stars = m.rating
+    ? [1,2,3,4,5].map(n => `<span class="${n<=m.rating?'ym-star-filled':'ym-star-empty'}">★</span>`).join('')
     : '<span style="color:var(--ym-border2); font-size:1rem;">まだひょうかなし</span>';
-  
-  const statusBadgebg = m.status === 'done' ? 'var(--ym-blue-main)' : (m.status === 'reading' ? 'var(--ym-pink-main)' : (m.status === 'backlog' ? 'var(--ym-purple)' : 'var(--ym-text-mut)'));
+  const statusBg = m.status === 'done' ? 'var(--ym-blue-main)' : (m.status === 'reading' ? 'var(--ym-pink-main)' : (m.status === 'backlog' ? 'var(--ym-purple)' : 'var(--ym-text-mut)'));
 
   document.getElementById('ym-detail-body').innerHTML = `
 <div class="ym-detail-cover-row">
   <div class="ym-detail-cover"><div class="ym-cover">${ci}</div></div>
   <div class="ym-detail-meta">
-    <div class="ym-detail-badge" style="background:${statusBadgebg}">${STATUS_LABEL[m.status]}</div>
+    <div class="ym-detail-badge" style="background:${statusBg}">${STATUS_LABEL[m.status]}</div>
     <div class="ym-detail-title">${esc(m.title)}</div>
     ${m.author ? `<div class="ym-detail-author">✎ ${esc(m.author)}</div>` : ''}
     <div class="ym-detail-stars">${stars}</div>
@@ -1916,8 +2012,8 @@ window.ymOpenDetail = function(id) {
   </div>
 </div>
 <div class="ym-detail-info-row">
-  <div class="ym-detail-info">かんすう<span>${esc(m.volumes) || '-'}</span></div>
-  <div class="ym-detail-info">カテゴリ<span>${m.category === 'shojo' ? '少女' : '少年'}</span></div>
+  <div class="ym-detail-info">かんすう<span>${esc(m.volumes)||'-'}</span></div>
+  <div class="ym-detail-info">カテゴリ<span>${m.category==='shojo'?'少女':'少年'}</span></div>
   <div class="ym-detail-info">サイト<span>${esc(m.site)}</span></div>
 </div>
 ${m.note ? `<div class="ym-detail-note">${esc(m.note)}</div>` : ''}`;
@@ -1935,34 +2031,39 @@ function openEdit(m) {
   document.getElementById('ym-form-title').textContent = '🎀 へんしゅう 🎀';
   document.getElementById('ym-edit-id').value = m.id;
   document.getElementById('ym-f-title').value = m.title;
-  document.getElementById('ym-f-furi').value = m.furigana || '';
-  document.getElementById('ym-f-author').value = m.author || '';
+  document.getElementById('ym-f-furi').value = m.furigana||'';
+  document.getElementById('ym-f-author').value = m.author||'';
   if (m.category === 'shojo') document.getElementById('f-cat-shojo').checked = true;
   else document.getElementById('f-cat-shonen').checked = true;
   if (m.site === 'ピッコマ') document.getElementById('f-site-pic').checked = true;
   else document.getElementById('f-site-cmoa').checked = true;
-  document.getElementById('ym-f-status').value = m.status || 'unread';
-  document.getElementById('ym-f-vol').value = m.volumes || '';
-  document.getElementById('ym-f-note').value = m.note || '';
-  document.getElementById('ym-f-cover').value = m.cover || '';
+  document.getElementById('ym-f-status').value = m.status||'unread';
+  document.getElementById('ym-f-vol').value = m.volumes||'';
+  document.getElementById('ym-f-note').value = m.note||'';
+  document.getElementById('ym-f-cover').value = m.cover||'';
   document.getElementById('ym-del-btn').style.display = 'block';
   document.getElementById('ym-save-btn').textContent = '🎀 ほぞん 🎀';
-  formRating = m.rating || 0; 
-  formTags = [...(m.tags || [])];
+  formRating = m.rating||0;
+  formTags = [...(m.tags||[])];
   updateStarUI(); updateTagUI();
   document.getElementById('ym-overlay-form').classList.add('open');
 }
 
- 
 ['ym-overlay-form', 'ym-overlay-detail'].forEach(id => {
-  document.getElementById(id).addEventListener('click', function(e) { 
-    if(e.target === this) this.classList.remove('open'); 
+  document.getElementById(id).addEventListener('click', function(e) {
+    if(e.target === this) this.classList.remove('open');
   });
+});
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') {
+    document.querySelectorAll('.ym-overlay.open').forEach(el => el.classList.remove('open'));
+    detailId = null;
+  }
 });
 
 init();
 </script>
-
 
     </section>
     <footer class="pt-8">
