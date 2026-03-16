@@ -885,7 +885,6 @@
   color: var(--ym-text-mut);
 }
 
- 
 .c-done    { color: var(--ym-blue-main); }
 .c-reading { color: var(--ym-pink-main); }
 .c-backlog { color: var(--ym-purple); }
@@ -909,9 +908,7 @@
   gap: 0.75rem;
   padding: 0.7rem 3rem 0.5rem;
 }
-.ym-toolbar-row2 {
-  padding: 0 3rem 0.6rem;
-}
+.ym-toolbar-row2 { padding: 0 3rem 0.6rem; }
 .ym-search-wrap {
   position: relative;
   flex: 1;
@@ -982,6 +979,8 @@
 .ym-tab.active-reading { background: var(--ym-pink-dark); color: #fff; border-color: var(--ym-pink-dark); }
 .ym-tab.active-backlog { background: var(--ym-purple);    color: #fff; border-color: var(--ym-purple); }
 .ym-tab.active-unread  { background: var(--ym-text-mut);  color: #fff; border-color: var(--ym-text-mut); }
+.ym-tab.active-cmoa    { background: #00bcd4; color: #fff; border-color: #00bcd4; }
+.ym-tab.active-picco   { background: #ffc107; color: #fff; border-color: #ffc107; }
 
  
 .ym-body {
@@ -1012,7 +1011,7 @@
   background: var(--ym-card-bg);
   border: 4px solid #fff;
   border-radius: 20px;
-  overflow: visible;  
+  overflow: visible;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   display: flex;
@@ -1026,14 +1025,11 @@
   transform: translateY(-5px) scale(1.02);
   box-shadow: 0 12px 25px rgba(244, 114, 182, 0.3);
 }
-
- 
 .ym-card.s-done    { border-top: 3px solid var(--ym-blue-main); }
 .ym-card.s-reading { border-top: 3px solid var(--ym-pink-main); }
 .ym-card.s-backlog { border-top: 3px solid var(--ym-purple); }
 .ym-card.s-unread  { border-top: 3px solid var(--ym-border2); }
 
- 
 .ym-card-cat {
   position: absolute;
   top: 6px; left: 6px;
@@ -1058,7 +1054,6 @@
   pointer-events: none;
   z-index: 3;
 }
-
 .ym-card-status {
   position: absolute;
   top: 13px;
@@ -1076,18 +1071,10 @@
   border-bottom: 1px solid rgba(0,0,0,0.15);
   box-shadow: 0 2px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
 }
-.ym-card.s-done .ym-card-status {
-  background: linear-gradient(180deg, #7dd3f8, #4baee8);
-}
-.ym-card.s-reading .ym-card-status {
-  background: linear-gradient(180deg, #f9c8e2, #f090c8);
-}
-.ym-card.s-backlog .ym-card-status {
-  background: linear-gradient(180deg, #d8a8e8, #be78d8);
-}
-.ym-card.s-unread .ym-card-status {
-  background: linear-gradient(180deg, #a8b8c8, #8898a8);
-}
+.ym-card.s-done    .ym-card-status { background: linear-gradient(180deg, #7dd3f8, #4baee8); }
+.ym-card.s-reading .ym-card-status { background: linear-gradient(180deg, #f9c8e2, #f090c8); }
+.ym-card.s-backlog .ym-card-status { background: linear-gradient(180deg, #d8a8e8, #be78d8); }
+.ym-card.s-unread  .ym-card-status { background: linear-gradient(180deg, #a8b8c8, #8898a8); }
 
 .ym-cover {
   width: 100%;
@@ -1098,7 +1085,7 @@
   position: relative;
   overflow: hidden;
   background: #fff;
-  border-radius: 16px 16px 0 0;  
+  border-radius: 16px 16px 0 0;
 }
 .ym-cover-art { width:100%; height:100%; object-fit:cover; }
 .ym-cover-gen {
@@ -1132,8 +1119,8 @@
   gap: 0.4rem;
   flex: 1;
   background: #fff;
-  border-radius: 0 0 16px 16px;  
-  overflow: hidden;  
+  border-radius: 0 0 16px 16px;
+  overflow: hidden;
 }
 .ym-card-title {
   font-size: 1.05rem;
@@ -1213,10 +1200,6 @@
   border-color: var(--ym-purple);
   color: var(--ym-purple);
 }
-
- 
-.ym-tab.active-cmoa  { background: #00bcd4; color: #fff; border-color: #00bcd4; }
-.ym-tab.active-picco { background: #ffc107; color: #fff; border-color: #ffc107; }
 
 .ym-stars-small { font-size: 0.9rem; letter-spacing: -2px; }
 .ym-star-filled { color: var(--ym-yellow); text-shadow: 0 0 2px rgba(251, 191, 36, 0.5); }
@@ -1402,6 +1385,83 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
 }
 
  
+.ym-cover-input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.ym-cover-input-row .ym-input {
+  flex: 1;
+  min-width: 0;
+}
+.ym-cover-search-btn {
+  font-family: var(--ym-font);
+  font-size: 0.75rem;
+  font-weight: 900;
+  padding: 0.6rem 0.9rem;
+  background: linear-gradient(135deg, var(--ym-purple), #b87fd4);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  box-shadow: 0 3px 0 #a060c0;
+}
+.ym-cover-search-btn:hover { transform: translateY(1px); box-shadow: 0 2px 0 #a060c0; }
+.ym-cover-search-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+ 
+.ym-cover-results {
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ym-cover-results.visible { display: flex; }
+.ym-cover-results-label {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: var(--ym-text-mut);
+}
+.ym-cover-results-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+.ym-cover-thumb {
+  aspect-ratio: 2/3;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid var(--ym-border);
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+.ym-cover-thumb:hover { border-color: var(--ym-purple); transform: scale(1.04); box-shadow: 0 4px 12px var(--ym-shadow); }
+.ym-cover-thumb.selected { border-color: var(--ym-purple); border-width: 3px; box-shadow: 0 0 0 3px #f3e8ff; }
+.ym-cover-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.ym-cover-thumb-title {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.65));
+  color: #fff;
+  font-size: 0.45rem;
+  font-weight: 700;
+  padding: 0.6rem 0.25rem 0.2rem;
+  line-height: 1.2;
+  text-align: center;
+  word-break: break-all;
+}
+.ym-cover-results-msg {
+  font-size: 0.8rem;
+  color: var(--ym-text-mut);
+  font-weight: 700;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+ 
 .ym-detail-cover-row { display:flex; gap:1.5rem; }
 .ym-detail-cover { width:120px; flex-shrink:0; aspect-ratio:2/3; border-radius:12px; overflow:hidden; border:4px solid #fff; box-shadow: 0 4px 10px var(--ym-shadow); }
 .ym-detail-cover .ym-cover-gen { font-size:1.8rem; }
@@ -1424,14 +1484,12 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
   .ym-toolbar-row1 { padding: 0.7rem 2rem 0.5rem; }
   .ym-toolbar-row2 { padding: 0 2rem 0.6rem; }
 }
-
 @media (max-width: 900px) {
   .ym-grid { grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); gap:1rem; padding: 1rem; }
 }
 
  
 @media (max-width: 640px) {
-
   .ym-header {
     flex-direction: row;
     flex-wrap: nowrap;
@@ -1441,11 +1499,9 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
   }
   .ym-logo-title { font-size: 1.05rem; letter-spacing: 0.05em; }
   .ym-logo-sub   { display: none; }
-   
   .ym-header .ym-hbtn.primary { display: none; }
   .ym-fab { display: flex; }
 
-   
   .ym-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1471,7 +1527,6 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
   .ym-sort-sel { font-size: 0.72rem; padding: 0.4rem 0.6rem; }
   .ym-tab { font-size: 0.68rem; padding: 0.3rem 0.7rem; }
 
-   
   .ym-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 0.55rem;
@@ -1482,7 +1537,7 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
   .ym-card { border-radius: 14px; border-width: 3px; }
   .ym-card .ym-cover { border-radius: 11px 11px 0 0; }
   .ym-card .ym-card-body { border-radius: 0 0 11px 11px; }
-  .ym-ribbon-clip { display: none; }  
+  .ym-ribbon-clip { display: none; }
   .ym-card-badge  { display: inline-block; }
 
   .ym-card-cat { font-size: 0.5rem; padding: 3px 6px; left: 5px; top: 5px; border-radius: 5px; }
@@ -1495,7 +1550,6 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
   .ym-card-foot { padding-top: 0.25rem; flex-wrap: wrap; gap: 0.2rem; }
   .ym-stars-small { font-size: 0.7rem; letter-spacing: -1px; }
 
-   
   .ym-overlay { align-items: flex-end; padding: 0; }
   .ym-modal {
     max-width: 100%;
@@ -1525,9 +1579,11 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
   .ym-modal-header { padding: 1.1rem 1rem 0.85rem; font-size: 1rem; }
   .ym-detail-cover { width: 90px; }
   .ym-detail-title { font-size: 1.1rem; }
+
+   
+  .ym-cover-results-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
- 
 @media (max-width: 360px) {
   .ym-grid { grid-template-columns: repeat(3, 1fr); gap: 0.4rem; padding: 0.5rem; }
   .ym-card-title { font-size: 0.68rem; }
@@ -1537,7 +1593,6 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
   .ym-logo-title { font-size: 0.9rem; }
 }
 
- 
 @media (max-height: 500px) and (max-width: 900px) {
   .ym-overlay { align-items: center; padding: 0.5rem; }
   .ym-modal { max-width: 480px; border-radius: 16px; animation: ym-modal-in 0.2s ease; }
@@ -1722,9 +1777,18 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
         <textarea class="ym-textarea" id="ym-f-note" placeholder="かわいかった！おもしろかった！など..."></textarea>
       </div>
 
+      
       <div class="ym-field">
-        <label>表紙のURL (COVER URL - optional)</label>
-        <input type="text" class="ym-input" id="ym-f-cover" placeholder="https://...">
+        <label>表紙のURL（「タイトル 巻数」で🔍検索できます　例: ワンピース 114）</label>
+        <div class="ym-cover-input-row">
+          <input type="text" class="ym-input" id="ym-f-cover" placeholder="https://... または 🔍 で検索">
+          <button class="ym-cover-search-btn" id="ym-cover-search-btn" onclick="ymSearchCover()">🔍 検索</button>
+        </div>
+        
+        <div class="ym-cover-results" id="ym-cover-results">
+          <div class="ym-cover-results-label" id="ym-cover-results-label">候補をタップして選択</div>
+          <div class="ym-cover-results-grid" id="ym-cover-results-grid"></div>
+        </div>
       </div>
 
       <div class="ym-modal-buttons">
@@ -1806,7 +1870,7 @@ let activeFilter = 'all';
 let formRating   = 0;
 let formTags     = [];
 let detailId     = null;
-let overlayOpenTime = 0;  
+let overlayOpenTime = 0;
 
 const STATUS_LABEL = {done:'読了済み', reading:'読んでる', backlog:'積読', unread:'まだ'};
 const STATUS_CLASS  = {done:'s-done', reading:'s-reading', backlog:'s-backlog', unread:'s-unread'};
@@ -1856,6 +1920,101 @@ function translateOldToNew(old) {
 
 function save() {
   try { localStorage.setItem(LS_KEY, JSON.stringify(db)); } catch(e){}
+}
+
+
+
+async function fetchCovers(query) {
+  const q = encodeURIComponent(query);
+  const url = `https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=8&langRestrict=ja&printType=books`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
+}
+
+window.ymSearchCover = async function() {
+  const title = document.getElementById('ym-f-title').value.trim();
+  if (!title) { alert('先にタイトルを入力してね！'); return; }
+
+  const btn          = document.getElementById('ym-cover-search-btn');
+  const resultsWrap  = document.getElementById('ym-cover-results');
+  const resultsGrid  = document.getElementById('ym-cover-results-grid');
+  const resultsLabel = document.getElementById('ym-cover-results-label');
+
+  btn.disabled = true;
+  btn.textContent = '⏳ 検索中...';
+  resultsWrap.classList.add('visible');
+  resultsGrid.innerHTML = '';
+  resultsLabel.textContent = '検索中...';
+
+  try {
+    const json = await fetchCovers(title);
+    const items = (json.items || []).filter(item =>
+      item.volumeInfo?.imageLinks?.thumbnail ||
+      item.volumeInfo?.imageLinks?.smallThumbnail
+    );
+
+    btn.disabled = false;
+    btn.textContent = '🔍 検索';
+
+    if (!items.length) {
+      resultsLabel.textContent = '見つからなかったよ…タイトルを変えて試してみて';
+      return;
+    }
+
+    resultsLabel.textContent = '候補をタップして選択 ✨';
+    resultsGrid.innerHTML = items.map(item => {
+      const info = item.volumeInfo;
+       
+      const rawImg = info.imageLinks?.thumbnail || info.imageLinks?.smallThumbnail || '';
+      const imgUrl = rawImg.replace(/^http:\/\//, 'https://').replace('&zoom=1','&zoom=2');
+      const dispTitle = info.title || '';
+       
+      const volMatch = (info.subtitle || info.title || '').match(/(\d+)/);
+      const volNum   = volMatch ? volMatch[1] : '';
+      const pageCount = info.pageCount ? `${info.pageCount}p` : '';
+      return `
+        <div class="ym-cover-thumb"
+          onclick="ymSelectCover('${imgUrl.replace(/'/g,"\\'")}', this)"
+          data-volumes="${volNum}"
+          data-finished="false"
+          title="${esc(dispTitle)}">
+          <img src="${esc(imgUrl)}" alt="${esc(dispTitle)}" loading="lazy">
+          <div class="ym-cover-thumb-title">
+            ${esc(dispTitle)}${volNum ? `<br><span style="color:#ffd54f">${volNum}巻</span>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = '🔍 検索';
+    resultsLabel.textContent = '通信エラー';
+    console.error('Google Books error:', err);
+  }
+};
+
+window.ymSelectCover = function(url, el) {
+  document.getElementById('ym-f-cover').value = url;
+
+   
+  const vol = el.dataset.volumes;
+  if (vol) {
+    const volField = document.getElementById('ym-f-vol');
+    if (!volField.value) volField.value = `${vol}巻`;
+  }
+
+  document.querySelectorAll('.ym-cover-thumb').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('ym-cover-results-label').textContent = '✅ 選択済み！このまま追加できるよ';
+};
+
+function resetCoverSearch() {
+  document.getElementById('ym-cover-results').classList.remove('visible');
+  document.getElementById('ym-cover-results-grid').innerHTML = '';
+  document.getElementById('ym-cover-results-label').textContent = '候補をタップして選択';
+  document.getElementById('ym-cover-search-btn').disabled = false;
+  document.getElementById('ym-cover-search-btn').textContent = '🔍 検索';
 }
 
  
@@ -1920,9 +2079,9 @@ function getFiltered() {
   const q    = document.getElementById('ym-search').value.trim().toLowerCase();
   const sort = document.getElementById('ym-sort').value;
   let arr = db.slice();
-  if (activeFilter === 'cmoa')  arr = arr.filter(m => m.site === 'シーモア');
+  if (activeFilter === 'cmoa')       arr = arr.filter(m => m.site === 'シーモア');
   else if (activeFilter === 'picco') arr = arr.filter(m => m.site === 'ピッコマ');
-  else if (activeFilter !== 'all') arr = arr.filter(m => m.status === activeFilter);
+  else if (activeFilter !== 'all')   arr = arr.filter(m => m.status === activeFilter);
   if (q) arr = arr.filter(m =>
     m.title.toLowerCase().includes(q) ||
     (m.furigana||'').toLowerCase().includes(q) ||
@@ -2028,7 +2187,8 @@ window.ymOpenAdd = function() {
   document.getElementById('ym-f-kanketsu').checked = false;
   formRating = 0; formTags = [];
   updateStarUI(); updateTagUI();
-  overlayOpenTime = Date.now();  
+  resetCoverSearch();
+  overlayOpenTime = Date.now();
   document.getElementById('ym-overlay-form').classList.add('open');
 };
 
@@ -2072,7 +2232,7 @@ window.ymOpenDetail = function(id) {
 </div>
 ${m.note ? `<div class="ym-detail-note">${esc(m.note)}</div>` : ''}`;
 
-  overlayOpenTime = Date.now();  
+  overlayOpenTime = Date.now();
   document.getElementById('ym-overlay-detail').classList.add('open');
 };
 
@@ -2108,11 +2268,11 @@ function openEdit(m) {
   formRating = m.rating || 0;
   formTags   = [...(m.tags || [])];
   updateStarUI(); updateTagUI();
-  overlayOpenTime = Date.now();  
+  resetCoverSearch();
+  overlayOpenTime = Date.now();
   document.getElementById('ym-overlay-form').classList.add('open');
 }
 
- 
 ['ym-overlay-form', 'ym-overlay-detail'].forEach(id => {
   document.getElementById(id).addEventListener('click', function(e) {
     if (e.target === this && Date.now() - overlayOpenTime > 350) {
