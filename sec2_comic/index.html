@@ -1012,7 +1012,7 @@
   background: var(--ym-card-bg);
   border: 4px solid #fff;
   border-radius: 20px;
-  overflow: hidden;
+  overflow: visible;  
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   display: flex;
@@ -1036,36 +1036,58 @@
  
 .ym-card-cat {
   position: absolute;
-  top: -4px; left: 10px;
-  padding: 4px 8px;
-  font-size: 0.65rem;
+  top: 6px; left: 6px;
+  padding: 3px 7px;
+  font-size: 0.6rem;
   font-weight: 900;
   color: #fff;
-  border-radius: 0 0 8px 8px;
+  border-radius: 6px;
   z-index: 2;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 .cat-shonen { background: var(--ym-blue-main); }
 .cat-shojo  { background: var(--ym-pink-main); }
 
  
+.ym-ribbon-clip {
+  position: absolute;
+  top: 0; right: 0;
+  width: 68px; height: 36px;
+  overflow: hidden;
+  border-top-right-radius: 16px;
+  pointer-events: none;
+  z-index: 3;
+}
+
 .ym-card-status {
   position: absolute;
-  top: 10px; right: -25px;
-  background: var(--ym-border2);
-  color: #fff;
-  font-size: 0.6rem;
+  top: 13px;
+  right: -20px;
+  width: 88px;
+  padding: 4px 0;
+  text-align: center;
+  transform: rotate(30deg);
+  font-size: 0.48rem;
   font-weight: 900;
-  padding: 4px 30px;
-  transform: rotate(45deg);
-  z-index: 2;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  letter-spacing: 0.04em;
+  color: #fff;
   white-space: nowrap;
+  border-top: 1px solid rgba(255,255,255,0.45);
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
 }
-.ym-card.s-done .ym-card-status    { background: var(--ym-blue-main); }
-.ym-card.s-reading .ym-card-status { background: var(--ym-pink-main); }
-.ym-card.s-backlog .ym-card-status { background: var(--ym-purple); }
-.ym-card.s-unread .ym-card-status  { background: var(--ym-text-mut); }
+.ym-card.s-done .ym-card-status {
+  background: linear-gradient(180deg, #7dd3f8, #4baee8);
+}
+.ym-card.s-reading .ym-card-status {
+  background: linear-gradient(180deg, #f9c8e2, #f090c8);
+}
+.ym-card.s-backlog .ym-card-status {
+  background: linear-gradient(180deg, #d8a8e8, #be78d8);
+}
+.ym-card.s-unread .ym-card-status {
+  background: linear-gradient(180deg, #a8b8c8, #8898a8);
+}
 
 .ym-cover {
   width: 100%;
@@ -1076,6 +1098,7 @@
   position: relative;
   overflow: hidden;
   background: #fff;
+  border-radius: 16px 16px 0 0;  
 }
 .ym-cover-art { width:100%; height:100%; object-fit:cover; }
 .ym-cover-gen {
@@ -1109,6 +1132,8 @@
   gap: 0.4rem;
   flex: 1;
   background: #fff;
+  border-radius: 0 0 16px 16px;  
+  overflow: hidden;  
 }
 .ym-card-title {
   font-size: 1.05rem;
@@ -1129,7 +1154,14 @@
   font-weight: 700;
 }
 .ym-card-foot {
-  display:flex; justify-content:space-between; align-items:center; margin-top: auto; padding-top: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.4rem;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  overflow: visible;
 }
 
  
@@ -1147,6 +1179,44 @@
 .ym-card.s-reading .ym-card-badge { background: var(--ym-pink-main); }
 .ym-card.s-backlog .ym-card-badge { background: var(--ym-purple); }
 .ym-card.s-unread  .ym-card-badge { background: var(--ym-text-mut); }
+
+ 
+.ym-card-kanketsu {
+  font-size: 0.6rem;
+  font-weight: 900;
+  padding: 0.12rem 0.4rem;
+  border-radius: 50px;
+  color: var(--ym-purple);
+  background: #f3e8ff;
+  border: 1.5px solid var(--ym-purple);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+ 
+.ym-check-row { display: flex; gap: 0.75rem; }
+.ym-check-row input[type="checkbox"] { display: none; }
+.ym-check-label {
+  flex: 1; text-align: center;
+  padding: 0.6rem;
+  background: #fff;
+  border: 2px solid var(--ym-border);
+  border-radius: 12px;
+  font-weight: 900;
+  color: var(--ym-border2);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+.ym-check-row input[type="checkbox"]:checked + .ym-check-label {
+  background: #f3e8ff;
+  border-color: var(--ym-purple);
+  color: var(--ym-purple);
+}
+
+ 
+.ym-tab.active-cmoa  { background: #00bcd4; color: #fff; border-color: #00bcd4; }
+.ym-tab.active-picco { background: #ffc107; color: #fff; border-color: #ffc107; }
 
 .ym-stars-small { font-size: 0.9rem; letter-spacing: -2px; }
 .ym-star-filled { color: var(--ym-yellow); text-shadow: 0 0 2px rgba(251, 191, 36, 0.5); }
@@ -1371,7 +1441,8 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
   }
   .ym-logo-title { font-size: 1.05rem; letter-spacing: 0.05em; }
   .ym-logo-sub   { display: none; }
-  .ym-hbtn.primary { display: none; }
+   
+  .ym-header .ym-hbtn.primary { display: none; }
   .ym-fab { display: flex; }
 
    
@@ -1408,11 +1479,13 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
     padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
   }
 
-  .ym-card { border-radius: 12px; border-width: 3px; }
-  .ym-card-status { display: none; }
+  .ym-card { border-radius: 14px; border-width: 3px; }
+  .ym-card .ym-cover { border-radius: 11px 11px 0 0; }
+  .ym-card .ym-card-body { border-radius: 0 0 11px 11px; }
+  .ym-ribbon-clip { display: none; }  
   .ym-card-badge  { display: inline-block; }
 
-  .ym-card-cat { font-size: 0.5rem; padding: 3px 6px; left: 6px; }
+  .ym-card-cat { font-size: 0.5rem; padding: 3px 6px; left: 5px; top: 5px; border-radius: 5px; }
   .ym-cover-gen { font-size: 1.4rem; padding: 0.5rem; }
   .ym-cover-site { font-size: 0.5rem; padding: 0.15rem 0.35rem; bottom: 0.3rem; right: 0.3rem; }
 
@@ -1521,7 +1594,7 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
   <div class="ym-toolbar">
     <div class="ym-toolbar-row1">
       <div class="ym-search-wrap">
-        <span class="ym-search-icon"></span>
+        <span class="ym-search-icon">🔍</span>
         <input type="text" class="ym-search" id="ym-search" placeholder="タイトル・さくしゃ・タグでさがす..." oninput="ymRender()">
       </div>
       <select class="ym-sort-sel" id="ym-sort" onchange="ymRender()">
@@ -1537,6 +1610,8 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
         <button class="ym-tab"            id="ym-tab-reading" onclick="ymFilter('reading')">読み中</button>
         <button class="ym-tab"            id="ym-tab-backlog" onclick="ymFilter('backlog')">積読</button>
         <button class="ym-tab"            id="ym-tab-unread"  onclick="ymFilter('unread')">まだ</button>
+        <button class="ym-tab"            id="ym-tab-cmoa"    onclick="ymFilter('cmoa')">📖 シーモア</button>
+        <button class="ym-tab"            id="ym-tab-picco"   onclick="ymFilter('picco')">🟡 ピッコマ</button>
       </div>
     </div>
   </div>
@@ -1604,9 +1679,17 @@ input[value="ピッコマ"]:checked + .ym-radio-label   { background: #fff8e1; b
           </select>
         </div>
         <div class="ym-field">
-          <label>巻数 (VOLUMES)</label>
-          <input type="text" class="ym-input" id="ym-f-vol" placeholder="例: 1~3巻">
+          <label>完結済み？</label>
+          <div class="ym-check-row">
+            <input type="checkbox" id="ym-f-kanketsu">
+            <label for="ym-f-kanketsu" class="ym-check-label">✅ 完結済み</label>
+          </div>
         </div>
+      </div>
+
+      <div class="ym-field">
+        <label>巻数 (VOLUMES)</label>
+        <input type="text" class="ym-input" id="ym-f-vol" placeholder="例: 1~3巻">
       </div>
 
       <div class="ym-field">
@@ -1725,7 +1808,7 @@ let formTags     = [];
 let detailId     = null;
 let overlayOpenTime = 0;  
 
-const STATUS_LABEL = {done:'よみおわり✨', reading:'よんでる！', backlog:'つんどく...', unread:'まだ'};
+const STATUS_LABEL = {done:'読了済み', reading:'読んでる', backlog:'積読', unread:'まだ'};
 const STATUS_CLASS  = {done:'s-done', reading:'s-reading', backlog:'s-backlog', unread:'s-unread'};
 
 const PALETTES = [
@@ -1788,6 +1871,7 @@ window.ymSave = function() {
     category: document.querySelector('input[name="f-category"]:checked').value,
     site:     document.querySelector('input[name="f-site"]:checked').value,
     status:   document.getElementById('ym-f-status').value,
+    kanketsu: document.getElementById('ym-f-kanketsu').checked,
     volumes:  document.getElementById('ym-f-vol').value.trim(),
     rating:   formRating,
     tags:     [...formTags],
@@ -1836,7 +1920,9 @@ function getFiltered() {
   const q    = document.getElementById('ym-search').value.trim().toLowerCase();
   const sort = document.getElementById('ym-sort').value;
   let arr = db.slice();
-  if (activeFilter !== 'all') arr = arr.filter(m => m.status === activeFilter);
+  if (activeFilter === 'cmoa')  arr = arr.filter(m => m.site === 'シーモア');
+  else if (activeFilter === 'picco') arr = arr.filter(m => m.site === 'ピッコマ');
+  else if (activeFilter !== 'all') arr = arr.filter(m => m.status === activeFilter);
   if (q) arr = arr.filter(m =>
     m.title.toLowerCase().includes(q) ||
     (m.furigana||'').toLowerCase().includes(q) ||
@@ -1874,9 +1960,11 @@ window.ymRender = function() {
   document.getElementById('ym-n-unread').textContent  = counts.unread  || 0;
   document.getElementById('ym-avg-stars').textContent = rcnt ? (rsum/rcnt).toFixed(1) : '—';
 
-  ['all','done','reading','backlog','unread'].forEach(k => {
+  ['all','done','reading','backlog','unread','cmoa','picco'].forEach(k => {
     const el = document.getElementById('ym-tab-'+k);
-    if(el) el.className = 'ym-tab' + (k === activeFilter ? ' active-'+k : '');
+    if (!el) return;
+    const activeClass = k === 'cmoa' ? 'active-cmoa' : k === 'picco' ? 'active-picco' : 'active-'+k;
+    el.className = 'ym-tab' + (k === activeFilter ? ' ' + activeClass : '');
   });
 
   const grid = document.getElementById('ym-grid');
@@ -1895,9 +1983,12 @@ window.ymRender = function() {
       : '';
     const catLabel = m.category === 'shojo' ? '少女' : '少年';
     const catClass  = m.category === 'shojo' ? 'cat-shojo' : 'cat-shonen';
+    const kanketsuBadge = m.kanketsu ? `<span class="ym-card-kanketsu">完結</span>` : '';
     return `
 <div class="ym-card ${STATUS_CLASS[m.status]||'s-unread'}" onclick="ymOpenDetail('${m.id}')" style="animation-delay:${i*0.03}s">
-  <div class="ym-card-status">${STATUS_LABEL[m.status]}</div>
+  <div class="ym-ribbon-clip">
+    <div class="ym-card-status">${STATUS_LABEL[m.status]}</div>
+  </div>
   <div class="ym-cover">
     <div class="ym-card-cat ${catClass}">${catLabel}</div>
     ${coverHtml}
@@ -1911,6 +2002,7 @@ window.ymRender = function() {
     </div>
     <div class="ym-card-foot">
       <span class="ym-card-badge">${STATUS_LABEL[m.status]}</span>
+      ${kanketsuBadge}
       <span class="ym-stars-small">${stars}</span>
     </div>
   </div>
@@ -1933,6 +2025,7 @@ window.ymOpenAdd = function() {
   document.getElementById('ym-f-cover').value  = '';
   document.getElementById('ym-del-btn').style.display = 'none';
   document.getElementById('ym-save-btn').textContent  = '🎀 追加する 🎀';
+  document.getElementById('ym-f-kanketsu').checked = false;
   formRating = 0; formTags = [];
   updateStarUI(); updateTagUI();
   overlayOpenTime = Date.now();  
@@ -1965,6 +2058,7 @@ window.ymOpenDetail = function(id) {
   <div class="ym-detail-cover"><div class="ym-cover">${ci}</div></div>
   <div class="ym-detail-meta">
     <div class="ym-detail-badge" style="background:${statusBg}">${STATUS_LABEL[m.status]}</div>
+    ${m.kanketsu ? `<span class="ym-card-kanketsu" style="align-self:flex-start">✅ 完結済み</span>` : ''}
     <div class="ym-detail-title">${esc(m.title)}</div>
     ${m.author ? `<div class="ym-detail-author">✎ ${esc(m.author)}</div>` : ''}
     <div class="ym-detail-stars">${stars}</div>
@@ -2010,6 +2104,7 @@ function openEdit(m) {
   document.getElementById('ym-f-cover').value  = m.cover   || '';
   document.getElementById('ym-del-btn').style.display = 'block';
   document.getElementById('ym-save-btn').textContent  = '🎀 保存 🎀';
+  document.getElementById('ym-f-kanketsu').checked = m.kanketsu || false;
   formRating = m.rating || 0;
   formTags   = [...(m.tags || [])];
   updateStarUI(); updateTagUI();
