@@ -1150,7 +1150,7 @@
   .panel::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
   .panel::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-  .panel-header { font-family: 'Orbitron', sans-serif; font-size: 0.95rem; color: #f59e0b; border-bottom: 1px dashed #333; padding-bottom: 0.4rem; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
+  .panel-header { font-family: 'Orbitron', sans-serif; font-size: 0.95rem; color: #f59e0b; border-bottom: 1px dashed #333; padding-bottom: 0.4rem; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; flex-wrap: wrap; gap: 0.3rem; }
 
    
   .gauge-container { display: flex; align-items: center; justify-content: center; position: relative; margin: 0.3rem 0;}
@@ -1177,11 +1177,11 @@
    
   .chart-panel { display: flex; flex-direction: column; gap: 0.5rem; }
   .chart-bar-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; }
-  .chart-bar-label { width: 60px; text-align: right; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .chart-bar-track { flex: 1; height: 16px; background: #111; border: 1px solid #222; position: relative; overflow: hidden; }
+  .chart-bar-label { min-width: 80px; max-width: 120px; text-align: right; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0; }
+  .chart-bar-track { flex: 1; height: 16px; background: #111; border: 1px solid #222; position: relative; overflow: hidden; min-width: 60px; }
   .chart-bar-fill { height: 100%; transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1); position: relative; }
   .chart-bar-fill::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15)); }
-  .chart-bar-val { width: 55px; font-family: 'Orbitron', sans-serif; font-size: 0.65rem; color: #e2e8f0; }
+  .chart-bar-val { min-width: 35px; font-family: 'Orbitron', sans-serif; font-size: 0.65rem; color: #e2e8f0; flex-shrink: 0; }
 
    
   .side-panel { display: flex; flex-direction: column; gap: 1rem; }
@@ -1244,14 +1244,21 @@
     .sub-val { font-size: 1.1rem; }
     .dashboard-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
     .panel { padding: 0.8rem; }
-    .panel-header { font-size: 0.75rem; }
-    .gauge-svg { width: 90px !important; height: 90px !important; }
-    .gauge-svg circle { r: 38; }
-    .gauge-percent { font-size: 1rem; }
-    .details { font-size: 0.7rem; }
+    .panel-header { font-size: 0.65rem; flex-wrap: wrap; }
+    .panel-header > span:first-child { width: 100%; margin-bottom: 0.2rem; font-size: 0.6rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .reset-btn { font-size: 0.5rem !important; padding: 2px 5px !important; }
+    .gauge-svg { width: 80px !important; height: 80px !important; }
+    .gauge-svg circle { r: 35; }
+    .gauge-percent { font-size: 0.9rem; }
+    .details { font-size: 0.65rem; }
+    .details-max { font-size: 0.6rem; }
     .log-panel { height: 180px; }
     .cy-btn { padding: 0.6rem; font-size: 0.65rem; }
     .cy-input, .cy-select { padding: 0.6rem; font-size: 0.8rem; }
+    .chart-bar-label { min-width: 50px; max-width: 70px; font-size: 0.55rem; }
+    .chart-bar-val { font-size: 0.55rem; min-width: 25px; }
+    .chart-bar-row { gap: 0.3rem; }
+    .chart-bar-track { height: 14px; }
   }
 </style>
 
@@ -1402,10 +1409,10 @@
 <script>
   const STORAGE_KEY = 'dt_resource_v4';
   const CATEGORY_COLORS = {
-    entertainment: { label: '娯楽 / ENTERTAINMENT', color: '#ec4899', cssClass: 'color-entertainment' },
-    learning:      { label: '学習 / LEARNING', color: '#3b82f6', cssClass: 'color-learning' },
-    gear:          { label: '機材 / GEAR', color: '#10b981', cssClass: 'color-gear' },
-    food:          { label: '食費 / FOOD', color: '#f59e0b', cssClass: 'color-food' }
+    entertainment: { label: '娯楽', color: '#ec4899', cssClass: 'color-entertainment' },
+    learning:      { label: '学習', color: '#3b82f6', cssClass: 'color-learning' },
+    gear:          { label: '機材', color: '#10b981', cssClass: 'color-gear' },
+    food:          { label: '食費', color: '#f59e0b', cssClass: 'color-food' }
   };
   const CUSTOM_COLORS = ['#a855f7','#06b6d4','#84cc16','#f97316','#e11d48','#14b8a6'];
 
@@ -1413,10 +1420,10 @@
     totalIncome: 0,
     totalExpense: 0,
     budgets: {
-      entertainment: { current: 0, max: 20000, label: '娯楽 / ENTERTAINMENT', color: '#ec4899' },
-      learning:      { current: 0, max: 10000, label: '学習 / LEARNING', color: '#3b82f6' },
-      gear:          { current: 0, max: 30000, label: '機材 / GEAR', color: '#10b981' },
-      food:          { current: 0, max: 40000, label: '食費 / FOOD', color: '#f59e0b' }
+      entertainment: { current: 0, max: 20000, label: '娯楽', color: '#ec4899' },
+      learning:      { current: 0, max: 10000, label: '学習', color: '#3b82f6' },
+      gear:          { current: 0, max: 30000, label: '機材', color: '#10b981' },
+      food:          { current: 0, max: 40000, label: '食費', color: '#f59e0b' }
     },
     logs: [],
     monthlyHistory: []
