@@ -227,7 +227,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "126"
+    "wordCount": "131"
   }]
   </script>
 
@@ -925,7 +925,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>126 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>131 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1085,28 +1085,23 @@
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
 
   :root {
-    --neon: #10b981;
-    --neon-dim: rgba(16, 185, 129, 0.2);
-    --neon-gl: rgba(16, 185, 129, 0.5);
-    --bg-dark: #050508;
-    --bg-panel: rgba(9, 9, 11, 0.85);
+    --neon: #10b981; --neon-dim: rgba(16,185,129,0.2); --neon-gl: rgba(16,185,129,0.5);
+    --bg-dark: #050508; --bg-panel: rgba(9,9,11,0.85);
+    --danger: #ef4444; --warn: #f59e0b;
   }
 
   .cy-root {
     font-family: "JetBrains Mono", monospace;
     position: fixed; inset: 0; width: 100vw; height: 100vh;
     background-color: var(--bg-dark);
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
     background-size: 30px 30px;
-    z-index: 99990; color: #e2e8f0; display: flex;
-    overflow: hidden; transition: --neon 0.5s;
+    z-index: 99990; color: #e2e8f0; display: flex; overflow: hidden;
   }
-  
   .cy-root::after {
     content: ""; position: absolute; inset: 0;
-    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
+    background: repeating-linear-gradient(0deg,rgba(0,0,0,0.15),rgba(0,0,0,0.15) 1px,transparent 1px,transparent 2px);
     pointer-events: none; z-index: 100;
   }
   .scanline-bar {
@@ -1115,176 +1110,264 @@
     border-bottom: 2px solid var(--neon);
     animation: scan 8s linear infinite; pointer-events: none; z-index: 101; opacity: 0.5;
   }
-  @keyframes scan { 0% { top: -10%; } 100% { top: 110%; } }
+  @keyframes scan { 0%{top:-10%} 100%{top:110%} }
+  @keyframes pulse-border { 0%,100%{box-shadow:0 0 8px var(--neon-dim),inset 0 0 8px var(--neon-dim)} 50%{box-shadow:0 0 20px var(--neon-gl),inset 0 0 20px var(--neon-dim)} }
+  @keyframes gauge-fill { from{width:0} }
 
    
   .cy-sidebar {
-    width: 250px; background: rgba(5, 5, 8, 0.95); border-right: 1px solid var(--neon);
+    width: 260px; min-width: 260px; background: rgba(5,5,8,0.95); border-right: 1px solid var(--neon);
     display: flex; flex-direction: column; z-index: 50; box-shadow: 2px 0 20px rgba(0,0,0,0.9);
   }
   .sidebar-header {
-    padding: 1.5rem 1rem; border-bottom: 1px dashed #333;
+    padding: 1.2rem 1rem; border-bottom: 1px dashed #333;
     font-family: 'Orbitron', sans-serif; color: var(--neon); letter-spacing: 2px;
-    text-shadow: 0 0 10px var(--neon-gl);
+    text-shadow: 0 0 10px var(--neon-gl); font-size: 0.85rem;
   }
-  .subject-list { flex-grow: 1; overflow-y: auto; padding: 1rem 0; display: flex; flex-direction: column; gap: 0.2rem; }
+  .subject-list { flex: 1; overflow-y: auto; padding: 0.5rem 0; display: flex; flex-direction: column; gap: 2px; }
   .subject-item {
-    padding: 0.8rem 1rem; color: #94a3b8; cursor: pointer; transition: 0.2s;
-    border-left: 3px solid transparent; display: flex; align-items: center; gap: 10px;
-    font-size: 0.8rem; font-family: 'Orbitron', sans-serif;
+    padding: 0.7rem 0.8rem; color: #94a3b8; cursor: pointer; transition: 0.2s;
+    border-left: 3px solid transparent; display: flex; align-items: center; gap: 8px;
+    font-size: 0.75rem; font-family: 'Orbitron', sans-serif; user-select: none;
   }
-  .subject-item:hover { background: rgba(255,255,255,0.05); color: #fff;}
+  .subject-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
   .subject-item.active {
     background: var(--neon-dim); color: var(--neon);
-    border-left: 3px solid var(--neon); box-shadow: inset 10px 0 20px rgba(0,0,0,0.5);
-    text-shadow: 0 0 5px var(--neon);
+    border-left: 3px solid var(--neon); text-shadow: 0 0 5px var(--neon);
   }
-  .color-dot { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 5px currentColor; }
-  
-  .sidebar-footer { padding: 1rem; border-top: 1px dashed #333; }
+  .subject-item.drag-over { border-top: 2px solid var(--neon); }
+  .subj-thumb {
+    width: 28px; height: 28px; border-radius: 50%; object-fit: cover;
+    border: 1px solid var(--neon); flex-shrink: 0; background: #111;
+  }
+  .color-dot { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 5px currentColor; flex-shrink: 0; }
+
+  .sidebar-footer { padding: 0.8rem; border-top: 1px dashed #333; display: flex; flex-direction: column; gap: 0.5rem; }
+  .sidebar-footer-row { display: flex; gap: 0.4rem; }
   .cy-btn {
     width: 100%; background: transparent; border: 1px solid var(--neon); color: var(--neon);
-    padding: 0.8rem; font-family: 'Orbitron', sans-serif; font-weight: bold; cursor: pointer;
-    text-transform: uppercase; transition: 0.2s; font-size: 0.8rem; letter-spacing: 1px;
+    padding: 0.7rem; font-family: 'Orbitron', sans-serif; font-weight: bold; cursor: pointer;
+    text-transform: uppercase; transition: 0.2s; font-size: 0.7rem; letter-spacing: 1px;
+    min-height: 44px; display: flex; align-items: center; justify-content: center;
   }
   .cy-btn:hover { background: var(--neon-dim); box-shadow: 0 0 15px var(--neon-gl); color: #fff; }
+  .cy-btn:active { transform: scale(0.97); }
+  .cy-btn.sm { padding: 0.4rem 0.6rem; min-height: 36px; font-size: 0.6rem; }
+  .cy-btn.danger { border-color: var(--danger); color: var(--danger); }
+  .cy-btn.danger:hover { background: rgba(239,68,68,0.2); }
 
    
-  .cy-main { flex-grow: 1; padding: 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 2rem; position: relative; z-index: 50; }
-  
-  .db-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid var(--neon); padding-bottom: 1rem;}
-  .db-header-left h1 { font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); margin: 0; font-size: 2.5rem; letter-spacing: 2px; }
-  .db-header-left .codename { color: var(--neon); font-size: 1rem; letter-spacing: 5px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace;}
-  .db-header-right { text-align: right; color: #64748b; font-size: 0.7rem; }
-  .edit-btn { background: transparent; border: 1px dashed var(--neon); color: var(--neon); padding: 4px 8px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; transition: 0.2s; margin-top: 10px;}
+  .cy-main { flex: 1; padding: 1.5rem 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem; position: relative; z-index: 50; }
+
+  .db-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid var(--neon); padding-bottom: 0.8rem; gap: 1rem; flex-wrap: wrap; }
+  .db-header-left h1 { font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); margin: 0; font-size: 2rem; letter-spacing: 2px; line-height: 1.2; }
+  .db-header-left .codename { color: var(--neon); font-size: 0.85rem; letter-spacing: 5px; text-transform: uppercase; }
+  .db-header-right { text-align: right; color: #64748b; font-size: 0.7rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .edit-btn {
+    background: transparent; border: 1px dashed var(--neon); color: var(--neon);
+    padding: 6px 12px; cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; transition: 0.2s; min-height: 36px;
+  }
   .edit-btn:hover { background: var(--neon); color: #000; }
 
    
-  .top-section { display: grid; grid-template-columns: 350px 1fr; gap: 2rem; }
-  
-   
-  .avatar-container { display: flex; flex-direction: column; gap: 10px; }
-  .avatar-frame {
-    position: relative; width: 100%; height: 450px; border: 1px solid var(--neon);
-    background: #000; box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 20px var(--neon-dim);
-    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  .tags-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .tag-chip {
+    padding: 3px 10px; font-size: 0.65rem; border-radius: 20px;
+    background: linear-gradient(135deg, var(--neon-dim), rgba(255,255,255,0.05));
+    border: 1px solid var(--neon); color: var(--neon); font-family: 'Zen Kaku Gothic New', sans-serif;
+    letter-spacing: 0.5px; white-space: nowrap;
   }
-  .avatar-frame::before, .avatar-frame::after { content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid var(--neon); pointer-events: none; z-index: 5;}
+
+   
+  .top-section { display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; }
+
+   
+  .avatar-container { display: flex; flex-direction: column; gap: 8px; }
+  .avatar-frame {
+    position: relative; width: 100%; aspect-ratio: 3/4; border: 1px solid var(--neon);
+    background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden;
+    animation: pulse-border 4s ease-in-out infinite;
+  }
+  .avatar-frame::before, .avatar-frame::after { content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid var(--neon); pointer-events: none; z-index: 5; }
   .avatar-frame::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
   .avatar-frame::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-  
-  .hologram-img {
-    width: 100%; height: 100%; object-fit: cover; object-position: center top;
-    filter: contrast(1.1) brightness(0.9); transition: 0.5s; z-index: 1;
-  }
+  .hologram-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: contrast(1.1) brightness(0.9); transition: 0.5s; z-index: 1; }
   .avatar-tint { position: absolute; inset: 0; background: var(--neon-dim); mix-blend-mode: screen; z-index: 2; pointer-events: none; }
   .hologram-glitch {
-    position: absolute; inset: 0; background: inherit; mix-blend-mode: screen;
-    background-image: var(--bg-img); background-size: cover; background-position: center top; background-repeat: no-repeat;
+    position: absolute; inset: 0; mix-blend-mode: screen;
+    background-size: cover; background-position: center top; background-repeat: no-repeat;
     opacity: 0.3; filter: blur(2px); transform: translateX(3px); animation: glitch-anim 3s infinite; z-index: 3; pointer-events: none;
   }
-  @keyframes glitch-anim {
-    0%, 100% { transform: translateX(0); opacity: 0.3; }
-    5%, 15% { transform: translateX(4px); opacity: 0.6; }
-    10%, 20% { transform: translateX(-4px); opacity: 0.1; }
-  }
+  @keyframes glitch-anim { 0%,100%{transform:translateX(0);opacity:0.3} 5%,15%{transform:translateX(4px);opacity:0.6} 10%,20%{transform:translateX(-4px);opacity:0.1} }
+
+   
+  .heart-gauge-container { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: rgba(0,0,0,0.5); border: 1px solid #333; }
+  .heart-icon { font-size: 1.2rem; filter: drop-shadow(0 0 4px var(--neon)); }
+  .heart-bar-bg { flex: 1; height: 12px; background: rgba(255,255,255,0.05); border: 1px solid #333; position: relative; overflow: hidden; }
+  .heart-bar-fill { height: 100%; background: linear-gradient(90deg, var(--neon-dim), var(--neon)); transition: width 0.8s ease; animation: gauge-fill 1s ease-out; box-shadow: 0 0 10px var(--neon-gl); }
+  .heart-val { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: var(--neon); min-width: 36px; text-align: right; }
 
    
   .stats-frame {
-    background: var(--bg-panel); border: 1px solid #333; padding: 1.5rem;
-    position: relative; display: flex; flex-direction: column; align-items: center;
-    justify-content: center;
+    background: var(--bg-panel); border: 1px solid #333; padding: 1.2rem;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
-  .section-title { font-family: 'Orbitron', sans-serif; color: var(--neon); font-size: 1rem; border-bottom: 1px dashed var(--neon); width: 100%; padding-bottom: 0.5rem; margin-bottom: 1rem; text-transform: uppercase;}
+  .section-title { font-family: 'Orbitron', sans-serif; color: var(--neon); font-size: 0.9rem; border-bottom: 1px dashed var(--neon); width: 100%; padding-bottom: 0.5rem; margin-bottom: 0.8rem; text-transform: uppercase; }
   canvas#radar-canvas { max-width: 100%; height: auto; }
 
    
-  .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-  .info-box { background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 1rem; border-left: 3px solid var(--neon); transition: 0.3s; }
+  .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
+  .info-box {
+    background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 0.8rem; border-left: 3px solid var(--neon); transition: 0.3s;
+  }
   .info-box:hover { border-color: var(--neon); background: rgba(255,255,255,0.05); box-shadow: 0 0 15px var(--neon-dim); }
-  .info-label { font-size: 0.6rem; color: #64748b; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.5rem; font-family: "Zen Kaku Gothic New", sans-serif; font-weight: bold;}
-  .info-val { font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 1.1rem; color: #e2e8f0; }
+  .info-label { font-size: 0.6rem; color: #64748b; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.3rem; font-family: "Zen Kaku Gothic New", sans-serif; font-weight: bold; }
+  .info-val { font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 1rem; color: #e2e8f0; word-break: break-word; }
 
    
-  .logs-frame { background: var(--bg-panel); border: 1px solid #333; padding: 1.5rem; flex-grow: 1; display:flex; flex-direction: column; }
+  .logs-frame { background: var(--bg-panel); border: 1px solid #333; padding: 1.2rem; display: flex; flex-direction: column; }
   .logs-textarea {
-    flex-grow: 1; background: transparent; border: none; color: #a1a1aa;
+    flex: 1; background: transparent; border: none; color: #a1a1aa;
     font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.9rem; resize: none; line-height: 1.6;
-    padding: 0.5rem 0; min-height: 150px;
+    padding: 0.5rem 0; min-height: 130px;
   }
   .logs-textarea:focus { outline: none; color: #fff; }
 
    
   .cy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 99999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-  .cy-modal-content { background: var(--bg-panel); border: 1px solid var(--neon); padding: 2rem; width: 90%; max-width: 900px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 30px var(--neon-dim); }
-  .cy-modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: #ef4444; font-size: 1.5rem; cursor: pointer; transition: 0.2s;}
+  .cy-modal-content {
+    background: var(--bg-panel); border: 1px solid var(--neon); padding: 1.5rem; width: 90%; max-width: 900px;
+    position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 30px var(--neon-dim);
+  }
+  .cy-modal-close { position: absolute; top: 0.8rem; right: 0.8rem; background: none; border: none; color: #ef4444; font-size: 1.5rem; cursor: pointer; transition: 0.2s; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
   .cy-modal-close:hover { text-shadow: 0 0 10px red; transform: scale(1.2); }
-  
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
   .form-group.full { grid-column: span 2; }
-  .cy-label { font-size: 0.7rem; color: var(--neon); font-family: 'Orbitron', 'Zen Kaku Gothic New', sans-serif; letter-spacing: 1px; }
-  .cy-input { background: #000; border: 1px solid #333; color: #fff; padding: 0.8rem; font-family: inherit; font-size: 0.9rem; transition: 0.2s; }
+  .cy-label { font-size: 0.65rem; color: var(--neon); font-family: 'Orbitron', 'Zen Kaku Gothic New', sans-serif; letter-spacing: 1px; }
+  .cy-input {
+    background: #000; border: 1px solid #333; color: #fff; padding: 0.7rem;
+    font-family: inherit; font-size: 0.85rem; transition: 0.2s; min-height: 44px; box-sizing: border-box;
+  }
   .cy-input:focus { outline: none; border-color: var(--neon); box-shadow: 0 0 10px var(--neon-dim); }
-  
-  .stats-inputs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-  .stat-col { display: flex; flex-direction: column; gap: 4px; align-items: stretch; }
+
+  .stats-inputs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stat-col { display: flex; flex-direction: column; gap: 4px; }
   .stat-col input[type=number] { text-align: center; }
 
    
-  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; overflow-y: auto; max-height: 70vh; padding-right: 1rem; }
-  .gallery-item { position: relative; cursor: pointer; border: 1px solid #333; overflow: hidden; background: #000; aspect-ratio: 1/1; transition: 0.3s; }
-  .gallery-item img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.5) contrast(1.2); transition: 0.3s; }
-  .gallery-item:hover { border-color: var(--neon); box-shadow: 0 0 15px var(--neon-dim); z-index: 10; transform: scale(1.05); }
-  .gallery-item:hover img { filter: grayscale(0) contrast(1); }
-  .gallery-meta { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); color: var(--neon); font-size: 0.6rem; padding: 4px; text-align: center; font-family: 'Orbitron', sans-serif; border-top: 1px solid var(--neon); }
-
-  .viewer-nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 3rem; color: var(--neon); background: none; border: none; cursor: pointer; opacity: 0.5; transition: 0.3s; text-shadow: 0 0 10px var(--neon); z-index: 50; }
-  .viewer-nav:hover { opacity: 1; transform: translateY(-50%) scale(1.2); }
+  .custom-fields-list { display: flex; flex-direction: column; gap: 8px; }
+  .custom-field-row { display: flex; gap: 8px; align-items: center; }
+  .custom-field-row .cy-input { flex: 1; }
+  .cf-remove { background: none; border: 1px solid var(--danger); color: var(--danger); width: 36px; height: 36px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; }
+  .cf-remove:hover { background: rgba(239,68,68,0.2); }
 
    
-  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 0.8rem 1.5rem; font-family: 'Orbitron', sans-serif; pointer-events: none; opacity: 0; transition: 0.3s; z-index: 100000; box-shadow: 0 0 20px var(--neon-gl); font-weight: bold; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.8rem; overflow-y: auto; max-height: 70vh; padding-right: 0.5rem; }
+  .gallery-item { position: relative; cursor: pointer; border: 1px solid #333; overflow: hidden; background: #000; aspect-ratio: 1/1; transition: 0.3s; }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.5) contrast(1.2); transition: 0.3s; }
+  .gallery-item:hover { border-color: var(--neon); box-shadow: 0 0 15px var(--neon-dim); z-index: 10; transform: scale(1.03); }
+  .gallery-item:hover img { filter: none; }
+  .gallery-meta { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); color: var(--neon); font-size: 0.6rem; padding: 4px; text-align: center; font-family: 'Orbitron', sans-serif; border-top: 1px solid var(--neon); }
 
-  @media (max-width: 900px) {
-    .cy-root { flex-direction: column; }
-    .cy-sidebar { width: 100%; height: 200px; border-right: none; border-bottom: 1px solid var(--neon); overflow-y: auto; }
-    .subject-list { flex-direction: row; overflow-x: auto; overflow-y: hidden; }
-    .subject-item { flex-shrink: 0; border-left: none; border-bottom: 3px solid transparent; }
-    .subject-item.active { border-left: none; border-bottom: 3px solid var(--neon); box-shadow: inset 0 10px 20px rgba(0,0,0,0.5); }
+  .viewer-nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 3rem; color: var(--neon); background: none; border: none; cursor: pointer; opacity: 0.5; transition: 0.3s; text-shadow: 0 0 10px var(--neon); z-index: 50; min-width: 50px; min-height: 60px; display: flex; align-items: center; justify-content: center; }
+  .viewer-nav:hover { opacity: 1; }
+
+   
+  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 0.8rem 1.5rem; font-family: 'Orbitron', sans-serif; pointer-events: none; opacity: 0; transition: 0.3s; z-index: 100000; box-shadow: 0 0 20px var(--neon-gl); font-weight: bold; font-size: 0.75rem; }
+
+   
+  .mobile-nav { display: none; }
+  .mobile-nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 99998;
+    background: rgba(5,5,8,0.97); border-top: 1px solid var(--neon);
+    padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+    min-height: 52px;
+  }
+  .mobile-current { display: flex; align-items: center; gap: 8px; flex: 1; cursor: pointer; min-height: 44px; }
+  .mobile-current .subj-thumb { width: 32px; height: 32px; }
+  .mobile-current-name { font-family: 'Orbitron', sans-serif; font-size: 0.75rem; color: var(--neon); letter-spacing: 1px; }
+  .mobile-nav-actions { display: flex; gap: 6px; }
+  .mobile-nav-btn { background: none; border: 1px solid var(--neon); color: var(--neon); padding: 6px 10px; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; cursor: pointer; min-height: 38px; min-width: 38px; display: flex; align-items: center; justify-content: center; }
+
+  .mobile-drawer {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
+    background: rgba(5,5,8,0.98); border-top: 2px solid var(--neon);
+    max-height: 60vh; transform: translateY(100%); transition: transform 0.3s ease;
+    display: flex; flex-direction: column; box-shadow: 0 -8px 30px rgba(0,0,0,0.9);
+  }
+  .mobile-drawer.open { transform: translateY(0); }
+  .drawer-handle { width: 40px; height: 4px; background: #444; border-radius: 2px; margin: 10px auto 6px; }
+  .drawer-header { display: flex; justify-content: space-between; align-items: center; padding: 0 1rem 0.5rem; border-bottom: 1px dashed #333; }
+  .drawer-header span { font-family: 'Orbitron', sans-serif; color: var(--neon); font-size: 0.75rem; }
+  .drawer-list { flex: 1; overflow-y: auto; padding: 0.5rem 0; overscroll-behavior: contain; }
+  .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 99998; display: none; }
+
+   
+  @media (max-width: 1024px) {
+    .top-section { grid-template-columns: 280px 1fr; }
+    .info-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .cy-sidebar { display: none; }
+    .mobile-nav { display: block; }
+    .cy-root { flex-direction: column; padding-bottom: 56px; }
+    .cy-main { padding: 1rem; gap: 1rem; }
     .top-section { grid-template-columns: 1fr; }
-    .avatar-frame { max-width: 400px; margin: 0 auto; height: 400px; }
-    .info-grid { grid-template-columns: 1fr; }
+    .avatar-frame { max-width: 280px; margin: 0 auto; aspect-ratio: 3/4; }
+    .db-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .db-header-left h1 { font-size: 1.4rem; }
+    .db-header-right { text-align: left; }
+    .info-grid { grid-template-columns: repeat(2, 1fr); }
     .form-grid { grid-template-columns: 1fr; }
     .form-group.full { grid-column: span 1; }
-    .stats-inputs { grid-template-columns: repeat(3, 1fr); margin-bottom: 10px;}
-    .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    .stats-inputs { grid-template-columns: repeat(3, 1fr); }
+    .cy-modal-content { width: 100%; max-width: 100%; max-height: 100vh; height: 100vh; border: none; padding: 1rem; padding-top: 3rem; }
+    .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); max-height: calc(100vh - 120px); }
+    .section-title { font-size: 0.8rem; }
+    .toast { bottom: 4.5rem; }
+  }
+
+  @media (max-width: 420px) {
+    .cy-main { padding: 0.7rem; }
+    .db-header-left h1 { font-size: 1.1rem; }
+    .info-grid { grid-template-columns: 1fr; }
+    .avatar-frame { max-width: 220px; }
+    .stats-inputs { grid-template-columns: repeat(2, 1fr); }
+    .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 6px; }
   }
 </style>
 
 <div class="cy-root" id="app-root">
   <div class="scanline-bar"></div>
+
   
   <div class="cy-sidebar">
-    <div class="sidebar-header">
-      // SUBJECT_LIST<br>
-      <span style="font-size:0.6rem; color:#64748b;">DATABASE ACCESS GRANTED</span>
-    </div>
-    <div class="subject-list" id="subject-list">
-      
-    </div>
+    <div class="sidebar-header">// SUBJECT_LIST<br><span style="font-size:0.55rem;color:#64748b;">DATABASE ACCESS GRANTED</span></div>
+    <div class="subject-list" id="subject-list"></div>
     <div class="sidebar-footer">
       <button class="cy-btn" onclick="openEditor(null)">+ ADD NEW SUBJECT</button>
+      <div class="sidebar-footer-row">
+        <button class="cy-btn sm" style="flex:1;" onclick="exportJSON()">⬇ EXPORT</button>
+        <button class="cy-btn sm" style="flex:1;" onclick="document.getElementById('import-file').click()">⬆ IMPORT</button>
+        <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importJSON(event)">
+      </div>
     </div>
   </div>
 
+  
   <div class="cy-main" id="main-view">
     <div class="db-header">
       <div class="db-header-left">
         <div class="codename" id="disp-codename">// LOADING...</div>
         <h1 id="disp-name">SUBJECT_NAME</h1>
+        <div class="tags-row" id="disp-tags"></div>
       </div>
       <div class="db-header-right">
-        STATUS: <span style="color:var(--neon); font-weight:bold;">CLASSIFIED</span><br>
         <button class="edit-btn" onclick="openEditor(currentSubjectId)">[ EDIT_RECORD ]</button>
       </div>
     </div>
@@ -1296,158 +1379,160 @@
           <div class="hologram-glitch" id="disp-glitch"></div>
           <img src="" alt="Avatar" class="hologram-img" id="disp-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJibGFjayIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjNDQ0IiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEwIiBkeT0iLjNlbSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Tk8gSU1BR0U8L3RleHQ+PC9zdmc+'">
         </div>
-        <button class="cy-btn" style="box-shadow: 0 0 10px var(--neon-dim);" onclick="openGallery()">[ EXPLORE VISUAL ARCHIVES ] (写真集を開く)</button>
+        <div class="heart-gauge-container">
+          <span class="heart-icon">💖</span>
+          <div class="heart-bar-bg"><div class="heart-bar-fill" id="disp-heart-fill" style="width:0%"></div></div>
+          <span class="heart-val" id="disp-heart-val">0%</span>
+        </div>
+        <button class="cy-btn" onclick="openGallery()">[ VISUAL ARCHIVES ] 写真集</button>
       </div>
-      
+
       <div class="stats-frame">
         <div class="section-title">// PARAMETER_ANALYSIS</div>
         <canvas id="radar-canvas" width="400" height="350"></canvas>
       </div>
     </div>
 
-    <div class="info-grid">
-      <div class="info-box"><div class="info-label">AGE / D.O.B (年齢・誕生日)</div><div class="info-val" id="disp-age">-</div></div>
-      <div class="info-box"><div class="info-label">HEIGHT (身長)</div><div class="info-val" id="disp-height">-</div></div>
-      <div class="info-box"><div class="info-label">FACTION / ORIGIN (所属・出身)</div><div class="info-val" id="disp-faction">-</div></div>
-      <div class="info-box"><div class="info-label">THREAT LEVEL (危険度/推し度)</div><div class="info-val" id="disp-threat">-</div></div>
-      <div class="info-box"><div class="info-label">STATUS (現在の状態)</div><div class="info-val" id="disp-status">-</div></div>
-      <div class="info-box"><div class="info-label">CLASSIFICATION (分類/種族)</div><div class="info-val" id="disp-class">-</div></div>
-    </div>
+    <div class="info-grid" id="info-grid"></div>
 
     <div class="logs-frame">
-      <div class="section-title" style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
         // OBSERVATION_LOGS
-        <button class="edit-btn" style="margin:0;" onclick="saveLogs()">SAVE_LOGS (ログを保存)</button>
+        <button class="edit-btn" style="margin:0;" onclick="saveLogs()">SAVE_LOGS (保存)</button>
       </div>
-      <textarea class="logs-textarea" id="disp-logs" placeholder="観察記録やメモをここに入力..."></textarea>
+      <textarea class="logs-textarea" id="disp-logs" placeholder="記録やメモをここに入力..."></textarea>
     </div>
   </div>
 
   
-  <div class="cy-modal" id="editor-modal">
+  <div class="mobile-nav">
+    <div class="drawer-overlay" id="drawer-overlay" onclick="closeMobileDrawer()"></div>
+    <div class="mobile-drawer" id="mobile-drawer">
+      <div class="drawer-handle"></div>
+      <div class="drawer-header">
+        <span>// SELECT SUBJECT</span>
+        <button class="mobile-nav-btn" onclick="openEditor(null)" style="font-size:0.7rem;">+ NEW</button>
+      </div>
+      <div class="drawer-list" id="drawer-list"></div>
+      <div style="padding:0.5rem 0.8rem; display:flex; gap:6px; border-top:1px dashed #333;">
+        <button class="cy-btn sm" style="flex:1;" onclick="exportJSON()">⬇ EXPORT</button>
+        <button class="cy-btn sm" style="flex:1;" onclick="document.getElementById('import-file-m').click()">⬆ IMPORT</button>
+        <input type="file" id="import-file-m" accept=".json" style="display:none;" onchange="importJSON(event)">
+      </div>
+    </div>
+    <div class="mobile-nav-bar">
+      <div class="mobile-current" onclick="openMobileDrawer()">
+        <img class="subj-thumb" id="mobile-thumb" src="" alt="">
+        <span class="mobile-current-name" id="mobile-current-name">SELECT...</span>
+      </div>
+      <div class="mobile-nav-actions">
+        <button class="mobile-nav-btn" onclick="openEditor(currentSubjectId)" title="Edit">✎</button>
+        <button class="mobile-nav-btn" onclick="openMobileDrawer()" title="List">☰</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="cy-modal" id="editor-modal" style="display:none;">
     <div class="cy-modal-content">
       <button class="cy-modal-close" onclick="closeEditor()">&times;</button>
-      <h2 class="section-title" style="font-size:1.5rem; margin-bottom:2rem;">// RECORD_OVERRIDE</h2>
-      
+      <h2 class="section-title" style="font-size:1.2rem;margin-bottom:1.5rem;">// RECORD_OVERRIDE</h2>
       <div class="form-grid">
+        <div class="form-group"><label class="cy-label">SUBJECT NAME (表示名)</label><input type="text" id="in-name" class="cy-input" placeholder="e.g. HATSUNE MIKU"></div>
+        <div class="form-group"><label class="cy-label">CODENAME / ALIAS (通称)</label><input type="text" id="in-codename" class="cy-input" placeholder="e.g. CV01"></div>
         <div class="form-group">
-          <label class="cy-label">SUBJECT NAME (表示名)</label>
-          <input type="text" id="in-name" class="cy-input" placeholder="e.g. HATSUNE MIKU">
+          <label class="cy-label">THEME COLOR (推し色)</label>
+          <div style="display:flex;gap:8px;"><input type="color" id="in-color-picker" style="height:44px;cursor:pointer;background:#000;border:1px solid #333;min-width:50px;"><input type="text" id="in-color" class="cy-input" style="flex:1;" value="#10b981"></div>
         </div>
         <div class="form-group">
-          <label class="cy-label">CODENAME / ALIAS (通称・コードネーム)</label>
-          <input type="text" id="in-codename" class="cy-input" placeholder="e.g. CV01">
+          <label class="cy-label">OSHI LEVEL 推し度 (0-100)</label>
+          <input type="range" id="in-oshi-level" min="0" max="100" value="50" style="accent-color:var(--neon);min-height:44px;">
+          <div style="text-align:center;color:var(--neon);font-family:'Orbitron';font-size:0.8rem;" id="oshi-level-disp">50%</div>
         </div>
-        
-        <div class="form-group">
-          <label class="cy-label">THEME COLOR (テーマカラー/推し色 HEX)</label>
-          <div style="display:flex; gap:10px;">
-            <input type="color" id="in-color-picker" style="height:40px; cursor:pointer; background:#000; border:1px solid #333;">
-            <input type="text" id="in-color" class="cy-input" style="flex-grow:1;" value="#10b981">
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label class="cy-label">AVATAR IMAGE UPLOAD (画像をアップロード・選択)</label>
-          <div style="display:flex; gap:0.5rem; align-items:stretch;">
-            <input type="file" id="in-avatar-file" class="cy-input" accept="image/*" style="flex:1; padding:0.5rem;" onchange="processLocalImage('in-avatar-file', 'in-avatar')">
-            <span style="display:flex; align-items:center; color:#64748b; font-size:0.7rem;">OR URL:</span>
-            <input type="text" id="in-avatar" class="cy-input" style="flex:1;" placeholder="https://... またはアップロードで自動入力">
-          </div>
-          <p style="font-size:0.6rem; color:#64748b; margin-top:2px;">※ファイルをアップロードすると自動的に圧縮され、URL入力欄にBase64として保存されます。</p>
-        </div>
-
         <div class="form-group full">
-          <label class="cy-label" style="display:flex; justify-content:space-between;">
-            <span>PARAMETERS (レーダーチャート項目名と数値 0-100)</span>
-          </label>
+          <label class="cy-label">AVATAR IMAGE (画像)</label>
+          <div style="display:flex;gap:0.5rem;align-items:stretch;flex-wrap:wrap;">
+            <input type="file" id="in-avatar-file" class="cy-input" accept="image/*" style="flex:1;min-width:150px;" onchange="processLocalImage('in-avatar-file','in-avatar')">
+            <input type="text" id="in-avatar" class="cy-input" style="flex:1;min-width:150px;" placeholder="URL or auto-fill">
+          </div>
+          <p style="font-size:0.55rem;color:#64748b;margin-top:2px;">※自動圧縮でBase64保存されます</p>
+        </div>
+        <div class="form-group full">
+          <label class="cy-label">TAGS タグ (カンマ区切り)</label>
+          <input type="text" id="in-tags" class="cy-input" placeholder="e.g. VTuber, 歌手, アニメ, 推し">
+        </div>
+        <div class="form-group full">
+          <label class="cy-label">PARAMETERS レーダーチャート (項目名 + 0-100)</label>
           <div class="stats-inputs">
-            <div class="stat-col">
-              <input type="text" id="in-l1" class="cy-input" style="padding:0.4rem; font-size:0.7rem; text-align:center; color:#94a3b8;" placeholder="項目名">
-              <input type="number" id="in-s1" class="cy-input" min="0" max="100">
-            </div>
-            <div class="stat-col">
-              <input type="text" id="in-l2" class="cy-input" style="padding:0.4rem; font-size:0.7rem; text-align:center; color:#94a3b8;" placeholder="項目名">
-              <input type="number" id="in-s2" class="cy-input" min="0" max="100">
-            </div>
-            <div class="stat-col">
-              <input type="text" id="in-l3" class="cy-input" style="padding:0.4rem; font-size:0.7rem; text-align:center; color:#94a3b8;" placeholder="項目名">
-              <input type="number" id="in-s3" class="cy-input" min="0" max="100">
-            </div>
-            <div class="stat-col">
-              <input type="text" id="in-l4" class="cy-input" style="padding:0.4rem; font-size:0.7rem; text-align:center; color:#94a3b8;" placeholder="項目名">
-              <input type="number" id="in-s4" class="cy-input" min="0" max="100">
-            </div>
-            <div class="stat-col">
-              <input type="text" id="in-l5" class="cy-input" style="padding:0.4rem; font-size:0.7rem; text-align:center; color:#94a3b8;" placeholder="項目名">
-              <input type="number" id="in-s5" class="cy-input" min="0" max="100">
-            </div>
+            <div class="stat-col"><input type="text" id="in-l1" class="cy-input" style="padding:0.4rem;font-size:0.7rem;text-align:center;color:#94a3b8;" placeholder="項目名"><input type="number" id="in-s1" class="cy-input" min="0" max="100"></div>
+            <div class="stat-col"><input type="text" id="in-l2" class="cy-input" style="padding:0.4rem;font-size:0.7rem;text-align:center;color:#94a3b8;" placeholder="項目名"><input type="number" id="in-s2" class="cy-input" min="0" max="100"></div>
+            <div class="stat-col"><input type="text" id="in-l3" class="cy-input" style="padding:0.4rem;font-size:0.7rem;text-align:center;color:#94a3b8;" placeholder="項目名"><input type="number" id="in-s3" class="cy-input" min="0" max="100"></div>
+            <div class="stat-col"><input type="text" id="in-l4" class="cy-input" style="padding:0.4rem;font-size:0.7rem;text-align:center;color:#94a3b8;" placeholder="項目名"><input type="number" id="in-s4" class="cy-input" min="0" max="100"></div>
+            <div class="stat-col"><input type="text" id="in-l5" class="cy-input" style="padding:0.4rem;font-size:0.7rem;text-align:center;color:#94a3b8;" placeholder="項目名"><input type="number" id="in-s5" class="cy-input" min="0" max="100"></div>
           </div>
         </div>
 
-        <div class="section-title full" style="margin-top:1rem;">// DETAILED_INFO (詳細データ)</div>
+        <div class="section-title full" style="margin-top:0.8rem;">// DETAILED_INFO (詳細データ)</div>
         <div class="form-group"><label class="cy-label">AGE / D.O.B (年齢・誕生日)</label><input type="text" id="in-age" class="cy-input"></div>
         <div class="form-group"><label class="cy-label">HEIGHT (身長)</label><input type="text" id="in-height" class="cy-input"></div>
-        <div class="form-group"><label class="cy-label">FACTION / ORIGIN (所属・出身地)</label><input type="text" id="in-faction" class="cy-input"></div>
-        <div class="form-group"><label class="cy-label">THREAT LEVEL (危険度/推し度)</label><input type="text" id="in-threat" class="cy-input" placeholder="e.g. OMEGA / MAX / ∞"></div>
-        <div class="form-group"><label class="cy-label">STATUS (現在の状態)</label><input type="text" id="in-status" class="cy-input" placeholder="e.g. 絶賛推し中(ACTIVE) / 待ち(HIBERNATING)"></div>
-        <div class="form-group"><label class="cy-label">CLASSIFICATION (分類/種族)</label><input type="text" id="in-class" class="cy-input" placeholder="e.g. アイドル / 吸血鬼 / バーチャル"></div>
+        <div class="form-group"><label class="cy-label">FACTION / ORIGIN (所属・出身)</label><input type="text" id="in-faction" class="cy-input"></div>
+        <div class="form-group"><label class="cy-label">THREAT LEVEL (推し度)</label><input type="text" id="in-threat" class="cy-input" placeholder="e.g. OMEGA / MAX / ∞"></div>
+        <div class="form-group"><label class="cy-label">STATUS (現在の状態)</label><input type="text" id="in-status" class="cy-input" placeholder="e.g. ACTIVE / HIBERNATING"></div>
+        <div class="form-group"><label class="cy-label">CLASSIFICATION (分類/種族)</label><input type="text" id="in-class" class="cy-input" placeholder="e.g. アイドル / 吸血鬼"></div>
 
-        <div class="form-group full" style="margin-top:1rem; display:flex; gap:1rem; flex-direction:row;">
-          <button class="cy-btn" style="flex-grow:1;" onclick="saveSubject()">SAVE_RECORD</button>
-          <button class="cy-btn" style="border-color:#ef4444; color:#ef4444;" onclick="deleteSubject()">PURGE (削除)</button>
+        <div class="section-title full" style="margin-top:0.8rem;">// CUSTOM_FIELDS (カスタムフィールド)</div>
+        <div class="form-group full">
+          <div class="custom-fields-list" id="custom-fields-list"></div>
+          <button class="cy-btn sm" style="margin-top:8px;width:auto;" onclick="addCustomFieldRow()">+ ADD FIELD (追加)</button>
+        </div>
+
+        <div class="form-group full" style="margin-top:1rem;display:flex;gap:0.8rem;flex-direction:row;flex-wrap:wrap;">
+          <button class="cy-btn" style="flex:1;min-width:150px;" onclick="saveSubject()">SAVE_RECORD</button>
+          <button class="cy-btn danger" style="min-width:100px;" onclick="deleteSubject()">PURGE (削除)</button>
         </div>
       </div>
     </div>
   </div>
 
   
-  <div class="cy-modal" id="gallery-modal" style="z-index: 999998;">
-    <div class="cy-modal-content" style="width: 95%; max-width: 1200px; height: 90vh;">
+  <div class="cy-modal" id="gallery-modal" style="display:none;z-index:999998;">
+    <div class="cy-modal-content" style="width:95%;max-width:1200px;height:90vh;">
       <button class="cy-modal-close" onclick="closeGallery()">&times;</button>
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px dashed var(--neon); padding-bottom:1rem; margin-bottom:1.5rem;">
-        <h2 class="section-title" style="margin:0; border:none;" id="gallery-title">// VISUAL_ARCHIVES</h2>
-        <button class="cy-btn" style="width:auto; padding:0.5rem 1.5rem;" onclick="openImageUploadModal()">+ ADD IMAGE (画像追加)</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed var(--neon);padding-bottom:0.8rem;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
+        <h2 class="section-title" style="margin:0;border:none;" id="gallery-title">// VISUAL_ARCHIVES</h2>
+        <button class="cy-btn sm" style="width:auto;padding:0.4rem 1rem;" onclick="openImageUploadModal()">+ ADD IMAGE</button>
       </div>
-      <div class="gallery-grid" id="gallery-grid">
-        
-      </div>
+      <div class="gallery-grid" id="gallery-grid"></div>
     </div>
   </div>
+
   
-  
-  <div class="cy-modal" id="upload-modal" style="z-index: 999999;">
-    <div class="cy-modal-content" style="max-width: 500px;">
+  <div class="cy-modal" id="upload-modal" style="display:none;z-index:999999;">
+    <div class="cy-modal-content" style="max-width:500px;">
       <button class="cy-modal-close" onclick="document.getElementById('upload-modal').style.display='none'">&times;</button>
       <h2 class="section-title">++ UPLOAD VISUAL DATA</h2>
-      
       <div class="form-group" style="margin-bottom:1rem;">
-        <label class="cy-label">UPLOAD FROM DEVICE (端末からアップロード)</label>
-        <input type="file" id="in-gallery-file" class="cy-input" accept="image/*" onchange="processLocalImage('in-gallery-file', 'in-gallery-url')">
-        <p style="font-size:0.6rem; color:#64748b; margin-top:2px;">※ブラウザ保存容量（5MB）を圧迫しないよう、自動で軽量化（圧縮）されて保存されます。大量の追加にご注意ください。</p>
+        <label class="cy-label">UPLOAD FROM DEVICE (端末から)</label>
+        <input type="file" id="in-gallery-file" class="cy-input" accept="image/*" onchange="processLocalImage('in-gallery-file','in-gallery-url')">
       </div>
-
       <div class="form-group" style="margin-bottom:1rem;">
-        <label class="cy-label">OR ENTER IMAGE URL (画像のURLを直接指定)</label>
-        <input type="text" id="in-gallery-url" class="cy-input" placeholder="https://... または端末からの画像データを表示">
+        <label class="cy-label">OR ENTER URL (URL指定)</label>
+        <input type="text" id="in-gallery-url" class="cy-input" placeholder="https://...">
       </div>
-
       <button class="cy-btn" onclick="submitGalleryImage()">UPLOAD TO ARCHIVE</button>
     </div>
   </div>
 
   
-  <div class="cy-modal" id="viewer-modal" style="z-index: 999999; background: rgba(0,0,0,0.95);">
-    <button class="cy-modal-close" onclick="closeViewer()" style="z-index: 20;">&times;</button>
-    <button class="cy-btn" onclick="deleteGalleryImage()" style="position:absolute; top:1.5rem; right:4rem; width:auto; border-color:#ef4444; color:#ef4444; z-index:20; padding:4px 8px; font-size:0.7rem;">PURGE (削除)</button>
-    
-    <button class="viewer-nav" style="left:1rem;" onclick="navigateViewer(-1)">&#10094;</button>
-    <div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; position:relative;">
-      <img id="viewer-img" src="" style="max-width:85vw; max-height:85vh; object-fit:contain; border:1px solid var(--neon); box-shadow:0 0 30px var(--neon-gl);">
+  <div class="cy-modal" id="viewer-modal" style="display:none;z-index:999999;background:rgba(0,0,0,0.95);">
+    <button class="cy-modal-close" onclick="closeViewer()" style="z-index:20;">&times;</button>
+    <button class="cy-btn sm danger" onclick="deleteGalleryImage()" style="position:absolute;top:1rem;right:3.5rem;width:auto;z-index:20;">PURGE</button>
+    <button class="viewer-nav" style="left:0.5rem;" onclick="navigateViewer(-1)">&#10094;</button>
+    <div id="viewer-img-wrap" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:relative;touch-action:pan-y;">
+      <img id="viewer-img" src="" style="max-width:90vw;max-height:85vh;object-fit:contain;border:1px solid var(--neon);box-shadow:0 0 30px var(--neon-gl);">
     </div>
-    <button class="viewer-nav" style="right:1rem;" onclick="navigateViewer(1)">&#10095;</button>
-    
-    <div id="viewer-count" style="position:absolute; bottom:1rem; left:50%; transform:translateX(-50%); color:var(--neon); font-family:'Orbitron', monospace; letter-spacing:2px; font-size:0.8rem; text-shadow:0 0 5px var(--neon);">1 / 10</div>
+    <button class="viewer-nav" style="right:0.5rem;" onclick="navigateViewer(1)">&#10095;</button>
+    <div id="viewer-count" style="position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);color:var(--neon);font-family:'Orbitron',monospace;letter-spacing:2px;font-size:0.8rem;text-shadow:0 0 5px var(--neon);">1/1</div>
   </div>
 
   <div class="toast" id="toast-msg"></div>
@@ -1458,40 +1543,42 @@
   let db = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
   let currentSubjectId = null;
   let currentViewIndex = 0;
+  const defaultStatNames = ['VOCAB','CHARM','PHYS','MENT','MYST'];
+  const defaultFields = [
+    {key:'age',label:'AGE / D.O.B (年齢・誕生日)'},{key:'height',label:'HEIGHT (身長)'},
+    {key:'faction',label:'FACTION / ORIGIN (所属・出身)'},{key:'threat',label:'THREAT LEVEL (推し度)'},
+    {key:'status',label:'STATUS (状態)'},{key:'cls',label:'CLASSIFICATION (分類)'}
+  ];
 
-  const defaultStatNames = ['VOCAB', 'CHARM', 'PHYS', 'MENT', 'MYST'];
+  
+  db = db.map(s => {
+    if(!s.statLabels) s.statLabels = [...defaultStatNames];
+    if(!s.gallery) s.gallery = [];
+    if(s.oshiLevel === undefined) s.oshiLevel = 50;
+    if(!s.tags) s.tags = [];
+    if(!s.customFields) s.customFields = [];
+    return s;
+  });
 
-  if (db.length === 0) {
+  if(db.length === 0) {
     db.push({
-      id: "subj_001",
-      name: "UNKNOWN SUBJECT",
-      codename: "NULL_POINTER",
-      color: "#10b981",
-      avatarUrl: "",
-      statLabels: [...defaultStatNames],
-      stats: [50, 50, 50, 50, 50],
-      details: { age: "---", height: "---", faction: "---", threat: "---", status: "---", cls: "---" },
-      logs: "No observations recorded.",
-      gallery: []
+      id:"subj_001", name:"UNKNOWN SUBJECT", codename:"NULL_POINTER", color:"#10b981",
+      avatarUrl:"", statLabels:[...defaultStatNames], stats:[50,50,50,50,50],
+      details:{age:"---",height:"---",faction:"---",threat:"---",status:"---",cls:"---"},
+      logs:"No observations recorded.", gallery:[], oshiLevel:50, tags:[], customFields:[]
     });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
   }
 
-  db = db.map(s => {
-    if(!s.statLabels) s.statLabels = [...defaultStatNames];
-    if(!s.gallery) s.gallery = [];
-    return s;
-  });
-
   function showToast(msg) {
     const t = document.getElementById('toast-msg');
     t.innerText = msg; t.style.opacity = 1; t.style.transform = 'translate(-50%, -20px)';
-    setTimeout(() => { t.style.opacity = 0; t.style.transform = 'translate(-50%, 0)'; }, 3000);
+    setTimeout(() => { t.style.opacity = 0; t.style.transform = 'translate(-50%, 0)'; }, 2500);
   }
 
   function hexToRgb(hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '16, 185, 129';
+    var r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return r ? `${parseInt(r[1],16)}, ${parseInt(r[2],16)}, ${parseInt(r[3],16)}` : '16,185,129';
   }
 
   function applyTheme(colorHex) {
@@ -1506,109 +1593,118 @@
     const canvas = document.getElementById('radar-canvas');
     if(!canvas) return;
     const ctx = canvas.getContext('2d');
-    ctx.clearRect(0,0, canvas.width, canvas.height);
-    
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2 + 15;
-    const radius = Math.min(centerX, centerY) - 40;
-    const numPoints = 5;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const cx = canvas.width/2, cy = canvas.height/2+15, radius = Math.min(cx,cy)-40, n = 5;
 
-    ctx.strokeStyle = '#333';
-    ctx.lineWidth = 1;
-    for(let level = 1; level <= 5; level++) {
-      let r = radius * (level/5);
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
+    for(let lv=1;lv<=5;lv++) {
+      let r = radius*(lv/5);
       ctx.beginPath();
-      for(let i=0; i<numPoints; i++) {
-        let angle = (Math.PI / 2) - (2 * Math.PI * i / numPoints);
-        let x = centerX + r * Math.cos(angle);
-        let y = centerY - r * Math.sin(angle);
-        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-      }
-      ctx.closePath();
-      ctx.stroke();
+      for(let i=0;i<n;i++) { let a=(Math.PI/2)-(2*Math.PI*i/n), x=cx+r*Math.cos(a), y=cy-r*Math.sin(a); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+      ctx.closePath(); ctx.stroke();
     }
-    for(let i=0; i<numPoints; i++) {
-      let angle = (Math.PI / 2) - (2 * Math.PI * i / numPoints);
-      ctx.beginPath(); ctx.moveTo(centerX, centerY);
-      ctx.lineTo(centerX + radius * Math.cos(angle), centerY - radius * Math.sin(angle));
-      ctx.stroke();
-
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '12px "Zen Kaku Gothic New"';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      let lx = centerX + (radius + 25) * Math.cos(angle);
-      let ly = centerY - (radius + 25) * Math.sin(angle);
-      
-      if (Math.abs(Math.cos(angle)) < 0.1) { } 
-      else if (Math.cos(angle) > 0) lx += 5; 
-      else lx -= 5; 
-
-      let text = (labelsArray[i] || '').toUpperCase();
-      ctx.fillText(text, lx, ly);
+    for(let i=0;i<n;i++) {
+      let a=(Math.PI/2)-(2*Math.PI*i/n);
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+radius*Math.cos(a),cy-radius*Math.sin(a)); ctx.stroke();
+      ctx.fillStyle='#94a3b8'; ctx.font='12px "Zen Kaku Gothic New"'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      let lx=cx+(radius+25)*Math.cos(a), ly=cy-(radius+25)*Math.sin(a);
+      if(Math.abs(Math.cos(a))>=0.1) lx += Math.cos(a)>0?5:-5;
+      ctx.fillText((labelsArray[i]||'').toUpperCase(),lx,ly);
     }
-
     ctx.beginPath();
-    for(let i=0; i<numPoints; i++) {
-      let angle = (Math.PI / 2) - (2 * Math.PI * i / numPoints);
-      let val = Math.max(0, Math.min(100, statsArray[i] || 0));
-      let r = radius * (val / 100);
-      let x = centerX + r * Math.cos(angle);
-      let y = centerY - r * Math.sin(angle);
-      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    for(let i=0;i<n;i++) {
+      let a=(Math.PI/2)-(2*Math.PI*i/n), val=Math.max(0,Math.min(100,statsArray[i]||0)), r=radius*(val/100);
+      let x=cx+r*Math.cos(a), y=cy-r*Math.sin(a);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
     }
     ctx.closePath();
-    const rgb = hexToRgb(colorHex);
-    ctx.fillStyle = `rgba(${rgb}, 0.4)`;
-    ctx.fill();
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = colorHex;
-    ctx.stroke();
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = colorHex;
-    ctx.stroke();
-    ctx.shadowBlur = 0; 
+    const rgb=hexToRgb(colorHex);
+    ctx.fillStyle=`rgba(${rgb},0.4)`; ctx.fill();
+    ctx.lineWidth=2; ctx.strokeStyle=colorHex; ctx.stroke();
+    ctx.shadowBlur=10; ctx.shadowColor=colorHex; ctx.stroke(); ctx.shadowBlur=0;
   }
 
   function loadSubject(id) {
-    if(!id && db.length > 0) id = db[0].id;
+    if(!id && db.length>0) id = db[0].id;
     if(!id) return;
-
     currentSubjectId = id;
-    const subj = db.find(s => s.id === id);
-    if(!subj) return;
+    const s = db.find(x => x.id === id);
+    if(!s) return;
 
-    applyTheme(subj.color);
+    applyTheme(s.color);
+    document.getElementById('disp-codename').innerText = `// ${s.codename}`;
+    document.getElementById('disp-name').innerText = s.name;
+    document.getElementById('disp-avatar').src = s.avatarUrl || '';
+    document.getElementById('disp-glitch').style.backgroundImage = s.avatarUrl ? `url(${s.avatarUrl})` : 'none';
+
     
-    document.getElementById('disp-codename').innerText = `// ${subj.codename}`;
-    document.getElementById('disp-name').innerText = `SUBJECT: ${subj.name}`;
+    const lv = s.oshiLevel || 0;
+    document.getElementById('disp-heart-fill').style.width = lv+'%';
+    document.getElementById('disp-heart-val').innerText = lv+'%';
+
     
-    document.getElementById('disp-avatar').src = subj.avatarUrl || 'data:image/svg+xml;base64,...';
-    document.getElementById('disp-glitch').style.setProperty('--bg-img', `url(${subj.avatarUrl})`);
+    const tagsEl = document.getElementById('disp-tags');
+    tagsEl.innerHTML = (s.tags||[]).map(t => `<span class="tag-chip">${t}</span>`).join('');
 
-    document.getElementById('disp-age').innerText = subj.details.age || '---';
-    document.getElementById('disp-height').innerText = subj.details.height || '---';
-    document.getElementById('disp-faction').innerText = subj.details.faction || '---';
-    document.getElementById('disp-threat').innerText = subj.details.threat || '---';
-    document.getElementById('disp-status').innerText = subj.details.status || '---';
-    document.getElementById('disp-class').innerText = subj.details.cls || '---';
+    
+    const grid = document.getElementById('info-grid');
+    grid.innerHTML = '';
+    defaultFields.forEach(f => {
+      const val = s.details[f.key] || '---';
+      grid.innerHTML += `<div class="info-box"><div class="info-label">${f.label}</div><div class="info-val">${val}</div></div>`;
+    });
+    (s.customFields||[]).forEach(cf => {
+      grid.innerHTML += `<div class="info-box"><div class="info-label">${cf.label}</div><div class="info-val">${cf.value||'---'}</div></div>`;
+    });
 
-    document.getElementById('disp-logs').value = subj.logs || '';
-
-    drawRadar(subj.stats || [0,0,0,0,0], subj.statLabels || defaultStatNames, subj.color);
+    document.getElementById('disp-logs').value = s.logs || '';
+    drawRadar(s.stats||[0,0,0,0,0], s.statLabels||defaultStatNames, s.color);
     renderSidebar();
+
+    
+    const mt = document.getElementById('mobile-thumb');
+    if(mt) { mt.src = s.avatarUrl||''; mt.style.borderColor = s.color; }
+    const mn = document.getElementById('mobile-current-name');
+    if(mn) mn.innerText = s.name.substring(0,18);
   }
 
   function renderSidebar() {
-    const list = document.getElementById('subject-list');
-    list.innerHTML = '';
-    db.forEach(subj => {
-      const el = document.createElement('div');
-      el.className = `subject-item ${subj.id === currentSubjectId ? 'active' : ''}`;
-      el.innerHTML = `<div class="color-dot" style="background:${subj.color}; color:${subj.color};"></div> ${subj.name.substring(0, 15)}`;
-      el.onclick = () => loadSubject(subj.id);
-      list.appendChild(el);
+    const lists = [document.getElementById('subject-list'), document.getElementById('drawer-list')];
+    lists.forEach(list => {
+      if(!list) return;
+      list.innerHTML = '';
+      db.forEach((s,idx) => {
+        const el = document.createElement('div');
+        el.className = `subject-item ${s.id===currentSubjectId?'active':''}`;
+        el.draggable = true;
+        el.dataset.idx = idx;
+        const thumbSrc = s.avatarUrl ? `<img class="subj-thumb" src="${s.avatarUrl}" onerror="this.style.display='none'" alt="">` : '';
+        el.innerHTML = `${thumbSrc}<div class="color-dot" style="background:${s.color};color:${s.color};"></div> ${s.name.substring(0,15)}`;
+        el.onclick = () => { loadSubject(s.id); closeMobileDrawer(); };
+        
+        el.ondragstart = e => { e.dataTransfer.setData('text/plain',idx); el.style.opacity='0.4'; };
+        el.ondragend = () => { el.style.opacity='1'; };
+        el.ondragover = e => { e.preventDefault(); el.classList.add('drag-over'); };
+        el.ondragleave = () => { el.classList.remove('drag-over'); };
+        el.ondrop = e => {
+          e.preventDefault(); el.classList.remove('drag-over');
+          const from = parseInt(e.dataTransfer.getData('text/plain'));
+          const to = idx;
+          if(from!==to) { const item=db.splice(from,1)[0]; db.splice(to,0,item); localStorage.setItem(STORAGE_KEY,JSON.stringify(db)); renderSidebar(); }
+        };
+        list.appendChild(el);
+      });
     });
+  }
+
+  
+  window.openMobileDrawer = function() {
+    document.getElementById('mobile-drawer').classList.add('open');
+    document.getElementById('drawer-overlay').style.display = 'block';
+  }
+  window.closeMobileDrawer = function() {
+    document.getElementById('mobile-drawer').classList.remove('open');
+    document.getElementById('drawer-overlay').style.display = 'none';
   }
 
   
@@ -1617,169 +1713,148 @@
   colorPicker.addEventListener('input', e => colorText.value = e.target.value);
   colorText.addEventListener('input', e => colorPicker.value = e.target.value);
 
+  
+  document.getElementById('in-oshi-level').addEventListener('input', function() {
+    document.getElementById('oshi-level-disp').innerText = this.value + '%';
+  });
+
+  
+  window.addCustomFieldRow = function(label,value) {
+    const list = document.getElementById('custom-fields-list');
+    const row = document.createElement('div');
+    row.className = 'custom-field-row';
+    row.innerHTML = `<input type="text" class="cy-input cf-label" placeholder="フィールド名" value="${label||''}"><input type="text" class="cy-input cf-value" placeholder="値" value="${value||''}"><button class="cf-remove" onclick="this.parentElement.remove()">&times;</button>`;
+    list.appendChild(row);
+  }
+
   function openEditor(id) {
-    let subj = db.find(s => s.id === id);
-    if (!subj) {
-      subj = { name:'', codename:'', color:'#10b981', avatarUrl:'', statLabels:[...defaultStatNames], stats:[50,50,50,50,50], details:{age:'',height:'',faction:'',threat:'',status:'',cls:''} };
-      currentSubjectId = "new_subject"; 
-    }
+    let s = db.find(x => x.id === id);
+    if(!s) { s = {name:'',codename:'',color:'#10b981',avatarUrl:'',statLabels:[...defaultStatNames],stats:[50,50,50,50,50],details:{age:'',height:'',faction:'',threat:'',status:'',cls:''},oshiLevel:50,tags:[],customFields:[]}; currentSubjectId="new_subject"; }
 
-    document.getElementById('in-name').value = subj.name;
-    document.getElementById('in-codename').value = subj.codename;
-    document.getElementById('in-color').value = subj.color;
-    document.getElementById('in-color-picker').value = subj.color;
-    document.getElementById('in-avatar').value = subj.avatarUrl;
-    document.getElementById('in-avatar-file').value = ""; 
+    document.getElementById('in-name').value = s.name;
+    document.getElementById('in-codename').value = s.codename;
+    document.getElementById('in-color').value = s.color;
+    document.getElementById('in-color-picker').value = s.color;
+    document.getElementById('in-avatar').value = s.avatarUrl;
+    document.getElementById('in-avatar-file').value = "";
+    document.getElementById('in-oshi-level').value = s.oshiLevel||50;
+    document.getElementById('oshi-level-disp').innerText = (s.oshiLevel||50)+'%';
+    document.getElementById('in-tags').value = (s.tags||[]).join(', ');
 
-    const labels = subj.statLabels || defaultStatNames;
-    document.getElementById('in-l1').value = labels[0];
-    document.getElementById('in-l2').value = labels[1];
-    document.getElementById('in-l3').value = labels[2];
-    document.getElementById('in-l4').value = labels[3];
-    document.getElementById('in-l5').value = labels[4];
+    const labels = s.statLabels||defaultStatNames;
+    for(let i=1;i<=5;i++) { document.getElementById('in-l'+i).value=labels[i-1]; document.getElementById('in-s'+i).value=s.stats[i-1]; }
+    document.getElementById('in-age').value = s.details.age||'';
+    document.getElementById('in-height').value = s.details.height||'';
+    document.getElementById('in-faction').value = s.details.faction||'';
+    document.getElementById('in-threat').value = s.details.threat||'';
+    document.getElementById('in-status').value = s.details.status||'';
+    document.getElementById('in-class').value = s.details.cls||'';
 
-    document.getElementById('in-s1').value = subj.stats[0];
-    document.getElementById('in-s2').value = subj.stats[1];
-    document.getElementById('in-s3').value = subj.stats[2];
-    document.getElementById('in-s4').value = subj.stats[3];
-    document.getElementById('in-s5').value = subj.stats[4];
-
-    document.getElementById('in-age').value = subj.details.age;
-    document.getElementById('in-height').value = subj.details.height;
-    document.getElementById('in-faction').value = subj.details.faction;
-    document.getElementById('in-threat').value = subj.details.threat;
-    document.getElementById('in-status').value = subj.details.status;
-    document.getElementById('in-class').value = subj.details.cls;
+    const cfList = document.getElementById('custom-fields-list');
+    cfList.innerHTML = '';
+    (s.customFields||[]).forEach(cf => addCustomFieldRow(cf.label,cf.value));
 
     document.getElementById('editor-modal').style.display = 'flex';
+    closeMobileDrawer();
   }
 
   function closeEditor() {
     document.getElementById('editor-modal').style.display = 'none';
-    if(currentSubjectId === "new_subject") {
-      currentSubjectId = db.length > 0 ? db[0].id : null;
-    }
+    if(currentSubjectId==="new_subject") currentSubjectId = db.length>0?db[0].id:null;
   }
 
   window.saveSubject = function() {
-    if (currentSubjectId === "new_subject") {
-      currentSubjectId = "subj_" + Date.now();
-    }
-    
-    let subj = db.find(s => s.id === currentSubjectId);
-    if (!subj) {
-      subj = { id: currentSubjectId, logs: "", gallery: [] };
-      db.push(subj);
-    }
+    if(currentSubjectId==="new_subject") currentSubjectId = "subj_"+Date.now();
+    let s = db.find(x => x.id===currentSubjectId);
+    if(!s) { s={id:currentSubjectId,logs:"",gallery:[]}; db.push(s); }
 
-    subj.name = document.getElementById('in-name').value || 'UNKNOWN';
-    subj.codename = document.getElementById('in-codename').value || 'NULL';
-    subj.color = document.getElementById('in-color').value || '#10b981';
-    subj.avatarUrl = document.getElementById('in-avatar').value;
-    
-    subj.statLabels = [
-      document.getElementById('in-l1').value || 'STAT1',
-      document.getElementById('in-l2').value || 'STAT2',
-      document.getElementById('in-l3').value || 'STAT3',
-      document.getElementById('in-l4').value || 'STAT4',
-      document.getElementById('in-l5').value || 'STAT5'
-    ];
+    s.name = document.getElementById('in-name').value||'UNKNOWN';
+    s.codename = document.getElementById('in-codename').value||'NULL';
+    s.color = document.getElementById('in-color').value||'#10b981';
+    s.avatarUrl = document.getElementById('in-avatar').value;
+    s.oshiLevel = parseInt(document.getElementById('in-oshi-level').value)||0;
+    s.tags = document.getElementById('in-tags').value.split(/[,、]/).map(t=>t.trim()).filter(t=>t);
+    s.statLabels = []; s.stats = [];
+    for(let i=1;i<=5;i++) { s.statLabels.push(document.getElementById('in-l'+i).value||'STAT'+i); s.stats.push(parseInt(document.getElementById('in-s'+i).value)||0); }
+    s.details = { age:document.getElementById('in-age').value, height:document.getElementById('in-height').value, faction:document.getElementById('in-faction').value, threat:document.getElementById('in-threat').value, status:document.getElementById('in-status').value, cls:document.getElementById('in-class').value };
 
-    subj.stats = [
-      parseInt(document.getElementById('in-s1').value) || 0,
-      parseInt(document.getElementById('in-s2').value) || 0,
-      parseInt(document.getElementById('in-s3').value) || 0,
-      parseInt(document.getElementById('in-s4').value) || 0,
-      parseInt(document.getElementById('in-s5').value) || 0
-    ];
-
-    subj.details = {
-      age: document.getElementById('in-age').value,
-      height: document.getElementById('in-height').value,
-      faction: document.getElementById('in-faction').value,
-      threat: document.getElementById('in-threat').value,
-      status: document.getElementById('in-status').value,
-      cls: document.getElementById('in-class').value
-    };
     
+    s.customFields = [];
+    document.querySelectorAll('.custom-field-row').forEach(row => {
+      const label = row.querySelector('.cf-label').value.trim();
+      const value = row.querySelector('.cf-value').value.trim();
+      if(label) s.customFields.push({label,value});
+    });
+
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-      closeEditor();
-      loadSubject(currentSubjectId);
-      showToast("RECORD SAVED");
-    } catch (e) {
-      alert("⚠️ 保存エラー: ブラウザの容量制限(LocalStorage)を超えました。画像サイズや枚数を減らしてください。");
-      console.error(e);
-    }
+      closeEditor(); loadSubject(currentSubjectId); showToast("RECORD SAVED");
+    } catch(e) { alert("⚠️ 保存エラー: 容量制限を超えました。"); console.error(e); }
   }
 
   window.deleteSubject = function() {
-    if(db.length <= 1) {
-      alert("Cannot delete the final subject. You must have at least one record in the database.");
-      return;
-    }
+    if(db.length<=1) { alert("最低1件のレコードが必要です。"); return; }
     if(confirm("WARNING: PERMANENTLY PURGE SUBJECT RECORD?")) {
-      db = db.filter(s => s.id !== currentSubjectId);
+      db = db.filter(s => s.id!==currentSubjectId);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-      closeEditor();
-      loadSubject(db[0].id);
-      showToast("RECORD PURGED");
+      closeEditor(); loadSubject(db[0].id); showToast("RECORD PURGED");
     }
   }
 
   window.saveLogs = function() {
-    const subj = db.find(s => s.id === currentSubjectId);
-    if(subj) {
-      subj.logs = document.getElementById('disp-logs').value;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-      showToast("LOGS SAVED");
-    }
+    const s = db.find(x => x.id===currentSubjectId);
+    if(s) { s.logs=document.getElementById('disp-logs').value; localStorage.setItem(STORAGE_KEY,JSON.stringify(db)); showToast("LOGS SAVED"); }
   }
+
   
+  window.exportJSON = function() {
+    const blob = new Blob([JSON.stringify(db,null,2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'oshi_database_'+new Date().toISOString().slice(0,10)+'.json';
+    a.click(); URL.revokeObjectURL(a.href);
+    showToast("EXPORT COMPLETE");
+    closeMobileDrawer();
+  }
+
+  window.importJSON = function(event) {
+    const file = event.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if(!Array.isArray(imported)) throw new Error("Invalid format");
+        if(!confirm(`${imported.length}件のレコードをインポートします。既存データは上書きされます。よろしいですか？`)) return;
+        db = imported.map(s => {
+          if(!s.statLabels) s.statLabels=[...defaultStatNames]; if(!s.gallery) s.gallery=[];
+          if(s.oshiLevel===undefined) s.oshiLevel=50; if(!s.tags) s.tags=[]; if(!s.customFields) s.customFields=[];
+          return s;
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+        loadSubject(db[0].id); showToast("IMPORT COMPLETE"); closeMobileDrawer();
+      } catch(err) { alert("⚠️ インポートエラー: 正しいJSONファイルを選択してください。"); console.error(err); }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+  }
+
   
   window.processLocalImage = function(fileInputId, targetTextId) {
-    const fileInput = document.getElementById(fileInputId);
-    if (!fileInput.files || fileInput.files.length === 0) return;
-    
-    const file = fileInput.files[0];
-    if (!file.type.match('image.*')) {
-      alert("画像ファイルを選択してください。");
-      return;
-    }
-
+    const fi = document.getElementById(fileInputId);
+    if(!fi.files||fi.files.length===0) return;
+    const file = fi.files[0];
+    if(!file.type.match('image.*')) { alert("画像ファイルを選択してください。"); return; }
     const reader = new FileReader();
     reader.onload = function(e) {
       const img = new Image();
       img.onload = function() {
-        showToast("COMPRESSING_DATA...");
-        
-        const maxWidth = 1000;
-        const maxHeight = 1000;
-        let width = img.width;
-        let height = img.height;
-
-        if (width > height) {
-          if (width > maxWidth) {
-            height *= maxWidth / width;
-            width = maxWidth;
-          }
-        } else {
-          if (height > maxHeight) {
-            width *= maxHeight / height;
-            height = maxHeight;
-          }
-        }
-
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-
-        
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-        
-        document.getElementById(targetTextId).value = dataUrl;
+        showToast("COMPRESSING...");
+        const max=1000; let w=img.width, h=img.height;
+        if(w>h) { if(w>max){h*=max/w;w=max;} } else { if(h>max){w*=max/h;h=max;} }
+        const c=document.createElement('canvas'); c.width=w; c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        document.getElementById(targetTextId).value = c.toDataURL('image/jpeg',0.7);
         showToast("COMPRESSION COMPLETE");
       }
       img.src = e.target.result;
@@ -1789,129 +1864,106 @@
 
   
   window.openGallery = function() {
-    const subj = db.find(s => s.id === currentSubjectId);
-    if(!subj) return;
-    
-    document.getElementById('gallery-title').innerText = `// ${subj.codename || subj.name} : VISUAL_ARCHIVES`;
+    const s = db.find(x => x.id===currentSubjectId);
+    if(!s) return;
+    document.getElementById('gallery-title').innerText = `// ${s.codename||s.name} : ARCHIVES`;
     const grid = document.getElementById('gallery-grid');
     grid.innerHTML = '';
-
-    const gallery = subj.gallery || [];
-    if (gallery.length === 0) {
-      grid.innerHTML = '<div style="color:#64748b; font-family:\'Orbitron\'; text-align:center; grid-column:1/-1; padding:2rem;">NO VISUAL DATA FOUND.<br>CLICK [+ ADD IMAGE] TO START ARCHIVING.</div>';
+    const g = s.gallery||[];
+    if(g.length===0) {
+      grid.innerHTML = '<div style="color:#64748b;font-family:\'Orbitron\';text-align:center;grid-column:1/-1;padding:2rem;">NO VISUAL DATA FOUND.<br>CLICK [+ ADD IMAGE] TO START.</div>';
     } else {
-      gallery.forEach((imgUrl, index) => {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        item.onclick = () => openViewer(index);
-        item.innerHTML = `
-          <img src="${imgUrl}" onerror="this.src='data:image/svg+xml;base64,...'">
-          <div class="gallery-meta">FILE_00${index+1} / CLASSIFIED</div>
-        `;
-        grid.appendChild(item);
+      g.forEach((url,i) => {
+        const el = document.createElement('div');
+        el.className = 'gallery-item'; el.onclick = () => openViewer(i);
+        el.innerHTML = `<img src="${url}" onerror="this.style.opacity=0.3"><div class="gallery-meta">FILE_${String(i+1).padStart(3,'0')}</div>`;
+        grid.appendChild(el);
       });
     }
     document.getElementById('gallery-modal').style.display = 'flex';
   }
-
-  window.closeGallery = function() {
-    document.getElementById('gallery-modal').style.display = 'none';
-  }
+  window.closeGallery = function() { document.getElementById('gallery-modal').style.display='none'; }
 
   window.openImageUploadModal = function() {
-    document.getElementById('in-gallery-file').value = "";
-    document.getElementById('in-gallery-url').value = "";
-    document.getElementById('upload-modal').style.display = 'flex';
+    document.getElementById('in-gallery-file').value=""; document.getElementById('in-gallery-url').value="";
+    document.getElementById('upload-modal').style.display='flex';
   }
 
   window.submitGalleryImage = function() {
     const url = document.getElementById('in-gallery-url').value;
-    if(!url || url.trim() === "") return;
-
-    const subj = db.find(s => s.id === currentSubjectId);
-    if(!subj) return;
-    if(!subj.gallery) subj.gallery = [];
-
-    
+    if(!url||!url.trim()) return;
+    const s = db.find(x => x.id===currentSubjectId);
+    if(!s) return; if(!s.gallery) s.gallery=[];
     try {
-      const originalLength = JSON.stringify(db).length;
-      subj.gallery.unshift(url.trim()); 
-      
-      const newJson = JSON.stringify(db);
-      if (newJson.length > 4000000) { 
-        console.warn("Approaching LocalStorage limit! Current size est:", newJson.length/1024/1024, "MB");
-      }
-      localStorage.setItem(STORAGE_KEY, newJson);
-      
-      document.getElementById('upload-modal').style.display = 'none';
-      showToast("IMAGE ARCHIVED");
-      openGallery(); 
-    } catch(e) {
-      
-      subj.gallery.shift(); 
-      alert("⚠️ 保存エラー: ブラウザの容量制限を超えました。これ以上画像を追加するには、先に不要な画像を削除するか、他からURLで直接参照させてください。");
-      console.error(e);
-    }
+      s.gallery.unshift(url.trim());
+      const json = JSON.stringify(db);
+      if(json.length>4000000) console.warn("Approaching storage limit:",json.length/1024/1024,"MB");
+      localStorage.setItem(STORAGE_KEY,json);
+      document.getElementById('upload-modal').style.display='none';
+      showToast("IMAGE ARCHIVED"); openGallery();
+    } catch(e) { s.gallery.shift(); alert("⚠️ 容量制限超過。不要な画像を削除してください。"); }
   }
 
-  window.openViewer = function(index) {
-    const subj = db.find(s => s.id === currentSubjectId);
-    if(!subj || !subj.gallery || subj.gallery.length === 0) return;
-    
-    currentViewIndex = index;
-    updateViewer();
-    document.getElementById('viewer-modal').style.display = 'flex';
+  window.openViewer = function(i) {
+    const s = db.find(x => x.id===currentSubjectId);
+    if(!s||!s.gallery||!s.gallery.length) return;
+    currentViewIndex = i; updateViewer();
+    document.getElementById('viewer-modal').style.display='flex';
   }
+  window.closeViewer = function() { document.getElementById('viewer-modal').style.display='none'; }
 
-  window.closeViewer = function() {
-    document.getElementById('viewer-modal').style.display = 'none';
-  }
-
-  window.navigateViewer = function(direction) {
-    const subj = db.find(s => s.id === currentSubjectId);
-    if(!subj || !subj.gallery) return;
-    const len = subj.gallery.length;
-    currentViewIndex = (currentViewIndex + direction + len) % len;
+  window.navigateViewer = function(dir) {
+    const s = db.find(x => x.id===currentSubjectId);
+    if(!s||!s.gallery) return;
+    currentViewIndex = (currentViewIndex+dir+s.gallery.length)%s.gallery.length;
     updateViewer();
   }
 
   function updateViewer() {
-    const subj = db.find(s => s.id === currentSubjectId);
-    document.getElementById('viewer-img').src = subj.gallery[currentViewIndex];
-    document.getElementById('viewer-count').innerText = `FILE: ${currentViewIndex + 1} / ${subj.gallery.length}`;
+    const s = db.find(x => x.id===currentSubjectId);
+    document.getElementById('viewer-img').src = s.gallery[currentViewIndex];
+    document.getElementById('viewer-count').innerText = `${currentViewIndex+1} / ${s.gallery.length}`;
   }
 
   window.deleteGalleryImage = function() {
-    if(!confirm("本当にこの画像を削除しますか？ (PURGE IMAGE?)")) return;
-    
-    const subj = db.find(s => s.id === currentSubjectId);
-    if(!subj || !subj.gallery) return;
-    
-    subj.gallery.splice(currentViewIndex, 1);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+    if(document.getElementById('viewer-modal').style.display!=='flex') return;
+    if(!confirm("この画像を削除しますか？")) return;
+    const s = db.find(x => x.id===currentSubjectId);
+    if(!s||!s.gallery) return;
+    s.gallery.splice(currentViewIndex,1);
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(db));
     showToast("IMAGE PURGED");
-    
-    if(subj.gallery.length === 0) {
-      closeViewer();
-      openGallery();
-    } else {
-      currentViewIndex = Math.min(currentViewIndex, subj.gallery.length - 1);
-      updateViewer();
-    }
+    if(s.gallery.length===0) { closeViewer(); openGallery(); }
+    else { currentViewIndex=Math.min(currentViewIndex,s.gallery.length-1); updateViewer(); }
   }
 
   
+  (function() {
+    const wrap = document.getElementById('viewer-img-wrap');
+    if(!wrap) return;
+    let startX=0, startY=0, swiping=false;
+    wrap.addEventListener('touchstart', e => { startX=e.touches[0].clientX; startY=e.touches[0].clientY; swiping=true; }, {passive:true});
+    wrap.addEventListener('touchmove', e => {
+      if(!swiping) return;
+      const dx=e.touches[0].clientX-startX, dy=e.touches[0].clientY-startY;
+      if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>40) { navigateViewer(dx>0?-1:1); swiping=false; }
+    }, {passive:true});
+    wrap.addEventListener('touchend', () => { swiping=false; }, {passive:true});
+  })();
+
+  
   document.addEventListener('keydown', function(e) {
-    if(document.getElementById('viewer-modal').style.display === 'flex') {
-      if(e.key === 'ArrowRight') navigateViewer(1);
-      if(e.key === 'ArrowLeft') navigateViewer(-1);
-      if(e.key === 'Escape') closeViewer();
+    if(document.getElementById('viewer-modal').style.display==='flex') {
+      if(e.key==='ArrowRight') navigateViewer(1);
+      if(e.key==='ArrowLeft') navigateViewer(-1);
+      if(e.key==='Escape') closeViewer();
     }
+    if(document.getElementById('editor-modal').style.display==='flex' && e.key==='Escape') closeEditor();
+    if(document.getElementById('gallery-modal').style.display==='flex' && e.key==='Escape') closeGallery();
   });
 
   
-  if(db.length > 0) loadSubject(db[0].id);
-
+  if(db.length>0) loadSubject(db[0].id);
 </script>
 
 
