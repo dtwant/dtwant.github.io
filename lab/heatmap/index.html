@@ -233,7 +233,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "82"
+    "wordCount": "117"
   }]
   </script>
 
@@ -931,7 +931,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>82 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>117 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1098,26 +1098,9 @@
     --heat-3: #10b981;
     --heat-4: #34d399;
   }
+  .theme-pink { --heat-base: #ec4899; --heat-0: #111; --heat-1: #500724; --heat-2: #9d174d; --heat-3: #db2777; --heat-4: #f472b6; }
+  .theme-blue { --heat-base: #3b82f6; --heat-0: #111; --heat-1: #1e3a8a; --heat-2: #1d4ed8; --heat-3: #2563eb; --heat-4: #60a5fa; }
 
-  .theme-pink {
-    --heat-base: #ec4899;
-    --heat-0: #111;
-    --heat-1: #500724;
-    --heat-2: #9d174d;
-    --heat-3: #db2777;
-    --heat-4: #f472b6;
-  }
-
-  .theme-blue {
-    --heat-base: #3b82f6;
-    --heat-0: #111;
-    --heat-1: #1e3a8a;
-    --heat-2: #1d4ed8;
-    --heat-3: #2563eb;
-    --heat-4: #60a5fa;
-  }
-
-   
   .cy-root {
     font-family: "JetBrains Mono", monospace;
     position: fixed; inset: 0; width: 100vw; height: 100vh;
@@ -1143,23 +1126,42 @@
 
   .main-content {
     display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-    padding: 3rem 1rem; position: relative; z-index: 5;
+    padding: 2rem 1rem 4rem; position: relative; z-index: 5; max-width: 1100px; margin: 0 auto;
   }
 
    
-  .hud-header { text-align: center; margin-bottom: 1.5rem; position: relative; }
-  .cy-title { font-family: 'Orbitron', sans-serif; color: var(--heat-base); font-size: 1.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; text-shadow: 0 0 15px var(--heat-base); transition: 0.3s; margin: 0;}
-  .cy-desc { font-size: 0.8rem; color: #64748b; letter-spacing: 0.05em; margin-top: 0.5rem; }
+  .hud-header { text-align: center; margin-bottom: 1rem; position: relative; }
+  .cy-title { font-family: 'Orbitron', sans-serif; color: var(--heat-base); font-size: 1.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; text-shadow: 0 0 15px var(--heat-base); transition: 0.3s; margin: 0;}
+  .cy-desc { font-size: 0.75rem; color: #64748b; letter-spacing: 0.05em; margin-top: 0.3rem; }
+  .header-actions { display: flex; gap: 0.4rem; margin-top: 0.5rem; justify-content: center; flex-wrap: wrap; }
 
   .help-btn {
     background: transparent; border: 1px solid var(--heat-base); color: var(--heat-base);
-    font-size: 0.7rem; padding: 2px 6px; cursor: pointer; font-family: 'Orbitron', sans-serif; transition: 0.2s; margin-top: 0.5rem;
+    font-size: 0.65rem; padding: 3px 8px; cursor: pointer; font-family: 'Orbitron', sans-serif; transition: 0.2s;
   }
   .help-btn:hover { background: var(--heat-base); color: #000; box-shadow: 0 0 10px var(--heat-base); }
 
    
-  .info-box { background: rgba(var(--heat-base), 0.1); border-left: 3px solid var(--heat-base); padding: 0.8rem 1.2rem; margin-bottom: 2rem; max-width: 800px; font-size: 0.8rem; color: #a1a1aa; }
-  .info-box strong { color: var(--heat-base); font-weight: bold;}
+  .habit-tabs { display: flex; gap: 0.3rem; flex-wrap: wrap; width: 100%; justify-content: center; margin-bottom: 1rem; }
+  .habit-tab {
+    background: rgba(9, 9, 11, 0.9); border: 1px solid #333; color: #94a3b8; padding: 0.4rem 0.8rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; cursor: pointer; transition: 0.2s;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .habit-tab:hover { border-color: var(--heat-base); color: var(--heat-base); }
+  .habit-tab.active { border-color: var(--heat-base); color: var(--heat-base); background: rgba(16, 185, 129, 0.1); box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
+  .habit-tab-add { border-style: dashed; color: #555; }
+  .habit-tab-add:hover { color: var(--heat-base); border-color: var(--heat-base); }
+  .habit-tab-del { border-color: #ef4444; color: #ef4444; font-size: 0.55rem; padding: 0.3rem 0.5rem; }
+
+   
+  .goal-bar { width: 100%; max-width: 800px; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.8rem; }
+  .goal-label { font-size: 0.7rem; color: #94a3b8; white-space: nowrap; }
+  .goal-track { flex: 1; height: 8px; background: #111; border: 1px solid #222; position: relative; overflow: hidden; }
+  .goal-fill { height: 100%; background: var(--heat-base); transition: width 0.5s; box-shadow: 0 0 10px var(--heat-base); }
+  .goal-text { font-family: 'Orbitron', sans-serif; font-size: 0.75rem; color: var(--heat-base); white-space: nowrap; }
+  .goal-edit-btn { background: none; border: 1px dashed #555; color: #555; font-size: 0.55rem; padding: 2px 5px; cursor: pointer; font-family: inherit; }
+  .goal-edit-btn:hover { border-color: var(--heat-base); color: var(--heat-base); }
 
    
   .heatmap-wrapper {
@@ -1167,7 +1169,6 @@
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(255, 255, 255, 0.05);
     padding: 2rem 1rem 1rem 1rem; border-radius: 4px; position: relative; max-width: 1000px;
     width: 100%; overflow-x: auto; overflow-y: hidden; transition: 0.3s;
-     
   }
   .heatmap-wrapper::-webkit-scrollbar { height: 6px; }
   .heatmap-wrapper::-webkit-scrollbar-track { background: #111; border-radius: 3px;}
@@ -1177,67 +1178,91 @@
   .heatmap-wrapper::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
   .heatmap-wrapper::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-   
   .heatmap-inner { display: inline-flex; flex-direction: column; position: relative; padding-bottom: 10px;}
-  
-  .month-labels { display: flex; position: absolute; top: -1.5rem; left: 0; width: 100%; height: 1.5rem; font-size: 0.7rem; color: #64748b; }
+  .month-labels { display: flex; position: absolute; top: -1.5rem; left: 0; width: 100%; height: 1.5rem; font-size: 0.65rem; color: #64748b; }
   .month-label { position: absolute; }
 
-  .heatmap-container { display: flex; gap: 4px; }
-  .week-col { display: flex; flex-direction: column; gap: 4px; }
+  .heatmap-container { display: flex; gap: 3px; }
+  .week-col { display: flex; flex-direction: column; gap: 3px; }
   
   .day-cell {
-    width: 14px; height: 14px; background-color: var(--heat-0); border: 1px solid #333;
+    width: 13px; height: 13px; background-color: var(--heat-0); border: 1px solid #333;
     border-radius: 2px; cursor: pointer; transition: all 0.2s; position: relative;
   }
-  .day-cell:hover { border-color: var(--heat-base) !important; transform: scale(1.3); z-index: 10; box-shadow: 0 0 10px var(--heat-base); }
+  .day-cell:hover { border-color: var(--heat-base) !important; transform: scale(1.4); z-index: 10; box-shadow: 0 0 10px var(--heat-base); }
+  .day-cell.today-cell { border: 2px solid var(--heat-base) !important; box-shadow: 0 0 8px var(--heat-base); animation: today-pulse 2s infinite; }
+  @keyframes today-pulse { 0%,100% { box-shadow: 0 0 5px var(--heat-base); } 50% { box-shadow: 0 0 15px var(--heat-base); } }
 
   .day-cell .tooltip {
     position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%) translateY(10px);
-    background: #000; color: var(--heat-base); padding: 4px 8px; font-size: 0.7rem;
+    background: #000; color: var(--heat-base); padding: 4px 8px; font-size: 0.65rem;
     border: 1px solid var(--heat-base); pointer-events: none; opacity: 0; transition: 0.2s;
     white-space: nowrap; z-index: 20; box-shadow: 0 0 10px rgba(0,0,0,0.8);
   }
   .day-cell:hover .tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
 
    
-  .stats-panel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; width: 100%; max-width: 1000px; margin-top: 2rem; }
-  .stat-box { background: rgba(9, 9, 11, 0.9); border: 1px dashed #333; padding: 1.5rem; text-align: center; }
-  .stat-label { font-size: 0.75rem; color: #94a3b8; font-weight: bold; }
-  .stat-val { font-family: 'Orbitron', sans-serif; font-size: 2rem; color: var(--heat-base); text-shadow: 0 0 10px var(--heat-base); transition: 0.3s;}
+  .stats-panel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; width: 100%; max-width: 1000px; margin-top: 1.5rem; }
+  .stat-box { background: rgba(9, 9, 11, 0.9); border: 1px dashed #333; padding: 1rem; text-align: center; }
+  .stat-label { font-size: 0.65rem; color: #94a3b8; font-weight: bold; }
+  .stat-val { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; color: var(--heat-base); text-shadow: 0 0 10px var(--heat-base); transition: 0.3s;}
 
    
-  .controls-row { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;}
-  
-  .action-panel { background: rgba(9, 9, 11, 0.85); border: 1px solid #333; padding: 1.5rem; width: 100%; max-width: 1000px; margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
-  .action-title { font-size: 0.8rem; color: #a1a1aa; text-transform: uppercase; border-bottom: 1px dashed #333; padding-bottom: 0.5rem; }
+  .weekly-chart { display: flex; gap: 4px; align-items: flex-end; height: 60px; margin-top: 0.5rem; }
+  .week-bar { flex: 1; background: var(--heat-base); min-width: 4px; transition: height 0.3s; opacity: 0.7; position: relative; }
+  .week-bar:hover { opacity: 1; }
+  .week-bar-label { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: #64748b; white-space: nowrap; }
+
+   
+  .action-panel { background: rgba(9, 9, 11, 0.85); border: 1px solid #333; padding: 1.2rem; width: 100%; max-width: 1000px; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; }
+  .action-title { font-size: 0.75rem; color: #a1a1aa; text-transform: uppercase; border-bottom: 1px dashed #333; padding-bottom: 0.4rem; }
+  .controls-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
 
   .cy-btn {
-    background: transparent; border: 1px solid var(--heat-base); color: var(--heat-base); padding: 0.6rem 1.2rem;
-    font-family: 'Orbitron', sans-serif; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: 0.2s; font-size: 0.8rem;
+    background: transparent; border: 1px solid var(--heat-base); color: var(--heat-base); padding: 0.5rem 1rem;
+    font-family: 'Orbitron', sans-serif; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: 0.2s; font-size: 0.7rem;
   }
   .cy-btn:hover { background: var(--heat-1); box-shadow: 0 0 15px var(--heat-2); color: #fff; }
 
   .theme-btn { border-color: #555; color: #999; }
   .theme-btn.active-theme { border-color: var(--heat-base); color: var(--heat-base); box-shadow: 0 0 10px var(--heat-base); }
 
-  textarea.cy-textarea { background: #000; border: 1px solid #333; color: var(--heat-base); font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; padding: 0.5rem; width: 100%; box-sizing: border-box; resize: vertical; margin-bottom: 0.5rem;}
+  textarea.cy-textarea { background: #000; border: 1px solid #333; color: var(--heat-base); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.5rem; width: 100%; box-sizing: border-box; resize: vertical; margin-bottom: 0.3rem;}
   textarea.cy-textarea:focus { outline: none; border-color: var(--heat-base); }
 
    
   .cy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-  .cy-modal-content { background: rgba(9, 9, 11, 0.95); border: 1px solid var(--heat-base); padding: 2rem; width: 90%; max-width: 600px; position: relative; font-family: "Zen Kaku Gothic New", sans-serif; box-shadow: 0 0 30px rgba(0,0,0,0.8); overflow-y: auto; max-height: 90vh; }
-  .cy-modal-title { font-family: 'Orbitron', sans-serif; color: var(--heat-base); font-size: 1.5rem; margin-top: 0; margin-bottom: 1rem; border-bottom: 1px solid #333; padding-bottom: 0.5rem; }
-  .cy-modal-body { font-size: 0.9rem; line-height: 1.6; color: #e2e8f0; }
+  .cy-modal-content { background: rgba(9, 9, 11, 0.95); border: 1px solid var(--heat-base); padding: 1.5rem; width: 90%; max-width: 600px; position: relative; font-family: "Zen Kaku Gothic New", sans-serif; box-shadow: 0 0 30px rgba(0,0,0,0.8); overflow-y: auto; max-height: 90vh; }
+  .cy-modal-title { font-family: 'Orbitron', sans-serif; color: var(--heat-base); font-size: 1.3rem; margin-top: 0; margin-bottom: 1rem; border-bottom: 1px solid #333; padding-bottom: 0.5rem; }
+  .cy-modal-body { font-size: 0.85rem; line-height: 1.6; color: #e2e8f0; }
   .cy-modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: #ef4444; font-size: 1.5rem; cursor: pointer; }
 
-  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: #000; border: 1px solid var(--heat-base); color: var(--heat-base); padding: 0.8rem 1.5rem; font-family: 'Orbitron', sans-serif; pointer-events: none; opacity: 0; transition: 0.3s; z-index: 50; box-shadow: 0 0 20px rgba(0,0,0,0.8); font-weight: bold; }
+  .cy-prompt { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 99998; display: none; align-items: center; justify-content: center; }
+  .cy-prompt-box { background: #0a0a0f; border: 1px solid var(--heat-base); padding: 1.5rem; width: 280px; display: flex; flex-direction: column; gap: 0.7rem; }
+  .cy-prompt-box input { background: #000; border: 1px solid #333; border-bottom: 2px solid var(--heat-base); color: var(--heat-base); padding: 0.5rem; font-family: inherit; font-size: 0.85rem; }
+  .cy-prompt-box input:focus { outline: none; }
+  .cy-prompt-box label { font-size: 0.7rem; color: #94a3b8; }
+
+  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: #000; border: 1px solid var(--heat-base); color: var(--heat-base); padding: 0.6rem 1.2rem; font-family: 'Orbitron', sans-serif; pointer-events: none; opacity: 0; transition: 0.3s; z-index: 99999; box-shadow: 0 0 20px rgba(0,0,0,0.8); font-weight: bold; font-size: 0.7rem; }
 
   @media (max-width: 768px) {
-    .stats-panel { grid-template-columns: 1fr; }
-    .heatmap-wrapper { padding: 2rem 0.5rem 0.5rem 0.5rem; }
-    .day-cell { width: 12px; height: 12px; }
-    .month-labels { font-size: 0.6rem; }
+    .stats-panel { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+    .heatmap-wrapper { padding: 1.5rem 0.5rem 0.5rem 0.5rem; }
+    .day-cell { width: 11px; height: 11px; }
+    .month-labels { font-size: 0.55rem; }
+    .main-content { padding: 1.5rem 0.5rem 4rem; }
+    .cy-title { font-size: 1.2rem; }
+    .stat-val { font-size: 1.3rem; }
+    .stat-label { font-size: 0.55rem; }
+    .action-panel { padding: 1rem 0.8rem; }
+    .cy-btn { padding: 0.5rem 0.7rem; font-size: 0.6rem; }
+    .habit-tab { font-size: 0.6rem; padding: 0.35rem 0.6rem; }
+  }
+  @media (max-width: 400px) {
+    .day-cell { width: 9px; height: 9px; }
+    .heatmap-container { gap: 2px; }
+    .week-col { gap: 2px; }
+    .stats-panel { grid-template-columns: 1fr 1fr; }
   }
 </style>
 
@@ -1247,21 +1272,28 @@
     <div class="hud-header">
       <h1 class="cy-title">CONTRIBUTION_MATRIX</h1>
       <div class="cy-desc">AWARENESS LEVEL // LAST 52 WEEKS</div>
-      <button class="help-btn" onclick="document.getElementById('help-modal').style.display='flex'">HELP</button>
+      <div class="header-actions">
+        <button class="help-btn" onclick="document.getElementById('help-modal').style.display='flex'">HELP</button>
+      </div>
     </div>
 
-    <div class="info-box">
-      <strong>[ 手動マニュアル記録モード ]</strong> <br>
-      グリッド上のマス（過去や未来の日付）を直接<strong>クリック</strong>することで、記録レベル(0〜4)を調整できます。
-      毎日の活動を <strong>+ ACTION</strong> ボタンから記録することも可能です！
+    
+    <div class="habit-tabs" id="habit-tabs">
+      
+    </div>
+
+    
+    <div class="goal-bar" id="goal-bar">
+      <span class="goal-label">TODAY GOAL</span>
+      <div class="goal-track"><div class="goal-fill" id="goal-fill"></div></div>
+      <span class="goal-text" id="goal-text">0/1</span>
+      <button class="goal-edit-btn" onclick="editGoal()">EDIT</button>
     </div>
 
     <div class="heatmap-wrapper">
       <div class="heatmap-inner">
         <div class="month-labels" id="month-labels"></div>
-        <div class="heatmap-container" id="heatmap-el">
-          
-        </div>
+        <div class="heatmap-container" id="heatmap-el"></div>
       </div>
     </div>
 
@@ -1271,37 +1303,46 @@
         <div class="stat-val" id="stat-total">0</div>
       </div>
       <div class="stat-box">
-        <div class="stat-label">CURRENT CONTINUOUS STREAK</div>
+        <div class="stat-label">CURRENT STREAK</div>
         <div class="stat-val" id="stat-streak">0</div>
       </div>
       <div class="stat-box">
-        <div class="stat-label">MAXIMUM STREAK</div>
+        <div class="stat-label">MAX STREAK</div>
         <div class="stat-val" id="stat-max-streak">0</div>
       </div>
+      <div class="stat-box">
+        <div class="stat-label">THIS WEEK</div>
+        <div class="stat-val" id="stat-week">0</div>
+      </div>
+    </div>
+
+    
+    <div class="action-panel" style="border-color:var(--heat-base); border-style:dashed;">
+      <div class="action-title">// WEEKLY ACTIVITY (直近12週)</div>
+      <div class="weekly-chart" id="weekly-chart"></div>
     </div>
 
     
     <div class="action-panel">
       <div class="action-title">// SYSTEM OPERATIONS (TODAY)</div>
-      
       <div class="controls-row" style="margin-top:0;">
         <button class="cy-btn" onclick="logToday(1)">+ LOG ACTION (L1)</button>
-        <button class="cy-btn" onclick="logToday(2)">+ LOG INTENSE COMMIT (L2)</button>
+        <button class="cy-btn" onclick="logToday(2)">+ INTENSE (L2)</button>
       </div>
       
-      <div class="action-title" style="margin-top:1rem;">// THEME SELECTION</div>
+      <div class="action-title" style="margin-top:0.5rem;">// THEME SELECTION</div>
       <div class="controls-row" style="margin-top:0;">
-        <button class="cy-btn theme-btn active-theme" id="t-green" onclick="setTheme('green')">NEON GREEN</button>
-        <button class="cy-btn theme-btn" id="t-pink" onclick="setTheme('pink')" style="--heat-base:#ec4899;">CYBER PINK</button>
-        <button class="cy-btn theme-btn" id="t-blue" onclick="setTheme('blue')" style="--heat-base:#3b82f6;">PLASMA BLUE</button>
+        <button class="cy-btn theme-btn active-theme" id="t-green" onclick="setTheme('green')">GREEN</button>
+        <button class="cy-btn theme-btn" id="t-pink" onclick="setTheme('pink')" style="--heat-base:#ec4899;">PINK</button>
+        <button class="cy-btn theme-btn" id="t-blue" onclick="setTheme('blue')" style="--heat-base:#3b82f6;">BLUE</button>
       </div>
 
-      <div class="action-title" style="margin-top:1rem;">// DATA BACKUP (JSON)</div>
-      <textarea id="io-area" class="cy-textarea" rows="3" placeholder="RAW JSON DATA HERE..."></textarea>
+      <div class="action-title" style="margin-top:0.5rem;">// DATA BACKUP (JSON)</div>
+      <textarea id="io-area" class="cy-textarea" rows="2" placeholder="RAW JSON DATA HERE..."></textarea>
       <div class="controls-row" style="margin-top:0;">
-        <button class="cy-btn" onclick="exportData()">EXPORT TO BOX</button>
-        <button class="cy-btn" onclick="importData()">IMPORT FROM BOX</button>
-        <button class="cy-btn" style="border-color:#ef4444; color:#ef4444;" onclick="if(confirm('PURGE EVERYTHING?')) { heatData={}; saveAndRender(); ioArea.value=''; }">PURGE ALL</button>
+        <button class="cy-btn" onclick="exportData()">EXPORT</button>
+        <button class="cy-btn" onclick="importData()">IMPORT</button>
+        <button class="cy-btn" style="border-color:#ef4444; color:#ef4444;" onclick="if(confirm('PURGE CURRENT HABIT?')) { allData.habits[currentHabit].data={}; saveAndRender(); }">PURGE</button>
       </div>
     </div>
 
@@ -1311,18 +1352,52 @@
   <div class="cy-modal" id="help-modal">
     <div class="cy-modal-content">
       <button class="cy-modal-close" onclick="document.getElementById('help-modal').style.display='none'">&times;</button>
-      <h2 class="cy-modal-title">SYSTEM_HELP // HEATMAP</h2>
+      <h2 class="cy-modal-title">SYSTEM_HELP // HEATMAP v2</h2>
       <div class="cy-modal-body">
-        <p>GitHubの草（Contributions Graph）のように、日々の活動量や習慣の継続を可視化するヒートマップです。</p>
-        <p>【修正・強化された機能】</p>
+        <p>日々の活動量や習慣の継続をGitHub風のヒートマップで可視化するツールです。過去52週間の記録を一覧できます。</p>
+
+        <p><strong>📝 基本の使い方</strong></p>
+        <ol>
+          <li>下の <strong>+ LOG ACTION (L1)</strong> ボタンを押すと、今日のレベルが1つ上がります</li>
+          <li><strong>+ INTENSE (L2)</strong> を押すと、レベルが2つ上がります（最大 LVL 4）</li>
+          <li>ヒートマップの各セルを直接 <strong>クリック/タップ</strong> してもレベルを変更できます（0→1→2→3→4→0の循環）</li>
+        </ol>
+
+        <p><strong>🎯 ゴールを設定する</strong></p>
         <ul>
-          <li><strong>直感的な時間軸:</strong> 左端から右端にかけて、およそ「1年前（52週間前）〜今日」までの状況を可視化します。各月と年度（YYYY/MM）のラベルが表示されるようになりました。</li>
-          <li><strong>スクロール改善:</strong> UI全体の上下に無駄なスクロールバーが出ないようレイアウトを見直しました。横に長い場合はヒートマップ内のみがスムーズにスクロールします。</li>
-          <li><strong>手動マッピング:</strong> 任意のマス（日付）をクリックすることでレベルを0〜4まで循環して手動設定できます。「しまった、昨日の分を押し忘れた！」という時も直接マスをクリックして修正可能です。</li>
-          <li><strong>THEME SELECTION:</strong> サイバーパンクな「NEON GREEN」「CYBER PINK」「PLASMA BLUE」のカラーテーマを即座に切り替えられます。</li>
-          <li><strong>DATA BACKUP:</strong> JSON形式でエクスポート・インポートすることで、他のデバイスへの移行やバックアップが可能です。</li>
+          <li>上部のプログレスバー横の <strong>EDIT</strong> ボタンで、1日の目標レベル（1〜4）を設定できます</li>
+          <li>達成度がバーで表示されるので、毎日の目標管理に活用してください</li>
         </ul>
+
+        <p><strong>📋 複数の習慣を管理する</strong></p>
+        <ul>
+          <li>上部の <strong>+ ADD</strong> タブをクリックして、新しい習慣を追加（例: 運動、読書、コーディング）</li>
+          <li>タブをクリックして習慣を切り替え。<strong>× DEL</strong> で現在の習慣を削除</li>
+        </ul>
+
+        <p><strong>📱 スマホ操作</strong></p>
+        <ul>
+          <li>セルを <strong>長押し</strong> すると、レベルを直接数値で指定できます</li>
+        </ul>
+
+        <p><strong>🎨 その他</strong></p>
+        <ul>
+          <li><strong>THEME:</strong> GREEN / PINK / BLUE のカラーテーマを切り替え</li>
+          <li><strong>WEEKLY ACTIVITY:</strong> 直近12週の棒グラフで活動量のトレンドを確認</li>
+          <li><strong>EXPORT / IMPORT:</strong> JSONでデータのバックアップと復元が可能</li>
+        </ul>
+
+        <p style="color:#64748b; font-size:0.75rem;">💾 データはブラウザのlocalStorageに自動保存されます。</p>
       </div>
+    </div>
+  </div>
+
+  
+  <div class="cy-prompt" id="prompt-modal" onclick="closePrompt()">
+    <div class="cy-prompt-box" onclick="event.stopPropagation()">
+      <label id="prompt-label">ENTER VALUE</label>
+      <input type="text" id="prompt-input">
+      <button class="cy-btn" onclick="submitPrompt()" style="font-size:0.7rem;">APPLY</button>
     </div>
   </div>
 
@@ -1330,25 +1405,40 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'dt_heatmap_v1';
-  let heatData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  const STORAGE_KEY = 'dt_heatmap_v2';
   const ioArea = document.getElementById('io-area');
+
   
+  let allData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  if(!allData || !allData.habits) {
+    
+    const oldData = JSON.parse(localStorage.getItem('dt_heatmap_v1'));
+    allData = {
+      habits: {
+        'default': { data: oldData || {}, goal: 1, label: 'DEFAULT' }
+      },
+      activeHabit: 'default',
+      theme: 'green'
+    };
+  }
+
+  let currentHabit = allData.activeHabit || 'default';
+  let promptCallback = null;
+
+  function getHeatData() { return allData.habits[currentHabit]?.data || {}; }
+  function setHeatData(d) { if(allData.habits[currentHabit]) allData.habits[currentHabit].data = d; }
+
   
   window.setTheme = function(theme) {
     const root = document.getElementById('app-root');
     root.className = 'cy-root ' + (theme === 'green' ? '' : 'theme-' + theme);
+    allData.theme = theme;
     const btns = ['green', 'pink', 'blue'];
     btns.forEach(b => {
       const el = document.getElementById('t-' + b);
-      if(el) {
-        if(b === theme) el.classList.add('active-theme');
-        else el.classList.remove('active-theme');
-      }
+      if(el) { b === theme ? el.classList.add('active-theme') : el.classList.remove('active-theme'); }
     });
-
-    
-    setTimeout(generateGrid, 50);
+    setTimeout(saveAndRender, 50);
   }
 
   function showToast(msg) {
@@ -1358,13 +1448,99 @@
   }
 
   function dtStr(d) {
-    const y = d.getFullYear(); const m = String(d.getMonth()+1).padStart(2,'0'); const dDay = String(d.getDate()).padStart(2,'0');
-    return `${y}-${m}-${dDay}`;
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   }
 
   const WEEKS = 52; const DAYS_PER_WEEK = 7;
+
+  function showPrompt(label, defaultVal, cb) {
+    document.getElementById('prompt-label').innerText = label;
+    document.getElementById('prompt-input').value = defaultVal || '';
+    document.getElementById('prompt-modal').style.display = 'flex';
+    promptCallback = cb;
+    setTimeout(() => document.getElementById('prompt-input').focus(), 100);
+  }
+  window.closePrompt = function() { document.getElementById('prompt-modal').style.display = 'none'; promptCallback = null; }
+  window.submitPrompt = function() {
+    const val = document.getElementById('prompt-input').value;
+    if(promptCallback) promptCallback(val);
+    closePrompt();
+  }
+
   
+  function renderTabs() {
+    const container = document.getElementById('habit-tabs');
+    container.innerHTML = '';
+    Object.keys(allData.habits).forEach(key => {
+      const h = allData.habits[key];
+      const tab = document.createElement('button');
+      tab.className = 'habit-tab' + (key === currentHabit ? ' active' : '');
+      tab.textContent = h.label || key.toUpperCase();
+      tab.onclick = () => { currentHabit = key; allData.activeHabit = key; saveAndRender(); };
+      container.appendChild(tab);
+    });
+    
+    if(Object.keys(allData.habits).length > 1) {
+      const del = document.createElement('button');
+      del.className = 'habit-tab habit-tab-del';
+      del.textContent = '× DEL';
+      del.onclick = () => {
+        if(confirm(`DELETE HABIT [${allData.habits[currentHabit]?.label || currentHabit}]?`)) {
+          delete allData.habits[currentHabit];
+          currentHabit = Object.keys(allData.habits)[0];
+          allData.activeHabit = currentHabit;
+          saveAndRender();
+        }
+      };
+      container.appendChild(del);
+    }
+    
+    const addBtn = document.createElement('button');
+    addBtn.className = 'habit-tab habit-tab-add';
+    addBtn.textContent = '+ ADD';
+    addBtn.onclick = () => {
+      showPrompt('HABIT NAME (習慣名)', '', (name) => {
+        if(!name) return;
+        const key = 'h_' + name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        if(allData.habits[key]) { showToast('ALREADY EXISTS'); return; }
+        allData.habits[key] = { data: {}, goal: 1, label: name };
+        currentHabit = key;
+        allData.activeHabit = key;
+        saveAndRender();
+        showToast('HABIT ADDED: ' + name);
+      });
+    };
+    container.appendChild(addBtn);
+  }
+
+  function updateGoalBar() {
+    const h = allData.habits[currentHabit];
+    if(!h) return;
+    const goal = h.goal || 1;
+    const todayVal = (h.data[dtStr(new Date())] || 0);
+    const pct = Math.min(todayVal / goal, 1) * 100;
+    document.getElementById('goal-fill').style.width = pct + '%';
+    document.getElementById('goal-text').textContent = `${todayVal}/${goal}`;
+  }
+
+  window.editGoal = function() {
+    const h = allData.habits[currentHabit];
+    showPrompt('DAILY GOAL (日次目標 1-4)', String(h?.goal || 1), (val) => {
+      const g = parseInt(val);
+      if(g >= 1 && g <= 4) {
+        allData.habits[currentHabit].goal = g;
+        saveAndRender();
+        showToast('GOAL SET TO ' + g);
+      }
+    });
+  }
+
+  
+  let longPressTimer = null;
+  let longPressTarget = null;
+
   function generateGrid() {
+    const heatData = getHeatData();
     const container = document.getElementById('heatmap-el');
     const labelsContainer = document.getElementById('month-labels');
     container.innerHTML = ''; labelsContainer.innerHTML = '';
@@ -1374,31 +1550,27 @@
     const baseColor = rootStyle.getPropertyValue('--heat-base').trim();
     
     const today = new Date();
+    const todayStr = dtStr(today);
     const startObj = new Date(today);
-    
     startObj.setDate(startObj.getDate() - (WEEKS * 7) + (0 - startObj.getDay()));
 
     let cursorDate = new Date(startObj);
-    let totalC = 0;
-    
-    
     let currentMonth = -1;
-    let colWidth = 14 + 4; 
+    let colWidth = 13 + 3;
     
     for(let w = 0; w <= WEEKS; w++) {
       const col = document.createElement('div');
       col.className = 'week-col';
       
       let weekStartMonth = cursorDate.getMonth();
-      
       if (weekStartMonth !== currentMonth) {
         if (w > 0 || (w === 0 && cursorDate.getDate() < 14)) {
-            const mLabel = document.createElement('div');
-            mLabel.className = 'month-label';
-            mLabel.style.left = (w * colWidth) + 'px';
-            mLabel.innerText = `${cursorDate.getFullYear()}/${String(weekStartMonth+1).padStart(2,'0')}`;
-            labelsContainer.appendChild(mLabel);
-            currentMonth = weekStartMonth;
+          const mLabel = document.createElement('div');
+          mLabel.className = 'month-label';
+          mLabel.style.left = (w * colWidth) + 'px';
+          mLabel.innerText = `${cursorDate.getFullYear()}/${String(weekStartMonth+1).padStart(2,'0')}`;
+          labelsContainer.appendChild(mLabel);
+          currentMonth = weekStartMonth;
         }
       }
       
@@ -1407,18 +1579,17 @@
         
         const dStr = dtStr(cursorDate);
         const val = heatData[dStr] || 0;
-        if (val > 0) totalC += val;
 
         const cell = document.createElement('div');
         cell.className = 'day-cell';
-        
+        if(dStr === todayStr) cell.classList.add('today-cell');
         
         cell.style.backgroundColor = getColor(val);
-        if(val === 0) { cell.style.borderColor = '#333'; }
+        if(val === 0) { cell.style.borderColor = dStr === todayStr ? '' : '#333'; }
         else if(val === 1) { cell.style.borderColor = getColor(2); }
         else if(val >= 2) { 
-           cell.style.borderColor = getColor(Math.min(val+1, 4));
-           cell.style.boxShadow = `0 0 ${val*3}px ${baseColor}`;
+          cell.style.borderColor = getColor(Math.min(val+1, 4));
+          cell.style.boxShadow = `0 0 ${val*3}px ${baseColor}`;
         }
         
         const tooltip = document.createElement('div');
@@ -1426,12 +1597,33 @@
         tooltip.innerText = `${dStr} : LVL ${val}`;
         cell.appendChild(tooltip);
 
+        const cellDateStr = dStr; 
         cell.onclick = () => {
-          let v = (heatData[dStr] || 0) + 1;
+          const hd = getHeatData();
+          let v = (hd[cellDateStr] || 0) + 1;
           if (v > 4) v = 0;
-          heatData[dStr] = v;
+          hd[cellDateStr] = v;
+          setHeatData(hd);
           saveAndRender();
         };
+
+        
+        cell.addEventListener('touchstart', (e) => {
+          longPressTarget = cellDateStr;
+          longPressTimer = setTimeout(() => {
+            showPrompt(`SET LEVEL FOR ${cellDateStr} (0-4)`, String(heatData[cellDateStr] || 0), (val) => {
+              const lv = parseInt(val);
+              if(lv >= 0 && lv <= 4) {
+                const hd = getHeatData();
+                hd[cellDateStr] = lv;
+                setHeatData(hd);
+                saveAndRender();
+              }
+            });
+          }, 500);
+        }, {passive: true});
+        cell.addEventListener('touchend', () => { clearTimeout(longPressTimer); });
+        cell.addEventListener('touchmove', () => { clearTimeout(longPressTimer); });
 
         col.appendChild(cell);
         cursorDate.setDate(cursorDate.getDate() + 1);
@@ -1439,41 +1631,41 @@
       container.appendChild(col);
     }
 
-    
     const wrapper = document.querySelector('.heatmap-wrapper');
     if(wrapper) wrapper.scrollLeft = wrapper.scrollWidth;
   }
 
   function calculateStats() {
-    let total = 0; let currentStreak = 0; let maxStreak = 0; let tempStreak = 0;
+    const heatData = getHeatData();
+    let total = 0; let currentStreak = 0; let maxStreak = 0; let tempStreak = 0; let weekTotal = 0;
 
-    const today = new Date(); let iterDate = new Date();
+    const today = new Date();
+    const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
+    let iterDate = new Date();
     iterDate.setDate(iterDate.getDate() - (WEEKS * 7));
 
     while(iterDate <= today) {
       const dS = dtStr(iterDate); const v = heatData[dS] || 0;
       total += v;
-      if(v > 0) {
-        tempStreak++; if(tempStreak > maxStreak) maxStreak = tempStreak;
-      } else { tempStreak = 0; }
+      if(v > 0) { tempStreak++; if(tempStreak > maxStreak) maxStreak = tempStreak; }
+      else { tempStreak = 0; }
+      if(iterDate >= weekAgo) weekTotal += v;
       iterDate.setDate(iterDate.getDate() + 1);
     }
     
     let traceDate = new Date();
     let todayVal = heatData[dtStr(traceDate)] || 0;
     let hitZero = false;
-
     if (todayVal === 0) {
       traceDate.setDate(traceDate.getDate() - 1);
       if((heatData[dtStr(traceDate)] || 0) > 0) {} else { hitZero = true; }
     }
-
     if (!hitZero) {
       while(true) {
         let v = heatData[dtStr(traceDate)] || 0;
         if(v > 0 || (currentStreak === 0 && todayVal === 0)) {
-            if(v > 0) currentStreak++;
-            traceDate.setDate(traceDate.getDate() - 1);
+          if(v > 0) currentStreak++;
+          traceDate.setDate(traceDate.getDate() - 1);
         } else break;
       }
     }
@@ -1481,37 +1673,87 @@
     document.getElementById('stat-total').innerText = total;
     document.getElementById('stat-streak').innerText = currentStreak;
     document.getElementById('stat-max-streak').innerText = maxStreak;
+    document.getElementById('stat-week').innerText = weekTotal;
+  }
+
+  function renderWeeklyChart() {
+    const heatData = getHeatData();
+    const container = document.getElementById('weekly-chart');
+    container.innerHTML = '';
+    const weeks = 12;
+    const today = new Date();
+    let weekTotals = [];
+
+    for(let w = weeks - 1; w >= 0; w--) {
+      let weekTotal = 0;
+      for(let d = 0; d < 7; d++) {
+        const dt = new Date(today);
+        dt.setDate(dt.getDate() - (w * 7 + d));
+        weekTotal += (heatData[dtStr(dt)] || 0);
+      }
+      weekTotals.push(weekTotal);
+    }
+
+    const maxWeek = Math.max(...weekTotals, 1);
+    weekTotals.forEach((wt, i) => {
+      const bar = document.createElement('div');
+      bar.className = 'week-bar';
+      bar.style.height = Math.max((wt / maxWeek) * 100, 2) + '%';
+      if(i === weekTotals.length - 1) bar.style.opacity = '1';
+      const label = document.createElement('div');
+      label.className = 'week-bar-label';
+      label.textContent = wt;
+      bar.appendChild(label);
+      container.appendChild(bar);
+    });
   }
 
   function saveAndRender() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(heatData));
-    generateGrid(); calculateStats();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
+    renderTabs();
+    generateGrid();
+    calculateStats();
+    updateGoalBar();
+    renderWeeklyChart();
   }
 
   window.logToday = function(amount) {
     const dStr = dtStr(new Date());
-    let current = heatData[dStr] || 0; current += amount;
+    const hd = getHeatData();
+    let current = hd[dStr] || 0; current += amount;
     if(current > 4) current = 4;
-    heatData[dStr] = current;
+    hd[dStr] = current;
+    setHeatData(hd);
     saveAndRender();
     showToast(`LOGGED TODAY: LVL ${current}`);
   }
 
   window.exportData = function() {
-    ioArea.value = JSON.stringify(heatData, null, 2);
-    showToast("DATA EXPORTED TO TEXTBOX");
+    ioArea.value = JSON.stringify(allData, null, 2);
+    showToast("DATA EXPORTED");
   }
 
   window.importData = function() {
     try {
       const parsed = JSON.parse(ioArea.value);
       if(typeof parsed === 'object' && parsed !== null) {
-        heatData = parsed;
+        
+        if(!parsed.habits) {
+          allData.habits[currentHabit].data = parsed;
+        } else {
+          Object.assign(allData, parsed);
+          currentHabit = allData.activeHabit || Object.keys(allData.habits)[0];
+        }
         saveAndRender();
         showToast("DATA IMPORT SUCCESSFUL");
         ioArea.value = "";
       }
     } catch(e) { showToast("ERROR: INVALID JSON"); }
+  }
+
+  
+  if(allData.theme && allData.theme !== 'green') {
+    setTheme(allData.theme);
   }
 
   saveAndRender();
@@ -1632,7 +1874,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>54 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
+      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>119 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
     
 
     
@@ -1789,7 +2031,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>62 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
+      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>98 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
     
 
     
@@ -1946,7 +2188,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>74 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
+      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>130 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
     
 
     

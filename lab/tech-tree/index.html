@@ -233,7 +233,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "90"
+    "wordCount": "116"
   }]
   </script>
 
@@ -931,7 +931,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>90 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>116 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1108,44 +1108,59 @@
 
    
   .hud {
-    position: absolute; top: 2rem; left: 2rem; z-index: 20;
-    background: rgba(9, 9, 11, 0.85); border: 1px solid rgba(139, 92, 246, 0.4);
+    position: absolute; top: 1rem; left: 1rem; z-index: 20;
+    background: rgba(9, 9, 11, 0.88); border: 1px solid rgba(139, 92, 246, 0.4);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(139, 92, 246, 0.1);
-    padding: 1.5rem; border-radius: 4px; display: flex; flex-direction: column; gap: 0.5rem;
-    pointer-events: auto; min-width: 280px;
+    padding: 1rem; border-radius: 4px; display: flex; flex-direction: column; gap: 0.4rem;
+    pointer-events: auto; min-width: 260px; max-height: calc(100vh - 2rem); overflow-y: auto;
+    transition: transform 0.3s;
   }
-  .hud::before, .hud::after { content: ''; position: absolute; width: 15px; height: 15px; border: 2px solid #8b5cf6; pointer-events: none; }
+  .hud.collapsed { transform: translateX(calc(-100% - 2rem)); }
+  .hud::before, .hud::after { content: ''; position: absolute; width: 12px; height: 12px; border: 2px solid #8b5cf6; pointer-events: none; }
   .hud::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
   .hud::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-  .hud-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed #333; padding-bottom: 0.5rem; margin-bottom: 0.5rem; }
-  .cy-title { font-family: 'Orbitron', sans-serif; color: #8b5cf6; font-size: 1.3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; text-shadow: 0 0 10px rgba(139, 92, 246, 0.5); margin: 0; }
-  .cy-desc { font-size: 0.75rem; color: #94a3b8; letter-spacing: 0.05em;}
+  .hud-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed #333; padding-bottom: 0.4rem; margin-bottom: 0.3rem; }
+  .cy-title { font-family: 'Orbitron', sans-serif; color: #8b5cf6; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; text-shadow: 0 0 10px rgba(139, 92, 246, 0.5); margin: 0; }
+  .cy-desc { font-size: 0.65rem; color: #94a3b8; letter-spacing: 0.05em;}
   
-  .help-btn { background: rgba(139, 92, 246, 0.1); border: 1px solid #8b5cf6; color: #8b5cf6; font-size: 0.7rem; padding: 2px 6px; cursor: pointer; font-family: 'Orbitron', sans-serif; transition: 0.2s; }
+  .help-btn { background: rgba(139, 92, 246, 0.1); border: 1px solid #8b5cf6; color: #8b5cf6; font-size: 0.6rem; padding: 2px 5px; cursor: pointer; font-family: 'Orbitron', sans-serif; transition: 0.2s; }
   .help-btn:hover { background: #8b5cf6; color: #000; box-shadow: 0 0 10px #8b5cf6; }
 
-  .exp-display { font-family: 'Orbitron', sans-serif; font-size: 2rem; color: #f59e0b; text-shadow: 0 0 10px rgba(245, 158, 11, 0.5); font-weight: bold; }
-  .exp-label { font-size: 0.7rem; color: #64748b; letter-spacing: 2px; text-transform: uppercase; }
+  .exp-display { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; color: #f59e0b; text-shadow: 0 0 10px rgba(245, 158, 11, 0.5); font-weight: bold; }
+  .exp-label { font-size: 0.6rem; color: #64748b; letter-spacing: 2px; text-transform: uppercase; }
 
-  .controls { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
-  .controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+   
+  .progress-bar { display: flex; align-items: center; gap: 0.4rem; margin: 0.3rem 0; }
+  .progress-track { flex: 1; height: 6px; background: #111; border: 1px solid #222; }
+  .progress-fill { height: 100%; background: #8b5cf6; transition: width 0.5s; box-shadow: 0 0 5px #8b5cf6; }
+  .progress-text { font-size: 0.6rem; color: #8b5cf6; font-family: 'Orbitron', sans-serif; white-space: nowrap; }
 
-  .cy-btn { background: transparent; border: 1px solid #8b5cf6; color: #8b5cf6; padding: 0.6rem; font-family: inherit; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.2s; font-size: 0.75rem; letter-spacing: 1px; }
+   
+  .search-box { background: #000; border: 1px solid #333; border-bottom: 2px solid #8b5cf6; color: #c4b5fd; padding: 0.4rem 0.5rem; font-family: inherit; font-size: 0.7rem; width: 100%; box-sizing: border-box; margin: 0.3rem 0; }
+  .search-box:focus { outline: none; border-color: #a855f7; box-shadow: 0 0 8px rgba(139,92,246,0.3); }
+  .search-box::placeholder { color: #555; }
+
+  .controls { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.3rem; }
+  .controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+
+  .cy-btn { background: transparent; border: 1px solid #8b5cf6; color: #8b5cf6; padding: 0.45rem; font-family: inherit; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.2s; font-size: 0.6rem; letter-spacing: 0.5px; }
   .cy-btn:hover { background: rgba(139, 92, 246, 0.2); box-shadow: 0 0 15px rgba(139, 92, 246, 0.5); color: #fff; }
   
-  .btn-farm { border-color: #f59e0b; color: #f59e0b; } .btn-farm:hover { background: rgba(245, 158, 11, 0.2); box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); color: #fff;}
-  .btn-edit { border-color: #3b82f6; color: #3b82f6; } .btn-edit:hover { background: rgba(59, 130, 246, 0.2); box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); color:#fff; }
-  .btn-drag { border-color: #10b981; color: #10b981; border-style: dashed; } .btn-drag:hover { background: rgba(16, 185, 129, 0.2); box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); color:#fff; }
-  .btn-link { border-color: #ec4899; color: #ec4899; border-style: dashed; } .btn-link:hover { background: rgba(236, 72, 153, 0.2); box-shadow: 0 0 15px rgba(236, 72, 153, 0.5); color:#fff; }
+  .btn-farm { border-color: #f59e0b; color: #f59e0b; } .btn-farm:hover { background: rgba(245, 158, 11, 0.2); }
+  .btn-edit { border-color: #3b82f6; color: #3b82f6; } .btn-edit:hover { background: rgba(59, 130, 246, 0.2); }
+  .btn-drag { border-color: #10b981; color: #10b981; border-style: dashed; } .btn-drag:hover { background: rgba(16, 185, 129, 0.2); }
+  .btn-link { border-color: #ec4899; color: #ec4899; border-style: dashed; } .btn-link:hover { background: rgba(236, 72, 153, 0.2); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.55rem; color: #a1a1aa; margin-top: 0.3rem; }
+  .legend span { display: flex; align-items: center; gap: 3px; }
+  .l-dot { width: 6px; height: 6px; border-radius: 50%; }
 
    
-  .legend { display: flex; justify-content: space-between; font-size: 0.65rem; color: #a1a1aa; margin-top: 0.5rem; }
-  .legend span { display: flex; align-items: center; gap: 4px; }
-  .l-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .toggle-hud-btn { position: absolute; top: 1rem; left: 1rem; z-index: 21; background: rgba(9,9,11,0.9); border: 1px solid #8b5cf6; color: #8b5cf6; width: 32px; height: 32px; cursor: pointer; font-size: 1rem; display: none; align-items: center; justify-content: center; }
 
    
-  .tree-container { position: absolute; inset: 0; overflow: auto; z-index: 5; cursor: grab; }
+  .tree-container { position: absolute; inset: 0; overflow: hidden; z-index: 5; cursor: grab; }
   .tree-container:active { cursor: grabbing; }
   
   .tree-canvas { position: relative; width: 4000px; height: 3000px; transform-origin: 0 0; }
@@ -1154,69 +1169,73 @@
    
   .node {
     position: absolute; transform: translate(-50%, -50%);
-    width: 140px; background: rgba(5, 5, 8, 0.9);
+    width: 130px; background: rgba(5, 5, 8, 0.9);
     border: 2px solid #333; border-radius: 4px;
-    padding: 0.8rem; text-align: center; cursor: pointer; z-index: 2;
+    padding: 0.6rem; text-align: center; cursor: pointer; z-index: 2;
     transition: box-shadow 0.3s, border-color 0.3s;
     box-shadow: 0 4px 10px rgba(0,0,0,0.8);
-    display: flex; flex-direction: column; gap: 0.3rem;
+    display: flex; flex-direction: column; gap: 0.2rem;
   }
-  
   .node.locked { filter: grayscale(100%) brightness(0.5); opacity: 0.7;}
-  .node.available { border-color: #64748b; box-shadow: 0 0 15px rgba(255,255,255,0.1); }
-  .node:not(.drag-mode):not(.link-mode).available:hover { border-color: #e2e8f0; transform: translate(-50%, -50%) scale(1.05); transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+  .node.available { border-color: #64748b; box-shadow: 0 0 12px rgba(255,255,255,0.1); }
+  .node:not(.drag-mode):not(.link-mode).available:hover { border-color: #e2e8f0; transform: translate(-50%, -50%) scale(1.05); }
+  .node.search-highlight { border-color: #fcd34d !important; box-shadow: 0 0 25px rgba(252,211,77,0.6) !important; animation: search-pulse 1.5s infinite; }
+  @keyframes search-pulse { 0%,100% { box-shadow: 0 0 15px rgba(252,211,77,0.4); } 50% { box-shadow: 0 0 30px rgba(252,211,77,0.8); } }
 
-   
-  .node.class-core.unlocked { border-color: #f59e0b; box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
-  .node.class-front.unlocked { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
-  .node.class-back.unlocked { border-color: #10b981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
-  .node.class-cyber.unlocked { border-color: #ec4899; box-shadow: 0 0 20px rgba(236, 72, 153, 0.4); }
+  .node.class-core.unlocked { border-color: #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+  .node.class-front.unlocked { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+  .node.class-back.unlocked { border-color: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+  .node.class-cyber.unlocked { border-color: #ec4899; box-shadow: 0 0 15px rgba(236, 72, 153, 0.4); }
+  .node.class-custom.unlocked { border-color: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); }
 
   .node.class-core.available:hover { border-color: #f59e0b; }
   .node.class-front.available:hover { border-color: #3b82f6; }
   .node.class-back.available:hover { border-color: #10b981; }
   .node.class-cyber.available:hover { border-color: #ec4899; }
 
-  .node.class-custom.unlocked { border-color: #a855f7; box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); }
-  .node.class-custom.available:hover { border-color: #a855f7; }
-
-   
   .node.drag-mode { border-style: dashed !important; animation: pulse 2s infinite; cursor: move !important; pointer-events: auto !important; opacity: 1 !important; filter: none !important; }
-  @keyframes pulse { 0% { box-shadow: 0 0 10px #10b981; border-color:#10b981;} 50% { box-shadow: 0 0 25px rgba(16,185,129,0.8); border-color:#fff;} 100% { box-shadow: 0 0 10px #10b981; border-color:#10b981;} }
-
+  @keyframes pulse { 0% { box-shadow: 0 0 10px #10b981; } 50% { box-shadow: 0 0 25px rgba(16,185,129,0.8); } 100% { box-shadow: 0 0 10px #10b981; } }
   .node.link-mode { border-style: dashed !important; cursor: crosshair !important; pointer-events: auto !important; opacity: 1 !important; filter: none !important; }
   .node.link-mode:hover { box-shadow: 0 0 20px #ec4899; border-color: #ec4899; }
-  .node.linking-source { border-color: #ec4899 !important; box-shadow: 0 0 30px #ec4899 !important; border-style: solid !important; animation: pulse-pink 1.5s infinite; }
-  @keyframes pulse-pink { 0% { box-shadow: 0 0 10px #ec4899; } 50% { box-shadow: 0 0 30px #ec4899; } 100% { box-shadow: 0 0 10px #ec4899; } }
+  .node.linking-source { border-color: #ec4899 !important; box-shadow: 0 0 30px #ec4899 !important; border-style: solid !important; }
 
-
-  .node-title { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; color: #fff; text-transform: uppercase; }
-  .node-cost { font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; font-weight: bold; }
+  .node-title { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: #fff; text-transform: uppercase; }
+  .node-cost { font-size: 0.6rem; font-family: 'JetBrains Mono', monospace; font-weight: bold; }
   .node.unlocked .node-cost { color: #10b981; }
   .node.available .node-cost { color: #f59e0b; }
   .node.unlocked { background: rgba(9, 9, 11, 0.95); }
 
-   
   .link-line { stroke: #333; stroke-width: 3; fill: none; transition: 0.3s; }
   .link-line.active { stroke: #8b5cf6; stroke-width: 4; filter: drop-shadow(0 0 5px #8b5cf6); }
 
    
-  .cy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-  .cy-modal-content { background: rgba(9, 9, 11, 0.95); border: 1px solid #8b5cf6; padding: 2rem; width: 90%; max-width: 600px; position: relative; font-family: "Zen Kaku Gothic New", sans-serif; box-shadow: 0 0 30px rgba(139, 92, 246, 0.2); }
-  .cy-modal-title { font-family: 'Orbitron', sans-serif; color: #8b5cf6; font-size: 1.5rem; margin-top: 0; margin-bottom: 1rem; border-bottom: 1px solid #333; padding-bottom: 0.5rem; }
-  .cy-modal-body { font-size: 0.9rem; line-height: 1.6; color: #e2e8f0; }
-  .cy-modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: #ef4444; font-size: 1.5rem; cursor: pointer; }
+  .zoom-controls { position: absolute; bottom: 1.5rem; right: 1.5rem; z-index: 20; display: flex; flex-direction: column; gap: 0.3rem; }
+  .zoom-btn { background: rgba(9,9,11,0.9); border: 1px solid #8b5cf6; color: #8b5cf6; width: 36px; height: 36px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; font-family: 'Orbitron', sans-serif; }
+  .zoom-btn:hover { background: rgba(139,92,246,0.2); box-shadow: 0 0 10px #8b5cf6; }
+  .zoom-label { font-size: 0.5rem; text-align: center; color: #64748b; }
 
    
+  .cy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+  .cy-modal-content { background: rgba(9, 9, 11, 0.95); border: 1px solid #8b5cf6; padding: 1.5rem; width: 90%; max-width: 600px; position: relative; font-family: "Zen Kaku Gothic New", sans-serif; box-shadow: 0 0 30px rgba(139, 92, 246, 0.2); max-height: 90vh; overflow-y: auto; }
+  .cy-modal-title { font-family: 'Orbitron', sans-serif; color: #8b5cf6; font-size: 1.3rem; margin-top: 0; margin-bottom: 0.8rem; border-bottom: 1px solid #333; padding-bottom: 0.4rem; }
+  .cy-modal-body { font-size: 0.85rem; line-height: 1.5; color: #e2e8f0; }
+  .cy-modal-close { position: absolute; top: 0.8rem; right: 0.8rem; background: none; border: none; color: #ef4444; font-size: 1.5rem; cursor: pointer; }
+
   .editor-modal .cy-modal-content { max-width: 900px; height: 80vh; display: flex; flex-direction: column; }
-  .editor-textarea { flex-grow: 1; background: #000; border: 1px solid #3b82f6; color: #60a5fa; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; padding: 1rem; box-sizing: border-box; resize: none; margin-bottom: 1rem;}
+  .editor-textarea { flex-grow: 1; background: #000; border: 1px solid #3b82f6; color: #60a5fa; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 0.8rem; box-sizing: border-box; resize: none; margin-bottom: 0.8rem;}
   .editor-textarea:focus { outline: none; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
 
-   
-  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: rgba(139, 92, 246, 0.2); border: 1px solid #8b5cf6; color: #c4b5fd; padding: 0.8rem 1.5rem; font-family: 'Orbitron', sans-serif; pointer-events: none; opacity: 0; transition: 0.3s; z-index: 50; box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); font-weight: bold; }
+  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: rgba(139, 92, 246, 0.2); border: 1px solid #8b5cf6; color: #c4b5fd; padding: 0.6rem 1rem; font-family: 'Orbitron', sans-serif; pointer-events: none; opacity: 0; transition: 0.3s; z-index: 50; box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); font-weight: bold; font-size: 0.65rem; }
 
   @media (max-width: 768px) {
-    .hud { top: auto; bottom: 0; left: 0; width: 100%; border-radius: 12px 12px 0 0; padding: 1rem; border: none; border-top: 2px solid #8b5cf6;}
+    .hud { top: auto; bottom: 0; left: 0; width: 100%; border-radius: 12px 12px 0 0; padding: 0.8rem; border: none; border-top: 2px solid #8b5cf6; min-width: 0; max-height: 50vh; transform: translateY(100%); transition: transform 0.3s ease; }
+    .hud.open { transform: translateY(0); }
+    .hud.collapsed { transform: translateY(100%); }
+    .toggle-hud-btn { display: flex; left: auto; right: 1rem; bottom: 1rem; top: auto; }
+    .zoom-controls { bottom: 4rem; right: 0.5rem; }
+    .node { width: 110px; padding: 0.5rem; }
+    .node-title { font-size: 0.6rem; }
+    .node-cost { font-size: 0.55rem; }
   }
 </style>
 
@@ -1229,19 +1248,38 @@
     </div>
   </div>
 
-  <div class="hud">
+  <button class="toggle-hud-btn" id="toggle-hud-btn" onclick="toggleHudMobile()">☰</button>
+
+  
+  <div class="zoom-controls">
+    <button class="zoom-btn" onclick="zoomTree(1.2)">+</button>
+    <button class="zoom-btn" onclick="zoomTree(0.8)">−</button>
+    <div class="zoom-label" id="zoom-label">100%</div>
+    <button class="zoom-btn" onclick="zoomTree(0, true)" style="font-size:0.55rem;">RST</button>
+  </div>
+
+  <div class="hud" id="hud-panel">
     <div class="hud-header">
       <div>
         <h1 class="cy-title">SKILL_TREE</h1>
         <div class="cy-desc">RPG Knowledge Progression</div>
       </div>
-      <button class="help-btn" onclick="document.getElementById('help-modal').style.display='flex'">HELP</button>
+      <button class="help-btn" onclick="document.getElementById('help-modal').style.display='flex'">?</button>
     </div>
     
     <div>
-      <div class="exp-label">AVAILABLE EXP <span style="color:#a1a1aa; font-size:0.6rem;">/ KNOWLEDGE POINTS</span></div>
+      <div class="exp-label">AVAILABLE EXP</div>
       <div class="exp-display" id="disp-exp">0</div>
     </div>
+
+    
+    <div class="progress-bar">
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <span class="progress-text" id="progress-text">0/0</span>
+    </div>
+
+    
+    <input type="text" class="search-box" id="search-box" placeholder="🔍 Search node..." oninput="searchNodes(this.value)">
 
     <div class="legend">
       <span><div class="l-dot" style="background:#f59e0b;"></div>CORE</span>
@@ -1252,15 +1290,15 @@
 
     <div class="controls">
       <div class="controls-row">
-        <button class="cy-btn btn-farm" onclick="farmExp()">+ FARM 100 EXP</button>
-        <button class="cy-btn" onclick="centerTree()">CENTER VIEW</button>
+        <button class="cy-btn btn-farm" onclick="farmExp()">+ 100 EXP</button>
+        <button class="cy-btn" onclick="centerTree()">CENTER</button>
       </div>
       <div class="controls-row">
-        <button class="cy-btn btn-drag" id="btn-drag" onclick="toggleDragMode()">[ EDIT_LAYOUT: OFF ]</button>
-        <button class="cy-btn btn-link" id="btn-link" onclick="toggleLinkMode()">[ LINK_NODES: OFF ]</button>
+        <button class="cy-btn btn-drag" id="btn-drag" onclick="toggleDragMode()">LAYOUT: OFF</button>
+        <button class="cy-btn btn-link" id="btn-link" onclick="toggleLinkMode()">LINK: OFF</button>
       </div>
-      <button class="cy-btn btn-edit" onclick="openEditor()">[ BUILD_TREE_JSON ]</button>
-      <button class="cy-btn" onclick="purgeProgression()" style="border-color:#ef4444; color:#ef4444; padding:0.4rem; font-size:0.65rem;">PURGE PROGRESSION</button>
+      <button class="cy-btn btn-edit" onclick="openEditor()">JSON EDITOR</button>
+      <button class="cy-btn" onclick="purgeProgression()" style="border-color:#ef4444; color:#ef4444; padding:0.3rem; font-size:0.5rem;">PURGE PROGRESSION</button>
     </div>
   </div>
 
@@ -1268,18 +1306,48 @@
   <div class="cy-modal" id="help-modal">
     <div class="cy-modal-content">
       <button class="cy-modal-close" onclick="document.getElementById('help-modal').style.display='none'">&times;</button>
-      <h2 class="cy-modal-title">SYSTEM_HELP // SKILL TREE</h2>
+      <h2 class="cy-modal-title">SYSTEM_HELP // SKILL TREE v2</h2>
       <div class="cy-modal-body">
-        <p>RPGの「スキルツリー」のように、学習進捗や技術スタックの解放状況を可視化するツールです。</p>
-        <p>【高度なクリエイト機能】</p>
+        <p>RPGのスキルツリーのように、知識やスキルの学習進捗を視覚的に管理するツールです。EXPを使ってスキルを解放していきます。</p>
+
+        <p><strong>🎮 基本の遊び方</strong></p>
+        <ol>
+          <li><strong>+ 100 EXP</strong> ボタンでEXPを獲得します（実際の学習の報酬として）</li>
+          <li>ツリー上で <strong>枠線のあるノード（available）</strong> をクリック → EXPを消費してスキルを解放</li>
+          <li>前提条件を満たしたノードだけが解放可能になります</li>
+        </ol>
+
+        <p><strong>🔍 ズーム & 移動</strong></p>
         <ul>
-          <li><strong>EXP システム:</strong> スキル（ノード）をアンロックするには EXP が必要になります。</li>
-          <li><strong>EDIT_LAYOUT (直感的配置):</strong> ONにすると、すべてのノードを<strong>ドラッグ＆ドロップ</strong>で自由自在に移動・再配置できます。</li>
-          <li><strong>LINK_NODES (直感的接続):</strong> ONにすると、ノード間の線（前提条件）をグラフィカルに繋いだり消したりできます。<br>
-            <span style="color:#ec4899">★使い方: </span>「元となるスキル」をクリックしてピンクに光らせ、「次に解放させたいスキル」をクリックすると線が繋がります。（もう一度同じ操作で線が消えます）
-          </li>
-          <li><strong>BUILD_TREE_JSON (自作):</strong> もっと細かく「必要EXP」「新規ノード追加」などを構築したい場合はJSONエディタをご利用ください。</li>
+          <li><strong>移動:</strong> ツリーをドラッグ / スワイプ</li>
+          <li><strong>ズーム:</strong> マウスホイール / +−ボタン / スマホでピンチ</li>
+          <li><strong>CENTER:</strong> ツリーの中心に戻る</li>
         </ul>
+
+        <p><strong>🔎 検索</strong></p>
+        <ul>
+          <li>左パネルの <strong>検索ボックス</strong> にノード名を入力すると、該当ノードが黄色でハイライトされ、自動でスクロールします</li>
+        </ul>
+
+        <p><strong>✏️ カスタマイズ</strong></p>
+        <ul>
+          <li><strong>LAYOUT: ON</strong> → ドラッグ＆ドロップでノードの位置を自由に変更</li>
+          <li><strong>LINK: ON</strong> → ノードをクリックして前提条件の接続/切断を操作</li>
+          <li><strong>JSON EDITOR</strong> → ノードの追加、名前・コスト・色の変更などをJSONで直接編集</li>
+        </ul>
+
+        <p><strong>📊 進捗</strong></p>
+        <ul>
+          <li>プログレスバーで全体の解放率を確認できます</li>
+          <li><strong>PURGE PROGRESSION</strong> で全ての進捗をリセット</li>
+        </ul>
+
+        <p><strong>🎨 ノードの色</strong></p>
+        <ul>
+          <li>🟡 <strong>CORE:</strong> 基礎知識 / 🔵 <strong>FRONT:</strong> フロントエンド / 🟢 <strong>BACK:</strong> バックエンド / 🩷 <strong>CYBER:</strong> セキュリティ</li>
+        </ul>
+
+        <p style="color:#64748b; font-size:0.75rem;">💾 データはブラウザのlocalStorageに自動保存されます。📱 スマホでは ☰ ボタンでパネルを開きます。</p>
       </div>
     </div>
   </div>
@@ -1288,15 +1356,11 @@
   <div class="cy-modal editor-modal" id="edit-modal">
     <div class="cy-modal-content">
       <button class="cy-modal-close" onclick="document.getElementById('edit-modal').style.display='none'">&times;</button>
-      <h2 class="cy-modal-title" style="color:#3b82f6; border-color:#333;">// TREE_ARCHITECTURE_EDITOR</h2>
-      <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:1rem;">
-        Modify the JSON below to construct your own custom Skill Tree. Each node needs:<br>
-        <code>"id"</code>(unique), <code>"label"</code>, <code>"cost"</code>, <code>"class"</code>, <code>"x"</code>, <code>"y"</code>, <code>"req"</code>(array of required ids).
-      </div>
+      <h2 class="cy-modal-title" style="color:#3b82f6;">TREE_EDITOR</h2>
       <textarea id="edit-area" class="editor-textarea"></textarea>
-      <div style="display:flex; justify-content:space-between; gap:1rem;">
-        <button class="cy-btn" style="flex-grow:1; border-color:#10b981; color:#10b981;" onclick="saveEditor()">APPLY NEW SCHEMA</button>
-        <button class="cy-btn" style="border-color:#ef4444; color:#ef4444;" onclick="resetToDefaultTree()">LOAD DEFAULT SCHEMA</button>
+      <div style="display:flex; justify-content:space-between; gap:0.5rem;">
+        <button class="cy-btn" style="flex-grow:1; border-color:#10b981; color:#10b981;" onclick="saveEditor()">APPLY</button>
+        <button class="cy-btn" style="border-color:#ef4444; color:#ef4444;" onclick="resetToDefaultTree()">DEFAULT</button>
       </div>
     </div>
   </div>
@@ -1325,17 +1389,12 @@
   ];
 
   let treeData = JSON.parse(localStorage.getItem(STORAGE_TREE)) || defaultTree;
-  
-  let saveData = JSON.parse(localStorage.getItem(STORAGE_PROG)) || {
-    exp: 500,
-    unlocked: ['base']
-  };
+  let saveData = JSON.parse(localStorage.getItem(STORAGE_PROG)) || { exp: 500, unlocked: ['base'] };
 
-  let isDragMode = false;
-  let draggedNodeId = null;
-
-  let isLinkMode = false;
-  let linkSourceId = null;
+  let isDragMode = false, draggedNodeId = null;
+  let isLinkMode = false, linkSourceId = null;
+  let treeScale = 1;
+  let searchQuery = '';
 
   function showToast(msg) {
     const t = document.getElementById('toast-msg');
@@ -1346,38 +1405,44 @@
   function saveProgression() { localStorage.setItem(STORAGE_PROG, JSON.stringify(saveData)); }
   function saveTreeData() { localStorage.setItem(STORAGE_TREE, JSON.stringify(treeData)); }
 
+  
+  window.zoomTree = function(factor, resetFlag) {
+    if(resetFlag) { treeScale = 1; } else { treeScale *= factor; }
+    treeScale = Math.max(0.3, Math.min(2, treeScale));
+    document.getElementById('zoom-canvas').style.transform = `scale(${treeScale})`;
+    document.getElementById('zoom-label').innerText = Math.round(treeScale * 100) + '%';
+  }
+
+  
+  window.searchNodes = function(query) {
+    searchQuery = query.toLowerCase();
+    renderTree();
+    if(searchQuery) {
+      const found = treeData.find(n => n.label.toLowerCase().includes(searchQuery));
+      if(found) {
+        const container = document.getElementById('pan-container');
+        container.scrollLeft = (found.x * treeScale) - window.innerWidth / 2;
+        container.scrollTop = (found.y * treeScale) - window.innerHeight / 2;
+      }
+    }
+  }
+
   window.toggleDragMode = function() {
     if(isLinkMode) toggleLinkMode();
-
     isDragMode = !isDragMode;
     const btn = document.getElementById('btn-drag');
-    if(isDragMode) {
-      btn.innerText = "[ EDIT_LAYOUT: ON ]";
-      btn.style.background = "rgba(16, 185, 129, 0.2)";
-      showToast("DRAG AND DROP MODE INITIATED");
-    } else {
-      btn.innerText = "[ EDIT_LAYOUT: OFF ]";
-      btn.style.background = "transparent";
-      showToast("LAYOUT SECURED");
-    }
-    renderTree(); 
+    btn.innerText = isDragMode ? "LAYOUT: ON" : "LAYOUT: OFF";
+    btn.style.background = isDragMode ? "rgba(16, 185, 129, 0.2)" : "transparent";
+    renderTree();
   }
 
   window.toggleLinkMode = function() {
     if(isDragMode) toggleDragMode();
-
     isLinkMode = !isLinkMode;
     const btn = document.getElementById('btn-link');
-    if(isLinkMode) {
-      btn.innerText = "[ LINK_NODES: ON ]";
-      btn.style.background = "rgba(236, 72, 153, 0.2)";
-      showToast("SELECT SOURCE NODE (PARENT)");
-    } else {
-      btn.innerText = "[ LINK_NODES: OFF ]";
-      btn.style.background = "transparent";
-      linkSourceId = null;
-      showToast("LINK MODE DISABLED");
-    }
+    btn.innerText = isLinkMode ? "LINK: ON" : "LINK: OFF";
+    btn.style.background = isLinkMode ? "rgba(236, 72, 153, 0.2)" : "transparent";
+    linkSourceId = null;
     renderTree();
   }
 
@@ -1406,9 +1471,16 @@
     nodesLayer.innerHTML = '';
     
     document.getElementById('disp-exp').innerText = saveData.exp;
+    
+    
+    const totalNodes = treeData.length;
+    const unlockedCount = saveData.unlocked.length;
+    const pct = totalNodes > 0 ? (unlockedCount / totalNodes) * 100 : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-text').innerText = `${unlockedCount}/${totalNodes}`;
+
     drawLines();
 
-    
     treeData.forEach(node => {
       const el = document.createElement('div');
       el.id = 'node-' + node.id;
@@ -1416,88 +1488,61 @@
       
       const isUnlocked = saveData.unlocked.includes(node.id);
       let isAvailable = !isUnlocked && node.req.every(r => saveData.unlocked.includes(r));
-      if(node.req.length === 0) isAvailable = true; 
+      if(node.req.length === 0) isAvailable = true;
 
       let statusClass = 'locked';
       if (isUnlocked) statusClass = 'unlocked';
       else if (isAvailable) statusClass = 'available';
 
       const nodeClass = node.class || 'class-custom';
-
       let stateClass = '';
       if(isDragMode) stateClass = 'drag-mode';
       if(isLinkMode) stateClass = 'link-mode';
       if(isLinkMode && linkSourceId === node.id) stateClass += ' linking-source';
+      
+      const isSearchMatch = searchQuery && node.label.toLowerCase().includes(searchQuery);
+      if(isSearchMatch) stateClass += ' search-highlight';
 
       el.className = `node ${nodeClass} ${statusClass} ${stateClass}`;
-      el.style.left = node.x + 'px';
-      el.style.top = node.y + 'px';
+      el.style.left = node.x + 'px'; el.style.top = node.y + 'px';
       
       let costText = isUnlocked ? '[ ACQUIRED ]' : `COST: ${node.cost} EXP`;
       if(!isUnlocked && !isAvailable) costText = '[ RESTRICTED ]';
 
-      el.innerHTML = `
-        <div class="node-title">${node.label}</div>
-        <div class="node-cost">${costText}</div>
-      `;
+      el.innerHTML = `<div class="node-title">${node.label}</div><div class="node-cost">${costText}</div>`;
 
       el.onmousedown = (e) => {
         if(isLinkMode) {
           e.stopPropagation();
-          if(!linkSourceId) {
-            linkSourceId = node.id;
-            renderTree();
-            showToast(`SOURCE: [${node.label}] SELECT TARGET`);
-          } else {
-            if(linkSourceId === node.id) {
-              
-              linkSourceId = null;
-              renderTree();
-              showToast("LINKING CANCELLED");
-            } else {
-              
-              
+          if(!linkSourceId) { linkSourceId = node.id; renderTree(); showToast(`SOURCE: [${node.label}]`); }
+          else {
+            if(linkSourceId === node.id) { linkSourceId = null; renderTree(); }
+            else {
               if(!node.req) node.req = [];
               const idx = node.req.indexOf(linkSourceId);
-              if(idx > -1) {
-                node.req.splice(idx, 1);
-                showToast(`CONNECTION SEVERED`);
-              } else {
-                node.req.push(linkSourceId);
-                showToast(`CONNECTION ESTABLISHED`);
-              }
-              linkSourceId = null;
-              saveTreeData();
-              renderTree();
+              if(idx > -1) { node.req.splice(idx, 1); showToast('SEVERED'); }
+              else { node.req.push(linkSourceId); showToast('CONNECTED'); }
+              linkSourceId = null; saveTreeData(); renderTree();
             }
           }
-        }
-        else if(isDragMode) {
-          e.stopPropagation();
-          draggedNodeId = node.id;
-          lastMouse.x = e.pageX;
-          lastMouse.y = e.pageY;
-        } 
-        else if(isAvailable) {
+        } else if(isDragMode) {
+          e.stopPropagation(); draggedNodeId = node.id;
+          lastMouse.x = e.pageX; lastMouse.y = e.pageY;
+        } else if(isAvailable) {
           if (saveData.exp >= node.cost) {
-            saveData.exp -= node.cost;
-            saveData.unlocked.push(node.id);
-            saveProgression();
-            renderTree();
-            showToast(`SKILL ACQUIRED: ${node.label}`);
-          } else {
-            showToast(`INSUFFICIENT EXP (${node.cost} Reqd)`);
-          }
+            saveData.exp -= node.cost; saveData.unlocked.push(node.id);
+            saveProgression(); renderTree(); showToast(`ACQUIRED: ${node.label}`);
+          } else { showToast(`INSUFFICIENT EXP (${node.cost})`); }
         }
       };
 
-      
       el.ontouchstart = (e) => {
         if(isDragMode) {
+          e.stopPropagation(); draggedNodeId = node.id;
+          lastMouse.x = e.touches[0].pageX; lastMouse.y = e.touches[0].pageY;
+        } else if(isLinkMode) {
           e.stopPropagation();
-          draggedNodeId = node.id;
-          lastMouse.x = e.touches[0].pageX;
-          lastMouse.y = e.touches[0].pageY;
+          el.onmousedown(e);
         }
       };
 
@@ -1505,147 +1550,109 @@
     });
   }
 
-  window.farmExp = function() {
-    saveData.exp += 100;
-    saveProgression(); renderTree(); showToast("+100 EXP ACQUIRED");
-  }
-
+  window.farmExp = function() { saveData.exp += 100; saveProgression(); renderTree(); showToast("+100 EXP"); }
   window.purgeProgression = function() {
-    if(confirm("WARNING: PURGE ALL SKILL PROGRESS?")) {
-      saveData = { exp: 500, unlocked: ['base'] };
-      saveProgression(); renderTree(); 
-      showToast("SYSTEM PURGED");
-    }
+    if(confirm("PURGE ALL PROGRESS?")) { saveData = { exp: 500, unlocked: ['base'] }; saveProgression(); renderTree(); showToast("PURGED"); }
   }
-
-  
-  window.openEditor = function() {
-    document.getElementById('edit-area').value = JSON.stringify(treeData, null, 2);
-    document.getElementById('edit-modal').style.display = 'flex';
-  }
-
+  window.openEditor = function() { document.getElementById('edit-area').value = JSON.stringify(treeData, null, 2); document.getElementById('edit-modal').style.display = 'flex'; }
   window.saveEditor = function() {
     try {
       const parsed = JSON.parse(document.getElementById('edit-area').value);
-      if(Array.isArray(parsed)) {
-        treeData = parsed;
-        saveTreeData();
-        document.getElementById('edit-modal').style.display = 'none';
-        renderTree();
-        showToast("SCHEMA APPLIED SUCCESSFULLY");
-      } else {
-        alert("The schema must be a JSON array '[ { ... }, ... ]'");
-      }
-    } catch(e) { alert("Invalid JSON format! Check for missing commas or quotes."); }
+      if(Array.isArray(parsed)) { treeData = parsed; saveTreeData(); document.getElementById('edit-modal').style.display = 'none'; renderTree(); showToast("APPLIED"); }
+      else alert("Must be a JSON array");
+    } catch(e) { alert("Invalid JSON"); }
   }
+  window.resetToDefaultTree = function() { if(confirm("Load default schema?")) document.getElementById('edit-area').value = JSON.stringify(defaultTree, null, 2); }
 
-  window.resetToDefaultTree = function() {
-    if(confirm("Discard current tree and load original RPG Schema?")) {
-      document.getElementById('edit-area').value = JSON.stringify(defaultTree, null, 2);
-    }
+  
+  window.toggleHudMobile = function() {
+    const hud = document.getElementById('hud-panel');
+    hud.classList.toggle('open');
+    hud.classList.remove('collapsed');
   }
 
   
   const container = document.getElementById('pan-container');
-  let isDown = false; let startX; let startY; let scrollLeft; let scrollTop;
+  let isDown = false, startX, startY, scrollLeft, scrollTop;
   let lastMouse = {x: 0, y: 0};
 
-  
   container.addEventListener('mousedown', (e) => {
-    if(draggedNodeId || isLinkMode) return; 
-    isDown = true;
-    startX = e.pageX - container.offsetLeft;
-    startY = e.pageY - container.offsetTop;
-    scrollLeft = container.scrollLeft;
-    scrollTop = container.scrollTop;
+    if(draggedNodeId || isLinkMode) return;
+    isDown = true; startX = e.pageX - container.offsetLeft; startY = e.pageY - container.offsetTop;
+    scrollLeft = container.scrollLeft; scrollTop = container.scrollTop;
   });
-  window.addEventListener('mouseup', () => { 
-    isDown = false;
-    if(draggedNodeId) {
-       saveTreeData(); 
-       draggedNodeId = null; 
-    }
-  });
+  window.addEventListener('mouseup', () => { isDown = false; if(draggedNodeId) { saveTreeData(); draggedNodeId = null; } });
 
   container.addEventListener('mousemove', (e) => {
     if (draggedNodeId) {
       e.preventDefault();
-      const dx = e.pageX - lastMouse.x;
-      const dy = e.pageY - lastMouse.y;
-      lastMouse.x = e.pageX;
-      lastMouse.y = e.pageY;
-
+      const dx = (e.pageX - lastMouse.x) / treeScale;
+      const dy = (e.pageY - lastMouse.y) / treeScale;
+      lastMouse.x = e.pageX; lastMouse.y = e.pageY;
       let node = treeData.find(n => n.id === draggedNodeId);
-      if(node) {
-        node.x += dx;
-        node.y += dy;
-        document.getElementById('node-'+node.id).style.left = node.x + 'px';
-        document.getElementById('node-'+node.id).style.top = node.y + 'px';
-        drawLines();
-      }
+      if(node) { node.x += dx; node.y += dy; document.getElementById('node-'+node.id).style.left = node.x+'px'; document.getElementById('node-'+node.id).style.top = node.y+'px'; drawLines(); }
       return;
     }
-
     if (!isDown) return;
     e.preventDefault();
-    const x = e.pageX - container.offsetLeft;
-    const y = e.pageY - container.offsetTop;
-    const walkX = (x - startX) * 1.5;
-    const walkY = (y - startY) * 1.5;
-    container.scrollLeft = scrollLeft - walkX;
-    container.scrollTop = scrollTop - walkY;
+    const x = e.pageX - container.offsetLeft; const y = e.pageY - container.offsetTop;
+    container.scrollLeft = scrollLeft - (x - startX) * 1.5;
+    container.scrollTop = scrollTop - (y - startY) * 1.5;
   });
 
   
   container.addEventListener('touchstart', (e) => {
     if(draggedNodeId || isLinkMode || e.touches.length > 1) return;
-    isDown = true;
-    startX = e.touches[0].pageX - container.offsetLeft;
-    startY = e.touches[0].pageY - container.offsetTop;
-    scrollLeft = container.scrollLeft;
-    scrollTop = container.scrollTop;
+    isDown = true; startX = e.touches[0].pageX - container.offsetLeft; startY = e.touches[0].pageY - container.offsetTop;
+    scrollLeft = container.scrollLeft; scrollTop = container.scrollTop;
   }, {passive:true});
-  
-  window.addEventListener('touchend', () => { 
-    isDown = false; 
-    if(draggedNodeId) { saveTreeData(); draggedNodeId = null; }
-  });
-
+  window.addEventListener('touchend', () => { isDown = false; if(draggedNodeId) { saveTreeData(); draggedNodeId = null; } });
   container.addEventListener('touchmove', (e) => {
     if (draggedNodeId && e.touches.length === 1) {
       e.preventDefault();
-      const dx = e.touches[0].pageX - lastMouse.x;
-      const dy = e.touches[0].pageY - lastMouse.y;
-      lastMouse.x = e.touches[0].pageX;
-      lastMouse.y = e.touches[0].pageY;
-
+      const dx = (e.touches[0].pageX - lastMouse.x) / treeScale;
+      const dy = (e.touches[0].pageY - lastMouse.y) / treeScale;
+      lastMouse.x = e.touches[0].pageX; lastMouse.y = e.touches[0].pageY;
       let node = treeData.find(n => n.id === draggedNodeId);
-      if(node) {
-        node.x += dx; node.y += dy;
-        document.getElementById('node-'+node.id).style.left = node.x + 'px';
-        document.getElementById('node-'+node.id).style.top = node.y + 'px';
-        drawLines();
-      }
+      if(node) { node.x += dx; node.y += dy; document.getElementById('node-'+node.id).style.left = node.x+'px'; document.getElementById('node-'+node.id).style.top = node.y+'px'; drawLines(); }
       return;
     }
-
     if (!isDown || e.touches.length > 1) return;
-    const x = e.touches[0].pageX - container.offsetLeft;
-    const y = e.touches[0].pageY - container.offsetTop;
-    const walkX = (x - startX) * 1.5;
-    const walkY = (y - startY) * 1.5;
-    container.scrollLeft = scrollLeft - walkX;
-    container.scrollTop = scrollTop - walkY;
+    const x = e.touches[0].pageX - container.offsetLeft; const y = e.touches[0].pageY - container.offsetTop;
+    container.scrollLeft = scrollLeft - (x - startX) * 1.5;
+    container.scrollTop = scrollTop - (y - startY) * 1.5;
   }, {passive:false});
 
+  
+  container.addEventListener('wheel', (e) => { e.preventDefault(); zoomTree(e.deltaY < 0 ? 1.1 : 0.9); }, {passive: false});
+
+  
+  let lastPinchDist = 0;
+  container.addEventListener('touchstart', (e) => {
+    if(e.touches.length === 2) { isDown = false; lastPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }
+  }, {passive:true});
+  container.addEventListener('touchmove', (e) => {
+    if(e.touches.length === 2) {
+      e.preventDefault();
+      const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      if(lastPinchDist > 0) { zoomTree(dist / lastPinchDist); }
+      lastPinchDist = dist;
+    }
+  }, {passive:false});
+  container.addEventListener('touchend', () => lastPinchDist = 0);
+
   window.centerTree = function() {
-    container.scrollLeft = 2000 - window.innerWidth / 2;
-    container.scrollTop = 1500 - window.innerHeight / 2;
+    container.scrollLeft = (2000 * treeScale) - window.innerWidth / 2;
+    container.scrollTop = (1500 * treeScale) - window.innerHeight / 2;
   }
 
   renderTree();
   setTimeout(centerTree, 100);
 
+  
+  if(window.innerWidth <= 768) {
+    document.getElementById('hud-panel').classList.remove('open');
+  }
 </script>
 
 
@@ -1763,7 +1770,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>54 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
+      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>119 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
     
 
     
@@ -1920,7 +1927,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>62 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
+      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>98 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
     
 
     
@@ -2077,7 +2084,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>82 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
+      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>117 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
     
 
     
