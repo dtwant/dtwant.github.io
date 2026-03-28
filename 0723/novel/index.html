@@ -2653,8 +2653,10 @@ window.nsRender=function(){
 function renderShelf(grid, arr){
   const cw = grid.clientWidth || window.innerWidth;
   const isMobile = window.innerWidth <= 600;
-  const baseSpineW = isMobile ? 38 : 46;
-  const estPerRow = Math.max(3, Math.floor((cw - 80) / (baseSpineW + 3)));
+  
+  const spineW = isMobile ? 36 : 46;
+  
+  const estPerRow = Math.max(2, Math.floor((cw - 96) / spineW));
 
   let html = '<div class="ns-shelf-unit">';
   for(let i=0; i<arr.length; i+=estPerRow) {
@@ -2667,7 +2669,6 @@ function renderShelf(grid, arr){
     html += chunk.map((m, idx) => {
       const h = hashStr(m.title+(m.author||''));
       const spineH = 180 + (h % 55);
-      const spineW = isMobile ? (32 + (h % 14)) : (36 + (h % 22));
       const ci = h % SPINE_COLORS.length;
       const ti = h % TEXTURES.length;
       const tex = TEXTURES[ti];
