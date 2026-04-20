@@ -2457,6 +2457,10 @@
         const item = document.createElement('div');
         item.className = `dm-task ${statusClass}`;
         item.style.animationDelay = `${i * 0.05}s`;
+        item.dataset.taskId = task.id;
+        item.dataset.date = task.date;
+        item.dataset.period = task.period;
+        item.dataset.est = task.est;
         
         item.innerHTML = `
           <div class="dm-info">
@@ -2724,14 +2728,55 @@
   });
 
    
-  setInterval(() => {
+  function updateCountdowns() {
     const now = new Date();
     const h = String(now.getHours()).padStart(2, '0');
     const m = String(now.getMinutes()).padStart(2, '0');
     const s = String(now.getSeconds()).padStart(2, '0');
     clockEl.innerText = `${h}:${m}:${s}`;
-    dmRender();
-  }, 1000); 
+
+    
+    const cards = listEl.querySelectorAll('.dm-task[data-task-id]');
+    cards.forEach(card => {
+      const dateStr = card.dataset.date;
+      const period = card.dataset.period;
+      const est = parseInt(card.dataset.est) || 0;
+      if (!dateStr) return;
+      const deadlineDate = getDeadlineDate(dateStr, period);
+      const remaining = deadlineDate.getTime() - now.getTime();
+      const newStatus = getStatusClass(deadlineDate, est);
+
+      
+      const cdEl = card.querySelector('.dm-countdown');
+      if (cdEl) cdEl.textContent = formatTime(remaining);
+
+      
+      const statusClasses = ['status-safe','status-warn','status-danger','status-critical','status-over'];
+      const currentStatus = statusClasses.find(c => card.classList.contains(c));
+      if (currentStatus !== newStatus) {
+        statusClasses.forEach(c => card.classList.remove(c));
+        card.classList.add(newStatus);
+      }
+    });
+
+    
+    let nActive = 0, nDanger = 0, nOver = 0;
+    tasks.forEach(t => {
+      const dl = getDeadlineDate(t.date, t.period);
+      const sc = getStatusClass(dl, t.est);
+      if (sc === 'status-over') nOver++;
+      else {
+        nActive++;
+        if (sc === 'status-danger' || sc === 'status-critical') nDanger++;
+      }
+    });
+    document.getElementById('dm-n-total').textContent  = tasks.length;
+    document.getElementById('dm-n-active').textContent = nActive;
+    document.getElementById('dm-n-danger').textContent = nDanger;
+    document.getElementById('dm-n-done').textContent   = doneTasks.length;
+    document.getElementById('dm-n-over').textContent   = nOver;
+  }
+  setInterval(updateCountdowns, 1000);
 
    
   window.dmSync = dmSync;
