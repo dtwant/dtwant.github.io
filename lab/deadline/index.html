@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "44"
+    "wordCount": "168"
   }]
   </script>
 
@@ -912,7 +912,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
     border-bottom: 1px solid #333;
     padding-bottom: 1.5rem;
   }
@@ -976,6 +976,14 @@
     0%, 100% { filter: brightness(1); }
     50%       { filter: brightness(1.2); }
   }
+
+  .dm-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
   
   .dm-clock-display {
     font-size: 0.9rem;
@@ -985,12 +993,165 @@
   }
 
    
+  .dm-sync-status {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0;
+    letter-spacing: 0.08em;
+    font-family: 'JetBrains Mono', monospace;
+    clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+  }
+  .dm-sync-status.local { background: rgba(100,116,139,0.3); color: #94a3b8; }
+  .dm-sync-status.ok    { background: rgba(34,197,94,0.2);   color: #22c55e; }
+  .dm-sync-status.busy  { background: rgba(250,204,21,0.2);  color: #facc15; }
+  .dm-sync-status.err   { background: rgba(239,68,68,0.2);   color: #ef4444; }
+
+   
+  .dm-hbtn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #a1a1aa;
+    padding: 0.3rem 0.65rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+  }
+  .dm-hbtn:hover {
+    border-color: #22d3ee;
+    color: #22d3ee;
+    box-shadow: 0 0 8px rgba(34,211,238,0.3);
+  }
+
+   
+  .dm-progress-wrap {
+    height: 2px;
+    background: #1a1a2e;
+    margin-bottom: 1rem;
+  }
+  .dm-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #22d3ee, #d946ef);
+    transition: width 0.3s;
+  }
+
+   
+  .dm-stats {
+    display: flex;
+    border: 1px solid #1e293b;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .dm-stat {
+    flex: 1;
+    text-align: center;
+    padding: 0.6rem 0.4rem;
+    border-right: 1px solid #1e293b;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .dm-stat:last-child { border-right: none; }
+  .dm-stat:hover { background: rgba(34,211,238,0.05); }
+  .dm-stat-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #22d3ee;
+    text-shadow: 0 0 6px rgba(34,211,238,0.4);
+  }
+  .dm-stat-num.c-active { color: #facc15; }
+  .dm-stat-num.c-danger { color: #ef4444; }
+  .dm-stat-num.c-done { color: #22c55e; }
+  .dm-stat-num.c-over { color: #6b7280; }
+  .dm-stat-label {
+    font-size: 0.55rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.2rem;
+  }
+
+   
+  .dm-toolbar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .dm-search-wrap {
+    flex: 1;
+    min-width: 150px;
+    position: relative;
+  }
+  .dm-search-wrap .dm-search-icon {
+    position: absolute;
+    left: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: #4b5563;
+    pointer-events: none;
+  }
+  .dm-search {
+    width: 100%;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid #333;
+    border-bottom: 2px solid #22d3ee;
+    color: #e2e8f0;
+    padding: 0.5rem 0.6rem 0.5rem 2rem;
+    font-family: inherit;
+    font-size: 0.8rem;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+  }
+  .dm-search:focus {
+    outline: none;
+    border-color: #d946ef;
+    background: rgba(217,70,239,0.05);
+  }
+  .dm-search::placeholder { color: #4b5563; }
+
+  .dm-filter-tabs {
+    display: flex;
+    gap: 0.25rem;
+  }
+  .dm-tab {
+    background: transparent;
+    border: 1px solid #333;
+    color: #64748b;
+    padding: 0.35rem 0.6rem;
+    font-family: inherit;
+    font-size: 0.6rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .dm-tab:hover { border-color: #22d3ee; color: #22d3ee; }
+  .dm-tab.active { background: rgba(34,211,238,0.15); border-color: #22d3ee; color: #22d3ee; }
+
+  .dm-sort-sel {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid #333;
+    color: #a1a1aa;
+    padding: 0.35rem 0.5rem;
+    font-family: inherit;
+    font-size: 0.65rem;
+    cursor: pointer;
+  }
+  .dm-sort-sel:focus { outline: none; border-color: #22d3ee; }
+
+   
   .dm-form { 
     display: grid; 
      
     grid-template-columns: 2.5fr 1.5fr 1.5fr 1.2fr auto; 
     gap: 15px; 
-    margin-bottom: 3rem; 
+    margin-bottom: 1.5rem; 
     padding: 1.5rem; 
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid #333;
@@ -1056,6 +1217,43 @@
   }
 
    
+  .dm-form-extra {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 1.5rem;
+    padding: 0 1.5rem 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #333;
+    border-top: none;
+    margin-top: -1.5rem;
+    padding-top: 0.75rem;
+  }
+
+  .dm-textarea {
+    width: 100%;
+    min-width: 0;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #333;
+    border-bottom: 2px solid #22d3ee;
+    color: #22d3ee;
+    padding: 0.5rem 0.8rem;
+    font-family: inherit;
+    font-size: 0.8rem;
+    border-radius: 0;
+    transition: all 0.2s;
+    resize: vertical;
+    min-height: 2rem;
+    max-height: 5rem;
+  }
+  .dm-textarea:focus {
+    outline: none;
+    border-color: #d946ef;
+    background: rgba(217, 70, 239, 0.05);
+  }
+  .dm-textarea::placeholder { color: #4b5563; }
+
+   
   .dm-btn-icon {
     background: #18181b;
     border: 1px solid #333;
@@ -1067,6 +1265,7 @@
     font-size: 1.2rem;
     border-radius: 0;
     clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+    transition: all 0.2s;
   }
   .dm-btn-icon:hover {
     border-color: #fff;
@@ -1074,6 +1273,7 @@
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   }
   .dm-btn-check:hover { border-color: #22c55e; color: #22c55e; box-shadow: 0 0 12px rgba(34, 197, 94, 0.5); }
+  .dm-btn-edit:hover { border-color: #facc15; color: #facc15; box-shadow: 0 0 12px rgba(250, 204, 21, 0.5); }
   .dm-btn-del:hover { border-color: #ef4444; color: #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.5); }
 
   .dm-empty { 
@@ -1084,6 +1284,251 @@
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 2px;
+  }
+
+   
+  .dm-task {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 0.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #1e293b;
+    border-left: 3px solid #22c55e;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    animation: dm-task-in 0.3s ease-out;
+  }
+  @keyframes dm-task-in {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .dm-task:hover {
+    background: rgba(34, 211, 238, 0.03);
+    border-color: rgba(34, 211, 238, 0.3);
+  }
+  .dm-task.status-safe { border-left-color: #22c55e; }
+  .dm-task.status-warn { border-left-color: #facc15; background: rgba(250, 204, 21, 0.02); }
+  .dm-task.status-danger { border-left-color: #f97316; background: rgba(249, 115, 22, 0.03); }
+  .dm-task.status-critical { 
+    border-left-color: #ef4444; 
+    background: rgba(239, 68, 68, 0.04);
+    animation: dm-task-in 0.3s ease-out, border-pulse 2s infinite;
+  }
+  .dm-task.status-over { 
+    border-left-color: #6b7280; 
+    opacity: 0.5; 
+  }
+  @keyframes border-pulse {
+    0%, 100% { border-left-color: #ef4444; box-shadow: inset 3px 0 12px rgba(239, 68, 68, 0.3); }
+    50%      { border-left-color: #fca5a5; box-shadow: inset 3px 0 20px rgba(239, 68, 68, 0.6); }
+  }
+
+  .dm-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+  .dm-task-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .dm-task-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  .dm-priority-badge {
+    font-size: 0.5rem;
+    padding: 0.15rem 0.4rem;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    text-transform: uppercase;
+    clip-path: polygon(3px 0, 100% 0, calc(100% - 3px) 100%, 0 100%);
+  }
+  .dm-priority-badge.p-high { background: rgba(239,68,68,0.3); color: #fca5a5; }
+  .dm-priority-badge.p-mid  { background: rgba(250,204,21,0.25); color: #fde68a; }
+  .dm-priority-badge.p-low  { background: rgba(100,116,139,0.3); color: #94a3b8; }
+
+  .dm-category-badge {
+    font-size: 0.5rem;
+    padding: 0.15rem 0.45rem;
+    background: rgba(217,70,239,0.2);
+    color: #e879f9;
+    letter-spacing: 0.05em;
+    clip-path: polygon(3px 0, 100% 0, calc(100% - 3px) 100%, 0 100%);
+  }
+
+  .dm-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: #64748b;
+    flex-wrap: wrap;
+  }
+  .dm-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .dm-task-note {
+    font-size: 0.7rem;
+    color: #64748b;
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    margin-top: 0.15rem;
+  }
+
+   
+  .dm-task-progress {
+    margin-top: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .dm-task-progress-bar {
+    flex: 1;
+    height: 3px;
+    background: #1a1a2e;
+    position: relative;
+    overflow: hidden;
+  }
+  .dm-task-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #22d3ee, #d946ef);
+    transition: width 0.3s;
+  }
+  .dm-task-progress-label {
+    font-size: 0.6rem;
+    color: #64748b;
+    min-width: 2.5rem;
+    text-align: right;
+  }
+
+  .dm-right-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .dm-time-label {
+    font-size: 0.6rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    text-align: right;
+  }
+
+  .dm-countdown {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #22d3ee;
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+    letter-spacing: 0.05em;
+  }
+  .status-warn .dm-countdown { color: #facc15; text-shadow: 0 0 10px rgba(250, 204, 21, 0.5); }
+  .status-danger .dm-countdown { color: #f97316; text-shadow: 0 0 10px rgba(249, 115, 22, 0.5); }
+  .status-critical .dm-countdown { color: #ef4444; text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); animation: countdown-blink 1s infinite; }
+  .status-over .dm-countdown { color: #6b7280; text-shadow: none; text-decoration: line-through; }
+
+  @keyframes countdown-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .dm-actions {
+    display: flex;
+    gap: 0.35rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .dm-task:hover .dm-actions {
+    opacity: 1;
+  }
+
+   
+  .dm-section-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 2rem 0 1rem;
+    color: #4b5563;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .dm-section-divider::before,
+  .dm-section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #1e293b;
+  }
+  .dm-section-divider .dm-section-toggle {
+    background: transparent;
+    border: 1px solid #333;
+    color: #4b5563;
+    padding: 0.2rem 0.5rem;
+    font-family: inherit;
+    font-size: 0.55rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .dm-section-divider .dm-section-toggle:hover {
+    border-color: #22d3ee;
+    color: #22d3ee;
+  }
+
+   
+  .dm-completed-list {
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  .dm-completed-list.collapsed {
+    max-height: 0 !important;
+  }
+  .dm-task-done {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.25rem;
+    background: rgba(34, 197, 94, 0.03);
+    border: 1px solid rgba(34, 197, 94, 0.1);
+    border-left: 3px solid rgba(34, 197, 94, 0.4);
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .dm-task-done:hover { opacity: 0.9; }
+  .dm-task-done .dm-done-title {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    text-decoration: line-through;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .dm-task-done .dm-done-date {
+    font-size: 0.6rem;
+    color: #4b5563;
   }
 
    
@@ -1152,6 +1597,173 @@
   }
 
    
+  .dm-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000010;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    padding: 1rem;
+  }
+  .dm-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .dm-modal {
+    background: #0c0c14;
+    border: 1px solid rgba(34,211,238,0.3);
+    max-width: 480px;
+    width: 100%;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    animation: dm-modal-in 0.25s ease-out;
+    box-shadow: 0 0 60px rgba(0,0,0,0.8), 0 0 30px rgba(34,211,238,0.1);
+  }
+  @keyframes dm-modal-in {
+    from { transform: scale(0.95) translateY(10px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+  }
+  .dm-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #1e293b;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    color: #22d3ee;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .dm-modal-close {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 0.2rem;
+  }
+  .dm-modal-close:hover { color: #ef4444; }
+  .dm-modal-body {
+    padding: 1.25rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .dm-modal-footer {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid #1e293b;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+  .dm-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .dm-field label {
+    font-size: 0.6rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .dm-field .dm-input,
+  .dm-field .dm-select,
+  .dm-field .dm-textarea {
+    clip-path: none;
+    font-size: 0.85rem;
+    padding: 0.6rem 0.75rem;
+  }
+  .dm-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .dm-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #a1a1aa;
+    padding: 0.45rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .dm-btn:hover { border-color: #22d3ee; color: #22d3ee; }
+  .dm-btn.save { background: rgba(34,211,238,0.15); border-color: #22d3ee; color: #22d3ee; }
+  .dm-btn.save:hover { background: rgba(34,211,238,0.3); }
+  .dm-btn.del { border-color: #ef4444; color: #ef4444; }
+  .dm-btn.del:hover { background: rgba(239,68,68,0.15); }
+
+   
+  .dm-settings-panel {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+  }
+  .dm-settings-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    color: #d946ef;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+  .dm-blob-info {
+    font-size: 0.7rem;
+    color: #64748b;
+    line-height: 1.6;
+  }
+  .dm-blob-id-display {
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid #1e293b;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #22d3ee;
+    word-break: break-all;
+    user-select: all;
+  }
+
+   
+  .dm-toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #0c0c14;
+    border: 1px solid #333;
+    padding: 0.6rem 1.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #e2e8f0;
+    z-index: 1000020;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s;
+    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  }
+  .dm-toast.show { transform: translateY(0); opacity: 1; }
+  .dm-toast.ok { border-color: #22c55e; color: #22c55e; }
+  .dm-toast.err { border-color: #ef4444; color: #ef4444; }
+  .dm-toast.info { border-color: #22d3ee; color: #22d3ee; }
+
+   
   @media (max-width: 768px) {
     .dm-root {
       padding: 1rem 0.5rem;
@@ -1168,14 +1780,25 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 0.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
+    .dm-header-right {
+      width: 100%;
+      justify-content: flex-start;
+    }
+    .dm-title { font-size: 1.2rem; }
 
      
     .dm-form {
       grid-template-columns: 1fr;  
       gap: 1rem;
       padding: 1.25rem;
+      margin-bottom: 0;
+    }
+    .dm-form-extra {
+      grid-template-columns: 1fr;
+      margin-top: 0;
+      padding-top: 1rem;
     }
     
     .dm-input, .dm-select {
@@ -1187,6 +1810,26 @@
     .dm-btn-add {
       width: 100%;
       padding: 1rem;  
+    }
+
+    .dm-stats {
+      flex-wrap: wrap;
+    }
+    .dm-stat {
+      flex: 1 0 30%;
+      min-width: 0;
+    }
+    .dm-stat-num { font-size: 1rem; }
+    .dm-stat-label { font-size: 0.45rem; }
+
+    .dm-toolbar {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .dm-search-wrap { width: 100%; }
+    .dm-filter-tabs {
+      width: 100%;
+      overflow-x: auto;
     }
 
      
@@ -1218,6 +1861,24 @@
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
+
+    .dm-modal {
+      max-width: 100%;
+      border-radius: 8px 8px 0 0;
+      border-bottom: none;
+    }
+    .dm-overlay {
+      align-items: flex-end;
+      padding: 0;
+    }
+    .dm-row { grid-template-columns: 1fr; }
+
+    .dm-toast {
+      bottom: 1rem;
+      right: 1rem;
+      left: 1rem;
+      text-align: center;
+    }
   }
 
 </style>
@@ -1228,11 +1889,63 @@
     <div class="dm-title">
       <span>_DEADLINE_SURVIVAL</span>
     </div>
-    <div class="dm-clock-display">
-      SYSTEM_TIME: <span id="dm-clock">--:--</span>
+    <div class="dm-header-right">
+      <span class="dm-sync-status local" id="dm-sync">◉ LOCAL</span>
+      <div class="dm-clock-display">
+        SYS: <span id="dm-clock">--:--</span>
+      </div>
+      <button class="dm-hbtn" onclick="dmOpenSettings()">⚙ CONFIG</button>
+      <button class="dm-hbtn" onclick="dmSync()">⇅ SYNC</button>
     </div>
   </header>
 
+  <div class="dm-progress-wrap"><div class="dm-progress-bar" id="dm-progress-bar"></div></div>
+
+  
+  <div class="dm-stats">
+    <div class="dm-stat" onclick="dmSetFilter('all')">
+      <div class="dm-stat-num" id="dm-n-total">0</div>
+      <div class="dm-stat-label">TOTAL</div>
+    </div>
+    <div class="dm-stat" onclick="dmSetFilter('active')">
+      <div class="dm-stat-num c-active" id="dm-n-active">0</div>
+      <div class="dm-stat-label">ACTIVE</div>
+    </div>
+    <div class="dm-stat" onclick="dmSetFilter('danger')">
+      <div class="dm-stat-num c-danger" id="dm-n-danger">0</div>
+      <div class="dm-stat-label">DANGER</div>
+    </div>
+    <div class="dm-stat" onclick="dmSetFilter('done')">
+      <div class="dm-stat-num c-done" id="dm-n-done">0</div>
+      <div class="dm-stat-label">DONE</div>
+    </div>
+    <div class="dm-stat">
+      <div class="dm-stat-num c-over" id="dm-n-over">0</div>
+      <div class="dm-stat-label">EXPIRED</div>
+    </div>
+  </div>
+
+  
+  <div class="dm-toolbar">
+    <div class="dm-search-wrap">
+      <span class="dm-search-icon">🔍</span>
+      <input type="text" class="dm-search" id="dm-search" placeholder="タスク名 / カテゴリで検索..." oninput="dmRender()">
+    </div>
+    <div class="dm-filter-tabs">
+      <button class="dm-tab active" id="dm-tab-all" onclick="dmSetFilter('all')">ALL</button>
+      <button class="dm-tab" id="dm-tab-active" onclick="dmSetFilter('active')">ACTIVE</button>
+      <button class="dm-tab" id="dm-tab-danger" onclick="dmSetFilter('danger')">DANGER</button>
+      <button class="dm-tab" id="dm-tab-done" onclick="dmSetFilter('done')">DONE</button>
+    </div>
+    <select class="dm-sort-sel" id="dm-sort" onchange="dmRender()">
+      <option value="deadline">締切順</option>
+      <option value="priority">優先度順</option>
+      <option value="added">追加順</option>
+      <option value="est">作業量順</option>
+    </select>
+  </div>
+
+  
   <form id="dm-form" class="dm-form">
     <input type="text" id="task-title" class="dm-input" placeholder="TASK_NAME" required>
     
@@ -1243,15 +1956,34 @@
       <option value="2">2限 (10:30)</option>
       <option value="3">3限 (13:00)</option>
       <option value="4">4限 (14:40)</option>
+      <option value="5">5限 (16:20)</option>
       <option value="end">指定なし (23:59)</option>
     </select>
     
     <input type="number" id="task-est" class="dm-input" placeholder="EST(MIN)" min="10" step="10" required>
     <button type="submit" class="dm-btn-add">ADD</button>
   </form>
+  <div class="dm-form-extra">
+    <select id="task-priority" class="dm-select">
+      <option value="mid">⬡ PRIORITY: MID</option>
+      <option value="high">▲ PRIORITY: HIGH</option>
+      <option value="low">▽ PRIORITY: LOW</option>
+    </select>
+    <input type="text" id="task-category" class="dm-input" placeholder="CATEGORY (例: 数学)">
+    <input type="text" id="task-note" class="dm-input" placeholder="NOTE (メモ)">
+  </div>
 
   <div id="dm-list" class="dm-list">
     
+  </div>
+
+  
+  <div id="dm-done-section" style="display:none;">
+    <div class="dm-section-divider">
+      <span>COMPLETED</span>
+      <button class="dm-section-toggle" id="dm-toggle-done" onclick="dmToggleDone()">▼ 表示</button>
+    </div>
+    <div id="dm-done-list" class="dm-completed-list collapsed"></div>
   </div>
 
   <div class="dm-guide">
@@ -1262,9 +1994,12 @@
         <h3 class="dm-guide-title">SYSTEM_GUIDE</h3>
         <ol class="dm-guide-list">
           <li><strong>TASK_NAME</strong>: 課題名を入力</li>
-          <li><strong>DATE / PERIOD</strong>: 提出日と時限（1〜4限）を選択</li>
+          <li><strong>DATE / PERIOD</strong>: 提出日と時限（1〜5限）を選択</li>
           <li><strong>EST (MIN)</strong>: 完了にかかる推定時間を「分」で入力</li>
-          <li><strong>ADD</strong>: タスク登録</li>
+          <li><strong>PRIORITY</strong>: HIGH / MID / LOW で優先度設定</li>
+          <li><strong>CATEGORY</strong>: 教科名などカテゴリを入力</li>
+          <li><strong>⇅ SYNC</strong>: スマホ/PC間でデータを同期</li>
+          <li><strong>⚙ CONFIG</strong>: Blob ID入力で別端末と連携</li>
         </ol>
       </div>
       <div class="dm-guide-col">
@@ -1279,108 +2014,468 @@
     </div>
     
     <div class="dm-guide-footer">
-      &gt; LOCAL_STORAGE_CONNECTED. DATA_PERSISTENCE_ACTIVE.
+      &gt; CLOUD_SYNC_ENABLED. JSONBIN_CONNECTED. DATA_PERSISTENCE_ACTIVE.
     </div>
   </div>
 </div>
 </div>
 
+
+<div class="dm-toast" id="dm-toast"></div>
+
+
+<div class="dm-overlay" id="dm-overlay-edit">
+  <div class="dm-modal">
+    <div class="dm-modal-header">
+      <span>EDIT TASK</span>
+      <button class="dm-modal-close" onclick="dmCloseEdit()">✕</button>
+    </div>
+    <div class="dm-modal-body">
+      <input type="hidden" id="dm-edit-id">
+      <div class="dm-field">
+        <label>TASK NAME</label>
+        <input type="text" class="dm-input" id="dm-edit-title" placeholder="課題名">
+      </div>
+      <div class="dm-row">
+        <div class="dm-field">
+          <label>DATE</label>
+          <input type="date" class="dm-input" id="dm-edit-date">
+        </div>
+        <div class="dm-field">
+          <label>PERIOD</label>
+          <select class="dm-select" id="dm-edit-period">
+            <option value="1">1限 (08:50)</option>
+            <option value="2">2限 (10:30)</option>
+            <option value="3">3限 (13:00)</option>
+            <option value="4">4限 (14:40)</option>
+            <option value="5">5限 (16:20)</option>
+            <option value="end">指定なし (23:59)</option>
+          </select>
+        </div>
+      </div>
+      <div class="dm-row">
+        <div class="dm-field">
+          <label>EST (MIN)</label>
+          <input type="number" class="dm-input" id="dm-edit-est" min="10" step="10">
+        </div>
+        <div class="dm-field">
+          <label>PRIORITY</label>
+          <select class="dm-select" id="dm-edit-priority">
+            <option value="high">▲ HIGH</option>
+            <option value="mid">⬡ MID</option>
+            <option value="low">▽ LOW</option>
+          </select>
+        </div>
+      </div>
+      <div class="dm-row">
+        <div class="dm-field">
+          <label>CATEGORY</label>
+          <input type="text" class="dm-input" id="dm-edit-category" placeholder="教科名">
+        </div>
+        <div class="dm-field">
+          <label>PROGRESS (%)</label>
+          <input type="number" class="dm-input" id="dm-edit-progress" min="0" max="100" step="5" placeholder="0">
+        </div>
+      </div>
+      <div class="dm-field">
+        <label>NOTE</label>
+        <textarea class="dm-textarea" id="dm-edit-note" placeholder="メモ..."></textarea>
+      </div>
+    </div>
+    <div class="dm-modal-footer">
+      <button class="dm-btn del" id="dm-edit-del" onclick="dmDeleteFromEdit()">🗑 削除</button>
+      <button class="dm-btn" onclick="dmCloseEdit()">CANCEL</button>
+      <button class="dm-btn save" onclick="dmSaveEdit()">SAVE</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="dm-overlay" id="dm-overlay-settings">
+  <div class="dm-modal">
+    <div class="dm-modal-header">
+      <span>⚙ CONFIG</span>
+      <button class="dm-modal-close" onclick="dmCloseSettings()">✕</button>
+    </div>
+    <div class="dm-settings-panel">
+      <div class="dm-settings-title">JSONBIN CLOUD SYNC</div>
+      <div class="dm-blob-info">
+        jsonbin.io を使ってデータをクラウド保存。初回 SYNC で自動作成されます。
+        <b>CONFIG</b> に表示される Blob ID を控えると別端末でも継続使用できます。
+        <div class="dm-blob-id-display" id="dm-blob-id-display">—</div>
+      </div>
+      <div class="dm-field">
+        <label>EXISTING BLOB ID</label>
+        <input type="text" class="dm-input" id="dm-blob-id-input" placeholder="別端末から引き継ぐ場合に入力">
+      </div>
+      <div class="dm-field">
+        <label>EXPORT / IMPORT</label>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <button class="dm-btn" type="button" onclick="dmExport()">⬇ JSON EXPORT</button>
+          <button class="dm-btn" type="button" onclick="document.getElementById('dm-import-file').click()">⬆ JSON IMPORT</button>
+          <input type="file" id="dm-import-file" accept=".json" style="display:none" onchange="dmImport(this)">
+        </div>
+      </div>
+      <div class="dm-field">
+        <label>DANGER ZONE</label>
+        <button class="dm-btn del" type="button" onclick="dmClearAll()">⚠ 全データ削除</button>
+      </div>
+    </div>
+    <div class="dm-modal-footer">
+      <button class="dm-btn" onclick="dmCloseSettings()">CANCEL</button>
+      <button class="dm-btn save" onclick="dmApplySettings()">APPLY</button>
+    </div>
+  </div>
+</div>
+
 <script>
-  (function() {
-    const STORAGE_KEY = 'dt_deadline_v2';
-    let tasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+(function() {
+   
+  const STORAGE_KEY = 'dt_deadline_v5';
+  const DONE_KEY   = 'dt_deadline_done_v5';
+  const BLOB_KEY   = 'dt_deadline_blob_id';
+  const SHORTCODE_BLOB = '';
 
-    const PERIOD_TIMES = {
-      1: "08:50",
-      2: "10:30",
-      3: "13:00",
-      4: "14:40",
-      "end": "23:59"
-    };
+  const PERIOD_TIMES = {
+    1: "08:50",
+    2: "10:30",
+    3: "13:00",
+    4: "14:40",
+    5: "16:20",
+    "end": "23:59"
+  };
 
-    const listEl = document.getElementById('dm-list');
-    const formEl = document.getElementById('dm-form');
-    const clockEl = document.getElementById('dm-clock');
+  const PRIORITY_ORDER = { high: 0, mid: 1, low: 2 };
+  const PRIORITY_LABEL = { high: '▲ HIGH', mid: '⬡ MID', low: '▽ LOW' };
+
+   
+  let tasks = [];
+  let doneTasks = [];
+  let blobId = null;
+  let activeFilter = 'all';
+  let doneExpanded = false;
+
+   
+  const listEl     = document.getElementById('dm-list');
+  const formEl     = document.getElementById('dm-form');
+  const clockEl    = document.getElementById('dm-clock');
+  const searchEl   = document.getElementById('dm-search');
+  const sortEl     = document.getElementById('dm-sort');
+
+   
+  function migrateV2() {
+    try {
+      const oldData = localStorage.getItem('dt_deadline_v2');
+      if (oldData && !localStorage.getItem(STORAGE_KEY)) {
+        const old = JSON.parse(oldData);
+        if (Array.isArray(old) && old.length > 0) {
+          const migrated = old.map(t => ({
+            id: String(t.id),
+            title: t.title,
+            date: t.date,
+            period: t.period,
+            est: t.est,
+            priority: 'mid',
+            category: '',
+            note: '',
+            progress: 0,
+            addedAt: t.id || Date.now(),
+            updatedAt: Date.now()
+          }));
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+        }
+      }
+    } catch(e) {   }
+  }
+
+   
+  function init() {
+    migrateV2();
+    try { tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { tasks = []; }
+    try { doneTasks = JSON.parse(localStorage.getItem(DONE_KEY) || '[]'); } catch(e) { doneTasks = []; }
+    
+    blobId = SHORTCODE_BLOB || localStorage.getItem(BLOB_KEY) || null;
+    if (blobId) {
+      try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+    }
+
+    updateBlobDisplay();
+    dmRender();
+    if (blobId) dmSync(true);
+  }
+
+   
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+  const formatTime = (ms) => {
+    if (ms < 0) return "TIME_OVER";
+    const d = Math.floor(ms / (1000 * 60 * 60 * 24));
+    const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+    const hh = String(h).padStart(2, '0');
+    const mm = String(m).padStart(2, '0');
+    if (d > 0) return `${d}d ${hh}h`;
+    return `${hh}:${mm}`;
+  };
+
+  const getDeadlineDate = (dateStr, period) => {
+    const timeStr = PERIOD_TIMES[period] || "23:59";
+    return new Date(`${dateStr}T${timeStr}`);
+  };
+
+  const getStatusClass = (deadlineDate, estMinutes) => {
+    const now = new Date().getTime();
+    const dueDate = deadlineDate.getTime();
+    const estMs = estMinutes * 60 * 1000;
+    const remaining = dueDate - now;
+    const margin = remaining - estMs;
+
+    if (remaining < 0) return 'status-over';
+    if (margin < 0) return 'status-critical'; 
+    if (margin < 1000 * 60 * 60 * 3) return 'status-danger';
+    if (margin < 1000 * 60 * 60 * 24) return 'status-warn';
+    return 'status-safe';
+  };
+
+  function save() { 
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)); } catch(e) {} 
+    try { localStorage.setItem(DONE_KEY, JSON.stringify(doneTasks.slice(0, 50))); } catch(e) {}  
+  }
+
+   
+  const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const BIN_CREATE_URL = 'https://api.jsonbin.io/v3/b';
+  const JSONBIN_HEADERS = () => ({ 'X-Master-Key': JSONBIN_KEY, 'Content-Type': 'application/json' });
+  const getBinUrl    = () => `https://api.jsonbin.io/v3/b/${blobId}/latest`;
+  const getBinPutUrl = () => `https://api.jsonbin.io/v3/b/${blobId}`;
+
+  function setSyncStatus(cls, txt) { 
+    const e = document.getElementById('dm-sync'); 
+    e.className = 'dm-sync-status ' + cls; 
+    e.textContent = txt; 
+  }
+  function setProgress(p) { document.getElementById('dm-progress-bar').style.width = p + '%'; }
+  function updateBlobDisplay() { document.getElementById('dm-blob-id-display').textContent = blobId ? blobId : '（未設定）'; }
+
+  let toastTimer;
+  function toast(msg, type) {
+    const e = document.getElementById('dm-toast');
+    e.textContent = msg;
+    e.className = 'dm-toast ' + type + ' show';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => e.classList.remove('show'), 2500);
+  }
+
+  function mergeData(local, remote) {
+    const m = {};
+    [...local, ...remote].forEach(x => {
+      if (!m[x.id] || (x.updatedAt || 0) > (m[x.id].updatedAt || 0)) m[x.id] = x;
+    });
+    return Object.values(m);
+  }
+
+  async function dmSync(silent) {
+    if (!silent) setProgress(20);
+    setSyncStatus('busy', '◌ SYNC…');
+    try {
+      const payload = { tasks: tasks, done: doneTasks };
+      if (!blobId) {
+        const res = await fetch(BIN_CREATE_URL, {
+          method: 'POST',
+          headers: { ...JSONBIN_HEADERS(), 'X-Bin-Name': 'deadline_manager' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error(`create failed: ${res.status}`);
+        const json = await res.json();
+        blobId = json.metadata.id;
+        try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+        updateBlobDisplay();
+        setSyncStatus('ok', '◉ SYNCED');
+        if (!silent) { setProgress(100); toast('Bin作成・同期完了', 'ok'); }
+      } else {
+        const r = await fetch(getBinUrl(), { headers: { 'X-Master-Key': JSONBIN_KEY }, cache: 'no-store' });
+        if (!r.ok) {
+          if ([400, 401, 403, 404, 422].includes(r.status)) {
+            blobId = null;
+            try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
+            if (!silent) toast('無効なBin。新規作成します', 'info');
+            return dmSync(silent);
+          }
+          throw new Error(`get failed: ${r.status}`);
+        }
+        const json = await r.json();
+        const rec = json.record || json;
+        const remTasks = Array.isArray(rec.tasks) ? rec.tasks : [];
+        const remDone = Array.isArray(rec.done) ? rec.done : [];
+        tasks = mergeData(tasks, remTasks);
+        doneTasks = mergeData(doneTasks, remDone).slice(0, 50);
+        save();
+        const p = await fetch(getBinPutUrl(), {
+          method: 'PUT',
+          headers: JSONBIN_HEADERS(),
+          body: JSON.stringify({ tasks: tasks, done: doneTasks })
+        });
+        if (!p.ok) {
+          if ([400, 401, 403, 404, 422].includes(p.status)) {
+            blobId = null;
+            try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
+            return dmSync(silent);
+          }
+          throw new Error(`put failed: ${p.status}`);
+        }
+        setSyncStatus('ok', '◉ SYNCED');
+        if (!silent) { setProgress(100); toast('同期完了', 'ok'); }
+        dmRender();
+      }
+    } catch(err) {
+      setSyncStatus('err', '✕ ERR');
+      if (!silent) toast('同期失敗: ' + err.message, 'err');
+    }
+    if (!silent) setTimeout(() => setProgress(0), 600);
+  }
+
+  async function pushBlob(silent = true) {
+    if (!blobId) return;
+    try {
+      const p = await fetch(getBinPutUrl(), {
+        method: 'PUT',
+        headers: JSONBIN_HEADERS(),
+        body: JSON.stringify({ tasks: tasks, done: doneTasks })
+      });
+      if (!p.ok) {
+        if ([400, 401, 403, 404, 422].includes(p.status)) {
+          blobId = null;
+          try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
+          return;
+        }
+      }
+      setSyncStatus('ok', '◉ SYNCED');
+    } catch(e) { setSyncStatus('err', '✕ ERR'); }
+  }
+
+   
+  function getFiltered() {
+    const q = searchEl.value.trim().toLowerCase();
+    const sort = sortEl.value;
+    const now = new Date().getTime();
+
+    let arr = tasks.slice();
 
     
-    const formatTime = (ms) => {
-      if (ms < 0) return "TIME_OVER";
-      
-      const d = Math.floor(ms / (1000 * 60 * 60 * 24));
-      const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-      
-      
-      const hh = String(h).padStart(2, '0');
-      const mm = String(m).padStart(2, '0');
-      
-      if (d > 0) return `${d}d ${hh}h`;
-      return `${hh}:${mm}`;
-    };
-
-    const getDeadlineDate = (dateStr, period) => {
-      const timeStr = PERIOD_TIMES[period] || "23:59";
-      return new Date(`${dateStr}T${timeStr}`);
-    };
-
-    const getStatusClass = (deadlineDate, estMinutes) => {
-      const now = new Date().getTime();
-      const dueDate = deadlineDate.getTime();
-      const estMs = estMinutes * 60 * 1000;
-      
-      const remaining = dueDate - now;
-      const margin = remaining - estMs;
-
-      if (remaining < 0) return 'status-over';
-      if (margin < 0) return 'status-critical'; 
-      if (margin < 1000 * 60 * 60 * 3) return 'status-danger';
-      if (margin < 1000 * 60 * 60 * 24) return 'status-warn';
-      return 'status-safe';
-    };
-
-    const save = () => {
-      tasks.sort((a, b) => {
-        const dateA = getDeadlineDate(a.date, a.period);
-        const dateB = getDeadlineDate(b.date, b.period);
-        return dateA - dateB;
+    if (activeFilter === 'active') {
+      arr = arr.filter(t => {
+        const dl = getDeadlineDate(t.date, t.period);
+        return dl.getTime() > now;
       });
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-      render();
-    };
+    } else if (activeFilter === 'danger') {
+      arr = arr.filter(t => {
+        const dl = getDeadlineDate(t.date, t.period);
+        const sc = getStatusClass(dl, t.est);
+        return sc === 'status-danger' || sc === 'status-critical';
+      });
+    } else if (activeFilter === 'done') {
+      
+    }
 
-    const render = () => {
-      listEl.innerHTML = '';
-      if (tasks.length === 0) {
-        listEl.innerHTML = '<div class="dm-empty">NO ACTIVE TASKS DETECTED<br>// SYSTEM IDLE</div>';
-        return;
+    
+    if (q) {
+      arr = arr.filter(t =>
+        t.title.toLowerCase().includes(q) ||
+        (t.category || '').toLowerCase().includes(q) ||
+        (t.note || '').toLowerCase().includes(q)
+      );
+    }
+
+    
+    arr.sort((a, b) => {
+      if (sort === 'priority') {
+        const pa = PRIORITY_ORDER[a.priority] ?? 1;
+        const pb = PRIORITY_ORDER[b.priority] ?? 1;
+        if (pa !== pb) return pa - pb;
       }
+      if (sort === 'est') return (b.est || 0) - (a.est || 0);
+      if (sort === 'added') return (b.addedAt || 0) - (a.addedAt || 0);
+      
+      const dlA = getDeadlineDate(a.date, a.period);
+      const dlB = getDeadlineDate(b.date, b.period);
+      return dlA - dlB;
+    });
 
-      const now = new Date().getTime();
+    return arr;
+  }
 
-      tasks.forEach(task => {
+  function dmRender() {
+    const now = new Date().getTime();
+    const arr = activeFilter === 'done' ? [] : getFiltered();
+
+    
+    let nActive = 0, nDanger = 0, nOver = 0;
+    tasks.forEach(t => {
+      const dl = getDeadlineDate(t.date, t.period);
+      const sc = getStatusClass(dl, t.est);
+      if (sc === 'status-over') nOver++;
+      else {
+        nActive++;
+        if (sc === 'status-danger' || sc === 'status-critical') nDanger++;
+      }
+    });
+    document.getElementById('dm-n-total').textContent  = tasks.length;
+    document.getElementById('dm-n-active').textContent = nActive;
+    document.getElementById('dm-n-danger').textContent = nDanger;
+    document.getElementById('dm-n-done').textContent   = doneTasks.length;
+    document.getElementById('dm-n-over').textContent   = nOver;
+
+    
+    ['all','active','danger','done'].forEach(k => {
+      const el = document.getElementById('dm-tab-' + k);
+      el.className = 'dm-tab' + (k === activeFilter ? ' active' : '');
+    });
+
+    
+    if (activeFilter === 'done') {
+      listEl.innerHTML = '<div class="dm-empty">// SHOWING COMPLETED TASKS BELOW</div>';
+    } else if (arr.length === 0) {
+      listEl.innerHTML = '<div class="dm-empty">NO ACTIVE TASKS DETECTED<br>// SYSTEM IDLE</div>';
+    } else {
+      listEl.innerHTML = '';
+      arr.forEach((task, i) => {
         const deadlineDate = getDeadlineDate(task.date, task.period);
         const statusClass = getStatusClass(deadlineDate, task.est);
         const remaining = deadlineDate.getTime() - now;
-        
         
         const month = String(deadlineDate.getMonth() + 1).padStart(2, '0');
         const day = String(deadlineDate.getDate()).padStart(2, '0');
         const dueStr = `${month}.${day}`;
         
-        
         let periodDisplay = `P-${task.period}`;
         if (task.period === "end") periodDisplay = "23:59";
 
+        const pClass = task.priority === 'high' ? 'p-high' : task.priority === 'low' ? 'p-low' : 'p-mid';
+        const progress = task.progress || 0;
+
         const item = document.createElement('div');
         item.className = `dm-task ${statusClass}`;
+        item.style.animationDelay = `${i * 0.05}s`;
         
         item.innerHTML = `
           <div class="dm-info">
-            <div class="dm-task-title">${task.title}</div>
+            <div class="dm-task-header">
+              <div class="dm-task-title">${esc(task.title)}</div>
+              <span class="dm-priority-badge ${pClass}">${PRIORITY_LABEL[task.priority] || '⬡ MID'}</span>
+              ${task.category ? `<span class="dm-category-badge">${esc(task.category)}</span>` : ''}
+            </div>
             <div class="dm-meta">
               <span>[DUE] ${dueStr} / ${periodDisplay}</span>
               <span>[EST] ${task.est}m</span>
             </div>
+            ${task.note ? `<div class="dm-task-note">📝 ${esc(task.note)}</div>` : ''}
+            ${progress > 0 ? `
+              <div class="dm-task-progress">
+                <div class="dm-task-progress-bar"><div class="dm-task-progress-fill" style="width:${progress}%"></div></div>
+                <span class="dm-task-progress-label">${progress}%</span>
+              </div>
+            ` : ''}
           </div>
           <div class="dm-right-col">
             <div>
@@ -1388,58 +2483,263 @@
               <div class="dm-countdown">${formatTime(remaining)}</div>
             </div>
             <div class="dm-actions">
-              <button class="dm-btn-icon dm-btn-check" onclick="window.dmDone(${task.id})" title="COMPLETE">✓</button>
-              <button class="dm-btn-icon dm-btn-del" onclick="window.dmDel(${task.id})" title="DELETE">×</button>
+              <button class="dm-btn-icon dm-btn-edit" data-id="${task.id}" title="EDIT">✎</button>
+              <button class="dm-btn-icon dm-btn-check" data-id="${task.id}" title="COMPLETE">✓</button>
+              <button class="dm-btn-icon dm-btn-del" data-id="${task.id}" title="DELETE">×</button>
             </div>
           </div>
         `;
         listEl.appendChild(item);
       });
-    };
 
-    window.dmDone = (id) => {
-      tasks = tasks.filter(t => t.id !== id);
-      save();
-    };
-    window.dmDel = (id) => {
-      if(confirm('CONFIRM DELETION?')) {
-        tasks = tasks.filter(t => t.id !== id);
-        save();
-      }
-    };
-
-    formEl.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const title = document.getElementById('task-title').value;
-      const date = document.getElementById('task-date').value;
-      const period = document.getElementById('task-period').value;
-      const est = parseInt(document.getElementById('task-est').value);
-
-      if (title && date && period && est) {
-        tasks.push({
-          id: Date.now(),
-          title,
-          date,
-          period,
-          est
-        });
-        formEl.reset();
-        save();
-      }
-    });
-
-    setInterval(() => {
-      const now = new Date();
       
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const s = String(now.getSeconds()).padStart(2, '0');
-      clockEl.innerText = `${h}:${m}:${s}`;
-      render();
-    }, 1000); 
+      listEl.querySelectorAll('.dm-btn-edit').forEach(btn => {
+        btn.addEventListener('click', () => dmOpenEdit(btn.dataset.id));
+      });
+      listEl.querySelectorAll('.dm-btn-check').forEach(btn => {
+        btn.addEventListener('click', () => dmDone(btn.dataset.id));
+      });
+      listEl.querySelectorAll('.dm-btn-del').forEach(btn => {
+        btn.addEventListener('click', () => dmDel(btn.dataset.id));
+      });
+    }
 
-    render();
-  })();
+    
+    renderDone();
+  }
+
+  function renderDone() {
+    const doneSection = document.getElementById('dm-done-section');
+    const doneList = document.getElementById('dm-done-list');
+    if (doneTasks.length === 0) {
+      doneSection.style.display = 'none';
+      return;
+    }
+    doneSection.style.display = '';
+    doneList.innerHTML = doneTasks.map(t => `
+      <div class="dm-task-done">
+        <div class="dm-done-title">
+          <span>✓</span>
+          <span>${esc(t.title)}</span>
+          ${t.category ? `<span class="dm-category-badge">${esc(t.category)}</span>` : ''}
+        </div>
+        <div class="dm-done-date">${t.completedAt ? new Date(t.completedAt).toLocaleDateString('ja-JP') : ''}</div>
+      </div>
+    `).join('');
+  }
+
+   
+  function dmDone(id) {
+    const task = tasks.find(t => t.id === id || String(t.id) === id);
+    if (!task) return;
+    doneTasks.unshift({ ...task, completedAt: Date.now() });
+    tasks = tasks.filter(t => t.id !== id && String(t.id) !== id);
+    save();
+    dmRender();
+    pushBlob();
+    toast('タスク完了！', 'ok');
+  }
+
+  function dmDel(id) {
+    if (!confirm('CONFIRM DELETION?')) return;
+    tasks = tasks.filter(t => t.id !== id && String(t.id) !== id);
+    save();
+    dmRender();
+    pushBlob();
+  }
+
+   
+  formEl.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('task-title').value.trim();
+    const date = document.getElementById('task-date').value;
+    const period = document.getElementById('task-period').value;
+    const est = parseInt(document.getElementById('task-est').value);
+    const priority = document.getElementById('task-priority').value;
+    const category = document.getElementById('task-category').value.trim();
+    const note = document.getElementById('task-note').value.trim();
+
+    if (title && date && period && est) {
+      const now = Date.now();
+      tasks.push({
+        id: genId(),
+        title,
+        date,
+        period,
+        est,
+        priority: priority || 'mid',
+        category: category || '',
+        note: note || '',
+        progress: 0,
+        addedAt: now,
+        updatedAt: now
+      });
+      formEl.reset();
+      document.getElementById('task-category').value = '';
+      document.getElementById('task-note').value = '';
+      save();
+      dmRender();
+      pushBlob();
+      toast('タスク追加', 'ok');
+    }
+  });
+
+   
+  window.dmOpenEdit = function(id) {
+    const task = tasks.find(t => t.id === id || String(t.id) === id);
+    if (!task) return;
+    document.getElementById('dm-edit-id').value = task.id;
+    document.getElementById('dm-edit-title').value = task.title;
+    document.getElementById('dm-edit-date').value = task.date;
+    document.getElementById('dm-edit-period').value = task.period;
+    document.getElementById('dm-edit-est').value = task.est;
+    document.getElementById('dm-edit-priority').value = task.priority || 'mid';
+    document.getElementById('dm-edit-category').value = task.category || '';
+    document.getElementById('dm-edit-progress').value = task.progress || 0;
+    document.getElementById('dm-edit-note').value = task.note || '';
+    document.getElementById('dm-overlay-edit').classList.add('open');
+  };
+  window.dmCloseEdit = function() { document.getElementById('dm-overlay-edit').classList.remove('open'); };
+
+  window.dmSaveEdit = function() {
+    const id = document.getElementById('dm-edit-id').value;
+    const idx = tasks.findIndex(t => t.id === id || String(t.id) === id);
+    if (idx < 0) return;
+    tasks[idx] = {
+      ...tasks[idx],
+      title: document.getElementById('dm-edit-title').value.trim(),
+      date: document.getElementById('dm-edit-date').value,
+      period: document.getElementById('dm-edit-period').value,
+      est: parseInt(document.getElementById('dm-edit-est').value) || tasks[idx].est,
+      priority: document.getElementById('dm-edit-priority').value,
+      category: document.getElementById('dm-edit-category').value.trim(),
+      progress: parseInt(document.getElementById('dm-edit-progress').value) || 0,
+      note: document.getElementById('dm-edit-note').value.trim(),
+      updatedAt: Date.now()
+    };
+    save();
+    dmCloseEdit();
+    dmRender();
+    pushBlob();
+    toast('更新しました', 'ok');
+  };
+
+  window.dmDeleteFromEdit = function() {
+    const id = document.getElementById('dm-edit-id').value;
+    if (!id || !confirm('削除しますか？')) return;
+    tasks = tasks.filter(t => t.id !== id && String(t.id) !== id);
+    save();
+    dmCloseEdit();
+    dmRender();
+    pushBlob();
+    toast('削除しました', 'info');
+  };
+
+   
+  window.dmSetFilter = function(f) { activeFilter = f; dmRender(); };
+
+  window.dmToggleDone = function() {
+    const list = document.getElementById('dm-done-list');
+    const btn = document.getElementById('dm-toggle-done');
+    doneExpanded = !doneExpanded;
+    if (doneExpanded) {
+      list.classList.remove('collapsed');
+      btn.textContent = '▲ 隠す';
+    } else {
+      list.classList.add('collapsed');
+      btn.textContent = '▼ 表示';
+    }
+  };
+
+   
+  window.dmOpenSettings = function() {
+    document.getElementById('dm-blob-id-input').value = blobId || '';
+    document.getElementById('dm-overlay-settings').classList.add('open');
+  };
+  window.dmCloseSettings = function() { document.getElementById('dm-overlay-settings').classList.remove('open'); };
+
+  window.dmApplySettings = function() {
+    const v = document.getElementById('dm-blob-id-input').value.trim();
+    if (v && v !== blobId) {
+      blobId = v;
+      try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+      updateBlobDisplay();
+      toast('Blob ID を適用しました', 'ok');
+      dmSync();
+    }
+    dmCloseSettings();
+  };
+
+  window.dmExport = function() {
+    const blob = new Blob([JSON.stringify({ tasks, done: doneTasks }, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'deadline_manager.json';
+    a.click();
+    toast('エクスポート完了', 'ok');
+  };
+
+  window.dmImport = function(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        const importedTasks = Array.isArray(data.tasks) ? data.tasks : (Array.isArray(data) ? data : []);
+        const importedDone = Array.isArray(data.done) ? data.done : [];
+        tasks = mergeData(tasks, importedTasks);
+        doneTasks = mergeData(doneTasks, importedDone).slice(0, 50);
+        save();
+        dmRender();
+        pushBlob();
+        toast(`${importedTasks.length}件インポートしました`, 'ok');
+      } catch(ex) { toast('インポート失敗: 不正なJSON', 'err'); }
+    };
+    reader.readAsText(file);
+    input.value = '';
+  };
+
+  window.dmClearAll = function() {
+    if (!confirm('全データを削除しますか？')) return;
+    tasks = [];
+    doneTasks = [];
+    save();
+    dmRender();
+    pushBlob();
+    toast('全データを削除しました', 'info');
+    dmCloseSettings();
+  };
+
+   
+  ['dm-overlay-edit', 'dm-overlay-settings'].forEach(id => {
+    document.getElementById(id).addEventListener('click', function(e) {
+      if (e.target === this) this.classList.remove('open');
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.dm-overlay.open').forEach(el => el.classList.remove('open'));
+    }
+  });
+
+   
+  setInterval(() => {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    clockEl.innerText = `${h}:${m}:${s}`;
+    dmRender();
+  }, 1000); 
+
+   
+  window.dmSync = dmSync;
+  window.dmRender = dmRender;
+
+   
+  init();
+})();
 </script>
 
     </section>
