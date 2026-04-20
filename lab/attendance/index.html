@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "44"
+    "wordCount": "71"
   }]
   </script>
 
@@ -793,7 +793,6 @@
     <section class="max-w-full mt-6 prose dark:prose-invert">
       
 
-
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
 
@@ -801,12 +800,9 @@
   .ag-root {
     font-family: "Zen Kaku Gothic New", "JetBrains Mono", sans-serif;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
-    margin: 0;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    max-width: none; margin: 0;
     padding: 2rem 1rem;
     background-color: #050508;
     background-image:
@@ -817,56 +813,33 @@
       radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.75) 120%);
     background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% 100%;
     color: #e2e8f0;
-    border: none;
-    border-radius: 0;
+    border: none; border-radius: 0;
     z-index: 999990;
-    overflow-y: auto;
-    overflow-x: hidden;
-    box-sizing: border-box;
-    animation: crt-flicker 0.15s infinite;
-  }
-  @keyframes crt-flicker {
-    0% { opacity: 0.98; }
-    50% { opacity: 1; }
-    100% { opacity: 0.99; }
-  }
-
-  .ag-root > * {
-    position: relative;
-    z-index: 2;
-  }
-  .ag-root *, .ag-root *::before, .ag-root *::after {
+    overflow-y: auto; overflow-x: hidden;
     box-sizing: border-box;
   }
+  .ag-root > * { position: relative; z-index: 2; }
+  .ag-root *, .ag-root *::before, .ag-root *::after { box-sizing: border-box; }
 
    
   .ag-root::after {
     content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-     
-    background: 
-      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px),
-      radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
-    box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
-    pointer-events: none;
-    z-index: 10;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+    pointer-events: none; z-index: 10;
   }
 
    
   .ag-root::before {
     content: "";
-    position: fixed;
-    top: -10%; left: 0; right: 0;
+    position: fixed; top: -10%; left: 0; right: 0;
     height: 10vh;
     background: linear-gradient(to bottom, rgba(16, 185, 129, 0) 0%, rgba(16, 185, 129, 0.1) 50%, rgba(16, 185, 129, 0.5) 100%);
     border-bottom: 2px solid rgba(16, 185, 129, 0.8);
     animation: scan-laser 8s linear infinite;
-    pointer-events: none;
-    z-index: 999999;
+    pointer-events: none; z-index: 999999;
     box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
   }
-
   @keyframes scan-laser {
     0% { transform: translateY(-100%); opacity: 0; }
     5% { opacity: 1; }
@@ -875,9 +848,8 @@
   }
 
   .ag-container {
-    font-family: "JetBrains Mono", "Consolas", "Monaco", "Courier New", monospace;
-    max-width: 900px;
-    width: 100%;
+    font-family: "JetBrains Mono", "Consolas", monospace;
+    max-width: 900px; width: 100%;
     margin: 0 auto;
     background-color: rgba(9, 9, 11, 0.95);
     padding: 2.5rem;
@@ -886,216 +858,130 @@
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(16, 185, 129, 0.05);
     backdrop-filter: blur(4px);
     color: #e2e8f0;
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
   }
 
    
   .ag-container::before, .ag-container::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
+    content: ''; position: absolute;
+    width: 20px; height: 20px;
     border: 2px solid #10b981;
-    z-index: 100;
-    pointer-events: none;
+    z-index: 100; pointer-events: none;
   }
-  .ag-container::before {
-    top: 5px; left: 5px;
-    border-right: none; border-bottom: none;
-  }
-  .ag-container::after {
-    bottom: 5px; right: 5px;
-    border-left: none; border-top: none;
-  }
+  .ag-container::before { top: 5px; left: 5px; border-right: none; border-bottom: none; }
+  .ag-container::after  { bottom: 5px; right: 5px; border-left: none; border-top: none; }
 
    
   .ag-header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-    border-bottom: 1px solid #333;
-    padding-bottom: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 2rem; border-bottom: 1px solid #333;
+    padding-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;
   }
+  .ag-header-left { display: flex; flex-direction: column; gap: 0.25rem; }
   .ag-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #10b981;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    position: relative;
-     
-    text-shadow: 0 0 12px rgba(16, 185, 129, 0.8), 2px 2px 0px rgba(59, 130, 246, 0.4), -2px -2px 0px rgba(16, 185, 129, 0.4);
-    margin-bottom: 0.5rem;
-    animation: ag-glow 3s ease-in-out infinite;
+    font-size: 1.4rem; font-weight: 700;
+    color: #10b981; text-transform: uppercase;
+    letter-spacing: 0.12em;
+    text-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
   }
+  .ag-desc { font-size: 0.75rem; color: #64748b; letter-spacing: 0.05em; }
+  .ag-header-right { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 
-   
-  .ag-title::before, .ag-title::after {
-    content: "ATTENDANCE_MONITOR";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    color: #f1f5f9;
-    background: transparent;
-    overflow: hidden;
-    clip-path: inset(0 0 0 0);
-    pointer-events: none;
+  .ag-sync-badge {
+    font-size: 0.6rem; padding: 0.2rem 0.6rem; letter-spacing: 0.08em;
+    font-family: 'JetBrains Mono', monospace; border-radius: 2px;
   }
-  .ag-title::before {
-    left: 2px;
-    text-shadow: -2px 0 #3b82f6;  
-    animation: text-glitch-1 2s infinite linear alternate-reverse;
-  }
-  .ag-title::after {
-    left: -2px;
-    text-shadow: -2px 0 #10b981;  
-    animation: text-glitch-2 3s infinite linear alternate-reverse;
-  }
-  
-  @keyframes text-glitch-1 {
-    0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
-    20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
-    40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
-    60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
-    80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 1px); }
-    100% { clip-path: inset(30% 0 50% 0); transform: translate(1px, -1px); }
-  }
-  @keyframes text-glitch-2 {
-    0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -1px); }
-    20% { clip-path: inset(30% 0 20% 0); transform: translate(-2px, 1px); }
-    40% { clip-path: inset(70% 0 10% 0); transform: translate(2px, -2px); }
-    60% { clip-path: inset(20% 0 50% 0); transform: translate(-2px, 2px); }
-    80% { clip-path: inset(50% 0 30% 0); transform: translate(1px, -1px); }
-    100% { clip-path: inset(10% 0 80% 0); transform: translate(-1px, 1px); }
-  }
+  .ag-sync-badge.local { background: rgba(100,116,139,0.25); color: #94a3b8; }
+  .ag-sync-badge.ok    { background: rgba(34,197,94,0.2); color: #22c55e; }
+  .ag-sync-badge.busy  { background: rgba(250,204,21,0.2); color: #facc15; }
+  .ag-sync-badge.err   { background: rgba(239,68,68,0.2); color: #ef4444; }
 
-  @keyframes ag-glow {
-    0%, 100% { filter: brightness(1); }
-    50%       { filter: brightness(1.2); }
+  .ag-hbtn {
+    background: transparent; border: 1px solid rgba(255,255,255,0.15);
+    color: #a1a1aa; padding: 0.3rem 0.6rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    cursor: pointer; transition: all 0.25s; letter-spacing: 0.04em;
+    border-radius: 3px;
   }
-  .ag-desc {
-    font-size: 0.8rem;
-    color: #64748b;
-    letter-spacing: 0.05em;
-  }
+  .ag-hbtn:hover { border-color: #10b981; color: #10b981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.2); }
 
    
   .ag-stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 2.5rem;
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 1rem; margin-bottom: 2rem;
   }
   .ag-stat-card {
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid #333;
-    padding: 1.5rem;
-    text-align: center;
+    border: 1px solid #333; padding: 1.25rem;
+    text-align: center; border-radius: 4px;
+    transition: border-color 0.3s;
   }
+  .ag-stat-card:hover { border-color: rgba(16, 185, 129, 0.3); }
   .ag-stat-label {
-    font-size: 0.7rem;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 0.75rem;
+    font-size: 0.65rem; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 0.5rem;
   }
-  .ag-stat-value {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #f1f5f9;
-  }
-  .ag-stat-sub { font-size: 0.8rem; color: #555; font-weight: normal; margin-left: 5px; }
+  .ag-stat-value { font-size: 1.6rem; font-weight: 700; color: #f1f5f9; }
+  .ag-stat-sub { font-size: 0.75rem; color: #555; font-weight: normal; margin-left: 4px; }
 
    
-  .ag-list { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 3rem; }
-  
+  .ag-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
   .ag-item {
     background: rgba(14, 14, 17, 0.8);
-    border: 1px solid #333;
-    padding: 1.5rem;
-    position: relative;
-    border-left: 4px solid #333;
-    transition: all 0.2s;
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+    border: 1px solid #333; padding: 1.25rem;
+    position: relative; border-left: 4px solid #333;
+    transition: all 0.2s; border-radius: 4px;
   }
-  .ag-item:hover {
-    border-color: #555;
-    transform: translateX(4px);
-  }
+  .ag-item:hover { border-color: #555; transform: translateX(3px); }
 
-   
   .ag-delete-btn {
-    position: absolute;
-    top: 1rem; right: 1rem;
-    background: transparent;
-    border: 1px solid #333;
-    color: #64748b;
-    width: 28px; height: 28px;
+    position: absolute; top: 0.75rem; right: 0.75rem;
+    background: transparent; border: 1px solid #333;
+    color: #64748b; width: 26px; height: 26px;
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    z-index: 5;
-    font-size: 1.2rem;
-    line-height: 1;
-    transition: all 0.2s;
+    cursor: pointer; z-index: 5; font-size: 1.1rem;
+    line-height: 1; transition: all 0.2s; border-radius: 3px;
   }
-  .ag-delete-btn:hover {
-    border-color: #ef4444;
-    color: #ef4444;
-    box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
-  }
+  .ag-delete-btn:hover { border-color: #ef4444; color: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
 
-   
   .ag-course-header {
     display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 1.25rem; padding-right: 2.5rem;
+    margin-bottom: 1rem; padding-right: 2.5rem;
   }
-  .ag-course-name { font-weight: 700; color: #e2e8f0; font-size: 1.2rem; }
-  .ag-course-tags { display: flex; gap: 0.75rem; font-size: 0.75rem; }
-  .ag-tag { padding: 4px 8px; background: #1e293b; color: #94a3b8; border: 1px solid #333; }
+  .ag-course-name { font-weight: 700; color: #e2e8f0; font-size: 1.05rem; word-break: break-all; }
+  .ag-course-tags { display: flex; gap: 0.5rem; font-size: 0.7rem; }
+  .ag-tag { padding: 3px 6px; background: #1e293b; color: #94a3b8; border: 1px solid #333; border-radius: 2px; }
 
-   
-  .ag-status-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.5rem; font-weight: bold; }
-  .ag-bar-bg { height: 8px; background: #1e1e24; width: 100%; position: relative; overflow: hidden; border-radius: 4px; }
-  .ag-bar-fill { height: 100%; transition: width 0.3s; box-shadow: 0 0 10px currentColor; border-radius: 4px; }
+  .ag-status-row { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.5rem; font-weight: bold; }
+  .ag-bar-bg { height: 6px; background: #1e1e24; width: 100%; position: relative; overflow: hidden; border-radius: 4px; }
+  .ag-bar-fill { height: 100%; transition: width 0.3s; box-shadow: 0 0 8px currentColor; border-radius: 4px; }
 
-   
   .status-safe { border-left-color: #10b981; }
   .status-safe .status-text { color: #10b981; }
   .status-safe .ag-bar-fill { background: #10b981; color: #10b981; }
-
   .status-danger { border-left-color: #f97316; }
   .status-danger .status-text { color: #f97316; }
   .status-danger .ag-bar-fill { background: #f97316; color: #f97316; }
-
-  .status-failed { 
-    border-left-color: #ef4444; 
-    box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.1);
-  }
+  .status-failed { border-left-color: #ef4444; box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.1); }
   .status-failed .status-text { color: #ef4444; text-shadow: 0 0 5px rgba(239, 68, 68, 0.6); animation: text-blink 2s infinite; }
   .status-failed .ag-bar-fill { background: #ef4444; color: #ef4444; }
-
   @keyframes text-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 
    
-  .ag-controls { display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; margin-top: 1.5rem; }
+  .ag-controls { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.5rem; margin-top: 0.75rem; }
   .ag-btn {
-    background: #000;
-    border: 1px solid #333;
-    color: #94a3b8;
-    padding: 0.8rem;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
+    background: #000; border: 1px solid #333;
+    color: #94a3b8; padding: 0.55rem 0.4rem;
+    font-family: inherit; font-size: 0.8rem;
+    font-weight: bold; cursor: pointer; transition: all 0.2s;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    line-height: 1.2;
-    clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+    line-height: 1.2; border-radius: 4px;
   }
-  .ag-btn-sub { font-size: 0.7rem; opacity: 0.7; font-weight: normal; }
-
+  .ag-btn-sub { font-size: 0.6rem; opacity: 0.7; font-weight: normal; }
   .ag-btn:hover:not(:disabled) { border-color: #e2e8f0; color: #e2e8f0; }
   .ag-btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: #222; }
-
   .ag-btn-late:hover:not(:disabled) { border-color: #facc15; color: #facc15; box-shadow: 0 0 10px rgba(250, 204, 21, 0.2); }
   .ag-btn-absent:hover:not(:disabled) { border-color: #f97316; color: #f97316; box-shadow: 0 0 10px rgba(249, 115, 22, 0.2); }
   .ag-btn-undo:hover { border-color: #10b981; color: #10b981; }
@@ -1103,236 +989,243 @@
    
   .ag-form {
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid #333;
-    padding: 2rem;
-    margin-top: 2rem;
+    border: 1px solid #333; padding: 1.5rem;
+    margin-top: 1.5rem; border-radius: 4px;
   }
   .ag-form-title {
-    font-size: 1rem; font-weight: bold; color: #10b981; margin-bottom: 1.5rem;
+    font-size: 0.9rem; font-weight: bold; color: #10b981; margin-bottom: 1.25rem;
     text-transform: uppercase; letter-spacing: 1px;
   }
-  .ag-input-row { display: grid; grid-template-columns: 3fr 1fr; gap: 15px; margin-bottom: 15px; }
-  
+  .ag-input-row { display: grid; grid-template-columns: 3fr 1fr; gap: 12px; margin-bottom: 12px; }
   .ag-input {
     width: 100%; min-width: 0;
-    background: rgba(0, 0, 0, 0.6); 
-    border: 1px solid #333; 
-    border-bottom: 2px solid #10b981;
-    color: #10b981;
-    padding: 0.8rem; font-family: inherit; border-radius: 0;
-    font-size: 1rem;
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #333; border-bottom: 2px solid #10b981;
+    color: #10b981; padding: 0.7rem; font-family: inherit;
+    border-radius: 3px; font-size: 0.95rem; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .ag-input:focus { outline: none; border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+  .ag-input:focus { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); box-shadow: 0 0 12px rgba(59, 130, 246, 0.3); }
 
-   
-  .ag-radio-group { display: flex; gap: 15px; margin-bottom: 1.5rem; }
-  
-  .ag-radio-wrapper {
-    flex: 1; display: block; cursor: pointer;
-  }
-  
+  .ag-radio-group { display: flex; gap: 10px; margin-bottom: 1.25rem; }
+  .ag-radio-wrapper { flex: 1; display: block; cursor: pointer; }
   .ag-radio-input { display: none; }
-  
   .ag-radio-label {
-    display: block; text-align: center; padding: 0.8rem;
+    display: block; text-align: center; padding: 0.65rem;
     border: 1px solid #333; background: #000; color: #64748b;
-    font-size: 0.9rem; transition: all 0.2s; font-weight: bold;
+    font-size: 0.85rem; transition: all 0.2s; font-weight: bold;
+    border-radius: 3px;
   }
-
   .ag-radio-input:checked + .ag-radio-label {
-    border-color: #10b981; color: #10b981; 
+    border-color: #10b981; color: #10b981;
     background: rgba(16, 185, 129, 0.1);
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
   }
-
   .ag-submit {
     width: 100%; background: transparent; color: #10b981;
-    border: 1px solid #10b981; padding: 1rem;
+    border: 1px solid #10b981; padding: 0.85rem;
     font-family: 'Orbitron', sans-serif; font-weight: 700; cursor: pointer;
     text-transform: uppercase; letter-spacing: 2px; transition: all 0.2s;
-    font-size: 1rem;
-    position: relative;
-    overflow: hidden;
-    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    font-size: 0.9rem; border-radius: 4px; position: relative; overflow: hidden;
   }
   .ag-submit::before {
-    content: '';
-    position: absolute;
+    content: ''; position: absolute;
     top: 0; left: -100%; width: 100%; height: 100%;
     background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.4), transparent);
     transition: all 0.4s;
   }
-  .ag-submit:hover::before {
-    left: 100%;
-  }
-  .ag-submit:hover { 
-    background: rgba(16, 185, 129, 0.2); 
-    color: #fff; 
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.8), inset 0 0 10px rgba(16, 185, 129, 0.4); 
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  .ag-submit:hover::before { left: 100%; }
+  .ag-submit:hover {
+    background: rgba(16, 185, 129, 0.2); color: #fff;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.8), inset 0 0 10px rgba(16, 185, 129, 0.4);
   }
 
    
   .ag-guide {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px dashed #333;
-    font-size: 0.85rem;
-    color: #94a3b8;
-    font-family: "Zen Kaku Gothic New", sans-serif;
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px dashed #333; font-size: 0.8rem;
+    color: #94a3b8; font-family: "Zen Kaku Gothic New", sans-serif;
   }
-  .ag-guide-desc {
-    margin-bottom: 2rem;
-    text-align: center;
-    color: #a1a1aa;
-    letter-spacing: 0.05em;
-  }
-  .ag-guide-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 2rem;
-  }
+  .ag-guide-desc { margin-bottom: 1.5rem; text-align: center; color: #a1a1aa; letter-spacing: 0.05em; }
+  .ag-guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
   .ag-guide-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1rem;
-    color: #10b981;
-    margin-bottom: 1rem;
-    margin-top: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    font-family: 'Orbitron', sans-serif; font-size: 0.9rem;
+    color: #10b981; margin-bottom: 0.75rem; margin-top: 0;
+    text-transform: uppercase; letter-spacing: 0.1em;
   }
-  .ag-guide-list {
-    margin: 0;
-    padding-left: 1.5rem;
-    line-height: 1.8;
-  }
-  .ag-guide-list li {
-    margin-bottom: 0.5rem;
-  }
-  .ag-guide-list strong {
-    color: #e2e8f0;
-    font-family: "JetBrains Mono", monospace;
-  }
-  .ag-guide-highlight {
-    color: #10b981;
-    font-weight: bold;
-    font-family: "JetBrains Mono", monospace;
-  }
-  .ag-guide-danger {
-    color: #ef4444;
-    font-weight: bold;
-    font-family: "JetBrains Mono", monospace;
-  }
-  .ag-guide-footer {
-    text-align: center;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.75rem;
-    color: #64748b;
-  }
-
+  .ag-guide-list { margin: 0; padding-left: 1.5rem; line-height: 1.8; }
+  .ag-guide-list li { margin-bottom: 0.4rem; }
+  .ag-guide-list strong { color: #e2e8f0; font-family: "JetBrains Mono", monospace; }
+  .ag-guide-highlight { color: #10b981; font-weight: bold; font-family: "JetBrains Mono", monospace; }
+  .ag-guide-danger { color: #ef4444; font-weight: bold; font-family: "JetBrains Mono", monospace; }
+  .ag-guide-footer { text-align: center; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #64748b; }
 
    
-  @media (max-width: 640px) {
-    .ag-root {
-      padding: 1rem 0.5rem;
-    }
-    .ag-container {
-      padding: 1.25rem 1rem;  
-      width: 100%;
-      margin: 0;
-      border-radius: 0;
-      border-left: none;
-      border-right: none;
-    }
+  .ag-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(3,3,8,0.85); backdrop-filter: blur(8px);
+    z-index: 1000001;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .ag-overlay.open { opacity: 1; pointer-events: auto; }
+  .ag-modal {
+    background: #0c0c10;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 8px; padding: 1.75rem;
+    width: 92%; max-width: 480px;
+    box-shadow: 0 8px 60px rgba(0,0,0,0.8), 0 0 40px rgba(16, 185, 129, 0.08);
+    max-height: 85vh; overflow-y: auto;
+    animation: ag-modal-in 0.3s ease;
+  }
+  @keyframes ag-modal-in { from { transform: translateY(20px) scale(0.97); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+  .ag-modal-title {
+    font-family: 'Orbitron', sans-serif; color: #f1f5f9; font-size: 1rem;
+    margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;
+    padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.08);
+    letter-spacing: 0.08em;
+  }
+  .ag-section-label {
+    font-size: 0.65rem; color: #64748b; text-transform: uppercase;
+    letter-spacing: 0.1em; margin-bottom: 0.5rem; margin-top: 1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .ag-section-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+  .ag-modal-footer {
+    display: flex; justify-content: flex-end; gap: 0.5rem;
+    margin-top: 1.25rem; padding-top: 0.75rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .ag-mbtn {
+    background: transparent; border: 1px solid rgba(255,255,255,0.15);
+    color: #a1a1aa; padding: 0.4rem 0.8rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    cursor: pointer; transition: all 0.2s; border-radius: 3px;
+  }
+  .ag-mbtn:hover { border-color: #10b981; color: #10b981; }
+  .ag-mbtn.save { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.4); color: #10b981; }
+  .ag-mbtn.save:hover { background: rgba(16, 185, 129, 0.25); }
+  .ag-mbtn.del { border-color: rgba(239,68,68,0.3); color: #ef4444; }
+  .ag-mbtn.del:hover { background: rgba(239,68,68,0.1); }
 
-     
-    .ag-stats {
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-    }
-    .ag-stat-card { padding: 1rem; }
-
-     
-    .ag-item { padding: 1.25rem; }
-    .ag-course-header {
-      flex-direction: column;  
-      align-items: flex-start;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      padding-right: 0;  
-    }
-    .ag-course-name { 
-      font-size: 1.1rem; 
-      width: 100%; 
-      padding-right: 2rem;  
-    }
-    
-     
-    .ag-form { padding: 1.25rem; }
-    .ag-input-row {
-      grid-template-columns: 1fr;  
-      gap: 10px;
-    }
-    
-     
-    .ag-controls { gap: 0.5rem; }
-    .ag-btn { padding: 0.8rem 0.2rem; font-size: 0.85rem; }
-    
-    .ag-radio-group { gap: 10px; }
-    .ag-radio-label { padding: 0.6rem; font-size: 0.8rem; }
-    
-    .ag-guide-grid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
+  .ag-blob-display {
+    margin-top: 0.5rem; padding: 0.4rem 0.6rem;
+    background: rgba(0,0,0,0.4); border: 1px solid #1e293b;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    color: #10b981; word-break: break-all; user-select: all;
+    border-radius: 3px;
   }
 
+   
+  .ag-toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: rgba(12,12,16,0.95); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px; padding: 0.7rem 1.1rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #e2e8f0;
+    transform: translateY(80px); opacity: 0; transition: all 0.35s; z-index: 9999999;
+  }
+  .ag-toast.show { transform: translateY(0); opacity: 1; }
+  .ag-toast.ok   { border-color: rgba(34,197,94,0.4); box-shadow: 0 4px 20px rgba(34,197,94,0.15); }
+  .ag-toast.err  { border-color: rgba(239,68,68,0.4); box-shadow: 0 4px 20px rgba(239,68,68,0.15); }
+  .ag-toast.info { border-color: rgba(16,185,129,0.4); box-shadow: 0 4px 20px rgba(16,185,129,0.15); }
+
+   
+  @media (max-width: 768px) {
+    .ag-root { padding: 1rem 0.25rem; }
+    .ag-container {
+      padding: 1rem 0.75rem; width: 100%; margin: 0;
+      border-radius: 0; border-left: none; border-right: none;
+    }
+    .ag-title { font-size: 1.1rem; letter-spacing: 0.08em; }
+    .ag-desc { font-size: 0.65rem; }
+    .ag-header { margin-bottom: 1.5rem; padding-bottom: 0.75rem; }
+
+    .ag-stats { gap: 0.5rem; margin-bottom: 1.5rem; }
+    .ag-stat-card { padding: 0.75rem 0.5rem; }
+    .ag-stat-value { font-size: 1.4rem; }
+    .ag-stat-label { font-size: 0.55rem; }
+
+    .ag-item { padding: 1rem; }
+    .ag-course-header {
+      flex-direction: column; align-items: flex-start;
+      gap: 0.4rem; margin-bottom: 0.75rem; padding-right: 2rem;
+    }
+    .ag-course-name { font-size: 0.95rem; width: 100%; }
+    .ag-course-tags { gap: 0.4rem; }
+    .ag-tag { font-size: 0.65rem; padding: 2px 5px; }
+
+    .ag-controls { gap: 0.4rem; margin-top: 0.6rem; }
+    .ag-btn { padding: 0.45rem 0.3rem; font-size: 0.75rem; }
+    .ag-btn-sub { font-size: 0.55rem; }
+    .ag-delete-btn { top: 0.6rem; right: 0.6rem; width: 24px; height: 24px; font-size: 1rem; }
+
+    .ag-form { padding: 1rem; margin-top: 1.25rem; }
+    .ag-form-title { font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .ag-input-row { grid-template-columns: 1fr; gap: 8px; }
+    .ag-input { padding: 0.55rem; font-size: 16px; }
+    .ag-radio-group { gap: 8px; }
+    .ag-radio-label { padding: 0.5rem; font-size: 0.75rem; }
+    .ag-submit { padding: 0.7rem; font-size: 0.8rem; }
+
+    .ag-guide { margin-top: 1.5rem; font-size: 0.75rem; }
+    .ag-guide-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .ag-guide-title { font-size: 0.8rem; }
+
+    .ag-modal { padding: 1.25rem; border-radius: 6px; }
+    .ag-toast { bottom: 12px; left: 12px; right: 12px; text-align: center; }
+  }
+
+  @media (max-width: 400px) {
+    .ag-container { padding: 0.75rem 0.5rem; }
+    .ag-title { font-size: 0.95rem; }
+    .ag-stat-value { font-size: 1.2rem; }
+    .ag-stat-label { font-size: 0.5rem; }
+    .ag-course-name { font-size: 0.85rem; }
+    .ag-btn { font-size: 0.7rem; padding: 0.4rem 0.2rem; }
+  }
 </style>
 
 <div class="ag-root">
 <div class="ag-container">
   <header class="ag-header">
-    <div class="ag-title">ATTENDANCE_MONITOR</div>
-    <div class="ag-desc">STATUS: MONITORING ACTIVE</div>
+    <div class="ag-header-left">
+      <div class="ag-title">出欠モニター</div>
+      <div class="ag-desc">欠課時数の管理・記録ツール</div>
+    </div>
+    <div class="ag-header-right">
+      <span class="ag-sync-badge local" id="ag-sync">◌ LOCAL</span>
+      <button class="ag-hbtn" onclick="agSyncCloud()">⟳ SYNC</button>
+      <button class="ag-hbtn" onclick="agOpenSettings()">⚙ CONFIG</button>
+    </div>
   </header>
 
-  <div class="ag-stats" id="ag-stats">
-    
-  </div>
+  <div class="ag-stats" id="ag-stats"></div>
 
-  <div id="ag-course-list" class="ag-list">
-    
-  </div>
+  <div id="ag-course-list" class="ag-list"></div>
 
   <div class="ag-form">
-    <div class="ag-form-title">>> REGISTER_NEW_SUBJECT</div>
+    <div class="ag-form-title">>> 科目を追加</div>
     <form id="ag-add-form">
       <div class="ag-input-row">
-        <input type="text" id="new-name" class="ag-input" placeholder="SUBJECT_NAME" required>
-        <input type="number" id="new-credit" class="ag-input" placeholder="CREDIT" value="2" min="1" required>
+        <input type="text" id="new-name" class="ag-input" placeholder="科目名" required>
+        <input type="number" id="new-credit" class="ag-input" placeholder="単位数" value="2" min="1" required>
       </div>
-      
       <div class="ag-radio-group">
         <label class="ag-radio-wrapper">
           <input type="radio" name="term-type" value="half" class="ag-radio-input" checked>
-          <span class="ag-radio-label">HALF TERM</span>
+          <span class="ag-radio-label">半期</span>
         </label>
         <label class="ag-radio-wrapper">
           <input type="radio" name="term-type" value="full" class="ag-radio-input">
-          <span class="ag-radio-label">FULL YEAR</span>
+          <span class="ag-radio-label">通年</span>
         </label>
       </div>
-
-      <button type="submit" class="ag-submit">INITIALIZE</button>
+      <button type="submit" class="ag-submit">追加</button>
     </form>
   </div>
 
   <div class="ag-guide">
-    <div class="ag-guide-desc">出席管理ツール. ブラウザにデータが保存される.</div>
-    
+    <div class="ag-guide-desc">出席管理ツール. クラウド同期でスマホ/PCで共有可能.</div>
     <div class="ag-guide-grid">
       <div class="ag-guide-col">
         <h3 class="ag-guide-title">🛡️ 設定 / 落単ライン</h3>
@@ -1340,7 +1233,7 @@
           <li><span style="display:inline-block; width:20px;">迟</span><strong>遅刻</strong>: <span class="ag-guide-highlight">-1</span> 点</li>
           <li><span style="display:inline-block; width:20px;">欠</span><strong>欠席</strong>: <span class="ag-guide-danger">-2</span> 点</li>
         </ul>
-        <div style="margin-top: 1rem;">
+        <div style="margin-top: 0.75rem;">
           <strong>⚠️ 落単ライン</strong>
           <ul class="ag-guide-list">
             <li><strong>半期科目</strong>: <span class="ag-guide-danger">-7</span> でアウト（-6まではセーフ）</li>
@@ -1351,202 +1244,387 @@
       <div class="ag-guide-col">
         <h3 class="ag-guide-title">📝 使い方</h3>
         <ol class="ag-guide-list">
-          <li><strong>科目追加</strong>: 上のフォームに「科目名」と「単位数」を入力し、半期か通年かを選んで追加する.</li>
-          <li><strong>記録</strong>: 遅刻あるいは欠席したら，その科目の対応するボタンを押して記録する.</li>
-          <li><strong>修正</strong>: 間違えてボタンを押した場合は「↺」ボタンで1ポイント修正できる.</li>
-          <li><strong>削除</strong>: 科目の右上の「×」ボタンでリストから削除できる.</li>
+          <li><strong>科目追加</strong>: 科目名と単位数を入力し、半期/通年を選んで追加.</li>
+          <li><strong>記録</strong>: 遅刻・欠席したら対応するボタンを押す.</li>
+          <li><strong>修正</strong>: 「↺」ボタンで1ポイント修正.</li>
+          <li><strong>同期</strong>: ⟳ SYNCで他端末と共有. ⚙ CONFIGでBlob ID入力で引継ぎ.</li>
         </ol>
       </div>
     </div>
-    
     <div class="ag-guide-footer">
-      &gt; ※ このデータはあなたのブラウザ(localStorage)にのみ保存される.キャッシュをクリアすると消える場合があるので注意.
+      &gt; ※ localStorageとクラウド(jsonbin.io)の両方に保存. 初回SYNCで自動作成.
     </div>
   </div>
 
 </div>
 </div>
 
+
+<div class="ag-overlay" id="ag-ov-settings">
+  <div class="ag-modal">
+    <div class="ag-modal-title"><span>⚙</span> SYSTEM CONFIG</div>
+    <div class="ag-section-label">Cloud Sync</div>
+    <div style="margin-bottom:1rem;">
+      <div style="font-size:0.65rem; color:#64748b; line-height:1.6; margin-bottom:0.5rem;">
+        jsonbin.ioを使って複数端末間でデータを共有します。初回SYNCで自動作成されます。
+        表示されるBlob IDを控えると別端末でも継続使用できます。
+      </div>
+      <div class="ag-blob-display" id="ag-blob-display">（未設定）</div>
+    </div>
+    <div class="ag-section-label">既存のBlob ID</div>
+    <input type="text" class="ag-input" id="ag-blob-input" placeholder="別端末のBlob IDを入力" style="margin-bottom:1rem; width:100%;">
+
+    <div class="ag-section-label">データ管理</div>
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+      <button class="ag-mbtn" onclick="agExport()">📤 エクスポート</button>
+      <label class="ag-mbtn" style="cursor:pointer;">📥 インポート<input type="file" accept=".json" style="display:none" onchange="agImport(this)"></label>
+      <button class="ag-mbtn del" onclick="agClearAll()">🗑 全削除</button>
+    </div>
+
+    <div class="ag-modal-footer">
+      <button class="ag-mbtn" onclick="agCloseSettings()">キャンセル</button>
+      <button class="ag-mbtn save" onclick="agApplySettings()">適用</button>
+    </div>
+  </div>
+</div>
+
+<div class="ag-toast" id="ag-toast"></div>
+
 <script>
-  (function() {
-    
-    const STORAGE_KEY = 'dt_attendance_v2'; 
-    const RULES = {
-      half: { limit: -6, fail: -7, danger: -5, label: 'HALF' },
-      full: { limit: -12, fail: -13, danger: -10, label: 'FULL' }
-    };
+(function() {
+   
+  const STORAGE_KEY = 'dt_attendance_v2';
+  const BLOB_KEY = 'dt_attendance_blob';
+  const SC_BLOB = '';
+  const RULES = {
+    half: { limit: -6, fail: -7, danger: -5, label: '半期' },
+    full: { limit: -12, fail: -13, danger: -10, label: '通年' }
+  };
 
-    
-    let courses = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [
-      { id: 1, name: 'SAMPLE: PHYSICS', type: 'half', credit: 2, current: 0 }
-    ];
+   
+  let courses = [];
+  let blobId = null;
 
-    
-    const listEl = document.getElementById('ag-course-list');
-    const statsEl = document.getElementById('ag-stats');
-    const formEl = document.getElementById('ag-add-form');
+   
+  const listEl = document.getElementById('ag-course-list');
+  const statsEl = document.getElementById('ag-stats');
+  const formEl = document.getElementById('ag-add-form');
 
-    
-    function saveData() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(courses));
-      render();
+   
+  let toastTimer;
+  function toast(msg, type) {
+    const e = document.getElementById('ag-toast');
+    e.textContent = msg; e.className = 'ag-toast ' + (type||'info') + ' show';
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => e.classList.remove('show'), 2500);
+  }
+  function setSS(cls, txt) {
+    const e = document.getElementById('ag-sync');
+    e.className = 'ag-sync-badge ' + cls; e.textContent = txt;
+  }
+  function updateBlobDisplay() {
+    document.getElementById('ag-blob-display').textContent = blobId || '（未設定）';
+  }
+
+   
+  function init() {
+    try { courses = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { courses = []; }
+    if (courses.length === 0 && !localStorage.getItem(STORAGE_KEY)) {
+      courses = [{ id: 1, name: 'サンプル: 物理', type: 'half', credit: 2, current: 0 }];
     }
+    blobId = SC_BLOB || localStorage.getItem(BLOB_KEY) || null;
+    if (blobId) try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+    updateBlobDisplay();
+    render();
+    if (blobId) agSyncCloud(true);
+  }
 
-    
-    function getStatusInfo(current, type) {
-      const rule = RULES[type];
-      
-      if (current <= rule.fail) {
-        return { label: 'CRITICAL FAILURE', class: 'status-failed', percent: 100 };
-      }
-      if (current <= rule.danger) {
-        return { label: 'DANGER', class: 'status-danger', percent: 90 };
-      }
-      const ratio = current / rule.limit;
-      const percent = Math.min(Math.max(ratio * 100, 5), 100);
-      return { label: 'STABLE', class: 'status-safe', percent: percent };
-    }
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(courses)); } catch(e) {}
+  }
+  function saveAndRender() { save(); render(); }
 
-    
-    function renderStats() {
-      const totalCredits = courses.reduce((acc, c) => acc + c.credit, 0);
-      const totalCourses = courses.length;
-      
-      const dangerCount = courses.filter(c => {
-        const rule = RULES[c.type];
-        return c.current <= rule.danger && c.current > rule.fail;
-      }).length;
+   
+  function render() { renderStats(); renderList(); }
 
-      const failCount = courses.filter(c => {
-        const rule = RULES[c.type];
-        return c.current <= rule.fail;
-      }).length;
+  function getStatusInfo(current, type) {
+    const rule = RULES[type];
+    if (current <= rule.fail) return { label: '落単', class: 'status-failed', percent: 100 };
+    if (current <= rule.danger) return { label: '危険', class: 'status-danger', percent: 90 };
+    const ratio = current / rule.limit;
+    const percent = Math.min(Math.max(ratio * 100, 5), 100);
+    return { label: '安全', class: 'status-safe', percent: percent };
+  }
 
-      statsEl.innerHTML = `
-        <div class="ag-stat-card">
-          <div class="ag-stat-label">TOTAL CREDITS</div>
-          <div class="ag-stat-value">${totalCredits}<span class="ag-stat-sub">(${totalCourses})</span></div>
+  function renderStats() {
+    const totalCredits = courses.reduce((acc, c) => acc + c.credit, 0);
+    const totalCourses = courses.length;
+
+    const dangerCount = courses.filter(c => {
+      const rule = RULES[c.type];
+      return c.current <= rule.danger && c.current > rule.fail;
+    }).length;
+    const failCount = courses.filter(c => {
+      const rule = RULES[c.type];
+      return c.current <= rule.fail;
+    }).length;
+
+    statsEl.innerHTML = `
+      <div class="ag-stat-card">
+        <div class="ag-stat-label">総単位数</div>
+        <div class="ag-stat-value">${totalCredits}<span class="ag-stat-sub">(${totalCourses}科目)</span></div>
+      </div>
+      <div class="ag-stat-card">
+        <div class="ag-stat-label">警告 / 落単</div>
+        <div class="ag-stat-value">
+          <span style="color:${dangerCount > 0 ? '#f97316' : '#555'}">${dangerCount}</span>
+          <span style="color:#333; margin:0 5px">/</span>
+          <span style="color:${failCount > 0 ? '#ef4444' : '#555'}">${failCount}</span>
         </div>
-        <div class="ag-stat-card">
-          <div class="ag-stat-label">WARNINGS / ERRORS</div>
-          <div class="ag-stat-value">
-            <span style="color:${dangerCount > 0 ? '#f97316' : '#555'}">${dangerCount}</span>
-            <span style="color:#333; margin:0 5px">/</span>
-            <span style="color:${failCount > 0 ? '#ef4444' : '#555'}">${failCount}</span>
+      </div>
+    `;
+  }
+
+  function renderList() {
+    listEl.innerHTML = '';
+    if (courses.length === 0) {
+      listEl.innerHTML = '<div style="text-align:center; padding:2.5rem; color:#444; border:1px dashed #333; border-radius:4px;">科目が登録されていません</div>';
+      return;
+    }
+    courses.forEach(course => {
+      const rule = RULES[course.type];
+      const status = getStatusInfo(course.current, course.type);
+      const isFailed = course.current <= rule.fail;
+
+      const used = Math.abs(course.current);
+      const max = Math.abs(rule.limit);
+      const percent = Math.min((used / max) * 100, 100);
+
+      const item = document.createElement('div');
+      item.className = `ag-item ${status.class}`;
+      item.innerHTML = `
+        <button class="ag-delete-btn" onclick="window.agDelete(${course.id})" title="削除">×</button>
+        <div class="ag-course-header">
+          <div class="ag-course-name">${course.name}</div>
+          <div class="ag-course-tags">
+            <span class="ag-tag">${course.credit} 単位</span>
+            <span class="ag-tag">${rule.label}</span>
           </div>
+        </div>
+        <div class="ag-status-row">
+          <span class="status-text">${status.label}</span>
+          <span style="font-family:monospace">
+            <span style="color:#e2e8f0; font-size:1.1em">${course.current}</span>
+            <span style="color:#555"> / ${rule.fail}</span>
+          </span>
+        </div>
+        <div class="ag-bar-bg">
+          <div class="ag-bar-fill" style="width: ${percent}%"></div>
+        </div>
+        <div class="ag-controls">
+          <button class="ag-btn ag-btn-late" onclick="window.agUpdate(${course.id}, -1)" ${isFailed ? 'disabled' : ''}>
+            遅刻<span class="ag-btn-sub">-1点</span>
+          </button>
+          <button class="ag-btn ag-btn-absent" onclick="window.agUpdate(${course.id}, -2)" ${isFailed ? 'disabled' : ''}>
+            欠席<span class="ag-btn-sub">-2点</span>
+          </button>
+          <button class="ag-btn ag-btn-undo" onclick="window.agUpdate(${course.id}, 1)" title="修正">↺</button>
         </div>
       `;
-    }
-
-    
-    function renderList() {
-      listEl.innerHTML = '';
-      if (courses.length === 0) {
-        listEl.innerHTML = '<div style="text-align:center; padding:3rem; color:#444; border:1px dashed #333;">NO DATA FOUND</div>';
-        return;
-      }
-
-      courses.forEach(course => {
-        const rule = RULES[course.type];
-        const status = getStatusInfo(course.current, course.type);
-        const isFailed = course.current <= rule.fail;
-        
-        const used = Math.abs(course.current);
-        const max = Math.abs(rule.limit);
-        const percent = Math.min((used / max) * 100, 100);
-
-        const item = document.createElement('div');
-        item.className = `ag-item ${status.class}`;
-        item.innerHTML = `
-          <button class="ag-delete-btn" onclick="window.agDelete(${course.id})" title="REMOVE">×</button>
-          
-          <div class="ag-course-header">
-            <div class="ag-course-name">
-              ${course.name}
-            </div>
-            <div class="ag-course-tags">
-              <span class="ag-tag">${course.credit} CR</span>
-              <span class="ag-tag">${rule.label}</span>
-            </div>
-          </div>
-          
-          <div class="ag-status-row">
-            <span class="status-text">${status.label}</span>
-            <span style="font-family:monospace">
-              <span style="color:#e2e8f0; font-size:1.1em">${course.current}</span>
-              <span style="color:#555"> / ${rule.fail}</span>
-            </span>
-          </div>
-          <div class="ag-bar-bg">
-            <div class="ag-bar-fill" style="width: ${percent}%"></div>
-          </div>
-
-          <div class="ag-controls">
-            <button class="ag-btn ag-btn-late" onclick="window.agUpdate(${course.id}, -1)" ${isFailed ? 'disabled' : ''}>
-              LATE<span class="ag-btn-sub">-1 PTS</span>
-            </button>
-            <button class="ag-btn ag-btn-absent" onclick="window.agUpdate(${course.id}, -2)" ${isFailed ? 'disabled' : ''}>
-              ABSENT<span class="ag-btn-sub">-2 PTS</span>
-            </button>
-            <button class="ag-btn ag-btn-undo" onclick="window.agUpdate(${course.id}, 1)" title="ROLLBACK">
-              ↺
-            </button>
-          </div>
-        `;
-        listEl.appendChild(item);
-      });
-    }
-
-    function render() {
-      renderStats();
-      renderList();
-    }
-
-    
-    window.agUpdate = (id, delta) => {
-      courses = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      courses = courses.map(c => {
-        if (c.id == id) { 
-          const newVal = Math.min(0, c.current + delta);
-          return { ...c, current: newVal };
-        }
-        return c;
-      });
-      saveData();
-    };
-
-    window.agDelete = (id) => {
-      if(!confirm('PURGE SUBJECT DATA?')) return;
-      let currentData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      courses = currentData.filter(c => c.id != id);
-      saveData();
-    };
-
-    
-    formEl.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('new-name').value;
-      const credit = parseInt(document.getElementById('new-credit').value);
-      const type = document.querySelector('input[name="term-type"]:checked').value;
-
-      if (name) {
-        courses = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-        courses.push({
-          id: Date.now(),
-          name,
-          credit,
-          type,
-          current: 0
-        });
-        document.getElementById('new-name').value = '';
-        saveData();
-      }
+      listEl.appendChild(item);
     });
+  }
 
+   
+  window.agUpdate = (id, delta) => {
+    courses = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    courses = courses.map(c => {
+      if (c.id == id) {
+        const newVal = Math.min(0, c.current + delta);
+        return { ...c, current: newVal };
+      }
+      return c;
+    });
+    saveAndRender();
+    pushBlob();
+  };
+
+  window.agDelete = (id) => {
+    if (!confirm('この科目のデータを削除しますか？')) return;
+    let currentData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    courses = currentData.filter(c => c.id != id);
+    saveAndRender();
+    pushBlob();
+  };
+
+  formEl.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('new-name').value.trim();
+    const credit = parseInt(document.getElementById('new-credit').value);
+    const type = document.querySelector('input[name="term-type"]:checked').value;
+
+    if (name) {
+      courses = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      courses.push({ id: Date.now(), name, credit, type, current: 0 });
+      document.getElementById('new-name').value = '';
+      saveAndRender();
+      pushBlob();
+      toast('科目を追加しました', 'ok');
+    }
+  });
+
+   
+  const JB_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const JB_CREATE = 'https://api.jsonbin.io/v3/b';
+  const JB_HDR = () => ({ 'X-Master-Key': JB_KEY, 'Content-Type': 'application/json' });
+  const binUrl = () => `https://api.jsonbin.io/v3/b/${blobId}/latest`;
+  const binPut = () => `https://api.jsonbin.io/v3/b/${blobId}`;
+
+  function mergeData(local, remote) {
+    const byId = {};
     
-    render();
+    [...(remote || []), ...(local || [])].forEach(c => {
+      byId[c.id] = c;
+    });
+    return Object.values(byId);
+  }
 
-  })();
+  window.agSyncCloud = async function(silent) {
+    setSS('busy', '◌ SYNC…');
+    try {
+      if (!blobId) {
+        
+        const res = await fetch(JB_CREATE, {
+          method: 'POST',
+          headers: { ...JB_HDR(), 'X-Bin-Name': 'attendance_guardian' },
+          body: JSON.stringify({ courses: courses })
+        });
+        if (!res.ok) throw new Error(`create: ${res.status}`);
+        const json = await res.json();
+        blobId = json.metadata.id;
+        try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+        updateBlobDisplay();
+        setSS('ok', '◉ SYNCED');
+        if (!silent) toast('Bin作成・同期完了', 'ok');
+      } else {
+        
+        const r = await fetch(binUrl(), { headers: { 'X-Master-Key': JB_KEY }, cache: 'no-store' });
+        if (!r.ok) {
+          if ([400,401,403,404,422].includes(r.status)) {
+            blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
+            updateBlobDisplay();
+            if (!silent) toast('無効なBin。新規作成します…', 'info');
+            return agSyncCloud(silent);
+          }
+          throw new Error(`get: ${r.status}`);
+        }
+        const json = await r.json();
+        const rec = json.record || json;
+        const remoteCourses = Array.isArray(rec.courses) ? rec.courses : (Array.isArray(rec) ? rec : []);
+
+        
+        courses = mergeData(remoteCourses, courses);
+        save(); render();
+
+        
+        const p = await fetch(binPut(), { method: 'PUT', headers: JB_HDR(), body: JSON.stringify({ courses: courses }) });
+        if (!p.ok) {
+          if ([400,401,403,404,422].includes(p.status)) {
+            blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
+            updateBlobDisplay();
+            return agSyncCloud(silent);
+          }
+          throw new Error(`put: ${p.status}`);
+        }
+        setSS('ok', '◉ SYNCED');
+        if (!silent) toast('同期完了', 'ok');
+      }
+    } catch(err) {
+      setSS('err', '✕ ERR');
+      if (!silent) toast('同期失敗: ' + err.message, 'err');
+    }
+  };
+
+  async function pushBlob() {
+    if (!blobId) return;
+    try {
+      const p = await fetch(binPut(), { method: 'PUT', headers: JB_HDR(), body: JSON.stringify({ courses: courses }) });
+      if (p.ok) setSS('ok', '◉ SYNCED');
+      else {
+        if ([400,401,403,404,422].includes(p.status)) {
+          blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
+          updateBlobDisplay();
+        }
+        setSS('err', '✕ ERR');
+      }
+    } catch(e) { setSS('err', '✕ ERR'); }
+  }
+
+   
+  window.agOpenSettings = function() {
+    document.getElementById('ag-blob-input').value = blobId || '';
+    document.getElementById('ag-ov-settings').classList.add('open');
+  };
+  window.agCloseSettings = function() {
+    document.getElementById('ag-ov-settings').classList.remove('open');
+  };
+
+  window.agApplySettings = function() {
+    const v = document.getElementById('ag-blob-input').value.trim();
+    if (v !== (blobId || '')) {
+      blobId = v || null;
+      if (blobId) try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+      else try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
+      updateBlobDisplay();
+      toast('設定を適用しました', 'ok');
+      if (blobId) agSyncCloud(false);
+    }
+    agCloseSettings();
+  };
+
+  window.agExport = function() {
+    const blob = new Blob([JSON.stringify({ courses: courses }, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'attendance_backup.json'; a.click();
+    toast('エクスポート完了', 'ok');
+  };
+
+  window.agImport = function(input) {
+    const file = input.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        const imported = Array.isArray(data.courses) ? data.courses : (Array.isArray(data) ? data : []);
+        courses = mergeData(courses, imported);
+        saveAndRender(); pushBlob();
+        toast('インポート完了', 'ok');
+      } catch(ex) { toast('インポート失敗', 'err'); }
+    };
+    reader.readAsText(file); input.value = '';
+  };
+
+  window.agClearAll = function() {
+    if (!confirm('全データを削除しますか？この操作は取り消せません。')) return;
+    courses = [];
+    saveAndRender(); pushBlob();
+    toast('全データを削除しました', 'info');
+    agCloseSettings();
+  };
+
+   
+  document.getElementById('ag-ov-settings').addEventListener('click', function(e) {
+    if (e.target === this) agCloseSettings();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      const ov = document.getElementById('ag-ov-settings');
+      if (ov.classList.contains('open')) agCloseSettings();
+    }
+  });
+
+   
+  init();
+})();
 </script>
 
     </section>

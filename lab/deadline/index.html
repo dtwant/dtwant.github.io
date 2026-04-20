@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "168"
+    "wordCount": "162"
   }]
   </script>
 
@@ -822,12 +822,6 @@
     overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;
-    animation: crt-flicker 0.15s infinite;
-  }
-  @keyframes crt-flicker {
-    0% { opacity: 0.98; }
-    50% { opacity: 1; }
-    100% { opacity: 0.99; }
   }
 
   .dm-root > * {
@@ -843,11 +837,7 @@
     content: "";
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-     
-    background: 
-      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px),
-      radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
-    box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+    background: radial-gradient(circle at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
     pointer-events: none;
     z-index: 10;
   }
@@ -1786,7 +1776,8 @@
       width: 100%;
       justify-content: flex-start;
     }
-    .dm-title { font-size: 1.2rem; }
+    .dm-title { font-size: 1.1rem; }
+    .dm-title::before, .dm-title::after { display: none; }
 
      
     .dm-form {
@@ -1802,9 +1793,8 @@
     }
     
     .dm-input, .dm-select {
-       
-      font-size: 16px;  
-      padding: 0.7rem;
+      font-size: 16px;
+      padding: 0.6rem;
     }
 
     .dm-btn-add {
@@ -1905,23 +1895,23 @@
   <div class="dm-stats">
     <div class="dm-stat" onclick="dmSetFilter('all')">
       <div class="dm-stat-num" id="dm-n-total">0</div>
-      <div class="dm-stat-label">TOTAL</div>
+      <div class="dm-stat-label">全件</div>
     </div>
     <div class="dm-stat" onclick="dmSetFilter('active')">
       <div class="dm-stat-num c-active" id="dm-n-active">0</div>
-      <div class="dm-stat-label">ACTIVE</div>
+      <div class="dm-stat-label">進行中</div>
     </div>
     <div class="dm-stat" onclick="dmSetFilter('danger')">
       <div class="dm-stat-num c-danger" id="dm-n-danger">0</div>
-      <div class="dm-stat-label">DANGER</div>
+      <div class="dm-stat-label">危険</div>
     </div>
     <div class="dm-stat" onclick="dmSetFilter('done')">
       <div class="dm-stat-num c-done" id="dm-n-done">0</div>
-      <div class="dm-stat-label">DONE</div>
+      <div class="dm-stat-label">完了</div>
     </div>
     <div class="dm-stat">
       <div class="dm-stat-num c-over" id="dm-n-over">0</div>
-      <div class="dm-stat-label">EXPIRED</div>
+      <div class="dm-stat-label">期限切れ</div>
     </div>
   </div>
 
@@ -1932,10 +1922,10 @@
       <input type="text" class="dm-search" id="dm-search" placeholder="タスク名 / カテゴリで検索..." oninput="dmRender()">
     </div>
     <div class="dm-filter-tabs">
-      <button class="dm-tab active" id="dm-tab-all" onclick="dmSetFilter('all')">ALL</button>
-      <button class="dm-tab" id="dm-tab-active" onclick="dmSetFilter('active')">ACTIVE</button>
-      <button class="dm-tab" id="dm-tab-danger" onclick="dmSetFilter('danger')">DANGER</button>
-      <button class="dm-tab" id="dm-tab-done" onclick="dmSetFilter('done')">DONE</button>
+      <button class="dm-tab active" id="dm-tab-all" onclick="dmSetFilter('all')">全件</button>
+      <button class="dm-tab" id="dm-tab-active" onclick="dmSetFilter('active')">進行中</button>
+      <button class="dm-tab" id="dm-tab-danger" onclick="dmSetFilter('danger')">危険</button>
+      <button class="dm-tab" id="dm-tab-done" onclick="dmSetFilter('done')">完了</button>
     </div>
     <select class="dm-sort-sel" id="dm-sort" onchange="dmRender()">
       <option value="deadline">締切順</option>
@@ -1947,7 +1937,7 @@
 
   
   <form id="dm-form" class="dm-form">
-    <input type="text" id="task-title" class="dm-input" placeholder="TASK_NAME" required>
+    <input type="text" id="task-title" class="dm-input" placeholder="課題名" required>
     
     <input type="date" id="task-date" class="dm-input" required>
     
@@ -1960,17 +1950,17 @@
       <option value="end">指定なし (23:59)</option>
     </select>
     
-    <input type="number" id="task-est" class="dm-input" placeholder="EST(MIN)" min="10" step="10" required>
-    <button type="submit" class="dm-btn-add">ADD</button>
+    <input type="number" id="task-est" class="dm-input" placeholder="推定時間(分)" min="10" step="10" required>
+    <button type="submit" class="dm-btn-add">追加</button>
   </form>
   <div class="dm-form-extra">
     <select id="task-priority" class="dm-select">
-      <option value="mid">⬡ PRIORITY: MID</option>
-      <option value="high">▲ PRIORITY: HIGH</option>
-      <option value="low">▽ PRIORITY: LOW</option>
+      <option value="mid">⬡ 優先度: 普通</option>
+      <option value="high">▲ 優先度: 高</option>
+      <option value="low">▽ 優先度: 低</option>
     </select>
-    <input type="text" id="task-category" class="dm-input" placeholder="CATEGORY (例: 数学)">
-    <input type="text" id="task-note" class="dm-input" placeholder="NOTE (メモ)">
+    <input type="text" id="task-category" class="dm-input" placeholder="カテゴリ（例: 数学）">
+    <input type="text" id="task-note" class="dm-input" placeholder="メモ">
   </div>
 
   <div id="dm-list" class="dm-list">
@@ -1980,7 +1970,7 @@
   
   <div id="dm-done-section" style="display:none;">
     <div class="dm-section-divider">
-      <span>COMPLETED</span>
+      <span>完了済み</span>
       <button class="dm-section-toggle" id="dm-toggle-done" onclick="dmToggleDone()">▼ 表示</button>
     </div>
     <div id="dm-done-list" class="dm-completed-list collapsed"></div>
@@ -2027,22 +2017,22 @@
 <div class="dm-overlay" id="dm-overlay-edit">
   <div class="dm-modal">
     <div class="dm-modal-header">
-      <span>EDIT TASK</span>
+      <span>タスク編集</span>
       <button class="dm-modal-close" onclick="dmCloseEdit()">✕</button>
     </div>
     <div class="dm-modal-body">
       <input type="hidden" id="dm-edit-id">
       <div class="dm-field">
-        <label>TASK NAME</label>
+        <label>課題名</label>
         <input type="text" class="dm-input" id="dm-edit-title" placeholder="課題名">
       </div>
       <div class="dm-row">
         <div class="dm-field">
-          <label>DATE</label>
+          <label>提出日</label>
           <input type="date" class="dm-input" id="dm-edit-date">
         </div>
         <div class="dm-field">
-          <label>PERIOD</label>
+          <label>時限</label>
           <select class="dm-select" id="dm-edit-period">
             <option value="1">1限 (08:50)</option>
             <option value="2">2限 (10:30)</option>
@@ -2055,37 +2045,37 @@
       </div>
       <div class="dm-row">
         <div class="dm-field">
-          <label>EST (MIN)</label>
+          <label>推定時間(分)</label>
           <input type="number" class="dm-input" id="dm-edit-est" min="10" step="10">
         </div>
         <div class="dm-field">
-          <label>PRIORITY</label>
+          <label>優先度</label>
           <select class="dm-select" id="dm-edit-priority">
-            <option value="high">▲ HIGH</option>
-            <option value="mid">⬡ MID</option>
-            <option value="low">▽ LOW</option>
+            <option value="high">▲ 高</option>
+            <option value="mid">⬡ 普通</option>
+            <option value="low">▽ 低</option>
           </select>
         </div>
       </div>
       <div class="dm-row">
         <div class="dm-field">
-          <label>CATEGORY</label>
+          <label>カテゴリ</label>
           <input type="text" class="dm-input" id="dm-edit-category" placeholder="教科名">
         </div>
         <div class="dm-field">
-          <label>PROGRESS (%)</label>
+          <label>進捗 (%)</label>
           <input type="number" class="dm-input" id="dm-edit-progress" min="0" max="100" step="5" placeholder="0">
         </div>
       </div>
       <div class="dm-field">
-        <label>NOTE</label>
+        <label>メモ</label>
         <textarea class="dm-textarea" id="dm-edit-note" placeholder="メモ..."></textarea>
       </div>
     </div>
     <div class="dm-modal-footer">
       <button class="dm-btn del" id="dm-edit-del" onclick="dmDeleteFromEdit()">🗑 削除</button>
-      <button class="dm-btn" onclick="dmCloseEdit()">CANCEL</button>
-      <button class="dm-btn save" onclick="dmSaveEdit()">SAVE</button>
+      <button class="dm-btn" onclick="dmCloseEdit()">キャンセル</button>
+      <button class="dm-btn save" onclick="dmSaveEdit()">保存</button>
     </div>
   </div>
 </div>
@@ -2105,11 +2095,11 @@
         <div class="dm-blob-id-display" id="dm-blob-id-display">—</div>
       </div>
       <div class="dm-field">
-        <label>EXISTING BLOB ID</label>
+        <label>既存のBLOB ID</label>
         <input type="text" class="dm-input" id="dm-blob-id-input" placeholder="別端末から引き継ぐ場合に入力">
       </div>
       <div class="dm-field">
-        <label>EXPORT / IMPORT</label>
+        <label>データ管理</label>
         <div style="display:flex;gap:.5rem;flex-wrap:wrap">
           <button class="dm-btn" type="button" onclick="dmExport()">⬇ JSON EXPORT</button>
           <button class="dm-btn" type="button" onclick="document.getElementById('dm-import-file').click()">⬆ JSON IMPORT</button>
@@ -2122,8 +2112,8 @@
       </div>
     </div>
     <div class="dm-modal-footer">
-      <button class="dm-btn" onclick="dmCloseSettings()">CANCEL</button>
-      <button class="dm-btn save" onclick="dmApplySettings()">APPLY</button>
+      <button class="dm-btn" onclick="dmCloseSettings()">キャンセル</button>
+      <button class="dm-btn save" onclick="dmApplySettings()">適用</button>
     </div>
   </div>
 </div>
@@ -2146,7 +2136,7 @@
   };
 
   const PRIORITY_ORDER = { high: 0, mid: 1, low: 2 };
-  const PRIORITY_LABEL = { high: '▲ HIGH', mid: '⬡ MID', low: '▽ LOW' };
+  const PRIORITY_LABEL = { high: '▲ 高', mid: '⬡ 普通', low: '▽ 低' };
 
    
   let tasks = [];
@@ -2209,13 +2199,13 @@
   function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
 
   const formatTime = (ms) => {
-    if (ms < 0) return "TIME_OVER";
+    if (ms < 0) return "期限切れ";
     const d = Math.floor(ms / (1000 * 60 * 60 * 24));
     const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
     const hh = String(h).padStart(2, '0');
     const mm = String(m).padStart(2, '0');
-    if (d > 0) return `${d}d ${hh}h`;
+    if (d > 0) return `${d}日 ${hh}時間`;
     return `${hh}:${mm}`;
   };
 
@@ -2434,9 +2424,9 @@
 
     
     if (activeFilter === 'done') {
-      listEl.innerHTML = '<div class="dm-empty">// SHOWING COMPLETED TASKS BELOW</div>';
+      listEl.innerHTML = '<div class="dm-empty">// 完了タスクは下に表示されます</div>';
     } else if (arr.length === 0) {
-      listEl.innerHTML = '<div class="dm-empty">NO ACTIVE TASKS DETECTED<br>// SYSTEM IDLE</div>';
+      listEl.innerHTML = '<div class="dm-empty">タスクはありません<br>// 待機中</div>';
     } else {
       listEl.innerHTML = '';
       arr.forEach((task, i) => {
@@ -2466,12 +2456,12 @@
           <div class="dm-info">
             <div class="dm-task-header">
               <div class="dm-task-title">${esc(task.title)}</div>
-              <span class="dm-priority-badge ${pClass}">${PRIORITY_LABEL[task.priority] || '⬡ MID'}</span>
+              <span class="dm-priority-badge ${pClass}">${PRIORITY_LABEL[task.priority] || '⬡ 普通'}</span>
               ${task.category ? `<span class="dm-category-badge">${esc(task.category)}</span>` : ''}
             </div>
             <div class="dm-meta">
-              <span>[DUE] ${dueStr} / ${periodDisplay}</span>
-              <span>[EST] ${task.est}m</span>
+              <span>[締切] ${dueStr} / ${periodDisplay}</span>
+              <span>[作業] ${task.est}分</span>
             </div>
             ${task.note ? `<div class="dm-task-note">📝 ${esc(task.note)}</div>` : ''}
             ${progress > 0 ? `
@@ -2483,13 +2473,13 @@
           </div>
           <div class="dm-right-col">
             <div>
-              <span class="dm-time-label">T-MINUS</span>
+              <span class="dm-time-label">残り時間</span>
               <div class="dm-countdown">${formatTime(remaining)}</div>
             </div>
             <div class="dm-actions">
-              <button class="dm-btn-icon dm-btn-edit" data-id="${task.id}" title="EDIT">✎</button>
-              <button class="dm-btn-icon dm-btn-check" data-id="${task.id}" title="COMPLETE">✓</button>
-              <button class="dm-btn-icon dm-btn-del" data-id="${task.id}" title="DELETE">×</button>
+              <button class="dm-btn-icon dm-btn-edit" data-id="${task.id}" title="編集">✎</button>
+              <button class="dm-btn-icon dm-btn-check" data-id="${task.id}" title="完了">✓</button>
+              <button class="dm-btn-icon dm-btn-del" data-id="${task.id}" title="削除">×</button>
             </div>
           </div>
         `;
@@ -2545,7 +2535,7 @@
   }
 
   function dmDel(id) {
-    if (!confirm('CONFIRM DELETION?')) return;
+    if (!confirm('このタスクを削除しますか？')) return;
     tasks = tasks.filter(t => t.id !== id && String(t.id) !== id);
     save();
     dmRender();
