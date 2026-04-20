@@ -230,7 +230,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "131"
+    "wordCount": "197"
   }]
   </script>
 
@@ -928,7 +928,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>131 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>197 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1096,889 +1096,1762 @@
 
         <div class="article-content max-w-prose mb-20">
           
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=DotGothic16&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
+ 
+#od-root, #od-root *,
+.od-overlay, .od-overlay * {
+  box-sizing: border-box; margin: 0; padding: 0;
+  --od-bg0:       #050508;
+  --od-bg1:       #0c0c14;
+  --od-bg2:       #0f172a;
+  --od-bg3:       #1e293b;
+  --od-border:    #1e293b;
+  --od-border2:   #334155;
+  --od-neon:      #10b981;
+  --od-neon-dim:  rgba(16,185,129,0.2);
+  --od-neon-gl:   rgba(16,185,129,0.5);
+  --od-cyan:      #06b6d4;
+  --od-yellow:    #facc15;
+  --od-pink:      #ef4444;
+  --od-purple:    #8b5cf6;
+  --od-dim:       #475569;
+  --od-muted:     #64748b;
+  --od-text:      #94a3b8;
+  --od-bright:    #e2e8f0;
+  --od-font-ui:   'Orbitron', monospace;
+  --od-font-jp:   'DotGothic16', monospace;
+  --od-font-mono: 'Share Tech Mono', monospace;
+}
 
-  :root {
-    --neon: #10b981; --neon-dim: rgba(16,185,129,0.2); --neon-gl: rgba(16,185,129,0.5);
-    --bg-dark: #050508; --bg-panel: rgba(9,9,11,0.85);
-    --danger: #ef4444; --warn: #f59e0b;
-  }
+ 
+#od-root {
+  position: fixed; inset: 0; z-index: 99990;
+  display: flex; font-family: var(--od-font-mono);
+  color: var(--od-text); overflow: hidden;
+  background:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px),
+    var(--od-bg0);
+  background-size: 30px 30px, 30px 30px, 100% 100%;
+}
+ 
+#od-root::after {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg,rgba(0,0,0,0.12),rgba(0,0,0,0.12) 1px,transparent 1px,transparent 2px);
+  pointer-events: none; z-index: 100;
+}
+ 
+#od-root::before {
+  content: ""; position: fixed; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--od-neon), var(--od-cyan), var(--od-neon), transparent);
+  background-size: 200% 100%;
+  animation: od-scan-top 2.5s linear infinite; z-index: 101;
+  box-shadow: 0 0 12px var(--od-neon-gl);
+}
+@keyframes od-scan-top { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
 
-  .cy-root {
-    font-family: "JetBrains Mono", monospace;
-    position: fixed; inset: 0; width: 100vw; height: 100vh;
-    background-color: var(--bg-dark);
-    background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 30px 30px;
-    z-index: 99990; color: #e2e8f0; display: flex; overflow: hidden;
-  }
-  .cy-root::after {
-    content: ""; position: absolute; inset: 0;
-    background: repeating-linear-gradient(0deg,rgba(0,0,0,0.15),rgba(0,0,0,0.15) 1px,transparent 1px,transparent 2px);
-    pointer-events: none; z-index: 100;
-  }
-  .scanline-bar {
-    position: absolute; top: -10%; left: 0; right: 0; height: 10vh;
-    background: linear-gradient(to bottom, transparent, var(--neon-dim));
-    border-bottom: 2px solid var(--neon);
-    animation: scan 8s linear infinite; pointer-events: none; z-index: 101; opacity: 0.5;
-  }
-  @keyframes scan { 0%{top:-10%} 100%{top:110%} }
-  @keyframes pulse-border { 0%,100%{box-shadow:0 0 8px var(--neon-dim),inset 0 0 8px var(--neon-dim)} 50%{box-shadow:0 0 20px var(--neon-gl),inset 0 0 20px var(--neon-dim)} }
-  @keyframes gauge-fill { from{width:0} }
+ 
+#od-vignette {
+  position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  background:
+    radial-gradient(ellipse at 15% 15%, rgba(16,185,129,0.04), transparent 50%),
+    radial-gradient(ellipse at 85% 85%, rgba(6,182,212,0.04), transparent 50%),
+    radial-gradient(ellipse 120% 100% at 50% 0%, transparent 60%, rgba(0,0,0,0.7) 100%),
+    radial-gradient(ellipse 100% 120% at 0% 50%, transparent 60%, rgba(0,0,0,0.5) 100%),
+    radial-gradient(ellipse 100% 120% at 100% 50%, transparent 60%, rgba(0,0,0,0.5) 100%);
+}
 
-   
-  .cy-sidebar {
-    width: 260px; min-width: 260px; background: rgba(5,5,8,0.95); border-right: 1px solid var(--neon);
-    display: flex; flex-direction: column; z-index: 50; box-shadow: 2px 0 20px rgba(0,0,0,0.9);
-  }
-  .sidebar-header {
-    padding: 1.2rem 1rem; border-bottom: 1px dashed #333;
-    font-family: 'Orbitron', sans-serif; color: var(--neon); letter-spacing: 2px;
-    text-shadow: 0 0 10px var(--neon-gl); font-size: 0.85rem;
-  }
-  .subject-list { flex: 1; overflow-y: auto; padding: 0.5rem 0; display: flex; flex-direction: column; gap: 2px; }
-  .subject-item {
-    padding: 0.7rem 0.8rem; color: #94a3b8; cursor: pointer; transition: 0.2s;
-    border-left: 3px solid transparent; display: flex; align-items: center; gap: 8px;
-    font-size: 0.75rem; font-family: 'Orbitron', sans-serif; user-select: none;
-  }
-  .subject-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
-  .subject-item.active {
-    background: var(--neon-dim); color: var(--neon);
-    border-left: 3px solid var(--neon); text-shadow: 0 0 5px var(--neon);
-  }
-  .subject-item.drag-over { border-top: 2px solid var(--neon); }
-  .subj-thumb {
-    width: 28px; height: 28px; border-radius: 50%; object-fit: cover;
-    border: 1px solid var(--neon); flex-shrink: 0; background: #111;
-  }
-  .color-dot { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 5px currentColor; flex-shrink: 0; }
+ 
+.od-sidebar {
+  width: 270px; min-width: 270px; display: flex; flex-direction: column;
+  background: rgba(5,5,10,0.97); border-right: 1px solid var(--od-border);
+  z-index: 50; box-shadow: 2px 0 20px rgba(0,0,0,0.9);
+}
+.od-sidebar-header {
+  padding: 1.1rem 1rem; border-bottom: 1px solid var(--od-border);
+  display: flex; flex-direction: column; gap: 0.3rem;
+}
+.od-sidebar-title {
+  font-family: var(--od-font-ui); font-size: 0.8rem; font-weight: 900;
+  color: var(--od-neon); letter-spacing: 0.2em;
+  text-shadow: 0 0 15px var(--od-neon-gl);
+}
+.od-sidebar-sub { font-size: 0.5rem; color: var(--od-dim); letter-spacing: 0.12em; font-family: var(--od-font-ui); }
 
-  .sidebar-footer { padding: 0.8rem; border-top: 1px dashed #333; display: flex; flex-direction: column; gap: 0.5rem; }
-  .sidebar-footer-row { display: flex; gap: 0.4rem; }
-  .cy-btn {
-    width: 100%; background: transparent; border: 1px solid var(--neon); color: var(--neon);
-    padding: 0.7rem; font-family: 'Orbitron', sans-serif; font-weight: bold; cursor: pointer;
-    text-transform: uppercase; transition: 0.2s; font-size: 0.7rem; letter-spacing: 1px;
-    min-height: 44px; display: flex; align-items: center; justify-content: center;
-  }
-  .cy-btn:hover { background: var(--neon-dim); box-shadow: 0 0 15px var(--neon-gl); color: #fff; }
-  .cy-btn:active { transform: scale(0.97); }
-  .cy-btn.sm { padding: 0.4rem 0.6rem; min-height: 36px; font-size: 0.6rem; }
-  .cy-btn.danger { border-color: var(--danger); color: var(--danger); }
-  .cy-btn.danger:hover { background: rgba(239,68,68,0.2); }
+.od-sidebar-search {
+  margin: 0.5rem 0.6rem 0; padding: 0.4rem 0.6rem;
+  background: rgba(9,12,30,0.8); border: 1px solid var(--od-border);
+  color: var(--od-bright); font-family: var(--od-font-mono); font-size: 0.78rem;
+  outline: none; border-radius: 2px; transition: border-color 0.15s;
+  width: calc(100% - 1.2rem);
+}
+.od-sidebar-search::placeholder { color: var(--od-dim); }
+.od-sidebar-search:focus { border-color: var(--od-neon); box-shadow: 0 0 8px var(--od-neon-dim); }
 
-   
-  .cy-main { flex: 1; padding: 1.5rem 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem; position: relative; z-index: 50; }
+.od-subject-list { flex: 1; overflow-y: auto; padding: 0.4rem 0; scrollbar-width: thin; scrollbar-color: var(--od-border2) transparent; }
+.od-subject-list::-webkit-scrollbar { width: 4px; }
+.od-subject-list::-webkit-scrollbar-thumb { background: var(--od-border2); border-radius: 2px; }
 
-  .db-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid var(--neon); padding-bottom: 0.8rem; gap: 1rem; flex-wrap: wrap; }
-  .db-header-left h1 { font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); margin: 0; font-size: 2rem; letter-spacing: 2px; line-height: 1.2; }
-  .db-header-left .codename { color: var(--neon); font-size: 0.85rem; letter-spacing: 5px; text-transform: uppercase; }
-  .db-header-right { text-align: right; color: #64748b; font-size: 0.7rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-  .edit-btn {
-    background: transparent; border: 1px dashed var(--neon); color: var(--neon);
-    padding: 6px 12px; cursor: pointer; font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem; transition: 0.2s; min-height: 36px;
-  }
-  .edit-btn:hover { background: var(--neon); color: #000; }
+.od-subj-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0.6rem 0.7rem; cursor: pointer; transition: all 0.15s;
+  border-left: 3px solid transparent; user-select: none;
+}
+.od-subj-item:hover { background: rgba(255,255,255,0.04); }
+.od-subj-item.active {
+  background: var(--od-neon-dim); border-left-color: var(--od-neon);
+}
+.od-subj-item.drag-over { border-top: 2px solid var(--od-neon); }
+.od-subj-thumb {
+  width: 36px; height: 36px; border-radius: 50%; object-fit: cover;
+  border: 1px solid var(--od-neon); flex-shrink: 0; background: #111;
+}
+.od-subj-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.od-subj-name {
+  font-family: var(--od-font-ui); font-size: 0.62rem; color: var(--od-bright);
+  letter-spacing: 0.06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.od-subj-code { font-size: 0.5rem; color: var(--od-dim); }
+.od-subj-bar-bg { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+.od-subj-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
 
-   
-  .tags-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-  .tag-chip {
-    padding: 3px 10px; font-size: 0.65rem; border-radius: 20px;
-    background: linear-gradient(135deg, var(--neon-dim), rgba(255,255,255,0.05));
-    border: 1px solid var(--neon); color: var(--neon); font-family: 'Zen Kaku Gothic New', sans-serif;
-    letter-spacing: 0.5px; white-space: nowrap;
-  }
+.od-sidebar-footer { padding: 0.6rem; border-top: 1px solid var(--od-border); display: flex; flex-direction: column; gap: 0.4rem; }
+.od-sidebar-footer-row { display: flex; gap: 0.35rem; }
 
-   
-  .top-section { display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; }
+ 
+.od-btn {
+  font-family: var(--od-font-ui); font-size: 0.58rem; letter-spacing: 0.08em;
+  padding: 0.4rem 0.8rem; background: transparent; border: 1px solid var(--od-border2);
+  color: var(--od-muted); cursor: pointer; border-radius: 2px; transition: all 0.15s;
+  min-height: 38px; display: flex; align-items: center; justify-content: center; gap: 4px;
+}
+.od-btn:hover { border-color: var(--od-neon); color: var(--od-neon); background: rgba(16,185,129,0.06); }
+.od-btn:active { transform: scale(0.97); }
+.od-btn.primary {
+  border-color: var(--od-neon); color: var(--od-bg0); background: var(--od-neon);
+  font-weight: 700; box-shadow: 0 0 12px var(--od-neon-gl);
+}
+.od-btn.primary:hover { background: #5eead4; box-shadow: 0 0 20px var(--od-neon-gl); }
+.od-btn.danger { border-color: var(--od-pink); color: var(--od-pink); }
+.od-btn.danger:hover { background: rgba(239,68,68,0.12); }
+.od-btn.sm { padding: 0.3rem 0.5rem; min-height: 32px; font-size: 0.52rem; }
+.od-btn.wide { width: 100%; }
+.od-btn.ghost { border-color: transparent; }
+.od-btn.ghost:hover { border-color: var(--od-border2); }
 
-   
-  .avatar-container { display: flex; flex-direction: column; gap: 8px; }
-  .avatar-frame {
-    position: relative; width: 100%; aspect-ratio: 3/4; border: 1px solid var(--neon);
-    background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden;
-    animation: pulse-border 4s ease-in-out infinite;
-  }
-  .avatar-frame::before, .avatar-frame::after { content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid var(--neon); pointer-events: none; z-index: 5; }
-  .avatar-frame::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
-  .avatar-frame::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-  .hologram-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: contrast(1.1) brightness(0.9); transition: 0.5s; z-index: 1; }
-  .avatar-tint { position: absolute; inset: 0; background: var(--neon-dim); mix-blend-mode: screen; z-index: 2; pointer-events: none; }
-  .hologram-glitch {
-    position: absolute; inset: 0; mix-blend-mode: screen;
-    background-size: cover; background-position: center top; background-repeat: no-repeat;
-    opacity: 0.3; filter: blur(2px); transform: translateX(3px); animation: glitch-anim 3s infinite; z-index: 3; pointer-events: none;
-  }
-  @keyframes glitch-anim { 0%,100%{transform:translateX(0);opacity:0.3} 5%,15%{transform:translateX(4px);opacity:0.6} 10%,20%{transform:translateX(-4px);opacity:0.1} }
+ 
+.od-main {
+  flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 50;
+}
 
-   
-  .heart-gauge-container { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: rgba(0,0,0,0.5); border: 1px solid #333; }
-  .heart-icon { font-size: 1.2rem; filter: drop-shadow(0 0 4px var(--neon)); }
-  .heart-bar-bg { flex: 1; height: 12px; background: rgba(255,255,255,0.05); border: 1px solid #333; position: relative; overflow: hidden; }
-  .heart-bar-fill { height: 100%; background: linear-gradient(90deg, var(--neon-dim), var(--neon)); transition: width 0.8s ease; animation: gauge-fill 1s ease-out; box-shadow: 0 0 10px var(--neon-gl); }
-  .heart-val { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: var(--neon); min-width: 36px; text-align: right; }
+ 
+.od-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.8rem 1.5rem; background: rgba(3,4,11,0.95);
+  border-bottom: 1px solid var(--od-border); flex-shrink: 0; gap: 1rem; flex-wrap: wrap;
+  position: relative;
+}
+.od-header::after {
+  content:''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--od-neon), var(--od-cyan), transparent); opacity: 0.3;
+}
+.od-header-left { display: flex; flex-direction: column; gap: 0.15rem; }
+.od-header-title {
+  font-family: var(--od-font-ui); font-size: 1.2rem; font-weight: 900;
+  color: var(--od-neon); letter-spacing: 0.2em;
+  text-shadow: 0 0 15px var(--od-neon-gl);
+  animation: od-flicker 9s infinite;
+}
+@keyframes od-flicker { 0%,94%,96%,100%{opacity:1} 95%{opacity:0.6} }
+.od-header-sub { font-size: 0.52rem; color: var(--od-dim); letter-spacing: 0.12em; font-family: var(--od-font-ui); }
+.od-header-right { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.od-status-badge {
+  font-family: var(--od-font-ui); font-size: 0.5rem; letter-spacing: 0.1em;
+  padding: 0.2rem 0.55rem; border-radius: 2px; border: 1px solid var(--od-neon);
+  color: var(--od-neon); background: var(--od-neon-dim);
+}
 
-   
-  .stats-frame {
-    background: var(--bg-panel); border: 1px solid #333; padding: 1.2rem;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-  }
-  .section-title { font-family: 'Orbitron', sans-serif; color: var(--neon); font-size: 0.9rem; border-bottom: 1px dashed var(--neon); width: 100%; padding-bottom: 0.5rem; margin-bottom: 0.8rem; text-transform: uppercase; }
-  canvas#radar-canvas { max-width: 100%; height: auto; }
+ 
+.od-content {
+  flex: 1; overflow-y: auto; overflow-x: hidden; padding: 1.5rem 2rem 3rem;
+  scrollbar-width: thin; scrollbar-color: var(--od-border2) transparent;
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.od-content::-webkit-scrollbar { width: 5px; }
+.od-content::-webkit-scrollbar-thumb { background: var(--od-border2); border-radius: 3px; }
 
-   
-  .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
-  .info-box {
-    background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 0.8rem; border-left: 3px solid var(--neon); transition: 0.3s;
-  }
-  .info-box:hover { border-color: var(--neon); background: rgba(255,255,255,0.05); box-shadow: 0 0 15px var(--neon-dim); }
-  .info-label { font-size: 0.6rem; color: #64748b; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.3rem; font-family: "Zen Kaku Gothic New", sans-serif; font-weight: bold; }
-  .info-val { font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 1rem; color: #e2e8f0; word-break: break-word; }
+ 
+.od-section-title {
+  font-family: var(--od-font-ui); font-size: 0.65rem; color: var(--od-neon);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding-bottom: 0.4rem; border-bottom: 1px dashed var(--od-border);
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+}
 
-   
-  .logs-frame { background: var(--bg-panel); border: 1px solid #333; padding: 1.2rem; display: flex; flex-direction: column; }
-  .logs-textarea {
-    flex: 1; background: transparent; border: none; color: #a1a1aa;
-    font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.9rem; resize: none; line-height: 1.6;
-    padding: 0.5rem 0; min-height: 130px;
-  }
-  .logs-textarea:focus { outline: none; color: #fff; }
+ 
+.od-hero {
+  display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem;
+}
+.od-avatar-col { display: flex; flex-direction: column; gap: 10px; }
+.od-avatar-frame {
+  position: relative; width: 100%; aspect-ratio: 3/4;
+  border: 1px solid var(--od-neon); background: #000;
+  overflow: hidden; border-radius: 2px;
+  animation: od-pulse-border 4s ease-in-out infinite;
+  box-shadow: 0 0 20px var(--od-neon-dim);
+}
+@keyframes od-pulse-border {
+  0%,100%{box-shadow: 0 0 8px var(--od-neon-dim), inset 0 0 8px var(--od-neon-dim)}
+  50%{box-shadow: 0 0 24px var(--od-neon-gl), inset 0 0 16px var(--od-neon-dim)}
+}
+.od-avatar-frame::before, .od-avatar-frame::after {
+  content:''; position: absolute; width: 18px; height: 18px; border: 2px solid var(--od-neon);
+  pointer-events: none; z-index: 5;
+}
+.od-avatar-frame::before { top:-1px; left:-1px; border-right:none; border-bottom:none; }
+.od-avatar-frame::after { bottom:-1px; right:-1px; border-left:none; border-top:none; }
+.od-avatar-img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center top;
+  filter: contrast(1.1) brightness(0.9); transition: 0.5s; z-index: 1;
+}
+.od-avatar-tint {
+  position: absolute; inset: 0; background: var(--od-neon-dim);
+  mix-blend-mode: screen; z-index: 2; pointer-events: none;
+}
+.od-avatar-glitch {
+  position: absolute; inset: 0; mix-blend-mode: screen;
+  background-size: cover; background-position: center top; background-repeat: no-repeat;
+  opacity: 0.25; filter: blur(2px); transform: translateX(3px);
+  animation: od-glitch 3s infinite; z-index: 3; pointer-events: none;
+}
+@keyframes od-glitch {
+  0%,100%{transform:translateX(0);opacity:0.25}
+  5%,15%{transform:translateX(4px);opacity:0.5}
+  10%,20%{transform:translateX(-4px);opacity:0.1}
+}
 
-   
-  .cy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 99999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-  .cy-modal-content {
-    background: var(--bg-panel); border: 1px solid var(--neon); padding: 1.5rem; width: 90%; max-width: 900px;
-    position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 30px var(--neon-dim);
-  }
-  .cy-modal-close { position: absolute; top: 0.8rem; right: 0.8rem; background: none; border: none; color: #ef4444; font-size: 1.5rem; cursor: pointer; transition: 0.2s; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
-  .cy-modal-close:hover { text-shadow: 0 0 10px red; transform: scale(1.2); }
+ 
+.od-heart-gauge {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; background: rgba(0,0,0,0.5);
+  border: 1px solid var(--od-border); border-radius: 2px;
+}
+.od-heart-icon { font-size: 1.15rem; filter: drop-shadow(0 0 4px var(--od-neon)); }
+.od-heart-bar-bg {
+  flex: 1; height: 10px; background: rgba(255,255,255,0.05);
+  border: 1px solid var(--od-border); position: relative; overflow: hidden; border-radius: 1px;
+}
+.od-heart-bar-fill {
+  height: 100%; border-radius: 1px;
+  background: linear-gradient(90deg, var(--od-neon-dim), var(--od-neon));
+  transition: width 0.8s ease; box-shadow: 0 0 10px var(--od-neon-gl);
+}
+.od-heart-val {
+  font-family: var(--od-font-ui); font-size: 0.65rem;
+  color: var(--od-neon); min-width: 32px; text-align: right;
+}
 
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-  .form-group.full { grid-column: span 2; }
-  .cy-label { font-size: 0.65rem; color: var(--neon); font-family: 'Orbitron', 'Zen Kaku Gothic New', sans-serif; letter-spacing: 1px; }
-  .cy-input {
-    background: #000; border: 1px solid #333; color: #fff; padding: 0.7rem;
-    font-family: inherit; font-size: 0.85rem; transition: 0.2s; min-height: 44px; box-sizing: border-box;
-  }
-  .cy-input:focus { outline: none; border-color: var(--neon); box-shadow: 0 0 10px var(--neon-dim); }
+ 
+.od-tags-row { display: flex; flex-wrap: wrap; gap: 5px; }
+.od-tag {
+  font-family: var(--od-font-ui); font-size: 0.48rem; letter-spacing: 0.06em;
+  padding: 0.18rem 0.5rem; border-radius: 2px;
+  border: 1px solid var(--od-purple); color: var(--od-purple);
+  background: rgba(139,92,246,0.08);
+}
 
-  .stats-inputs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-  .stat-col { display: flex; flex-direction: column; gap: 4px; }
-  .stat-col input[type=number] { text-align: center; }
+ 
+.od-radar-frame {
+  background: rgba(7,9,22,0.9); border: 1px solid var(--od-border); border-radius: 2px;
+  padding: 1.2rem; display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+canvas#od-radar { max-width: 100%; height: auto; }
 
-   
-  .custom-fields-list { display: flex; flex-direction: column; gap: 8px; }
-  .custom-field-row { display: flex; gap: 8px; align-items: center; }
-  .custom-field-row .cy-input { flex: 1; }
-  .cf-remove { background: none; border: 1px solid var(--danger); color: var(--danger); width: 36px; height: 36px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; }
-  .cf-remove:hover { background: rgba(239,68,68,0.2); }
+ 
+.od-info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; }
+.od-info-box {
+  background: rgba(7,9,22,0.7); border: 1px solid var(--od-border);
+  border-left: 3px solid var(--od-neon); padding: 0.7rem; border-radius: 2px;
+  transition: 0.2s;
+}
+.od-info-box:hover {
+  border-color: var(--od-neon); background: rgba(16,185,129,0.04);
+  box-shadow: 0 0 12px var(--od-neon-dim);
+}
+.od-info-label {
+  font-family: var(--od-font-ui); font-size: 0.48rem; color: var(--od-dim);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.25rem;
+}
+.od-info-val {
+  font-family: var(--od-font-jp); font-size: 0.95rem;
+  color: var(--od-bright); word-break: break-word; line-height: 1.4;
+}
 
-   
-  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.8rem; overflow-y: auto; max-height: 70vh; padding-right: 0.5rem; }
-  .gallery-item { position: relative; cursor: pointer; border: 1px solid #333; overflow: hidden; background: #000; aspect-ratio: 1/1; transition: 0.3s; }
-  .gallery-item img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.5) contrast(1.2); transition: 0.3s; }
-  .gallery-item:hover { border-color: var(--neon); box-shadow: 0 0 15px var(--neon-dim); z-index: 10; transform: scale(1.03); }
-  .gallery-item:hover img { filter: none; }
-  .gallery-meta { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); color: var(--neon); font-size: 0.6rem; padding: 4px; text-align: center; font-family: 'Orbitron', sans-serif; border-top: 1px solid var(--neon); }
+ 
+.od-timeline { display: flex; flex-direction: column; gap: 0; }
+.od-tl-entry {
+  display: flex; gap: 12px; padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(30,41,59,0.4);
+  animation: od-fadein 0.25s ease both;
+}
+@keyframes od-fadein { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+.od-tl-date {
+  flex-shrink: 0; width: 70px; text-align: right;
+  font-family: var(--od-font-ui); font-size: 0.5rem; color: var(--od-dim);
+  letter-spacing: 0.06em; padding-top: 2px;
+}
+.od-tl-dot {
+  flex-shrink: 0; width: 10px; height: 10px; margin-top: 3px;
+  border-radius: 50%; border: 2px solid var(--od-neon);
+  background: var(--od-bg0); position: relative;
+  box-shadow: 0 0 6px var(--od-neon-gl);
+}
+.od-tl-line {
+  position: absolute; top: 12px; left: 50%; width: 1px; height: calc(100% + 18px);
+  background: var(--od-border); transform: translateX(-50%);
+}
+.od-tl-text {
+  flex: 1; font-family: var(--od-font-jp); font-size: 0.85rem;
+  color: var(--od-text); line-height: 1.5; min-width: 0; word-break: break-word;
+}
+.od-tl-add-row { display: flex; gap: 8px; margin-top: 0.5rem; }
+.od-tl-input {
+  flex: 1; background: rgba(9,12,30,0.8); border: 1px solid var(--od-border);
+  color: var(--od-bright); font-family: var(--od-font-jp); font-size: 0.85rem;
+  padding: 0.5rem 0.7rem; outline: none; border-radius: 2px; transition: border-color 0.15s;
+}
+.od-tl-input::placeholder { color: var(--od-dim); font-family: var(--od-font-mono); }
+.od-tl-input:focus { border-color: var(--od-neon); box-shadow: 0 0 8px var(--od-neon-dim); }
+.od-tl-delete {
+  background: none; border: none; color: var(--od-dim); cursor: pointer; font-size: 0.9rem;
+  opacity: 0; transition: opacity 0.15s, color 0.15s; padding: 0 4px;
+}
+.od-tl-entry:hover .od-tl-delete { opacity: 1; }
+.od-tl-delete:hover { color: var(--od-pink); }
 
-  .viewer-nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 3rem; color: var(--neon); background: none; border: none; cursor: pointer; opacity: 0.5; transition: 0.3s; text-shadow: 0 0 10px var(--neon); z-index: 50; min-width: 50px; min-height: 60px; display: flex; align-items: center; justify-content: center; }
-  .viewer-nav:hover { opacity: 1; }
+ 
+.od-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(3,4,11,0.82); z-index: 99999;
+  align-items: center; justify-content: center; padding: 1.5rem;
+  backdrop-filter: blur(6px);
+}
+.od-overlay.open { display: flex; }
+.od-modal {
+  background: rgba(7,9,22,0.97); border: 1px solid var(--od-border2);
+  border-radius: 4px; width: 100%; max-width: 580px; max-height: 90vh;
+  display: flex; flex-direction: column; overflow: hidden;
+  box-shadow: 0 0 60px var(--od-neon-dim), 0 30px 80px rgba(0,0,0,0.8);
+  animation: od-modal-in 0.22s ease;
+}
+@keyframes od-modal-in { from{opacity:0;transform:scale(0.95) translateY(10px)} to{opacity:1;transform:none} }
+.od-modal.wide { max-width: 900px; }
+.od-modal.full { max-width: 1200px; width: 95%; }
+.od-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.9rem 1.2rem; border-bottom: 1px solid var(--od-border);
+  font-family: var(--od-font-ui); font-size: 0.75rem; font-weight: 700;
+  color: var(--od-neon); letter-spacing: 0.12em; flex-shrink: 0;
+}
+.od-modal-close {
+  background: none; border: none; color: var(--od-muted); cursor: pointer;
+  font-size: 1.3rem; line-height: 1; padding: 0.2rem 0.4rem; transition: color 0.15s;
+}
+.od-modal-close:hover { color: var(--od-pink); }
+.od-modal-body {
+  padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem;
+  overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--od-border2) transparent;
+}
+.od-modal-body::-webkit-scrollbar { width: 5px; }
+.od-modal-body::-webkit-scrollbar-thumb { background: var(--od-border2); border-radius: 3px; }
+.od-modal-footer {
+  display: flex; justify-content: flex-end; gap: 0.6rem;
+  padding: 0.8rem 1.2rem; border-top: 1px solid var(--od-border); flex-shrink: 0;
+}
 
-   
-  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 0.8rem 1.5rem; font-family: 'Orbitron', sans-serif; pointer-events: none; opacity: 0; transition: 0.3s; z-index: 100000; box-shadow: 0 0 20px var(--neon-gl); font-weight: bold; font-size: 0.75rem; }
+ 
+.od-field { display: flex; flex-direction: column; gap: 0.3rem; }
+.od-field label {
+  font-family: var(--od-font-ui); font-size: 0.48rem;
+  letter-spacing: 0.12em; color: var(--od-muted);
+}
+.od-input, .od-textarea, .od-select {
+  font-family: var(--od-font-jp); font-size: 0.88rem;
+  background: rgba(9,12,30,0.9); border: 1px solid var(--od-border);
+  border-radius: 2px; color: var(--od-bright); padding: 0.45rem 0.7rem;
+  outline: none; transition: border-color 0.15s, box-shadow 0.15s; width: 100%;
+}
+.od-input::placeholder, .od-textarea::placeholder { color: var(--od-dim); font-family: var(--od-font-mono); font-size: 0.78rem; }
+.od-input:focus, .od-textarea:focus, .od-select:focus {
+  border-color: var(--od-neon); box-shadow: 0 0 0 1px var(--od-neon-dim);
+}
+.od-textarea { resize: vertical; min-height: 60px; }
+.od-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.od-select option { background: #090c1e; }
 
-   
-  .mobile-nav { display: none; }
-  .mobile-nav-bar {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 99998;
-    background: rgba(5,5,8,0.97); border-top: 1px solid var(--neon);
-    padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.8); backdrop-filter: blur(10px);
-    min-height: 52px;
-  }
-  .mobile-current { display: flex; align-items: center; gap: 8px; flex: 1; cursor: pointer; min-height: 44px; }
-  .mobile-current .subj-thumb { width: 32px; height: 32px; }
-  .mobile-current-name { font-family: 'Orbitron', sans-serif; font-size: 0.75rem; color: var(--neon); letter-spacing: 1px; }
-  .mobile-nav-actions { display: flex; gap: 6px; }
-  .mobile-nav-btn { background: none; border: 1px solid var(--neon); color: var(--neon); padding: 6px 10px; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; cursor: pointer; min-height: 38px; min-width: 38px; display: flex; align-items: center; justify-content: center; }
+ 
+.od-cf-row { display: flex; gap: 6px; align-items: center; }
+.od-cf-row .od-input { flex: 1; }
+.od-cf-rm {
+  background: none; border: 1px solid var(--od-pink); color: var(--od-pink);
+  width: 32px; height: 32px; cursor: pointer; font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 2px; transition: 0.15s; flex-shrink: 0;
+}
+.od-cf-rm:hover { background: rgba(239,68,68,0.15); }
 
-  .mobile-drawer {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
-    background: rgba(5,5,8,0.98); border-top: 2px solid var(--neon);
-    max-height: 60vh; transform: translateY(100%); transition: transform 0.3s ease;
-    display: flex; flex-direction: column; box-shadow: 0 -8px 30px rgba(0,0,0,0.9);
-  }
-  .mobile-drawer.open { transform: translateY(0); }
-  .drawer-handle { width: 40px; height: 4px; background: #444; border-radius: 2px; margin: 10px auto 6px; }
-  .drawer-header { display: flex; justify-content: space-between; align-items: center; padding: 0 1rem 0.5rem; border-bottom: 1px dashed #333; }
-  .drawer-header span { font-family: 'Orbitron', sans-serif; color: var(--neon); font-size: 0.75rem; }
-  .drawer-list { flex: 1; overflow-y: auto; padding: 0.5rem 0; overscroll-behavior: contain; }
-  .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 99998; display: none; }
+ 
+.od-stats-inputs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.od-stat-col { display: flex; flex-direction: column; gap: 3px; }
+.od-stat-col input { text-align: center; }
 
-   
-  @media (max-width: 1024px) {
-    .top-section { grid-template-columns: 280px 1fr; }
-    .info-grid { grid-template-columns: repeat(2, 1fr); }
-  }
+ 
+.od-gallery-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.7rem; overflow-y: auto; max-height: 70vh; padding-right: 0.4rem;
+}
+.od-gal-item {
+  position: relative; cursor: pointer; border: 1px solid var(--od-border);
+  overflow: hidden; background: #000; aspect-ratio: 1/1;
+  transition: 0.25s; border-radius: 2px;
+}
+.od-gal-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(0.4) contrast(1.1); transition: 0.3s;
+}
+.od-gal-item:hover {
+  border-color: var(--od-neon); box-shadow: 0 0 15px var(--od-neon-dim);
+  transform: scale(1.03); z-index: 10;
+}
+.od-gal-item:hover img { filter: none; }
+.od-gal-meta {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(0,0,0,0.8); color: var(--od-neon);
+  font-family: var(--od-font-ui); font-size: 0.48rem;
+  padding: 4px; text-align: center; letter-spacing: 0.08em;
+  border-top: 1px solid var(--od-neon);
+}
+.od-gal-caption {
+  font-family: var(--od-font-jp); font-size: 0.58rem;
+  color: var(--od-dim); padding: 2px 4px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 
-  @media (max-width: 768px) {
-    .cy-sidebar { display: none; }
-    .mobile-nav { display: block; }
-    .cy-root { flex-direction: column; padding-bottom: 56px; }
-    .cy-main { padding: 1rem; gap: 1rem; }
-    .top-section { grid-template-columns: 1fr; }
-    .avatar-frame { max-width: 280px; margin: 0 auto; aspect-ratio: 3/4; }
-    .db-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-    .db-header-left h1 { font-size: 1.4rem; }
-    .db-header-right { text-align: left; }
-    .info-grid { grid-template-columns: repeat(2, 1fr); }
-    .form-grid { grid-template-columns: 1fr; }
-    .form-group.full { grid-column: span 1; }
-    .stats-inputs { grid-template-columns: repeat(3, 1fr); }
-    .cy-modal-content { width: 100%; max-width: 100%; max-height: 100vh; height: 100vh; border: none; padding: 1rem; padding-top: 3rem; }
-    .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); max-height: calc(100vh - 120px); }
-    .section-title { font-size: 0.8rem; }
-    .toast { bottom: 4.5rem; }
-  }
+ 
+.od-viewer-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  font-size: 2.5rem; color: var(--od-neon); background: none; border: none;
+  cursor: pointer; opacity: 0.4; transition: 0.3s;
+  text-shadow: 0 0 10px var(--od-neon); z-index: 50;
+  min-width: 50px; min-height: 60px; display: flex; align-items: center; justify-content: center;
+}
+.od-viewer-nav:hover { opacity: 1; }
 
-  @media (max-width: 420px) {
-    .cy-main { padding: 0.7rem; }
-    .db-header-left h1 { font-size: 1.1rem; }
-    .info-grid { grid-template-columns: 1fr; }
-    .avatar-frame { max-width: 220px; }
-    .stats-inputs { grid-template-columns: repeat(2, 1fr); }
-    .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 6px; }
-  }
+ 
+.od-compare-selects { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.od-compare-vs { font-family: var(--od-font-ui); font-size: 1rem; color: var(--od-pink); font-weight: 900; }
+
+ 
+.od-help-section { margin-bottom: 1rem; }
+.od-help-section h3 {
+  font-family: var(--od-font-ui); font-size: 0.65rem; color: var(--od-neon);
+  letter-spacing: 0.1em; margin-bottom: 0.4rem; padding-bottom: 0.2rem;
+  border-bottom: 1px dashed var(--od-border);
+}
+.od-help-section p, .od-help-section li {
+  font-family: var(--od-font-jp); font-size: 0.85rem;
+  color: var(--od-text); line-height: 1.7; margin: 0.2rem 0;
+}
+.od-help-section ul { padding-left: 1.2rem; }
+
+ 
+.od-toast {
+  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(10px);
+  background: rgba(5,5,10,0.95); border: 1px solid var(--od-neon);
+  color: var(--od-neon); padding: 0.7rem 1.4rem;
+  font-family: var(--od-font-ui); font-size: 0.65rem; font-weight: 700;
+  letter-spacing: 0.1em; pointer-events: none; opacity: 0; transition: 0.3s;
+  z-index: 100001; box-shadow: 0 0 20px var(--od-neon-gl); border-radius: 2px;
+}
+.od-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+ 
+.od-mobile-nav { display: none; }
+.od-mobile-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 99998;
+  background: rgba(5,5,10,0.97); border-top: 1px solid var(--od-neon);
+  padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.8); backdrop-filter: blur(10px); min-height: 52px;
+}
+.od-mobile-current {
+  display: flex; align-items: center; gap: 8px; flex: 1; cursor: pointer; min-height: 44px;
+}
+.od-mobile-current .od-subj-thumb { width: 32px; height: 32px; }
+.od-mobile-current-name {
+  font-family: var(--od-font-ui); font-size: 0.65rem; color: var(--od-neon); letter-spacing: 0.08em;
+}
+.od-mobile-actions { display: flex; gap: 5px; }
+.od-mobile-btn {
+  background: none; border: 1px solid var(--od-neon); color: var(--od-neon);
+  padding: 6px 10px; font-family: var(--od-font-ui); font-size: 0.55rem;
+  cursor: pointer; min-height: 38px; min-width: 38px;
+  display: flex; align-items: center; justify-content: center; border-radius: 2px;
+}
+.od-drawer {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
+  background: rgba(5,5,10,0.98); border-top: 2px solid var(--od-neon);
+  max-height: 65vh; transform: translateY(100%); transition: transform 0.3s ease;
+  display: flex; flex-direction: column; box-shadow: 0 -8px 30px rgba(0,0,0,0.9);
+  border-radius: 12px 12px 0 0;
+}
+.od-drawer.open { transform: translateY(0); }
+.od-drawer-handle { width: 40px; height: 4px; background: #444; border-radius: 2px; margin: 10px auto 6px; }
+.od-drawer-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 1rem 0.5rem; border-bottom: 1px dashed var(--od-border);
+}
+.od-drawer-header span { font-family: var(--od-font-ui); color: var(--od-neon); font-size: 0.65rem; letter-spacing: 0.1em; }
+.od-drawer-list { flex: 1; overflow-y: auto; padding: 0.5rem 0; overscroll-behavior: contain; }
+.od-drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 99998; display: none; }
+
+ 
+@media (max-width: 1024px) {
+  .od-hero { grid-template-columns: 240px 1fr; }
+  .od-info-grid { grid-template-columns: repeat(2, 1fr); }
+  .od-content { padding: 1.2rem 1.5rem 3rem; }
+}
+@media (max-width: 768px) {
+  .od-sidebar { display: none; }
+  .od-mobile-nav { display: block; }
+  #od-root { flex-direction: column; padding-bottom: 56px; }
+  .od-content { padding: 1rem; gap: 1rem; }
+  .od-hero { grid-template-columns: 1fr; }
+  .od-avatar-frame { max-width: 250px; margin: 0 auto; }
+  .od-header { padding: 0.6rem 1rem; }
+  .od-header-title { font-size: 0.95rem; }
+  .od-info-grid { grid-template-columns: repeat(2, 1fr); }
+  .od-modal { max-width: 100%; max-height: 100vh; height: 100vh; border: none; border-radius: 0; }
+  .od-modal-body { padding: 1rem; }
+  .od-row { grid-template-columns: 1fr; }
+  .od-stats-inputs { grid-template-columns: repeat(3, 1fr); }
+  .od-gallery-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); max-height: calc(100vh - 120px); }
+  .od-toast { bottom: 4.5rem; }
+  .od-compare-selects { flex-direction: column; gap: 0.5rem; }
+  .od-tl-date { width: 55px; font-size: 0.45rem; }
+}
+@media (max-width: 420px) {
+  .od-content { padding: 0.6rem; }
+  .od-header-title { font-size: 0.8rem; }
+  .od-info-grid { grid-template-columns: 1fr; }
+  .od-avatar-frame { max-width: 200px; }
+  .od-stats-inputs { grid-template-columns: repeat(2, 1fr); }
+  .od-gallery-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 5px; }
+}
 </style>
 
-<div class="cy-root" id="app-root">
-  <div class="scanline-bar"></div>
+
+<div id="od-root">
+  <div id="od-vignette"></div>
 
   
-  <div class="cy-sidebar">
-    <div class="sidebar-header">// SUBJECT_LIST<br><span style="font-size:0.55rem;color:#64748b;">DATABASE ACCESS GRANTED</span></div>
-    <div class="subject-list" id="subject-list"></div>
-    <div class="sidebar-footer">
-      <button class="cy-btn" onclick="openEditor(null)">+ ADD NEW SUBJECT</button>
-      <div class="sidebar-footer-row">
-        <button class="cy-btn sm" style="flex:1;" onclick="exportJSON()">⬇ EXPORT</button>
-        <button class="cy-btn sm" style="flex:1;" onclick="document.getElementById('import-file').click()">⬆ IMPORT</button>
-        <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importJSON(event)">
+  <div class="od-sidebar">
+    <div class="od-sidebar-header">
+      <div class="od-sidebar-title">推しDB</div>
+      <div class="od-sidebar-sub">// SUBJECT_REGISTRY</div>
+    </div>
+    <input class="od-sidebar-search" id="od-search" type="text" placeholder="🔍 Search...">
+    <div class="od-subject-list" id="od-subject-list"></div>
+    <div class="od-sidebar-footer">
+      <button class="od-btn primary wide" onclick="OD.openEditor(null)">+ NEW SUBJECT</button>
+      <div class="od-sidebar-footer-row">
+        <button class="od-btn sm" style="flex:1" onclick="OD.exportJSON()">⬇ EXPORT</button>
+        <button class="od-btn sm" style="flex:1" onclick="document.getElementById('od-import-file').click()">⬆ IMPORT</button>
+        <input type="file" id="od-import-file" accept=".json" style="display:none" onchange="OD.importJSON(event)">
       </div>
     </div>
   </div>
 
   
-  <div class="cy-main" id="main-view">
-    <div class="db-header">
-      <div class="db-header-left">
-        <div class="codename" id="disp-codename">// LOADING...</div>
-        <h1 id="disp-name">SUBJECT_NAME</h1>
-        <div class="tags-row" id="disp-tags"></div>
+  <div class="od-main">
+    <div class="od-header">
+      <div class="od-header-left">
+        <div class="od-header-title">OSHI_DATABASE</div>
+        <div class="od-header-sub" id="od-record-count">RECORDS: 0</div>
       </div>
-      <div class="db-header-right">
-        <button class="edit-btn" onclick="openEditor(currentSubjectId)">[ EDIT_RECORD ]</button>
-      </div>
-    </div>
-
-    <div class="top-section">
-      <div class="avatar-container">
-        <div class="avatar-frame">
-          <div class="avatar-tint"></div>
-          <div class="hologram-glitch" id="disp-glitch"></div>
-          <img src="" alt="Avatar" class="hologram-img" id="disp-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJibGFjayIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjNDQ0IiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEwIiBkeT0iLjNlbSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Tk8gSU1BR0U8L3RleHQ+PC9zdmc+'">
-        </div>
-        <div class="heart-gauge-container">
-          <span class="heart-icon">💖</span>
-          <div class="heart-bar-bg"><div class="heart-bar-fill" id="disp-heart-fill" style="width:0%"></div></div>
-          <span class="heart-val" id="disp-heart-val">0%</span>
-        </div>
-        <button class="cy-btn" onclick="openGallery()">[ VISUAL ARCHIVES ] 写真集</button>
-      </div>
-
-      <div class="stats-frame">
-        <div class="section-title">// PARAMETER_ANALYSIS</div>
-        <canvas id="radar-canvas" width="400" height="350"></canvas>
+      <div class="od-header-right">
+        <div class="od-status-badge" id="od-save-status">✓ SYNCED</div>
+        <button class="od-btn sm" onclick="OD.openCompare()">⚔ COMPARE</button>
+        <button class="od-btn sm" onclick="OD.openHelp()">? HELP</button>
       </div>
     </div>
 
-    <div class="info-grid" id="info-grid"></div>
-
-    <div class="logs-frame">
-      <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
-        // OBSERVATION_LOGS
-        <button class="edit-btn" style="margin:0;" onclick="saveLogs()">SAVE_LOGS (保存)</button>
+    <div class="od-content" id="od-content">
+      
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:0.5rem;">
+        <div>
+          <div style="font-family:var(--od-font-ui);font-size:0.55rem;color:var(--od-dim);letter-spacing:0.15em;" id="od-disp-code">// CODENAME</div>
+          <h1 style="font-family:var(--od-font-ui);font-size:1.8rem;font-weight:900;color:var(--od-bright);letter-spacing:0.1em;line-height:1.2;text-shadow:0 0 15px rgba(255,255,255,0.3);" id="od-disp-name">SELECT A SUBJECT</h1>
+          <div class="od-tags-row" id="od-disp-tags" style="margin-top:6px;"></div>
+        </div>
+        <button class="od-btn" onclick="OD.openEditor(OD.currentId)" id="od-edit-btn">✎ EDIT RECORD</button>
       </div>
-      <textarea class="logs-textarea" id="disp-logs" placeholder="記録やメモをここに入力..."></textarea>
+
+      
+      <div class="od-hero">
+        <div class="od-avatar-col">
+          <div class="od-avatar-frame">
+            <div class="od-avatar-tint"></div>
+            <div class="od-avatar-glitch" id="od-disp-glitch"></div>
+            <img src="" alt="Avatar" class="od-avatar-img" id="od-disp-avatar"
+              onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjY3Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDUwNTA4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiMzMzQxNTUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTIiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5OTyBJTUFHRTwvdGV4dD48L3N2Zz4='">
+          </div>
+          <div class="od-heart-gauge">
+            <span class="od-heart-icon">💖</span>
+            <div class="od-heart-bar-bg"><div class="od-heart-bar-fill" id="od-disp-heart-fill" style="width:0%"></div></div>
+            <span class="od-heart-val" id="od-disp-heart-val">0%</span>
+          </div>
+          <button class="od-btn wide" onclick="OD.openGallery()">📷 VISUAL ARCHIVES</button>
+        </div>
+        <div class="od-radar-frame">
+          <div class="od-section-title" style="width:100%;">// PARAMETER ANALYSIS</div>
+          <canvas id="od-radar" width="400" height="350"></canvas>
+        </div>
+      </div>
+
+      
+      <div>
+        <div class="od-section-title">// DETAILED DATA</div>
+        <div class="od-info-grid" id="od-info-grid"></div>
+      </div>
+
+      
+      <div>
+        <div class="od-section-title">
+          // OBSERVATION LOG
+          <span style="font-size:0.5rem;color:var(--od-dim);">自動保存</span>
+        </div>
+        <div class="od-timeline" id="od-timeline"></div>
+        <div class="od-tl-add-row">
+          <input class="od-tl-input" id="od-tl-new" type="text" placeholder="新しい記録を入力... (Enter で追加)">
+          <button class="od-btn sm" onclick="OD.addTimelineEntry()">+ ADD</button>
+        </div>
+      </div>
     </div>
   </div>
 
   
-  <div class="mobile-nav">
-    <div class="drawer-overlay" id="drawer-overlay" onclick="closeMobileDrawer()"></div>
-    <div class="mobile-drawer" id="mobile-drawer">
-      <div class="drawer-handle"></div>
-      <div class="drawer-header">
+  <div class="od-mobile-nav">
+    <div class="od-drawer-overlay" id="od-drawer-overlay" onclick="OD.closeDrawer()"></div>
+    <div class="od-drawer" id="od-drawer">
+      <div class="od-drawer-handle"></div>
+      <div class="od-drawer-header">
         <span>// SELECT SUBJECT</span>
-        <button class="mobile-nav-btn" onclick="openEditor(null)" style="font-size:0.7rem;">+ NEW</button>
+        <button class="od-btn sm" onclick="OD.openEditor(null)">+ NEW</button>
       </div>
-      <div class="drawer-list" id="drawer-list"></div>
-      <div style="padding:0.5rem 0.8rem; display:flex; gap:6px; border-top:1px dashed #333;">
-        <button class="cy-btn sm" style="flex:1;" onclick="exportJSON()">⬇ EXPORT</button>
-        <button class="cy-btn sm" style="flex:1;" onclick="document.getElementById('import-file-m').click()">⬆ IMPORT</button>
-        <input type="file" id="import-file-m" accept=".json" style="display:none;" onchange="importJSON(event)">
+      <div class="od-drawer-list" id="od-drawer-list"></div>
+      <div style="padding:0.5rem 0.8rem;display:flex;gap:5px;border-top:1px dashed var(--od-border);">
+        <button class="od-btn sm" style="flex:1" onclick="OD.exportJSON()">⬇ EXPORT</button>
+        <button class="od-btn sm" style="flex:1" onclick="document.getElementById('od-import-file-m').click()">⬆ IMPORT</button>
+        <input type="file" id="od-import-file-m" accept=".json" style="display:none" onchange="OD.importJSON(event)">
       </div>
     </div>
-    <div class="mobile-nav-bar">
-      <div class="mobile-current" onclick="openMobileDrawer()">
-        <img class="subj-thumb" id="mobile-thumb" src="" alt="">
-        <span class="mobile-current-name" id="mobile-current-name">SELECT...</span>
+    <div class="od-mobile-bar">
+      <div class="od-mobile-current" onclick="OD.openDrawer()">
+        <img class="od-subj-thumb" id="od-m-thumb" src="" alt="">
+        <span class="od-mobile-current-name" id="od-m-name">SELECT...</span>
       </div>
-      <div class="mobile-nav-actions">
-        <button class="mobile-nav-btn" onclick="openEditor(currentSubjectId)" title="Edit">✎</button>
-        <button class="mobile-nav-btn" onclick="openMobileDrawer()" title="List">☰</button>
+      <div class="od-mobile-actions">
+        <button class="od-mobile-btn" onclick="OD.openEditor(OD.currentId)" title="Edit">✎</button>
+        <button class="od-mobile-btn" onclick="OD.openDrawer()" title="List">☰</button>
       </div>
     </div>
   </div>
 
   
-  <div class="cy-modal" id="editor-modal" style="display:none;">
-    <div class="cy-modal-content">
-      <button class="cy-modal-close" onclick="closeEditor()">&times;</button>
-      <h2 class="section-title" style="font-size:1.2rem;margin-bottom:1.5rem;">// RECORD_OVERRIDE</h2>
-      <div class="form-grid">
-        <div class="form-group"><label class="cy-label">SUBJECT NAME (表示名)</label><input type="text" id="in-name" class="cy-input" placeholder="e.g. HATSUNE MIKU"></div>
-        <div class="form-group"><label class="cy-label">CODENAME / ALIAS (通称)</label><input type="text" id="in-codename" class="cy-input" placeholder="e.g. CV01"></div>
-        <div class="form-group">
-          <label class="cy-label">THEME COLOR (推し色)</label>
-          <div style="display:flex;gap:8px;"><input type="color" id="in-color-picker" style="height:44px;cursor:pointer;background:#000;border:1px solid #333;min-width:50px;"><input type="text" id="in-color" class="cy-input" style="flex:1;" value="#10b981"></div>
+  <div class="od-overlay" id="od-editor-overlay">
+    <div class="od-modal wide">
+      <div class="od-modal-header">
+        // RECORD OVERRIDE
+        <button class="od-modal-close" onclick="OD.closeEditor()">&times;</button>
+      </div>
+      <div class="od-modal-body">
+        <div class="od-row">
+          <div class="od-field"><label>SUBJECT NAME (表示名)</label><input class="od-input" id="in-name" placeholder="例: 初音ミク"></div>
+          <div class="od-field"><label>CODENAME / ALIAS (通称)</label><input class="od-input" id="in-codename" placeholder="例: CV01"></div>
         </div>
-        <div class="form-group">
-          <label class="cy-label">OSHI LEVEL 推し度 (0-100)</label>
-          <input type="range" id="in-oshi-level" min="0" max="100" value="50" style="accent-color:var(--neon);min-height:44px;">
-          <div style="text-align:center;color:var(--neon);font-family:'Orbitron';font-size:0.8rem;" id="oshi-level-disp">50%</div>
-        </div>
-        <div class="form-group full">
-          <label class="cy-label">AVATAR IMAGE (画像)</label>
-          <div style="display:flex;gap:0.5rem;align-items:stretch;flex-wrap:wrap;">
-            <input type="file" id="in-avatar-file" class="cy-input" accept="image/*" style="flex:1;min-width:150px;" onchange="processLocalImage('in-avatar-file','in-avatar')">
-            <input type="text" id="in-avatar" class="cy-input" style="flex:1;min-width:150px;" placeholder="URL or auto-fill">
+        <div class="od-row">
+          <div class="od-field">
+            <label>THEME COLOR (推し色)</label>
+            <div style="display:flex;gap:6px;">
+              <input type="color" id="in-color-pick" style="height:38px;cursor:pointer;background:#000;border:1px solid var(--od-border);min-width:44px;border-radius:2px;">
+              <input class="od-input" id="in-color" value="#10b981" style="flex:1;">
+            </div>
           </div>
-          <p style="font-size:0.55rem;color:#64748b;margin-top:2px;">※自動圧縮でBase64保存されます</p>
-        </div>
-        <div class="form-group full">
-          <label class="cy-label">TAGS タグ (カンマ区切り)</label>
-          <input type="text" id="in-tags" class="cy-input" placeholder="e.g. VTuber, 歌手, アニメ, 推し">
-        </div>
-        <div class="form-group full">
-          <label class="cy-label">PARAMETERS レーダーチャート (項目名 + 0-100)</label>
-          <div class="stats-inputs">
-            <div class="stat-col"><input type="text" id="in-l1" class="cy-input" style="padding:0.4rem;font-size:0.7rem;text-align:center;color:#94a3b8;" placeholder="項目名"><input type="number" id="in-s1" class="cy-input" min="0" max="100"></div>
-            <div class="stat-col"><input type="text" id="in-l2" class="cy-input" style="padding:0.4rem;font-size:0.7rem;text-align:center;color:#94a3b8;" placeholder="項目名"><input type="number" id="in-s2" class="cy-input" min="0" max="100"></div>
-            <div class="stat-col"><input type="text" id="in-l3" class="cy-input" style="padding:0.4rem;font-size:0.7rem;text-align:center;color:#94a3b8;" placeholder="項目名"><input type="number" id="in-s3" class="cy-input" min="0" max="100"></div>
-            <div class="stat-col"><input type="text" id="in-l4" class="cy-input" style="padding:0.4rem;font-size:0.7rem;text-align:center;color:#94a3b8;" placeholder="項目名"><input type="number" id="in-s4" class="cy-input" min="0" max="100"></div>
-            <div class="stat-col"><input type="text" id="in-l5" class="cy-input" style="padding:0.4rem;font-size:0.7rem;text-align:center;color:#94a3b8;" placeholder="項目名"><input type="number" id="in-s5" class="cy-input" min="0" max="100"></div>
+          <div class="od-field">
+            <label>OSHI LEVEL 推し度 (0-100)</label>
+            <input type="range" id="in-oshi-lv" min="0" max="100" value="50" style="accent-color:var(--od-neon);height:38px;">
+            <div style="text-align:center;color:var(--od-neon);font-family:var(--od-font-ui);font-size:0.7rem;" id="in-oshi-lv-disp">50%</div>
           </div>
         </div>
-
-        <div class="section-title full" style="margin-top:0.8rem;">// DETAILED_INFO (詳細データ)</div>
-        <div class="form-group"><label class="cy-label">AGE / D.O.B (年齢・誕生日)</label><input type="text" id="in-age" class="cy-input"></div>
-        <div class="form-group"><label class="cy-label">HEIGHT (身長)</label><input type="text" id="in-height" class="cy-input"></div>
-        <div class="form-group"><label class="cy-label">FACTION / ORIGIN (所属・出身)</label><input type="text" id="in-faction" class="cy-input"></div>
-        <div class="form-group"><label class="cy-label">THREAT LEVEL (推し度)</label><input type="text" id="in-threat" class="cy-input" placeholder="e.g. OMEGA / MAX / ∞"></div>
-        <div class="form-group"><label class="cy-label">STATUS (現在の状態)</label><input type="text" id="in-status" class="cy-input" placeholder="e.g. ACTIVE / HIBERNATING"></div>
-        <div class="form-group"><label class="cy-label">CLASSIFICATION (分類/種族)</label><input type="text" id="in-class" class="cy-input" placeholder="e.g. アイドル / 吸血鬼"></div>
-
-        <div class="section-title full" style="margin-top:0.8rem;">// CUSTOM_FIELDS (カスタムフィールド)</div>
-        <div class="form-group full">
-          <div class="custom-fields-list" id="custom-fields-list"></div>
-          <button class="cy-btn sm" style="margin-top:8px;width:auto;" onclick="addCustomFieldRow()">+ ADD FIELD (追加)</button>
+        <div class="od-field">
+          <label>AVATAR IMAGE (画像)</label>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <input type="file" id="in-avatar-file" class="od-input" accept="image/*" style="flex:1;min-width:140px;" onchange="OD.processImage('in-avatar-file','in-avatar')">
+            <input class="od-input" id="in-avatar" style="flex:1;min-width:140px;" placeholder="URL or auto-fill">
+          </div>
+          <p style="font-size:0.48rem;color:var(--od-dim);margin-top:2px;">※ローカルファイルは自動圧縮→IndexedDB保存</p>
         </div>
+        <div class="od-field">
+          <label>TAGS タグ (カンマ区切り)</label>
+          <input class="od-input" id="in-tags" placeholder="例: VTuber, 歌手, 推し">
+        </div>
+        <div class="od-field">
+          <label>PARAMETERS レーダーチャート</label>
+          <div class="od-stats-inputs">
+            <div class="od-stat-col"><input class="od-input" id="in-l1" placeholder="項目名" style="font-size:0.65rem;padding:0.3rem;"><input type="number" class="od-input" id="in-s1" min="0" max="100" style="padding:0.3rem;"></div>
+            <div class="od-stat-col"><input class="od-input" id="in-l2" placeholder="項目名" style="font-size:0.65rem;padding:0.3rem;"><input type="number" class="od-input" id="in-s2" min="0" max="100" style="padding:0.3rem;"></div>
+            <div class="od-stat-col"><input class="od-input" id="in-l3" placeholder="項目名" style="font-size:0.65rem;padding:0.3rem;"><input type="number" class="od-input" id="in-s3" min="0" max="100" style="padding:0.3rem;"></div>
+            <div class="od-stat-col"><input class="od-input" id="in-l4" placeholder="項目名" style="font-size:0.65rem;padding:0.3rem;"><input type="number" class="od-input" id="in-s4" min="0" max="100" style="padding:0.3rem;"></div>
+            <div class="od-stat-col"><input class="od-input" id="in-l5" placeholder="項目名" style="font-size:0.65rem;padding:0.3rem;"><input type="number" class="od-input" id="in-s5" min="0" max="100" style="padding:0.3rem;"></div>
+          </div>
+        </div>
+        <div class="od-section-title" style="margin-top:0.5rem;">// PROFILE DATA (詳細)</div>
+        <div class="od-row">
+          <div class="od-field"><label>AGE / D.O.B (年齢・誕生日)</label><input class="od-input" id="in-age"></div>
+          <div class="od-field"><label>HEIGHT (身長)</label><input class="od-input" id="in-height"></div>
+        </div>
+        <div class="od-row">
+          <div class="od-field"><label>FACTION / ORIGIN (所属・出身)</label><input class="od-input" id="in-faction"></div>
+          <div class="od-field"><label>THREAT LEVEL (推し度テキスト)</label><input class="od-input" id="in-threat" placeholder="例: OMEGA / MAX"></div>
+        </div>
+        <div class="od-row">
+          <div class="od-field"><label>STATUS (現在の状態)</label><input class="od-input" id="in-status" placeholder="ACTIVE / HIBERNATING"></div>
+          <div class="od-field"><label>CLASSIFICATION (分類)</label><input class="od-input" id="in-class" placeholder="アイドル / 吸血鬼"></div>
+        </div>
+        <div class="od-section-title" style="margin-top:0.5rem;">// CUSTOM FIELDS (カスタムフィールド)</div>
+        <div id="od-cf-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+        <button class="od-btn sm" onclick="OD.addCFRow()">+ ADD FIELD</button>
+      </div>
+      <div class="od-modal-footer">
+        <button class="od-btn danger" onclick="OD.deleteSubject()">PURGE (削除)</button>
+        <button class="od-btn" onclick="OD.closeEditor()">CANCEL</button>
+        <button class="od-btn primary" onclick="OD.saveSubject()">SAVE RECORD</button>
+      </div>
+    </div>
+  </div>
 
-        <div class="form-group full" style="margin-top:1rem;display:flex;gap:0.8rem;flex-direction:row;flex-wrap:wrap;">
-          <button class="cy-btn" style="flex:1;min-width:150px;" onclick="saveSubject()">SAVE_RECORD</button>
-          <button class="cy-btn danger" style="min-width:100px;" onclick="deleteSubject()">PURGE (削除)</button>
+  
+  <div class="od-overlay" id="od-gallery-overlay">
+    <div class="od-modal full" style="height:90vh;">
+      <div class="od-modal-header">
+        <span id="od-gal-title">// VISUAL ARCHIVES</span>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="od-btn sm" onclick="OD.openUploadModal()">+ ADD IMAGE</button>
+          <button class="od-modal-close" onclick="OD.closeGallery()">&times;</button>
+        </div>
+      </div>
+      <div class="od-modal-body" style="padding:1rem;">
+        <div class="od-gallery-grid" id="od-gal-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="od-overlay" id="od-upload-overlay" style="z-index:100000;">
+    <div class="od-modal" style="max-width:450px;">
+      <div class="od-modal-header">
+        ++ UPLOAD VISUAL DATA
+        <button class="od-modal-close" onclick="OD.closeUpload()">&times;</button>
+      </div>
+      <div class="od-modal-body">
+        <div class="od-field">
+          <label>UPLOAD FROM DEVICE (端末から)</label>
+          <input type="file" id="in-gal-file" class="od-input" accept="image/*" onchange="OD.processImage('in-gal-file','in-gal-url')">
+        </div>
+        <div class="od-field">
+          <label>OR ENTER URL (URL指定)</label>
+          <input class="od-input" id="in-gal-url" placeholder="https://...">
+        </div>
+        <div class="od-field">
+          <label>CAPTION (キャプション)</label>
+          <input class="od-input" id="in-gal-caption" placeholder="任意: メモやタイトル">
+        </div>
+        <button class="od-btn primary wide" onclick="OD.submitGalleryImage()">UPLOAD TO ARCHIVE</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="od-overlay" id="od-viewer-overlay" style="z-index:100000;background:rgba(0,0,0,0.95);">
+    <button class="od-modal-close" onclick="OD.closeViewer()" style="position:absolute;top:1rem;right:1rem;z-index:20;font-size:1.8rem;">&times;</button>
+    <button class="od-btn sm danger" onclick="OD.deleteGalleryImage()" style="position:absolute;top:1rem;right:4rem;z-index:20;">DELETE</button>
+    <button class="od-viewer-nav" style="left:0.5rem;" onclick="OD.navViewer(-1)">&#10094;</button>
+    <div id="od-viewer-wrap" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;flex-direction:column;gap:0.5rem;touch-action:pan-y;">
+      <img id="od-viewer-img" src="" style="max-width:90vw;max-height:80vh;object-fit:contain;border:1px solid var(--od-neon);box-shadow:0 0 30px var(--od-neon-gl);">
+      <div id="od-viewer-caption" style="font-family:var(--od-font-jp);font-size:0.8rem;color:var(--od-text);max-width:80vw;text-align:center;"></div>
+    </div>
+    <button class="od-viewer-nav" style="right:0.5rem;" onclick="OD.navViewer(1)">&#10095;</button>
+    <div id="od-viewer-count" style="position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);color:var(--od-neon);font-family:var(--od-font-ui);font-size:0.7rem;letter-spacing:0.15em;text-shadow:0 0 5px var(--od-neon);">1/1</div>
+  </div>
+
+  
+  <div class="od-overlay" id="od-compare-overlay">
+    <div class="od-modal wide">
+      <div class="od-modal-header">
+        ⚔ PARAMETER COMPARISON
+        <button class="od-modal-close" onclick="OD.closeCompare()">&times;</button>
+      </div>
+      <div class="od-modal-body" style="align-items:center;">
+        <div class="od-compare-selects">
+          <select class="od-input" id="od-cmp-a" style="max-width:200px;" onchange="OD.drawCompare()"></select>
+          <span class="od-compare-vs">VS</span>
+          <select class="od-input" id="od-cmp-b" style="max-width:200px;" onchange="OD.drawCompare()"></select>
+        </div>
+        <canvas id="od-compare-radar" width="500" height="420" style="max-width:100%;height:auto;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="od-overlay" id="od-help-overlay">
+    <div class="od-modal wide">
+      <div class="od-modal-header">
+        ? USAGE GUIDE / 使い方
+        <button class="od-modal-close" onclick="OD.closeHelp()">&times;</button>
+      </div>
+      <div class="od-modal-body">
+        <div class="od-help-section">
+          <h3>基本操作</h3>
+          <ul>
+            <li><strong>推しの追加:</strong> サイドバーの「+ NEW SUBJECT」ボタンをクリック</li>
+            <li><strong>推しの編集:</strong> メイン画面の「✎ EDIT RECORD」ボタンをクリック</li>
+            <li><strong>推しの切替:</strong> サイドバー（PC）またはボトムバー（スマホ）から選択</li>
+            <li><strong>並べ替え:</strong> サイドバーの推し名をドラッグ＆ドロップ</li>
+          </ul>
+        </div>
+        <div class="od-help-section">
+          <h3>タイムライン（記録ログ）</h3>
+          <ul>
+            <li>テキストを入力してEnterまたは「+ ADD」で記録を追加</li>
+            <li>記録は日付付きで自動保存されます</li>
+            <li>各エントリにマウスを乗せると🗑ボタンで削除可能</li>
+          </ul>
+        </div>
+        <div class="od-help-section">
+          <h3>ギャラリー</h3>
+          <ul>
+            <li>「📷 VISUAL ARCHIVES」から画像管理画面を開く</li>
+            <li>ローカルファイルまたはURLで画像を追加</li>
+            <li>キャプション（メモ）も付けられます</li>
+            <li>画像をクリックで拡大ビューア（左右スワイプ/矢印キーで切替）</li>
+          </ul>
+        </div>
+        <div class="od-help-section">
+          <h3>データ管理</h3>
+          <ul>
+            <li><strong>自動保存:</strong> すべての変更はIndexedDBに即座に保存されます</li>
+            <li><strong>Export:</strong> JSONファイルとしてバックアップをダウンロード</li>
+            <li><strong>Import:</strong> 以前エクスポートしたJSONファイルから復元</li>
+            <li><strong>⚔ COMPARE:</strong> 2人の推しのレーダーチャートを重ねて比較</li>
+          </ul>
+        </div>
+        <div class="od-help-section">
+          <h3>データ保存について</h3>
+          <p>データはブラウザの <strong>IndexedDB</strong> に保存されます。LocalStorageと違い、数百MB以上のデータ（画像含む）を安全に保存できます。ブラウザのキャッシュを完全に削除すると消えますので、定期的にExportでバックアップを取ることを推奨します。</p>
         </div>
       </div>
     </div>
   </div>
 
-  
-  <div class="cy-modal" id="gallery-modal" style="display:none;z-index:999998;">
-    <div class="cy-modal-content" style="width:95%;max-width:1200px;height:90vh;">
-      <button class="cy-modal-close" onclick="closeGallery()">&times;</button>
-      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed var(--neon);padding-bottom:0.8rem;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
-        <h2 class="section-title" style="margin:0;border:none;" id="gallery-title">// VISUAL_ARCHIVES</h2>
-        <button class="cy-btn sm" style="width:auto;padding:0.4rem 1rem;" onclick="openImageUploadModal()">+ ADD IMAGE</button>
-      </div>
-      <div class="gallery-grid" id="gallery-grid"></div>
-    </div>
-  </div>
-
-  
-  <div class="cy-modal" id="upload-modal" style="display:none;z-index:999999;">
-    <div class="cy-modal-content" style="max-width:500px;">
-      <button class="cy-modal-close" onclick="document.getElementById('upload-modal').style.display='none'">&times;</button>
-      <h2 class="section-title">++ UPLOAD VISUAL DATA</h2>
-      <div class="form-group" style="margin-bottom:1rem;">
-        <label class="cy-label">UPLOAD FROM DEVICE (端末から)</label>
-        <input type="file" id="in-gallery-file" class="cy-input" accept="image/*" onchange="processLocalImage('in-gallery-file','in-gallery-url')">
-      </div>
-      <div class="form-group" style="margin-bottom:1rem;">
-        <label class="cy-label">OR ENTER URL (URL指定)</label>
-        <input type="text" id="in-gallery-url" class="cy-input" placeholder="https://...">
-      </div>
-      <button class="cy-btn" onclick="submitGalleryImage()">UPLOAD TO ARCHIVE</button>
-    </div>
-  </div>
-
-  
-  <div class="cy-modal" id="viewer-modal" style="display:none;z-index:999999;background:rgba(0,0,0,0.95);">
-    <button class="cy-modal-close" onclick="closeViewer()" style="z-index:20;">&times;</button>
-    <button class="cy-btn sm danger" onclick="deleteGalleryImage()" style="position:absolute;top:1rem;right:3.5rem;width:auto;z-index:20;">PURGE</button>
-    <button class="viewer-nav" style="left:0.5rem;" onclick="navigateViewer(-1)">&#10094;</button>
-    <div id="viewer-img-wrap" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:relative;touch-action:pan-y;">
-      <img id="viewer-img" src="" style="max-width:90vw;max-height:85vh;object-fit:contain;border:1px solid var(--neon);box-shadow:0 0 30px var(--neon-gl);">
-    </div>
-    <button class="viewer-nav" style="right:0.5rem;" onclick="navigateViewer(1)">&#10095;</button>
-    <div id="viewer-count" style="position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);color:var(--neon);font-family:'Orbitron',monospace;letter-spacing:2px;font-size:0.8rem;text-shadow:0 0 5px var(--neon);">1/1</div>
-  </div>
-
-  <div class="toast" id="toast-msg"></div>
+  <div class="od-toast" id="od-toast"></div>
 </div>
 
+
 <script>
-  const STORAGE_KEY = 'dt_oshi_db_v1';
-  let db = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  let currentSubjectId = null;
-  let currentViewIndex = 0;
-  const defaultStatNames = ['VOCAB','CHARM','PHYS','MENT','MYST'];
-  const defaultFields = [
-    {key:'age',label:'AGE / D.O.B (年齢・誕生日)'},{key:'height',label:'HEIGHT (身長)'},
-    {key:'faction',label:'FACTION / ORIGIN (所属・出身)'},{key:'threat',label:'THREAT LEVEL (推し度)'},
-    {key:'status',label:'STATUS (状態)'},{key:'cls',label:'CLASSIFICATION (分類)'}
-  ];
+(function() {
+  'use strict';
 
   
-  db = db.map(s => {
-    if(!s.statLabels) s.statLabels = [...defaultStatNames];
-    if(!s.gallery) s.gallery = [];
-    if(s.oshiLevel === undefined) s.oshiLevel = 50;
-    if(!s.tags) s.tags = [];
-    if(!s.customFields) s.customFields = [];
-    return s;
-  });
+  
+  
+  const DB_NAME = 'dt_oshi_db';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'subjects';
+  const LS_KEY = 'dt_oshi_db_v1'; 
 
-  if(db.length === 0) {
-    db.push({
-      id:"subj_001", name:"UNKNOWN SUBJECT", codename:"NULL_POINTER", color:"#10b981",
-      avatarUrl:"", statLabels:[...defaultStatNames], stats:[50,50,50,50,50],
-      details:{age:"---",height:"---",faction:"---",threat:"---",status:"---",cls:"---"},
-      logs:"No observations recorded.", gallery:[], oshiLevel:50, tags:[], customFields:[]
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, DB_VERSION);
+      req.onupgradeneeded = e => {
+        const idb = e.target.result;
+        if (!idb.objectStoreNames.contains(STORE_NAME)) {
+          idb.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        }
+      };
+      req.onsuccess = e => resolve(e.target.result);
+      req.onerror = e => reject(e.target.error);
     });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
   }
 
+  async function idbGetAll() {
+    const idb = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = idb.transaction(STORE_NAME, 'readonly');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = e => reject(e.target.error);
+    });
+  }
+
+  async function idbPut(subject) {
+    const idb = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = idb.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      store.put(subject);
+      tx.oncomplete = () => resolve();
+      tx.onerror = e => reject(e.target.error);
+    });
+  }
+
+  async function idbDelete(id) {
+    const idb = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = idb.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      store.delete(id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = e => reject(e.target.error);
+    });
+  }
+
+  async function idbClear() {
+    const idb = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = idb.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      store.clear();
+      tx.oncomplete = () => resolve();
+      tx.onerror = e => reject(e.target.error);
+    });
+  }
+
+  
+  
+  
+  let db = [];
+  let currentId = null;
+  let viewerIndex = 0;
+  let isEditorNew = false;
+  const defaultStatNames = ['VOCAL','CHARM','PHYS','MENT','MYST'];
+  const defaultFields = [
+    {key:'age',label:'AGE / D.O.B (年齢・誕生日)'},
+    {key:'height',label:'HEIGHT (身長)'},
+    {key:'faction',label:'FACTION / ORIGIN (所属・出身)'},
+    {key:'threat',label:'THREAT LEVEL (推し度)'},
+    {key:'status',label:'STATUS (状態)'},
+    {key:'cls',label:'CLASSIFICATION (分類)'}
+  ];
+
+  function newSubject() {
+    return {
+      id: 'subj_' + Date.now(),
+      name: '',
+      codename: '',
+      color: '#10b981',
+      avatarUrl: '',
+      statLabels: [...defaultStatNames],
+      stats: [50,50,50,50,50],
+      details: {age:'',height:'',faction:'',threat:'',status:'',cls:''},
+      oshiLevel: 50,
+      tags: [],
+      customFields: [],
+      gallery: [],
+      timeline: [],
+      order: 0
+    };
+  }
+
+  function migrate(s) {
+    if (!s.statLabels) s.statLabels = [...defaultStatNames];
+    if (!s.gallery) s.gallery = [];
+    if (s.oshiLevel === undefined) s.oshiLevel = 50;
+    if (!s.tags) s.tags = [];
+    if (!s.customFields) s.customFields = [];
+    if (!s.timeline) {
+      s.timeline = [];
+      
+      if (s.logs && s.logs.trim()) {
+        s.timeline.push({
+          date: new Date().toISOString().slice(0,10),
+          text: s.logs.trim()
+        });
+      }
+    }
+    if (s.order === undefined) s.order = 0;
+    
+    if (s.gallery.length > 0 && typeof s.gallery[0] === 'string') {
+      s.gallery = s.gallery.map((url, i) => ({
+        url: url,
+        caption: '',
+        date: new Date().toISOString().slice(0,10)
+      }));
+    }
+    return s;
+  }
+
+  
+  
+  
+  async function init() {
+    try {
+      db = await idbGetAll();
+
+      
+      if (db.length === 0) {
+        const lsData = localStorage.getItem(LS_KEY);
+        if (lsData) {
+          try {
+            const parsed = JSON.parse(lsData);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              showToast('MIGRATING FROM LOCALSTORAGE...');
+              for (let i = 0; i < parsed.length; i++) {
+                parsed[i] = migrate(parsed[i]);
+                parsed[i].order = i;
+                await idbPut(parsed[i]);
+              }
+              db = parsed;
+              
+              localStorage.removeItem(LS_KEY);
+              showToast('MIGRATION COMPLETE');
+            }
+          } catch(e) { console.warn('LS migration failed:', e); }
+        }
+      } else {
+        db = db.map(s => migrate(s));
+      }
+
+      
+      db.sort((a,b) => (a.order||0) - (b.order||0));
+
+      if (db.length === 0) {
+        const s = newSubject();
+        s.name = 'UNKNOWN SUBJECT';
+        s.codename = 'NULL_POINTER';
+        s.details = {age:'---',height:'---',faction:'---',threat:'---',status:'---',cls:'---'};
+        s.timeline = [{date: new Date().toISOString().slice(0,10), text: 'データベース初期化完了。'}];
+        await idbPut(s);
+        db.push(s);
+      }
+
+      loadSubject(db[0].id);
+    } catch(e) {
+      console.error('Init error:', e);
+      showToast('⚠ DATABASE ERROR');
+    }
+  }
+
+  
+  
+  
+  async function saveOne(s) {
+    try {
+      await idbPut(s);
+      showSaveStatus('✓ SAVED');
+    } catch(e) {
+      console.error('Save error:', e);
+      showSaveStatus('⚠ ERROR');
+    }
+  }
+
+  function showSaveStatus(text) {
+    const el = document.getElementById('od-save-status');
+    el.textContent = text;
+    el.style.borderColor = text.includes('⚠') ? 'var(--od-pink)' : 'var(--od-neon)';
+    el.style.color = text.includes('⚠') ? 'var(--od-pink)' : 'var(--od-neon)';
+  }
+
+  
+  
+  
   function showToast(msg) {
-    const t = document.getElementById('toast-msg');
-    t.innerText = msg; t.style.opacity = 1; t.style.transform = 'translate(-50%, -20px)';
-    setTimeout(() => { t.style.opacity = 0; t.style.transform = 'translate(-50%, 0)'; }, 2500);
+    const t = document.getElementById('od-toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
   }
 
+  
+  
+  
   function hexToRgb(hex) {
-    var r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return r ? `${parseInt(r[1],16)}, ${parseInt(r[2],16)}, ${parseInt(r[3],16)}` : '16,185,129';
+    const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return r ? `${parseInt(r[1],16)},${parseInt(r[2],16)},${parseInt(r[3],16)}` : '16,185,129';
   }
 
-  function applyTheme(colorHex) {
-    const root = document.getElementById('app-root');
-    const rgb = hexToRgb(colorHex);
-    root.style.setProperty('--neon', colorHex);
-    root.style.setProperty('--neon-dim', `rgba(${rgb}, 0.2)`);
-    root.style.setProperty('--neon-gl', `rgba(${rgb}, 0.5)`);
+  function applyTheme(hex) {
+    const root = document.getElementById('od-root');
+    const rgb = hexToRgb(hex);
+    root.style.setProperty('--od-neon', hex);
+    root.style.setProperty('--od-neon-dim', `rgba(${rgb},0.2)`);
+    root.style.setProperty('--od-neon-gl', `rgba(${rgb},0.5)`);
   }
 
-  function drawRadar(statsArray, labelsArray, colorHex) {
-    const canvas = document.getElementById('radar-canvas');
-    if(!canvas) return;
+  
+  
+  
+  function drawRadar(canvas, statsArr, labelsArr, colorHex, secondStats, secondColor) {
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    const cx = canvas.width/2, cy = canvas.height/2+15, radius = Math.min(cx,cy)-40, n = 5;
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    const cx = W/2, cy = H/2 + 15, radius = Math.min(cx, cy) - 45, n = 5;
 
-    ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
-    for(let lv=1;lv<=5;lv++) {
-      let r = radius*(lv/5);
+    
+    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
+    for (let lv = 1; lv <= 5; lv++) {
+      const r = radius * (lv/5);
       ctx.beginPath();
-      for(let i=0;i<n;i++) { let a=(Math.PI/2)-(2*Math.PI*i/n), x=cx+r*Math.cos(a), y=cy-r*Math.sin(a); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+      for (let i = 0; i < n; i++) {
+        const a = (Math.PI/2) - (2*Math.PI*i/n);
+        const x = cx + r * Math.cos(a), y = cy - r * Math.sin(a);
+        i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      }
       ctx.closePath(); ctx.stroke();
     }
-    for(let i=0;i<n;i++) {
-      let a=(Math.PI/2)-(2*Math.PI*i/n);
-      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+radius*Math.cos(a),cy-radius*Math.sin(a)); ctx.stroke();
-      ctx.fillStyle='#94a3b8'; ctx.font='12px "Zen Kaku Gothic New"'; ctx.textAlign='center'; ctx.textBaseline='middle';
-      let lx=cx+(radius+25)*Math.cos(a), ly=cy-(radius+25)*Math.sin(a);
-      if(Math.abs(Math.cos(a))>=0.1) lx += Math.cos(a)>0?5:-5;
-      ctx.fillText((labelsArray[i]||'').toUpperCase(),lx,ly);
+
+    
+    for (let i = 0; i < n; i++) {
+      const a = (Math.PI/2) - (2*Math.PI*i/n);
+      ctx.beginPath(); ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + radius*Math.cos(a), cy - radius*Math.sin(a));
+      ctx.stroke();
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '12px "DotGothic16", monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      let lx = cx + (radius+28)*Math.cos(a);
+      let ly = cy - (radius+28)*Math.sin(a);
+      if (Math.abs(Math.cos(a)) >= 0.1) lx += Math.cos(a) > 0 ? 5 : -5;
+      ctx.fillText((labelsArr[i]||'').toUpperCase(), lx, ly);
     }
-    ctx.beginPath();
-    for(let i=0;i<n;i++) {
-      let a=(Math.PI/2)-(2*Math.PI*i/n), val=Math.max(0,Math.min(100,statsArray[i]||0)), r=radius*(val/100);
-      let x=cx+r*Math.cos(a), y=cy-r*Math.sin(a);
-      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+
+    
+    function drawFill(stats, color, alpha) {
+      ctx.beginPath();
+      for (let i = 0; i < n; i++) {
+        const a = (Math.PI/2) - (2*Math.PI*i/n);
+        const val = Math.max(0, Math.min(100, stats[i]||0));
+        const r = radius * (val/100);
+        const x = cx + r*Math.cos(a), y = cy - r*Math.sin(a);
+        i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      const rgb = hexToRgb(color);
+      ctx.fillStyle = `rgba(${rgb},${alpha})`;
+      ctx.fill();
+      ctx.lineWidth = 2; ctx.strokeStyle = color; ctx.stroke();
+      ctx.shadowBlur = 10; ctx.shadowColor = color; ctx.stroke(); ctx.shadowBlur = 0;
     }
-    ctx.closePath();
-    const rgb=hexToRgb(colorHex);
-    ctx.fillStyle=`rgba(${rgb},0.4)`; ctx.fill();
-    ctx.lineWidth=2; ctx.strokeStyle=colorHex; ctx.stroke();
-    ctx.shadowBlur=10; ctx.shadowColor=colorHex; ctx.stroke(); ctx.shadowBlur=0;
+
+    
+    if (secondStats && secondColor) {
+      drawFill(secondStats, secondColor, 0.25);
+    }
+
+    
+    drawFill(statsArr, colorHex, 0.35);
   }
 
+  
+  
+  
   function loadSubject(id) {
-    if(!id && db.length>0) id = db[0].id;
-    if(!id) return;
-    currentSubjectId = id;
+    if (!id && db.length > 0) id = db[0].id;
+    if (!id) return;
+    currentId = id;
     const s = db.find(x => x.id === id);
-    if(!s) return;
+    if (!s) return;
 
     applyTheme(s.color);
-    document.getElementById('disp-codename').innerText = `// ${s.codename}`;
-    document.getElementById('disp-name').innerText = s.name;
-    document.getElementById('disp-avatar').src = s.avatarUrl || '';
-    document.getElementById('disp-glitch').style.backgroundImage = s.avatarUrl ? `url(${s.avatarUrl})` : 'none';
+
+    
+    document.getElementById('od-disp-code').textContent = `// ${s.codename || 'NO CODENAME'}`;
+    document.getElementById('od-disp-name').textContent = s.name || 'UNNAMED';
+
+    
+    const avatarEl = document.getElementById('od-disp-avatar');
+    avatarEl.src = s.avatarUrl || '';
+    const glitchEl = document.getElementById('od-disp-glitch');
+    glitchEl.style.backgroundImage = s.avatarUrl ? `url(${s.avatarUrl})` : 'none';
 
     
     const lv = s.oshiLevel || 0;
-    document.getElementById('disp-heart-fill').style.width = lv+'%';
-    document.getElementById('disp-heart-val').innerText = lv+'%';
+    document.getElementById('od-disp-heart-fill').style.width = lv + '%';
+    document.getElementById('od-disp-heart-val').textContent = lv + '%';
 
     
-    const tagsEl = document.getElementById('disp-tags');
-    tagsEl.innerHTML = (s.tags||[]).map(t => `<span class="tag-chip">${t}</span>`).join('');
+    const tagsEl = document.getElementById('od-disp-tags');
+    tagsEl.innerHTML = (s.tags||[]).map(t => `<span class="od-tag">${t}</span>`).join('');
 
     
-    const grid = document.getElementById('info-grid');
+    const grid = document.getElementById('od-info-grid');
     grid.innerHTML = '';
     defaultFields.forEach(f => {
       const val = s.details[f.key] || '---';
-      grid.innerHTML += `<div class="info-box"><div class="info-label">${f.label}</div><div class="info-val">${val}</div></div>`;
+      grid.innerHTML += `<div class="od-info-box"><div class="od-info-label">${f.label}</div><div class="od-info-val">${val}</div></div>`;
     });
     (s.customFields||[]).forEach(cf => {
-      grid.innerHTML += `<div class="info-box"><div class="info-label">${cf.label}</div><div class="info-val">${cf.value||'---'}</div></div>`;
+      grid.innerHTML += `<div class="od-info-box"><div class="od-info-label">${cf.label}</div><div class="od-info-val">${cf.value||'---'}</div></div>`;
     });
 
-    document.getElementById('disp-logs').value = s.logs || '';
-    drawRadar(s.stats||[0,0,0,0,0], s.statLabels||defaultStatNames, s.color);
+    
+    drawRadar(document.getElementById('od-radar'), s.stats||[0,0,0,0,0], s.statLabels||defaultStatNames, s.color);
+
+    
+    renderTimeline(s);
+
+    
+    document.getElementById('od-record-count').textContent = `RECORDS: ${db.length}`;
+
+    
     renderSidebar();
 
     
-    const mt = document.getElementById('mobile-thumb');
-    if(mt) { mt.src = s.avatarUrl||''; mt.style.borderColor = s.color; }
-    const mn = document.getElementById('mobile-current-name');
-    if(mn) mn.innerText = s.name.substring(0,18);
+    const mt = document.getElementById('od-m-thumb');
+    if (mt) { mt.src = s.avatarUrl || ''; mt.style.borderColor = s.color; }
+    const mn = document.getElementById('od-m-name');
+    if (mn) mn.textContent = (s.name||'').substring(0,18);
   }
 
+  
+  
+  
   function renderSidebar() {
-    const lists = [document.getElementById('subject-list'), document.getElementById('drawer-list')];
+    const searchVal = (document.getElementById('od-search').value || '').toLowerCase();
+    const lists = [document.getElementById('od-subject-list'), document.getElementById('od-drawer-list')];
+
     lists.forEach(list => {
-      if(!list) return;
+      if (!list) return;
       list.innerHTML = '';
-      db.forEach((s,idx) => {
-        const el = document.createElement('div');
-        el.className = `subject-item ${s.id===currentSubjectId?'active':''}`;
-        el.draggable = true;
-        el.dataset.idx = idx;
-        const thumbSrc = s.avatarUrl ? `<img class="subj-thumb" src="${s.avatarUrl}" onerror="this.style.display='none'" alt="">` : '';
-        el.innerHTML = `${thumbSrc}<div class="color-dot" style="background:${s.color};color:${s.color};"></div> ${s.name.substring(0,15)}`;
-        el.onclick = () => { loadSubject(s.id); closeMobileDrawer(); };
-        
-        el.ondragstart = e => { e.dataTransfer.setData('text/plain',idx); el.style.opacity='0.4'; };
-        el.ondragend = () => { el.style.opacity='1'; };
-        el.ondragover = e => { e.preventDefault(); el.classList.add('drag-over'); };
-        el.ondragleave = () => { el.classList.remove('drag-over'); };
-        el.ondrop = e => {
-          e.preventDefault(); el.classList.remove('drag-over');
-          const from = parseInt(e.dataTransfer.getData('text/plain'));
-          const to = idx;
-          if(from!==to) { const item=db.splice(from,1)[0]; db.splice(to,0,item); localStorage.setItem(STORAGE_KEY,JSON.stringify(db)); renderSidebar(); }
-        };
-        list.appendChild(el);
-      });
+      db.filter(s => !searchVal || s.name.toLowerCase().includes(searchVal) || (s.codename||'').toLowerCase().includes(searchVal))
+        .forEach((s, idx) => {
+          const el = document.createElement('div');
+          el.className = `od-subj-item ${s.id === currentId ? 'active' : ''}`;
+          el.draggable = true;
+          el.dataset.idx = db.indexOf(s);
+
+          const thumbSrc = s.avatarUrl || 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzExMSIvPjwvc3ZnPg==';
+          const barW = s.oshiLevel || 0;
+
+          el.innerHTML = `
+            <img class="od-subj-thumb" src="${thumbSrc}" onerror="this.style.opacity=0.3" style="border-color:${s.color}" alt="">
+            <div class="od-subj-info">
+              <div class="od-subj-name">${s.name||'UNNAMED'}</div>
+              <div class="od-subj-code">// ${(s.codename||'').substring(0,15)}</div>
+              <div class="od-subj-bar-bg"><div class="od-subj-bar-fill" style="width:${barW}%;background:${s.color};box-shadow:0 0 4px ${s.color};"></div></div>
+            </div>`;
+
+          el.onclick = () => { loadSubject(s.id); closeDrawer(); };
+
+          
+          el.ondragstart = e => { e.dataTransfer.setData('text/plain', db.indexOf(s)); el.style.opacity = '0.4'; };
+          el.ondragend = () => { el.style.opacity = '1'; };
+          el.ondragover = e => { e.preventDefault(); el.classList.add('drag-over'); };
+          el.ondragleave = () => el.classList.remove('drag-over');
+          el.ondrop = async e => {
+            e.preventDefault(); el.classList.remove('drag-over');
+            const from = parseInt(e.dataTransfer.getData('text/plain'));
+            const to = db.indexOf(s);
+            if (from !== to) {
+              const item = db.splice(from, 1)[0];
+              db.splice(to, 0, item);
+              for (let i = 0; i < db.length; i++) { db[i].order = i; await idbPut(db[i]); }
+              renderSidebar();
+            }
+          };
+
+          list.appendChild(el);
+        });
     });
   }
 
   
-  window.openMobileDrawer = function() {
-    document.getElementById('mobile-drawer').classList.add('open');
-    document.getElementById('drawer-overlay').style.display = 'block';
+  document.getElementById('od-search').addEventListener('input', () => renderSidebar());
+
+  
+  
+  
+  function renderTimeline(s) {
+    const container = document.getElementById('od-timeline');
+    container.innerHTML = '';
+    const entries = s.timeline || [];
+    if (entries.length === 0) {
+      container.innerHTML = '<div style="color:var(--od-dim);font-family:var(--od-font-ui);font-size:0.6rem;padding:1rem 0;text-align:center;letter-spacing:0.1em;">NO LOGS RECORDED</div>';
+      return;
+    }
+    entries.forEach((entry, i) => {
+      const div = document.createElement('div');
+      div.className = 'od-tl-entry';
+      div.innerHTML = `
+        <div class="od-tl-date">${entry.date || '----'}</div>
+        <div class="od-tl-dot"></div>
+        <div class="od-tl-text">${escapeHtml(entry.text)}</div>
+        <button class="od-tl-delete" onclick="OD.deleteTimeline(${i})" title="削除">🗑</button>`;
+      container.appendChild(div);
+    });
   }
-  window.closeMobileDrawer = function() {
-    document.getElementById('mobile-drawer').classList.remove('open');
-    document.getElementById('drawer-overlay').style.display = 'none';
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
   }
 
   
-  const colorPicker = document.getElementById('in-color-picker');
-  const colorText = document.getElementById('in-color');
-  colorPicker.addEventListener('input', e => colorText.value = e.target.value);
-  colorText.addEventListener('input', e => colorPicker.value = e.target.value);
-
   
-  document.getElementById('in-oshi-level').addEventListener('input', function() {
-    document.getElementById('oshi-level-disp').innerText = this.value + '%';
-  });
-
   
-  window.addCustomFieldRow = function(label,value) {
-    const list = document.getElementById('custom-fields-list');
-    const row = document.createElement('div');
-    row.className = 'custom-field-row';
-    row.innerHTML = `<input type="text" class="cy-input cf-label" placeholder="フィールド名" value="${label||''}"><input type="text" class="cy-input cf-value" placeholder="値" value="${value||''}"><button class="cf-remove" onclick="this.parentElement.remove()">&times;</button>`;
-    list.appendChild(row);
-  }
-
   function openEditor(id) {
-    let s = db.find(x => x.id === id);
-    if(!s) { s = {name:'',codename:'',color:'#10b981',avatarUrl:'',statLabels:[...defaultStatNames],stats:[50,50,50,50,50],details:{age:'',height:'',faction:'',threat:'',status:'',cls:''},oshiLevel:50,tags:[],customFields:[]}; currentSubjectId="new_subject"; }
+    let s;
+    if (id && id !== 'new') {
+      s = db.find(x => x.id === id);
+      isEditorNew = false;
+    }
+    if (!s) {
+      s = newSubject();
+      isEditorNew = true;
+    }
 
     document.getElementById('in-name').value = s.name;
     document.getElementById('in-codename').value = s.codename;
     document.getElementById('in-color').value = s.color;
-    document.getElementById('in-color-picker').value = s.color;
+    document.getElementById('in-color-pick').value = s.color;
     document.getElementById('in-avatar').value = s.avatarUrl;
-    document.getElementById('in-avatar-file').value = "";
-    document.getElementById('in-oshi-level').value = s.oshiLevel||50;
-    document.getElementById('oshi-level-disp').innerText = (s.oshiLevel||50)+'%';
+    try { document.getElementById('in-avatar-file').value = ''; } catch(e) {}
+    document.getElementById('in-oshi-lv').value = s.oshiLevel || 50;
+    document.getElementById('in-oshi-lv-disp').textContent = (s.oshiLevel||50) + '%';
     document.getElementById('in-tags').value = (s.tags||[]).join(', ');
 
-    const labels = s.statLabels||defaultStatNames;
-    for(let i=1;i<=5;i++) { document.getElementById('in-l'+i).value=labels[i-1]; document.getElementById('in-s'+i).value=s.stats[i-1]; }
-    document.getElementById('in-age').value = s.details.age||'';
-    document.getElementById('in-height').value = s.details.height||'';
-    document.getElementById('in-faction').value = s.details.faction||'';
-    document.getElementById('in-threat').value = s.details.threat||'';
-    document.getElementById('in-status').value = s.details.status||'';
-    document.getElementById('in-class').value = s.details.cls||'';
+    const labels = s.statLabels || defaultStatNames;
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('in-l'+i).value = labels[i-1];
+      document.getElementById('in-s'+i).value = s.stats[i-1];
+    }
 
-    const cfList = document.getElementById('custom-fields-list');
+    document.getElementById('in-age').value = s.details.age || '';
+    document.getElementById('in-height').value = s.details.height || '';
+    document.getElementById('in-faction').value = s.details.faction || '';
+    document.getElementById('in-threat').value = s.details.threat || '';
+    document.getElementById('in-status').value = s.details.status || '';
+    document.getElementById('in-class').value = s.details.cls || '';
+
+    
+    const cfList = document.getElementById('od-cf-list');
     cfList.innerHTML = '';
-    (s.customFields||[]).forEach(cf => addCustomFieldRow(cf.label,cf.value));
+    (s.customFields||[]).forEach(cf => addCFRow(cf.label, cf.value));
 
-    document.getElementById('editor-modal').style.display = 'flex';
-    closeMobileDrawer();
+    
+    document.getElementById('od-editor-overlay')._editId = isEditorNew ? s.id : id;
+
+    document.getElementById('od-editor-overlay').classList.add('open');
+    closeDrawer();
   }
 
   function closeEditor() {
-    document.getElementById('editor-modal').style.display = 'none';
-    if(currentSubjectId==="new_subject") currentSubjectId = db.length>0?db[0].id:null;
+    document.getElementById('od-editor-overlay').classList.remove('open');
   }
 
-  window.saveSubject = function() {
-    if(currentSubjectId==="new_subject") currentSubjectId = "subj_"+Date.now();
-    let s = db.find(x => x.id===currentSubjectId);
-    if(!s) { s={id:currentSubjectId,logs:"",gallery:[]}; db.push(s); }
+  async function saveSubject() {
+    const editId = document.getElementById('od-editor-overlay')._editId;
+    let s = db.find(x => x.id === editId);
+    if (!s) {
+      s = newSubject();
+      s.id = editId;
+      s.order = db.length;
+      s.timeline = [];
+      s.gallery = [];
+      db.push(s);
+    }
 
-    s.name = document.getElementById('in-name').value||'UNKNOWN';
-    s.codename = document.getElementById('in-codename').value||'NULL';
-    s.color = document.getElementById('in-color').value||'#10b981';
+    s.name = document.getElementById('in-name').value || 'UNKNOWN';
+    s.codename = document.getElementById('in-codename').value || 'NULL';
+    s.color = document.getElementById('in-color').value || '#10b981';
     s.avatarUrl = document.getElementById('in-avatar').value;
-    s.oshiLevel = parseInt(document.getElementById('in-oshi-level').value)||0;
+    s.oshiLevel = parseInt(document.getElementById('in-oshi-lv').value) || 0;
     s.tags = document.getElementById('in-tags').value.split(/[,、]/).map(t=>t.trim()).filter(t=>t);
-    s.statLabels = []; s.stats = [];
-    for(let i=1;i<=5;i++) { s.statLabels.push(document.getElementById('in-l'+i).value||'STAT'+i); s.stats.push(parseInt(document.getElementById('in-s'+i).value)||0); }
-    s.details = { age:document.getElementById('in-age').value, height:document.getElementById('in-height').value, faction:document.getElementById('in-faction').value, threat:document.getElementById('in-threat').value, status:document.getElementById('in-status').value, cls:document.getElementById('in-class').value };
 
-    
+    s.statLabels = []; s.stats = [];
+    for (let i = 1; i <= 5; i++) {
+      s.statLabels.push(document.getElementById('in-l'+i).value || 'STAT'+i);
+      s.stats.push(parseInt(document.getElementById('in-s'+i).value) || 0);
+    }
+
+    s.details = {
+      age: document.getElementById('in-age').value,
+      height: document.getElementById('in-height').value,
+      faction: document.getElementById('in-faction').value,
+      threat: document.getElementById('in-threat').value,
+      status: document.getElementById('in-status').value,
+      cls: document.getElementById('in-class').value
+    };
+
     s.customFields = [];
-    document.querySelectorAll('.custom-field-row').forEach(row => {
-      const label = row.querySelector('.cf-label').value.trim();
-      const value = row.querySelector('.cf-value').value.trim();
-      if(label) s.customFields.push({label,value});
+    document.querySelectorAll('.od-cf-row').forEach(row => {
+      const label = row.querySelector('.od-cf-label').value.trim();
+      const value = row.querySelector('.od-cf-value').value.trim();
+      if (label) s.customFields.push({label, value});
     });
 
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-      closeEditor(); loadSubject(currentSubjectId); showToast("RECORD SAVED");
-    } catch(e) { alert("⚠️ 保存エラー: 容量制限を超えました。"); console.error(e); }
+    await saveOne(s);
+    closeEditor();
+    loadSubject(s.id);
+    showToast('RECORD SAVED');
   }
 
-  window.deleteSubject = function() {
-    if(db.length<=1) { alert("最低1件のレコードが必要です。"); return; }
-    if(confirm("WARNING: PERMANENTLY PURGE SUBJECT RECORD?")) {
-      db = db.filter(s => s.id!==currentSubjectId);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-      closeEditor(); loadSubject(db[0].id); showToast("RECORD PURGED");
+  async function deleteSubject() {
+    if (db.length <= 1) { alert('最低1件のレコードが必要です。'); return; }
+    if (!confirm('WARNING: この推しレコードを完全削除しますか？')) return;
+    const editId = document.getElementById('od-editor-overlay')._editId;
+    db = db.filter(s => s.id !== editId);
+    await idbDelete(editId);
+    closeEditor();
+    loadSubject(db[0].id);
+    showToast('RECORD PURGED');
+  }
+
+  
+  function addCFRow(label, value) {
+    const list = document.getElementById('od-cf-list');
+    const row = document.createElement('div');
+    row.className = 'od-cf-row';
+    row.innerHTML = `
+      <input class="od-input od-cf-label" placeholder="フィールド名" value="${label||''}">
+      <input class="od-input od-cf-value" placeholder="値" value="${value||''}">
+      <button class="od-cf-rm" onclick="this.parentElement.remove()">&times;</button>`;
+    list.appendChild(row);
+  }
+
+  
+  document.getElementById('in-color-pick').addEventListener('input', e => {
+    document.getElementById('in-color').value = e.target.value;
+  });
+  document.getElementById('in-color').addEventListener('input', e => {
+    if (/^#[0-9a-f]{6}$/i.test(e.target.value)) {
+      document.getElementById('in-color-pick').value = e.target.value;
     }
-  }
-
-  window.saveLogs = function() {
-    const s = db.find(x => x.id===currentSubjectId);
-    if(s) { s.logs=document.getElementById('disp-logs').value; localStorage.setItem(STORAGE_KEY,JSON.stringify(db)); showToast("LOGS SAVED"); }
-  }
+  });
+  document.getElementById('in-oshi-lv').addEventListener('input', function() {
+    document.getElementById('in-oshi-lv-disp').textContent = this.value + '%';
+  });
 
   
-  window.exportJSON = function() {
-    const blob = new Blob([JSON.stringify(db,null,2)], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'oshi_database_'+new Date().toISOString().slice(0,10)+'.json';
-    a.click(); URL.revokeObjectURL(a.href);
-    showToast("EXPORT COMPLETE");
-    closeMobileDrawer();
-  }
-
-  window.importJSON = function(event) {
-    const file = event.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      try {
-        const imported = JSON.parse(e.target.result);
-        if(!Array.isArray(imported)) throw new Error("Invalid format");
-        if(!confirm(`${imported.length}件のレコードをインポートします。既存データは上書きされます。よろしいですか？`)) return;
-        db = imported.map(s => {
-          if(!s.statLabels) s.statLabels=[...defaultStatNames]; if(!s.gallery) s.gallery=[];
-          if(s.oshiLevel===undefined) s.oshiLevel=50; if(!s.tags) s.tags=[]; if(!s.customFields) s.customFields=[];
-          return s;
-        });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-        loadSubject(db[0].id); showToast("IMPORT COMPLETE"); closeMobileDrawer();
-      } catch(err) { alert("⚠️ インポートエラー: 正しいJSONファイルを選択してください。"); console.error(err); }
-    };
-    reader.readAsText(file);
-    event.target.value = '';
-  }
-
   
-  window.processLocalImage = function(fileInputId, targetTextId) {
+  
+  function processImage(fileInputId, targetTextId) {
     const fi = document.getElementById(fileInputId);
-    if(!fi.files||fi.files.length===0) return;
+    if (!fi.files || fi.files.length === 0) return;
     const file = fi.files[0];
-    if(!file.type.match('image.*')) { alert("画像ファイルを選択してください。"); return; }
+    if (!file.type.match('image.*')) { alert('画像ファイルを選択してください。'); return; }
+
     const reader = new FileReader();
     reader.onload = function(e) {
       const img = new Image();
       img.onload = function() {
-        showToast("COMPRESSING...");
-        const max=1000; let w=img.width, h=img.height;
-        if(w>h) { if(w>max){h*=max/w;w=max;} } else { if(h>max){w*=max/h;h=max;} }
-        const c=document.createElement('canvas'); c.width=w; c.height=h;
-        c.getContext('2d').drawImage(img,0,0,w,h);
-        document.getElementById(targetTextId).value = c.toDataURL('image/jpeg',0.7);
-        showToast("COMPRESSION COMPLETE");
-      }
+        showToast('COMPRESSING...');
+        const max = 1200;
+        let w = img.width, h = img.height;
+        if (w > h) { if (w > max) { h *= max/w; w = max; } }
+        else { if (h > max) { w *= max/h; h = max; } }
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = c.toDataURL('image/jpeg', 0.75);
+        document.getElementById(targetTextId).value = dataUrl;
+        showToast('COMPRESSION COMPLETE');
+      };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   }
 
   
-  window.openGallery = function() {
-    const s = db.find(x => x.id===currentSubjectId);
-    if(!s) return;
-    document.getElementById('gallery-title').innerText = `// ${s.codename||s.name} : ARCHIVES`;
-    const grid = document.getElementById('gallery-grid');
+  
+  
+  async function addTimelineEntry() {
+    const input = document.getElementById('od-tl-new');
+    const text = input.value.trim();
+    if (!text) return;
+    const s = db.find(x => x.id === currentId);
+    if (!s) return;
+    if (!s.timeline) s.timeline = [];
+    s.timeline.unshift({
+      date: new Date().toISOString().slice(0,10),
+      text: text
+    });
+    input.value = '';
+    await saveOne(s);
+    renderTimeline(s);
+  }
+
+  async function deleteTimeline(index) {
+    const s = db.find(x => x.id === currentId);
+    if (!s || !s.timeline) return;
+    s.timeline.splice(index, 1);
+    await saveOne(s);
+    renderTimeline(s);
+  }
+
+  
+  document.getElementById('od-tl-new').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); addTimelineEntry(); }
+  });
+
+  
+  
+  
+  function openGallery() {
+    const s = db.find(x => x.id === currentId);
+    if (!s) return;
+    document.getElementById('od-gal-title').textContent = `// ${s.codename||s.name} : ARCHIVES`;
+    const grid = document.getElementById('od-gal-grid');
     grid.innerHTML = '';
-    const g = s.gallery||[];
-    if(g.length===0) {
-      grid.innerHTML = '<div style="color:#64748b;font-family:\'Orbitron\';text-align:center;grid-column:1/-1;padding:2rem;">NO VISUAL DATA FOUND.<br>CLICK [+ ADD IMAGE] TO START.</div>';
+    const g = s.gallery || [];
+    if (g.length === 0) {
+      grid.innerHTML = '<div style="color:var(--od-dim);font-family:var(--od-font-ui);font-size:0.65rem;text-align:center;grid-column:1/-1;padding:3rem 1rem;letter-spacing:0.1em;">NO VISUAL DATA FOUND.<br>CLICK [+ ADD IMAGE] TO START.</div>';
     } else {
-      g.forEach((url,i) => {
+      g.forEach((item, i) => {
         const el = document.createElement('div');
-        el.className = 'gallery-item'; el.onclick = () => openViewer(i);
-        el.innerHTML = `<img src="${url}" onerror="this.style.opacity=0.3"><div class="gallery-meta">FILE_${String(i+1).padStart(3,'0')}</div>`;
+        el.className = 'od-gal-item';
+        el.onclick = () => openViewer(i);
+        el.innerHTML = `
+          <img src="${item.url}" onerror="this.style.opacity=0.2" loading="lazy">
+          <div class="od-gal-meta">FILE_${String(i+1).padStart(3,'0')}</div>
+          ${item.caption ? `<div class="od-gal-caption">${escapeHtml(item.caption)}</div>` : ''}`;
         grid.appendChild(el);
       });
     }
-    document.getElementById('gallery-modal').style.display = 'flex';
-  }
-  window.closeGallery = function() { document.getElementById('gallery-modal').style.display='none'; }
-
-  window.openImageUploadModal = function() {
-    document.getElementById('in-gallery-file').value=""; document.getElementById('in-gallery-url').value="";
-    document.getElementById('upload-modal').style.display='flex';
+    document.getElementById('od-gallery-overlay').classList.add('open');
   }
 
-  window.submitGalleryImage = function() {
-    const url = document.getElementById('in-gallery-url').value;
-    if(!url||!url.trim()) return;
-    const s = db.find(x => x.id===currentSubjectId);
-    if(!s) return; if(!s.gallery) s.gallery=[];
-    try {
-      s.gallery.unshift(url.trim());
-      const json = JSON.stringify(db);
-      if(json.length>4000000) console.warn("Approaching storage limit:",json.length/1024/1024,"MB");
-      localStorage.setItem(STORAGE_KEY,json);
-      document.getElementById('upload-modal').style.display='none';
-      showToast("IMAGE ARCHIVED"); openGallery();
-    } catch(e) { s.gallery.shift(); alert("⚠️ 容量制限超過。不要な画像を削除してください。"); }
+  function closeGallery() { document.getElementById('od-gallery-overlay').classList.remove('open'); }
+
+  function openUploadModal() {
+    try { document.getElementById('in-gal-file').value = ''; } catch(e) {}
+    document.getElementById('in-gal-url').value = '';
+    document.getElementById('in-gal-caption').value = '';
+    document.getElementById('od-upload-overlay').classList.add('open');
+  }
+  function closeUpload() { document.getElementById('od-upload-overlay').classList.remove('open'); }
+
+  async function submitGalleryImage() {
+    const url = document.getElementById('in-gal-url').value;
+    if (!url || !url.trim()) return;
+    const caption = document.getElementById('in-gal-caption').value.trim();
+    const s = db.find(x => x.id === currentId);
+    if (!s) return;
+    if (!s.gallery) s.gallery = [];
+    s.gallery.unshift({
+      url: url.trim(),
+      caption: caption,
+      date: new Date().toISOString().slice(0,10)
+    });
+    await saveOne(s);
+    closeUpload();
+    showToast('IMAGE ARCHIVED');
+    openGallery();
   }
 
-  window.openViewer = function(i) {
-    const s = db.find(x => x.id===currentSubjectId);
-    if(!s||!s.gallery||!s.gallery.length) return;
-    currentViewIndex = i; updateViewer();
-    document.getElementById('viewer-modal').style.display='flex';
+  
+  function openViewer(i) {
+    const s = db.find(x => x.id === currentId);
+    if (!s || !s.gallery || !s.gallery.length) return;
+    viewerIndex = i;
+    updateViewer();
+    document.getElementById('od-viewer-overlay').classList.add('open');
   }
-  window.closeViewer = function() { document.getElementById('viewer-modal').style.display='none'; }
+  function closeViewer() { document.getElementById('od-viewer-overlay').classList.remove('open'); }
 
-  window.navigateViewer = function(dir) {
-    const s = db.find(x => x.id===currentSubjectId);
-    if(!s||!s.gallery) return;
-    currentViewIndex = (currentViewIndex+dir+s.gallery.length)%s.gallery.length;
+  function navViewer(dir) {
+    const s = db.find(x => x.id === currentId);
+    if (!s || !s.gallery) return;
+    viewerIndex = (viewerIndex + dir + s.gallery.length) % s.gallery.length;
     updateViewer();
   }
 
   function updateViewer() {
-    const s = db.find(x => x.id===currentSubjectId);
-    document.getElementById('viewer-img').src = s.gallery[currentViewIndex];
-    document.getElementById('viewer-count').innerText = `${currentViewIndex+1} / ${s.gallery.length}`;
+    const s = db.find(x => x.id === currentId);
+    if (!s || !s.gallery || !s.gallery.length) return;
+    const item = s.gallery[viewerIndex];
+    document.getElementById('od-viewer-img').src = item.url;
+    document.getElementById('od-viewer-caption').textContent = item.caption || '';
+    document.getElementById('od-viewer-count').textContent = `${viewerIndex+1} / ${s.gallery.length}`;
   }
 
-  window.deleteGalleryImage = function() {
-    if(document.getElementById('viewer-modal').style.display!=='flex') return;
-    if(!confirm("この画像を削除しますか？")) return;
-    const s = db.find(x => x.id===currentSubjectId);
-    if(!s||!s.gallery) return;
-    s.gallery.splice(currentViewIndex,1);
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(db));
-    showToast("IMAGE PURGED");
-    if(s.gallery.length===0) { closeViewer(); openGallery(); }
-    else { currentViewIndex=Math.min(currentViewIndex,s.gallery.length-1); updateViewer(); }
+  async function deleteGalleryImage() {
+    if (!confirm('この画像を削除しますか？')) return;
+    const s = db.find(x => x.id === currentId);
+    if (!s || !s.gallery) return;
+    s.gallery.splice(viewerIndex, 1);
+    await saveOne(s);
+    showToast('IMAGE PURGED');
+    if (s.gallery.length === 0) { closeViewer(); openGallery(); }
+    else { viewerIndex = Math.min(viewerIndex, s.gallery.length - 1); updateViewer(); }
   }
 
   
   (function() {
-    const wrap = document.getElementById('viewer-img-wrap');
-    if(!wrap) return;
-    let startX=0, startY=0, swiping=false;
-    wrap.addEventListener('touchstart', e => { startX=e.touches[0].clientX; startY=e.touches[0].clientY; swiping=true; }, {passive:true});
+    const wrap = document.getElementById('od-viewer-wrap');
+    if (!wrap) return;
+    let startX = 0, swiping = false;
+    wrap.addEventListener('touchstart', e => { startX = e.touches[0].clientX; swiping = true; }, {passive:true});
     wrap.addEventListener('touchmove', e => {
-      if(!swiping) return;
-      const dx=e.touches[0].clientX-startX, dy=e.touches[0].clientY-startY;
-      if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>40) { navigateViewer(dx>0?-1:1); swiping=false; }
+      if (!swiping) return;
+      const dx = e.touches[0].clientX - startX;
+      if (Math.abs(dx) > 50) { navViewer(dx > 0 ? -1 : 1); swiping = false; }
     }, {passive:true});
-    wrap.addEventListener('touchend', () => { swiping=false; }, {passive:true});
+    wrap.addEventListener('touchend', () => { swiping = false; }, {passive:true});
   })();
 
   
+  
+  
+  function openCompare() {
+    const selA = document.getElementById('od-cmp-a');
+    const selB = document.getElementById('od-cmp-b');
+    selA.innerHTML = ''; selB.innerHTML = '';
+    db.forEach((s, i) => {
+      const optA = new Option(s.name, s.id);
+      const optB = new Option(s.name, s.id);
+      selA.add(optA); selB.add(optB);
+    });
+    if (db.length >= 2) { selB.selectedIndex = 1; }
+    document.getElementById('od-compare-overlay').classList.add('open');
+    drawCompare();
+  }
+  function closeCompare() { document.getElementById('od-compare-overlay').classList.remove('open'); }
+
+  function drawCompare() {
+    const idA = document.getElementById('od-cmp-a').value;
+    const idB = document.getElementById('od-cmp-b').value;
+    const sA = db.find(x => x.id === idA);
+    const sB = db.find(x => x.id === idB);
+    if (!sA) return;
+
+    const canvas = document.getElementById('od-compare-radar');
+    const labels = sA.statLabels || defaultStatNames;
+    const statsA = sA.stats || [0,0,0,0,0];
+    const statsB = sB ? (sB.stats || [0,0,0,0,0]) : null;
+    const colorA = sA.color || '#10b981';
+    const colorB = sB ? (sB.color || '#06b6d4') : null;
+
+    drawRadar(canvas, statsA, labels, colorA, statsB, colorB);
+  }
+
+  
+  
+  
+  function openHelp() { document.getElementById('od-help-overlay').classList.add('open'); }
+  function closeHelp() { document.getElementById('od-help-overlay').classList.remove('open'); }
+
+  
+  
+  
+  function exportJSON() {
+    const blob = new Blob([JSON.stringify(db, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'oshi_database_' + new Date().toISOString().slice(0,10) + '.json';
+    a.click(); URL.revokeObjectURL(a.href);
+    showToast('EXPORT COMPLETE');
+    closeDrawer();
+  }
+
+  async function importJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if (!Array.isArray(imported)) throw new Error('Invalid format');
+        if (!confirm(`${imported.length}件のレコードをインポートします。既存データは上書きされます。よろしいですか？`)) return;
+        await idbClear();
+        db = [];
+        for (let i = 0; i < imported.length; i++) {
+          imported[i] = migrate(imported[i]);
+          imported[i].order = i;
+          await idbPut(imported[i]);
+          db.push(imported[i]);
+        }
+        loadSubject(db[0].id);
+        showToast('IMPORT COMPLETE');
+        closeDrawer();
+      } catch(err) {
+        alert('⚠️ インポートエラー: 正しいJSONファイルを選択してください。');
+        console.error(err);
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+  }
+
+  
+  
+  
+  function openDrawer() {
+    document.getElementById('od-drawer').classList.add('open');
+    document.getElementById('od-drawer-overlay').style.display = 'block';
+  }
+  function closeDrawer() {
+    document.getElementById('od-drawer').classList.remove('open');
+    document.getElementById('od-drawer-overlay').style.display = 'none';
+  }
+
+  
+  
+  
   document.addEventListener('keydown', function(e) {
-    if(document.getElementById('viewer-modal').style.display==='flex') {
-      if(e.key==='ArrowRight') navigateViewer(1);
-      if(e.key==='ArrowLeft') navigateViewer(-1);
-      if(e.key==='Escape') closeViewer();
+    if (document.getElementById('od-viewer-overlay').classList.contains('open')) {
+      if (e.key === 'ArrowRight') navViewer(1);
+      if (e.key === 'ArrowLeft') navViewer(-1);
+      if (e.key === 'Escape') closeViewer();
+      return;
     }
-    if(document.getElementById('editor-modal').style.display==='flex' && e.key==='Escape') closeEditor();
-    if(document.getElementById('gallery-modal').style.display==='flex' && e.key==='Escape') closeGallery();
+    if (e.key === 'Escape') {
+      if (document.getElementById('od-upload-overlay').classList.contains('open')) { closeUpload(); return; }
+      if (document.getElementById('od-gallery-overlay').classList.contains('open')) { closeGallery(); return; }
+      if (document.getElementById('od-compare-overlay').classList.contains('open')) { closeCompare(); return; }
+      if (document.getElementById('od-help-overlay').classList.contains('open')) { closeHelp(); return; }
+      if (document.getElementById('od-editor-overlay').classList.contains('open')) { closeEditor(); return; }
+    }
   });
 
   
-  if(db.length>0) loadSubject(db[0].id);
+  
+  
+  window.OD = {
+    get currentId() { return currentId; },
+    openEditor, closeEditor, saveSubject, deleteSubject,
+    addCFRow: (l,v) => addCFRow(l,v),
+    openGallery, closeGallery, openUploadModal, closeUpload,
+    submitGalleryImage, openViewer, closeViewer, navViewer, deleteGalleryImage,
+    openCompare, closeCompare, drawCompare,
+    openHelp, closeHelp,
+    exportJSON, importJSON,
+    processImage,
+    addTimelineEntry, deleteTimeline,
+    openDrawer, closeDrawer,
+    showToast
+  };
+
+  
+  init();
+
+})();
 </script>
 
 
