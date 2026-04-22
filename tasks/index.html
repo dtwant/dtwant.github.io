@@ -232,7 +232,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "66"
+    "wordCount": "57"
   }]
   </script>
 
@@ -783,360 +783,648 @@
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <p>判明しているタスクの一覧！<br>
-チェックボックスはページ上で記録出来ないようにしています。</p>
+      
+
 <style>
-   
-  .cyber-tasks-wrapper {
-    font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace !important;
-  }
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
 
    
-  #auth-container {
-    text-align: center;
-    padding: 3rem;
-    background: rgba(5, 5, 5, 0.8);
-    border: 1px solid #ff0055;
+  .tl-root {
+    font-family: "Zen Kaku Gothic New", "JetBrains Mono", sans-serif;
+    position: fixed; top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    max-width: none; margin: 0;
+    padding: 2rem 1rem;
+    background-color: #050508;
+    background-image:
+      linear-gradient(rgba(255, 0, 85, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 0, 85, 0.05) 1px, transparent 1px),
+      radial-gradient(ellipse at 15% 15%, rgba(0, 243, 255, 0.1), transparent 50%),
+      radial-gradient(ellipse at 85% 85%, rgba(255, 0, 85, 0.1), transparent 50%),
+      radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.75) 120%);
+    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% 100%;
+    color: #e2e8f0;
+    border: none; border-radius: 0;
+    z-index: 999990;
+    overflow-y: auto; overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .tl-root > * { position: relative; z-index: 2; }
+  .tl-root *, .tl-root *::before, .tl-root *::after { box-sizing: border-box; }
+
+  .tl-root::after {
+    content: "";
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+    pointer-events: none; z-index: 10;
+  }
+
+  .tl-root::before {
+    content: "";
+    position: fixed; top: -10%; left: 0; right: 0;
+    height: 10vh;
+    background: linear-gradient(to bottom, rgba(255, 0, 85, 0) 0%, rgba(255, 0, 85, 0.1) 50%, rgba(255, 0, 85, 0.5) 100%);
+    border-bottom: 2px solid rgba(255, 0, 85, 0.8);
+    animation: scan-laser 8s linear infinite;
+    pointer-events: none; z-index: 999999;
+    box-shadow: 0 5px 20px rgba(255, 0, 85, 0.4);
+  }
+  @keyframes scan-laser {
+    0% { transform: translateY(-100%); opacity: 0; }
+    5% { opacity: 1; }
+    95% { opacity: 1; }
+    100% { transform: translateY(1100%); opacity: 0; }
+  }
+
+  .tl-container {
+    font-family: "JetBrains Mono", "Consolas", monospace;
+    max-width: 900px; width: 100%;
+    margin: 0 auto;
+    background-color: rgba(9, 9, 11, 0.95);
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 0, 85, 0.4);
     border-radius: 4px;
-    margin: 2rem 0;
-    box-shadow: 0 0 20px rgba(255, 0, 85, 0.2), inset 0 0 10px rgba(255, 0, 85, 0.1);
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 0, 85, 0.05);
+    backdrop-filter: blur(4px);
+    color: #e2e8f0;
+    position: relative; overflow: hidden;
   }
-  
-  #auth-container::before {
-    content: "WARNING: RESTRICTED AREA";
-    position: absolute;
-    top: -1px; left: -1px;
-    background: #ff0055;
-    color: #000;
-    padding: 2px 10px;
+
+  .tl-corner {
+    position: absolute; width: 18px; height: 18px;
+    border: 2px solid #ff0055;
+    z-index: 100; pointer-events: none;
+  }
+  .tl-corner.tl { top: 5px; left: 5px; border-right: none; border-bottom: none; }
+  .tl-corner.tr { top: 5px; right: 5px; border-left: none; border-bottom: none; }
+  .tl-corner.bl { bottom: 5px; left: 5px; border-right: none; border-top: none; }
+  .tl-corner.br { bottom: 5px; right: 5px; border-left: none; border-top: none; }
+
+   
+  .tl-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 2rem; border-bottom: 1px solid #333;
+    padding-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;
+  }
+  .tl-header-left { display: flex; flex-direction: column; gap: 0.25rem; }
+  .tl-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.8rem;
-    font-weight: bold;
-    letter-spacing: 1px;
+    font-size: 1.4rem; font-weight: 700;
+    color: #ff0055; text-transform: uppercase;
+    letter-spacing: 0.12em;
+    text-shadow: 0 0 12px rgba(255, 0, 85, 0.8);
+  }
+  .tl-desc { font-size: 0.75rem; color: #64748b; letter-spacing: 0.05em; }
+  .tl-header-right { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+
+  .tl-sync-badge {
+    font-size: 0.6rem; padding: 0.2rem 0.6rem; letter-spacing: 0.08em;
+    font-family: 'JetBrains Mono', monospace; border-radius: 2px;
+  }
+  .tl-sync-badge.local { background: rgba(100,116,139,0.25); color: #94a3b8; }
+  .tl-sync-badge.ok    { background: rgba(34,197,94,0.2); color: #22c55e; }
+  .tl-sync-badge.busy  { background: rgba(250,204,21,0.2); color: #facc15; }
+  .tl-sync-badge.err   { background: rgba(239,68,68,0.2); color: #ef4444; }
+
+  .tl-hbtn {
+    background: transparent; border: 1px solid rgba(255,255,255,0.15);
+    color: #a1a1aa; padding: 0.3rem 0.6rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    cursor: pointer; transition: all 0.25s; letter-spacing: 0.04em;
+    border-radius: 3px;
+  }
+  .tl-hbtn:hover { border-color: #00f3ff; color: #00f3ff; box-shadow: 0 0 12px rgba(0, 243, 255, 0.2); }
+
+   
+  .tl-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+  .tl-item {
+    background: rgba(14, 14, 17, 0.8);
+    border: 1px solid #333; padding: 1.25rem;
+    position: relative; border-left: 4px solid #333;
+    transition: all 0.2s; border-radius: 4px;
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .tl-item:hover { border-color: #555; transform: translateX(3px); box-shadow: 0 0 15px rgba(0,243,255,0.05); }
+
+  .tl-item.task-done { opacity: 0.5; border-left-color: #444; }
+  .tl-item.task-done .tl-task-obj { text-decoration: line-through; color: #64748b; }
+
+   
+  .tl-item.p-s { border-left-color: #bc13fe; }  
+  .tl-item.p-a { border-left-color: #ff0055; }
+  .tl-item.p-b { border-left-color: #fde047; }
+  .tl-item.p-c { border-left-color: #00ff66; }
+
+  .pbadge {
+    font-size: 0.7rem; font-weight: bold; padding: 0.15rem 0.4rem;
+    border-radius: 2px; text-shadow: 0 0 5px currentColor;
+    border: 1px solid currentColor;
+  }
+  .pbadge.p-s { color: #bc13fe; background: rgba(188,19,254,0.1); }
+  .pbadge.p-a { color: #ff0055; background: rgba(255,0,85,0.1); }
+  .pbadge.p-b { color: #fde047; background: rgba(253,224,71,0.1); }
+  .pbadge.p-c { color: #00ff66; background: rgba(0,255,102,0.1); }
+
+  .tl-item-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .tl-task-obj { font-size: 1.1rem; font-weight: bold; color: #e0f8ff; word-break: break-all; }
+  .tl-task-meta { font-size: 0.8rem; color: #94a3b8; display: flex; gap: 1rem; flex-wrap: wrap; }
+  .tl-task-note {
+    font-size: 0.85rem; color: #cbd5e1;
+    background: rgba(0,243,255,0.05); padding: 0.6rem;
+    border-left: 2px solid rgba(0,243,255,0.3); border-radius: 2px;
   }
 
-  .lock-icon {
-    font-size: 3rem; 
-    margin-bottom: 1rem;
-    filter: drop-shadow(0 0 10px #ff0055);
-    animation: pulse-red 2s infinite;
+  .tl-controls { display: flex; gap: 0.5rem; margin-top: 0.5rem; justify-content: flex-end; }
+  .tl-btn-icon {
+    background: transparent; border: 1px solid #333;
+    color: #94a3b8; width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s; font-size: 1rem; border-radius: 3px;
   }
-  @keyframes pulse-red { 0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px #ff0055); } 50% { opacity: 0.5; filter: drop-shadow(0 0 2px #ff0055); } }
+  .tl-btn-icon:hover { color: #fff; }
+  .tl-btn-icon.check:hover { border-color: #00ff66; color: #00ff66; box-shadow: 0 0 8px rgba(0,255,102,0.4); }
+  .tl-btn-icon.del:hover { border-color: #ff0055; color: #ff0055; box-shadow: 0 0 8px rgba(255,0,85,0.4); }
 
-  .auth-title {
-    margin-bottom: 1.5rem; 
-    font-weight: bold; 
-    font-size: 1.2rem;
-    color: #ff0055;
-    text-shadow: 0 0 5px #ff0055;
-    letter-spacing: 0.1em;
+   
+  .tl-form {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #333; padding: 1.5rem;
+    margin-top: 1.5rem; border-radius: 4px;
   }
-
-  .input-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+  .tl-form-title {
+    font-size: 0.9rem; font-weight: bold; color: #00f3ff; margin-bottom: 1.25rem;
+    text-transform: uppercase; letter-spacing: 1px;
   }
-
-  .auth-prompt { color: #00f3ff; font-weight: bold; }
-
-  #pass-input {
-    padding: 0.5rem;
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid #00f3ff;
-    border-radius: 0;
-    color: #fff;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1.2rem;
-    text-align: center;
-    outline: none;
-    letter-spacing: 5px;
-    text-shadow: 0 0 5px #fff;
-    width: 200px;
-    transition: all 0.3s;
-  }
-  #pass-input:focus {
-    border-color: #ff0055;
-    box-shadow: 0 5px 10px -5px rgba(255, 0, 85, 0.5);
-  }
-
-  #unlock-btn {
-    padding: 0.5rem 1.5rem;
-    background-color: transparent;
-    color: #00f3ff;
-    border: 1px solid #00f3ff;
-    cursor: pointer;
-    font-family: 'Orbitron', sans-serif;
-    font-weight: bold;
-    font-size: 1rem;
+  .tl-input-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .tl-input {
+    width: 100%; min-width: 0; background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #333; border-bottom: 2px solid #00f3ff;
+    color: #00f3ff; padding: 0.7rem; font-family: inherit;
+    border-radius: 3px; font-size: 0.95rem; outline: none;
     transition: all 0.2s;
-    box-shadow: inset 0 0 5px rgba(0, 243, 255, 0.2);
   }
-  #unlock-btn:hover { 
-    background-color: #00f3ff; 
-    color: #000;
-    box-shadow: 0 0 15px #00f3ff;
+  .tl-input:focus { border-color: #ff0055; background: rgba(255, 0, 85, 0.05); }
+
+  .tl-submit {
+    width: 100%; background: transparent; color: #00f3ff;
+    border: 1px solid #00f3ff; padding: 0.85rem;
+    font-family: 'Orbitron', sans-serif; font-weight: 700; cursor: pointer;
+    text-transform: uppercase; letter-spacing: 2px; transition: all 0.2s;
+    font-size: 0.9rem; border-radius: 4px; position: relative; overflow: hidden;
   }
+  .tl-submit:hover {
+    background: rgba(0, 243, 255, 0.2); color: #fff;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.6), inset 0 0 10px rgba(0, 243, 255, 0.3);
+  }
+
+   
+  .tl-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(3,3,8,0.9); backdrop-filter: blur(8px);
+    z-index: 1000001;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .tl-overlay.open { opacity: 1; pointer-events: auto; }
   
-  #error-msg {
-    color: #ff0055; 
-    display: none; 
-    margin-top: 1rem; 
-    font-weight: bold;
-    text-shadow: 0 0 5px #ff0055;
-    animation: glitch 0.2s 3;
-  }
+   
+  #tl-auth .tl-modal { background: rgba(5, 5, 5, 0.9); border: 1px solid #ff0055; box-shadow: 0 0 40px rgba(255, 0, 85, 0.2); text-align: center; }
+  .lock-icon { font-size: 3.5rem; margin-bottom: 1rem; animation: pulse-red 2s infinite; filter: drop-shadow(0 0 10px #ff0055); }
+  @keyframes pulse-red { 0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px #ff0055); } 50% { opacity: 0.6; filter: drop-shadow(0 0 4px #ff0055); } }
+  .auth-title { color: #ff0055; font-size: 1.4rem; letter-spacing: 0.2em; font-weight: bold; margin-bottom: 2rem; font-family: 'Orbitron', sans-serif; }
+  #pass-input { background: transparent; border: none; border-bottom: 2px solid #00f3ff; color: #fff; font-size: 1.5rem; text-align: center; width: 220px; outline: none; letter-spacing: 5px; transition: border-color 0.3s; margin-bottom: 1.5rem; }
+  #pass-input:focus { border-color: #ff0055; }
+  
+  #auth-error { color: #ff0055; font-size: 0.85rem; font-weight: bold; margin-top: 1rem; display: none; animation: glitch 0.3s 3; }
   @keyframes glitch { 0% { transform: translate(0) } 20% { transform: translate(-2px, 1px) } 40% { transform: translate(-1px, -1px) } 60% { transform: translate(2px, 1px) } 80% { transform: translate(1px, -1px) } 100% { transform: translate(0) } }
 
-   
-  #secret-content { display: none; }
-
-   
-  .task-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1rem 0;
-    font-size: 0.95rem;
-    background: rgba(5, 5, 5, 0.6);
+  .tl-modal {
+    background: #0c0c10;
     border: 1px solid rgba(0, 243, 255, 0.3);
-    box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
+    border-radius: 8px; padding: 1.75rem;
+    width: 92%; max-width: 480px;
+    box-shadow: 0 8px 60px rgba(0,0,0,0.8), 0 0 40px rgba(0, 243, 255, 0.08);
+    max-height: 85vh; overflow-y: auto;
   }
-  .task-table th, .task-table td {
-    border: 1px solid rgba(0, 243, 255, 0.15);
-    padding: 0.8rem;
-    text-align: left;
-    vertical-align: middle;
-    color: #e0f8ff;
-  }
-  .task-table th {
-    background-color: rgba(0, 243, 255, 0.1);
-    font-family: 'Orbitron', sans-serif;
-    font-weight: bold;
-    text-align: center;
-    white-space: nowrap;
-    color: #00f3ff;
-    text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
-    letter-spacing: 1px;
-    border-bottom: 2px solid #00f3ff;
-  }
-  
-  .task-table tr { transition: all 0.2s; }
-  .task-table tr:not(.task-done):hover {
-    background: rgba(0, 243, 255, 0.05);
-    box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.1);
-  }
+  .tl-section-label { font-size: 0.65rem; color: #64748b; letter-spacing: 0.1em; margin-bottom: 0.5rem; margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .tl-section-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+  .tl-mbtn { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #a1a1aa; padding: 0.4rem 0.8rem; cursor: pointer; transition: all 0.2s; border-radius: 3px; font-size: 0.7rem; font-family: inherit; }
+  .tl-mbtn:hover { border-color: #00f3ff; color: #00f3ff; }
+  .tl-mbtn.save { border-color: rgba(0,243,255,0.4); color: #00f3ff; }
+  .tl-mbtn.save:hover { background: rgba(0,243,255,0.2); }
+  .tl-mbtn.del { border-color: rgba(255,0,85,0.3); color: #ff0055; }
+  .tl-modal-footer { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); }
 
-  .task-center { text-align: center !important; }
-  
-   
-   
-  .cyber-checkbox input[type="checkbox"] { display: none; }
-  .cyber-checkbox span {
-    color: #00f3ff;
-    font-weight: bold;
-    font-size: 1.1rem;
-    text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
-  }
-  .task-done .cyber-checkbox span {
-    color: #ff0055;
-    text-shadow: 0 0 5px rgba(255, 0, 85, 0.5);
-  }
+  .tl-blob-display { margin-top: 0.5rem; padding: 0.4rem 0.6rem; background: rgba(0,0,0,0.4); border: 1px solid #1e293b; font-size: 0.65rem; color: #00f3ff; word-break: break-all; user-select: all; border-radius: 3px; }
 
    
-  .task-done {
-    opacity: 0.5;
-    background-color: rgba(255, 0, 85, 0.05);
-  }
-  .task-done td:not(:first-child) {
-    text-decoration: line-through;
-    color: #ff0055;
-    text-shadow: none;
-  }
+  .tl-toast { position: fixed; bottom: 24px; right: 24px; background: rgba(12,12,16,0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 0.7rem 1.1rem; font-size: 0.75rem; color: #e2e8f0; transform: translateY(80px); opacity: 0; transition: all 0.35s; z-index: 9999999; }
+  .tl-toast.show { transform: translateY(0); opacity: 1; }
+  .tl-toast.ok { border-color: #00f3ff; }
+  .tl-toast.err { border-color: #ff0055; }
 
    
-  .priority-SS { color: #bc13fe; font-weight: 900; text-shadow: 0 0 8px #bc13fe; font-size: 1.1em; }  
-  .priority-S { color: #ff0055; font-weight: 800; text-shadow: 0 0 5px #ff0055; }  
-  .priority-A { color: #fde047; font-weight: 800; text-shadow: 0 0 5px #ca8a04; }  
-  .priority-B { color: #00ff66; font-weight: 600; text-shadow: 0 0 5px #00ff66; }  
+  @media (max-width: 768px) {
+    .tl-root { padding: 0.75rem 0.25rem; }
+    .tl-container { padding: 0.75rem 0.6rem; width: 100%; border-radius: 0; border-left: none; border-right: none; }
+    .tl-header { flex-direction: column; align-items: flex-start; gap: 0.4rem; margin-bottom: 1rem; padding-bottom: 0.6rem; }
+    .tl-title { font-size: 1rem; letter-spacing: 0.06em; }
+    .tl-desc { font-size: 0.6rem; }
+    .tl-header-right { width: 100%; gap: 0.3rem; flex-wrap: nowrap; justify-content: flex-start; }
+    .tl-sync-badge { font-size: 0.5rem; padding: 0.15rem 0.4rem; }
+    .tl-hbtn { font-size: 0.55rem; padding: 0.2rem 0.4rem; }
 
-   
-  .task-table a { color: #00f3ff !important; text-decoration: underline; }
-  .task-table a:hover { color: #ff0055 !important; }
-  .task-table code { background: rgba(0, 243, 255, 0.1); color: #ff0055; padding: 2px 4px; border-radius: 3px; }
+    .tl-list { gap: 0.6rem; margin-bottom: 1rem; }
+    .tl-item { padding: 0.75rem; border-radius: 3px; gap: 0.5rem; }
+    .tl-task-obj { font-size: 0.95rem; }
+    .tl-task-meta { flex-direction: column; gap: 0.2rem; font-size: 0.7rem; }
+    .tl-task-note { font-size: 0.75rem; padding: 0.4rem; }
+
+    .tl-form { padding: 0.75rem; margin-top: 1rem; }
+    .tl-form-title { font-size: 0.75rem; margin-bottom: 0.6rem; }
+    .tl-input-row { grid-template-columns: 1fr; gap: 6px; }
+    .tl-input { padding: 0.5rem; font-size: 16px; }
+    .tl-submit { padding: 0.6rem; font-size: 0.75rem; }
+
+    .tl-modal { padding: 1.25rem; border-radius: 12px 12px 0 0; width: 100%; max-width: 100%; }
+    .tl-overlay:not(#tl-auth) { align-items: flex-end; }
+    .tl-toast { bottom: 12px; left: 12px; right: 12px; text-align: center; }
+  }
 </style>
 
-<div class="cyber-tasks-wrapper">
-  <div id="auth-container">
-    <div class="lock-icon">🔒</div>
-    <p class="auth-title">SYSTEM LOCKED</p>
-    <div class="input-wrapper">
-      <span class="auth-prompt">></span>
-      <input type="password" id="pass-input" placeholder="KEY">
-      <button id="unlock-btn" onclick="checkPassword()">DECRYPT</button>
-    </div>
-    <p id="error-msg">ACCESS DENIED. INCORRECT KEY.</p>
-  </div>
 
-  <div id="secret-content">
-    <div style="overflow-x: auto;">
-    <table class="task-table">
-      <thead>
-        <tr>
-          <th style="width: 3rem;">STATUS</th>
-          <th>OBJECTIVE</th>
-          <th style="width: 4rem;">PRIORITY</th>
-          <th>DEADLINE</th>
-          <th>NOTES</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-        <tr class="">
-          <td class="task-center cyber-checkbox">
-            <input type="checkbox" disabled >
-            <span>[ ]</span>
-          </td>
-          <td>電算レポート</td>
-          <td class="task-center">
-            <span class="priority-S">S</span>
-          </td>
-          <td style="font-family: 'Orbitron', sans-serif;">至急</td>
-          <td>評価配点大きい</td>
-        </tr>
-        
-        <tr class="">
-          <td class="task-center cyber-checkbox">
-            <input type="checkbox" disabled >
-            <span>[ ]</span>
-          </td>
-          <td>微積レポート</td>
-          <td class="task-center">
-            <span class="priority-A">A</span>
-          </td>
-          <td style="font-family: 'Orbitron', sans-serif;">2025/12/15の週</td>
-          <td>範囲は画像参照のこと</td>
-        </tr>
-        
-        <tr class="">
-          <td class="task-center cyber-checkbox">
-            <input type="checkbox" disabled >
-            <span>[ ]</span>
-          </td>
-          <td>物理のレポート+過去の課題確認</td>
-          <td class="task-center">
-            <span class="priority-A">A</span>
-          </td>
-          <td style="font-family: 'Orbitron', sans-serif;">なるはや 12月中</td>
-          <td>必要なら池田に聞く！</td>
-        </tr>
-        
-        <tr class="">
-          <td class="task-center cyber-checkbox">
-            <input type="checkbox" disabled >
-            <span>[ ]</span>
-          </td>
-          <td>倫理レポート</td>
-          <td class="task-center">
-            <span class="priority-S">S</span>
-          </td>
-          <td style="font-family: 'Orbitron', sans-serif;">-</td>
-          <td>急ぎではないが残りは確実に提出</td>
-        </tr>
-        
-        <tr class="task-done">
-          <td class="task-center cyber-checkbox">
-            <input type="checkbox" disabled checked>
-            <span>[X]</span>
-          </td>
-          <td>サイトのメニュー構築</td>
-          <td class="task-center">
-            <span class="priority-S">S</span>
-          </td>
-          <td style="font-family: 'Orbitron', sans-serif;">2025-12-07</td>
-          <td>完了</td>
-        </tr>
-        
-        <tr class="">
-          <td class="task-center cyber-checkbox">
-            <input type="checkbox" disabled >
-            <span>[ ]</span>
-          </td>
-          <td>物理数学の記事の続き</td>
-          <td class="task-center">
-            <span class="priority-A">A</span>
-          </td>
-          <td style="font-family: 'Orbitron', sans-serif;">-</td>
-          <td>過去の手書きの内容もまとめたい</td>
-        </tr>
-        
-        <tr class="">
-          <td class="task-center cyber-checkbox">
-            <input type="checkbox" disabled >
-            <span>[ ]</span>
-          </td>
-          <td>植物の記事を書いてまとめる</td>
-          <td class="task-center">
-            <span class="priority-A">A</span>
-          </td>
-          <td style="font-family: 'Orbitron', sans-serif;">-</td>
-          <td>写真撮っておかないと書けないので注意</td>
-        </tr>
-        
-      </tbody>
-    </table>
+<div class="tl-overlay open" id="tl-auth">
+  <div class="tl-modal" style="width: 320px;">
+    <div class="lock-icon">🔒</div>
+    <div class="auth-title">RESTRICTED</div>
+    <input type="password" id="pass-input" placeholder="KEY">
+    <button class="tl-mbtn save" style="width: 100%; padding: 0.75rem; font-size: 1rem; font-family: 'Orbitron', sans-serif;" onclick="tlCheckPass()">DECRYPT</button>
+    <div id="auth-error">ACCESS DENIED</div>
+  </div>
+</div>
+
+<div class="tl-root" id="tl-main" style="display: none;">
+<div class="tl-container">
+  <div class="tl-corner tl"></div>
+  <div class="tl-corner tr"></div>
+  <div class="tl-corner bl"></div>
+  <div class="tl-corner br"></div>
+  
+  <header class="tl-header">
+    <div class="tl-header-left">
+      <div class="tl-title">_MISSION_CONTROL</div>
+      <div class="tl-desc">SYS: TASK LOG // DATA SYNC ACTIVE</div>
+    </div>
+    <div class="tl-header-right">
+      <span class="tl-sync-badge local" id="tl-sync">◌ LOCAL</span>
+      <button class="tl-hbtn" onclick="tlSyncCloud()">⟳ SYNC</button>
+      <button class="tl-hbtn" onclick="tlOpenSettings()">⚙ CONFIG</button>
+    </div>
+  </header>
+
+  <div id="tl-task-list" class="tl-list"></div>
+
+  <div class="tl-form">
+    <div class="tl-form-title">>> ADD_TASK</div>
+    <form id="tl-add-form">
+      <div class="tl-input-row">
+        <input type="text" id="new-obj" class="tl-input" placeholder="OBJECTIVE (必須)" required>
+        <select id="new-pri" class="tl-input" required>
+          <option value="" disabled selected>PRIORITY</option>
+          <option value="S">Priority S (最高)</option>
+          <option value="A">Priority A (高)</option>
+          <option value="B">Priority B (中)</option>
+          <option value="C">Priority C (低)</option>
+        </select>
+        <input type="text" id="new-due" class="tl-input" placeholder="DEADLINE (例: 12月31日)">
+      </div>
+      <input type="text" id="new-note" class="tl-input" placeholder="NOTES" style="margin-bottom: 12px;">
+      <button type="submit" class="tl-submit">DEPLOY</button>
+    </form>
+  </div>
+</div>
+</div>
+
+
+<div class="tl-overlay" id="tl-ov-settings">
+  <div class="tl-modal">
+    <div class="tl-form-title"><span>⚙</span> SYSTEM CONFIG</div>
+    
+    <div class="tl-section-label">Cloud Sync</div>
+    <div style="font-size:0.65rem; color:#64748b; line-height:1.6; margin-bottom:0.5rem;">
+      jsonbin.ioによる複数端末共有。初回同期時に自動生成されます。表示されるBlob IDを別端末に入力すると引き継げます。
+    </div>
+    <div class="tl-blob-display" id="tl-blob-display">（未設定）</div>
+    
+    <div class="tl-section-label">Existing Blob ID</div>
+    <input type="text" class="tl-input" id="tl-blob-input" placeholder="別端末のBlob IDを入力" style="margin-bottom:1rem; width:100%;">
+
+    <div class="tl-section-label">Data Management</div>
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+      <button class="tl-mbtn" onclick="tlExport()">📤 EXPORT</button>
+      <label class="tl-mbtn" style="cursor:pointer;">📥 IMPORT<input type="file" accept=".json" style="display:none" onchange="tlImport(this)"></label>
+      <button class="tl-mbtn del" onclick="tlClearAll()">🗑 WIPE ALL</button>
+    </div>
+
+    <div class="tl-modal-footer">
+      <button class="tl-mbtn" onclick="tlCloseSettings()">CANCEL</button>
+      <button class="tl-mbtn save" onclick="tlApplySettings()">APPLY</button>
     </div>
   </div>
 </div>
 
+<div class="tl-toast" id="tl-toast"></div>
+
 <script>
-  function checkPassword() {
-    
-    const PASS = "0723"; 
-    
+(function() {
+   
+  const STORAGE_KEY = 'dt_tasks_v1';
+  const BLOB_KEY = 'dt_tasks_blob';
+  
+  
+  const INITIAL_YAML = [{"done":false,"due":"至急","note":"評価配点大きい","priority":"S","task":"電算レポート"},{"done":false,"due":"2025/12/15の週","note":"範囲は画像参照のこと","priority":"A","task":"微積レポート"},{"done":false,"due":"なるはや 12月中","note":"必要なら池田に聞く！","priority":"A","task":"物理のレポート+過去の課題確認"},{"done":false,"due":"-","note":"急ぎではないが残りは確実に提出","priority":"S","task":"倫理レポート"},{"done":true,"due":"2025-12-07","note":"完了","priority":"S","task":"サイトのメニュー構築"},{"done":false,"due":"-","note":"過去の手書きの内容もまとめたい","priority":"A","task":"物理数学の記事の続き"},{"done":false,"due":"-","note":"写真撮っておかないと書けないので注意","priority":"A","task":"植物の記事を書いてまとめる"}];
+  
+  let tasks = [];
+  let blobId = null;
 
+   
+  const listEl = document.getElementById('tl-task-list');
+  const formEl = document.getElementById('tl-add-form');
+
+   
+  window.tlCheckPass = function() {
     const input = document.getElementById('pass-input').value;
-    const overlay = document.getElementById('auth-container');
-    const content = document.getElementById('secret-content');
-    const error = document.getElementById('error-msg');
-
-    if (input === PASS) {
-      
-      overlay.style.display = 'none';
-      content.style.display = 'block';
-      sessionStorage.setItem('tasks_unlocked', 'true');
-      
-      if (typeof MathJax !== 'undefined') {
-        MathJax.typesetPromise();
-      }
+    const err = document.getElementById('auth-error');
+    if (input === "0723" || sessionStorage.getItem('tl_unlocked') === 'true') {
+      document.getElementById('tl-auth').classList.remove('open');
+      document.getElementById('tl-main').style.display = 'block';
+      sessionStorage.setItem('tl_unlocked', 'true');
     } else {
-      error.style.display = 'block';
-      
-      error.style.animation = 'none';
-      void error.offsetWidth;
-      error.style.animation = 'glitch 0.2s 3';
+      err.style.display = 'block';
+      err.style.animation = 'none';
+      void err.offsetWidth;
+      err.style.animation = 'glitch 0.3s 3';
       document.getElementById('pass-input').value = "";
     }
+  };
+  document.getElementById("pass-input").addEventListener("keypress", e => { if (e.key === "Enter") tlCheckPass(); });
+  
+  
+  if (sessionStorage.getItem('tl_unlocked') === 'true') {
+    document.getElementById('tl-auth').classList.remove('open');
+    document.getElementById('tl-main').style.display = 'block';
   }
 
-  
-  document.getElementById("pass-input").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-      checkPassword();
+   
+  let toastTimer;
+  function toast(msg, type) {
+    const e = document.getElementById('tl-toast');
+    e.textContent = msg; e.className = 'tl-toast ' + (type||'info') + ' show';
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => e.classList.remove('show'), 2500);
+  }
+  function setSS(cls, txt) {
+    const e = document.getElementById('tl-sync');
+    e.className = 'tl-sync-badge ' + cls; e.textContent = txt;
+  }
+  function esc(s) {
+    const p = document.createElement('p'); p.textContent = s; return p.innerHTML;
+  }
+
+   
+  function init() {
+    try { tasks = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) {}
+    
+    
+    if (!tasks || !Array.isArray(tasks) || tasks.length === 0) {
+      if (INITIAL_YAML && Array.isArray(INITIAL_YAML)) {
+        tasks = INITIAL_YAML.map((t, i) => ({
+          id: Date.now() + i,
+          task: String(t.task || ''),
+          priority: t.priority || 'B',
+          due: t.due || '',
+          done: !!t.done,
+          note: t.note || ''
+        }));
+      } else {
+        tasks = [];
+      }
+      save();
+    }
+    
+    blobId = localStorage.getItem(BLOB_KEY) || null;
+    document.getElementById('tl-blob-display').textContent = blobId || '（未設定）';
+    
+    render();
+    if (blobId) tlSyncCloud(true);
+  }
+
+  function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)); } catch(e) {} }
+  function saveAndRender() { save(); render(); }
+
+   
+  function getPriClass(p) {
+    if (p === 'S' || p === 'SS') return 'p-s';
+    if (p === 'A') return 'p-a';
+    if (p === 'B') return 'p-b';
+    return 'p-c';
+  }
+
+  function render() {
+    listEl.innerHTML = '';
+    
+    
+    const priMap = { 'S': 0, 'SS': 0, 'A': 1, 'B': 2, 'C': 3 };
+    const sorted = [...tasks].sort((a, b) => {
+      if (a.done !== b.done) return a.done ? 1 : -1;
+      const pa = priMap[a.priority] ?? 4;
+      const pb = priMap[b.priority] ?? 4;
+      if (pa !== pb) return pa - pb;
+      return a.id - b.id; 
+    });
+
+    if (sorted.length === 0) {
+      listEl.innerHTML = '<div style="text-align:center; padding:2rem; color:#444; border:1px dashed #333;">NO TASKS DETECTED</div>';
+      return;
+    }
+
+    sorted.forEach(t => {
+      const pc = getPriClass(t.priority);
+      const isDone = t.done ? 'task-done' : '';
+      
+      const el = document.createElement('div');
+      el.className = `tl-item ${isDone} ${pc}`;
+      el.innerHTML = `
+        <div class="tl-item-head">
+          <div class="tl-task-obj">${t.done ? '[COMPLETED] ' : ''}${esc(t.task)}</div>
+          <span class="pbadge ${pc}">RANK ${esc(t.priority)}</span>
+        </div>
+        <div class="tl-task-meta">
+          ${t.due ? `<span>[DUE: ${esc(t.due)}]</span>` : ''}
+        </div>
+        ${t.note ? `<div class="tl-task-note">${esc(t.note)}</div>` : ''}
+        <div class="tl-controls">
+          <button class="tl-btn-icon check" onclick="tlToggle(${t.id})" title="${t.done ? 'Revert' : 'Complete'}">
+            ${t.done ? '↺' : '✓'}
+          </button>
+          <button class="tl-btn-icon del" onclick="tlDelete(${t.id})" title="Delete">×</button>
+        </div>
+      `;
+      listEl.appendChild(el);
+    });
+  }
+
+   
+  window.tlToggle = (id) => {
+    const t = tasks.find(x => x.id === id);
+    if (t) { t.done = !t.done; saveAndRender(); pushBlob(); }
+  };
+
+  window.tlDelete = (id) => {
+    if (!confirm('CONFIRM DELETION?')) return;
+    tasks = tasks.filter(x => x.id !== id);
+    saveAndRender(); pushBlob();
+  };
+
+  formEl.addEventListener('submit', e => {
+    e.preventDefault();
+    const task = document.getElementById('new-obj').value.trim();
+    const priority = document.getElementById('new-pri').value;
+    const due = document.getElementById('new-due').value.trim();
+    const note = document.getElementById('new-note').value.trim();
+
+    if (task && priority) {
+      tasks.push({ id: Date.now(), task, priority, due, done: false, note });
+      formEl.reset();
+      saveAndRender(); pushBlob();
+      toast('TASK DEPLOYED', 'ok');
     }
   });
 
-  
-  if (sessionStorage.getItem('tasks_unlocked') === 'true') {
-    document.getElementById('auth-container').style.display = 'none';
-    document.getElementById('secret-content').style.display = 'block';
+   
+  const JB_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const JB_CREATE = 'https://api.jsonbin.io/v3/b';
+  const JB_HDR = () => ({ 'X-Master-Key': JB_KEY, 'Content-Type': 'application/json' });
+  const binUrl = () => `https://api.jsonbin.io/v3/b/${blobId}/latest`;
+  const binPut = () => `https://api.jsonbin.io/v3/b/${blobId}`;
+
+  function mergeData(local, remote) {
+    const byId = {};
+    [...(remote || []), ...(local || [])].forEach(c => { byId[c.id] = c; });
+    return Object.values(byId);
   }
+
+  window.tlSyncCloud = async function(silent) {
+    setSS('busy', '◌ SYNC…');
+    try {
+      if (!blobId) {
+        const res = await fetch(JB_CREATE, {
+          method: 'POST',
+          headers: { ...JB_HDR(), 'X-Bin-Name': 'tasks_log' },
+          body: JSON.stringify({ tasks })
+        });
+        if (!res.ok) throw new Error(`create: ${res.status}`);
+        const json = await res.json();
+        blobId = json.metadata.id;
+        try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+        document.getElementById('tl-blob-display').textContent = blobId;
+        setSS('ok', '◉ SYNCED');
+        if (!silent) toast('BIN CREATED', 'ok');
+      } else {
+        const r = await fetch(binUrl(), { headers: { 'X-Master-Key': JB_KEY }, cache: 'no-store' });
+        if (!r.ok) {
+          if ([400,401,403,404,422].includes(r.status)) {
+            blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
+            document.getElementById('tl-blob-display').textContent = '（未設定）';
+            if (!silent) toast('INVALID BIN: RECREATING...', 'err');
+            return tlSyncCloud(silent);
+          }
+          throw new Error(`get: ${r.status}`);
+        }
+        const json = await r.json();
+        const rec = json.record || json;
+        const remoteTasks = Array.isArray(rec.tasks) ? rec.tasks : Array.isArray(rec) ? rec : [];
+
+        tasks = mergeData(remoteTasks, tasks);
+        save(); render();
+
+        const p = await fetch(binPut(), { method: 'PUT', headers: JB_HDR(), body: JSON.stringify({ tasks }) });
+        if (!p.ok) throw new Error(`put: ${p.status}`);
+        setSS('ok', '◉ SYNCED');
+        if (!silent) toast('SYNC COMPLETE', 'ok');
+      }
+    } catch(err) {
+      setSS('err', '✕ ERR');
+      if (!silent) toast('SYNC FAILED', 'err');
+    }
+  };
+
+  async function pushBlob() {
+    if (!blobId) return;
+    try {
+      const p = await fetch(binPut(), { method: 'PUT', headers: JB_HDR(), body: JSON.stringify({ tasks }) });
+      if (p.ok) setSS('ok', '◉ SYNCED');
+      else setSS('err', '✕ ERR');
+    } catch(e) { setSS('err', '✕ ERR'); }
+  }
+
+   
+  window.tlOpenSettings = () => {
+    document.getElementById('tl-blob-input').value = blobId || '';
+    document.getElementById('tl-ov-settings').classList.add('open');
+  };
+  window.tlCloseSettings = () => { document.getElementById('tl-ov-settings').classList.remove('open'); };
+
+  window.tlApplySettings = () => {
+    const v = document.getElementById('tl-blob-input').value.trim();
+    if (v !== (blobId || '')) {
+      blobId = v || null;
+      if (blobId) try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+      else try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
+      document.getElementById('tl-blob-display').textContent = blobId || '（未設定）';
+      toast('CONFIG APPLIED', 'ok');
+      if (blobId) tlSyncCloud(false);
+    }
+    tlCloseSettings();
+  };
+
+  window.tlExport = () => {
+    const blob = new Blob([JSON.stringify({ tasks }, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'tasks_backup.json'; a.click();
+    toast('EXPORT COMPLETE', 'ok');
+  };
+
+  window.tlImport = (input) => {
+    const file = input.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        const imported = Array.isArray(data.tasks) ? data.tasks : Array.isArray(data) ? data : [];
+        tasks = mergeData(tasks, imported);
+        saveAndRender(); pushBlob();
+        toast('IMPORT COMPLETE', 'ok');
+      } catch(ex) { toast('IMPORT FAILED', 'err'); }
+    };
+    reader.readAsText(file); input.value = '';
+  };
+
+  window.tlClearAll = () => {
+    if (!confirm('WIPE ALL DATA? THIS CANNOT BE UNDONE.')) return;
+    tasks = [];
+    saveAndRender(); pushBlob();
+    toast('SYSTEM WIPED', 'info');
+    tlCloseSettings();
+  };
+
+  document.getElementById('tl-ov-settings').addEventListener('click', function(e) { if (e.target === this) tlCloseSettings(); });
+
+   
+  init();
+})();
 </script>
-<blockquote>
-<p><strong>S</strong> (最優先) / <strong>A</strong> (優先) / <strong>B</strong> (通常)</p></blockquote>
 
     </section>
     <footer class="pt-8">
