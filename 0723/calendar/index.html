@@ -230,7 +230,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "61"
+    "wordCount": "82"
   }]
   </script>
 
@@ -928,7 +928,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>61 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>82 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1096,6 +1096,10 @@
 
         <div class="article-content max-w-prose mb-20">
           
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+</script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
@@ -1537,20 +1541,36 @@
   .cg-co-class::after { content: '授業'; }
 
    
-  .cg-preview-modal { max-width: 800px; width: 95%; height: 90vh; display: flex; flex-direction: column; }
+  .cg-preview-modal { max-width: 900px; width: 95%; height: 90vh; display: flex; flex-direction: column; }
   .cg-prev-content {
-    flex: 1; min-height: 0; background: rgba(0,0,0,0.5); border: 1px dashed rgba(0,243,255,0.2);
-    border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden;
+    flex: 1; min-height: 0; background: #050508; border: 1px dashed rgba(0,243,255,0.2);
+    border-radius: 6px; display: flex; flex-direction: column; overflow: hidden;
     position: relative;
   }
+  .cg-prev-viewer { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; position: relative; background: #111; overflow-y: auto; overflow-x: hidden; flex-direction: column; }
+  .cg-prev-thumbs { height: 80px; display: flex; gap: 10px; padding: 10px; background: rgba(0,243,255,0.05); overflow-x: auto; border-top: 1px solid rgba(0,243,255,0.2); }
+  
+  .cg-thumb {
+    width: 60px; height: 60px; border-radius: 4px; border: 2px solid transparent;
+    object-fit: cover; cursor: pointer; transition: 0.2s; background: #222; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff; overflow:hidden;
+  }
+  .cg-thumb.sel { border-color: #00f3ff; box-shadow: 0 0 10px rgba(0,243,255,0.3); }
+  .cg-thumb-add {
+    width: 60px; height: 60px; border-radius: 4px; border: 2px dashed rgba(0,243,255,0.4);
+    display: flex; align-items: center; justify-content: center; cursor: pointer; color: #00f3ff;
+    font-size: 1.5rem; flex-shrink: 0; transition: 0.2s;
+  }
+  .cg-thumb-add:hover { background: rgba(0,243,255,0.1); }
+
   .cg-upload-zone {
     width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    cursor: pointer; transition: background 0.2s;
+    cursor: pointer; transition: background 0.2s; flex: 1;
   }
   .cg-upload-zone:hover { background: rgba(0,243,255,0.05); }
-  .cg-preview-media {
-    max-width: 100%; max-height: 100%; object-fit: contain; width: 100%; height: 100%; border: none; background: #fff;
-  }
+  .cg-preview-media { max-width: 100%; object-fit: contain; }
+  
+  .cg-pdf-page { margin-bottom: 10px; max-width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
   .cg-btn-att {
     background: rgba(0,243,255,0.08); border: 1px solid rgba(0,243,255,0.3); color: #00f3ff;
     padding: 0.15rem 0.5rem; font-size: 0.65rem; border-radius: 3px; cursor: pointer; transition: all 0.2s;
@@ -1791,7 +1811,25 @@
     <div style="margin-bottom:1rem;">
       <label class="cg-section-label" style="margin-top:0">JSONBIN BIN ID</label>
       <input type="text" class="cg-input" id="cg-blob-input" placeholder="Enter Bin ID or leave blank to create new">
+      <label class="cg-section-label" style="margin-top:0.5rem">JSONBIN API KEY</label>
+      <input type="password" class="cg-input" id="cg-jbkey-input" placeholder="Master Key (自動設定済み)">
       <div style="font-size:0.6rem; color:#555; margin-top:0.4rem;">空欄のままSyncを押すと新しいBinが自動生成されます</div>
+    </div>
+    <div class="cg-section-label">GitHub Attachment Storage</div>
+    <div style="margin-bottom:1rem;">
+      <label class="cg-section-label" style="margin-top:0">GitHub PAT (Personal Access Token)</label>
+      <input type="password" class="cg-input" id="cg-gh-pat" placeholder="ghp_xxxxxxxxxxxx">
+      <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+        <div style="flex:1;">
+          <label class="cg-section-label" style="margin-top:0">Repo Owner</label>
+          <input type="text" class="cg-input" id="cg-gh-owner" value="dtwant">
+        </div>
+        <div style="flex:1;">
+          <label class="cg-section-label" style="margin-top:0">Repo Name</label>
+          <input type="text" class="cg-input" id="cg-gh-repo" value="dtwant.github.io">
+        </div>
+      </div>
+      <div style="font-size:0.6rem; color:#555; margin-top:0.4rem;">※PATはブラウザ内にのみ安全に保存されます。Scopeは <code>contents</code> 推奨。</div>
     </div>
     <div class="cg-section-label">データ管理</div>
     <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
@@ -1809,14 +1847,20 @@
 
 <div class="cg-overlay" id="cg-ov-preview">
   <div class="cg-modal cg-preview-modal">
-    <div class="cg-modal-title">
+    <div class="cg-modal-title" style="margin-bottom:0.75rem;">
       <span>📎</span> <span id="cg-prev-title">Document</span>
+      <div id="cg-prev-loading" style="display:none; font-size:0.7rem; color:#facc15; margin-left:auto;">[ 処理中... ]</div>
     </div>
     <div id="cg-prev-content" class="cg-prev-content">
-      
+      <div id="cg-prev-viewer" class="cg-prev-viewer">
+        
+      </div>
+      <div id="cg-prev-thumbs" class="cg-prev-thumbs" style="display:none;">
+        
+      </div>
     </div>
     <div class="cg-modal-footer">
-      <button class="cg-btn" id="cg-prev-del-btn" style="border-color:rgba(239,68,68,0.3); color:#ef4444; display:none;" onclick="cgDeleteAttachment()">🗑 削除</button>
+      <button class="cg-btn" id="cg-prev-del-btn" style="border-color:rgba(239,68,68,0.3); color:#ef4444; display:none;" onclick="cgDeleteAttachment()">🗑 現在のファイルを削除</button>
       <button class="cg-btn" onclick="cgClosePreview()">閉じる</button>
     </div>
   </div>
@@ -1909,34 +1953,42 @@
     return holidayCache[y][dateStr] || null;
   }
 
+  const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+
+  const todayJST = () => {
+    const d = new Date(new Date().toLocaleString('sv', { timeZone: 'Asia/Tokyo' }));
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  };
+
    
   let viewYear, viewMonth; 
   let selDate = '';
   let selColor = 'cyan';
   let blobId = null;
   let statMode = 'all'; 
-  let data = { attendance: {}, events: {} };
+  let data = { attendance: {}, attendance_ts: {}, events: {} };
+
+  const JB_KEY_DEFAULT = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  let jbKey = localStorage.getItem('cg_jb_key') || JB_KEY_DEFAULT;
+  let ghPat = localStorage.getItem('cg_gh_pat') || '';
+  let ghOwner = localStorage.getItem('cg_gh_owner') || 'dtwant';
+  let ghRepo = localStorage.getItem('cg_gh_repo') || 'dtwant.github.io';
 
    
   const grid = document.getElementById('cg-grid');
 
    
-  const pad = n => n < 10 ? '0'+n : ''+n;
-  const ymd = (y,m,d) => `${y}-${pad(m+1)}-${pad(d)}`;
-  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-
-   
   function init() {
-    const now = new Date();
-    viewYear = now.getFullYear();
-    viewMonth = now.getMonth();
+    const d = new Date(new Date().toLocaleString('sv', { timeZone: 'Asia/Tokyo' }));
+    viewYear = d.getFullYear();
+    viewMonth = d.getMonth();
 
     try {
       const raw = localStorage.getItem(ST_KEY);
       if (raw) data = JSON.parse(raw);
     } catch(e) {}
     if (!data.attendance) data.attendance = {};
+    if (!data.attendance_ts) data.attendance_ts = {};
     if (!data.events) data.events = {};
 
     blobId = SC_BLOB || localStorage.getItem(BLOB_KEY) || null;
@@ -1963,7 +2015,7 @@
     const firstDow = new Date(y, m, 1).getDay();
     const daysInMonth = new Date(y, m+1, 0).getDate();
     const prevDays = new Date(y, m, 0).getDate();
-    const todayStr = ymd(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    const todayStr = todayJST();
 
     grid.innerHTML = '';
     const totalCells = Math.ceil((firstDow + daysInMonth)/7)*7;
@@ -2076,14 +2128,13 @@
    
   function renderUpcoming() {
     const list = document.getElementById('cg-upcoming-list');
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const todayStr = ymd(today.getFullYear(), today.getMonth(), today.getDate());
+    const todayStr = todayJST();
+    const todayObj = new Date(todayStr + 'T00:00:00');
 
     
     const items = [];
     for (let i = 0; i < 30; i++) {
-      const d = new Date(today);
+      const d = new Date(todayObj);
       d.setDate(d.getDate() + i);
       const ds = ymd(d.getFullYear(), d.getMonth(), d.getDate());
       const dow = d.getDay();
@@ -2119,7 +2170,7 @@
     list.innerHTML = show.map(item => {
       const [iy, im, id] = item.date.split('-').map(Number);
       const dow = item.dayObj.getDay();
-      const diff = Math.round((item.dayObj - today) / (1000*60*60*24));
+      const diff = Math.round((item.dayObj - todayObj) / (1000*60*60*24));
       let daysLabel = '';
       let daysClass = '';
       if (diff === 0) { daysLabel = 'TODAY'; daysClass = 'today-ev'; }
@@ -2160,9 +2211,9 @@
     renderAll();
   };
   window.cgToday = function() {
-    const now = new Date();
-    viewYear = now.getFullYear();
-    viewMonth = now.getMonth();
+    const d = new Date(new Date().toLocaleString('sv', { timeZone: 'Asia/Tokyo' }));
+    viewYear = d.getFullYear();
+    viewMonth = d.getMonth();
     renderAll();
   };
 
@@ -2254,9 +2305,16 @@
         const v = this.dataset.v;
         const wasOn = this.classList.contains('on');
         document.querySelectorAll('.cg-att-opt').forEach(b => b.classList.remove('on'));
-        if (wasOn) { delete data.attendance[selDate]; }
-        else { this.classList.add('on'); data.attendance[selDate] = v; }
-        save(); pushBlob();
+        if (wasOn) { 
+          delete data.attendance[selDate]; 
+          if(data.attendance_ts) delete data.attendance_ts[selDate];
+        } else { 
+          this.classList.add('on'); 
+          data.attendance[selDate] = v; 
+          if (!data.attendance_ts) data.attendance_ts = {};
+          data.attendance_ts[selDate] = Date.now();
+        }
+        save(); debouncedPush();
       });
     });
   }
@@ -2279,7 +2337,7 @@
     data.events[selDate].push({ id: genId(), title, time, color: selColor, addedAt: Date.now() });
     document.getElementById('cg-ev-title').value = '';
     document.getElementById('cg-ev-time').value = '';
-    save(); pushBlob(); renderDayEvents();
+    save(); debouncedPush(); renderDayEvents();
     toast('予定を追加しました', 'ok');
   };
 
@@ -2291,8 +2349,7 @@
     if (!data.events[selDate]) return;
     data.events[selDate] = data.events[selDate].filter(e => e.id !== id);
     if (data.events[selDate].length === 0) delete data.events[selDate];
-    if (window.deleteAttachmentDB) deleteAttachmentDB(id).catch(()=>{});
-    save(); pushBlob(); renderDayEvents();
+    save(); debouncedPush(); renderDayEvents();
   };
 
   function renderDayEvents() {
@@ -2324,9 +2381,8 @@
   });
 
    
-  const JB_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
   const JB_CREATE = 'https://api.jsonbin.io/v3/b';
-  const JB_HDR = () => ({ 'X-Master-Key': JB_KEY, 'Content-Type': 'application/json' });
+  const JB_HDR = () => ({ 'X-Master-Key': jbKey, 'Content-Type': 'application/json' });
   const binUrl = () => `https://api.jsonbin.io/v3/b/${blobId}/latest`;
   const binPut = () => `https://api.jsonbin.io/v3/b/${blobId}`;
 
@@ -2340,8 +2396,22 @@
   }
 
   function mergeData(local, remote) {
-    const merged = { attendance: {}, events: {} };
-    Object.assign(merged.attendance, remote.attendance || {}, local.attendance || {});
+    const merged = { attendance: {}, attendance_ts: {}, events: {} };
+    
+    
+    const allAttDates = new Set([...Object.keys(local.attendance||{}), ...Object.keys(remote.attendance||{})]);
+    allAttDates.forEach(d => {
+      const lt = local.attendance_ts?.[d] || 0;
+      const rt = remote.attendance_ts?.[d] || 0;
+      if (lt >= rt && local.attendance[d]) {
+        merged.attendance[d] = local.attendance[d];
+        merged.attendance_ts[d] = lt;
+      } else if (remote.attendance[d]) {
+        merged.attendance[d] = remote.attendance[d];
+        merged.attendance_ts[d] = rt;
+      }
+    });
+
     const allDates = new Set([...Object.keys(local.events||{}), ...Object.keys(remote.events||{})]);
     allDates.forEach(d => {
       const le = (local.events||{})[d] || [];
@@ -2371,7 +2441,7 @@
         setSS('ok', '◉ SYNCED');
         if (!silent) toast('Bin作成・同期完了', 'ok');
       } else {
-        const r = await fetch(binUrl(), { headers: { 'X-Master-Key': JB_KEY }, cache: 'no-store' });
+        const r = await fetch(binUrl(), { headers: { 'X-Master-Key': jbKey }, cache: 'no-store' });
         if (!r.ok) {
           if ([400,401,403,404,422].includes(r.status)) {
             blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
@@ -2415,9 +2485,19 @@
     } catch(e) { setSS('err', '✕ ERR'); }
   }
 
+  let pushTimer = null;
+  function debouncedPush() {
+    clearTimeout(pushTimer);
+    pushTimer = setTimeout(() => pushBlob(), 500);
+  }
+
    
   window.cgOpenSettings = function() {
     document.getElementById('cg-blob-input').value = blobId || '';
+    document.getElementById('cg-jbkey-input').value = jbKey === JB_KEY_DEFAULT ? '' : jbKey;
+    document.getElementById('cg-gh-pat').value = ghPat;
+    document.getElementById('cg-gh-owner').value = ghOwner;
+    document.getElementById('cg-gh-repo').value = ghRepo;
     document.getElementById('cg-ov-settings').classList.add('open');
   };
   window.cgCloseSettings = function() { document.getElementById('cg-ov-settings').classList.remove('open'); };
@@ -2428,9 +2508,19 @@
       blobId = v || null;
       if (blobId) try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
       else try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
-      toast('設定を適用しました', 'ok');
-      if (blobId) cgSync(false);
     }
+    
+    jbKey = document.getElementById('cg-jbkey-input').value.trim() || JB_KEY_DEFAULT;
+    localStorage.setItem('cg_jb_key', jbKey);
+    ghPat = document.getElementById('cg-gh-pat').value.trim();
+    localStorage.setItem('cg_gh_pat', ghPat);
+    ghOwner = document.getElementById('cg-gh-owner').value.trim() || 'dtwant';
+    localStorage.setItem('cg_gh_owner', ghOwner);
+    ghRepo = document.getElementById('cg-gh-repo').value.trim() || 'dtwant.github.io';
+    localStorage.setItem('cg_gh_repo', ghRepo);
+
+    toast('設定を適用しました', 'ok');
+    if (blobId) cgSync(false);
     cgCloseSettings();
   };
 
@@ -2447,8 +2537,11 @@
     reader.onload = e => {
       try {
         const imported = JSON.parse(e.target.result);
+        if (typeof imported !== 'object' || (!imported.attendance && !imported.events)) {
+          throw new Error('Invalid format');
+        }
         data = mergeData(data, imported);
-        save(); renderAll(); pushBlob();
+        save(); renderAll(); debouncedPush();
         toast('インポート完了', 'ok');
       } catch(ex) { toast('インポート失敗', 'err'); }
     };
@@ -2457,8 +2550,8 @@
 
   window.cgClearAll = function() {
     if (!confirm('全データを削除しますか？この操作は取り消せません。')) return;
-    data = { attendance: {}, events: {} };
-    save(); renderAll(); pushBlob();
+    data = { attendance: {}, attendance_ts: {}, events: {} };
+    save(); renderAll(); debouncedPush();
     toast('全データを削除しました', 'info');
     cgCloseSettings();
   };
@@ -2484,133 +2577,239 @@
   });
 
    
-  const DB_NAME = 'cg_files_db';
-  const DB_VER = 1;
-  const STORE_NAME = 'attachments';
-  let dbPromise = new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, DB_VER);
-    req.onupgradeneeded = e => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME);
-      }
+  async function uploadToGitHub(file, dateStr) {
+    if (!ghPat) throw new Error('CONFIG画面で GitHub PAT を設定してください。');
+    
+    
+    const base64 = await new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = () => res(reader.result.split(',')[1]);
+      reader.onerror = rej;
+      reader.readAsDataURL(file);
+    });
+
+    
+    let safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '');
+    if (!safeName) safeName = 'file';
+    if (!safeName.includes('.')) {
+      if (file.type.startsWith('image/')) safeName += '.jpg';
+      else if (file.type === 'application/pdf') safeName += '.pdf';
+      else safeName += '.bin';
+    }
+
+    const path = `attachments/${dateStr}_${Date.now()}_${safeName}`;
+    const url = `https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`;
+    
+    const body = {
+      message: `Add attachment: ${safeName}`,
+      content: base64,
+      branch: 'main'
     };
-    req.onsuccess = e => resolve(e.target.result);
-    req.onerror = e => reject(e.target.error);
-  });
 
-  async function getAttachment(id) {
-    const db = await dbPromise;
-    return new Promise((res, rej) => {
-      const tx = db.transaction(STORE_NAME, 'readonly');
-      const req = tx.objectStore(STORE_NAME).get(id);
-      req.onsuccess = () => res(req.result);
-      req.onerror = () => rej(req.error);
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${ghPat}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
     });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || 'GitHubへのアップロードに失敗しました');
+    }
+
+    const resData = await res.json();
+    const rawUrl = `https://raw.githubusercontent.com/${ghOwner}/${ghRepo}/main/${path}`;
+    
+    return {
+      url: rawUrl,
+      filename: file.name,
+      type: file.type,
+      sha: resData.content.sha,
+      uploadedAt: new Date().toISOString()
+    };
   }
 
-  async function saveAttachment(id, file) {
-    const db = await dbPromise;
-    return new Promise((res, rej) => {
-      const tx = db.transaction(STORE_NAME, 'readwrite');
-      tx.objectStore(STORE_NAME).put(file, id);
-      tx.oncomplete = () => res();
-      tx.onerror = () => rej(tx.error);
+  async function deleteFromGitHub(sha, url) {
+    if (!ghPat) return;
+    const match = url.match(/main\/(attachments\/.*)$/);
+    if (!match) return;
+    const path = match[1];
+    
+    const apiUrl = `https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`;
+    const body = {
+      message: `Delete attachment`,
+      sha: sha,
+      branch: 'main'
+    };
+
+    await fetch(apiUrl, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `token ${ghPat}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
     });
   }
-
-  window.deleteAttachmentDB = async function(id) {
-    const db = await dbPromise;
-    return new Promise((res, rej) => {
-      const tx = db.transaction(STORE_NAME, 'readwrite');
-      tx.objectStore(STORE_NAME).delete(id);
-      tx.oncomplete = () => res();
-      tx.onerror = () => rej(tx.error);
-    });
-  };
 
   let curPrevId = null;
+  let curEvent = null;
+  let curAttIdx = 0;
 
   window.cgOpenPreview = async function(id, title) {
     curPrevId = id;
-    document.getElementById('cg-prev-title').textContent = title;
-    const content = document.getElementById('cg-prev-content');
-    const delBtn = document.getElementById('cg-prev-del-btn');
-    
-    document.getElementById('cg-ov-preview').classList.add('open');
-    content.innerHTML = '<div class="cg-up-empty">Loading...</div>';
-    delBtn.style.display = 'none';
+    curEvent = data.events[selDate].find(e => e.id === id);
+    if (!curEvent) return;
+    if (!curEvent.attachments) curEvent.attachments = [];
+    curAttIdx = 0;
 
-    try {
-      const file = await getAttachment(id);
-      if (file) {
-        renderPreviewFile(file);
-      } else {
-        renderUploadPrompt();
-      }
-    } catch(e) {
-      content.innerHTML = '<div class="cg-ev-empty" style="color:#ef4444">読み込みエラー</div>';
-    }
+    document.getElementById('cg-prev-title').textContent = title;
+    document.getElementById('cg-ov-preview').classList.add('open');
+    renderPreviewModal();
   };
 
   window.cgClosePreview = function() {
     curPrevId = null;
+    curEvent = null;
     document.getElementById('cg-ov-preview').classList.remove('open');
-    document.getElementById('cg-prev-content').innerHTML = '';
+    document.getElementById('cg-prev-viewer').innerHTML = '';
   };
 
-  function renderUploadPrompt() {
-    const content = document.getElementById('cg-prev-content');
-    document.getElementById('cg-prev-del-btn').style.display = 'none';
-    content.innerHTML = `
-      <label class="cg-upload-zone">
-        <div style="font-size: 2.5rem; margin-bottom: 1rem; color: #00f3ff; filter: drop-shadow(0 0 10px rgba(0,243,255,0.4));">[ SCAN ]</div>
-        <div style="font-size: 1rem; color: #e2e8f0;">タップして写真やPDFを選択</div>
-        <div style="font-size: 0.7rem; color: #64748b; margin-top: 0.5rem; font-family:'JetBrains Mono', monospace;">STORED ON LOCAL DEVICE</div>
-        <input type="file" accept="image/*,application/pdf" style="display:none" onchange="cgHandleUpload(this)">
-      </label>
-    `;
-  }
-
-  function renderPreviewFile(file) {
-    const content = document.getElementById('cg-prev-content');
-    document.getElementById('cg-prev-del-btn').style.display = '';
-    const url = URL.createObjectURL(file);
-    if (file.type.startsWith('image/')) {
-      content.innerHTML = `<img src="${url}" class="cg-preview-media">`;
-    } else if (file.type === 'application/pdf') {
-      content.innerHTML = `<iframe src="${url}" class="cg-preview-media" style="background:#fff;"></iframe>`;
+  function renderPreviewModal() {
+    const viewer = document.getElementById('cg-prev-viewer');
+    const thumbs = document.getElementById('cg-prev-thumbs');
+    const delBtn = document.getElementById('cg-prev-del-btn');
+    
+    if (curEvent.attachments.length === 0) {
+      thumbs.style.display = 'none';
+      delBtn.style.display = 'none';
+      viewer.innerHTML = `
+        <label class="cg-upload-zone">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem; color: #00f3ff; filter: drop-shadow(0 0 10px rgba(0,243,255,0.4));">[ UPLOAD ]</div>
+          <div style="font-size: 1rem; color: #e2e8f0;">タップして写真やPDFを選択（複数可）</div>
+          <div style="font-size: 0.7rem; color: #64748b; margin-top: 0.5rem; font-family:'JetBrains Mono', monospace;">STORED ON GITHUB</div>
+          <input type="file" accept="image/*,application/pdf" multiple style="display:none" onchange="cgHandleUpload(this)">
+        </label>
+      `;
     } else {
-      content.innerHTML = `<a href="${url}" download="${file.name}" style="color:#00f3ff;">[ダウンロード] ${file.name}</a>`;
+      thumbs.style.display = 'flex';
+      delBtn.style.display = '';
+      
+      
+      thumbs.innerHTML = curEvent.attachments.map((att, idx) => {
+        const isSel = idx === curAttIdx ? 'sel' : '';
+        let content = '';
+        if (att.type.startsWith('image/')) {
+          content = `<img src="${att.url}" style="width:100%;height:100%;object-fit:cover;">`;
+        } else {
+          content = `📄`;
+        }
+        return `<div class="cg-thumb ${isSel}" onclick="cgSelectAttachment(${idx})" title="${esc(att.filename)}">${content}</div>`;
+      }).join('');
+      
+      thumbs.innerHTML += `
+        <label class="cg-thumb-add" title="ファイルを追加">
+          +
+          <input type="file" accept="image/*,application/pdf" multiple style="display:none" onchange="cgHandleUpload(this)">
+        </label>
+      `;
+
+      
+      const att = curEvent.attachments[curAttIdx];
+      if (att.type.startsWith('image/')) {
+        viewer.innerHTML = `<img src="${att.url}" class="cg-preview-media">`;
+      } else if (att.type === 'application/pdf') {
+        renderPdfNative(att.url, viewer);
+      } else {
+        viewer.innerHTML = `<a href="${att.url}" target="_blank" style="color:#00f3ff;">[開く] ${esc(att.filename)}</a>`;
+      }
     }
   }
 
+  async function renderPdfNative(url, container) {
+    container.innerHTML = '<div style="color:#00f3ff; font-family:\'JetBrains Mono\', monospace; margin: auto;">Loading PDF...</div>';
+    try {
+      const pdf = await pdfjsLib.getDocument(url).promise;
+      container.innerHTML = ''; 
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const scale = window.devicePixelRatio || 1.5;
+        const viewport = page.getViewport({ scale: scale });
+        
+        const canvas = document.createElement('canvas');
+        canvas.className = 'cg-pdf-page';
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        canvas.style.width = (viewport.width / scale) + 'px';
+        
+        container.appendChild(canvas);
+        
+        const renderContext = { canvasContext: context, viewport: viewport };
+        await page.render(renderContext).promise;
+      }
+    } catch(e) {
+      container.innerHTML = '<div style="color:#ef4444; margin: auto;">PDFの読み込みに失敗しました</div>';
+    }
+  }
+
+  window.cgSelectAttachment = function(idx) {
+    curAttIdx = idx;
+    renderPreviewModal();
+  };
+
   window.cgHandleUpload = async function(input) {
     if (!input.files || input.files.length === 0) return;
-    const file = input.files[0];
-    if (!curPrevId) return;
-    const content = document.getElementById('cg-prev-content');
-    content.innerHTML = '<div class="cg-up-empty">Saving to Storage...</div>';
+    if (!curEvent) return;
+    
+    const loading = document.getElementById('cg-prev-loading');
+    loading.style.display = '';
+    const files = Array.from(input.files);
     
     try {
-      await saveAttachment(curPrevId, file);
-      renderPreviewFile(file);
-      toast('ファイルをデバイスに保存しました', 'ok');
+      for (const file of files) {
+        const att = await uploadToGitHub(file, selDate);
+        if (!curEvent.attachments) curEvent.attachments = [];
+        curEvent.attachments.push(att);
+      }
+      save(); debouncedPush();
+      curAttIdx = curEvent.attachments.length - 1;
+      renderPreviewModal();
+      toast('アップロード成功', 'ok');
     } catch(e) {
-      toast('保存に失敗しました', 'err');
-      renderUploadPrompt();
+      toast(e.message, 'err');
+    } finally {
+      loading.style.display = 'none';
+      input.value = '';
     }
   };
 
   window.cgDeleteAttachment = async function() {
-    if (!curPrevId) return;
-    if (!confirm('この添付ファイルを削除しますか？')) return;
+    if (!curEvent || !curEvent.attachments || curEvent.attachments.length === 0) return;
+    if (!confirm('現在表示中の添付ファイルを完全に削除しますか？(GitHubからも削除されます)')) return;
+    
+    const loading = document.getElementById('cg-prev-loading');
+    loading.style.display = '';
+    
     try {
-      await window.deleteAttachmentDB(curPrevId);
-      renderUploadPrompt();
+      const att = curEvent.attachments[curAttIdx];
+      await deleteFromGitHub(att.sha, att.url);
+      curEvent.attachments.splice(curAttIdx, 1);
+      
+      save(); debouncedPush();
+      
+      if (curAttIdx >= curEvent.attachments.length) {
+        curAttIdx = Math.max(0, curEvent.attachments.length - 1);
+      }
+      renderPreviewModal();
       toast('削除しました', 'info');
     } catch(e) {
-      toast('削除に失敗しました', 'err');
+      toast('削除に失敗しました: ' + e.message, 'err');
+    } finally {
+      loading.style.display = 'none';
     }
   };
 
