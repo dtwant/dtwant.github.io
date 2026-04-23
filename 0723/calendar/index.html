@@ -1953,6 +1953,10 @@
     return holidayCache[y][dateStr] || null;
   }
 
+   
+  const pad = n => n < 10 ? '0'+n : ''+n;
+  const ymd = (y,m,d) => `${y}-${pad(m+1)}-${pad(d)}`;
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
 
   const todayJST = () => {
