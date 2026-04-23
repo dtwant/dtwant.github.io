@@ -230,7 +230,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "56"
+    "wordCount": "61"
   }]
   </script>
 
@@ -928,7 +928,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>56 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>61 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1533,6 +1533,31 @@
   .cg-co-green  { background: #22c55e; color: #22c55e; }
   .cg-co-yellow { background: #facc15; color: #facc15; }
   .cg-co-orange { background: #f97316; color: #f97316; }
+  .cg-co-class  { background: #94a3b8; color: #e2e8f0; border-radius: 4px; padding: 0 4px; font-size: 0.7rem; display:flex; align-items:center; justify-content:center; font-weight:bold; width: 40px;}
+  .cg-co-class::after { content: '授業'; }
+
+   
+  .cg-preview-modal { max-width: 800px; width: 95%; height: 90vh; display: flex; flex-direction: column; }
+  .cg-prev-content {
+    flex: 1; min-height: 0; background: rgba(0,0,0,0.5); border: 1px dashed rgba(0,243,255,0.2);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden;
+    position: relative;
+  }
+  .cg-upload-zone {
+    width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .cg-upload-zone:hover { background: rgba(0,243,255,0.05); }
+  .cg-preview-media {
+    max-width: 100%; max-height: 100%; object-fit: contain; width: 100%; height: 100%; border: none; background: #fff;
+  }
+  .cg-btn-att {
+    background: rgba(0,243,255,0.08); border: 1px solid rgba(0,243,255,0.3); color: #00f3ff;
+    padding: 0.15rem 0.5rem; font-size: 0.65rem; border-radius: 3px; cursor: pointer; transition: all 0.2s;
+    white-space: nowrap; font-family: 'JetBrains Mono', monospace;
+  }
+  .cg-btn-att:hover { background: rgba(0,243,255,0.2); box-shadow: 0 0 10px rgba(0,243,255,0.2); }
+
 
    
   .cg-ev-list { margin-top: 1rem; }
@@ -1549,6 +1574,7 @@
   .cg-ev-item.c-green  { border-left-color: #22c55e; }
   .cg-ev-item.c-yellow { border-left-color: #facc15; }
   .cg-ev-item.c-orange { border-left-color: #f97316; }
+  .cg-ev-item.c-class  { border-left-color: #94a3b8; background: rgba(148,163,184,0.05); }
 
   .cg-ev-time { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #00f3ff; min-width: 38px; }
   .cg-ev-title { flex: 1; font-size: 0.85rem; color: #ddd; }
@@ -1744,6 +1770,7 @@
         <div class="cg-color-opt cg-co-green" data-c="green"></div>
         <div class="cg-color-opt cg-co-yellow" data-c="yellow"></div>
         <div class="cg-color-opt cg-co-orange" data-c="orange"></div>
+        <div class="cg-color-opt cg-co-class" data-c="class" title="授業"></div>
       </div>
     </div>
 
@@ -1775,6 +1802,22 @@
     <div class="cg-modal-footer">
       <button class="cg-btn" onclick="cgCloseSettings()">Cancel</button>
       <button class="cg-btn cg-btn-add" onclick="cgApplySettings()">Apply</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="cg-overlay" id="cg-ov-preview">
+  <div class="cg-modal cg-preview-modal">
+    <div class="cg-modal-title">
+      <span>📎</span> <span id="cg-prev-title">Document</span>
+    </div>
+    <div id="cg-prev-content" class="cg-prev-content">
+      
+    </div>
+    <div class="cg-modal-footer">
+      <button class="cg-btn" id="cg-prev-del-btn" style="border-color:rgba(239,68,68,0.3); color:#ef4444; display:none;" onclick="cgDeleteAttachment()">🗑 削除</button>
+      <button class="cg-btn" onclick="cgClosePreview()">閉じる</button>
     </div>
   </div>
 </div>
@@ -1985,10 +2028,11 @@
       }
 
       
-      if (evts.length > 0 || (holName && !isOther)) {
+      const dotEvts = evts.filter(e => e.color !== 'class');
+      if (dotEvts.length > 0 || (holName && !isOther)) {
         html += `<div class="cg-cell-dots">`;
         if (holName && !isOther) html += `<span class="cg-dot d-hol"></span>`;
-        evts.forEach(e => { html += `<span class="cg-dot d-${e.color||'cyan'}"></span>`; });
+        dotEvts.forEach(e => { html += `<span class="cg-dot d-${e.color||'cyan'}"></span>`; });
         html += `</div>`;
       }
 
@@ -2053,7 +2097,9 @@
       
       const evts = data.events[ds] || [];
       evts.forEach(e => {
-        items.push({ date: ds, title: e.title, color: e.color || 'cyan', time: e.time || '', isHol: false, dayObj: new Date(d) });
+        if (e.color !== 'class') {
+          items.push({ date: ds, title: e.title, color: e.color || 'cyan', time: e.time || '', isHol: false, dayObj: new Date(d) });
+        }
       });
     }
 
@@ -2245,6 +2291,7 @@
     if (!data.events[selDate]) return;
     data.events[selDate] = data.events[selDate].filter(e => e.id !== id);
     if (data.events[selDate].length === 0) delete data.events[selDate];
+    if (window.deleteAttachmentDB) deleteAttachmentDB(id).catch(()=>{});
     save(); pushBlob(); renderDayEvents();
   };
 
@@ -2259,6 +2306,7 @@
       <div class="cg-ev-item c-${e.color||'cyan'}">
         <span class="cg-ev-time">${e.time || '--:--'}</span>
         <span class="cg-ev-title">${esc(e.title)}</span>
+        ${e.color === 'class' ? `<button class="cg-btn-att" onclick="cgOpenPreview('${e.id}', '${esc(e.title)}')">📎 添付を開く</button>` : ''}
         <button class="cg-ev-del" onclick="cgDelEvent('${e.id}')">&times;</button>
       </div>
     `).join('');
@@ -2416,10 +2464,11 @@
   };
 
    
-  ['cg-ov-day','cg-ov-settings'].forEach(id => {
+  ['cg-ov-day','cg-ov-settings','cg-ov-preview'].forEach(id => {
     document.getElementById(id).addEventListener('click', function(e) {
       if (e.target === this) {
         if (id === 'cg-ov-day') cgCloseDay();
+        else if (id === 'cg-ov-preview') cgClosePreview();
         else this.classList.remove('open');
       }
     });
@@ -2428,10 +2477,142 @@
     if (e.key === 'Escape') {
       document.querySelectorAll('.cg-overlay.open').forEach(el => {
         if (el.id === 'cg-ov-day') cgCloseDay();
+        else if (el.id === 'cg-ov-preview') cgClosePreview();
         else el.classList.remove('open');
       });
     }
   });
+
+   
+  const DB_NAME = 'cg_files_db';
+  const DB_VER = 1;
+  const STORE_NAME = 'attachments';
+  let dbPromise = new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VER);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME);
+      }
+    };
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror = e => reject(e.target.error);
+  });
+
+  async function getAttachment(id) {
+    const db = await dbPromise;
+    return new Promise((res, rej) => {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const req = tx.objectStore(STORE_NAME).get(id);
+      req.onsuccess = () => res(req.result);
+      req.onerror = () => rej(req.error);
+    });
+  }
+
+  async function saveAttachment(id, file) {
+    const db = await dbPromise;
+    return new Promise((res, rej) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      tx.objectStore(STORE_NAME).put(file, id);
+      tx.oncomplete = () => res();
+      tx.onerror = () => rej(tx.error);
+    });
+  }
+
+  window.deleteAttachmentDB = async function(id) {
+    const db = await dbPromise;
+    return new Promise((res, rej) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      tx.objectStore(STORE_NAME).delete(id);
+      tx.oncomplete = () => res();
+      tx.onerror = () => rej(tx.error);
+    });
+  };
+
+  let curPrevId = null;
+
+  window.cgOpenPreview = async function(id, title) {
+    curPrevId = id;
+    document.getElementById('cg-prev-title').textContent = title;
+    const content = document.getElementById('cg-prev-content');
+    const delBtn = document.getElementById('cg-prev-del-btn');
+    
+    document.getElementById('cg-ov-preview').classList.add('open');
+    content.innerHTML = '<div class="cg-up-empty">Loading...</div>';
+    delBtn.style.display = 'none';
+
+    try {
+      const file = await getAttachment(id);
+      if (file) {
+        renderPreviewFile(file);
+      } else {
+        renderUploadPrompt();
+      }
+    } catch(e) {
+      content.innerHTML = '<div class="cg-ev-empty" style="color:#ef4444">読み込みエラー</div>';
+    }
+  };
+
+  window.cgClosePreview = function() {
+    curPrevId = null;
+    document.getElementById('cg-ov-preview').classList.remove('open');
+    document.getElementById('cg-prev-content').innerHTML = '';
+  };
+
+  function renderUploadPrompt() {
+    const content = document.getElementById('cg-prev-content');
+    document.getElementById('cg-prev-del-btn').style.display = 'none';
+    content.innerHTML = `
+      <label class="cg-upload-zone">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem; color: #00f3ff; filter: drop-shadow(0 0 10px rgba(0,243,255,0.4));">[ SCAN ]</div>
+        <div style="font-size: 1rem; color: #e2e8f0;">タップして写真やPDFを選択</div>
+        <div style="font-size: 0.7rem; color: #64748b; margin-top: 0.5rem; font-family:'JetBrains Mono', monospace;">STORED ON LOCAL DEVICE</div>
+        <input type="file" accept="image/*,application/pdf" style="display:none" onchange="cgHandleUpload(this)">
+      </label>
+    `;
+  }
+
+  function renderPreviewFile(file) {
+    const content = document.getElementById('cg-prev-content');
+    document.getElementById('cg-prev-del-btn').style.display = '';
+    const url = URL.createObjectURL(file);
+    if (file.type.startsWith('image/')) {
+      content.innerHTML = `<img src="${url}" class="cg-preview-media">`;
+    } else if (file.type === 'application/pdf') {
+      content.innerHTML = `<iframe src="${url}" class="cg-preview-media" style="background:#fff;"></iframe>`;
+    } else {
+      content.innerHTML = `<a href="${url}" download="${file.name}" style="color:#00f3ff;">[ダウンロード] ${file.name}</a>`;
+    }
+  }
+
+  window.cgHandleUpload = async function(input) {
+    if (!input.files || input.files.length === 0) return;
+    const file = input.files[0];
+    if (!curPrevId) return;
+    const content = document.getElementById('cg-prev-content');
+    content.innerHTML = '<div class="cg-up-empty">Saving to Storage...</div>';
+    
+    try {
+      await saveAttachment(curPrevId, file);
+      renderPreviewFile(file);
+      toast('ファイルをデバイスに保存しました', 'ok');
+    } catch(e) {
+      toast('保存に失敗しました', 'err');
+      renderUploadPrompt();
+    }
+  };
+
+  window.cgDeleteAttachment = async function() {
+    if (!curPrevId) return;
+    if (!confirm('この添付ファイルを削除しますか？')) return;
+    try {
+      await window.deleteAttachmentDB(curPrevId);
+      renderUploadPrompt();
+      toast('削除しました', 'info');
+    } catch(e) {
+      toast('削除に失敗しました', 'err');
+    }
+  };
 
   init();
 })();
