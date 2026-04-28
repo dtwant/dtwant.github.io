@@ -230,7 +230,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "38"
+    "wordCount": "73"
   }]
   </script>
 
@@ -928,7 +928,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>38 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>73 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1096,628 +1096,630 @@
 
         <div class="article-content max-w-prose mb-20">
           
-
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
-
-  .pt-root {
-    font-family: "Zen Kaku Gothic New", "JetBrains Mono", sans-serif;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 2rem 1rem;
-    background-color: #030305;
-    background-image:
-      linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px),
-      radial-gradient(circle at 50% 50%, rgba(20, 20, 30, 1) 0%, rgba(0, 0, 0, 1) 100%);
-    background-size: 30px 30px, 30px 30px, 100% 100%;
-    color: #e0e0e0;
-    z-index: 999990;
-    overflow-y: auto;
-    overflow-x: hidden;
-    box-sizing: border-box;
-  }
-
-   
-  .pt-root::after {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1), rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px);
-    pointer-events: none;
-    z-index: 10;
-  }
-
-  .pt-container {
-    font-family: "JetBrains Mono", monospace;
-    max-width: 1000px;
-    width: 100%;
-    margin: 0 auto;
-    background: rgba(5, 5, 10, 0.9);
-    padding: 2.5rem;
-    border: 1px solid rgba(0, 243, 255, 0.3);
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 243, 255, 0.05);
-    position: relative;
-    border-radius: 2px;
-  }
-
-  .pt-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #ff0055;
-    padding-bottom: 1rem;
-    margin-bottom: 2rem;
-  }
-
-  .pt-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 2rem;
-    font-weight: 900;
-    color: #00f3ff;
-    text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 2px 2px 0px rgba(255, 0, 85, 0.5);
-    letter-spacing: 0.1em;
-    margin: 0;
-  }
-
-   
-  .pt-dashboard {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 3rem;
-  }
-
-  .pt-stat-card {
-    background: linear-gradient(135deg, rgba(20, 20, 30, 0.8), rgba(0, 0, 0, 0.9));
-    border: 1px solid #333;
-    padding: 1.5rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .pt-stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 4px; height: 100%;
-  }
-  .pt-stat-total::before { background: #bc13fe; box-shadow: 0 0 10px #bc13fe; }
-  .pt-stat-fixed::before { background: #00f3ff; box-shadow: 0 0 10px #00f3ff; }
-  .pt-stat-var::before { background: #ff0055; box-shadow: 0 0 10px #ff0055; }
-
-  .pt-stat-label {
-    font-size: 0.8rem;
-    color: #888;
-    margin-bottom: 0.5rem;
-    letter-spacing: 2px;
-  }
-
-  .pt-stat-value {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #fff;
-  }
-  .pt-stat-total .pt-stat-value { color: #bc13fe; text-shadow: 0 0 8px rgba(188, 19, 254, 0.6); }
-
-  .pt-stat-var {
-    transform: scale(1.1);
-    z-index: 2;
-    border: 1px solid rgba(255, 0, 85, 0.5);
-    box-shadow: 0 0 20px rgba(255, 0, 85, 0.2);
-  }
-  .pt-stat-var .pt-stat-value {
-    font-size: 2.4rem;
-    text-shadow: 0 0 10px rgba(255, 0, 85, 0.8);
-  }
-
-   
-  .pt-form-wrapper {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px dashed rgba(255, 0, 85, 0.4);
-    padding: 1.5rem;
-    margin-bottom: 3rem;
-  }
-
-  .pt-form-title {
-    font-size: 0.9rem;
-    color: #ff0055;
-    margin-bottom: 1rem;
-    letter-spacing: 1px;
-  }
-
-  .pt-form {
-    display: grid;
-    grid-template-columns: 2fr 1.5fr 1fr 1fr auto;
-    gap: 1rem;
-    align-items: center;
-  }
-
-  .pt-input, .pt-select {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    border: 1px solid #333;
-    border-bottom: 2px solid #00f3ff;
-    padding: 0.8rem;
-    color: #00f3ff;
-    font-family: inherit;
-    font-size: 0.9rem;
-    outline: none;
-    transition: all 0.2s;
-  }
-  .pt-input:focus, .pt-select:focus {
-    border-color: #ff0055;
-    background: rgba(255, 0, 85, 0.05);
-    box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
-  }
-
-  .pt-btn-add {
-    background: transparent;
-    color: #ff0055;
-    border: 1px solid #ff0055;
-    padding: 0.8rem 1.5rem;
-    font-weight: bold;
-    cursor: pointer;
-    letter-spacing: 2px;
-    transition: all 0.2s;
-  }
-  .pt-btn-add:hover {
-    background: rgba(255, 0, 85, 0.2);
-    box-shadow: 0 0 15px rgba(255, 0, 85, 0.5);
-    color: #fff;
-  }
-
-   
-  .pt-lists-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
-
-  .pt-list-col h3 {
-    font-family: 'Orbitron', sans-serif;
-    color: #fff;
-    font-size: 1.2rem;
-    border-bottom: 1px solid #333;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .pt-list-col h3 span.fixed-tag { color: #00f3ff; }
-  .pt-list-col h3 span.var-tag { color: #ff0055; }
-
-  .pt-item {
-    background: rgba(10, 10, 15, 0.8);
-    border: 1px solid #222;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.2s;
-  }
-  .pt-item:hover {
-    border-color: rgba(255, 255, 255, 0.2);
-    background: rgba(20, 20, 30, 0.9);
-  }
-
-  .pt-item-info { flex: 1; }
-  .pt-item-name { 
-    font-family: "Zen Kaku Gothic New", sans-serif; 
-    font-weight: bold; 
-    font-size: 1.1rem; 
-    margin-bottom: 0.2rem;
-  }
-  .pt-item-meta { font-size: 0.8rem; color: #888; }
-  .pt-item-day { color: #00f3ff; }
-
-  .pt-item-amount {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
-    color: #fff;
-    margin-right: 1rem;
-    text-align: right;
-    min-width: 100px;
-  }
-
-  .pt-item.is-paid {
-    opacity: 0.5;
-    border-color: #22c55e;
-  }
-  .pt-item.is-paid .pt-item-name {
-    text-decoration: line-through;
-    color: #22c55e;
-  }
-  
-  .pt-actions { display: flex; align-items: center; }
-
-  .pt-btn-check {
-    background: transparent;
-    border: 1px solid #444;
-    color: #888;
-    width: 30px; height: 30px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.2s;
-    margin-right: 0.5rem;
-  }
-  .pt-btn-check:hover, .pt-item.is-paid .pt-btn-check {
-    color: #22c55e;
-    border-color: #22c55e;
-    box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
-  }
-
-  .pt-btn-del {
-    background: transparent;
-    border: 1px solid #444;
-    color: #888;
-    width: 30px; height: 30px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: all 0.2s;
-  }
-  .pt-btn-del:hover {
-    color: #ff0055;
-    border-color: #ff0055;
-    box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
-  }
-
-  .pt-empty {
-    font-size: 0.85rem;
-    color: #555;
-    text-align: center;
-    padding: 2rem;
-    border: 1px dashed #333;
-  }
-
-  .pt-reset-btn {
-    border: 1px dashed #444;
-    color: #888;
-    background: transparent;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 0.85rem;
-    transition: all 0.2s;
-  }
-  .pt-reset-btn:hover {
-    color: #eab308;
-    border-color: #eab308;
-    box-shadow: 0 0 10px rgba(234, 179, 8, 0.3);
-  }
-
-  .pt-month-selector {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-size: 1.5rem;
-    font-family: 'Orbitron', sans-serif;
-    color: #fff;
-    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-  }
-  .pt-month-selector button {
-    background: transparent;
-    border: none;
-    color: #ff0055;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.8rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .pt-month-selector button:hover {
-    color: #fff;
-    text-shadow: 0 0 10px #ff0055;
-  }
-  
-  .pt-copy-btn {
-    background: rgba(0, 243, 255, 0.05);
-    color: #00f3ff;
-    border: 1px dashed #00f3ff;
-    padding: 1rem 2rem;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1rem;
-    cursor: pointer;
-    margin: 0 auto;
-    display: block;
-    margin-bottom: 2rem;
-    transition: all 0.2s;
-    letter-spacing: 2px;
-  }
-  .pt-copy-btn:hover {
-    background: rgba(0, 243, 255, 0.2);
-    box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
-    color: #fff;
-  }
-
-  @media (max-width: 768px) {
-    .pt-root { padding: 0.5rem; }
-    .pt-container { padding: 1rem 0.5rem; width: 100%; border: none; }
-    
-    .pt-header { flex-direction: column; gap: 1rem; text-align: center; }
-    .pt-header > div { text-align: center !important; }
-    .pt-month-selector { justify-content: center; font-size: 1.2rem; }
-
-    .pt-dashboard { grid-template-columns: 1fr; gap: 1rem; overflow-x: hidden; padding: 0.5rem; }
-    .pt-stat-var { transform: scale(1.02); }  
-    .pt-stat-var .pt-stat-value { font-size: 2.1rem; }
-
-    .pt-form { grid-template-columns: 1fr; gap: 0.8rem; }
-    .pt-lists-container { grid-template-columns: 1fr; gap: 2rem; }
-    
-    .pt-title { font-size: 1.5rem; }
-
-    .pt-item { 
-      display: grid; 
-      grid-template-columns: 1fr auto; 
-      grid-gap: 0.8rem; 
-      align-items: center; 
-    }
-    .pt-item-info { grid-column: 1 / -1; }
-    .pt-item-amount { grid-column: 1 / 2; text-align: left; margin: 0; font-size: 1.2rem; }
-    .pt-actions { grid-column: 2 / 3; justify-content: flex-end; }
-    .pt-btn-check { width: 40px; height: 40px; font-size: 1.2rem; }
-    .pt-btn-del { width: 40px; height: 40px; font-size: 1.4rem; }
-  }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+:root{
+--bg:#0a0e1a;--surface:rgba(15,20,40,0.85);--glass:rgba(255,255,255,0.04);
+--glass-b:rgba(255,255,255,0.08);--border:rgba(255,255,255,0.08);
+--border-h:rgba(255,255,255,0.15);--text:#e2e8f0;--text-m:#94a3b8;--text-d:#475569;
+--amber:#f59e0b;--amber-g:rgba(245,158,11,0.15);--amber-s:0 0 20px rgba(245,158,11,0.3);
+--emerald:#10b981;--emerald-g:rgba(16,185,129,0.15);
+--rose:#f43f5e;--rose-g:rgba(244,63,94,0.15);
+--violet:#8b5cf6;--violet-g:rgba(139,92,246,0.15);
+--sky:#0ea5e9;--sky-g:rgba(14,165,233,0.15);
+--radius:12px;--radius-s:8px;
+}
+.pl-root{font-family:'Inter',sans-serif;position:fixed;top:0;left:0;width:100vw;height:100vh;margin:0;padding:0;background:var(--bg);color:var(--text);z-index:999990;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;box-sizing:border-box}
+.pl-root *,.pl-root *::before,.pl-root *::after{box-sizing:border-box}
+.pl-root::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 0%,rgba(245,158,11,0.06),transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(139,92,246,0.06),transparent 50%);pointer-events:none;z-index:0}
+.pl-wrap{max-width:960px;width:100%;margin:0 auto;padding:1.5rem 1rem 4rem;position:relative;z-index:1}
+ 
+.pl-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.pl-logo{display:flex;align-items:center;gap:.6rem}
+.pl-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--amber),#d97706);border-radius:var(--radius-s);display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:var(--amber-s)}
+.pl-title{font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--amber),#fbbf24);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.02em}
+.pl-hdr-r{display:flex;align-items:center;gap:.5rem}
+.pl-sync-badge{font-size:.6rem;padding:.2rem .5rem;border-radius:20px;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+.pl-sync-badge.local{background:rgba(100,116,139,.2);color:#94a3b8}
+.pl-sync-badge.ok{background:var(--emerald-g);color:var(--emerald)}
+.pl-sync-badge.busy{background:rgba(250,204,21,.15);color:#facc15}
+.pl-sync-badge.err{background:var(--rose-g);color:var(--rose)}
+.pl-hbtn{background:var(--glass);border:1px solid var(--border);color:var(--text-m);padding:.35rem .6rem;border-radius:var(--radius-s);font-size:.7rem;cursor:pointer;transition:all .2s;font-family:inherit}
+.pl-hbtn:hover{border-color:var(--amber);color:var(--amber);box-shadow:0 0 12px rgba(245,158,11,.2)}
+ 
+.pl-month-nav{display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:1.5rem;padding:.75rem;background:var(--glass);border:1px solid var(--border);border-radius:var(--radius)}
+.pl-month-btn{background:none;border:1px solid var(--border);color:var(--text-m);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.pl-month-btn:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-g)}
+.pl-month-label{font-size:1.2rem;font-weight:700;min-width:140px;text-align:center;color:var(--text)}
+ 
+.pl-dash{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.5rem}
+.pl-card{background:var(--surface);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.pl-card:hover{border-color:var(--border-h);transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.3)}
+.pl-card::after{content:"";position:absolute;top:0;left:0;right:0;height:2px}
+.pl-card.c-total::after{background:linear-gradient(90deg,var(--amber),#d97706)}
+.pl-card.c-sub::after{background:linear-gradient(90deg,var(--violet),#7c3aed)}
+.pl-card.c-var::after{background:linear-gradient(90deg,var(--sky),#0284c7)}
+.pl-card.c-paid::after{background:linear-gradient(90deg,var(--emerald),#059669)}
+.pl-card-label{font-size:.65rem;color:var(--text-d);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem;font-weight:600}
+.pl-card-val{font-family:'JetBrains Mono',monospace;font-size:1.4rem;font-weight:700}
+.pl-card.c-total .pl-card-val{color:var(--amber);text-shadow:0 0 15px rgba(245,158,11,.4)}
+.pl-card.c-sub .pl-card-val{color:var(--violet)}
+.pl-card.c-var .pl-card-val{color:var(--sky)}
+.pl-card.c-paid .pl-card-val{color:var(--emerald)}
+ 
+.pl-toolbar{display:flex;gap:.5rem;margin-bottom:1rem;align-items:center;flex-wrap:wrap}
+.pl-search{flex:1;min-width:120px;background:var(--glass);border:1px solid var(--border);color:var(--text);padding:.5rem .75rem;border-radius:var(--radius-s);font-size:.8rem;font-family:inherit;transition:all .2s}
+.pl-search:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(245,158,11,.1)}
+.pl-search::placeholder{color:var(--text-d)}
+.pl-filter-btn{background:var(--glass);border:1px solid var(--border);color:var(--text-m);padding:.4rem .7rem;border-radius:var(--radius-s);font-size:.65rem;cursor:pointer;transition:all .2s;font-family:inherit;text-transform:uppercase;letter-spacing:.04em}
+.pl-filter-btn.active,.pl-filter-btn:hover{background:var(--amber-g);border-color:var(--amber);color:var(--amber)}
+.pl-add-btn{background:linear-gradient(135deg,var(--amber),#d97706);color:#000;border:none;padding:.5rem 1rem;border-radius:var(--radius-s);font-weight:700;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:inherit;letter-spacing:.03em;white-space:nowrap}
+.pl-add-btn:hover{box-shadow:var(--amber-s);transform:translateY(-1px)}
+ 
+.pl-table-wrap{background:var(--surface);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--radius);overflow-x:auto;margin-bottom:1.5rem}
+.pl-table{width:100%;border-collapse:collapse}
+.pl-table td:nth-child(2),.pl-table th:nth-child(2){width:100%}
+.pl-table th{background:rgba(0,0,0,.3);padding:.7rem .75rem;font-size:.6rem;color:var(--text-d);text-transform:uppercase;letter-spacing:.08em;font-weight:600;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.pl-table td{padding:.7rem .75rem;border-bottom:1px solid var(--border);font-size:.8rem;vertical-align:middle;transition:background .2s}
+.pl-table tr:hover td{background:var(--glass-b)}
+.pl-table tr.is-paid td{opacity:.5}
+.pl-table tr.is-paid .pl-t-name{text-decoration:line-through;color:var(--text-d)}
+.pl-t-status{width:44px;text-align:center}
+.pl-t-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);background:none;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:transparent;padding:0}
+.pl-t-check:hover{border-color:var(--emerald)}
+tr.is-paid .pl-t-check{border-color:var(--emerald);background:var(--emerald);color:#fff}
+.pl-t-name{font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-t-cat{display:inline-block;font-size:.55rem;padding:.1rem .4rem;border-radius:10px;margin-left:.4rem;background:var(--violet-g);color:var(--violet);font-weight:500}
+.pl-t-sub-badge{display:inline-block;font-size:.5rem;padding:.1rem .35rem;border-radius:10px;margin-left:.3rem;background:var(--amber-g);color:var(--amber);font-weight:600}
+.pl-t-amount{font-family:'JetBrains Mono',monospace;font-weight:600;text-align:right;white-space:nowrap}
+.pl-t-date{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text-m);white-space:nowrap}
+.pl-t-due-soon{color:var(--rose);font-weight:600}
+.pl-t-due-near{color:var(--amber)}
+.pl-t-memo{font-size:.7rem;color:var(--text-d);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-t-actions{white-space:nowrap}
+.pl-t-btn{background:none;border:1px solid var(--border);color:var(--text-d);width:30px;height:30px;border-radius:var(--radius-s);cursor:pointer;font-size:.75rem;transition:all .2s;margin-left:.25rem;padding:0}
+.pl-t-btn:hover{border-color:var(--amber);color:var(--amber)}
+.pl-t-btn.del:hover{border-color:var(--rose);color:var(--rose)}
+.pl-empty{text-align:center;padding:3rem;color:var(--text-d);font-size:.85rem}
+.pl-empty-icon{font-size:2rem;margin-bottom:.5rem;opacity:.5}
+ 
+.pl-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:1000010;opacity:0;pointer-events:none;transition:opacity .25s;padding:1rem}
+.pl-overlay.open{opacity:1;pointer-events:auto}
+.pl-modal{background:#0f1429;border:1px solid var(--border-h);border-radius:var(--radius);max-width:480px;width:100%;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 25px 60px rgba(0,0,0,.6);animation:pl-modal-in .25s ease-out}
+@keyframes pl-modal-in{from{transform:scale(.95) translateY(10px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.pl-modal-hdr{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.25rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.85rem;color:var(--amber)}
+.pl-modal-close{background:none;border:none;color:var(--text-d);font-size:1.1rem;cursor:pointer;padding:.2rem;transition:color .2s}
+.pl-modal-close:hover{color:var(--rose)}
+.pl-modal-body{padding:1.25rem;overflow-y:auto;display:flex;flex-direction:column;gap:.75rem}
+.pl-modal-footer{padding:.75rem 1.25rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.5rem}
+.pl-field{display:flex;flex-direction:column;gap:.3rem}
+.pl-field label{font-size:.6rem;color:var(--text-d);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.pl-input,.pl-select,.pl-textarea{width:100%;background:var(--glass);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;border-radius:var(--radius-s);font-family:inherit;font-size:.8rem;transition:all .2s}
+.pl-input:focus,.pl-select:focus,.pl-textarea:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(245,158,11,.1)}
+.pl-textarea{resize:vertical;min-height:2.5rem;max-height:5rem}
+.pl-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.pl-mbtn{background:var(--glass);border:1px solid var(--border);color:var(--text-m);padding:.45rem .8rem;border-radius:var(--radius-s);font-size:.7rem;cursor:pointer;transition:all .2s;font-family:inherit}
+.pl-mbtn:hover{border-color:var(--amber);color:var(--amber)}
+.pl-mbtn.primary{background:linear-gradient(135deg,var(--amber),#d97706);border-color:transparent;color:#000;font-weight:700}
+.pl-mbtn.primary:hover{box-shadow:var(--amber-s)}
+.pl-mbtn.danger{border-color:var(--rose);color:var(--rose)}
+.pl-mbtn.danger:hover{background:var(--rose-g)}
+ 
+.pl-toggle-wrap{display:flex;align-items:center;gap:.6rem}
+.pl-toggle{position:relative;width:40px;height:22px;background:var(--glass-b);border:1px solid var(--border);border-radius:11px;cursor:pointer;transition:all .3s}
+.pl-toggle.on{background:var(--amber-g);border-color:var(--amber)}
+.pl-toggle::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--text-d);border-radius:50%;transition:all .3s}
+.pl-toggle.on::after{left:20px;background:var(--amber)}
+.pl-toggle-label{font-size:.75rem;color:var(--text-m)}
+ 
+.pl-toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#0f1429;border:1px solid var(--border);padding:.6rem 1.1rem;border-radius:var(--radius-s);font-size:.75rem;color:var(--text);z-index:1000020;transform:translateY(80px);opacity:0;transition:all .3s;box-shadow:0 8px 25px rgba(0,0,0,.4)}
+.pl-toast.show{transform:translateY(0);opacity:1}
+.pl-toast.ok{border-color:var(--emerald);color:var(--emerald)}
+.pl-toast.err{border-color:var(--rose);color:var(--rose)}
+.pl-toast.info{border-color:var(--sky);color:var(--sky)}
+ 
+.pl-sub-section{margin-bottom:1.5rem}
+.pl-sub-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.pl-sub-title{font-size:.75rem;font-weight:700;color:var(--violet);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:.4rem}
+.pl-sub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem}
+.pl-sub-card{background:var(--glass);border:1px solid var(--border);border-radius:var(--radius-s);padding:.65rem .75rem;display:flex;justify-content:space-between;align-items:center;transition:all .2s}
+.pl-sub-card:hover{border-color:var(--border-h)}
+.pl-sub-name{font-weight:600;font-size:.8rem}
+.pl-sub-info{font-size:.65rem;color:var(--text-d);font-family:'JetBrains Mono',monospace}
+.pl-sub-amt{font-family:'JetBrains Mono',monospace;color:var(--amber);font-weight:600;font-size:.8rem}
+.pl-sub-actions{display:flex;gap:.25rem}
+ 
+.pl-blob-display{margin-top:.5rem;padding:.4rem .6rem;background:var(--glass);border:1px solid var(--border);border-radius:var(--radius-s);font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--amber);word-break:break-all;user-select:all}
+ 
+.pl-progress{height:2px;background:var(--glass);margin-bottom:.5rem;border-radius:1px;overflow:hidden}
+.pl-progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--amber),var(--violet));transition:width .3s}
+ 
+@media(max-width:768px){
+.pl-wrap{padding:1rem .5rem 5rem}
+.pl-header{flex-direction:column;align-items:flex-start;gap:.5rem}
+.pl-hdr-r{width:100%;justify-content:flex-start;flex-wrap:wrap}
+.pl-dash{grid-template-columns:repeat(2,1fr);gap:.5rem}
+.pl-card{padding:.75rem}
+.pl-card-val{font-size:1.1rem}
+.pl-toolbar{flex-direction:column}
+.pl-search{width:100%}
+.pl-table{min-width:520px}
+.pl-table th:nth-child(5),.pl-table td:nth-child(5){display:none}
+.pl-table th,.pl-table td{padding:.55rem .5rem;font-size:.72rem}
+.pl-t-btn{width:34px;height:34px;font-size:.85rem}
+.pl-t-check{width:28px;height:28px;font-size:.8rem}
+.pl-sub-grid{grid-template-columns:1fr}
+.pl-month-label{font-size:1rem;min-width:100px}
+.pl-add-btn{width:100%;padding:.6rem}
+.pl-filter-btn{font-size:.6rem;padding:.35rem .5rem}
+.pl-row{grid-template-columns:1fr}
+.pl-modal{max-width:100%;margin:.5rem;max-height:90vh}
+}
+@media(max-width:400px){
+.pl-dash{grid-template-columns:1fr 1fr}
+.pl-card-val{font-size:1rem}
+.pl-title{font-size:1.1rem}
+.pl-month-nav{gap:.5rem;padding:.5rem}
+.pl-month-btn{width:32px;height:32px}
+}
 </style>
-
-<div class="pt-root">
-  <div class="pt-container">
-    
-    <div class="pt-header">
-      <h1 class="pt-title">MONTHLY_BILLING</h1>
-      <div class="pt-month-selector">
-        <button onclick="window.ptChangeMonth(-1)">&lt;</button>
-        <span id="pt-current-month-display">2026-04</span>
-        <button onclick="window.ptChangeMonth(1)">&gt;</button>
-      </div>
-      <div style="text-align: right;">
-        <button class="pt-reset-btn" onclick="window.ptResetPaid()">RESET CURRENT MONTH</button><br>
-        <span style="color: #666; font-size: 0.75rem;">LOCAL_STORAGE ACTIVE</span>
-      </div>
+<div class="pl-root">
+<div class="pl-wrap">
+  <div class="pl-header">
+    <div class="pl-logo">
+      <div class="pl-logo-icon">💳</div>
+      <div class="pl-title">PAYMENT LEDGER</div>
     </div>
-
-    
-    <div class="pt-dashboard">
-      <div class="pt-stat-card pt-stat-fixed">
-        <div class="pt-stat-label">FIXED (SUBSCRIPTIONS)</div>
-        <div class="pt-stat-value" id="pt-fixed-total" style="color:#00f3ff;">¥0</div>
-      </div>
-      <div class="pt-stat-card pt-stat-var">
-        <div class="pt-stat-label">VARIABLE (UTILITIES, etc...)</div>
-        <div class="pt-stat-value" id="pt-var-total" style="color:#ff0055;">¥0</div>
-      </div>
-      <div class="pt-stat-card pt-stat-total">
-        <div class="pt-stat-label">TOTAL ESTIMATE / MONTH</div>
-        <div class="pt-stat-value" id="pt-total">¥0</div>
-      </div>
+    <div class="pl-hdr-r">
+      <span class="pl-sync-badge local" id="pl-sync">LOCAL</span>
+      <button class="pl-hbtn" onclick="plSync()" title="同期">⇅</button>
+      <button class="pl-hbtn" onclick="plOpenSettings()" title="設定">⚙</button>
     </div>
-
-    
-    <div id="pt-copy-container" style="display: none;">
-      <button class="pt-copy-btn" onclick="window.ptCopyPrevious()">> IMPORT PREVIOUS MONTH'S ITEMS &lt;</button>
+  </div>
+  <div class="pl-progress"><div class="pl-progress-bar" id="pl-progress-bar"></div></div>
+  
+  <div class="pl-month-nav">
+    <button class="pl-month-btn" onclick="plChangeMonth(-1)">◂</button>
+    <div class="pl-month-label" id="pl-month-display">2026年 4月</div>
+    <button class="pl-month-btn" onclick="plChangeMonth(1)">▸</button>
+  </div>
+  
+  <div class="pl-dash">
+    <div class="pl-card c-total"><div class="pl-card-label">月間合計</div><div class="pl-card-val" id="pl-total">¥0</div></div>
+    <div class="pl-card c-sub"><div class="pl-card-label">サブスク</div><div class="pl-card-val" id="pl-sub-total">¥0</div></div>
+    <div class="pl-card c-var"><div class="pl-card-label">変動費</div><div class="pl-card-val" id="pl-var-total">¥0</div></div>
+    <div class="pl-card c-paid"><div class="pl-card-label">支払済</div><div class="pl-card-val" id="pl-paid-total">¥0</div></div>
+  </div>
+  
+  <div class="pl-sub-section">
+    <div class="pl-sub-header">
+      <div class="pl-sub-title">⟁ サブスクリプション登録</div>
+      <button class="pl-hbtn" onclick="plOpenSubModal()">+ 追加</button>
     </div>
-
-    
-    <div class="pt-form-wrapper">
-      <div class="pt-form-title">> ADD_NEW_ENTRY</div>
-      <form class="pt-form" id="pt-form">
-        <input type="text" id="pt-name" class="pt-input" placeholder="Name (e.g., Netflix, Electric)" required>
-        <input type="number" id="pt-amount" class="pt-input" placeholder="Amount (¥)" required min="0">
-        <select id="pt-type" class="pt-select" required>
-          <option value="variable">Variable (Bill)</option>
-          <option value="fixed">Fixed (Sub)</option>
-        </select>
-        <input type="number" id="pt-day" class="pt-input" placeholder="Day (1-31)" min="1" max="31">
-        <button type="submit" class="pt-btn-add">REGISTER</button>
-      </form>
-    </div>
-
-    
-    <div class="pt-lists-container">
-      <div class="pt-list-col">
-        <h3><span class="fixed-tag">■</span> FIXED_SUBSCRIPTIONS</h3>
-        <div id="pt-list-fixed"></div>
-      </div>
-      <div class="pt-list-col">
-        <h3><span class="var-tag">■</span> VARIABLE_BILLS</h3>
-        <div id="pt-list-variable"></div>
-      </div>
-    </div>
-
+    <div class="pl-sub-grid" id="pl-sub-list"></div>
+  </div>
+  
+  <div class="pl-toolbar">
+    <input type="text" class="pl-search" id="pl-search" placeholder="検索..." oninput="plRender()">
+    <button class="pl-filter-btn active" id="pf-all" onclick="plSetFilter('all')">全件</button>
+    <button class="pl-filter-btn" id="pf-unpaid" onclick="plSetFilter('unpaid')">未払</button>
+    <button class="pl-filter-btn" id="pf-paid" onclick="plSetFilter('paid')">済</button>
+    <button class="pl-add-btn" onclick="plOpenAddModal()">＋ 支払い追加</button>
+  </div>
+  
+  <div class="pl-table-wrap">
+    <table class="pl-table">
+      <thead><tr>
+        <th></th><th>名称</th><th style="text-align:right">金額</th><th>支払日</th><th>メモ</th><th></th>
+      </tr></thead>
+      <tbody id="pl-tbody"></tbody>
+    </table>
+    <div class="pl-empty" id="pl-empty" style="display:none"><div class="pl-empty-icon">📋</div>データがありません</div>
   </div>
 </div>
+</div>
 
+
+<div class="pl-toast" id="pl-toast"></div>
+
+
+<div class="pl-overlay" id="pl-overlay-edit">
+<div class="pl-modal">
+  <div class="pl-modal-hdr"><span id="pl-modal-title">支払い追加</span><button class="pl-modal-close" onclick="plCloseEdit()">✕</button></div>
+  <div class="pl-modal-body">
+    <input type="hidden" id="pl-edit-id">
+    <div class="pl-field"><label>名称</label><input type="text" class="pl-input" id="pl-edit-name" placeholder="例: 電気代、Netflix" required></div>
+    <div class="pl-row">
+      <div class="pl-field"><label>金額 (¥)</label><input type="number" class="pl-input" id="pl-edit-amount" placeholder="1000" min="0" required></div>
+      <div class="pl-field"><label>支払日</label><input type="date" class="pl-input" id="pl-edit-date"></div>
+    </div>
+    <div class="pl-row">
+      <div class="pl-field"><label>カテゴリ</label>
+        <select class="pl-select" id="pl-edit-cat">
+          <option value="">未分類</option><option value="住居">住居</option><option value="光熱費">光熱費</option>
+          <option value="通信">通信</option><option value="保険">保険</option><option value="食費">食費</option>
+          <option value="交通">交通</option><option value="娯楽">娯楽</option><option value="教育">教育</option>
+          <option value="医療">医療</option><option value="その他">その他</option>
+        </select>
+      </div>
+      <div class="pl-field"><label>引き落とし日 (1-31)</label><input type="number" class="pl-input" id="pl-edit-day" min="1" max="31" placeholder="毎月の日付"></div>
+    </div>
+    <div class="pl-field"><label>メモ</label><textarea class="pl-textarea" id="pl-edit-memo" placeholder="メモ..."></textarea></div>
+  </div>
+  <div class="pl-modal-footer">
+    <button class="pl-mbtn danger" id="pl-edit-del-btn" onclick="plDeleteFromEdit()" style="display:none">削除</button>
+    <button class="pl-mbtn" onclick="plCloseEdit()">キャンセル</button>
+    <button class="pl-mbtn primary" onclick="plSaveEdit()">保存</button>
+  </div>
+</div>
+</div>
+
+
+<div class="pl-overlay" id="pl-overlay-sub">
+<div class="pl-modal">
+  <div class="pl-modal-hdr"><span>サブスクリプション登録</span><button class="pl-modal-close" onclick="plCloseSub()">✕</button></div>
+  <div class="pl-modal-body">
+    <div class="pl-field"><label>サービス名</label><input type="text" class="pl-input" id="pl-sub-name" placeholder="例: Netflix, Spotify" required></div>
+    <div class="pl-row">
+      <div class="pl-field"><label>月額 (¥)</label><input type="number" class="pl-input" id="pl-sub-amount" placeholder="980" min="0" required></div>
+      <div class="pl-field"><label>引き落とし日 (1-31)</label><input type="number" class="pl-input" id="pl-sub-day" min="1" max="31" placeholder="15" required></div>
+    </div>
+    <div class="pl-field"><label>カテゴリ</label>
+      <select class="pl-select" id="pl-sub-cat">
+        <option value="娯楽">娯楽</option><option value="通信">通信</option><option value="教育">教育</option>
+        <option value="その他">その他</option>
+      </select>
+    </div>
+  </div>
+  <div class="pl-modal-footer">
+    <button class="pl-mbtn" onclick="plCloseSub()">キャンセル</button>
+    <button class="pl-mbtn primary" onclick="plSaveSub()">登録</button>
+  </div>
+</div>
+</div>
+
+
+<div class="pl-overlay" id="pl-overlay-settings">
+<div class="pl-modal">
+  <div class="pl-modal-hdr"><span>⚙ 設定</span><button class="pl-modal-close" onclick="plCloseSettings()">✕</button></div>
+  <div class="pl-modal-body">
+    <div class="pl-field"><label>CLOUD SYNC (JSONBIN)</label>
+      <div style="font-size:.7rem;color:var(--text-d);line-height:1.6;margin-bottom:.5rem">初回SYNC時にBinを自動作成。Blob IDを別端末に入力すれば同期可能。
+        <div class="pl-blob-display" id="pl-blob-display">未設定</div>
+      </div>
+    </div>
+    <div class="pl-field"><label>既存のBlob ID</label><input type="text" class="pl-input" id="pl-blob-input" placeholder="別端末から引き継ぐ場合"></div>
+    <div class="pl-field"><label>データ管理</label>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="pl-mbtn" onclick="plExport()">⬇ Export</button>
+        <button class="pl-mbtn" onclick="document.getElementById('pl-import-file').click()">⬆ Import</button>
+        <input type="file" id="pl-import-file" accept=".json" style="display:none" onchange="plImport(this)">
+      </div>
+    </div>
+    <div class="pl-field"><label style="color:var(--rose)">DANGER ZONE</label>
+      <button class="pl-mbtn danger" onclick="plClearAll()">⚠ 全データ削除</button>
+    </div>
+  </div>
+  <div class="pl-modal-footer">
+    <button class="pl-mbtn" onclick="plCloseSettings()">キャンセル</button>
+    <button class="pl-mbtn primary" onclick="plApplySettings()">適用</button>
+  </div>
+</div>
+</div>
 <script>
-  (function() {
-    const STORAGE_KEY = 'dt_payment_tracker_v1';
-    
-    let allData = {};
-    let currentFocusDate = new Date();
-    
-    
-    const rawData = localStorage.getItem(STORAGE_KEY);
-    if (rawData) {
-      const parsed = JSON.parse(rawData);
-      if (Array.isArray(parsed)) {
-        
-        const key = `${currentFocusDate.getFullYear()}-${String(currentFocusDate.getMonth()+1).padStart(2,'0')}`;
-        allData[key] = parsed;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
-      } else {
-        allData = parsed;
+(function(){
+const S_KEY='dt_pay_v2',SUB_KEY='dt_pay_subs',BLOB_KEY='dt_pay_blob';
+const JSONBIN_KEY='$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+const BIN_URL='https://api.jsonbin.io/v3/b';
+const jbH=()=>({'X-Master-Key':JSONBIN_KEY,'Content-Type':'application/json'});
+let entries={},subs=[],blobId=null,focusDate=new Date(),activeFilter='all';
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const genId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const fmt=n=>new Intl.NumberFormat('ja-JP',{style:'currency',currency:'JPY'}).format(n);
+const mKey=()=>{const y=focusDate.getFullYear(),m=String(focusDate.getMonth()+1).padStart(2,'0');return`${y}-${m}`};
+const getE=()=>{const k=mKey();if(!entries[k])entries[k]=[];return entries[k]};
+const save=()=>{try{localStorage.setItem(S_KEY,JSON.stringify(entries));localStorage.setItem(SUB_KEY,JSON.stringify(subs))}catch(e){}};
+
+
+function migrateV1(){
+  try{
+    const old=localStorage.getItem('dt_payment_tracker_v1');
+    if(old&&!localStorage.getItem(S_KEY)){
+      const d=JSON.parse(old);
+      if(typeof d==='object'&&!Array.isArray(d)){
+        const newE={};
+        Object.keys(d).forEach(k=>{
+          newE[k]=(d[k]||[]).map(e=>({id:genId(),name:e.name,amount:e.amount,type:e.type==='fixed'?'sub':'var',day:e.day||null,date:null,cat:'',memo:'',paid:!!e.paid,updatedAt:Date.now()}));
+        });
+        entries=newE;
+      }else if(Array.isArray(d)){
+        entries[mKey()]=d.map(e=>({id:genId(),name:e.name,amount:e.amount,type:'var',day:e.day||null,date:null,cat:'',memo:'',paid:!!e.paid,updatedAt:Date.now()}));
       }
+      save();
     }
+  }catch(e){}
+}
 
-    const getCurrentKey = () => {
-      const y = currentFocusDate.getFullYear();
-      const m = String(currentFocusDate.getMonth() + 1).padStart(2, '0');
-      return `${y}-${m}`;
-    };
+function init(){
+  migrateV1();
+  try{entries=JSON.parse(localStorage.getItem(S_KEY)||'{}')}catch(e){entries={}}
+  try{subs=JSON.parse(localStorage.getItem(SUB_KEY)||'[]')}catch(e){subs=[]}
+  blobId=localStorage.getItem(BLOB_KEY)||null;
+  updateBlobDisplay();
+  expandSubs();
+  plRender();
+  renderSubs();
+  if(blobId)plSync(true);
+}
 
-    const getPreviousKey = () => {
-      const prevDate = new Date(currentFocusDate.getFullYear(), currentFocusDate.getMonth() - 1, 1);
-      const y = prevDate.getFullYear();
-      const m = String(prevDate.getMonth() + 1).padStart(2, '0');
-      return `${y}-${m}`;
-    };
 
-    const getEntries = () => {
-      const key = getCurrentKey();
-      if (!allData[key]) allData[key] = [];
-      return allData[key];
-    };
+function expandSubs(){
+  const k=mKey();
+  if(!entries[k])entries[k]=[];
+  const existing=entries[k];
+  subs.forEach(sub=>{
+    const already=existing.find(e=>e.subId===sub.id);
+    if(!already){
+      entries[k].push({id:genId(),subId:sub.id,name:sub.name,amount:sub.amount,type:'sub',day:sub.day,date:null,cat:sub.cat||'',memo:'サブスク自動登録',paid:false,updatedAt:Date.now()});
+    }
+  });
+  save();
+}
 
-    const listFixedEl = document.getElementById('pt-list-fixed');
-    const listVarEl = document.getElementById('pt-list-variable');
-    const totalEl = document.getElementById('pt-total');
-    const fixedTotalEl = document.getElementById('pt-fixed-total');
-    const varTotalEl = document.getElementById('pt-var-total');
-    const formEl = document.getElementById('pt-form');
-    const displayMonthEl = document.getElementById('pt-current-month-display');
-    const copyContainerEl = document.getElementById('pt-copy-container');
 
-    const formatCurrency = (amount) => {
-      return new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(amount);
-    };
+function renderSubs(){
+  const el=document.getElementById('pl-sub-list');
+  if(subs.length===0){el.innerHTML='<div style="color:var(--text-d);font-size:.75rem;padding:.5rem">サブスクリプション未登録</div>';return}
+  el.innerHTML=subs.map(s=>`
+    <div class="pl-sub-card">
+      <div><div class="pl-sub-name">${esc(s.name)}</div><div class="pl-sub-info">毎月${s.day}日 · ${s.cat||'未分類'}</div></div>
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <div class="pl-sub-amt">${fmt(s.amount)}</div>
+        <button class="pl-t-btn del" onclick="plDelSub('${s.id}')" title="削除">×</button>
+      </div>
+    </div>`).join('');
+}
 
-    const save = () => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
-      render();
-    };
 
-    const render = () => {
-      const y = currentFocusDate.getFullYear();
-      const m = currentFocusDate.getMonth() + 1;
-      displayMonthEl.innerText = `${y}年 ${m}月`;
+function plRender(){
+  const k=mKey();
+  const y=focusDate.getFullYear(),m=focusDate.getMonth()+1;
+  document.getElementById('pl-month-display').textContent=`${y}年 ${m}月`;
+  expandSubs();
+  let items=getE();
+  const q=(document.getElementById('pl-search').value||'').toLowerCase();
+  if(q)items=items.filter(e=>(e.name||'').toLowerCase().includes(q)||(e.cat||'').toLowerCase().includes(q)||(e.memo||'').toLowerCase().includes(q));
+  if(activeFilter==='paid')items=items.filter(e=>e.paid);
+  else if(activeFilter==='unpaid')items=items.filter(e=>!e.paid);
+  
+  items.sort((a,b)=>{if(a.paid!==b.paid)return a.paid?1:-1;return(a.day||99)-(b.day||99)});
+  const tbody=document.getElementById('pl-tbody');
+  const emptyEl=document.getElementById('pl-empty');
+  if(items.length===0){tbody.innerHTML='';emptyEl.style.display='';return}
+  emptyEl.style.display='none';
+  const today=new Date();const td=today.getDate();const thisMonth=today.getFullYear()===y&&today.getMonth()+1===m;
+  tbody.innerHTML=items.map(e=>{
+    const paid=e.paid?'is-paid':'';
+    const dayStr=e.day?`${m}/${e.day}`:(e.date?e.date.slice(5):'—');
+    let dueCls='';
+    if(thisMonth&&e.day&&!e.paid){
+      const diff=e.day-td;
+      if(diff<0)dueCls='pl-t-due-soon';
+      else if(diff<=3)dueCls='pl-t-due-near';
+    }
+    const catBadge=e.cat?`<span class="pl-t-cat">${esc(e.cat)}</span>`:'';
+    const subBadge=e.type==='sub'?'<span class="pl-t-sub-badge">SUB</span>':'';
+    return`<tr class="${paid}" data-id="${e.id}">
+      <td class="pl-t-status"><button class="pl-t-check" onclick="plToggle('${e.id}')">✓</button></td>
+      <td><span class="pl-t-name">${esc(e.name)}</span>${subBadge}${catBadge}</td>
+      <td class="pl-t-amount">${fmt(e.amount)}</td>
+      <td class="pl-t-date ${dueCls}">${dayStr}</td>
+      <td class="pl-t-memo" title="${esc(e.memo||'')}">${esc(e.memo||'')}</td>
+      <td class="pl-t-actions">
+        <button class="pl-t-btn" onclick="plOpenEdit('${e.id}')" title="編集">✎</button>
+        <button class="pl-t-btn del" onclick="plDel('${e.id}')" title="削除">×</button>
+      </td>
+    </tr>`}).join('');
+  
+  const all=getE();
+  let totalAll=0,totalSub=0,totalVar=0,totalPaid=0;
+  all.forEach(e=>{const a=parseInt(e.amount)||0;totalAll+=a;if(e.type==='sub')totalSub+=a;else totalVar+=a;if(e.paid)totalPaid+=a});
+  document.getElementById('pl-total').textContent=fmt(totalAll);
+  document.getElementById('pl-sub-total').textContent=fmt(totalSub);
+  document.getElementById('pl-var-total').textContent=fmt(totalVar);
+  document.getElementById('pl-paid-total').textContent=fmt(totalPaid);
+  
+  document.querySelectorAll('.pl-filter-btn').forEach(b=>{b.classList.toggle('active',b.id==='pf-'+activeFilter)});
+}
 
-      const entries = getEntries();
-      
-      
-      const prevKey = getPreviousKey();
-      if (entries.length === 0 && allData[prevKey] && allData[prevKey].length > 0) {
-        copyContainerEl.style.display = 'block';
-      } else {
-        copyContainerEl.style.display = 'none';
-      }
 
-      listFixedEl.innerHTML = '';
-      listVarEl.innerHTML = '';
+window.plToggle=id=>{const k=mKey();entries[k]=entries[k].map(e=>e.id===id?{...e,paid:!e.paid,updatedAt:Date.now()}:e);save();plRender();pushBlob()};
+window.plDel=id=>{if(!confirm('削除しますか？'))return;const k=mKey();entries[k]=entries[k].filter(e=>e.id!==id);save();plRender();pushBlob()};
+window.plChangeMonth=d=>{focusDate.setMonth(focusDate.getMonth()+d);plRender()};
+window.plSetFilter=f=>{activeFilter=f;plRender()};
+window.plRender=plRender;
 
-      let totalFixed = 0;
-      let totalVar = 0;
 
-      const fixedItems = entries.filter(e => e.type === 'fixed').sort((a,b) => (a.day || 99) - (b.day || 99));
-      const varItems = entries.filter(e => e.type === 'variable').sort((a,b) => (a.day || 99) - (b.day || 99));
+window.plOpenAddModal=()=>{
+  document.getElementById('pl-edit-id').value='';
+  document.getElementById('pl-edit-name').value='';
+  document.getElementById('pl-edit-amount').value='';
+  document.getElementById('pl-edit-date').value='';
+  document.getElementById('pl-edit-day').value='';
+  document.getElementById('pl-edit-cat').value='';
+  document.getElementById('pl-edit-memo').value='';
+  document.getElementById('pl-modal-title').textContent='支払い追加';
+  document.getElementById('pl-edit-del-btn').style.display='none';
+  document.getElementById('pl-overlay-edit').classList.add('open');
+};
+window.plOpenEdit=id=>{
+  const e=getE().find(x=>x.id===id);if(!e)return;
+  document.getElementById('pl-edit-id').value=e.id;
+  document.getElementById('pl-edit-name').value=e.name;
+  document.getElementById('pl-edit-amount').value=e.amount;
+  document.getElementById('pl-edit-date').value=e.date||'';
+  document.getElementById('pl-edit-day').value=e.day||'';
+  document.getElementById('pl-edit-cat').value=e.cat||'';
+  document.getElementById('pl-edit-memo').value=e.memo||'';
+  document.getElementById('pl-modal-title').textContent='支払い編集';
+  document.getElementById('pl-edit-del-btn').style.display='';
+  document.getElementById('pl-overlay-edit').classList.add('open');
+};
+window.plCloseEdit=()=>document.getElementById('pl-overlay-edit').classList.remove('open');
+window.plSaveEdit=()=>{
+  const id=document.getElementById('pl-edit-id').value;
+  const name=document.getElementById('pl-edit-name').value.trim();
+  const amount=parseInt(document.getElementById('pl-edit-amount').value);
+  const date=document.getElementById('pl-edit-date').value;
+  const day=parseInt(document.getElementById('pl-edit-day').value)||null;
+  const cat=document.getElementById('pl-edit-cat').value;
+  const memo=document.getElementById('pl-edit-memo').value.trim();
+  if(!name||!amount)return toast('名称と金額は必須','err');
+  const k=mKey();
+  if(id){
+    entries[k]=entries[k].map(e=>e.id===id?{...e,name,amount,date:date||null,day,cat,memo,updatedAt:Date.now()}:e);
+    toast('更新しました','ok');
+  }else{
+    if(!entries[k])entries[k]=[];
+    entries[k].push({id:genId(),name,amount,type:'var',day,date:date||null,cat,memo,paid:false,updatedAt:Date.now()});
+    toast('追加しました','ok');
+  }
+  save();plCloseEdit();plRender();pushBlob();
+};
+window.plDeleteFromEdit=()=>{
+  const id=document.getElementById('pl-edit-id').value;
+  if(!id||!confirm('削除しますか？'))return;
+  const k=mKey();entries[k]=entries[k].filter(e=>e.id!==id);
+  save();plCloseEdit();plRender();pushBlob();toast('削除しました','info');
+};
 
-      if (fixedItems.length === 0) listFixedEl.innerHTML = '<div class="pt-empty">NO DATA</div>';
-      if (varItems.length === 0) listVarEl.innerHTML = '<div class="pt-empty">NO DATA</div>';
 
-      fixedItems.forEach(item => {
-        totalFixed += parseInt(item.amount);
-        listFixedEl.appendChild(createItemCard(item));
-      });
+window.plOpenSubModal=()=>document.getElementById('pl-overlay-sub').classList.add('open');
+window.plCloseSub=()=>document.getElementById('pl-overlay-sub').classList.remove('open');
+window.plSaveSub=()=>{
+  const name=document.getElementById('pl-sub-name').value.trim();
+  const amount=parseInt(document.getElementById('pl-sub-amount').value);
+  const day=parseInt(document.getElementById('pl-sub-day').value);
+  const cat=document.getElementById('pl-sub-cat').value;
+  if(!name||!amount||!day)return toast('全項目を入力してください','err');
+  subs.push({id:genId(),name,amount,day,cat,createdAt:Date.now()});
+  save();plCloseSub();renderSubs();expandSubs();plRender();pushBlob();
+  document.getElementById('pl-sub-name').value='';
+  document.getElementById('pl-sub-amount').value='';
+  document.getElementById('pl-sub-day').value='';
+  toast('サブスク登録しました','ok');
+};
+window.plDelSub=id=>{
+  if(!confirm('このサブスクを削除しますか？\n（既に展開された月のエントリは残ります）'))return;
+  subs=subs.filter(s=>s.id!==id);save();renderSubs();pushBlob();toast('削除しました','info');
+};
 
-      varItems.forEach(item => {
-        totalVar += parseInt(item.amount);
-        listVarEl.appendChild(createItemCard(item));
-      });
 
-      totalEl.innerText = formatCurrency(totalFixed + totalVar);
-      fixedTotalEl.innerText = formatCurrency(totalFixed);
-      varTotalEl.innerText = formatCurrency(totalVar);
-    };
+window.plOpenSettings=()=>{document.getElementById('pl-blob-input').value=blobId||'';document.getElementById('pl-overlay-settings').classList.add('open')};
+window.plCloseSettings=()=>document.getElementById('pl-overlay-settings').classList.remove('open');
+window.plApplySettings=()=>{
+  const v=document.getElementById('pl-blob-input').value.trim();
+  if(v&&v!==blobId){blobId=v;try{localStorage.setItem(BLOB_KEY,blobId)}catch(e){}updateBlobDisplay();toast('Blob ID適用','ok');plSync()}
+  plCloseSettings();
+};
+function updateBlobDisplay(){document.getElementById('pl-blob-display').textContent=blobId||'未設定'}
+window.plExport=()=>{
+  const b=new Blob([JSON.stringify({entries,subs},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='payment_ledger.json';a.click();toast('エクスポート完了','ok');
+};
+window.plImport=input=>{
+  const f=input.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);
+      if(d.entries)entries=mergeEntries(entries,d.entries);
+      if(d.subs)subs=mergeSubs(subs,d.subs);
+      save();plRender();renderSubs();pushBlob();toast('インポート完了','ok');
+    }catch(e){toast('JSONエラー','err')}
+  };r.readAsText(f);input.value='';
+};
+window.plClearAll=()=>{
+  if(!confirm('全データを削除しますか？'))return;
+  entries={};subs=[];save();plRender();renderSubs();pushBlob();toast('全削除完了','info');plCloseSettings();
+};
 
-    const createItemCard = (item) => {
-      const div = document.createElement('div');
-      div.className = 'pt-item' + (item.paid ? ' is-paid' : '');
-      
-      const dayStr = item.day ? `Day ${item.day}` : 'Unscheduled';
-      
-      div.innerHTML = `
-        <div class="pt-item-info">
-          <div class="pt-item-name">${item.name}</div>
-          <div class="pt-item-meta">DUE: <span class="pt-item-day">${dayStr}</span></div>
-        </div>
-        <div class="pt-item-amount">${formatCurrency(item.amount)}</div>
-        <div class="pt-actions">
-          <button class="pt-btn-check" onclick="window.ptTogglePaid(${item.id})" title="Mark Paid">✓</button>
-          <button class="pt-btn-del" onclick="window.ptDel(${item.id})" title="Delete">×</button>
-        </div>
-      `;
-      return div;
-    };
 
-    window.ptTogglePaid = (id) => {
-      const key = getCurrentKey();
-      allData[key] = allData[key].map(e => e.id === id ? { ...e, paid: !e.paid } : e);
-      save();
-    };
-
-    window.ptResetPaid = () => {
-      if(confirm('RESET CURRENT MONTH: Clear all checkmarks for this month? (Existing items will NOT be deleted)')) {
-        const key = getCurrentKey();
-        allData[key] = allData[key].map(e => ({ ...e, paid: false }));
-        save();
-      }
-    };
-
-    window.ptDel = (id) => {
-      if(confirm('Delete entry?')) {
-        const key = getCurrentKey();
-        allData[key] = allData[key].filter(e => e.id !== id);
-        save();
-      }
-    };
-
-    window.ptChangeMonth = (diff) => {
-      currentFocusDate.setMonth(currentFocusDate.getMonth() + diff);
-      render();
-    };
-
-    window.ptCopyPrevious = () => {
-      const prevKey = getPreviousKey();
-      const currKey = getCurrentKey();
-      if (allData[prevKey] && allData[currKey].length === 0) {
-        
-        allData[currKey] = JSON.parse(JSON.stringify(allData[prevKey])).map(e => ({
-          ...e,
-          id: Date.now() + Math.random(), 
-          paid: false
-        }));
-        save();
-      }
-    };
-
-    formEl.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('pt-name').value;
-      const amount = document.getElementById('pt-amount').value;
-      const type = document.getElementById('pt-type').value;
-      const day = document.getElementById('pt-day').value;
-
-      const key = getCurrentKey();
-      getEntries(); 
-      allData[key].push({
-        id: Date.now(),
-        name,
-        amount: parseInt(amount),
-        type,
-        day: day ? parseInt(day) : null,
-        paid: false
-      });
-
-      formEl.reset();
-      save();
+function mergeEntries(local,remote){
+  const merged={};
+  [local,remote].forEach(src=>{Object.keys(src||{}).forEach(k=>{
+    if(!merged[k])merged[k]=[];
+    const map={};[...(merged[k]||[]),...(src[k]||[])].forEach(e=>{
+      if(!map[e.id]||(e.updatedAt||0)>(map[e.id].updatedAt||0))map[e.id]=e;
     });
+    merged[k]=Object.values(map);
+  })});
+  return merged;
+}
+function mergeSubs(local,remote){
+  const map={};
+  [...local,...remote].forEach(s=>{if(!map[s.id]||(s.createdAt||0)>(map[s.id].createdAt||0))map[s.id]=s});
+  return Object.values(map);
+}
 
-    
-    render();
-  })();
+
+function setSyncStatus(cls,txt){const e=document.getElementById('pl-sync');e.className='pl-sync-badge '+cls;e.textContent=txt}
+function setProgress(p){document.getElementById('pl-progress-bar').style.width=p+'%'}
+let toastTimer;
+function toast(msg,type){const e=document.getElementById('pl-toast');e.textContent=msg;e.className='pl-toast '+type+' show';clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove('show'),2500)}
+
+window.plSync=async function(silent){
+  if(!silent)setProgress(20);
+  setSyncStatus('busy','◌ SYNC…');
+  try{
+    const payload={entries,subs};
+    if(!blobId){
+      const res=await fetch(BIN_URL,{method:'POST',headers:{...jbH(),'X-Bin-Name':'payment_ledger'},body:JSON.stringify(payload)});
+      if(!res.ok)throw new Error('create:'+res.status);
+      const j=await res.json();blobId=j.metadata.id;
+      try{localStorage.setItem(BLOB_KEY,blobId)}catch(e){}
+      updateBlobDisplay();setSyncStatus('ok','◉ SYNCED');
+      if(!silent){setProgress(100);toast('Bin作成・同期完了','ok')}
+    }else{
+      const r=await fetch(`${BIN_URL}/${blobId}/latest`,{headers:{'X-Master-Key':JSONBIN_KEY},cache:'no-store'});
+      if(!r.ok){
+        if([400,401,403,404,422].includes(r.status)){blobId=null;try{localStorage.removeItem(BLOB_KEY)}catch(e){}if(!silent)toast('無効なBin。再作成','info');return plSync(silent)}
+        throw new Error('get:'+r.status);
+      }
+      const j=await r.json();const rec=j.record||j;
+      if(rec.entries)entries=mergeEntries(entries,rec.entries);
+      if(rec.subs)subs=mergeSubs(subs,rec.subs);
+      save();
+      const p=await fetch(`${BIN_URL}/${blobId}`,{method:'PUT',headers:jbH(),body:JSON.stringify({entries,subs})});
+      if(!p.ok){
+        if([400,401,403,404,422].includes(p.status)){blobId=null;try{localStorage.removeItem(BLOB_KEY)}catch(e){}return plSync(silent)}
+        throw new Error('put:'+p.status);
+      }
+      setSyncStatus('ok','◉ SYNCED');
+      if(!silent){setProgress(100);toast('同期完了','ok')}
+      plRender();renderSubs();
+    }
+  }catch(err){setSyncStatus('err','✕ ERR');if(!silent)toast('同期失敗: '+err.message,'err')}
+  if(!silent)setTimeout(()=>setProgress(0),600);
+};
+
+async function pushBlob(s=true){
+  if(!blobId)return;
+  try{
+    const p=await fetch(`${BIN_URL}/${blobId}`,{method:'PUT',headers:jbH(),body:JSON.stringify({entries,subs})});
+    if(p.ok)setSyncStatus('ok','◉ SYNCED');
+    else if([400,401,403,404,422].includes(p.status)){blobId=null;try{localStorage.removeItem(BLOB_KEY)}catch(e){}}
+  }catch(e){setSyncStatus('err','✕ ERR')}
+}
+
+
+['pl-overlay-edit','pl-overlay-sub','pl-overlay-settings'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')})
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.pl-overlay.open').forEach(el=>el.classList.remove('open'))});
+
+init();
+})();
 </script>
 
 
