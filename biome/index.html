@@ -229,7 +229,7 @@
     "keywords": ["archive"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "23"
+    "wordCount": "12"
   }]
   </script>
 
@@ -781,436 +781,732 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Orbitron:wght@400;500;700;900&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap');
 
-  #biome-space-root {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: #030406; z-index: 9999; overflow: hidden;
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    color: #e2e8f0; display: flex; flex-direction: column;
-    letter-spacing: 0.05em; line-height: 1.6;
-  }
-
-   
-  .biome-bg {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: 
-      radial-gradient(circle at 20% 40%, rgba(0, 243, 255, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 60%, rgba(255, 0, 85, 0.04) 0%, transparent 50%);
-    z-index: 1; pointer-events: none;
-  }
+:root {
+  --ba-bg: #010409;
+  --ba-surface: rgba(4, 13, 24, 0.6);
+  --ba-card: rgba(8, 20, 35, 0.4);
+  --ba-border: rgba(14, 245, 194, 0.15);
   
    
-  .grid-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: 
-      linear-gradient(rgba(0, 243, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 243, 255, 0.02) 1px, transparent 1px);
-    background-size: 20px 20px; z-index: 2; pointer-events: none;
-  }
-
-   
-  .crt-scanline {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
-    background-size: 100% 4px; z-index: 99; pointer-events: none; opacity: 0.6;
-  }
-
-   
-  .biome-header {
-    position: relative; z-index: 10;
-    padding: 1rem 2rem; border-bottom: 2px solid rgba(0, 243, 255, 0.3);
-    display: flex; justify-content: space-between; align-items: center;
-    background: rgba(0, 5, 10, 0.85); backdrop-filter: blur(10px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-  }
-  .header-left { display: flex; flex-direction: column; }
-  .biome-subtitle { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; color: #00f3ff; letter-spacing: 4px; margin-bottom: 2px; }
-  .biome-subtitle::before { content: '/// '; opacity: 0.5; }
-  .biome-title h1 {
-    font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900;
-    color: #fff; margin: 0; text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); letter-spacing: 2px;
-  }
+  --ba-cyan: #0ef5c2;
+  --ba-cyan-glow: rgba(14, 245, 194, 0.4);
+  --ba-blue: #0088ff;
+  --ba-purple: #9d4edd;
+  --ba-pink: #ff0a78;
+  --ba-green: #39ff14;
+  --ba-amber: #ff9e00;
   
-  .exit-btn {
-    padding: 8px 24px; background: rgba(255, 0, 85, 0.05); border: 1px solid rgba(255, 0, 85, 0.5);
-    color: #ff0055; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: bold;
-    cursor: pointer; transition: all 0.3s; letter-spacing: 1px;
-    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-  }
-  .exit-btn:hover { background: #ff0055; color: #000; box-shadow: 0 0 15px rgba(255, 0, 85, 0.5); }
-
-   
-  .biome-container {
-    position: relative; z-index: 10; flex-grow: 1; display: flex;
-    overflow: hidden; padding: 1.5rem; gap: 1.5rem;
-    max-width: 1400px; margin: 0 auto; width: 100%;
-  }
-
-   
-  .list-pane {
-    width: 280px; background: rgba(5, 10, 15, 0.7);
-    border: 1px solid rgba(0, 243, 255, 0.2); border-top: 3px solid rgba(0, 243, 255, 0.5);
-    display: flex; flex-direction: column;
-    overflow-y: auto; flex-shrink: 0;
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
-  }
-  .list-pane::-webkit-scrollbar { width: 4px; }
-  .list-pane::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.4); }
-
-  .category-header {
-    padding: 0.8rem 1rem; font-size: 0.8rem; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
-    background: rgba(0, 0, 0, 0.6); color: #fff; border-bottom: 1px solid rgba(255,255,255,0.05);
-    position: sticky; top: 0; z-index: 5; backdrop-filter: blur(10px);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .cat-indicator { width: 4px; height: 12px; }
-
-   
-  .species-group { border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; flex-direction: column; }
-  .species-header {
-    padding: 1rem 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
-    color: #94a3b8; transition: all 0.2s; position: relative;
-  }
-  .species-header:hover { background: rgba(255, 255, 255, 0.03); color: #e2e8f0; }
-  .species-name { font-size: 0.9rem; font-weight: bold; flex-grow: 1; }
-  .toggle-icon { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; opacity: 0.5; transition: transform 0.2s; }
+  --ba-text: #e2f1f8;
+  --ba-dim: #648296;
   
-  .species-group.open .species-header { color: #00f3ff; background: rgba(0, 243, 255, 0.03); }
-  .species-group.open .toggle-icon { transform: rotate(180deg); color: #00f3ff; opacity: 1; }
-  .species-group.archive.open .species-header { color: #ff0055; background: rgba(255, 0, 85, 0.03); }
-  .species-group.archive.open .toggle-icon { color: #ff0055; }
+  --glass-blur: blur(12px);
+  --hologram: linear-gradient(125deg, transparent 20%, rgba(255,255,255,0.03) 40%, rgba(14, 245, 194, 0.08) 50%, transparent 60%);
+}
 
-   
-  .entities-list { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: rgba(0, 0, 0, 0.4); }
-  .species-group.open .entities-list { max-height: 500px; }
+.ba-root {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: radial-gradient(circle at 50% 0%, #041221 0%, var(--ba-bg) 70%);
+  z-index: 999990; overflow-y: auto; overflow-x: hidden;
+  font-family: 'Zen Kaku Gothic New', sans-serif; color: var(--ba-text);
+  letter-spacing: 0.04em; line-height: 1.6; box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  perspective: 1000px;
+}
+.ba-root * { box-sizing: border-box; text-decoration: none !important; }
 
-  .entity-subitem {
-    padding: 0.8rem 1.2rem 0.8rem 2rem; cursor: pointer; color: #64748b; font-size: 0.85rem;
-    position: relative; display: flex; align-items: center; gap: 8px; transition: all 0.2s;
-  }
-  .entity-subitem::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 2px; background: transparent; transition: all 0.2s; }
-  .entity-subitem:hover { color: #e2e8f0; background: rgba(0, 243, 255, 0.05); }
-  
-  .entity-subitem.active { color: #fff; background: rgba(0, 243, 255, 0.1); }
-  .entity-subitem.active::before { background: #00f3ff; box-shadow: 0 0 10px #00f3ff; }
-  .entity-subitem.archive.active { background: rgba(255, 0, 85, 0.1); }
-  .entity-subitem.archive.active::before { background: #ff0055; box-shadow: 0 0 10px #ff0055; }
-  .entity-subitem .sub-indicator { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; opacity: 0.5; }
+ 
+.ba-root::before {
+  content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: 
+    radial-gradient(circle at 15% 50%, var(--ba-cyan-glow), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(157, 78, 221, 0.15), transparent 25%),
+    radial-gradient(circle at 50% 80%, rgba(0, 136, 255, 0.1), transparent 30%);
+  z-index: 0; pointer-events: none;
+  animation: breathe 10s ease-in-out infinite alternate;
+}
+@keyframes breathe { 0% { opacity: 0.5; } 100% { opacity: 1; } }
 
-   
-  .entity-single {
-    padding: 1rem 1.2rem; cursor: pointer; color: #94a3b8; font-weight: bold;
-    position: relative; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.03);
-    display: flex; flex-direction: column; gap: 4px;
-  }
-  .entity-single::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 2px; background: transparent; transition: all 0.2s; }
-  .entity-single:hover { background: rgba(255, 255, 255, 0.03); color: #e2e8f0; }
-  .entity-single.active { color: #fff; background: rgba(0, 243, 255, 0.08); }
-  .entity-single.active::before { background: #00f3ff; box-shadow: 0 0 10px #00f3ff; }
-  .entity-single.archive.active { background: rgba(255, 0, 85, 0.08); }
-  .entity-single.archive.active::before { background: #ff0055; box-shadow: 0 0 10px #ff0055; }
+ 
+.ba-grid-bg {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: 
+    linear-gradient(rgba(14, 245, 194, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 245, 194, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px; pointer-events: none; z-index: 1;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
+}
+.ba-scanlines {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1), rgba(0,0,0,0.1) 1px, transparent 1px, transparent 3px);
+  pointer-events: none; z-index: 9999; opacity: 0.8; mix-blend-mode: overlay;
+}
 
-  .item-name { font-size: 0.9rem; }
-  .item-nickname { font-size: 0.75rem; color: rgba(255,255,255,0.5); font-weight: normal; display: flex; align-items: center; }
-  .item-nickname::before { content: '└'; margin-right: 4px; font-family: 'JetBrains Mono', monospace; }
+.ba-wrap { position: relative; z-index: 10; max-width: 1300px; margin: 0 auto; padding: 2rem 2rem 4rem; }
 
-   
-  .detail-pane {
-    flex-grow: 1; background: rgba(5, 10, 15, 0.7);
-    border: 1px solid rgba(0, 243, 255, 0.2); border-top: 3px solid rgba(0, 243, 255, 0.5);
-    padding: 2.5rem; display: flex; flex-direction: column;
-    overflow-y: auto; position: relative;
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
-    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
-  }
-  .detail-pane::-webkit-scrollbar { width: 4px; }
-  .detail-pane::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.4); }
-  
-  .no-selection {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    text-align: center; color: rgba(0, 243, 255, 0.3); font-family: 'Orbitron', sans-serif;
-    letter-spacing: 4px; font-size: 0.9rem;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+ 
+.ba-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding-bottom: 1.5rem; margin-bottom: 2rem;
+  border-bottom: 1px solid var(--ba-border);
+  position: relative;
+}
+.ba-header::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; width: 150px; height: 1px;
+  background: var(--ba-cyan); box-shadow: 0 0 10px var(--ba-cyan);
+}
+.ba-header-left { display: flex; flex-direction: column; gap: 4px; }
+.ba-subtitle {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--ba-cyan);
+  letter-spacing: 4px; opacity: 0.8; text-transform: uppercase;
+}
+.ba-title {
+  font-family: 'Orbitron', sans-serif; font-size: 2.2rem; font-weight: 300; color: #fff;
+  letter-spacing: 3px; margin: 0; text-shadow: 0 0 20px var(--ba-cyan-glow);
+}
+.ba-title strong { font-weight: 900; color: var(--ba-cyan); }
+.ba-header-right { display: flex; align-items: center; gap: 1rem; }
 
-  #detail-content { display: none; height: 100%; display: flex; flex-direction: column; gap: 2rem;}
-  .detail-top { display: grid; grid-template-columns: 350px 1fr; gap: 2.5rem; align-items: start; flex-shrink: 0;}
+ 
+.ba-sync {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 4px 12px;
+  border-radius: 20px; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;
+  background: rgba(0,0,0,0.5); backdrop-filter: var(--glass-blur); border: 1px solid;
+}
+.ba-sync::before { content: ''; width: 6px; height: 6px; border-radius: 50%; box-shadow: 0 0 8px currentColor; }
+.ba-sync-on { color: var(--ba-cyan); border-color: rgba(14,245,194,0.3); }
+.ba-sync-on::before { background: var(--ba-cyan); }
+.ba-sync-off { color: var(--ba-amber); border-color: rgba(255,158,0,0.3); }
+.ba-sync-off::before { background: var(--ba-amber); }
+.ba-sync-err { color: var(--ba-pink); border-color: rgba(255,10,120,0.3); }
+.ba-sync-err::before { background: var(--ba-pink); }
 
-   
-  .image-wrapper {
-    width: 100%; aspect-ratio: 4/3; background: #000; border: 1px solid rgba(0,243,255,0.3);
-    position: relative; display: flex; justify-content: center; align-items: center;
-    clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
-  }
-  .target-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
-  .no-img-text { font-family: 'Orbitron', sans-serif; color: #475569; font-size: 0.8rem; letter-spacing: 2px; }
-  
-   
-  .info-container { display: flex; flex-direction: column; gap: 1rem; }
-  
-  .status-badge {
-    align-self: flex-start; padding: 4px 12px; font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem; font-weight: bold; border: 1px solid;
-    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
-  }
-  .status-active { color: #00f3ff; border-color: rgba(0, 243, 255, 0.4); background: rgba(0, 243, 255, 0.05); box-shadow: 0 0 10px rgba(0,243,255,0.2); }
-  .status-deceased { color: #ff0055; border-color: rgba(255, 0, 85, 0.4); background: rgba(255, 0, 85, 0.05); box-shadow: 0 0 10px rgba(255,0,85,0.2); }
+.ba-exit {
+  background: transparent; border: 1px solid var(--ba-dim); color: var(--ba-text);
+  padding: 8px 20px; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; letter-spacing: 2px;
+  cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 4px;
+}
+.ba-exit:hover { background: var(--ba-text); color: var(--ba-bg); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
 
-  .info-name-box { border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 1rem; }
-  .info-name { font-size: 2rem; font-weight: 700; color: #fff; margin: 0 0 4px 0; line-height: 1.2; text-shadow: 0 0 10px rgba(255,255,255,0.2);}
-  .info-nickname { font-size: 1.2rem; color: #00f3ff; margin-bottom: 8px; }
-  .info-scientific { font-size: 0.95rem; color: #94a3b8; font-style: italic; font-family: 'JetBrains Mono', monospace; }
+ 
+.ba-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.ba-stat {
+  background: var(--ba-surface); backdrop-filter: var(--glass-blur); border: 1px solid var(--ba-border);
+  padding: 1.2rem 1rem; border-radius: 8px; position: relative; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.ba-stat::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: var(--hologram); background-size: 200% 100%; pointer-events: none;
+}
+.ba-stat-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--ba-dim); letter-spacing: 2px; margin-bottom: 0.5rem; }
+.ba-stat-val { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 300; color: #fff; }
 
-  .data-grid { display: grid; grid-template-columns: max-content 1fr; gap: 12px 20px; font-size: 0.95rem; margin-top: 10px;}
-  .data-label { color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; display: flex; align-items: center; }
-  .data-label::before { content: '>>'; color: #00f3ff; margin-right: 6px; opacity: 0.7; }
-  .data-value { color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;}
+ 
+.ba-tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+.ba-tab {
+  background: var(--ba-surface); border: 1px solid transparent; color: var(--ba-dim);
+  padding: 0.8rem 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700;
+  cursor: pointer; letter-spacing: 1px; transition: all 0.3s; border-radius: 20px; backdrop-filter: var(--glass-blur);
+}
+.ba-tab:hover { color: var(--ba-text); background: rgba(255,255,255,0.05); }
+.ba-tab.active { color: var(--ba-cyan); background: rgba(14,245,194,0.1); border-color: var(--ba-cyan); box-shadow: 0 0 15px rgba(14,245,194,0.15); }
+.ba-panel { display: none; animation: fadeIn 0.4s ease-out; }
+.ba-panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-   
-  .detail-bottom { flex-grow: 1; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; position: relative; }
-  .log-header { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: rgba(0,243,255,0.5); letter-spacing: 2px; margin-bottom: 1rem; }
-  .desc-area { font-size: 1rem; line-height: 1.8; color: #cbd5e1; white-space: pre-wrap; padding-left: 1rem; border-left: 2px solid rgba(0,243,255,0.2); }
+ 
+.ba-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
 
-   
-  .archived-view { border-color: rgba(255,0,85,0.3); border-top-color: rgba(255,0,85,0.6); }
-  .archived-view .image-wrapper { border-color: rgba(255,0,85,0.4); }
-  .archived-view .target-img { filter: grayscale(1) sepia(0.3) hue-rotate(-50deg) contrast(1.1); opacity: 0.6; }
-  .archived-view .info-nickname { color: #ff0055; }
-  .archived-view .data-label::before { color: #ff0055; }
-  .archived-view .desc-area { border-left-color: rgba(255,0,85,0.4); color: #94a3b8; }
-  .archived-view .log-header { color: rgba(255,0,85,0.5); }
+ 
+.ba-card {
+  background: var(--ba-card); border: 1px solid var(--ba-border); border-radius: 12px;
+  cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s, border-color 0.4s;
+  position: relative; overflow: hidden; backdrop-filter: var(--glass-blur);
+  display: flex; flex-direction: column; transform-style: preserve-3d;
+}
+.ba-card::before {
+  content: ''; position: absolute; inset: 0; background: var(--hologram);
+  opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 2;
+}
+.ba-card:hover {
+  transform: translateY(-8px) rotateX(2deg) rotateY(-2deg);
+  border-color: var(--ba-cyan); box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(14,245,194,0.2);
+}
+.ba-card:hover::before { opacity: 1; animation: shimmer 2s linear infinite; }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-   
-  @media (max-width: 900px) { .detail-top { grid-template-columns: 1fr; gap: 1.5rem; } .image-wrapper { max-width: 400px; } }
-  
-  @media (max-width: 640px) {
-     
-    .grid-overlay { background-size: 15px 15px; }
+.ba-card.archived { border-color: rgba(255,10,120,0.15); }
+.ba-card.archived:hover { border-color: var(--ba-pink); box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(255,10,120,0.2); }
 
-    .biome-header { padding: 1rem 1.2rem; }
-    .biome-title h1 { font-size: 1.2rem; }
-    .exit-btn { padding: 6px 12px; font-size: 0.7rem; clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px); }
-    
-    .biome-container { flex-direction: column; padding: 1rem; gap: 1rem; }
-    
-     
-    .list-pane {
-      width: 100%; 
-      height: 250px;  
-      flex-shrink: 0;
-      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
-    }
+.ba-card-img-wrap { position: relative; width: 100%; aspect-ratio: 4/3; overflow: hidden; background: #000; border-bottom: 1px solid var(--ba-border); }
+.ba-card-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; filter: saturate(0.8) contrast(1.1); transition: all 0.5s; }
+.ba-card:hover .ba-card-img { opacity: 1; filter: saturate(1.1) contrast(1.1); transform: scale(1.05); }
+.ba-card.archived .ba-card-img { filter: grayscale(0.8) sepia(0.3) hue-rotate(-50deg); opacity: 0.4; }
 
-    .detail-pane { 
-      padding: 1.5rem 1.2rem; 
-      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
-    }
-    
-    .info-name { font-size: 1.5rem; }
-    .detail-top { gap: 1rem; }
-    .image-wrapper { max-width: 100%; aspect-ratio: 16/9;   }
-  }
+.ba-card-noimg {
+  width: 100%; height: 100%; background: radial-gradient(circle at center, #0a111a, #020408);
+  display: flex; align-items: center; justify-content: center; color: rgba(14,245,194,0.2);
+  font-family: 'Orbitron', sans-serif; font-size: 0.7rem; letter-spacing: 4px;
+}
+
+.ba-card-body { padding: 1.2rem; display: flex; flex-direction: column; flex-grow: 1; position: relative; z-index: 3; }
+.ba-card-cat {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 2px;
+  margin-bottom: 0.6rem; display: flex; align-items: center; gap: 8px; text-transform: uppercase;
+}
+.ba-card-cat-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px currentColor; }
+
+.ba-card-name { font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 2px; line-height: 1.3; }
+.ba-card-name span { font-weight: 400; font-size: 0.85rem; color: var(--ba-cyan); margin-left: 4px; }
+.ba-card-sci { font-family: 'EB Garamond', serif; font-size: 1rem; color: var(--ba-dim); font-style: italic; margin-bottom: 1rem; }
+
+.ba-card-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; }
+.ba-card-badge {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700;
+  padding: 4px 10px; border-radius: 4px; letter-spacing: 1px; border: 1px solid;
+}
+.ba-badge-active { color: var(--ba-cyan); border-color: rgba(14,245,194,0.3); background: rgba(14,245,194,0.05); }
+.ba-badge-dead { color: var(--ba-pink); border-color: rgba(255,10,120,0.3); background: rgba(255,10,120,0.05); }
+
+ 
+.ba-empty {
+  grid-column: 1 / -1; text-align: center; padding: 6rem 1rem; color: var(--ba-dim);
+  font-family: 'Orbitron', sans-serif; letter-spacing: 4px; font-size: 0.9rem;
+  border: 1px dashed var(--ba-border); border-radius: 12px; background: rgba(0,0,0,0.2);
+}
+
+ 
+.ba-modal-overlay {
+  position: fixed; inset: 0; background: rgba(1,4,9,0.85); backdrop-filter: blur(8px);
+  z-index: 999995; display: flex; align-items: center; justify-content: center;
+  padding: 2rem 1rem; overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.ba-modal-overlay.show { opacity: 1; pointer-events: all; }
+
+.ba-modal {
+  background: var(--ba-bg); border: 1px solid var(--ba-border); border-radius: 16px;
+  width: 100%; max-width: 680px; position: relative; overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 30px 60px rgba(0,0,0,0.8), 0 0 40px rgba(14,245,194,0.1);
+  transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 90vh; display: flex; flex-direction: column;
+}
+.ba-modal-overlay.show .ba-modal { transform: scale(1) translateY(0); }
+
+.ba-modal-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.2rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.02); flex-shrink: 0;
+}
+.ba-modal-title { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; color: var(--ba-text); letter-spacing: 2px; display: flex; align-items: center; gap: 8px; }
+.ba-modal-title::before { content: ''; width: 8px; height: 8px; background: var(--ba-cyan); border-radius: 50%; box-shadow: 0 0 10px var(--ba-cyan); }
+.ba-modal-close {
+  background: rgba(255,255,255,0.05); border: none; color: var(--ba-dim); width: 36px; height: 36px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+}
+.ba-modal-close:hover { background: rgba(255,10,120,0.1); color: var(--ba-pink); transform: rotate(90deg); }
+
+.ba-modal-body { padding: 0; overflow-y: auto; flex-grow: 1; }
+.ba-modal-body::-webkit-scrollbar { width: 6px; }
+.ba-modal-body::-webkit-scrollbar-thumb { background: rgba(14,245,194,0.3); border-radius: 3px; }
+
+ 
+.ba-detail-img { width: 100%; height: 300px; object-fit: cover; border-bottom: 1px solid var(--ba-border); display: block; }
+.ba-detail-noimg { width: 100%; height: 200px; background: repeating-linear-gradient(45deg, #040a12, #040a12 10px, #020509 10px, #020509 20px); display: flex; align-items: center; justify-content: center; color: rgba(14,245,194,0.3); font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 4px; border-bottom: 1px solid var(--ba-border); }
+
+.ba-detail-content-wrap { padding: 2rem; }
+.ba-detail-header { margin-bottom: 2rem; position: relative; }
+.ba-detail-badge-wrap { margin-bottom: 1rem; }
+.ba-detail-name { font-size: 2rem; font-weight: 700; color: #fff; margin: 0 0 4px; line-height: 1.2; }
+.ba-detail-nick { font-size: 1.1rem; color: var(--ba-cyan); margin-bottom: 8px; font-weight: 300; }
+.ba-detail-sci { font-family: 'EB Garamond', serif; font-size: 1.2rem; color: var(--ba-dim); font-style: italic; }
+
+.ba-detail-grid { display: grid; grid-template-columns: max-content 1fr; gap: 12px 24px; margin-bottom: 2rem; background: rgba(255,255,255,0.02); padding: 1.2rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
+.ba-detail-label { color: var(--ba-dim); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; }
+.ba-detail-val { color: var(--ba-text); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700; }
+
+.ba-detail-actions { display: flex; gap: 0.8rem; margin-bottom: 2.5rem; }
+
+ 
+.ba-btn {
+  padding: 0.7rem 1.2rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700;
+  cursor: pointer; letter-spacing: 1px; transition: all 0.2s; border-radius: 6px; text-transform: uppercase;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.ba-btn:active { transform: scale(0.96); }
+.ba-btn-primary { background: rgba(14,245,194,0.1); border: 1px solid var(--ba-cyan); color: var(--ba-cyan); width: 100%; padding: 1rem; }
+.ba-btn-primary:hover { background: var(--ba-cyan); color: #000; box-shadow: 0 0 20px rgba(14,245,194,0.4); }
+.ba-btn-edit { background: transparent; border: 1px solid var(--ba-dim); color: var(--ba-text); }
+.ba-btn-edit:hover { border-color: var(--ba-cyan); color: var(--ba-cyan); background: rgba(14,245,194,0.05); }
+.ba-btn-del { background: transparent; border: 1px solid rgba(255,10,120,0.5); color: var(--ba-pink); }
+.ba-btn-del:hover { background: var(--ba-pink); color: #000; box-shadow: 0 0 15px rgba(255,10,120,0.4); }
+
+ 
+.ba-log-section { border-top: 1px dashed var(--ba-border); padding-top: 2rem; }
+.ba-log-header { font-family: 'Orbitron', sans-serif; font-size: 0.85rem; color: var(--ba-text); letter-spacing: 2px; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+.ba-timeline { position: relative; padding-left: 1.5rem; }
+.ba-timeline::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--ba-border) 0%, transparent 100%); }
+
+.ba-log-entry { position: relative; margin-bottom: 1.5rem; padding: 1rem 1.2rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; transition: all 0.3s; }
+.ba-log-entry:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); transform: translateX(4px); }
+.ba-log-entry::before { content: ''; position: absolute; left: -1.5rem; top: 1.2rem; width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--ba-bg); background: var(--ba-dim); box-shadow: 0 0 0 1px var(--ba-border); transition: all 0.3s; }
+.ba-log-entry:hover::before { background: var(--ba-cyan); box-shadow: 0 0 10px var(--ba-cyan), 0 0 0 1px var(--ba-cyan); }
+
+.ba-log-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+.ba-log-date { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--ba-dim); letter-spacing: 1px; }
+.ba-log-type { font-size: 0.65rem; font-family: 'JetBrains Mono', monospace; padding: 3px 8px; border-radius: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; letter-spacing: 1px; }
+.ba-log-text { font-size: 0.95rem; line-height: 1.6; color: #cbd5e1; white-space: pre-wrap; font-weight: 300; }
+.ba-log-actions { display: flex; gap: 0.5rem; margin-top: 1rem; opacity: 0; transition: opacity 0.2s; }
+.ba-log-entry:hover .ba-log-actions { opacity: 1; }
+.ba-log-btn { background: none; border: none; color: var(--ba-dim); font-size: 0.7rem; cursor: pointer; font-family: 'JetBrains Mono', monospace; text-decoration: underline; padding: 0; }
+.ba-log-btn:hover { color: var(--ba-cyan); }
+.ba-log-btn.del:hover { color: var(--ba-pink); }
+
+ 
+.ba-form-body { padding: 1.5rem; }
+.ba-form-group { margin-bottom: 1.2rem; }
+.ba-form-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--ba-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; display: block; }
+.ba-input, .ba-select { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: var(--ba-text); padding: 0.8rem 1rem; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.95rem; border-radius: 6px; outline: none; transition: all 0.2s; }
+.ba-input:focus, .ba-select:focus { border-color: var(--ba-cyan); background: rgba(14,245,194,0.05); box-shadow: 0 0 0 3px rgba(14,245,194,0.1); }
+.ba-input::placeholder { color: rgba(255,255,255,0.2); }
+.ba-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+ 
+.ba-img-picker {
+  width: 100%; aspect-ratio: 16/9; background: rgba(0,0,0,0.5); border: 1px dashed rgba(255,255,255,0.2);
+  border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+}
+.ba-img-picker:hover { border-color: var(--ba-cyan); background: rgba(14,245,194,0.05); }
+.ba-img-picker-icon { font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5; filter: grayscale(1); }
+.ba-img-picker:hover .ba-img-picker-icon { opacity: 1; filter: grayscale(0); }
+.ba-img-picker-text { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--ba-dim); letter-spacing: 1px; }
+.ba-img-picker img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+.ba-img-remove {
+  position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border: 1px solid var(--ba-pink); color: var(--ba-pink);
+  width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  z-index: 2; opacity: 0; transition: all 0.2s; backdrop-filter: blur(4px);
+}
+.ba-img-picker:hover .ba-img-remove { opacity: 1; }
+.ba-img-remove:hover { background: var(--ba-pink); color: #fff; }
+
+ 
+.ba-form-container-wrap { background: var(--ba-surface); border: 1px solid var(--ba-border); border-radius: 12px; padding: 2rem; backdrop-filter: var(--glass-blur); }
+
+ 
+.ba-confirm { text-align: center; padding: 2rem; }
+.ba-confirm-text { font-size: 1.1rem; margin-bottom: 2rem; color: var(--ba-text); }
+.ba-confirm-btns { display: flex; gap: 1rem; }
+.ba-confirm-btns .ba-btn { flex: 1; }
+
+ 
+.ba-toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: var(--ba-surface); border: 1px solid var(--ba-cyan); color: var(--ba-cyan);
+  padding: 1rem 2rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700;
+  border-radius: 30px; z-index: 9999999; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(14,245,194,0.2);
+  letter-spacing: 1px; backdrop-filter: var(--glass-blur); display: flex; align-items: center; gap: 10px;
+}
+.ba-toast::before { content: ''; width: 8px; height: 8px; background: var(--ba-cyan); border-radius: 50%; box-shadow: 0 0 10px var(--ba-cyan); }
+.ba-toast.show { transform: translateX(-50%) translateY(0); }
+
+ 
+@media(max-width: 768px) {
+  .ba-wrap { padding: 1.5rem 1rem 3rem; }
+  .ba-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .ba-header-right { width: 100%; justify-content: space-between; }
+  .ba-stats { grid-template-columns: 1fr; gap: 0.5rem; margin-bottom: 1.5rem; }
+  .ba-stat { padding: 0.8rem; flex-direction: row; justify-content: space-between; }
+  .ba-stat-label { margin: 0; }
+  .ba-cards { grid-template-columns: 1fr; }
+  .ba-form-row, .ba-detail-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+  .ba-detail-content-wrap { padding: 1.5rem; }
+  .ba-detail-actions { flex-direction: column; }
+  .ba-log-actions { opacity: 1; }
+  .ba-form-container-wrap { padding: 1.5rem; }
+}
 </style>
 
-<div id="biome-space-root">
-  <div class="biome-bg"></div>
-  <div class="grid-overlay"></div>
-  <div class="crt-scanline"></div>
 
-  <header class="biome-header">
-    <div class="header-left">
-      <div class="biome-subtitle">ASSET_DATABASE</div>
-      <div class="biome-title"><h1>BIOME_ARCHIVE</h1></div>
-    </div>
-    <button class="exit-btn" onclick="history.back()">DISCONNECT</button>
-  </header>
 
-  <div class="biome-container">
-    <div class="list-pane" id="entity-list"></div>
-
-    <div class="detail-pane" id="detail-pane">
-      <div class="no-selection" id="no-selection">/// WAITING FOR SIGNAL ///</div>
-      <div id="detail-content" style="display: none;">
-        <div class="detail-top">
-          <div class="image-wrapper">
-            <img id="d-image" src="" class="target-img" style="display: none;">
-            <div id="d-no-img" class="no-img-text">[ NO_VISUAL_DATA ]</div>
-          </div>
-          <div class="info-container">
-            <div id="d-status" class="status-badge status-active">OBSERVING</div>
-            <div class="info-name-box">
-              <h2 id="d-name" class="info-name">Name</h2>
-              <div id="d-nickname" class="info-nickname">Nickname</div>
-              <div id="d-scientific" class="info-scientific">Scientific</div>
-            </div>
-            <div class="data-grid">
-              <div class="data-label">記録開始日</div>
-              <div class="data-value" id="d-acquired">---</div>
-              <div class="data-label" id="label-lost" style="display: none;">記録終了日</div>
-              <div class="data-value" id="d-lost" style="display: none;">---</div>
-            </div>
-          </div>
-        </div>
-        <div class="detail-bottom">
-          <div class="log-header">[ DATA_STREAM ]</div>
-          <div class="desc-area" id="d-desc">Description...</div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="ba-root" id="ba-root">
+<div class="ba-grid-bg"></div>
+<div class="ba-wrap">
+<header class="ba-header">
+<div class="ba-header-left">
+<div class="ba-subtitle">ASSET_DATABASE</div>
+<h1 class="ba-title">BIOME_ARCHIVE</h1>
+</div>
+<div class="ba-header-right">
+<div class="ba-sync ba-sync-off" id="ba-sync">LOCAL</div>
+<button class="ba-exit" onclick="history.back()">EXIT</button>
+</div>
+</header>
+<div class="ba-stats" id="ba-stats"></div>
+<div class="ba-tabs">
+<button class="ba-tab active" data-tab="list">📋 一覧</button>
+<button class="ba-tab" data-tab="add">＋ 登録</button>
+</div>
+<div class="ba-panel active" id="ba-panel-list">
+<div class="ba-cards" id="ba-cards"></div>
+</div>
+<div class="ba-panel" id="ba-panel-add">
+<div id="ba-form-container"></div>
+</div>
+</div>
+</div>
+<div class="ba-toast" id="ba-toast"></div>
+<div class="ba-modal-overlay" id="ba-detail-overlay">
+<div class="ba-modal" style="max-width:560px">
+<div id="ba-detail-content"></div>
+</div>
+</div>
+<div class="ba-modal-overlay" id="ba-form-overlay">
+<div class="ba-modal">
+<div class="ba-modal-head"><div class="ba-modal-title" id="ba-form-title">REGISTER</div><button class="ba-modal-close" id="ba-form-close">✕</button></div>
+<div class="ba-modal-body" id="ba-form-body"></div>
+</div>
+</div>
+<div class="ba-modal-overlay" id="ba-confirm-overlay">
+<div class="ba-modal" style="max-width:380px">
+<div class="ba-modal-head"><div class="ba-modal-title">CONFIRM</div></div>
+<div class="ba-modal-body ba-confirm" id="ba-confirm-body"></div>
+</div>
+</div>
+<div class="ba-modal-overlay" id="ba-log-overlay">
+<div class="ba-modal" style="max-width:440px">
+<div class="ba-modal-head"><div class="ba-modal-title" id="ba-log-title">ADD LOG</div><button class="ba-modal-close" id="ba-log-close">✕</button></div>
+<div class="ba-modal-body" id="ba-log-body"></div>
+</div>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const data = {"categories":[{"color":"#f59e0b","id":"arachnid","name":"ARACHNID // 節足動物"},{"color":"#10b981","id":"reptile","name":"REPTILE // 爬虫類"},{"color":"#00f3ff","id":"mammal","name":"MAMMAL // 哺乳類"},{"color":"#bc13fe","id":"flora","name":"FLORA // 植生"},{"color":"#ff0055","id":"archive","name":"ARCHIVE // 記録済"}],"entities":[{"category":"arachnid","date_acquired":"2023.08.15","desc":"[OBSERVATION LOG]\n・現在のレッグスパン: 約8cm\n・給餌: コオロギMを週1回\n・状態: 非常に安定。樹上性レイアウトの上部で網を張っている。\n・備考: 次回の脱皮が近い可能性あり。湿度に注意。\n","id":"b_001","image":"","name":"アンティルピンクトゥー","nickname":"個体A","scientific":"Caribena versicolor","status":"ACTIVE"},{"category":"reptile","date_acquired":"2022.11.03","desc":"[HEALTH STATUS]\n人工飼料への食いつき良好。ハンドリングへの耐性あり。\n夜間はケージ内を活発に移動する。\n","id":"b_002","image":"","name":"クレステッドゲッコー","nickname":"","scientific":"Correlophus ciliatus","status":"ACTIVE"},{"category":"archive","date_acquired":"2020.04.01","date_lost":"2022.10.15","desc":"[FINAL RECORD]\n寿命を全うし、静かに眠りについた。\n回し車を誰よりも愛した、美しいブルーサファイアの個体。","id":"b_004","image":"","name":"ジャンガリアンハムスター","nickname":"","scientific":"Phodopus sungorus","status":"DECEASED"}]};
-  if (!data || !data.categories || !data.entities) return;
 
-  const listContainer = document.getElementById('entity-list');
-  
-  const groupedEntities = {};
-  data.entities.forEach(ent => {
-    if (!groupedEntities[ent.category]) groupedEntities[ent.category] = {};
-    if (!groupedEntities[ent.category][ent.name]) groupedEntities[ent.category][ent.name] = [];
-    groupedEntities[ent.category][ent.name].push(ent);
+(function(){
+const SEED = {"categories":[{"color":"#f59e0b","id":"arachnid","name":"ARACHNID // 節足動物"},{"color":"#10b981","id":"reptile","name":"REPTILE // 爬虫類"},{"color":"#00f3ff","id":"mammal","name":"MAMMAL // 哺乳類"},{"color":"#bc13fe","id":"flora","name":"FLORA // 植生"},{"color":"#ff0055","id":"archive","name":"ARCHIVE // 記録済"}],"entities":[{"category":"arachnid","date_acquired":"2023.08.15","desc":"[OBSERVATION LOG]\n・現在のレッグスパン: 約8cm\n・給餌: コオロギMを週1回\n・状態: 非常に安定。樹上性レイアウトの上部で網を張っている。\n・備考: 次回の脱皮が近い可能性あり。湿度に注意。\n","id":"b_001","image":"","name":"アンティルピンクトゥー","nickname":"個体A","scientific":"Caribena versicolor","status":"ACTIVE"},{"category":"reptile","date_acquired":"2022.11.03","desc":"[HEALTH STATUS]\n人工飼料への食いつき良好。ハンドリングへの耐性あり。\n夜間はケージ内を活発に移動する。\n","id":"b_002","image":"","name":"クレステッドゲッコー","nickname":"","scientific":"Correlophus ciliatus","status":"ACTIVE"},{"category":"archive","date_acquired":"2020.04.01","date_lost":"2022.10.15","desc":"[FINAL RECORD]\n寿命を全うし、静かに眠りについた。\n回し車を誰よりも愛した、美しいブルーサファイアの個体。","id":"b_004","image":"","name":"ジャンガリアンハムスター","nickname":"","scientific":"Phodopus sungorus","status":"DECEASED"}]};
+const JSONBIN_KEY='$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+const LS_BIN='dt_biome_archive_bin_id';
+const LS_DATA='dt_biome_archive_v1';
+let BIN_ID=localStorage.getItem(LS_BIN)||'';
+const LOG_TYPES={feeding:{icon:'🍽',label:'給餌',color:'#10b981'},molt:{icon:'🐛',label:'脱皮',color:'#f59e0b'},health:{icon:'💊',label:'体調',color:'#ef4444'},memo:{icon:'📝',label:'メモ',color:'#94a3b8'},measure:{icon:'📏',label:'計測',color:'#06b6d4'}};
+let data={categories:{},entities:{},logs:{}};
+let syncOk=false,isSyncing=false;
+const $=id=>document.getElementById(id);
+const toast=(msg)=>{const t=$('ba-toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)};
+
+
+const hdrs=()=>({'X-Master-Key':JSONBIN_KEY,'Content-Type':'application/json'});
+async function fetchData(){
+  try{
+    isSyncing=true;updateSync();
+    if(!BIN_ID){await createBin();return}
+    const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':JSONBIN_KEY},cache:'no-store'});
+    if(r.status===404){await createBin();return}
+    if(!r.ok)throw new Error(r.status);
+    const j=await r.json();const v=j.record||{};
+    data={categories:v.categories||{},entities:v.entities||{},logs:v.logs||{}};
+    saveLocal();syncOk=true;
+  }catch(e){console.error('[BA] fetch fail:',e);loadLocal();syncOk=false}
+  isSyncing=false;updateSync();render();
+}
+async function createBin(){
+  try{
+    const r=await fetch('https://api.jsonbin.io/v3/b',{method:'POST',headers:{...hdrs(),'X-Bin-Name':'biome_archive'},body:JSON.stringify(data)});
+    if(!r.ok)throw new Error(r.status);
+    const j=await r.json();BIN_ID=j.metadata.id;localStorage.setItem(LS_BIN,BIN_ID);
+    syncOk=true;toast('✓ Bin作成完了');
+  }catch(e){console.error('[BA] create fail:',e);syncOk=false;toast('✗ Bin作成失敗')}
+  isSyncing=false;updateSync();render();
+}
+let pushTimer=null;
+function pushData(){
+  saveLocal();clearTimeout(pushTimer);
+  pushTimer=setTimeout(async()=>{
+    if(!JSONBIN_KEY)return;
+    try{
+      isSyncing=true;updateSync();
+      if(!BIN_ID){await createBin();return}
+      const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:hdrs(),body:JSON.stringify(data)});
+      if(r.status===404){await createBin();return}
+      if(!r.ok)throw new Error(r.status);
+      syncOk=true;
+    }catch(e){console.error('[BA] push fail:',e);syncOk=false}
+    isSyncing=false;updateSync();
+  },800);
+}
+function saveLocal(){try{localStorage.setItem(LS_DATA,JSON.stringify(data))}catch(e){}}
+function loadLocal(){try{const s=localStorage.getItem(LS_DATA);if(s)data=JSON.parse(s)}catch(e){}}
+function updateSync(){
+  const el=$('ba-sync');
+  if(isSyncing){el.className='ba-sync ba-sync-off';el.textContent='SYNCING...'}
+  else if(syncOk){el.className='ba-sync ba-sync-on';el.textContent='● SYNCED'}
+  else{el.className='ba-sync ba-sync-err';el.textContent='✗ LOCAL'}
+}
+
+
+function compressImg(file,maxW=800,quality=0.7){
+  return new Promise((resolve)=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        const c=document.createElement('canvas');
+        let w=img.width,h=img.height;
+        if(w>maxW){h=Math.round(h*(maxW/w));w=maxW}
+        c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        resolve(c.toDataURL('image/jpeg',quality));
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
   });
+}
 
-  data.categories.forEach(cat => {
-    const speciesMap = groupedEntities[cat.id];
-    if (!speciesMap || Object.keys(speciesMap).length === 0) return;
 
-    
-    const header = document.createElement('div');
-    header.className = 'category-header';
-    header.innerHTML = `<div class="cat-indicator" style="background-color: ${cat.color};"></div> ${cat.name}`;
-    listContainer.appendChild(header);
+function migrate(){
+  if(!SEED||Object.keys(data.entities).length>0)return;
+  if(SEED.categories){SEED.categories.forEach(c=>{data.categories[c.id]={name:c.name,color:c.color}})}
+  if(SEED.entities){SEED.entities.forEach(e=>{
+    data.entities[e.id]={id:e.id,category:e.category,name:e.name,nickname:e.nickname||'',scientific:e.scientific||'',status:e.status||'ACTIVE',dateAcquired:e.date_acquired||'',dateLost:e.date_lost||'',image:'',createdAt:Date.now()};
+    if(e.desc){data.logs[e.id]=[{id:'log_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),date:e.date_acquired||new Date().toISOString().slice(0,10),type:'memo',content:e.desc.trim(),createdAt:Date.now()}]}
+  })}
+  if(Object.keys(data.categories).length===0){
+    data.categories={arachnid:{name:'ARACHNID // 節足動物',color:'#f59e0b'},reptile:{name:'REPTILE // 爬虫類',color:'#10b981'},mammal:{name:'MAMMAL // 哺乳類',color:'#06b6d4'},flora:{name:'FLORA // 植生',color:'#bc13fe'}};
+  }
+  pushData();
+}
 
-    Object.keys(speciesMap).forEach(speciesName => {
-      const ents = speciesMap[speciesName];
 
-      if (ents.length === 1) {
-        
-        const ent = ents[0];
-        const item = document.createElement('div');
-        item.className = `entity-single ${ent.status === 'DECEASED' ? 'archive' : ''}`;
-        
-        let innerHTML = `<span class="item-name">${ent.name}</span>`;
-        if (ent.nickname) {
-          innerHTML += `<span class="item-nickname">${ent.nickname}</span>`;
-        }
-        item.innerHTML = innerHTML;
-        
-        item.addEventListener('click', () => {
-          clearActive();
-          item.classList.add('active');
-          showDetails(ent);
-        });
-        listContainer.appendChild(item);
+function addEntity(ent){const id='b_'+Date.now();ent.id=id;ent.createdAt=Date.now();data.entities[id]=ent;data.logs[id]=[];pushData();return id}
+function updateEntity(id,updates){Object.assign(data.entities[id],updates);pushData()}
+function deleteEntity(id){delete data.entities[id];delete data.logs[id];pushData()}
+function addLog(eid,log){if(!data.logs[eid])data.logs[eid]=[];log.id='log_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);log.createdAt=Date.now();data.logs[eid].unshift(log);pushData();return log.id}
+function updateLog(eid,lid,updates){const arr=data.logs[eid]||[];const i=arr.findIndex(l=>l.id===lid);if(i>=0)Object.assign(arr[i],updates);pushData()}
+function deleteLog(eid,lid){if(data.logs[eid])data.logs[eid]=data.logs[eid].filter(l=>l.id!==lid);pushData()}
 
-      } else {
-        
-        const isArchiveGroup = ents.every(e => e.status === 'DECEASED');
-        
-        const groupWrap = document.createElement('div');
-        groupWrap.className = `species-group ${isArchiveGroup ? 'archive' : ''}`;
-        
-        const groupHeader = document.createElement('div');
-        groupHeader.className = 'species-header';
-        groupHeader.innerHTML = `<span class="species-name">${speciesName}</span> <span class="toggle-icon">▼</span>`;
-        
-        const subList = document.createElement('div');
-        subList.className = 'entities-list';
-        
-        groupHeader.addEventListener('click', () => {
-          groupWrap.classList.toggle('open');
-        });
 
-        ents.forEach(ent => {
-          const subItem = document.createElement('div');
-          subItem.className = `entity-subitem ${ent.status === 'DECEASED' ? 'archive' : ''}`;
-          const displayName = ent.nickname || "個体不明";
-          subItem.innerHTML = `<span class="sub-indicator">└</span> <span>${displayName}</span>`;
-          
-          subItem.addEventListener('click', (e) => {
-            clearActive();
-            subItem.classList.add('active');
-            showDetails(ent);
-          });
-          subList.appendChild(subItem);
-        });
+function showModal(id){$(id).classList.add('show')}
+function hideModal(id){$(id).classList.remove('show')}
+function showConfirm(msg,onYes){
+  $('ba-confirm-body').innerHTML=`<div class="ba-confirm-text">${msg}</div><div class="ba-confirm-btns"><button class="ba-btn ba-btn-del" id="ba-cfm-yes">DELETE</button><button class="ba-btn ba-btn-edit" id="ba-cfm-no">CANCEL</button></div>`;
+  showModal('ba-confirm-overlay');
+  $('ba-cfm-yes').onclick=()=>{hideModal('ba-confirm-overlay');onYes()};
+  $('ba-cfm-no').onclick=()=>hideModal('ba-confirm-overlay');
+}
 
-        groupWrap.appendChild(groupHeader);
-        groupWrap.appendChild(subList);
-        listContainer.appendChild(groupWrap);
-      }
-    });
+
+document.querySelectorAll('.ba-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.ba-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.ba-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    $('ba-panel-'+tab.dataset.tab).classList.add('active');
+    if(tab.dataset.tab==='add')renderForm();
   });
-
-  function clearActive() {
-    document.querySelectorAll('.entity-single, .entity-subitem').forEach(el => el.classList.remove('active'));
-  }
-
-  function showDetails(ent) {
-    document.getElementById('no-selection').style.display = 'none';
-    const detailContent = document.getElementById('detail-content');
-    detailContent.style.display = 'flex';
-
-    const detailPane = document.getElementById('detail-pane');
-    const dStatus = document.getElementById('d-status');
-    const labelLost = document.getElementById('label-lost');
-    const dLost = document.getElementById('d-lost');
-
-    if (ent.status === 'DECEASED') {
-      detailPane.classList.add('archived-view');
-      dStatus.className = 'status-badge status-deceased';
-      dStatus.innerText = 'ARCHIVED';
-      labelLost.style.display = 'block';
-      dLost.style.display = 'block';
-      dLost.innerText = ent.date_lost || 'UNKNOWN';
-    } else {
-      detailPane.classList.remove('archived-view');
-      dStatus.className = 'status-badge status-active';
-      dStatus.innerText = 'OBSERVING';
-      labelLost.style.display = 'none';
-      dLost.style.display = 'none';
-    }
-
-    document.getElementById('d-name').innerText = ent.name;
-    
-    const dNickname = document.getElementById('d-nickname');
-    if (ent.nickname) {
-      dNickname.innerText = `"${ent.nickname}"`;
-      dNickname.style.display = 'block';
-    } else {
-      dNickname.style.display = 'none';
-    }
-
-    document.getElementById('d-scientific').innerText = ent.scientific || '';
-    document.getElementById('d-acquired').innerText = ent.date_acquired || 'UNKNOWN';
-    document.getElementById('d-desc').innerText = ent.desc || 'NO_RECORD';
-
-    const dImage = document.getElementById('d-image');
-    const dNoImg = document.getElementById('d-no-img');
-    if (ent.image && ent.image.trim() !== "") {
-      dImage.src = ent.image;
-      dImage.style.display = 'block';
-      dNoImg.style.display = 'none';
-    } else {
-      dImage.style.display = 'none';
-      dNoImg.style.display = 'block';
-    }
-
-    
-    if (window.innerWidth <= 640) {
-      detailPane.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    detailContent.style.opacity = '0';
-    setTimeout(() => { detailContent.style.opacity = '1'; detailContent.style.transition = 'opacity 0.2s ease'; }, 10);
-  }
 });
+
+
+function renderStats(){
+  const ents=Object.values(data.entities);
+  const active=ents.filter(e=>e.status==='ACTIVE').length;
+  const archived=ents.filter(e=>e.status==='DECEASED').length;
+  const totalLogs=Object.values(data.logs).reduce((s,a)=>s+a.length,0);
+  $('ba-stats').innerHTML=`
+    <div class="ba-stat"><div class="ba-stat-label">ACTIVE</div><div class="ba-stat-val">${active}</div></div>
+    <div class="ba-stat"><div class="ba-stat-label">ARCHIVED</div><div class="ba-stat-val">${archived}</div></div>
+    <div class="ba-stat"><div class="ba-stat-label">TOTAL LOGS</div><div class="ba-stat-val">${totalLogs}</div></div>`;
+}
+
+
+function renderCards(){
+  const container=$('ba-cards');
+  const ents=Object.values(data.entities).sort((a,b)=>(a.status==='ACTIVE'?0:1)-(b.status==='ACTIVE'?0:1)||(b.createdAt||0)-(a.createdAt||0));
+  if(ents.length===0){container.innerHTML='<div class="ba-empty">/// NO ENTITIES REGISTERED ///</div>';return}
+  container.innerHTML=ents.map(e=>{
+    const cat=data.categories[e.category]||{name:'UNKNOWN',color:'#666'};
+    const isDead=e.status==='DECEASED';
+    const imgHtml=e.image?`<img class="ba-card-img" src="${e.image}" alt="${e.name}" style="${isDead?'filter:grayscale(.8) sepia(.2);opacity:.5':''}">`:`<div class="ba-card-noimg">NO_DATA</div>`;
+    return `<div class="ba-card ${isDead?'archived':''}" data-id="${e.id}">
+      ${imgHtml}
+      <div class="ba-card-body">
+        <div class="ba-card-cat" style="color:${cat.color}"><span class="ba-card-cat-dot" style="background:${cat.color}"></span>${cat.name.split('//')[0].trim()}</div>
+        <div class="ba-card-name">${e.name}${e.nickname?` <span style="font-weight:400;font-size:.8rem;color:var(--ba-dim)">"${e.nickname}"</span>`:''}</div>
+        <div class="ba-card-sci">${e.scientific||'—'}</div>
+        <div class="ba-card-badge ${isDead?'ba-badge-dead':'ba-badge-active'}">${isDead?'ARCHIVED':'OBSERVING'}</div>
+      </div></div>`;
+  }).join('');
+  container.querySelectorAll('.ba-card').forEach(card=>{
+    card.addEventListener('click',()=>showDetail(card.dataset.id));
+  });
+}
+
+
+function showDetail(id){
+  const e=data.entities[id];if(!e)return;
+  const cat=data.categories[e.category]||{name:'UNKNOWN',color:'#666'};
+  const isDead=e.status==='DECEASED';
+  const logs=(data.logs[id]||[]).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  const imgStyle=isDead?'filter:grayscale(.8) sepia(.2);opacity:.5':'';
+  const imgHtml=e.image?`<img class="ba-detail-img" src="${e.image}" style="${imgStyle}">`:`<div class="ba-detail-noimg">NO_VISUAL_DATA</div>`;
+  let logHtml=logs.map(l=>{
+    const lt=LOG_TYPES[l.type]||LOG_TYPES.memo;
+    return `<div class="ba-log-entry"><div class="ba-log-meta"><span class="ba-log-date">${l.date}</span><span class="ba-log-type" style="border-color:${lt.color};color:${lt.color}">${lt.icon} ${lt.label}</span></div><div class="ba-log-text">${escHtml(l.content)}</div><div class="ba-log-actions"><button class="ba-log-btn" data-eid="${id}" data-lid="${l.id}" data-action="edit-log">編集</button><button class="ba-log-btn del" data-eid="${id}" data-lid="${l.id}" data-action="del-log">削除</button></div></div>`;
+  }).join('');
+
+  $('ba-detail-content').innerHTML=`
+    <div class="ba-modal-head"><div class="ba-modal-title">ENTITY_DETAIL</div><button class="ba-modal-close" onclick="document.getElementById('ba-detail-overlay').classList.remove('show')">✕</button></div>
+    ${imgHtml}
+    <div class="ba-detail-info">
+      <div class="ba-card-badge ${isDead?'ba-badge-dead':'ba-badge-active'}" style="margin-bottom:.8rem">${isDead?'ARCHIVED':'OBSERVING'}</div>
+      <div class="ba-detail-name">${e.name}</div>
+      ${e.nickname?`<div class="ba-detail-nick">"${e.nickname}"</div>`:''}
+      ${e.scientific?`<div class="ba-detail-sci">${e.scientific}</div>`:''}
+      <div class="ba-detail-grid">
+        <div class="ba-detail-label">カテゴリ</div><div class="ba-detail-val" style="color:${cat.color}">${cat.name}</div>
+        <div class="ba-detail-label">記録開始日</div><div class="ba-detail-val">${e.dateAcquired||'UNKNOWN'}</div>
+        ${isDead?`<div class="ba-detail-label">記録終了日</div><div class="ba-detail-val" style="color:var(--ba-pink)">${e.dateLost||'UNKNOWN'}</div>`:''}
+      </div>
+      <div class="ba-detail-actions">
+        <button class="ba-btn ba-btn-edit" id="ba-d-edit">✏ 編集</button>
+        <button class="ba-btn ba-btn-del" id="ba-d-del">🗑 削除</button>
+        <button class="ba-btn ba-btn-add" id="ba-d-archive">${isDead?'復帰':'記録終了'}</button>
+      </div>
+      <div class="ba-log-header"><span>[ OBSERVATION_LOG ]</span><button class="ba-btn ba-btn-add" id="ba-d-addlog" style="padding:4px 10px;font-size:.6rem">＋ ログ追加</button></div>
+      <div class="ba-timeline" id="ba-timeline">${logHtml||'<div style="color:var(--ba-dim);font-size:.8rem;padding:.5rem">ログなし</div>'}</div>
+    </div>`;
+  showModal('ba-detail-overlay');
+  $('ba-d-edit').onclick=()=>{hideModal('ba-detail-overlay');showEntityForm(id)};
+  $('ba-d-del').onclick=()=>showConfirm(`"${e.name}" を削除しますか？`,()=>{deleteEntity(id);hideModal('ba-detail-overlay');render();toast('削除しました')});
+  $('ba-d-archive').onclick=()=>{updateEntity(id,isDead?{status:'ACTIVE',dateLost:''}:{status:'DECEASED',dateLost:new Date().toISOString().slice(0,10)});hideModal('ba-detail-overlay');render();toast(isDead?'復帰しました':'記録終了しました')};
+  $('ba-d-addlog').onclick=()=>showLogForm(id);
+  document.querySelectorAll('[data-action="edit-log"]').forEach(b=>b.onclick=()=>{const l=logs.find(x=>x.id===b.dataset.lid);if(l)showLogForm(b.dataset.eid,l)});
+  document.querySelectorAll('[data-action="del-log"]').forEach(b=>b.onclick=()=>showConfirm('このログを削除しますか？',()=>{deleteLog(b.dataset.eid,b.dataset.lid);hideModal('ba-confirm-overlay');showDetail(id);toast('ログ削除')}));
+}
+function escHtml(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+
+let formImgData='';
+function showEntityForm(editId){
+  const isEdit=!!editId;
+  const e=isEdit?data.entities[editId]:{};
+  formImgData=e.image||'';
+  const catOpts=Object.entries(data.categories).map(([k,v])=>`<option value="${k}" ${e.category===k?'selected':''}>${v.name}</option>`).join('');
+  $('ba-form-title').textContent=isEdit?'EDIT_ENTITY':'REGISTER_ENTITY';
+  $('ba-form-body').innerHTML=`
+    <div class="ba-form-group"><label class="ba-form-label">画像</label>
+      <div class="ba-img-picker" id="ba-fp"><input type="file" accept="image/*" id="ba-fi" style="display:none">
+        ${formImgData?`<img src="${formImgData}"><button type="button" class="ba-img-remove" id="ba-fr">✕</button>`:'<div class="ba-img-picker-icon">📷</div><div class="ba-img-picker-text">TAP TO SELECT</div>'}
+      </div>
+    </div>
+    <div class="ba-form-row">
+      <div class="ba-form-group"><label class="ba-form-label">名前 *</label><input class="ba-input" id="ba-fn" value="${e.name||''}" placeholder="種名"></div>
+      <div class="ba-form-group"><label class="ba-form-label">ニックネーム</label><input class="ba-input" id="ba-fnn" value="${e.nickname||''}" placeholder="愛称"></div>
+    </div>
+    <div class="ba-form-group"><label class="ba-form-label">学名</label><input class="ba-input" id="ba-fs" value="${e.scientific||''}" placeholder="Scientific name" style="font-style:italic"></div>
+    <div class="ba-form-row">
+      <div class="ba-form-group"><label class="ba-form-label">カテゴリ</label><select class="ba-select" id="ba-fc">${catOpts}</select></div>
+      <div class="ba-form-group"><label class="ba-form-label">取得日</label><input type="date" class="ba-input" id="ba-fd" value="${e.dateAcquired||new Date().toISOString().slice(0,10)}"></div>
+    </div>
+    <button class="ba-btn ba-btn-primary" id="ba-fsave">${isEdit?'UPDATE':'REGISTER'}</button>`;
+  showModal('ba-form-overlay');
+  const fp=$('ba-fp'),fi=$('ba-fi');
+  fp.onclick=ev=>{if(ev.target.id!=='ba-fr')fi.click()};
+  fi.onchange=async ev=>{
+    const f=ev.target.files[0];if(!f)return;
+    formImgData=await compressImg(f);
+    fp.innerHTML=`<img src="${formImgData}"><button type="button" class="ba-img-remove" id="ba-fr">✕</button>`;
+    $('ba-fr').onclick=ev2=>{ev2.stopPropagation();formImgData='';fp.innerHTML='<div class="ba-img-picker-icon">📷</div><div class="ba-img-picker-text">TAP TO SELECT</div>'};
+  };
+  if($('ba-fr'))$('ba-fr').onclick=ev=>{ev.stopPropagation();formImgData='';fp.innerHTML='<div class="ba-img-picker-icon">📷</div><div class="ba-img-picker-text">TAP TO SELECT</div>'};
+  $('ba-fsave').onclick=()=>{
+    const name=$('ba-fn').value.trim();if(!name){toast('名前を入力してください');return}
+    const obj={name,nickname:$('ba-fnn').value.trim(),scientific:$('ba-fs').value.trim(),category:$('ba-fc').value,dateAcquired:$('ba-fd').value,image:formImgData,status:e.status||'ACTIVE',dateLost:e.dateLost||''};
+    if(isEdit){updateEntity(editId,obj);toast('更新しました')}else{addEntity(obj);toast('登録しました')}
+    hideModal('ba-form-overlay');render();
+  };
+}
+$('ba-form-close').onclick=()=>hideModal('ba-form-overlay');
+
+
+function showLogForm(eid,editLog){
+  const isEdit=!!editLog;
+  $('ba-log-title').textContent=isEdit?'EDIT_LOG':'ADD_LOG';
+  const typeOpts=Object.entries(LOG_TYPES).map(([k,v])=>`<option value="${k}" ${isEdit&&editLog.type===k?'selected':''}>${v.icon} ${v.label}</option>`).join('');
+  $('ba-log-body').innerHTML=`
+    <div class="ba-form-row">
+      <div class="ba-form-group"><label class="ba-form-label">日付</label><input type="date" class="ba-input" id="ba-ld" value="${isEdit?editLog.date:new Date().toISOString().slice(0,10)}"></div>
+      <div class="ba-form-group"><label class="ba-form-label">タイプ</label><select class="ba-select" id="ba-lt">${typeOpts}</select></div>
+    </div>
+    <div class="ba-form-group"><label class="ba-form-label">内容</label><textarea class="ba-input" id="ba-lc" rows="4" placeholder="観察内容...">${isEdit?editLog.content:''}</textarea></div>
+    <button class="ba-btn ba-btn-primary" id="ba-lsave">${isEdit?'UPDATE':'ADD'}</button>`;
+  showModal('ba-log-overlay');
+  $('ba-lsave').onclick=()=>{
+    const content=$('ba-lc').value.trim();if(!content){toast('内容を入力してください');return}
+    const obj={date:$('ba-ld').value,type:$('ba-lt').value,content};
+    if(isEdit){updateLog(eid,editLog.id,obj)}else{addLog(eid,obj)}
+    hideModal('ba-log-overlay');showDetail(eid);toast(isEdit?'ログ更新':'ログ追加');
+  };
+}
+$('ba-log-close').onclick=()=>hideModal('ba-log-overlay');
+
+
+function renderForm(){
+  showEntityForm(null);
+  hideModal('ba-form-overlay');
+  
+  const e={};formImgData='';
+  const catOpts=Object.entries(data.categories).map(([k,v])=>`<option value="${k}">${v.name}</option>`).join('');
+  $('ba-form-container').innerHTML=`
+    <div style="background:var(--ba-card);border:1px solid var(--ba-border);padding:1.5rem;clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)">
+    <div style="font-family:'Orbitron',sans-serif;font-size:.8rem;color:var(--ba-cyan);letter-spacing:1.5px;margin-bottom:1.2rem">REGISTER_NEW_ENTITY</div>
+    <div class="ba-form-group"><label class="ba-form-label">画像</label>
+      <div class="ba-img-picker" id="ba-fp2"><input type="file" accept="image/*" id="ba-fi2" style="display:none">
+        <div class="ba-img-picker-icon">📷</div><div class="ba-img-picker-text">TAP TO SELECT</div>
+      </div>
+    </div>
+    <div class="ba-form-row">
+      <div class="ba-form-group"><label class="ba-form-label">名前 *</label><input class="ba-input" id="ba-fn2" placeholder="種名"></div>
+      <div class="ba-form-group"><label class="ba-form-label">ニックネーム</label><input class="ba-input" id="ba-fnn2" placeholder="愛称"></div>
+    </div>
+    <div class="ba-form-group"><label class="ba-form-label">学名</label><input class="ba-input" id="ba-fs2" placeholder="Scientific name" style="font-style:italic"></div>
+    <div class="ba-form-row">
+      <div class="ba-form-group"><label class="ba-form-label">カテゴリ</label><select class="ba-select" id="ba-fc2">${catOpts}</select></div>
+      <div class="ba-form-group"><label class="ba-form-label">取得日</label><input type="date" class="ba-input" id="ba-fd2" value="${new Date().toISOString().slice(0,10)}"></div>
+    </div>
+    <button class="ba-btn ba-btn-primary" id="ba-fsave2">REGISTER</button>
+    </div>`;
+  let imgData2='';
+  const fp2=$('ba-fp2'),fi2=$('ba-fi2');
+  fp2.onclick=ev=>{if(!ev.target.classList.contains('ba-img-remove'))fi2.click()};
+  fi2.onchange=async ev=>{
+    const f=ev.target.files[0];if(!f)return;
+    imgData2=await compressImg(f);
+    fp2.innerHTML=`<img src="${imgData2}"><button type="button" class="ba-img-remove" onclick="event.stopPropagation();this.parentElement.innerHTML='<div class=ba-img-picker-icon>📷</div><div class=ba-img-picker-text>TAP TO SELECT</div>';"><input type="file" accept="image/*" id="ba-fi2" style="display:none">✕</button>`;
+  };
+  $('ba-fsave2').onclick=()=>{
+    const name=$('ba-fn2').value.trim();if(!name){toast('名前を入力してください');return}
+    addEntity({name,nickname:$('ba-fnn2').value.trim(),scientific:$('ba-fs2').value.trim(),category:$('ba-fc2').value,dateAcquired:$('ba-fd2').value,image:imgData2,status:'ACTIVE',dateLost:''});
+    toast('登録しました');
+    document.querySelector('[data-tab="list"]').click();render();
+  };
+}
+
+
+['ba-detail-overlay','ba-form-overlay','ba-confirm-overlay','ba-log-overlay'].forEach(id=>{
+  $(id).addEventListener('click',ev=>{if(ev.target===$(id))hideModal(id)});
+});
+
+function render(){renderStats();renderCards()}
+
+
+migrate();
+fetchData();
+})();
+
 </script>
 
     </section>
