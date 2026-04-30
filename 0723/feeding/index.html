@@ -234,7 +234,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "37"
+    "wordCount": "42"
   }]
   </script>
 
@@ -1041,18 +1041,25 @@
   }
   .fl-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     min-width: max-content;
     table-layout: fixed;
   }
   .fl-table th,
   .fl-table td {
-    border: 1px solid #1a1a2e;
+    border-bottom: 1px solid #1a1a2e;
+    border-right: 1px solid #1a1a2e;
     text-align: center;
     vertical-align: middle;
     font-size: 0.8rem;
   }
+  .fl-table th:first-child,
+  .fl-table td:first-child {
+    border-left: 1px solid #1a1a2e;
+  }
   .fl-table th {
+    border-top: 1px solid #1a1a2e;
     background: #0f172a;
     color: #94a3b8;
     font-family: "JetBrains Mono", monospace;
@@ -1137,39 +1144,21 @@
   }
 
    
-  .fl-alerts {
-    margin-bottom: 1.2rem;
+  .fl-cell.fl-cell-alert:not([data-v="○"]):not([data-v="△"]) {
+    background: rgba(239, 68, 68, 0.15);
+    box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.8), 0 0 15px rgba(239, 68, 68, 0.4);
+    border: 1px solid #ef4444;
+    animation: fl-neon-pulse 1.5s infinite alternate;
+    z-index: 10;
   }
-  .fl-alert-item {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.7rem 1rem;
-    background: rgba(239, 68, 68, 0.08);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    border-left: 3px solid #ef4444;
-    border-radius: 4px;
-    margin-bottom: 0.5rem;
-    font-size: 0.8rem;
-    animation: fl-pulse 2s ease-in-out infinite;
-  }
-  @keyframes fl-pulse {
-    0%,
+  @keyframes fl-neon-pulse {
+    0% {
+      box-shadow: inset 0 0 8px rgba(239, 68, 68, 0.4), 0 0 10px rgba(239, 68, 68, 0.2);
+    }
     100% {
-      opacity: 1;
+      box-shadow: inset 0 0 15px rgba(239, 68, 68, 0.9), 0 0 25px rgba(239, 68, 68, 0.7);
+      background: rgba(239, 68, 68, 0.3);
     }
-    50% {
-      opacity: 0.7;
-    }
-  }
-  .fl-alert-emoji {
-    font-size: 1.2rem;
-  }
-  .fl-alert-text {
-    color: #fca5a5;
-  }
-  .fl-alert-text strong {
-    color: #ef4444;
   }
 
    
@@ -1547,10 +1536,6 @@
       padding: 0.65rem 0.5rem;
       min-width: 0;
     }
-    .fl-alert-item {
-      padding: 0.5rem 0.7rem;
-      font-size: 0.75rem;
-    }
   }
 
    
@@ -1685,12 +1670,57 @@
     border-color: #888;
     color: #ccc;
   }
+
+   
+  .fl-checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.7rem 0.5rem;
+    border-bottom: 1px dashed rgba(6, 182, 212, 0.2);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .fl-checklist-item:hover {
+    background: rgba(6, 182, 212, 0.05);
+  }
+  .fl-checklist-item:last-child {
+    border-bottom: none;
+  }
+  .fl-checklist-checkbox {
+    width: 22px;
+    height: 22px;
+    accent-color: #06b6d4;
+    cursor: pointer;
+  }
+  .fl-checklist-name {
+    color: #e2e8f0;
+  }
+   
+  .fl-checklist-checkbox:checked + .fl-checklist-name {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+  .fl-th-deceased {
+    opacity: 0.5;
+    background: rgba(0,0,0,0.5) !important;
+  }
+  .fl-date-prev {
+    color: #475569 !important;
+  }
 </style>
 
 <div class="fl-root" id="fl-root">
   <header class="fl-header">
-    <div class="fl-title">FEEDING_LOG</div>
-    <div class="fl-desc">> BIO-MONITOR: ACTIVE</div>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+      <button onclick="window.history.back()" style="background: transparent; border: 1px solid #10b981; color: #10b981; padding: 0.2rem 0.5rem; font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: bold; cursor: pointer; border-radius: 3px; white-space: nowrap; margin-top: 0.3rem;">◀ EXIT</button>
+      <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+        <div class="fl-title" style="margin-bottom: 0.1rem;">FEEDING_LOG</div>
+        <div class="fl-desc">> BIO-MONITOR: ACTIVE</div>
+      </div>
+      <div style="width: 50px;"></div>
+    </div>
     <div class="fl-sync-status fl-sync-offline" id="fl-sync-badge">
       LOCAL ONLY
     </div>
@@ -1711,9 +1741,6 @@
 
   
   <div class="fl-panel active" id="fl-panel-record">
-    
-    <div class="fl-alerts" id="fl-alerts"></div>
-
     
     <div class="fl-month-nav">
       <button class="fl-month-btn" id="fl-prev">◀</button>
@@ -1803,6 +1830,18 @@
 </div>
 
 
+<div class="fl-modal-overlay" id="fl-checklist-overlay">
+  <div class="fl-modal">
+    <div class="fl-modal-title">✅ FEEDING_CHECKLIST</div>
+    <div class="fl-modal-meta" id="fl-checklist-meta"></div>
+    <div id="fl-checklist-content" style="max-height: 50vh; overflow-y: auto; margin-bottom: 1rem;"></div>
+    <div class="fl-modal-btns">
+      <button class="fl-modal-btn cancel" id="fl-checklist-close" style="width:100%">閉じる</button>
+    </div>
+  </div>
+</div>
+
+
 <script>
   (function () {
     "use strict";
@@ -1850,7 +1889,6 @@
     const root = document.getElementById('fl-root');
     const statsEl = document.getElementById('fl-stats');
     const tableEl = document.getElementById('fl-table');
-    const alertsEl = document.getElementById('fl-alerts');
     const animalListEl = document.getElementById('fl-animal-list');
     const monthLabel = document.getElementById('fl-month-label');
     const syncBadge = document.getElementById('fl-sync-badge');
@@ -2050,7 +2088,6 @@
       renderMonth();
       renderTable();
       renderStats();
-      renderAlerts();
       renderAnimalList();
     }
 
@@ -2060,7 +2097,12 @@
 
     function getAnimalsSorted() {
       return Object.entries(data.animals)
-        .sort((a, b) => (a[1].order || 0) - (b[1].order || 0))
+        .sort((a, b) => {
+          const aDec = a[1].deceased ? 1 : 0;
+          const bDec = b[1].deceased ? 1 : 0;
+          if (aDec !== bDec) return aDec - bDec;
+          return (a[1].order || 0) - (b[1].order || 0);
+        })
         .map(([id, animal]) => ({ id, ...animal }));
     }
 
@@ -2092,6 +2134,46 @@
       currentMemoKey = null;
     }
 
+    
+    const checklistOverlay = document.getElementById('fl-checklist-overlay');
+    const checklistMeta = document.getElementById('fl-checklist-meta');
+    const checklistContent = document.getElementById('fl-checklist-content');
+
+    function openChecklist(y, m, d) {
+       const mKey = `${y}-${String(m).padStart(2, '0')}`;
+       const records = data.records[mKey] || {};
+       const animals = getAnimalsSorted();
+       
+       let listHtml = '';
+       animals.forEach(a => {
+          if (a.deceased) return;
+          const rec = (records[a.id] || {})[String(d)] || "";
+          if (rec === "○") {
+             listHtml += `
+             <label class="fl-checklist-item">
+               <input type="checkbox" class="fl-checklist-checkbox" />
+               <span class="fl-checklist-name">${a.emoji} ${a.name}</span>
+             </label>
+             `;
+          }
+       });
+
+       if (!listHtml) {
+          listHtml = '<div style="color:#64748b;font-size:0.8rem;text-align:center;padding:1rem;">この日に「○」の生体はいません。</div>';
+       }
+
+       checklistMeta.textContent = `${y}/${m}/${d} の給餌対象`;
+       checklistContent.innerHTML = listHtml;
+       checklistOverlay.classList.add('show');
+    }
+
+    document.getElementById('fl-checklist-close').addEventListener('click', () => {
+       checklistOverlay.classList.remove('show');
+    });
+    checklistOverlay.addEventListener('click', (e) => {
+       if (e.target === checklistOverlay) checklistOverlay.classList.remove('show');
+    });
+
     const DOW = ["日", "月", "火", "水", "木", "金", "土"];
 
     function renderTable() {
@@ -2117,9 +2199,36 @@
         '<thead><tr><th class="fl-date-col" style="position:sticky;left:0;z-index:6;">日</th>';
       animals.forEach((a) => {
         const isAlert = alertIds.has(a.id);
-        html += `<th class="${isAlert ? "fl-th-alert" : ""}"><span class="fl-th-emoji">${a.emoji}</span><span class="fl-th-name">${a.name}</span></th>`;
+        const deceasedCls = a.deceased ? " fl-th-deceased" : "";
+        const nameDisp = a.name + (a.deceased ? " ✘" : "");
+        html += `<th class="${isAlert ? "fl-th-alert" : ""}${deceasedCls}"><span class="fl-th-emoji">${a.emoji}</span><span class="fl-th-name">${nameDisp}</span></th>`;
       });
       html += "</tr></thead><tbody>";
+
+      
+      let prevYear = currentYear;
+      let prevMonth = currentMonth - 1;
+      if (prevMonth < 1) {
+        prevMonth = 12;
+        prevYear--;
+      }
+      const prevMonthDays = getDaysInMonth(prevYear, prevMonth);
+      const prevMonthKey = `${prevYear}-${String(prevMonth).padStart(2, "0")}`;
+      const prevMonthRecords = data.records[prevMonthKey] || {};
+
+      for (let d = prevMonthDays - 6; d <= prevMonthDays; d++) {
+        const dow = getDayOfWeek(prevYear, prevMonth, d);
+        const isWeekend = dow === 0 || dow === 6;
+        const dateCls = ["fl-date-col", "fl-date-prev", isWeekend ? "fl-date-weekend" : ""].filter(Boolean).join(" ");
+
+        html += `<tr style="opacity:0.6;"><td class="${dateCls}" data-action="checklist" data-y="${prevYear}" data-m="${prevMonth}" data-d="${d}" style="cursor:pointer;" title="タップで給餌リストを表示">${prevMonth}/${d}<span style="font-size:0.55rem;display:block;opacity:0.6">${DOW[dow]}</span></td>`;
+
+        animals.forEach((a) => {
+          const rec = (prevMonthRecords[a.id] || {})[String(d)] || "";
+          html += `<td class="fl-cell" data-v="${rec}" data-aid="${a.id}" data-day="${d}" data-monthkey="${prevMonthKey}" style="background:rgba(255,255,255,0.02)">${rec}</td>`;
+        });
+        html += "</tr>";
+      }
 
       for (let d = 1; d <= days; d++) {
         const dow = getDayOfWeek(currentYear, currentMonth, d);
@@ -2133,11 +2242,14 @@
           .filter(Boolean)
           .join(" ");
 
-        html += `<tr><td class="${dateCls}">${d}<span style="font-size:0.55rem;display:block;opacity:0.6">${DOW[dow]}</span></td>`;
+        const trStyle = d === 1 ? 'border-top: 2px solid #1e293b;' : '';
+        html += `<tr style="${trStyle}"><td class="${dateCls}" data-action="checklist" data-y="${currentYear}" data-m="${currentMonth}" data-d="${d}" style="cursor:pointer;" title="タップで給餌リストを表示">${d}<span style="font-size:0.55rem;display:block;opacity:0.6">${DOW[dow]}</span></td>`;
 
         animals.forEach((a) => {
           const rec = (monthRecords[a.id] || {})[String(d)] || "";
-          html += `<td class="fl-cell" data-v="${rec}" data-aid="${a.id}" data-day="${d}">${rec}</td>`;
+          const isAlertCell = isToday && alertIds.has(a.id);
+          const alertCls = isAlertCell ? " fl-cell-alert" : "";
+          html += `<td class="fl-cell${alertCls}" data-v="${rec}" data-aid="${a.id}" data-day="${d}" data-monthkey="${monthKey}">${rec}</td>`;
         });
         html += "</tr>";
       }
@@ -2152,7 +2264,8 @@
         const THRESHOLD = 15; 
 
         const aid = cell.dataset.aid, day = cell.dataset.day;
-        const memoKey = `${monthKey}:${aid}:${day}`;
+        const cMonthKey = cell.dataset.monthkey;
+        const memoKey = `${cMonthKey}:${aid}:${day}`;
         if (data.memos?.[memoKey]) {
           cell.classList.add('has-memo');
           cell.title = data.memos[memoKey];
@@ -2196,15 +2309,16 @@
         const doTap = () => {
           const cur = cell.dataset.v || "";
           const next = MARKS[(MARKS.indexOf(cur) + 1) % MARKS.length];
-          if (!data.records[monthKey]) data.records[monthKey] = {};
-          if (!data.records[monthKey][aid]) data.records[monthKey][aid] = {};
+          const cMKey = cell.dataset.monthkey;
+          if (!data.records[cMKey]) data.records[cMKey] = {};
+          if (!data.records[cMKey][aid]) data.records[cMKey][aid] = {};
 
           if (next === "") {
-            delete data.records[monthKey][aid][day];
-            if (!Object.keys(data.records[monthKey][aid]).length) delete data.records[monthKey][aid];
-            if (!Object.keys(data.records[monthKey]).length) delete data.records[monthKey];
+            delete data.records[cMKey][aid][day];
+            if (!Object.keys(data.records[cMKey][aid]).length) delete data.records[cMKey][aid];
+            if (!Object.keys(data.records[cMKey]).length) delete data.records[cMKey];
           } else {
-            data.records[monthKey][aid][day] = next;
+            data.records[cMKey][aid][day] = next;
           }
           pushData();
           cell.textContent = cell.dataset.v = next;
@@ -2220,6 +2334,16 @@
         cell.addEventListener("mouseup", onEnd);
         cell.addEventListener("mouseleave", onCancel);
         cell.addEventListener("contextmenu", e => e.preventDefault());
+      });
+
+      
+      tableEl.querySelectorAll(".fl-date-col[data-action='checklist']").forEach(col => {
+         col.addEventListener('click', () => {
+            const y = col.dataset.y;
+            const m = col.dataset.m;
+            const d = col.dataset.d;
+            openChecklist(y, m, d);
+         });
       });
     }
 
@@ -2265,6 +2389,7 @@
       const animals = getAnimalsSorted();
 
       animals.forEach((a) => {
+        if (a.deceased) return;
         const threshold = a.alertDays || 3;
         const streak = getConsecutiveMissStreak(a.id);
         if (streak >= threshold) alertSet.add(a.id);
@@ -2304,34 +2429,6 @@
       return streak;
     }
 
-    function renderAlerts() {
-      const animals = getAnimalsSorted();
-      const alertAnimals = [];
-
-      animals.forEach((a) => {
-        const threshold = a.alertDays || 3;
-        const streak = getConsecutiveMissStreak(a.id);
-        if (streak >= threshold) {
-          alertAnimals.push({ ...a, streak });
-        }
-      });
-
-      if (alertAnimals.length === 0) {
-        alertsEl.innerHTML = "";
-        return;
-      }
-
-      alertsEl.innerHTML = alertAnimals
-        .map(
-          (a) =>
-            `<div class="fl-alert-item">
-        <span class="fl-alert-emoji">${a.emoji}</span>
-        <span class="fl-alert-text"><strong>${a.name}</strong> — ${a.streak}日連続未給餌 ⚠️</span>
-      </div>`,
-        )
-        .join("");
-    }
-
     
     function renderAnimalList() {
       const animals = getAnimalsSorted();
@@ -2344,21 +2441,34 @@
       animalListEl.innerHTML = animals
         .map(
           (a, index) => `
-      <div class="fl-animal-item" data-id="${a.id}" data-index="${index}">
+      <div class="fl-animal-item ${a.deceased ? 'deceased' : ''}" data-id="${a.id}" data-index="${index}" style="${a.deceased ? 'opacity:0.6; border-color:#333;' : ''}">
         <div class="fl-animal-drag-handle" title="長押ししてドラッグで移動">⠿</div>
         <span class="fl-animal-emoji">${a.emoji}</span>
         <div class="fl-animal-info">
-          <div class="fl-animal-name">${a.name}</div>
+          <div class="fl-animal-name" style="${a.deceased ? 'text-decoration: line-through;' : ''}">${a.name}${a.deceased ? ' ✘' : ''}</div>
           <div class="fl-animal-species">${a.species || "-"}</div>
         </div>
-        <span class="fl-animal-alert-badge">×${a.alertDays || 3}日</span>
+        ${!a.deceased ? `<span class="fl-animal-alert-badge">×${a.alertDays || 3}日</span>` : '<span style="font-size:0.65rem;color:#64748b;font-family:monospace;">DECEASED</span>'}
         <div class="fl-animal-controls">
+          <button class="fl-animal-btn toggle-deceased" data-id="${a.id}" title="亡くなった状態を切り替え" style="background:transparent; border:1px solid #333; color:#555; width:30px; height:30px; font-size:1rem; cursor:pointer; border-radius:3px; display:flex; align-items:center; justify-content:center; transition:all 0.2s;" onmouseover="this.style.borderColor='#ef4444';this.style.color='#ef4444'" onmouseout="this.style.borderColor='#333';this.style.color='#555'">✘</button>
           <button class="fl-animal-btn del" data-id="${a.id}" title="削除">×</button>
         </div>
       </div>
     `
         )
         .join("");
+
+      
+      animalListEl.querySelectorAll(".fl-animal-btn.toggle-deceased").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.id;
+          if (data.animals[id]) {
+            data.animals[id].deceased = !data.animals[id].deceased;
+            pushData();
+            render();
+          }
+        });
+      });
 
       
 
