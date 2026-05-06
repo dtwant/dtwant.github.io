@@ -1926,7 +1926,8 @@
         data = {
           animals: val.animals || {},
           records: val.records || {},
-          memos:   val.memos   || {}
+          memos:   val.memos   || {},
+          checklist: val.checklist || {}
         };
         saveToLocal();
         syncOk = true;
@@ -2034,6 +2035,7 @@
       if (!data.animals) data.animals = {};
       if (!data.records) data.records = {};
       if (!data.memos) data.memos = {};
+      if (!data.checklist) data.checklist = {};
     }
 
     
@@ -2139,7 +2141,24 @@
     const checklistMeta = document.getElementById('fl-checklist-meta');
     const checklistContent = document.getElementById('fl-checklist-content');
 
+    
+    function cleanupChecklist() {
+       if (!data.checklist) data.checklist = {};
+       const now = Date.now();
+       const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
+       let changed = false;
+       Object.keys(data.checklist).forEach(key => {
+          if (now - data.checklist[key] > THREE_DAYS) {
+             delete data.checklist[key];
+             changed = true;
+          }
+       });
+       if (changed) pushData();
+    }
+
     function openChecklist(y, m, d) {
+       if (!data.checklist) data.checklist = {};
+       cleanupChecklist();
        const mKey = `${y}-${String(m).padStart(2, '0')}`;
        const records = data.records[mKey] || {};
        const animals = getAnimalsSorted();
@@ -2148,9 +2167,11 @@
           if (a.deceased) return;
           const rec = (records[a.id] || {})[String(d)] || "";
           if (rec === "○") {
+             const checkKey = `${mKey}:${a.id}:${d}`;
+             const isChecked = !!data.checklist[checkKey];
              listHtml += `
              <label class="fl-checklist-item">
-               <input type="checkbox" class="fl-checklist-checkbox" />
+               <input type="checkbox" class="fl-checklist-checkbox" data-check-key="${checkKey}" ${isChecked ? 'checked' : ''} />
                <span class="fl-checklist-name">${a.emoji} ${a.name}</span>
              </label>`;
           }
@@ -2160,6 +2181,20 @@
        }
        checklistMeta.textContent = `${y}/${m}/${d} の給餌対象`;
        checklistContent.innerHTML = listHtml;
+
+       
+       checklistContent.querySelectorAll('.fl-checklist-checkbox').forEach(cb => {
+          cb.addEventListener('change', () => {
+             const key = cb.dataset.checkKey;
+             if (cb.checked) {
+                data.checklist[key] = Date.now();
+             } else {
+                delete data.checklist[key];
+             }
+             pushData();
+          });
+       });
+
        checklistOverlay.classList.add('show');
     }
 
