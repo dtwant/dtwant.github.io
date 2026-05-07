@@ -2690,11 +2690,17 @@
   
   async function resolveGitHubUrl(url) {
     if (!ghPat) return url;
-    if (!url.includes('githubusercontent.com') && !url.includes('api.github.com')) return url;
     
-    let path = '';
-    const match = url.match(/(?:main|contents)\/(attachments\/[^\?]+)/);
-    if (match) path = match[1];
+    let owner = ghOwner, repo = ghRepo, path = '';
+    
+    
+    const m = url.match(/github(?:usercontent)?\.com\/([^\/]+)\/([^\/]+)\/(?:main|contents|blob\/main)\/(attachments\/[^\?]+)/);
+    if (m) {
+      owner = m[1]; repo = m[2]; path = m[3];
+    } else {
+      const m2 = url.match(/(?:main|contents)\/(attachments\/[^\?]+)/);
+      if (m2) path = m2[1];
+    }
     
     if (!path) return url;
 
@@ -2703,11 +2709,12 @@
     }
 
     try {
-      const apiUrl = `https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`;
+      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=main`;
       const res = await fetch(apiUrl, {
         headers: {
           'Authorization': `token ${ghPat}`,
-          'Accept': 'application/vnd.github.v3+json'
+          'Accept': 'application/vnd.github.v3+json',
+          'Cache-Control': 'no-cache'
         }
       });
       if (res.ok) {
@@ -2715,8 +2722,12 @@
         const freshUrl = data.download_url || url;
         ghUrlCache.set(path, freshUrl);
         return freshUrl;
+      } else {
+        console.error("Resolve failed:", res.status, await res.text());
       }
-    } catch(e) {}
+    } catch(e) {
+      console.error("Resolve error:", e);
+    }
     return url;
   }
 
