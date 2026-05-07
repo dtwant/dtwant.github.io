@@ -2074,7 +2074,7 @@
       }
 
       
-      const evts = (data.events[dateStr] || []).sort((a,b) => (a.time||'').localeCompare(b.time||''));
+      const evts = (data.events[dateStr] || []).filter(e => !e.deleted).sort((a,b) => (a.time||'').localeCompare(b.time||''));
       if (evts.length > 0) {
         html += `<div class="cg-cell-events">`;
         const show = evts.slice(0, 3);
@@ -2153,7 +2153,7 @@
       }
 
       
-      const evts = data.events[ds] || [];
+      const evts = (data.events[ds] || []).filter(e => !e.deleted);
       evts.forEach(e => {
         if (e.color !== 'class') {
           items.push({ date: ds, title: e.title, color: e.color || 'cyan', time: e.time || '', isHol: false, dayObj: new Date(d) });
@@ -2354,14 +2354,17 @@
 
   window.cgDelEvent = function(id) {
     if (!data.events[selDate]) return;
-    data.events[selDate] = data.events[selDate].filter(e => e.id !== id);
-    if (data.events[selDate].length === 0) delete data.events[selDate];
+    const evt = data.events[selDate].find(e => e.id === id);
+    if (evt) {
+      evt.deleted = true;
+      evt.addedAt = Date.now();
+    }
     save(); debouncedPush(); renderDayEvents();
   };
 
   function renderDayEvents() {
     const list = document.getElementById('cg-ev-list');
-    const evts = (data.events[selDate] || []).sort((a,b) => (a.time||'').localeCompare(b.time||''));
+    const evts = (data.events[selDate] || []).filter(e => !e.deleted).sort((a,b) => (a.time||'').localeCompare(b.time||''));
     if (evts.length === 0) {
       list.innerHTML = '<div class="cg-ev-empty">予定はありません</div>';
       return;
@@ -2668,7 +2671,7 @@
 
   window.cgOpenPreview = async function(id, title) {
     curPrevId = id;
-    curEvent = data.events[selDate].find(e => e.id === id);
+    curEvent = data.events[selDate].find(e => e.id === id && !e.deleted);
     if (!curEvent) return;
     if (!curEvent.attachments) curEvent.attachments = [];
     curAttIdx = 0;
