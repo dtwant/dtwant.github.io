@@ -2685,10 +2685,46 @@
     document.getElementById('cg-prev-viewer').innerHTML = '';
   };
 
-  function renderPreviewModal() {
+  const ghUrlCache = new Map();
+  let renderPreviewSeq = 0;
+  
+  async function resolveGitHubUrl(url) {
+    if (!ghPat) return url;
+    if (!url.includes('githubusercontent.com') && !url.includes('api.github.com')) return url;
+    
+    let path = '';
+    const match = url.match(/(?:main|contents)\/(attachments\/[^\?]+)/);
+    if (match) path = match[1];
+    
+    if (!path) return url;
+
+    if (ghUrlCache.has(path)) {
+      return ghUrlCache.get(path);
+    }
+
+    try {
+      const apiUrl = `https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`;
+      const res = await fetch(apiUrl, {
+        headers: {
+          'Authorization': `token ${ghPat}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const freshUrl = data.download_url || url;
+        ghUrlCache.set(path, freshUrl);
+        return freshUrl;
+      }
+    } catch(e) {}
+    return url;
+  }
+
+  async function renderPreviewModal() {
     const viewer = document.getElementById('cg-prev-viewer');
     const thumbs = document.getElementById('cg-prev-thumbs');
     const delBtn = document.getElementById('cg-prev-del-btn');
+    const seq = ++renderPreviewSeq;
     
     if (curEvent.attachments.length === 0) {
       thumbs.style.display = 'none';
@@ -2704,13 +2740,22 @@
     } else {
       thumbs.style.display = 'flex';
       delBtn.style.display = '';
+
+      viewer.innerHTML = '<div style="color:#00f3ff; margin:auto; font-family:\'JetBrains Mono\', monospace;">[ Resolving Media... ]</div>';
+
+      const resolvedAtts = await Promise.all(curEvent.attachments.map(async (att) => {
+        const resolvedUrl = await resolveGitHubUrl(att.url);
+        return { ...att, resolvedUrl };
+      }));
       
+      if (seq !== renderPreviewSeq) return;
+
       
-      thumbs.innerHTML = curEvent.attachments.map((att, idx) => {
+      thumbs.innerHTML = resolvedAtts.map((att, idx) => {
         const isSel = idx === curAttIdx ? 'sel' : '';
         let content = '';
         if (att.type.startsWith('image/')) {
-          content = `<img src="${att.url}" style="width:100%;height:100%;object-fit:cover;">`;
+          content = `<img src="${att.resolvedUrl}" style="width:100%;height:100%;object-fit:cover;">`;
         } else {
           content = `📄`;
         }
@@ -2725,13 +2770,14 @@
       `;
 
       
-      const att = curEvent.attachments[curAttIdx];
+      if (curAttIdx >= resolvedAtts.length) curAttIdx = resolvedAtts.length - 1;
+      const att = resolvedAtts[curAttIdx];
       if (att.type.startsWith('image/')) {
-        viewer.innerHTML = `<img src="${att.url}" class="cg-preview-media">`;
+        viewer.innerHTML = `<img src="${att.resolvedUrl}" class="cg-preview-media">`;
       } else if (att.type === 'application/pdf') {
-        renderPdfNative(att.url, viewer);
+        renderPdfNative(att.resolvedUrl, viewer);
       } else {
-        viewer.innerHTML = `<a href="${att.url}" target="_blank" style="color:#00f3ff;">[開く] ${esc(att.filename)}</a>`;
+        viewer.innerHTML = `<a href="${att.resolvedUrl}" target="_blank" style="color:#00f3ff;">[開く] ${esc(att.filename)}</a>`;
       }
     }
   }
