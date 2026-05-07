@@ -2690,25 +2690,40 @@
   
   async function resolveGitHubUrl(url) {
     if (!ghPat) return url;
+    if (!url.includes('githubusercontent.com') && !url.includes('api.github.com')) return url;
+    
+    if (ghUrlCache.has(url)) return ghUrlCache.get(url);
+
+    
+    
+    try {
+      const res = await fetch(url, {
+        headers: { 'Authorization': `token ${ghPat}` }
+      });
+      if (res.ok) {
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        ghUrlCache.set(url, blobUrl);
+        return blobUrl;
+      }
+    } catch(e) {
+      console.warn("Direct blob fetch failed, falling back to API:", e);
+    }
+
     
     let owner = ghOwner, repo = ghRepo, path = '';
-    
-    
-    const m = url.match(/github(?:usercontent)?\.com\/([^\/]+)\/([^\/]+)\/(?:main|contents|blob\/main)\/(attachments\/[^\?]+)/);
+    const m = url.match(/github(?:usercontent)?\.com\/([^\/]+)\/([^\/]+)\/(?:main|contents|blob\/main|master)\/(attachments\/[^\?]+)/);
     if (m) {
       owner = m[1]; repo = m[2]; path = m[3];
     } else {
-      const m2 = url.match(/(?:main|contents)\/(attachments\/[^\?]+)/);
+      const m2 = url.match(/(?:main|contents|master)\/(attachments\/[^\?]+)/);
       if (m2) path = m2[1];
     }
     
     if (!path) return url;
 
-    if (ghUrlCache.has(path)) {
-      return ghUrlCache.get(path);
-    }
-
     try {
+      
       const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=main`;
       const res = await fetch(apiUrl, {
         headers: {
@@ -2720,14 +2735,15 @@
       if (res.ok) {
         const data = await res.json();
         const freshUrl = data.download_url || url;
-        ghUrlCache.set(path, freshUrl);
+        ghUrlCache.set(url, freshUrl);
         return freshUrl;
       } else {
-        console.error("Resolve failed:", res.status, await res.text());
+        console.error("API Resolve failed:", res.status);
       }
     } catch(e) {
-      console.error("Resolve error:", e);
+      console.error("API Resolve error:", e);
     }
+    
     return url;
   }
 
