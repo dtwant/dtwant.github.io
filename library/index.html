@@ -1553,8 +1553,6 @@ h1, h2 {
 
  
 @media (max-width: 600px) {
-  .bs-toolbar { flex-direction: column; }
-  .bs-search { min-width: 100%; }
   .bs-dashboard { grid-template-columns: repeat(2, 1fr); }
   .bs-dash-bar { flex-direction: column; align-items: stretch; }
   .bs-controls { flex-direction: column; align-items: stretch; }
@@ -1634,12 +1632,16 @@ h1, h2 {
 
   
   <div class="bs-toolbar">
-    <button class="bs-btn" onclick="window.history.back()">◀ EXIT</button>
-    <input type="text" class="bs-search" id="bs-search"
+    <div style="display:flex; width:100%; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+      <button class="bs-btn" onclick="window.history.back()">◀ EXIT</button>
+      <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+        <span class="bs-sync-status" id="bs-sync-status">◉ LOCAL</span>
+        <button class="bs-btn bs-btn-sync" onclick="bsSync()">⇅ SYNC</button>
+        <button class="bs-btn" onclick="bsOpenSettings()">⚙ CONFIG</button>
+      </div>
+    </div>
+    <input type="text" class="bs-search" id="bs-search" style="flex:1; width:100%; box-sizing:border-box;"
            placeholder="タイトル / 著者 / 出版社 / タグ で検索..." oninput="bsRender()">
-    <button class="bs-btn bs-btn-sync" onclick="bsSync()">⇅ SYNC</button>
-    <button class="bs-btn" onclick="bsOpenSettings()">⚙ CONFIG</button>
-    <span class="bs-sync-status" id="bs-sync-status">◉ LOCAL</span>
   </div>
 
   
