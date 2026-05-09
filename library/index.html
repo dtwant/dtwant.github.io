@@ -228,7 +228,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "71"
+    "wordCount": "93"
   }]
   </script>
 
@@ -1638,6 +1638,7 @@ h1, h2 {
     <input type="text" class="bs-search" id="bs-search"
            placeholder="タイトル / 著者 / 出版社 / タグ で検索..." oninput="bsRender()">
     <button class="bs-btn bs-btn-sync" onclick="bsSync()">⇅ SYNC</button>
+    <button class="bs-btn" onclick="bsOpenSettings()">⚙ CONFIG</button>
     <span class="bs-sync-status" id="bs-sync-status">◉ LOCAL</span>
   </div>
 
@@ -1779,6 +1780,40 @@ h1, h2 {
 </div>
 
 
+<div class="bs-overlay" id="bs-overlay-settings">
+  <div class="bs-modal" style="max-width: 500px;">
+    <div class="bs-modal-header">
+      <span>⚙ SYSTEM CONFIG</span>
+      <button class="bs-modal-close" onclick="bsCloseSettings()">✕</button>
+    </div>
+    <div class="bs-modal-body">
+      <div class="bs-field">
+        <label>JSONBIN BIN ID</label>
+        <input type="text" class="bs-input" id="bs-blob-input" placeholder="Enter Bin ID or leave blank to create new">
+      </div>
+      <div class="bs-field">
+        <label>JSONBIN API KEY</label>
+        <input type="password" class="bs-input" id="bs-jbkey-input" placeholder="Master Key (自動設定済み)">
+        <div style="font-size:0.55rem; color:#666; margin-top:0.2rem;">空欄のままSyncを押すと新しいBinが自動生成されます</div>
+      </div>
+      
+      <div class="bs-field" style="margin-top: 1rem; border-top: 1px solid rgba(0, 243, 255, 0.3); padding-top: 1rem;">
+        <label>データ管理</label>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.4rem;">
+          <button class="bs-btn" onclick="bsExport()">📤 Export</button>
+          <label class="bs-btn" style="cursor:pointer;">📥 Import<input type="file" accept=".json" style="display:none" onchange="bsImport(this)"></label>
+          <button class="bs-btn" style="border-color:rgba(255, 0, 85, 0.5); color:var(--neon-pink-bs);" onclick="bsClearAll()">🗑 全削除</button>
+        </div>
+      </div>
+    </div>
+    <div class="bs-modal-footer">
+      <button class="bs-btn" onclick="bsCloseSettings()">CANCEL</button>
+      <button class="bs-btn bs-btn-save" onclick="bsApplySettings()">APPLY</button>
+    </div>
+  </div>
+</div>
+
+
 <div class="bs-overlay" id="bs-overlay-detail">
   <div class="bs-modal">
     <div class="bs-modal-header">
@@ -1804,9 +1839,10 @@ const LS_DATA = 'dt_library_data';
 const LS_BLOB = 'dt_library_blob';
 const SHORTCODE_BLOB = '';
 const INJECTED_BOOKS = [{"author":"青木 純二","comment":"","image":"https://m.media-amazon.com/images/I/518doVjQnsL.jpg","link":"","publisher":"東進ブックス","status":"owned","title":"数学の真髄 論理・写像"},{"author":"日本大学文理学部数学科","comment":"","image":"https://m.media-amazon.com/images/I/71BuUrtKyCL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"日本評論社","status":"owned","title":"数学基礎セミナー"},{"author":"鈴木 晋一","comment":"","image":"https://m.media-amazon.com/images/I/71BBoEHYPFL._UF1000,1000_QL80_.jpg","link":"","publisher":"日本評論社","status":"owned","title":"代数・解析 パーフェクト・マスター"},{"author":"鈴木 晋一","comment":"","image":"https://m.media-amazon.com/images/I/71TYa9CU3RL.jpg","link":"","publisher":"日本評論社","status":"owned","title":"平面幾何 パーフェクト・マスター"},{"author":"鈴木 晋一","comment":"","image":"https://m.media-amazon.com/images/I/71oXuwaccUL.jpg","link":"","publisher":"日本評論社","status":"owned","title":"初等整数 パーフェクト・マスター"},{"author":"数学オリンピック財団","comment":"","image":"https://m.media-amazon.com/images/I/710K3PkJPjL._UF1000,1000_QL80_.jpg","link":"","publisher":"日本評論社","status":"owned","title":"数学オリンピック 2016-2020"},{"author":"大日本図書","comment":"","image":"https://www.dainippon-tosho.co.jp/college_math/images/book_re_applied.png","link":"","publisher":"大日本図書","status":"owned","title":"新応用数学 (高専テキストシリーズ)"},{"author":"岡本 和夫 他","comment":"","image":"https://m.media-amazon.com/images/I/71YRZ4Kpt3L.jpg","link":"","publisher":"実教出版","status":"owned","title":"新版 応用数学 改訂版 (新版数学シリーズ)"},{"author":"國分 雅敏","comment":"","image":"https://m.media-amazon.com/images/I/71+cWQBtjdL.jpg","link":"","publisher":"共立出版","status":"owned","title":"ラプラス変換 (数学のかんどころ 13)"},{"author":"飯高 茂","comment":"","image":"https://content.bookoff.co.jp/goodsimages/LL/001695/0016956288LL.jpg","link":"","publisher":"共立出版","status":"owned","title":"体論、これはおもしろい (数学のかんどころ 18)"},{"author":"若林 功","comment":"","image":"https://m.media-amazon.com/images/I/61hP1pTG8oL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"共立出版","status":"owned","title":"多変数関数論 (数学のかんどころ 21)"},{"author":"福間 慶明","comment":"","image":"https://shop.r10s.jp/bookfan/cabinet/00498/bk432011065x.jpg","link":"","publisher":"共立出版","status":"owned","title":"わかる！使える！楽しめる！ベクトル空間 (数学のかんどころ 24)"},{"author":"澤野 嘉宏","comment":"","image":"https://m.media-amazon.com/images/I/71Ni6XGI8RL.jpg","link":"","publisher":"共立出版","status":"owned","title":"早わかりルベーグ積分 (数学のかんどころ 29)"},{"author":"後藤 四郎","comment":"","image":"https://m.media-amazon.com/images/I/81FedImgLwL.jpg","link":"","publisher":"共立出版","status":"owned","title":"可換環論の勘どころ (数学のかんどころ 32)"},{"author":"新井 仁之","comment":"","image":"https://m.media-amazon.com/images/I/81tsMJumoUL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"共立出版","status":"owned","title":"有理型関数 (数学のかんどころ 37)"},{"author":"酒井 文雄","comment":"","image":"https://m.media-amazon.com/images/I/81XYYF4xM-L.jpg","link":"","publisher":"共立出版","status":"owned","title":"多変数の微積分 (数学のかんどころ 38)"},{"author":"室田 一雄, 杉原 正顯","comment":"","image":"https://m.media-amazon.com/images/I/61xHrXTACpL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"丸善出版","status":"owned","title":"線形代数 I (東京大学工学教程 基礎系 数学)"},{"author":"大岩 顕、奥薗 透、松野 俊一、岡 隆史","comment":"","image":"https://m.media-amazon.com/images/I/81dvCXTngqL.jpg","link":"","publisher":"丸善出版","status":"owned","title":"ベクトル解析 (東京大学工学教程 基礎系 数学)"},{"author":"黒川 信重, 小山 信也","comment":"","image":"https://m.media-amazon.com/images/I/71szvwXM7HL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"日本評論社","status":"owned","title":"ゼータへの招待 (シリーズ ゼータの現在)"},{"author":"黒川 信重","comment":"","image":"https://m.media-amazon.com/images/I/817DEACbLfL._UF1000,1000_QL80_.jpg","link":"","publisher":"日本評論社","status":"owned","title":"オイラーとリーマンのゼータ関数 (シリーズ ゼータの現在)"},{"author":"高木 貞治","comment":"名著。","image":"https://m.media-amazon.com/images/I/81d7gK8bcAL._AC_UF1000,1000_QL80_.jpg","link":"/posts/2025-06-05-books/","publisher":"岩波書店","status":"owned","title":"解析概論"},{"author":"飯高 茂","comment":"","image":"https://m.media-amazon.com/images/I/71wvtPjiITL._UF1000,1000_QL80_.jpg","link":"","publisher":"講談社","status":"owned","title":"微分積分と集合 そのまま使える答えの書き方"},{"author":"本田 龍央, 五十嵐 貫","comment":"","image":"https://m.media-amazon.com/images/I/71nBOffEOHL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"東京図書","status":"owned","title":"詳解 大学院への数学 微分積分編"},{"author":"野本 久夫, 岸 正倫","comment":"","image":"https://m.media-amazon.com/images/I/317DNyFxBuL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"サイエンス社","status":"owned","title":"解析演習 (理工系のための数学演習ライブラリ 2)"},{"author":"上江洌 達也, 吉岡 英生","comment":"","image":"https://hondana-image.s3.amazonaws.com/book/image/10003335/normal_89a6365e-e35a-4e3f-a5ab-c21e58907f70.jpg","link":"","publisher":"共立出版","status":"owned","title":"理工系のための関数論"},{"author":"志賀 浩二","comment":"","image":"https://content.bookoff.co.jp/goodsimages/LL/002040/0020405979LL.jpg","link":"","publisher":"朝倉書店","status":"owned","title":"ルベーグ積分30講 (数学30講シリーズ 9) [新装版]"},{"author":"伊藤 清三","comment":"","image":"https://m.media-amazon.com/images/I/71V7V05lVoL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"裳華房","status":"owned","title":"ルベーグ積分入門 [新装版]"},{"author":"梅野 高司, 濱田 英隆 他","comment":"","image":"https://images-na.ssl-images-amazon.com/images/P/4320110595.01._SCLZZZZZZZ_.jpg","link":"","publisher":"共立出版","status":"owned","title":"基礎から学ぶ 微分方程式"},{"author":"本田 龍央, 佐藤 義隆","comment":"","image":"https://m.media-amazon.com/images/I/61PmGOh423L._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"東京図書","status":"owned","title":"詳解 大学院への数学 線形代数編"},{"author":"藤本 淳夫","comment":"","image":"https://m.media-amazon.com/images/I/91mjwW4z9CL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"培風館","status":"owned","title":"ベクトル解析 (現代数学レクチャーズ C-1)"},{"author":"加須栄 篤","comment":"","image":"https://m.media-amazon.com/images/I/71Y8fzPr6JL.jpg","link":"","publisher":"共立出版","status":"owned","title":"ベクトル解析 (数・学・探・検 12)"},{"author":"千葉 逸人","comment":"","image":"https://m.media-amazon.com/images/I/814+4B11V7L.jpg","link":"","publisher":"現代数学社","status":"owned","title":"復刻版 ベクトル解析からの幾何学入門"},{"author":"雪江 明彦","comment":"","image":"https://www.nippyo.co.jp/shop/img/content_sub/temp/09165_1.jpg","link":"","publisher":"日本評論社","status":"owned","title":"代数学 1 群論入門 [第2版]"},{"author":"新井 敏康","comment":"","image":"https://m.media-amazon.com/images/I/61jtuIUWtCL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"東京図書","status":"owned","title":"集合・論理と位相 (基幹講座 数学)"},{"author":"小山 晃","comment":"","image":"https://www.morikita.co.jp/storage/images/cvr/007861cvr.jpg","link":"","publisher":"森北出版","status":"owned","title":"位相空間論 (現代数学への基礎)"},{"author":"Tai-Danae Bradley (著), 小森 洋平 (訳)","comment":"","image":"https://m.media-amazon.com/images/I/51KAgZbkNYL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"共立出版","status":"owned","title":"圏論によるトポロジー"},{"author":"三枝 洋一","comment":"","image":"https://www.morikita.co.jp/storage/images/cvr/007891cvr.jpg","link":"","publisher":"森北出版","status":"owned","title":"数論幾何入門"},{"author":"山本 義隆","comment":"","image":"https://m.media-amazon.com/images/I/81uuCn0MF7L.jpg","link":"","publisher":"駿台文庫","status":"owned","title":"新・物理入門 \u003c増補改訂版\u003e"},{"author":"山本 義隆","comment":"","image":"https://m.media-amazon.com/images/I/51kKuDkohLL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"駿台文庫","status":"owned","title":"新・物理入門問題演習 \u003c改訂版\u003e"},{"author":"杉山 忠男","comment":"","image":"https://m.media-amazon.com/images/I/61-1xMfi6kL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"河合出版","status":"owned","title":"理論物理への道標 (上) [三訂版]"},{"author":"橋爪 秀利","comment":"","image":"https://images-na.ssl-images-amazon.com/images/P/4320114434.01._SCLZZZZZZZ_.jpg","link":"","publisher":"共立出版","status":"owned","title":"工学系学生のための数学物理学演習 [増補版]"},{"author":"後藤 憲一, 山本 邦夫, 神吉 健","comment":"","image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnMMoh5cMX1ASh8It813380Uyin8Kw1O2qgw\u0026s","link":"","publisher":"共立出版","status":"owned","title":"詳解 物理応用数学演習"},{"author":"橋爪 洋一郎","comment":"","image":"https://m.media-amazon.com/images/I/51-wB-91oVL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"裳華房","status":"owned","title":"物理数学 (物理学レクチャーコース)"},{"author":"河辺 哲次","comment":"","image":"https://www.shokabo.co.jp/newgif/c2416.jpg","link":"","publisher":"裳華房","status":"owned","title":"解析力学 (物理学レクチャーコース)"},{"author":"加藤 岳生","comment":"","image":"https://m.media-amazon.com/images/I/51YZbp-2GSL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"裳華房","status":"owned","title":"電磁気学入門 (物理学レクチャーコース)"},{"author":"河辺 哲次","comment":"","image":"https://m.media-amazon.com/images/I/613NHXAzNQL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"裳華房","status":"owned","title":"相対性理論 (物理学レクチャーコース)"},{"author":"石川 裕","comment":"","image":"https://m.media-amazon.com/images/I/61P2S+l9VIL.jpg","link":"","publisher":"東京図書","status":"owned","title":"弱点克服 大学生の初等力学 [改訂版]"},{"author":"A.P.フレンチ (著), 橘高 重義 (監訳)","comment":"","image":"https://content.bookoff.co.jp/goodsimages/LL/001604/0016045084LL.jpg","link":"","publisher":"培風館","status":"owned","title":"MIT物理 力学"},{"author":"L.D.ランダウ, E.M.リフシッツ","comment":"test","image":"https://m.media-amazon.com/images/I/812oUWSe4IL._AC_UF1000,1000_QL80_.jpg","link":"#","publisher":"東京図書","status":"owned","title":"力学 (ランダウ=リフシッツ理論物理学教程)"},{"author":"リチャード・P・ファインマン","comment":"","image":"https://content.bookoff.co.jp/goodsimages/LL/001639/0016394878LL.jpg","link":"","publisher":"岩波書店","status":"owned","title":"ファインマン物理学 I 力学 [新装版]"},{"author":"阿部 龍蔵","comment":"","image":"https://content.bookoff.co.jp/goodsimages/LL/001590/0015905629LL.jpg","link":"","publisher":"岩波書店","status":"owned","title":"力学・解析力学 (岩波基礎物理シリーズ 1) [新装版]"},{"author":"今井 功, 高見 穎郎 他","comment":"","image":"https://m.media-amazon.com/images/I/814NshbnF6L._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"サイエンス社","status":"owned","title":"演習 力学 [新訂版] (セミナーライブラリ 物理学2)"},{"author":"後藤 憲一, 山本 邦夫, 神吉 健","comment":"","image":"https://hondana-image.s3.amazonaws.com/book/image/10011293/normal_2f13c650-be59-4597-924c-964be21b5b86.jpg","link":"","publisher":"共立出版","status":"owned","title":"詳解 物理学演習 上"},{"author":"崎元 達郎","comment":"","image":"https://m.media-amazon.com/images/I/917zjJg556L._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"森北出版","status":"owned","title":"構造力学 [第2版] (上) 静定編"},{"author":"小出 昭一郎","comment":"","image":"https://m.media-amazon.com/images/I/81ZS1gRMqnL._AC_UF350,350_QL50_.jpg","link":"","publisher":"岩波書店","status":"owned","title":"物理入門コース 2 解析力学"},{"author":"渡辺 悠樹","comment":"","image":"https://m.media-amazon.com/images/I/61Dix6KUezL.jpg","link":"","publisher":"共立出版","status":"owned","title":"解析力学 (基礎の基礎から発展的なトピックまで)"},{"author":"綿村 哲","comment":"","image":"https://m.media-amazon.com/images/I/71xIgmkvHfL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"共立出版","status":"owned","title":"解析力学 (フロー式物理演習シリーズ 17)"},{"author":"藤田 丈久","comment":"","image":"https://m.media-amazon.com/images/I/71xRNfB0nIL.jpg","link":"","publisher":"三省堂","status":"owned","title":"電磁気学 (現象と理論)"},{"author":"益川 敏英 (監修), 植松 恒夫 他","comment":"","image":"https://m.media-amazon.com/images/I/81UBfSWtenL.jpg","link":"","publisher":"東京図書","status":"owned","title":"電磁気学 I (基幹講座 物理学)"},{"author":"高木 淳 他","comment":"","image":"https://m.media-amazon.com/images/I/71nDdk+ty+L.jpg","link":"","publisher":"サイエンス社","status":"owned","title":"電磁気学講義ノート"},{"author":"後藤 憲一, 山崎 修一郎","comment":"","image":"https://hondana-image.s3.amazonaws.com/book/image/10011310/normal_ee3528e0-eb28-4f08-bde8-edd8832ffdb0.jpg","link":"","publisher":"共立出版","status":"owned","title":"詳解 電磁気学演習"},{"author":"石川 正明","comment":"","image":"https://m.media-amazon.com/images/I/71IEbBfeSUL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"駿台文庫","status":"owned","title":"原点からの化学 化学の理論"},{"author":"石川 正明","comment":"","image":"https://m.media-amazon.com/images/I/61U9hGl1g5L._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"駿台文庫","status":"owned","title":"理系標準問題集 化学"},{"author":"卜部 吉庸","comment":"","image":"https://m.media-amazon.com/images/I/71KMlO4y1SL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"三省堂","status":"owned","title":"理系大学受験 化学の新演習"},{"author":"小川 裕司","comment":"","image":"https://m.media-amazon.com/images/I/41r9Of0AqTL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"旺文社","status":"owned","title":"精選化学 I・II 問題演習"},{"author":"浅井 秀樹","comment":"","image":"https://m.media-amazon.com/images/I/41e-EdAP73L._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"コロナ社","status":"owned","title":"デジタル回路演習ノート"},{"author":"栢木 厚","comment":"","image":"https://m.media-amazon.com/images/I/81VnPOlfCZL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"技術評論社","status":"owned","title":"令和04年 栢木先生の書き込み式ドリル 基本情報技術者"},{"author":"日高 哲郎","comment":"test","image":"https://m.media-amazon.com/images/I/81n8PDfFiIL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"翔泳社","status":"owned","title":"情報処理教科書 応用情報技術者 テキスト＆問題集 2025年版"},{"author":"富士栄 尚寛 他","comment":"","image":"https://m.media-amazon.com/images/I/71shtiQC00L._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"翔泳社","status":"owned","title":"HTML5 プロフェッショナル認定試験 レベル1"},{"author":"吉田 薫","comment":"","image":"https://m.media-amazon.com/images/I/71RdOTT-fRL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"リックテレコム","status":"owned","title":"合格対策 AZ-104: Microsoft Azure Administrator テキスト＆演習問題"},{"author":"柴田 望洋, 由梨 かおる","comment":"","image":"https://m.media-amazon.com/images/I/81bvHt+pC2L.jpg","link":"","publisher":"SBクリエイティブ","status":"owned","title":"新・解きながら学ぶC言語 [第2版]"},{"author":"ビープラウド","comment":"","image":"https://m.media-amazon.com/images/I/81Vkcl0zDDL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"秀和システム","status":"owned","title":"Pythonプロフェッショナルプログラミング 第4版"},{"author":"三谷 純","comment":"","image":"https://m.media-amazon.com/images/I/71HkbpNFhaL.jpg","link":"","publisher":"翔泳社","status":"owned","title":"プログラミング学習シリーズ Java 第3版 入門編"},{"author":"WINGSプロジェクト (著), 山田 祥寛 (監修)","comment":"","image":"https://m.media-amazon.com/images/I/81lspovrLtL._UF1000,1000_QL80_.jpg","link":"","publisher":"技術評論社","status":"owned","title":"1日で基本が身に付く！ JavaScript 超入門"},{"author":"掌田 津耶乃","comment":"","image":"https://m.media-amazon.com/images/I/61FI+wkcRCL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"秀和システム","status":"owned","title":"React.js \u0026 Next.js超入門 第2版"},{"author":"手島 拓也 他","comment":"","image":"https://m.media-amazon.com/images/I/81v3o9pA7TL.jpg","link":"","publisher":"技術評論社","status":"owned","title":"TypeScriptとReact/Next.jsでつくる実践Webアプリケーション開発"},{"author":"古川 正寿","comment":"","image":"https://m.media-amazon.com/images/I/81HMfLkR6HL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"翔泳社","status":"owned","title":"実装で学ぶフルスタックWeb開発"},{"author":"横田 紋奈, 宇賀神 みずき","comment":"","image":"https://m.media-amazon.com/images/I/81Z8OMEGBJL._UF1000,1000_QL80_.jpg","link":"","publisher":"インプレス","status":"owned","title":"いちばんやさしい Git \u0026 GitHubの教本 [第3版]"},{"author":"Richard Dawkins","comment":"原著で読んでみたい。","image":"https://m.media-amazon.com/images/I/81sr4LoeEqL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"紀伊國屋書店","status":"wishlist","title":"The Selfish Gene (利己的な遺伝子)"},{"author":"岩崎 務","comment":"","image":"https://www.hakusuisha.co.jp/images/book/370899_lrg.jpg","link":"","publisher":"白水社","status":"owned","title":"ニューエクスプレスプラス ラテン語"},{"author":"中井 穂瑞領","comment":"","image":"https://m.media-amazon.com/images/I/91T5r+dDJ-L._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"誠文堂新光社","status":"owned","title":"DISCOVERY ヤモリ大図鑑"},{"author":"田向 健一","comment":"","image":"https://m.media-amazon.com/images/I/51JBP0on9SL._AC_UF1000,1000_QL80_.jpg","link":"","publisher":"誠文堂新光社","status":"owned","title":"ザ・カエル (世界のカエルの飼育がわかる本)"},{"author":"千田 義洋","comment":"","image":"https://m.media-amazon.com/images/I/91A6KMOeUUL.jpg","link":"","publisher":"日本文芸社","status":"owned","title":"中・小型水槽で楽しむ アクアリウム"},{"author":"","comment":"","image":"https://www.mpj-aqualife.com/wp-content/uploads/2024/02/80152da2f324db182efd64c2733f602b.jpg","link":"","publisher":"エムピージェー","status":"owned","title":"新装版 パルダリウムとアクアテラリウム"},{"author":"アクアライフ編集部","comment":"","image":"https://m.media-amazon.com/images/I/712VbejZXYL.jpg","link":"","publisher":"エムピージェー","status":"owned","title":"水草レイアウト制作ノート (緑のアクアリウムの作り方)"},{"author":"アクアライフ編集部","comment":"","image":"https://img.hmv.co.jp/image/jacket/400/0000126/0/2/845.jpg","link":"","publisher":"エムピージェー","status":"owned","title":"水草レイアウト制作ノート2 (緑のアクアリウムのアイデア集)"}];
-const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+const JB_KEY_DEFAULT = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+let jbKey = localStorage.getItem('dt_library_jb_key') || JB_KEY_DEFAULT;
 const BIN_CREATE_URL = 'https://api.jsonbin.io/v3/b';
-const binHeaders = () => ({'X-Master-Key':JSONBIN_KEY,'Content-Type':'application/json'});
+const binHeaders = () => ({'X-Master-Key':jbKey,'Content-Type':'application/json'});
 const binUrl = () => `https://api.jsonbin.io/v3/b/${blobId}`;
 const binLatest = () => `${binUrl()}/latest`;
 
@@ -1831,6 +1867,71 @@ function setSyncStatus(cls,txt){
   el.textContent=txt;
   el.className='bs-sync-status'+(' bs-sync-'+cls);
 }
+
+ 
+window.bsOpenSettings = function() {
+  document.getElementById('bs-blob-input').value = blobId || '';
+  document.getElementById('bs-jbkey-input').value = (jbKey === JB_KEY_DEFAULT) ? '' : jbKey;
+  document.getElementById('bs-overlay-settings').classList.add('open');
+};
+window.bsCloseSettings = function() {
+  document.getElementById('bs-overlay-settings').classList.remove('open');
+};
+window.bsApplySettings = function() {
+  const newBlob = document.getElementById('bs-blob-input').value.trim();
+  const newKey = document.getElementById('bs-jbkey-input').value.trim();
+  
+  blobId = newBlob || null;
+  if(blobId) localStorage.setItem(LS_BLOB, blobId);
+  else localStorage.removeItem(LS_BLOB);
+
+  if(newKey) { jbKey = newKey; localStorage.setItem('dt_library_jb_key', newKey); }
+  else { jbKey = JB_KEY_DEFAULT; localStorage.removeItem('dt_library_jb_key'); }
+
+  bsCloseSettings();
+  toast('Config saved');
+  if(blobId) bsSync();
+};
+window.bsExport = function() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+  const dlAnchorElem = document.createElement('a');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", "library_export.json");
+  dlAnchorElem.click();
+  toast('Exported');
+};
+window.bsImport = function(input) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if(Array.isArray(imported)) {
+        db = imported;
+        save();
+        bsRender();
+        toast('Imported successfully');
+        bsCloseSettings();
+      } else {
+        toast('Invalid format', 'err');
+      }
+    } catch(err) {
+      toast('Failed to parse', 'err');
+    }
+  };
+  reader.readAsText(file);
+};
+window.bsClearAll = function() {
+  if(confirm("全データを削除しますか？\n（クラウド上のデータは消えませんが、ローカルデータは空になります）")) {
+    db = [];
+    save();
+    bsRender();
+    bsCloseSettings();
+    toast('Cleared', 'err');
+  }
+};
+
 
  
 function migrate(){
