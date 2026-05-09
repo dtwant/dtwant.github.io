@@ -2148,7 +2148,7 @@ function renderList(id, books, isWish){
   }
   el.innerHTML = books.map(b => {
     const sl = STATUS_LABEL[b.status] || b.status;
-    const tagsHtml = (b.tags||[]).length ? '<div class="bs-list-tags">' + b.tags.slice(0,uohjikjo3).map(t=>'<span class="book-tag">'+esc(t)+'</span>').join('') + '</div>' : '';
+    const tagsHtml = (b.tags||[]).length ? '<div class="bs-list-tags">' + b.tags.slice(0,3).map(t=>'<span class="book-tag">'+esc(t)+'</span>').join('') + '</div>' : '';
     const thumb = b.image
       ? '<img src="'+esc(b.image)+'" alt="" loading="lazy">'
       : '<div class="bs-list-thumb-null">N/A</div>';
@@ -2367,7 +2367,7 @@ window.bsSync = async function(silent){
       setSyncStatus('ok','◉ SYNCED');
       if(!silent) toast('Bin作成・ID保存しました','ok');
     } else {
-      const r = await fetch(binLatest(),{headers:{'X-Master-Key':JSONBIN_KEY},cache:'no-store'});
+      const r = await fetch(binLatest(),{headers:binHeaders(),cache:'no-store'});
       if(!r.ok){
         if(r.status===404||r.status===400||r.status===422){
           blobId=null; try{localStorage.removeItem(LS_BLOB);}catch(e){}
