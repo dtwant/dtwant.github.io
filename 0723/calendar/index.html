@@ -230,7 +230,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "84"
+    "wordCount": "95"
   }]
   </script>
 
@@ -928,7 +928,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>84 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>95 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1676,6 +1676,24 @@
     .cg-up-date { min-width: 50px; }
     .cg-up-title { font-size: 0.8rem; }
   }
+
+   
+  .cg-autocomplete {
+    position: absolute; top: 100%; left: 0; right: 0; background: #111;
+    border: 1px solid rgba(0,243,255,0.3); border-top: none; z-index: 100;
+    max-height: 150px; overflow-y: auto; border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+  }
+  .cg-ac-item {
+    padding: 8px 10px; cursor: pointer; color: #ddd; font-size: 0.85rem;
+    display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .cg-ac-item:hover { background: rgba(0,243,255,0.1); }
+  
+   
+  .cg-legend-list { display: flex; flex-direction: column; gap: 12px; padding: 10px 0; }
+  .cg-legend-item { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 0.95rem; }
+
 </style>
 
 <div class="cg-root">
@@ -1690,6 +1708,7 @@
       <span class="cg-sync-badge local" id="cg-sync">◌ LOCAL</span>
       <button class="cg-btn" onclick="cgSync(false)">⟳ SYNC</button>
       <button class="cg-btn" onclick="cgOpenSettings()">⚙ CONFIG</button>
+      <button class="cg-btn" onclick="cgOpenLegend()" style="padding: 0.3rem 0.6rem; margin-left: 5px;" title="凡例">❗</button>
     </div>
   </div>
 
@@ -1781,7 +1800,10 @@
 
     <div class="cg-section-label">予定を追加</div>
     <div class="cg-ev-form">
-      <input type="text" class="cg-input" id="cg-ev-title" placeholder="予定の内容...">
+      <div style="flex:1; position:relative; display:flex;">
+        <input type="text" class="cg-input" id="cg-ev-title" placeholder="予定の内容..." autocomplete="off" style="width: 100%;">
+        <div id="cg-ev-autocomplete" class="cg-autocomplete" style="display:none;"></div>
+      </div>
       <button class="cg-btn-add" onclick="cgAddEvent()">追加</button>
     </div>
     <div class="cg-time-row">
@@ -1802,6 +1824,24 @@
 
     <div class="cg-modal-footer">
       <button class="cg-btn" onclick="cgCloseDay()">閉じる</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="cg-overlay" id="cg-ov-legend">
+  <div class="cg-modal">
+    <div class="cg-modal-content" style="max-width: 400px;">
+      <button class="cg-modal-close" onclick="cgCloseLegend()">×</button>
+      <div class="cg-modal-title"><span>❗</span> COLOR LEGEND</div>
+      <div class="cg-legend-list">
+        <div class="cg-legend-item"><span class="cg-dot d-cyan"></span> 水色は学校の予定</div>
+        <div class="cg-legend-item"><span class="cg-dot d-purple"></span> 紫色はバイトなど</div>
+        <div class="cg-legend-item"><span class="cg-dot d-pink"></span> 赤色は大事なこと</div>
+        <div class="cg-legend-item"><span class="cg-dot d-green"></span> 緑色は生き物関連</div>
+        <div class="cg-legend-item"><span class="cg-dot d-yellow"></span> 黄色はその他の予定色々</div>
+        <div class="cg-legend-item"><span class="cg-dot d-orange"></span> 橙色は自由</div>
+      </div>
     </div>
   </div>
 </div>
@@ -2352,6 +2392,63 @@
     if (e.key === 'Enter') { e.preventDefault(); cgAddEvent(); }
   });
 
+  
+  window.cgOpenLegend = function() { document.getElementById('cg-ov-legend').classList.add('open'); };
+  window.cgCloseLegend = function() { document.getElementById('cg-ov-legend').classList.remove('open'); };
+
+  
+  const evTitleInput = document.getElementById('cg-ev-title');
+  const evAutocomplete = document.getElementById('cg-ev-autocomplete');
+
+  function getPastEvents() {
+    const past = {};
+    if (data.events) {
+      Object.values(data.events).forEach(dayEvts => {
+        dayEvts.forEach(e => {
+          if (!e.deleted && e.title) {
+            if (!past[e.title] || e.addedAt > (past[e.title].addedAt || 0)) {
+              past[e.title] = { color: e.color, addedAt: e.addedAt || 0 };
+            }
+          }
+        });
+      });
+    }
+    return Object.keys(past).map(title => ({ title, color: past[title].color })).sort((a,b) => a.title.localeCompare(b.title));
+  }
+
+  function showAutocomplete() {
+    const val = evTitleInput.value.trim().toLowerCase();
+    const past = getPastEvents();
+    const matches = val ? past.filter(p => p.title.toLowerCase().includes(val)).slice(0, 10) : past.slice(0, 10);
+    
+    if (matches.length === 0) {
+      evAutocomplete.style.display = 'none';
+      return;
+    }
+
+    evAutocomplete.innerHTML = matches.map(m => `
+      <div class="cg-ac-item" onmousedown="cgSelectAc('${esc(m.title.replace(/'/g, "\\'"))}', '${m.color}')">
+        <span class="cg-dot d-${m.color}"></span> ${esc(m.title)}
+      </div>
+    `).join('');
+    evAutocomplete.style.display = 'block';
+  }
+
+  evTitleInput.addEventListener('input', showAutocomplete);
+  evTitleInput.addEventListener('focus', showAutocomplete);
+  evTitleInput.addEventListener('blur', () => { setTimeout(() => evAutocomplete.style.display = 'none', 150); });
+
+  window.cgSelectAc = function(title, color) {
+    evTitleInput.value = title;
+    const opt = document.querySelector(`.cg-color-opt[data-c="${color}"]`);
+    if (opt) {
+      document.querySelectorAll('.cg-color-opt').forEach(b => b.classList.remove('sel'));
+      opt.classList.add('sel');
+      selColor = color;
+    }
+    evAutocomplete.style.display = 'none';
+  };
+
   window.cgDelEvent = function(id) {
     if (!data.events[selDate]) return;
     const evt = data.events[selDate].find(e => e.id === id);
@@ -2567,11 +2664,12 @@
   };
 
    
-  ['cg-ov-day','cg-ov-settings','cg-ov-preview'].forEach(id => {
+  ['cg-ov-day','cg-ov-settings','cg-ov-preview','cg-ov-legend'].forEach(id => {
     document.getElementById(id).addEventListener('click', function(e) {
       if (e.target === this) {
         if (id === 'cg-ov-day') cgCloseDay();
         else if (id === 'cg-ov-preview') cgClosePreview();
+        else if (id === 'cg-ov-legend') cgCloseLegend();
         else this.classList.remove('open');
       }
     });
@@ -2581,6 +2679,7 @@
       document.querySelectorAll('.cg-overlay.open').forEach(el => {
         if (el.id === 'cg-ov-day') cgCloseDay();
         else if (el.id === 'cg-ov-preview') cgClosePreview();
+        else if (el.id === 'cg-ov-legend') cgCloseLegend();
         else el.classList.remove('open');
       });
     }
