@@ -1547,7 +1547,7 @@
     border-radius: 6px; display: flex; flex-direction: column; overflow: hidden;
     position: relative;
   }
-  .cg-prev-viewer { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: flex-start; position: relative; background: #111; overflow-y: auto; overflow-x: hidden; flex-direction: column; padding: 1rem 0; }
+  .cg-prev-viewer { flex: 1; min-height: 0; display: block; text-align: center; position: relative; background: #111; overflow-y: auto; overflow-x: hidden; padding: 1rem 0; }
   .cg-prev-thumbs { height: 80px; display: flex; gap: 10px; padding: 10px; background: rgba(0,243,255,0.05); overflow-x: auto; border-top: 1px solid rgba(0,243,255,0.2); }
   
   .cg-thumb {
@@ -1568,9 +1568,9 @@
     cursor: pointer; transition: background 0.2s; flex: 1;
   }
   .cg-upload-zone:hover { background: rgba(0,243,255,0.05); }
-  .cg-preview-media { max-width: 100%; object-fit: contain; margin: auto; }
+  .cg-preview-media { max-width: 100%; object-fit: contain; margin: 0 auto; display: block; }
   
-  .cg-pdf-page { margin-bottom: 10px; max-width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.5); flex-shrink: 0; }
+  .cg-pdf-page { margin: 0 auto 10px auto; max-width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.5); display: block; }
   .cg-btn-att {
     background: rgba(0,243,255,0.08); border: 1px solid rgba(0,243,255,0.3); color: #00f3ff;
     padding: 0.15rem 0.5rem; font-size: 0.65rem; border-radius: 3px; cursor: pointer; transition: all 0.2s;
@@ -2819,7 +2819,8 @@
       container.innerHTML = ''; 
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
-        const scale = window.devicePixelRatio || 1.5;
+        let scale = window.devicePixelRatio || 1.5;
+        if (scale > 2) scale = 2; 
         const viewport = page.getViewport({ scale: scale });
         
         const canvas = document.createElement('canvas');
