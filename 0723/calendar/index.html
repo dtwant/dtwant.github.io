@@ -1570,7 +1570,20 @@
   .cg-upload-zone:hover { background: rgba(0,243,255,0.05); }
   .cg-preview-media { max-width: 100%; object-fit: contain; margin: 0 auto; display: block; }
   
-  .cg-pdf-page { margin: 0 auto 10px auto; max-width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.5); display: block; }
+  .cg-pdf-page { margin: 0 auto; max-width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.5); display: block; }
+  .cg-pdf-nav {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    padding: 8px 0; background: rgba(0,0,0,0.6); border-top: 1px solid rgba(0,243,255,0.15);
+    position: sticky; bottom: 0; z-index: 2; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  .cg-pdf-nav button {
+    background: rgba(0,243,255,0.1); border: 1px solid rgba(0,243,255,0.3); color: #00f3ff;
+    padding: 6px 14px; border-radius: 4px; cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem; transition: all 0.2s;
+  }
+  .cg-pdf-nav button:hover:not(:disabled) { background: rgba(0,243,255,0.2); }
+  .cg-pdf-nav button:disabled { opacity: 0.3; cursor: default; }
+  .cg-pdf-nav span { color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; min-width: 80px; text-align: center; }
   .cg-btn-att {
     background: rgba(0,243,255,0.08); border: 1px solid rgba(0,243,255,0.3); color: #00f3ff;
     padding: 0.15rem 0.5rem; font-size: 0.65rem; border-radius: 3px; cursor: pointer; transition: all 0.2s;
@@ -1682,13 +1695,13 @@
     position: absolute; top: 100%; left: 0; right: 0; background: #111;
     border: 1px solid rgba(0,243,255,0.3); border-top: none; z-index: 100;
     max-height: 150px; overflow-y: auto; border-radius: 0 0 4px 4px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.8); width: 100%;
   }
   .cg-ac-item {
     padding: 8px 10px; cursor: pointer; color: #ddd; font-size: 0.85rem;
     display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05);
   }
-  .cg-ac-item:hover { background: rgba(0,243,255,0.1); }
+  .cg-ac-item:hover, .cg-ac-item.cg-ac-active { background: rgba(0,243,255,0.1); }
   
    
   .cg-legend-list { display: flex; flex-direction: column; gap: 12px; padding: 10px 0; }
@@ -1800,7 +1813,7 @@
 
     <div class="cg-section-label">予定を追加</div>
     <div class="cg-ev-form">
-      <div style="flex:1; position:relative; display:flex;">
+      <div style="flex:1; position:relative; min-width: 0;">
         <input type="text" class="cg-input" id="cg-ev-title" placeholder="予定の内容..." autocomplete="off" style="width: 100%;">
         <div id="cg-ev-autocomplete" class="cg-autocomplete" style="display:none;"></div>
       </div>
@@ -2040,6 +2053,21 @@
 
     blobId = SC_BLOB || localStorage.getItem(BLOB_KEY) || null;
     if (blobId) try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+
+    
+    const CLEANUP_THRESHOLD = 30 * 24 * 60 * 60 * 1000; 
+    const now = Date.now();
+    let cleaned = false;
+    Object.keys(data.events).forEach(dateKey => {
+      const before = data.events[dateKey].length;
+      data.events[dateKey] = data.events[dateKey].filter(e => {
+        if (e.deleted && e.addedAt && (now - e.addedAt) > CLEANUP_THRESHOLD) return false;
+        return true;
+      });
+      if (data.events[dateKey].length === 0) delete data.events[dateKey];
+      if (data.events[dateKey] && data.events[dateKey].length !== before) cleaned = true;
+    });
+    if (cleaned) save();
 
     setupColorPicker();
     setupAttToggle();
@@ -2399,6 +2427,7 @@
   
   const evTitleInput = document.getElementById('cg-ev-title');
   const evAutocomplete = document.getElementById('cg-ev-autocomplete');
+  let acSelectedIdx = -1;
 
   function getPastEvents() {
     const past = {};
@@ -2420,25 +2449,31 @@
     const val = evTitleInput.value.trim().toLowerCase();
     const past = getPastEvents();
     const matches = val ? past.filter(p => p.title.toLowerCase().includes(val)).slice(0, 10) : past.slice(0, 10);
+    acSelectedIdx = -1;
     
     if (matches.length === 0) {
       evAutocomplete.style.display = 'none';
       return;
     }
 
-    evAutocomplete.innerHTML = matches.map(m => `
-      <div class="cg-ac-item" onmousedown="cgSelectAc('${esc(m.title.replace(/'/g, "\\'"))}', '${m.color}')">
+    evAutocomplete.innerHTML = matches.map((m, i) => {
+      const safeTitle = m.title.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      return `<div class="cg-ac-item" data-ac-idx="${i}" data-ac-title="${safeTitle}" data-ac-color="${m.color}">
         <span class="cg-dot d-${m.color}"></span> ${esc(m.title)}
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
+
+    evAutocomplete.querySelectorAll('.cg-ac-item').forEach(item => {
+      item.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        selectAcItem(this.dataset.acTitle, this.dataset.acColor);
+      });
+    });
+
     evAutocomplete.style.display = 'block';
   }
 
-  evTitleInput.addEventListener('input', showAutocomplete);
-  evTitleInput.addEventListener('focus', showAutocomplete);
-  evTitleInput.addEventListener('blur', () => { setTimeout(() => evAutocomplete.style.display = 'none', 150); });
-
-  window.cgSelectAc = function(title, color) {
+  function selectAcItem(title, color) {
     evTitleInput.value = title;
     const opt = document.querySelector(`.cg-color-opt[data-c="${color}"]`);
     if (opt) {
@@ -2447,7 +2482,36 @@
       selColor = color;
     }
     evAutocomplete.style.display = 'none';
-  };
+  }
+
+  evTitleInput.addEventListener('input', showAutocomplete);
+  evTitleInput.addEventListener('focus', showAutocomplete);
+  evTitleInput.addEventListener('blur', () => { setTimeout(() => evAutocomplete.style.display = 'none', 200); });
+
+  
+  evTitleInput.addEventListener('keydown', function(e) {
+    const items = evAutocomplete.querySelectorAll('.cg-ac-item');
+    if (!items.length || evAutocomplete.style.display === 'none') return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      acSelectedIdx = Math.min(acSelectedIdx + 1, items.length - 1);
+      items.forEach((it, i) => it.classList.toggle('cg-ac-active', i === acSelectedIdx));
+      items[acSelectedIdx].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      acSelectedIdx = Math.max(acSelectedIdx - 1, 0);
+      items.forEach((it, i) => it.classList.toggle('cg-ac-active', i === acSelectedIdx));
+      items[acSelectedIdx].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter' && acSelectedIdx >= 0) {
+      e.preventDefault();
+      const sel = items[acSelectedIdx];
+      selectAcItem(sel.dataset.acTitle, sel.dataset.acColor);
+      return; 
+    }
+  });
+
+  
 
   window.cgDelEvent = function(id) {
     if (!data.events[selDate]) return;
@@ -2783,6 +2847,14 @@
   window.cgClosePreview = function() {
     curPrevId = null;
     curEvent = null;
+    
+    if (curPdf) { try { curPdf.destroy(); } catch(e) {} curPdf = null; }
+    pdfContainer = null;
+    
+    ghUrlCache.forEach((val, key) => {
+      if (val.startsWith('blob:')) URL.revokeObjectURL(val);
+    });
+    ghUrlCache.clear();
     document.getElementById('cg-ov-preview').classList.remove('open');
     document.getElementById('cg-prev-viewer').innerHTML = '';
   };
@@ -2911,33 +2983,97 @@
     }
   }
 
+  
+  let curPdf = null;
+  let curPdfPage = 1;
+  let curPdfTotal = 0;
+  let pdfContainer = null;
+  let pdfSwipeStartX = 0;
+
   async function renderPdfNative(url, container) {
+    pdfContainer = container;
     container.innerHTML = '<div style="color:#00f3ff; font-family:\'JetBrains Mono\', monospace; margin: auto;">Loading PDF...</div>';
     try {
-      const pdf = await pdfjsLib.getDocument(url).promise;
-      container.innerHTML = ''; 
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        let scale = window.devicePixelRatio || 1.5;
-        if (scale > 2) scale = 2; 
-        const viewport = page.getViewport({ scale: scale });
-        
-        const canvas = document.createElement('canvas');
-        canvas.className = 'cg-pdf-page';
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        canvas.style.width = (viewport.width / scale) + 'px';
-        
-        container.appendChild(canvas);
-        
-        const renderContext = { canvasContext: context, viewport: viewport };
-        await page.render(renderContext).promise;
+      if (curPdf) { try { curPdf.destroy(); } catch(e) {} curPdf = null; }
+      
+      const loadingTask = pdfjsLib.getDocument(url);
+      if (url.startsWith('blob:')) {
+        loadingTask.disableAutoFetch = true;
       }
+      curPdf = await loadingTask.promise;
+      curPdfTotal = curPdf.numPages;
+      curPdfPage = 1;
+      renderPdfPage(curPdfPage);
     } catch(e) {
-      container.innerHTML = '<div style="color:#ef4444; margin: auto;">PDFの読み込みに失敗しました</div>';
+      console.error('PDF load error:', e);
+      container.innerHTML = `<div style="color:#ef4444; margin: auto; padding: 1rem; text-align: center;">
+        <div style="margin-bottom: 0.5rem;">PDFの読み込みに失敗しました</div>
+        <div style="font-size: 0.7rem; color: #888;">${esc(e.message || '')}</div>
+      </div>`;
     }
   }
+
+  async function renderPdfPage(pageNum) {
+    if (!curPdf || !pdfContainer) return;
+    pdfContainer.innerHTML = '<div style="color:#00f3ff; font-family:\'JetBrains Mono\', monospace; margin: auto; padding: 2rem;">ページを読み込み中...</div>';
+    try {
+      const page = await curPdf.getPage(pageNum);
+      
+      const containerWidth = pdfContainer.clientWidth - 20;
+      const unscaledViewport = page.getViewport({ scale: 1 });
+      let scale = containerWidth > 0 ? containerWidth / unscaledViewport.width : 1;
+      
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      const renderScale = scale * pixelRatio;
+      const viewport = page.getViewport({ scale: renderScale });
+
+      pdfContainer.innerHTML = '';
+
+      const canvas = document.createElement('canvas');
+      canvas.className = 'cg-pdf-page';
+      const context = canvas.getContext('2d');
+      if (!context) throw new Error('Canvas 2D context unavailable');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      canvas.style.width = (viewport.width / pixelRatio) + 'px';
+      canvas.style.height = (viewport.height / pixelRatio) + 'px';
+      pdfContainer.appendChild(canvas);
+
+      await page.render({ canvasContext: context, viewport: viewport }).promise;
+
+      
+      canvas.addEventListener('touchstart', function(e) {
+        pdfSwipeStartX = e.touches[0].clientX;
+      }, { passive: true });
+      canvas.addEventListener('touchend', function(e) {
+        const dx = e.changedTouches[0].clientX - pdfSwipeStartX;
+        if (Math.abs(dx) > 50) {
+          if (dx < 0) cgPdfNext(); 
+          else cgPdfPrev(); 
+        }
+      }, { passive: true });
+
+      
+      const nav = document.createElement('div');
+      nav.className = 'cg-pdf-nav';
+      nav.innerHTML = `
+        <button onclick="cgPdfPrev()" ${pageNum <= 1 ? 'disabled' : ''}>◀ 前</button>
+        <span>${pageNum} / ${curPdfTotal}</span>
+        <button onclick="cgPdfNext()" ${pageNum >= curPdfTotal ? 'disabled' : ''}>次 ▶</button>
+      `;
+      pdfContainer.appendChild(nav);
+    } catch(e) {
+      console.error('PDF page render error:', e);
+      pdfContainer.innerHTML = '<div style="color:#ef4444; margin: auto;">ページの描画に失敗しました</div>';
+    }
+  }
+
+  window.cgPdfPrev = function() {
+    if (curPdfPage > 1) { curPdfPage--; renderPdfPage(curPdfPage); }
+  };
+  window.cgPdfNext = function() {
+    if (curPdfPage < curPdfTotal) { curPdfPage++; renderPdfPage(curPdfPage); }
+  };
 
   window.cgSelectAttachment = function(idx) {
     curAttIdx = idx;
@@ -3115,7 +3251,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>31 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>48 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
     
 
     

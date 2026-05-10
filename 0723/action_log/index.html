@@ -234,7 +234,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "31"
+    "wordCount": "48"
   }]
   </script>
 
@@ -932,7 +932,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>31 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>48 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1187,6 +1187,7 @@
    
   .ntc-header {
     text-align: center;
+    padding-top: 2.5rem;
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
     border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -1201,6 +1202,27 @@
     height: 1px;
     background: linear-gradient(90deg, transparent, #0ff, transparent);
     box-shadow: 0 0 10px #0ff;
+  }
+  .ntc-exit-btn {
+    position: absolute;
+    top: 0; left: 0;
+    background: transparent;
+    border: 1px solid #0ff;
+    color: #0ff;
+    padding: 0.4rem 0.8rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    z-index: 5;
+  }
+  .ntc-exit-btn:hover {
+    background: #0ff;
+    color: #000;
+    box-shadow: 0 0 15px #0ff;
   }
   .ntc-title {
     font-family: "Orbitron", sans-serif;
@@ -1737,20 +1759,24 @@
    
   @media (max-width: 768px) {
     .ntc-root { padding: 1rem 0.5rem; }
-    .ntc-title { font-size: 1.5rem; }
-    .ntc-month-nav { gap: 1rem; }
+    .ntc-title { font-size: 1.3rem; letter-spacing: 0.1em; }
+    .ntc-exit-btn { font-size: 0.6rem; padding: 0.3rem 0.6rem; }
+    .ntc-month-nav { gap: 0.8rem; }
     .ntc-month-label { font-size: 1.1rem; min-width: 140px; }
+    .ntc-month-btn { width: 40px; height: 40px; font-size: 1rem; }
     .ntc-form-row { grid-template-columns: 1fr; gap: 1rem; }
     .ntc-export-bar { flex-direction: column; }
     .ntc-table th { padding: 0.6rem 0.2rem; font-size: 0.65rem; }
     .ntc-cell { width: 45px; min-width: 45px; height: 40px; font-size: 1.1rem; }
     .ntc-table .ntc-date-col { min-width: 40px; width: 40px; font-size: 0.75rem; }
+    .ntc-tab { padding: 0.8rem 1.2rem; font-size: 0.75rem; letter-spacing: 1px; }
   }
 </style>
 
 <div class="ntc-root" id="ntc-root">
   <header class="ntc-header">
-    <button onclick="window.history.back()" style="position: absolute; top: 0; left: 0; background: transparent; border: 1px solid #0ff; color: #0ff; padding: 0.4rem 0.8rem; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;">◀ SYSTEM_EXIT</button>
+    <button class="ntc-exit-btn" onclick="window.history.back()">◀ EXIT</button>
+    <button class="ntc-exit-btn" style="left:auto;right:0;border-color:#f0f;color:#f0f;" id="ntc-config-btn">⚙ CONFIG</button>
     <div class="ntc-title">TASK_ARCHIVE</div>
     <div class="ntc-desc">>> ACTION_LOG_MONITOR : ONLINE</div>
     <div class="ntc-sync-status ntc-sync-offline" id="ntc-sync-badge">LOCAL ONLY</div>
@@ -1813,6 +1839,30 @@
 <div class="ntc-toast" id="ntc-toast"></div>
 
 
+<div class="ntc-modal-overlay" id="ntc-config-overlay">
+  <div class="ntc-modal" style="max-width:450px;">
+    <div class="ntc-modal-title">⚙ SYSTEM_CONFIG</div>
+    <div style="margin-bottom:1.2rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem;">JSONBIN BIN_ID</div>
+      <input type="text" class="ntc-input" id="ntc-cfg-binid" placeholder="Bin IDを入力 (空欄で新規作成)" style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;">
+      <div style="font-size:0.6rem;color:#475569;margin-top:0.3rem;">別端末と同期するにはBin IDを共有してください</div>
+    </div>
+    <div style="margin-bottom:1.2rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem;">DATA_MANAGEMENT</div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <button class="ntc-modal-btn save" id="ntc-cfg-export" style="flex:1;padding:0.6rem;font-size:0.7rem;">📤 EXPORT</button>
+        <label class="ntc-modal-btn save" style="flex:1;padding:0.6rem;font-size:0.7rem;text-align:center;cursor:pointer;">📥 IMPORT<input type="file" accept=".json" id="ntc-cfg-import" style="display:none;"></label>
+        <button class="ntc-modal-btn del" id="ntc-cfg-clear" style="flex:0 0 auto;padding:0.6rem;font-size:0.7rem;">🗑 PURGE_ALL</button>
+      </div>
+    </div>
+    <div class="ntc-modal-btns">
+      <button class="ntc-modal-btn save" id="ntc-cfg-apply">APPLY</button>
+      <button class="ntc-modal-btn cancel" id="ntc-cfg-cancel">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+
 <div class="ntc-modal-overlay" id="ntc-list-overlay">
   <div class="ntc-modal">
     <div class="ntc-modal-title">ACTION_LOG_RECORD</div>
@@ -1843,9 +1893,9 @@
     "use strict";
 
     
-    const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q'; 
+    const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
     const LS_BIN_KEY  = 'dt_task_cal_bin_id';
-    let BIN_ID = localStorage.getItem(LS_BIN_KEY);
+    let BIN_ID = localStorage.getItem(LS_BIN_KEY) || '6a004707adc21f119a7bbbff';
     const JSONBIN_HEADERS = () => ({
       'X-Master-Key': JSONBIN_KEY,
       'Content-Type': 'application/json',
@@ -2302,6 +2352,75 @@
         pdf.addImage(imgData, "PNG", 20, 50, pdfW, pdfH);
         pdf.save(`TASK_LOG_${currentYear}_${currentMonth}.pdf`);
       });
+    });
+
+    
+    const cfgOverlay = document.getElementById('ntc-config-overlay');
+    const cfgBinInput = document.getElementById('ntc-cfg-binid');
+
+    document.getElementById('ntc-config-btn').addEventListener('click', () => {
+      cfgBinInput.value = BIN_ID || '';
+      cfgOverlay.classList.add('show');
+    });
+    document.getElementById('ntc-cfg-cancel').addEventListener('click', () => cfgOverlay.classList.remove('show'));
+    cfgOverlay.addEventListener('click', (e) => { if (e.target === cfgOverlay) cfgOverlay.classList.remove('show'); });
+
+    document.getElementById('ntc-cfg-apply').addEventListener('click', async () => {
+      const newId = cfgBinInput.value.trim();
+      if (newId && newId !== BIN_ID) {
+        BIN_ID = newId;
+        localStorage.setItem(LS_BIN_KEY, BIN_ID);
+        toast('BIN_ID_UPDATED');
+        cfgOverlay.classList.remove('show');
+        await fetchFromBlob();
+      } else if (!newId) {
+        BIN_ID = null;
+        localStorage.removeItem(LS_BIN_KEY);
+        toast('CREATING_NEW_BIN...');
+        cfgOverlay.classList.remove('show');
+        await createNewBin();
+      } else {
+        cfgOverlay.classList.remove('show');
+      }
+    });
+
+    
+    document.getElementById('ntc-cfg-export').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `task_archive_backup_${new Date().toISOString().slice(0,10)}.json`;
+      a.click(); URL.revokeObjectURL(url);
+      toast('EXPORTED');
+    });
+
+    
+    document.getElementById('ntc-cfg-import').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          if (imported.tasks && imported.records) {
+            data = { tasks: imported.tasks || {}, records: imported.records || {}, memos: imported.memos || {} };
+            pushData(); render();
+            toast('IMPORTED');
+          } else { toast('INVALID_FORMAT'); }
+        } catch (err) { toast('PARSE_ERROR'); }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+
+    
+    document.getElementById('ntc-cfg-clear').addEventListener('click', () => {
+      if (confirm('全データを削除しますか？この操作は取り消せません。')) {
+        data = { tasks: {}, records: {}, memos: {} };
+        pushData(); render();
+        toast('ALL_DATA_PURGED');
+        cfgOverlay.classList.remove('show');
+      }
     });
 
     

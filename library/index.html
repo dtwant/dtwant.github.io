@@ -228,7 +228,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "93"
+    "wordCount": "95"
   }]
   </script>
 
@@ -946,13 +946,20 @@ h1, h2 {
   pointer-events: none;
 }
 
-.book-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  border-color: var(--neon-cyan-bs);
-  box-shadow: 0 0 20px rgba(0, 243, 255, 0.3), inset 0 0 25px rgba(0, 243, 255, 0.15);
-  z-index: 10;
+ 
+@media (hover: hover) {
+  .book-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: var(--neon-cyan-bs);
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.4), inset 0 0 30px rgba(0, 243, 255, 0.18), 0 0 60px rgba(0, 243, 255, 0.1);
+    z-index: 10;
+  }
+  .book-card:hover::before, .book-card:hover::after { opacity: 1; box-shadow: 0 0 10px var(--neon-cyan-bs); }
 }
-.book-card:hover::before, .book-card:hover::after { opacity: 1; box-shadow: 0 0 8px var(--neon-cyan-bs); }
+.book-card:active {
+  transform: scale(0.98);
+  transition: transform 0.1s;
+}
 
 .wishlist-card {
   border: 1px solid rgba(255, 0, 85, 0.4);
@@ -961,11 +968,13 @@ h1, h2 {
 .wishlist-card::before { border-color: var(--neon-pink-bs); }
 .wishlist-card::after { border-color: var(--neon-pink-bs); }
 
-.wishlist-card:hover {
-  border-color: var(--neon-pink-bs);
-  box-shadow: 0 0 20px rgba(255, 0, 85, 0.3), inset 0 0 25px rgba(255, 0, 85, 0.15);
+@media (hover: hover) {
+  .wishlist-card:hover {
+    border-color: var(--neon-pink-bs);
+    box-shadow: 0 0 25px rgba(255, 0, 85, 0.4), inset 0 0 30px rgba(255, 0, 85, 0.18), 0 0 60px rgba(255, 0, 85, 0.1);
+  }
+  .wishlist-card:hover::before, .wishlist-card:hover::after { box-shadow: 0 0 10px var(--neon-pink-bs); }
 }
-.wishlist-card:hover::before, .wishlist-card:hover::after { box-shadow: 0 0 8px var(--neon-pink-bs); }
 
  
 .book-cover-wrapper {
@@ -1099,6 +1108,17 @@ h1, h2 {
   gap: 0.75rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(5, 5, 5, 0.92);
+  backdrop-filter: blur(12px);
+  padding: 0.75rem 0;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-bottom: 1px solid rgba(0, 243, 255, 0.15);
 }
 .bs-search {
   flex: 1;
@@ -1306,6 +1326,35 @@ h1, h2 {
 .bs-detail-tag { font-size:0.55rem; font-family:'Orbitron',sans-serif; letter-spacing:0.06em; padding:0.15rem 0.4rem; border:1px solid #8b5cf6; color:#8b5cf6; background:rgba(139,92,246,0.07); }
 
  
+.bs-detail-cover img { cursor: zoom-in; transition: filter 0.3s; }
+.bs-detail-cover img:hover { filter: brightness(1.1); }
+
+ 
+.bs-lightbox {
+  display: none; position: fixed; inset: 0; z-index: 999999;
+  background: rgba(0,0,0,0.95); cursor: zoom-out;
+  align-items: center; justify-content: center;
+  animation: bs-lb-in 0.2s ease;
+}
+.bs-lightbox.open { display: flex; }
+.bs-lightbox img {
+  max-width: 92vw; max-height: 92vh; object-fit: contain;
+  border: 1px solid rgba(0,243,255,0.3);
+  box-shadow: 0 0 40px rgba(0,243,255,0.15);
+}
+@keyframes bs-lb-in { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
+
+ 
+.book-cover-error {
+  width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(135deg, rgba(255,0,85,0.1), rgba(0,0,0,0.8));
+  color: var(--neon-pink-bs); font-size:0.6rem; font-family:'Orbitron',sans-serif;
+  letter-spacing:1px; text-shadow:0 0 5px var(--neon-pink-bs);
+  flex-direction: column; gap: 0.3rem;
+}
+.book-cover-error::before { content: '⚠'; font-size: 1.2rem; }
+
+ 
 .book-status-badge {
   position:absolute; top:6px; right:6px; z-index:5;
   font-family:'Orbitron',sans-serif; font-size:0.45rem; letter-spacing:0.06em;
@@ -1343,7 +1392,7 @@ h1, h2 {
 .bs-toast {
   position: fixed;
   bottom: 1.5rem; right: 1.5rem;
-  z-index: 999999;
+  z-index: 9999999;
   font-family: 'Orbitron', sans-serif;
   font-size: 0.65rem;
   letter-spacing: 0.1em;
@@ -1351,20 +1400,57 @@ h1, h2 {
   border: 1px solid currentColor;
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity 0.2s, transform 0.2s;
+  transition: opacity 0.3s, transform 0.3s;
   pointer-events: none;
+  backdrop-filter: blur(8px);
 }
 .bs-toast.show { opacity:1; transform:none; }
-.bs-toast.ok   { color:var(--neon-cyan-bs); background:rgba(0,243,255,0.08); }
+.bs-toast.ok   { color:var(--neon-green-bs); background:rgba(0,255,65,0.08); border-color:var(--neon-green-bs); }
 .bs-toast.err  { color:var(--neon-pink-bs); background:rgba(255,0,85,0.08); }
 .bs-toast.info { color:#facc15; background:rgba(250,204,21,0.08); }
 
 .bs-empty {
   color: #555;
-  padding: 2rem;
+  padding: 2.5rem 1.5rem;
   text-align: center;
-  border: 1px dashed #333;
+  border: 1px dashed rgba(0, 243, 255, 0.2);
   font-size: 0.85rem;
+  font-family: 'JetBrains Mono', monospace;
+  background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,243,255,0.02));
+  position: relative;
+  overflow: hidden;
+}
+.bs-empty::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,243,255,0.3), transparent);
+  animation: bs-empty-scan 3s ease infinite;
+}
+@keyframes bs-empty-scan { 0%,100%{transform:translateX(-100%)} 50%{transform:translateX(100%)} }
+
+ 
+.bs-dash-rate {
+  grid-column: 1 / -1;
+  background: rgba(10,10,18,0.9);
+  border: 1px solid #222;
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.bs-dash-rate-label { font-family:'Orbitron',sans-serif; font-size:0.5rem; color:#666; letter-spacing:0.08em; white-space:nowrap; }
+.bs-dash-rate-val { font-family:'Orbitron',sans-serif; font-size:1.1rem; font-weight:700; color:var(--neon-cyan-bs); text-shadow:0 0 8px rgba(0,243,255,0.4); }
+.bs-dash-rate-ring {
+  width: 36px; height: 36px; flex-shrink: 0;
+}
+.bs-dash-rate-ring circle {
+  fill: none; stroke-width: 3;
+}
+.bs-dash-rate-ring .ring-bg { stroke: #222; }
+.bs-dash-rate-ring .ring-fg {
+  stroke: var(--neon-cyan-bs); stroke-linecap: round;
+  transform: rotate(-90deg); transform-origin: center;
+  transition: stroke-dashoffset 0.8s ease;
+  filter: drop-shadow(0 0 3px rgba(0,243,255,0.5));
 }
 
  
@@ -1641,7 +1727,7 @@ h1, h2 {
       </div>
     </div>
     <input type="text" class="bs-search" id="bs-search" style="flex:1; width:100%; box-sizing:border-box;"
-           placeholder="タイトル / 著者 / 出版社 / タグ で検索..." oninput="bsRender()">
+           placeholder="タイトル / 著者 / 出版社 / タグ で検索..." oninput="bsSearchDebounced()">
   </div>
 
   
@@ -1665,6 +1751,15 @@ h1, h2 {
     <div class="bs-dash-card d-wish" style="grid-column:1/-1">
       <div class="bs-dash-label">WISHLIST</div>
       <div class="bs-dash-val" id="bs-d-wish">0</div>
+    </div>
+    <div class="bs-dash-rate">
+      <svg class="bs-dash-rate-ring" viewBox="0 0 36 36">
+        <circle class="ring-bg" cx="18" cy="18" r="15.915"/>
+        <circle class="ring-fg" id="bs-rate-ring" cx="18" cy="18" r="15.915"
+                stroke-dasharray="100" stroke-dashoffset="100"/>
+      </svg>
+      <div class="bs-dash-rate-label">読了率</div>
+      <div class="bs-dash-rate-val" id="bs-d-rate">--%</div>
     </div>
     <div class="bs-dash-bar">
       <div class="bs-dash-bar-label">STATUS</div>
@@ -1715,6 +1810,11 @@ h1, h2 {
 
 
 <div class="bs-toast" id="bs-toast"></div>
+
+
+<div class="bs-lightbox" id="bs-lightbox" onclick="bsCloseLightbox()">
+  <img id="bs-lightbox-img" src="" alt="">
+</div>
 
 
 <div class="bs-overlay" id="bs-overlay-form">
@@ -1853,6 +1953,9 @@ let db = [];
 let blobId = null;
 let detailId = null;
 let toastTimer = null;
+let searchTimer = null;
+let syncRetries = 0;
+const MAX_SYNC_RETRIES = 2;
 
  
 function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
@@ -1869,6 +1972,29 @@ function setSyncStatus(cls,txt){
   el.textContent=txt;
   el.className='bs-sync-status'+(' bs-sync-'+cls);
 }
+
+ 
+window.bsSearchDebounced = function(){
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(()=>{ bsRender(); }, 200);
+};
+
+ 
+window.bsOpenLightbox = function(src){
+  if(!src) return;
+  document.getElementById('bs-lightbox-img').src = src;
+  document.getElementById('bs-lightbox').classList.add('open');
+};
+window.bsCloseLightbox = function(){
+  document.getElementById('bs-lightbox').classList.remove('open');
+  document.getElementById('bs-lightbox-img').src = '';
+};
+
+ 
+window.bsImgError = function(img){
+  const wrapper = img.parentElement;
+  if(wrapper) wrapper.innerHTML = '<div class="book-cover-error">BROKEN</div>';
+};
 
  
 window.bsOpenSettings = function() {
@@ -2040,15 +2166,38 @@ function sortBooks(arr){
 }
 
  
+function animateVal(el, target){
+  const cur = parseInt(el.textContent)||0;
+  if(cur === target){ el.textContent = target; return; }
+  const step = target > cur ? 1 : -1;
+  const duration = Math.min(Math.abs(target-cur)*30, 400);
+  const steps = Math.abs(target-cur);
+  const interval = duration / steps;
+  let i = 0;
+  const timer = setInterval(()=>{
+    i++;
+    el.textContent = cur + step*i;
+    if(i >= steps) clearInterval(timer);
+  }, interval);
+}
+
 function updateDashboard(){
   const counts = {done:0, reading:0, backlog:0, wishlist:0};
   db.forEach(b => { counts[b.status] = (counts[b.status]||0)+1; });
   const total = db.length;
-  document.getElementById('bs-d-total').textContent = total;
-  document.getElementById('bs-d-done').textContent = counts.done;
-  document.getElementById('bs-d-reading').textContent = counts.reading;
-  document.getElementById('bs-d-backlog').textContent = counts.backlog;
-  document.getElementById('bs-d-wish').textContent = counts.wishlist;
+  animateVal(document.getElementById('bs-d-total'), total);
+  animateVal(document.getElementById('bs-d-done'), counts.done);
+  animateVal(document.getElementById('bs-d-reading'), counts.reading);
+  animateVal(document.getElementById('bs-d-backlog'), counts.backlog);
+  animateVal(document.getElementById('bs-d-wish'), counts.wishlist);
+
+  
+  const owned = counts.done + counts.reading + counts.backlog;
+  const rate = owned > 0 ? ((counts.done / owned) * 100) : 0;
+  document.getElementById('bs-d-rate').textContent = owned > 0 ? rate.toFixed(1)+'%' : '--%';
+  
+  const ring = document.getElementById('bs-rate-ring');
+  ring.style.strokeDashoffset = (100 - rate).toString();
 
   
   const bar = document.getElementById('bs-d-bar');
@@ -2113,7 +2262,7 @@ function renderGrid(id, books, isWish){
   const el = document.getElementById(id);
   el.className = 'book-grid';
   if(!books.length){
-    el.innerHTML = '<div class="bs-empty">NO DATA</div>';
+    el.innerHTML = '<div class="bs-empty">&gt; NO_DATA_FOUND // '+( isWish ? 'WISHLIST_EMPTY' : 'LIBRARY_EMPTY' )+'</div>';
     return;
   }
   el.innerHTML = books.map(b => {
@@ -2124,7 +2273,7 @@ function renderGrid(id, books, isWish){
       <span class="book-status-badge s-${b.status}">${sl}</span>
       <div class="book-cover-wrapper">
         ${b.image
-          ? '<img src="'+esc(b.image)+'" alt="'+esc(b.title)+'" class="book-cover" loading="lazy">'
+          ? '<img src="'+esc(b.image)+'" alt="'+esc(b.title)+'" class="book-cover" loading="lazy" onerror="bsImgError(this)">'
           : '<div class="img-null">'+(isWish?'IMG_NULL // PENDING':'IMG_NULL // 404')+'</div>'}
       </div>
       <div class="book-info">
@@ -2143,7 +2292,7 @@ function renderList(id, books, isWish){
   const el = document.getElementById(id);
   el.className = 'bs-list';
   if(!books.length){
-    el.innerHTML = '<div class="bs-empty">NO DATA</div>';
+    el.innerHTML = '<div class="bs-empty">&gt; NO_DATA_FOUND // '+( isWish ? 'WISHLIST_EMPTY' : 'LIBRARY_EMPTY' )+'</div>';
     return;
   }
   el.innerHTML = books.map(b => {
@@ -2300,7 +2449,7 @@ window.bsOpenDetail = function(id){
   if(!m) return;
   detailId = id;
   const ci = m.image
-    ? '<img src="'+esc(m.image)+'" alt="'+esc(m.title)+'" style="width:100%;height:100%;object-fit:cover">'
+    ? '<img src="'+esc(m.image)+'" alt="'+esc(m.title)+'" style="width:100%;height:100%;object-fit:cover;cursor:zoom-in" onclick="event.stopPropagation();bsOpenLightbox(\''+esc(m.image).replace(/'/g,"\\\'")+'\')">'
     : '<div class="img-null">IMG_NULL</div>';
   const sl = STATUS_LABEL[m.status] || m.status;
   const tagsHtml = (m.tags||[]).length ? '<div class="bs-detail-tags">' + m.tags.map(t=>'<span class="bs-detail-tag">'+esc(t)+'</span>').join('') + '</div>' : '';
@@ -2330,7 +2479,7 @@ window.bsEditFromDetail = function(){
 
  
 document.addEventListener('keydown', function(e){
-  if(e.key==='Escape'){ bsCloseForm(); bsCloseDetail(); }
+  if(e.key==='Escape'){ bsCloseLightbox(); bsCloseForm(); bsCloseDetail(); bsCloseSettings(); }
 });
 
  
@@ -2339,14 +2488,16 @@ async function pushBlob(silent){
   try{
     const p = await fetch(binUrl(),{method:'PUT',headers:binHeaders(),body:JSON.stringify({library:db})});
     if(!p.ok){
-      if(p.status===404||p.status===400||p.status===422){
+      if((p.status===404||p.status===400||p.status===422) && syncRetries < MAX_SYNC_RETRIES){
+        syncRetries++;
         blobId=null; try{localStorage.removeItem(LS_BLOB);}catch(e){}
         return bsSync(silent);
       }
       throw new Error('put failed: '+p.status);
     }
     setSyncStatus('ok','◉ SYNCED');
-  }catch(e){ setSyncStatus('err','✕ ERR'); }
+    syncRetries = 0;
+  }catch(e){ syncRetries = 0; setSyncStatus('err','✕ ERR'); }
 }
 
 function mergeData(a,b){
@@ -2365,11 +2516,13 @@ window.bsSync = async function(silent){
       blobId = json.metadata.id;
       try{localStorage.setItem(LS_BLOB,blobId);}catch(e){}
       setSyncStatus('ok','◉ SYNCED');
+      syncRetries = 0;
       if(!silent) toast('Bin作成・ID保存しました','ok');
     } else {
       const r = await fetch(binLatest(),{headers:binHeaders(),cache:'no-store'});
       if(!r.ok){
-        if(r.status===404||r.status===400||r.status===422){
+        if((r.status===404||r.status===400||r.status===422) && syncRetries < MAX_SYNC_RETRIES){
+          syncRetries++;
           blobId=null; try{localStorage.removeItem(LS_BLOB);}catch(e){}
           if(!silent) toast('無効なBin。新規作成します','info');
           return bsSync(silent);
@@ -2382,17 +2535,20 @@ window.bsSync = async function(silent){
       save();
       const p = await fetch(binUrl(),{method:'PUT',headers:binHeaders(),body:JSON.stringify({library:db})});
       if(!p.ok){
-        if(p.status===404||p.status===400||p.status===422){
+        if((p.status===404||p.status===400||p.status===422) && syncRetries < MAX_SYNC_RETRIES){
+          syncRetries++;
           blobId=null; try{localStorage.removeItem(LS_BLOB);}catch(e){}
           return bsSync(silent);
         }
         throw new Error('put failed: '+p.status);
       }
       setSyncStatus('ok','◉ SYNCED');
+      syncRetries = 0;
       if(!silent) toast('同期完了','ok');
       bsRender();
     }
   }catch(err){
+    syncRetries = 0;
     setSyncStatus('err','✕ ERR');
     if(!silent) toast('同期失敗: '+err.message,'err');
   }
