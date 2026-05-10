@@ -1096,10 +1096,6 @@
 
         <div class="article-content max-w-prose mb-20">
           
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script>
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-</script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
@@ -1541,49 +1537,43 @@
   .cg-co-class::after { content: '授業'; }
 
    
-  .cg-preview-modal { max-width: 900px; width: 95%; height: 90vh; display: flex; flex-direction: column; }
-  .cg-prev-content {
-    flex: 1; min-height: 0; background: #050508; border: 1px dashed rgba(0,243,255,0.2);
-    border-radius: 6px; display: flex; flex-direction: column; overflow: hidden;
-    position: relative;
+  .cg-preview-modal { max-width: 520px; width: 92%; max-height: 88vh; display: flex; flex-direction: column; }
+  .cg-fm-list { flex: 1; overflow-y: auto; min-height: 80px; }
+  .cg-fm-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px; margin-bottom: 6px; transition: background 0.2s;
   }
-  .cg-prev-viewer { flex: 1; min-height: 0; display: block; text-align: center; position: relative; background: #111; overflow-y: auto; overflow-x: hidden; padding: 1rem 0; -webkit-overflow-scrolling: touch; }
-  .cg-prev-thumbs { height: 80px; display: flex; gap: 10px; padding: 10px; background: rgba(0,243,255,0.05); overflow-x: auto; border-top: 1px solid rgba(0,243,255,0.2); }
-  
-  .cg-thumb {
-    width: 60px; height: 60px; border-radius: 4px; border: 2px solid transparent;
-    object-fit: cover; cursor: pointer; transition: 0.2s; background: #222; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff; overflow:hidden;
+  .cg-fm-item:hover { background: rgba(0,243,255,0.04); }
+  .cg-fm-icon {
+    width: 44px; height: 44px; border-radius: 4px; background: #1a1a2e; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+    overflow: hidden; border: 1px solid rgba(255,255,255,0.08);
   }
-  .cg-thumb.sel { border-color: #00f3ff; box-shadow: 0 0 10px rgba(0,243,255,0.3); }
-  .cg-thumb-add {
-    width: 60px; height: 60px; border-radius: 4px; border: 2px dashed rgba(0,243,255,0.4);
-    display: flex; align-items: center; justify-content: center; cursor: pointer; color: #00f3ff;
-    font-size: 1.5rem; flex-shrink: 0; transition: 0.2s;
-  }
-  .cg-thumb-add:hover { background: rgba(0,243,255,0.1); }
-
-  .cg-upload-zone {
-    width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    cursor: pointer; transition: background 0.2s; flex: 1;
-  }
-  .cg-upload-zone:hover { background: rgba(0,243,255,0.05); }
-  .cg-preview-media { max-width: 100%; object-fit: contain; margin: 0 auto; display: block; }
-  
-  .cg-pdf-page { margin: 0 auto; max-width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.5); display: block; }
-  .cg-pdf-nav {
-    display: flex; align-items: center; justify-content: center; gap: 12px;
-    padding: 8px 0; background: rgba(0,0,0,0.6); border-top: 1px solid rgba(0,243,255,0.15);
-    position: sticky; bottom: 0; z-index: 2; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  }
-  .cg-pdf-nav button {
+  .cg-fm-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .cg-fm-info { flex: 1; min-width: 0; }
+  .cg-fm-name { font-size: 0.8rem; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cg-fm-type { font-size: 0.6rem; color: #64748b; font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+  .cg-fm-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .cg-fm-open {
     background: rgba(0,243,255,0.1); border: 1px solid rgba(0,243,255,0.3); color: #00f3ff;
-    padding: 6px 14px; border-radius: 4px; cursor: pointer; font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem; transition: all 0.2s;
+    padding: 5px 10px; border-radius: 4px; cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; transition: all 0.2s; white-space: nowrap;
   }
-  .cg-pdf-nav button:hover:not(:disabled) { background: rgba(0,243,255,0.2); }
-  .cg-pdf-nav button:disabled { opacity: 0.3; cursor: default; }
-  .cg-pdf-nav span { color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; min-width: 80px; text-align: center; }
+  .cg-fm-open:hover { background: rgba(0,243,255,0.2); }
+  .cg-fm-del {
+    background: transparent; border: 1px solid rgba(239,68,68,0.3); color: #ef4444;
+    padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s;
+  }
+  .cg-fm-del:hover { background: rgba(239,68,68,0.1); }
+  .cg-fm-empty { text-align: center; color: #444; font-size: 0.85rem; padding: 2rem; }
+  .cg-fm-upload {
+    display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px;
+    border: 2px dashed rgba(0,243,255,0.25); border-radius: 6px; cursor: pointer;
+    color: #00f3ff; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace;
+    transition: all 0.2s; margin-top: 8px;
+  }
+  .cg-fm-upload:hover { background: rgba(0,243,255,0.05); border-color: rgba(0,243,255,0.5); }
   .cg-btn-att {
     background: rgba(0,243,255,0.08); border: 1px solid rgba(0,243,255,0.3); color: #00f3ff;
     padding: 0.15rem 0.5rem; font-size: 0.65rem; border-radius: 3px; cursor: pointer; transition: all 0.2s;
@@ -1904,19 +1894,17 @@
 <div class="cg-overlay" id="cg-ov-preview">
   <div class="cg-modal cg-preview-modal">
     <div class="cg-modal-title" style="margin-bottom:0.75rem;">
-      <span>📎</span> <span id="cg-prev-title">Document</span>
+      <span>📁</span> <span id="cg-prev-title">添付ファイル</span>
       <div id="cg-prev-loading" style="display:none; font-size:0.7rem; color:#facc15; margin-left:auto;">[ 処理中... ]</div>
     </div>
-    <div id="cg-prev-content" class="cg-prev-content">
-      <div id="cg-prev-viewer" class="cg-prev-viewer">
-        
-      </div>
-      <div id="cg-prev-thumbs" class="cg-prev-thumbs" style="display:none;">
-        
-      </div>
+    <div id="cg-fm-list" class="cg-fm-list">
+      
     </div>
+    <label class="cg-fm-upload" id="cg-fm-upload-zone">
+      ＋ ファイルを追加
+      <input type="file" accept="image/*,application/pdf" multiple style="display:none" onchange="cgHandleUpload(this)">
+    </label>
     <div class="cg-modal-footer">
-      <button class="cg-btn" id="cg-prev-del-btn" style="border-color:rgba(239,68,68,0.3); color:#ef4444; display:none;" onclick="cgDeleteAttachment()">🗑 現在のファイルを削除</button>
       <button class="cg-btn" onclick="cgClosePreview()">閉じる</button>
     </div>
   </div>
@@ -2830,7 +2818,113 @@
 
   let curPrevId = null;
   let curEvent = null;
-  let curAttIdx = 0;
+
+  window.cgOpenPreview = async function(id, title) {
+    curPrevId = id;
+    curEvent = data.events[selDate].find(e => e.id === id && !e.deleted);
+    if (!curEvent) return;
+    if (!curEvent.attachments) curEvent.attachments = [];
+    document.getElementById('cg-prev-title').textContent = title;
+    document.getElementById('cg-ov-preview').classList.add('open');
+    renderFileList();
+  };
+
+  window.cgClosePreview = function() {
+    curPrevId = null;
+    curEvent = null;
+    ghUrlCache.forEach((val) => { if (val.startsWith('blob:')) URL.revokeObjectURL(val); });
+    ghUrlCache.clear();
+    document.getElementById('cg-ov-preview').classList.remove('open');
+    document.getElementById('cg-fm-list').innerHTML = '';
+  };
+
+  const ghUrlCache = new Map();
+
+  async function resolveGitHubUrl(url) {
+    if (!ghPat) return url;
+    if (!url.includes('githubusercontent.com') && !url.includes('api.github.com')) return url;
+    if (ghUrlCache.has(url)) return ghUrlCache.get(url);
+    try {
+      const res = await fetch(url, { headers: { 'Authorization': `token ${ghPat}` } });
+      if (res.ok) { const blob = await res.blob(); const bu = URL.createObjectURL(blob); ghUrlCache.set(url, bu); return bu; }
+    } catch(e) { console.warn("Direct fetch failed:", e); }
+    let owner = ghOwner, repo = ghRepo, path = '';
+    const m = url.match(/github(?:usercontent)?\.com\/([^\/]+)\/([^\/]+)\/(?:main|contents|blob\/main|master)\/(attachments\/[^\?]+)/);
+    if (m) { owner = m[1]; repo = m[2]; path = m[3]; }
+    else { const m2 = url.match(/(?:main|contents|master)\/(attachments\/[^\?]+)/); if (m2) path = m2[1]; }
+    if (!path) return url;
+    try {
+      const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=main`, {
+        headers: { 'Authorization': `token ${ghPat}`, 'Accept': 'application/vnd.github.v3+json', 'Cache-Control': 'no-cache' }
+      });
+      if (r.ok) { const d = await r.json(); const u = d.download_url || url; ghUrlCache.set(url, u); return u; }
+    } catch(e) {}
+    return url;
+  }
+
+  async function renderFileList() {
+    const list = document.getElementById('cg-fm-list');
+    if (!curEvent || curEvent.attachments.length === 0) {
+      list.innerHTML = '<div class="cg-fm-empty">添付ファイルはありません</div>';
+      return;
+    }
+    list.innerHTML = '<div style="color:#00f3ff;text-align:center;padding:1rem;font-size:0.8rem;">読み込み中...</div>';
+    const resolved = await Promise.all(curEvent.attachments.map(async (att, idx) => {
+      const resolvedUrl = await resolveGitHubUrl(att.url);
+      return { ...att, resolvedUrl, idx };
+    }));
+    if (!curEvent) return;
+    list.innerHTML = resolved.map(att => {
+      const isImg = att.type && att.type.startsWith('image/');
+      const isPdf = att.type === 'application/pdf';
+      const icon = isImg ? `<img src="${att.resolvedUrl}" alt="">` : isPdf ? '📄' : '📎';
+      const typeLabel = isPdf ? 'PDF' : isImg ? 'IMAGE' : 'FILE';
+      return `<div class="cg-fm-item">
+        <div class="cg-fm-icon">${icon}</div>
+        <div class="cg-fm-info"><div class="cg-fm-name">${esc(att.filename||'file')}</div><div class="cg-fm-type">${typeLabel}</div></div>
+        <div class="cg-fm-actions">
+          <button class="cg-fm-open" onclick="cgOpenFile(${att.idx})">開く ↗</button>
+          <button class="cg-fm-del" onclick="cgDeleteFile(${att.idx})">🗑</button>
+        </div></div>`;
+    }).join('');
+  }
+
+  window.cgOpenFile = async function(idx) {
+    if (!curEvent || !curEvent.attachments[idx]) return;
+    const url = await resolveGitHubUrl(curEvent.attachments[idx].url);
+    window.open(url, '_blank');
+  };
+
+  window.cgHandleUpload = async function(input) {
+    if (!input.files || !input.files.length || !curEvent) return;
+    const loading = document.getElementById('cg-prev-loading');
+    loading.style.display = '';
+    try {
+      for (const file of Array.from(input.files)) {
+        const att = await uploadToGitHub(file, selDate);
+        if (!curEvent.attachments) curEvent.attachments = [];
+        curEvent.attachments.push(att);
+      }
+      save(); debouncedPush(); renderFileList();
+      toast('アップロード成功', 'ok');
+    } catch(e) { toast(e.message, 'err'); }
+    finally { loading.style.display = 'none'; input.value = ''; }
+  };
+
+  window.cgDeleteFile = async function(idx) {
+    if (!curEvent || !curEvent.attachments[idx]) return;
+    if (!confirm('このファイルを削除しますか？')) return;
+    const loading = document.getElementById('cg-prev-loading');
+    loading.style.display = '';
+    try {
+      const att = curEvent.attachments[idx];
+      await deleteFromGitHub(att.sha, att.url);
+      curEvent.attachments.splice(idx, 1);
+      save(); debouncedPush(); renderFileList();
+      toast('削除しました', 'info');
+    } catch(e) { toast('削除失敗: ' + e.message, 'err'); }
+    finally { loading.style.display = 'none'; }
+  };
 
   window.cgOpenPreview = async function(id, title) {
     curPrevId = id;
