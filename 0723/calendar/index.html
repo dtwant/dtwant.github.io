@@ -230,7 +230,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "95"
+    "wordCount": "99"
   }]
   </script>
 
@@ -928,7 +928,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>95 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>99 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1331,7 +1331,6 @@
   }
   .cg-cell.cg-sun .cg-day-num { color: rgba(255,0,85,0.7); }
   .cg-cell.cg-sat .cg-day-num { color: rgba(0,243,255,0.7); }
-   
   .cg-cell.cg-holiday .cg-day-num { color: rgba(255,0,85,0.7); }
 
   .cg-day-num {
@@ -1341,7 +1340,6 @@
   }
   .cg-today .cg-day-num { color: #e2e8f0; font-weight: 700; }
 
-   
   .cg-hol-name {
     font-size: 0.55rem; color: #ff5588; background: rgba(255,0,85,0.08);
     padding: 1px 3px; border-radius: 2px; margin-bottom: 2px;
@@ -1349,7 +1347,6 @@
     flex-shrink: 0;
   }
 
-   
   .cg-att-badge {
     font-size: 0.55rem; font-weight: 700;
     padding: 1px 4px; border-radius: 2px;
@@ -1361,7 +1358,6 @@
   .cg-ab-absent  { background: rgba(239,68,68,0.15); color: #ef4444; }
   .cg-ab-holiday { background: rgba(100,116,139,0.12); color: #94a3b8; }
 
-   
   .cg-cell-events { flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 2px; }
   .cg-cell-ev {
     font-size: 0.6rem; padding: 2px 4px;
@@ -1377,7 +1373,6 @@
   .cg-cell-ev.c-orange { border-left-color: #f97316; }
   .cg-cell-more { font-size: 0.55rem; color: #555; padding: 1px 4px; }
 
-   
   .cg-cell-dots { display: none; }
   .cg-dot {
     width: 6px; height: 6px; border-radius: 50%; display: inline-block;
@@ -1537,50 +1532,118 @@
   .cg-co-class::after { content: '授業'; }
 
    
-  .cg-preview-modal { max-width: 520px; width: 92%; max-height: 88vh; display: flex; flex-direction: column; }
-  .cg-fm-list { flex: 1; overflow-y: auto; min-height: 80px; }
+  .cg-preview-modal { max-width: 540px; width: 92%; }
+
+   
+  .cg-fm-bar {
+    display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+    background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 5px; margin-bottom: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #64748b;
+  }
+  .cg-fm-bar-path { color: #00f3ff; flex: 1; }
+  .cg-fm-count { color: #555; }
+
+   
+  .cg-fm-list {
+    display: flex; flex-direction: column; gap: 4px;
+    max-height: 55vh; overflow-y: auto;
+    padding-right: 2px;
+  }
+  .cg-fm-list::-webkit-scrollbar { width: 4px; }
+  .cg-fm-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
+  .cg-fm-list::-webkit-scrollbar-thumb { background: rgba(0,243,255,0.2); border-radius: 2px; }
+
   .cg-fm-item {
-    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 6px; margin-bottom: 6px; transition: background 0.2s;
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+    background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 5px; transition: all 0.15s; cursor: default;
   }
-  .cg-fm-item:hover { background: rgba(0,243,255,0.04); }
-  .cg-fm-icon {
-    width: 44px; height: 44px; border-radius: 4px; background: #1a1a2e; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
-    overflow: hidden; border: 1px solid rgba(255,255,255,0.08);
+  .cg-fm-item:hover { background: rgba(0,243,255,0.05); border-color: rgba(0,243,255,0.2); }
+
+   
+  .cg-fm-thumb {
+    width: 48px; height: 48px; flex-shrink: 0;
+    border-radius: 4px; overflow: hidden;
+    background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; position: relative;
   }
-  .cg-fm-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .cg-fm-thumb img {
+    width: 100%; height: 100%; object-fit: cover;
+    display: block;
+  }
+  .cg-fm-thumb-loading {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.5rem; color: #00f3ff; font-family: 'JetBrains Mono', monospace;
+  }
+
+   
   .cg-fm-info { flex: 1; min-width: 0; }
-  .cg-fm-name { font-size: 0.8rem; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .cg-fm-type { font-size: 0.6rem; color: #64748b; font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
-  .cg-fm-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .cg-fm-name {
+    font-size: 0.82rem; color: #e2e8f0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-bottom: 3px;
+  }
+  .cg-fm-meta {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .cg-fm-type {
+    font-size: 0.58rem; color: #64748b;
+    font-family: 'JetBrains Mono', monospace;
+    background: rgba(255,255,255,0.04); padding: 1px 5px; border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+  .cg-fm-date { font-size: 0.58rem; color: #444; font-family: 'JetBrains Mono', monospace; }
+
+   
+  .cg-fm-actions { display: flex; gap: 5px; flex-shrink: 0; }
   .cg-fm-open {
-    background: rgba(0,243,255,0.1); border: 1px solid rgba(0,243,255,0.3); color: #00f3ff;
-    padding: 5px 10px; border-radius: 4px; cursor: pointer; font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem; transition: all 0.2s; white-space: nowrap;
+    background: rgba(0,243,255,0.08); border: 1px solid rgba(0,243,255,0.25);
+    color: #00f3ff; padding: 5px 12px; border-radius: 4px;
+    cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem; transition: all 0.2s; white-space: nowrap;
+    display: flex; align-items: center; gap: 4px;
   }
-  .cg-fm-open:hover { background: rgba(0,243,255,0.2); }
+  .cg-fm-open:hover { background: rgba(0,243,255,0.18); box-shadow: 0 0 10px rgba(0,243,255,0.2); }
   .cg-fm-del {
-    background: transparent; border: 1px solid rgba(239,68,68,0.3); color: #ef4444;
-    padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s;
+    background: transparent; border: 1px solid rgba(239,68,68,0.25);
+    color: #ef4444; padding: 5px 9px; border-radius: 4px;
+    cursor: pointer; font-size: 0.85rem; transition: all 0.2s;
+    line-height: 1; display: flex; align-items: center;
   }
-  .cg-fm-del:hover { background: rgba(239,68,68,0.1); }
-  .cg-fm-empty { text-align: center; color: #444; font-size: 0.85rem; padding: 2rem; }
+  .cg-fm-del:hover { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.5); }
+
+   
+  .cg-fm-empty {
+    text-align: center; color: #444; font-size: 0.85rem;
+    padding: 3rem 1rem;
+    display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+  }
+  .cg-fm-empty-icon { font-size: 2.5rem; opacity: 0.3; }
+  .cg-fm-empty-text { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #333; }
+
+   
   .cg-fm-upload {
-    display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px;
-    border: 2px dashed rgba(0,243,255,0.25); border-radius: 6px; cursor: pointer;
-    color: #00f3ff; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace;
-    transition: all 0.2s; margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 11px; margin-top: 8px;
+    border: 2px dashed rgba(0,243,255,0.2); border-radius: 5px;
+    cursor: pointer; color: #00f3ff; font-size: 0.78rem;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.2s; letter-spacing: 0.04em;
+    background: rgba(0,243,255,0.02);
   }
-  .cg-fm-upload:hover { background: rgba(0,243,255,0.05); border-color: rgba(0,243,255,0.5); }
+  .cg-fm-upload:hover { background: rgba(0,243,255,0.06); border-color: rgba(0,243,255,0.45); }
+  .cg-fm-upload-icon { font-size: 1rem; }
+
   .cg-btn-att {
     background: rgba(0,243,255,0.08); border: 1px solid rgba(0,243,255,0.3); color: #00f3ff;
     padding: 0.15rem 0.5rem; font-size: 0.65rem; border-radius: 3px; cursor: pointer; transition: all 0.2s;
     white-space: nowrap; font-family: 'JetBrains Mono', monospace;
   }
   .cg-btn-att:hover { background: rgba(0,243,255,0.2); box-shadow: 0 0 10px rgba(0,243,255,0.2); }
-
 
    
   .cg-ev-list { margin-top: 1rem; }
@@ -1640,6 +1703,7 @@
     .cg-cell-ev { font-size: 0.5rem; padding: 1px 3px; }
     .cg-hol-name { font-size: 0.5rem; }
     .cg-jump-months { grid-template-columns: repeat(4, 1fr); }
+    .cg-fm-thumb { width: 40px; height: 40px; }
   }
 
   @media (max-width: 480px) {
@@ -1654,7 +1718,6 @@
     .cg-month-label { font-size: 1rem; }
     .cg-month-sub { display: none; }
     .cg-wh-cell { font-size: 0.6rem; padding: 0.3rem 0; }
-
     .cg-cell { min-height: 52px; padding: 0.2rem; border-radius: 2px; }
     .cg-day-num { font-size: 0.65rem; }
     .cg-att-badge { font-size: 0; width: 100%; height: 3px; padding: 0; border-radius: 1px; margin-bottom: 2px; }
@@ -1663,21 +1726,21 @@
     .cg-ab-absent  { background: #ef4444; }
     .cg-ab-holiday { background: #94a3b8; }
     .cg-hol-name { font-size: 0; width: 100%; height: 2px; padding: 0; background: #ff5588; margin-bottom: 1px; border-radius: 1px; }
-
     .cg-cell-events { display: none !important; }
     .cg-cell-dots { display: flex !important; flex-wrap: wrap; gap: 1px; margin-top: 2px; }
     .cg-dot { width: 5px; height: 5px; }
-
     .cg-modal { padding: 1.25rem; border-radius: 6px; }
     .cg-att-row { grid-template-columns: repeat(2, 1fr); gap: 0.4rem; }
     .cg-ev-form { flex-direction: column; }
     .cg-btn-add { padding: 0.5rem; text-align: center; }
     .cg-jump-months { grid-template-columns: repeat(3, 1fr); }
     .cg-toast { bottom: 12px; left: 12px; right: 12px; text-align: center; }
-
     .cg-up-item { padding: 0.5rem 0.5rem; gap: 0.5rem; }
     .cg-up-date { min-width: 50px; }
     .cg-up-title { font-size: 0.8rem; }
+    .cg-fm-thumb { width: 36px; height: 36px; font-size: 1.2rem; }
+    .cg-fm-name { font-size: 0.75rem; }
+    .cg-fm-open { padding: 5px 8px; font-size: 0.62rem; }
   }
 
    
@@ -1692,11 +1755,10 @@
     display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05);
   }
   .cg-ac-item:hover, .cg-ac-item.cg-ac-active { background: rgba(0,243,255,0.1); }
-  
+
    
   .cg-legend-list { display: flex; flex-direction: column; gap: 12px; padding: 10px 0; }
   .cg-legend-item { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 0.95rem; }
-
 </style>
 
 <div class="cg-root">
@@ -1834,17 +1896,17 @@
 
 <div class="cg-overlay" id="cg-ov-legend">
   <div class="cg-modal">
-    <div class="cg-modal-content" style="max-width: 400px;">
-      <button class="cg-modal-close" onclick="cgCloseLegend()">×</button>
-      <div class="cg-modal-title"><span>❗</span> COLOR LEGEND</div>
-      <div class="cg-legend-list">
-        <div class="cg-legend-item"><span class="cg-dot d-cyan"></span> 水色は学校の予定</div>
-        <div class="cg-legend-item"><span class="cg-dot d-purple"></span> 紫色はバイトなど</div>
-        <div class="cg-legend-item"><span class="cg-dot d-pink"></span> 赤色は大事なこと</div>
-        <div class="cg-legend-item"><span class="cg-dot d-green"></span> 緑色は生き物関連</div>
-        <div class="cg-legend-item"><span class="cg-dot d-yellow"></span> 黄色はその他の予定色々</div>
-        <div class="cg-legend-item"><span class="cg-dot d-orange"></span> 橙色は自由</div>
-      </div>
+    <div class="cg-modal-title"><span>❗</span> COLOR LEGEND</div>
+    <div class="cg-legend-list">
+      <div class="cg-legend-item"><span class="cg-dot d-cyan" style="flex-shrink:0"></span> 水色は学校の予定</div>
+      <div class="cg-legend-item"><span class="cg-dot d-purple" style="flex-shrink:0"></span> 紫色はバイトなど</div>
+      <div class="cg-legend-item"><span class="cg-dot d-pink" style="flex-shrink:0"></span> 赤色は大事なこと</div>
+      <div class="cg-legend-item"><span class="cg-dot d-green" style="flex-shrink:0"></span> 緑色は生き物関連</div>
+      <div class="cg-legend-item"><span class="cg-dot d-yellow" style="flex-shrink:0"></span> 黄色はその他の予定色々</div>
+      <div class="cg-legend-item"><span class="cg-dot d-orange" style="flex-shrink:0"></span> 橙色は自由</div>
+    </div>
+    <div class="cg-modal-footer">
+      <button class="cg-btn" onclick="cgCloseLegend()">閉じる</button>
     </div>
   </div>
 </div>
@@ -1893,15 +1955,22 @@
 
 <div class="cg-overlay" id="cg-ov-preview">
   <div class="cg-modal cg-preview-modal">
-    <div class="cg-modal-title" style="margin-bottom:0.75rem;">
-      <span>📁</span> <span id="cg-prev-title">添付ファイル</span>
-      <div id="cg-prev-loading" style="display:none; font-size:0.7rem; color:#facc15; margin-left:auto;">[ 処理中... ]</div>
+    <div class="cg-modal-title" style="margin-bottom:0.5rem; flex-wrap:wrap; gap:6px;">
+      <span>📁</span>
+      <span id="cg-prev-title" style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></span>
+      <div id="cg-prev-loading" style="display:none; font-size:0.65rem; color:#facc15; font-family:'JetBrains Mono',monospace; white-space:nowrap;">[ UPLOADING... ]</div>
     </div>
-    <div id="cg-fm-list" class="cg-fm-list">
-      
+    
+    <div class="cg-fm-bar">
+      <span style="color:#555;">📂</span>
+      <span class="cg-fm-bar-path" id="cg-fm-path">attachments /</span>
+      <span class="cg-fm-count" id="cg-fm-count">0 files</span>
     </div>
-    <label class="cg-fm-upload" id="cg-fm-upload-zone">
-      ＋ ファイルを追加
+    
+    <div id="cg-fm-list" class="cg-fm-list"></div>
+    
+    <label class="cg-fm-upload">
+      <span class="cg-fm-upload-icon">＋</span> ファイルを追加（画像・PDF）
       <input type="file" accept="image/*,application/pdf" multiple style="display:none" onchange="cgHandleUpload(this)">
     </label>
     <div class="cg-modal-footer">
@@ -1924,35 +1993,27 @@
 
    
   function getNthDow(year, month, n, dow) {
-    
     let count = 0;
     for (let d = 1; d <= 31; d++) {
       const dt = new Date(year, month - 1, d);
       if (dt.getMonth() !== month - 1) break;
-      if (dt.getDay() === dow) {
-        count++;
-        if (count === n) return d;
-      }
+      if (dt.getDay() === dow) { count++; if (count === n) return d; }
     }
     return null;
   }
-
-  
   function getVernalEquinox(y) {
     if (y <= 2024) return 20;
     if (y <= 2055) return Math.floor(20.8431 + 0.242194 * (y - 1980) - Math.floor((y - 1980) / 4));
-    return 20; 
+    return 20;
   }
   function getAutumnalEquinox(y) {
     if (y <= 2024) return 23;
     if (y <= 2055) return Math.floor(23.2488 + 0.242194 * (y - 1980) - Math.floor((y - 1980) / 4));
     return 23;
   }
-
   function getHolidays(year) {
     const h = {};
-    const add = (m, d, name) => { h[`${year}-${pad(m)}-${pad(d)}`] = name; };
-
+    const add = (m, d, name) => { if (d) h[`${year}-${pad(m)}-${pad(d)}`] = name; };
     add(1, 1, '元日');
     add(1, getNthDow(year, 1, 2, 1), '成人の日');
     add(2, 11, '建国記念の日');
@@ -1969,27 +2030,18 @@
     add(10, getNthDow(year, 10, 2, 1), 'スポーツの日');
     add(11, 3, '文化の日');
     add(11, 23, '勤労感謝の日');
-
     
-    const keys = Object.keys(h);
-    keys.forEach(dateStr => {
+    Object.keys(h).forEach(dateStr => {
       const dt = new Date(dateStr + 'T00:00:00');
-      if (dt.getDay() === 0) { 
-        let nextDay = new Date(dt);
-        nextDay.setDate(nextDay.getDate() + 1);
-        let ns = ymd(nextDay.getFullYear(), nextDay.getMonth(), nextDay.getDate());
-        while (h[ns]) { 
-          nextDay.setDate(nextDay.getDate() + 1);
-          ns = ymd(nextDay.getFullYear(), nextDay.getMonth(), nextDay.getDate());
-        }
+      if (dt.getDay() === 0) {
+        let next = new Date(dt); next.setDate(next.getDate() + 1);
+        let ns = ymd(next.getFullYear(), next.getMonth(), next.getDate());
+        while (h[ns]) { next.setDate(next.getDate() + 1); ns = ymd(next.getFullYear(), next.getMonth(), next.getDate()); }
         h[ns] = '振替休日';
       }
     });
-
     return h;
   }
-
-  
   const holidayCache = {};
   function getHolidayName(dateStr) {
     const y = parseInt(dateStr.slice(0, 4));
@@ -2002,18 +2054,24 @@
   const ymd = (y,m,d) => `${y}-${pad(m+1)}-${pad(d)}`;
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-
   const todayJST = () => {
     const d = new Date(new Date().toLocaleString('sv', { timeZone: 'Asia/Tokyo' }));
     return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
   };
+  function fmtUploadedAt(iso) {
+    if (!iso) return '';
+    try {
+      const d = new Date(iso);
+      return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}`;
+    } catch(e) { return ''; }
+  }
 
    
-  let viewYear, viewMonth; 
+  let viewYear, viewMonth;
   let selDate = '';
   let selColor = 'cyan';
   let blobId = null;
-  let statMode = 'all'; 
+  let statMode = 'all';
   let data = { attendance: {}, attendance_ts: {}, events: {} };
 
   const JB_KEY_DEFAULT = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
@@ -2031,29 +2089,26 @@
     viewYear = d.getFullYear();
     viewMonth = d.getMonth();
 
-    try {
-      const raw = localStorage.getItem(ST_KEY);
-      if (raw) data = JSON.parse(raw);
-    } catch(e) {}
-    if (!data.attendance) data.attendance = {};
+    try { const raw = localStorage.getItem(ST_KEY); if (raw) data = JSON.parse(raw); } catch(e) {}
+    if (!data.attendance)    data.attendance = {};
     if (!data.attendance_ts) data.attendance_ts = {};
-    if (!data.events) data.events = {};
+    if (!data.events)        data.events = {};
 
     blobId = SC_BLOB || localStorage.getItem(BLOB_KEY) || null;
     if (blobId) try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
 
     
-    const CLEANUP_THRESHOLD = 30 * 24 * 60 * 60 * 1000; 
+    const CLEANUP_MS = 30 * 24 * 60 * 60 * 1000;
     const now = Date.now();
     let cleaned = false;
     Object.keys(data.events).forEach(dateKey => {
       const before = data.events[dateKey].length;
       data.events[dateKey] = data.events[dateKey].filter(e => {
-        if (e.deleted && e.addedAt && (now - e.addedAt) > CLEANUP_THRESHOLD) return false;
+        if (e.deleted && e.addedAt && (now - e.addedAt) > CLEANUP_MS) return false;
         return true;
       });
       if (data.events[dateKey].length === 0) delete data.events[dateKey];
-      if (data.events[dateKey] && data.events[dateKey].length !== before) cleaned = true;
+      else if (data.events[dateKey].length !== before) cleaned = true;
     });
     if (cleaned) save();
 
@@ -2075,66 +2130,51 @@
     document.getElementById('cg-month-label').textContent = `${y}.${pad(m+1)}`;
     document.getElementById('cg-month-sub').textContent = MONTH_JP[m];
 
-    const firstDow = new Date(y, m, 1).getDay();
+    const firstDow    = new Date(y, m, 1).getDay();
     const daysInMonth = new Date(y, m+1, 0).getDate();
-    const prevDays = new Date(y, m, 0).getDate();
-    const todayStr = todayJST();
+    const prevDays    = new Date(y, m, 0).getDate();
+    const todayStr    = todayJST();
 
     grid.innerHTML = '';
-    const totalCells = Math.ceil((firstDow + daysInMonth)/7)*7;
+    const totalCells = Math.ceil((firstDow + daysInMonth) / 7) * 7;
 
     for (let i = 0; i < totalCells; i++) {
       const cell = document.createElement('div');
       cell.className = 'cg-cell';
       const dow = i % 7;
-
       let dayNum, dateStr, isOther = false;
 
       if (i < firstDow) {
         dayNum = prevDays - firstDow + i + 1;
-        const pm = m === 0 ? 11 : m-1;
-        const py = m === 0 ? y-1 : y;
-        dateStr = ymd(py, pm, dayNum);
-        isOther = true;
+        const pm = m === 0 ? 11 : m-1, py = m === 0 ? y-1 : y;
+        dateStr = ymd(py, pm, dayNum); isOther = true;
       } else if (i - firstDow >= daysInMonth) {
         dayNum = i - firstDow - daysInMonth + 1;
-        const nm = m === 11 ? 0 : m+1;
-        const ny = m === 11 ? y+1 : y;
-        dateStr = ymd(ny, nm, dayNum);
-        isOther = true;
+        const nm = m === 11 ? 0 : m+1, ny = m === 11 ? y+1 : y;
+        dateStr = ymd(ny, nm, dayNum); isOther = true;
       } else {
         dayNum = i - firstDow + 1;
         dateStr = ymd(y, m, dayNum);
       }
 
-      if (isOther) cell.classList.add('cg-other');
+      if (isOther)          cell.classList.add('cg-other');
       if (dateStr === todayStr) cell.classList.add('cg-today');
-      if (dow === 0) cell.classList.add('cg-sun');
-      if (dow === 6) cell.classList.add('cg-sat');
+      if (dow === 0)        cell.classList.add('cg-sun');
+      if (dow === 6)        cell.classList.add('cg-sat');
 
-      
       const holName = getHolidayName(dateStr);
       if (holName && !isOther) cell.classList.add('cg-holiday');
 
       let html = `<span class="cg-day-num">${dayNum}</span>`;
+      if (holName && !isOther) html += `<span class="cg-hol-name">${holName}</span>`;
 
-      
-      if (holName && !isOther) {
-        html += `<span class="cg-hol-name">${holName}</span>`;
-      }
-
-      
       const att = data.attendance[dateStr];
-      if (att && ATT_LABELS[att]) {
-        html += `<span class="cg-att-badge cg-ab-${att}">${ATT_LABELS[att]}</span>`;
-      }
+      if (att && ATT_LABELS[att]) html += `<span class="cg-att-badge cg-ab-${att}">${ATT_LABELS[att]}</span>`;
 
-      
       const evts = (data.events[dateStr] || []).filter(e => !e.deleted).sort((a,b) => (a.time||'').localeCompare(b.time||''));
       if (evts.length > 0) {
         html += `<div class="cg-cell-events">`;
-        const show = evts.slice(0, 3);
-        show.forEach(e => {
+        evts.slice(0, 3).forEach(e => {
           const t = e.time ? `${e.time} ` : '';
           html += `<div class="cg-cell-ev c-${e.color||'cyan'}">${t}${esc(e.title)}</div>`;
         });
@@ -2142,7 +2182,6 @@
         html += `</div>`;
       }
 
-      
       const dotEvts = evts.filter(e => e.color !== 'class');
       if (dotEvts.length > 0 || (holName && !isOther)) {
         html += `<div class="cg-cell-dots">`;
@@ -2152,10 +2191,7 @@
       }
 
       cell.innerHTML = html;
-      if (!isOther) {
-        const ds = dateStr;
-        cell.addEventListener('click', () => openDay(ds));
-      }
+      if (!isOther) { const ds = dateStr; cell.addEventListener('click', () => openDay(ds)); }
       grid.appendChild(cell);
     }
   }
@@ -2163,20 +2199,16 @@
   function renderStats() {
     let pres = 0, late = 0, abs = 0, total = 0;
     const prefix = statMode === 'month' ? `${viewYear}-${pad(viewMonth+1)}-` : null;
-
     Object.entries(data.attendance).forEach(([key, v]) => {
       if (prefix && !key.startsWith(prefix)) return;
       if (v === 'present') { pres++; total++; }
       else if (v === 'late') { late++; total++; }
       else if (v === 'absent') { abs++; total++; }
     });
-
     document.getElementById('cg-s-pres').textContent = pres;
     document.getElementById('cg-s-late').textContent = late;
     document.getElementById('cg-s-absent').textContent = abs;
-
-    let rate = 0;
-    if (total > 0) rate = ((pres + late) / total) * 100;
+    let rate = total > 0 ? ((pres + late) / total) * 100 : 0;
     document.getElementById('cg-s-rate').textContent = total > 0 ? rate.toFixed(1)+'%' : '--%';
     document.getElementById('cg-rate-bar').style.width = rate + '%';
   }
@@ -2193,54 +2225,29 @@
     const list = document.getElementById('cg-upcoming-list');
     const todayStr = todayJST();
     const todayObj = new Date(todayStr + 'T00:00:00');
-
-    
     const items = [];
+
     for (let i = 0; i < 30; i++) {
-      const d = new Date(todayObj);
-      d.setDate(d.getDate() + i);
+      const d = new Date(todayObj); d.setDate(d.getDate() + i);
       const ds = ymd(d.getFullYear(), d.getMonth(), d.getDate());
-      const dow = d.getDay();
-
-      
       const hol = getHolidayName(ds);
-      if (hol) {
-        items.push({ date: ds, title: hol, color: 'hol', time: '', isHol: true, dayObj: new Date(d) });
-      }
-
-      
-      const evts = (data.events[ds] || []).filter(e => !e.deleted);
-      evts.forEach(e => {
-        if (e.color !== 'class') {
-          items.push({ date: ds, title: e.title, color: e.color || 'cyan', time: e.time || '', isHol: false, dayObj: new Date(d) });
-        }
+      if (hol) items.push({ date: ds, title: hol, color: 'hol', time: '', isHol: true, dayObj: new Date(d) });
+      (data.events[ds] || []).filter(e => !e.deleted && e.color !== 'class').forEach(e => {
+        items.push({ date: ds, title: e.title, color: e.color || 'cyan', time: e.time || '', isHol: false, dayObj: new Date(d) });
       });
     }
 
-    
-    items.sort((a,b) => {
-      if (a.date !== b.date) return a.date.localeCompare(b.date);
-      return (a.time||'').localeCompare(b.time||'');
-    });
-
+    items.sort((a,b) => a.date !== b.date ? a.date.localeCompare(b.date) : (a.time||'').localeCompare(b.time||''));
     const show = items.slice(0, 10);
 
-    if (show.length === 0) {
-      list.innerHTML = '<div class="cg-up-empty">今後30日間の予定はありません</div>';
-      return;
-    }
+    if (show.length === 0) { list.innerHTML = '<div class="cg-up-empty">今後30日間の予定はありません</div>'; return; }
 
     list.innerHTML = show.map(item => {
-      const [iy, im, id] = item.date.split('-').map(Number);
+      const [, im, id] = item.date.split('-').map(Number);
       const dow = item.dayObj.getDay();
       const diff = Math.round((item.dayObj - todayObj) / (1000*60*60*24));
-      let daysLabel = '';
-      let daysClass = '';
-      if (diff === 0) { daysLabel = 'TODAY'; daysClass = 'today-ev'; }
-      else if (diff === 1) { daysLabel = '明日'; daysClass = 'soon'; }
-      else if (diff <= 3) { daysLabel = `${diff}日後`; daysClass = 'soon'; }
-      else { daysLabel = `${diff}日後`; }
-
+      let daysLabel = diff === 0 ? 'TODAY' : diff === 1 ? '明日' : `${diff}日後`;
+      let daysClass = diff === 0 ? 'today-ev' : diff <= 3 ? 'soon' : '';
       return `
         <div class="cg-up-item c-${item.color}" onclick="cgJumpToDate('${item.date}')">
           <div class="cg-up-date">
@@ -2252,31 +2259,27 @@
             ${item.time ? `<div class="cg-up-time">${item.time}</div>` : ''}
           </div>
           <div class="cg-up-days ${daysClass}">${daysLabel}</div>
-        </div>
-      `;
+        </div>`;
     }).join('');
   }
 
   window.cgJumpToDate = function(ds) {
     const [y, m] = ds.split('-').map(Number);
-    viewYear = y;
-    viewMonth = m - 1;
+    viewYear = y; viewMonth = m - 1;
     renderAll();
-    
     document.querySelector('.cg-root').scrollTo({ top: 0, behavior: 'smooth' });
   };
 
    
   window.cgNavMonth = function(d) {
     viewMonth += d;
-    if (viewMonth < 0) { viewMonth = 11; viewYear--; }
-    if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    if (viewMonth < 0)  { viewMonth = 11; viewYear--; }
+    if (viewMonth > 11) { viewMonth = 0;  viewYear++; }
     renderAll();
   };
   window.cgToday = function() {
     const d = new Date(new Date().toLocaleString('sv', { timeZone: 'Asia/Tokyo' }));
-    viewYear = d.getFullYear();
-    viewMonth = d.getMonth();
+    viewYear = d.getFullYear(); viewMonth = d.getMonth();
     renderAll();
   };
 
@@ -2284,42 +2287,26 @@
   let jumpYear = null;
   window.cgToggleJump = function() {
     const panel = document.getElementById('cg-jump-panel');
-    if (panel.classList.contains('open')) {
-      panel.classList.remove('open');
-      return;
-    }
-    jumpYear = viewYear;
-    renderJumpPanel();
-    panel.classList.add('open');
+    if (panel.classList.contains('open')) { panel.classList.remove('open'); return; }
+    jumpYear = viewYear; renderJumpPanel(); panel.classList.add('open');
   };
-
   function renderJumpPanel() {
-    const yearRow = document.getElementById('cg-jump-year');
-    const monthRow = document.getElementById('cg-jump-months');
     const now = new Date();
-
-    yearRow.innerHTML = '';
+    let yr = '';
     for (let y = now.getFullYear() - 2; y <= now.getFullYear() + 2; y++) {
-      const sel = y === jumpYear ? 'sel' : '';
-      yearRow.innerHTML += `<button class="cg-jump-year-btn ${sel}" onclick="cgSetJumpYear(${y})">${y}</button>`;
+      yr += `<button class="cg-jump-year-btn ${y === jumpYear ? 'sel' : ''}" onclick="cgSetJumpYear(${y})">${y}</button>`;
     }
-
-    monthRow.innerHTML = '';
+    document.getElementById('cg-jump-year').innerHTML = yr;
+    let mr = '';
     for (let m = 0; m < 12; m++) {
-      const isCur = (jumpYear === viewYear && m === viewMonth) ? 'cur' : '';
-      const isSel = (jumpYear === viewYear && m === viewMonth) ? 'sel' : '';
-      monthRow.innerHTML += `<button class="cg-jump-m ${isSel}" onclick="cgJumpTo(${jumpYear},${m})">${MONTH_JP[m]}</button>`;
+      const isSel = jumpYear === viewYear && m === viewMonth;
+      mr += `<button class="cg-jump-m ${isSel ? 'sel' : ''}" onclick="cgJumpTo(${jumpYear},${m})">${MONTH_JP[m]}</button>`;
     }
+    document.getElementById('cg-jump-months').innerHTML = mr;
   }
-
-  window.cgSetJumpYear = function(y) {
-    jumpYear = y;
-    renderJumpPanel();
-  };
-
+  window.cgSetJumpYear = function(y) { jumpYear = y; renderJumpPanel(); };
   window.cgJumpTo = function(y, m) {
-    viewYear = y;
-    viewMonth = m;
+    viewYear = y; viewMonth = m;
     document.getElementById('cg-jump-panel').classList.remove('open');
     renderAll();
   };
@@ -2332,21 +2319,15 @@
     document.getElementById('cg-modal-day-title').textContent = `${y}年${m}月${d}日`;
     document.getElementById('cg-modal-day-badge').textContent = `(${DAY_JP[dow]})`;
 
-    
     const holBadge = document.getElementById('cg-modal-hol-badge');
     const hol = getHolidayName(ds);
     if (hol) { holBadge.textContent = '🎌 ' + hol; holBadge.style.display = ''; }
     else { holBadge.style.display = 'none'; }
 
-    
     document.querySelectorAll('.cg-att-opt').forEach(b => b.classList.remove('on'));
     const att = data.attendance[ds];
-    if (att) {
-      const el = document.querySelector(`.cg-att-opt[data-v="${att}"]`);
-      if (el) el.classList.add('on');
-    }
+    if (att) { const el = document.querySelector(`.cg-att-opt[data-v="${att}"]`); if (el) el.classList.add('on'); }
 
-    
     document.getElementById('cg-ev-title').value = '';
     document.getElementById('cg-ev-time').value = '';
     selColor = 'cyan';
@@ -2356,7 +2337,6 @@
     renderDayEvents();
     document.getElementById('cg-ov-day').classList.add('open');
   }
-
   window.cgCloseDay = function() {
     document.getElementById('cg-ov-day').classList.remove('open');
     renderAll();
@@ -2368,12 +2348,12 @@
         const v = this.dataset.v;
         const wasOn = this.classList.contains('on');
         document.querySelectorAll('.cg-att-opt').forEach(b => b.classList.remove('on'));
-        if (wasOn) { 
-          delete data.attendance[selDate]; 
-          if(data.attendance_ts) delete data.attendance_ts[selDate];
-        } else { 
-          this.classList.add('on'); 
-          data.attendance[selDate] = v; 
+        if (wasOn) {
+          delete data.attendance[selDate];
+          if (data.attendance_ts) delete data.attendance_ts[selDate];
+        } else {
+          this.classList.add('on');
+          data.attendance[selDate] = v;
           if (!data.attendance_ts) data.attendance_ts = {};
           data.attendance_ts[selDate] = Date.now();
         }
@@ -2386,8 +2366,7 @@
     document.querySelectorAll('.cg-color-opt').forEach(btn => {
       btn.addEventListener('click', function() {
         document.querySelectorAll('.cg-color-opt').forEach(b => b.classList.remove('sel'));
-        this.classList.add('sel');
-        selColor = this.dataset.c;
+        this.classList.add('sel'); selColor = this.dataset.c;
       });
     });
   }
@@ -2408,12 +2387,12 @@
     if (e.key === 'Enter') { e.preventDefault(); cgAddEvent(); }
   });
 
-  
-  window.cgOpenLegend = function() { document.getElementById('cg-ov-legend').classList.add('open'); };
+   
+  window.cgOpenLegend  = function() { document.getElementById('cg-ov-legend').classList.add('open'); };
   window.cgCloseLegend = function() { document.getElementById('cg-ov-legend').classList.remove('open'); };
 
-  
-  const evTitleInput = document.getElementById('cg-ev-title');
+   
+  const evTitleInput   = document.getElementById('cg-ev-title');
   const evAutocomplete = document.getElementById('cg-ev-autocomplete');
   let acSelectedIdx = -1;
 
@@ -2423,9 +2402,8 @@
       Object.values(data.events).forEach(dayEvts => {
         dayEvts.forEach(e => {
           if (!e.deleted && e.title) {
-            if (!past[e.title] || e.addedAt > (past[e.title].addedAt || 0)) {
+            if (!past[e.title] || e.addedAt > (past[e.title].addedAt || 0))
               past[e.title] = { color: e.color, addedAt: e.addedAt || 0 };
-            }
           }
         });
       });
@@ -2438,103 +2416,72 @@
     const past = getPastEvents();
     const matches = val ? past.filter(p => p.title.toLowerCase().includes(val)).slice(0, 10) : past.slice(0, 10);
     acSelectedIdx = -1;
-    
-    if (matches.length === 0) {
-      evAutocomplete.style.display = 'none';
-      return;
-    }
-
-    evAutocomplete.innerHTML = matches.map((m, i) => {
-      const safeTitle = m.title.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-      return `<div class="cg-ac-item" data-ac-idx="${i}" data-ac-title="${safeTitle}" data-ac-color="${m.color}">
+    if (matches.length === 0) { evAutocomplete.style.display = 'none'; return; }
+    evAutocomplete.innerHTML = matches.map((m, i) => `
+      <div class="cg-ac-item" data-ac-idx="${i}" data-ac-title="${esc(m.title)}" data-ac-color="${m.color}">
         <span class="cg-dot d-${m.color}"></span> ${esc(m.title)}
-      </div>`;
-    }).join('');
-
+      </div>`).join('');
     evAutocomplete.querySelectorAll('.cg-ac-item').forEach(item => {
       item.addEventListener('mousedown', function(e) {
-        e.preventDefault();
-        selectAcItem(this.dataset.acTitle, this.dataset.acColor);
+        e.preventDefault(); selectAcItem(this.dataset.acTitle, this.dataset.acColor);
       });
     });
-
     evAutocomplete.style.display = 'block';
   }
 
   function selectAcItem(title, color) {
     evTitleInput.value = title;
     const opt = document.querySelector(`.cg-color-opt[data-c="${color}"]`);
-    if (opt) {
-      document.querySelectorAll('.cg-color-opt').forEach(b => b.classList.remove('sel'));
-      opt.classList.add('sel');
-      selColor = color;
-    }
+    if (opt) { document.querySelectorAll('.cg-color-opt').forEach(b => b.classList.remove('sel')); opt.classList.add('sel'); selColor = color; }
     evAutocomplete.style.display = 'none';
   }
 
   evTitleInput.addEventListener('input', showAutocomplete);
   evTitleInput.addEventListener('focus', showAutocomplete);
   evTitleInput.addEventListener('blur', () => { setTimeout(() => evAutocomplete.style.display = 'none', 200); });
-
-  
   evTitleInput.addEventListener('keydown', function(e) {
     const items = evAutocomplete.querySelectorAll('.cg-ac-item');
     if (!items.length || evAutocomplete.style.display === 'none') return;
-
     if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      acSelectedIdx = Math.min(acSelectedIdx + 1, items.length - 1);
+      e.preventDefault(); acSelectedIdx = Math.min(acSelectedIdx + 1, items.length - 1);
       items.forEach((it, i) => it.classList.toggle('cg-ac-active', i === acSelectedIdx));
       items[acSelectedIdx].scrollIntoView({ block: 'nearest' });
     } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      acSelectedIdx = Math.max(acSelectedIdx - 1, 0);
+      e.preventDefault(); acSelectedIdx = Math.max(acSelectedIdx - 1, 0);
       items.forEach((it, i) => it.classList.toggle('cg-ac-active', i === acSelectedIdx));
       items[acSelectedIdx].scrollIntoView({ block: 'nearest' });
     } else if (e.key === 'Enter' && acSelectedIdx >= 0) {
       e.preventDefault();
-      const sel = items[acSelectedIdx];
-      selectAcItem(sel.dataset.acTitle, sel.dataset.acColor);
-      return; 
+      const sel = items[acSelectedIdx]; selectAcItem(sel.dataset.acTitle, sel.dataset.acColor);
     }
   });
 
-  
-
+   
   window.cgDelEvent = function(id) {
     if (!data.events[selDate]) return;
     const evt = data.events[selDate].find(e => e.id === id);
-    if (evt) {
-      evt.deleted = true;
-      evt.addedAt = Date.now();
-    }
+    if (evt) { evt.deleted = true; evt.addedAt = Date.now(); }
     save(); debouncedPush(); renderDayEvents();
   };
 
   function renderDayEvents() {
     const list = document.getElementById('cg-ev-list');
     const evts = (data.events[selDate] || []).filter(e => !e.deleted).sort((a,b) => (a.time||'').localeCompare(b.time||''));
-    if (evts.length === 0) {
-      list.innerHTML = '<div class="cg-ev-empty">予定はありません</div>';
-      return;
-    }
+    if (evts.length === 0) { list.innerHTML = '<div class="cg-ev-empty">予定はありません</div>'; return; }
     list.innerHTML = evts.map(e => `
       <div class="cg-ev-item c-${e.color||'cyan'}">
         <span class="cg-ev-time">${e.time || '--:--'}</span>
         <span class="cg-ev-title">${esc(e.title)}</span>
-        ${e.color === 'class' ? `<button class="cg-btn-att" onclick="cgOpenPreview('${e.id}', '${esc(e.title)}')">📎 添付を開く</button>` : ''}
+        ${e.color === 'class' ? `<button class="cg-btn-att" onclick="cgOpenPreview('${e.id}', '${esc(e.title)}')">📎 添付</button>` : ''}
         <button class="cg-ev-del" onclick="cgDelEvent('${e.id}')">&times;</button>
-      </div>
-    `).join('');
+      </div>`).join('');
   }
 
    
   document.addEventListener('keydown', e => {
-    
     if (document.querySelector('.cg-overlay.open')) return;
     if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
-
-    if (e.key === 'ArrowLeft') { e.preventDefault(); cgNavMonth(-1); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); cgNavMonth(-1); }
     else if (e.key === 'ArrowRight') { e.preventDefault(); cgNavMonth(1); }
     else if (e.key === 't' || e.key === 'T') { e.preventDefault(); cgToday(); }
   });
@@ -2556,29 +2503,17 @@
 
   function mergeData(local, remote) {
     const merged = { attendance: {}, attendance_ts: {}, events: {} };
-    
-    
     const allAttDates = new Set([...Object.keys(local.attendance||{}), ...Object.keys(remote.attendance||{})]);
     allAttDates.forEach(d => {
-      const lt = local.attendance_ts?.[d] || 0;
-      const rt = remote.attendance_ts?.[d] || 0;
-      if (lt >= rt && local.attendance[d]) {
-        merged.attendance[d] = local.attendance[d];
-        merged.attendance_ts[d] = lt;
-      } else if (remote.attendance[d]) {
-        merged.attendance[d] = remote.attendance[d];
-        merged.attendance_ts[d] = rt;
-      }
+      const lt = local.attendance_ts?.[d] || 0, rt = remote.attendance_ts?.[d] || 0;
+      if (lt >= rt && local.attendance[d]) { merged.attendance[d] = local.attendance[d]; merged.attendance_ts[d] = lt; }
+      else if (remote.attendance[d]) { merged.attendance[d] = remote.attendance[d]; merged.attendance_ts[d] = rt; }
     });
-
     const allDates = new Set([...Object.keys(local.events||{}), ...Object.keys(remote.events||{})]);
     allDates.forEach(d => {
-      const le = (local.events||{})[d] || [];
-      const re = (remote.events||{})[d] || [];
+      const le = (local.events||{})[d] || [], re = (remote.events||{})[d] || [];
       const byId = {};
-      [...re, ...le].forEach(e => {
-        if (!byId[e.id] || (e.addedAt||0) > (byId[e.id].addedAt||0)) byId[e.id] = e;
-      });
+      [...re, ...le].forEach(e => { if (!byId[e.id] || (e.addedAt||0) > (byId[e.id].addedAt||0)) byId[e.id] = e; });
       const arr = Object.values(byId);
       if (arr.length > 0) merged.events[d] = arr;
     });
@@ -2590,8 +2525,7 @@
     try {
       if (!blobId) {
         const res = await fetch(JB_CREATE, {
-          method: 'POST', headers: { ...JB_HDR(), 'X-Bin-Name': 'chrono_grid' },
-          body: JSON.stringify(data)
+          method: 'POST', headers: { ...JB_HDR(), 'X-Bin-Name': 'chrono_grid' }, body: JSON.stringify(data)
         });
         if (!res.ok) throw new Error(`create: ${res.status}`);
         const json = await res.json();
@@ -2602,32 +2536,21 @@
       } else {
         const r = await fetch(binUrl(), { headers: { 'X-Master-Key': jbKey }, cache: 'no-store' });
         if (!r.ok) {
-          if ([400,401,403,404,422].includes(r.status)) {
-            blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
-            if (!silent) toast('無効なBin。新規作成します…', 'info');
-            return cgSync(silent);
-          }
+          if ([400,401,403,404,422].includes(r.status)) { blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {} if (!silent) toast('無効なBin。新規作成します…', 'info'); return cgSync(silent); }
           throw new Error(`get: ${r.status}`);
         }
         const json = await r.json();
-        const rec = json.record || json;
-        data = mergeData(data, rec);
+        data = mergeData(data, json.record || json);
         save(); renderAll();
         const p = await fetch(binPut(), { method: 'PUT', headers: JB_HDR(), body: JSON.stringify(data) });
         if (!p.ok) {
-          if ([400,401,403,404,422].includes(p.status)) {
-            blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
-            return cgSync(silent);
-          }
+          if ([400,401,403,404,422].includes(p.status)) { blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {} return cgSync(silent); }
           throw new Error(`put: ${p.status}`);
         }
         setSS('ok', '◉ SYNCED');
         if (!silent) toast('同期完了', 'ok');
       }
-    } catch(err) {
-      setSS('err', '✕ ERR');
-      if (!silent) toast('同期失敗: ' + err.message, 'err');
-    }
+    } catch(err) { setSS('err', '✕ ERR'); if (!silent) toast('同期失敗: ' + err.message, 'err'); }
   };
 
   async function pushBlob() {
@@ -2635,20 +2558,12 @@
     try {
       const p = await fetch(binPut(), { method: 'PUT', headers: JB_HDR(), body: JSON.stringify(data) });
       if (p.ok) setSS('ok', '◉ SYNCED');
-      else {
-        if ([400,401,403,404,422].includes(p.status)) {
-          blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
-        }
-        setSS('err', '✕ ERR');
-      }
+      else { if ([400,401,403,404,422].includes(p.status)) { blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {} } setSS('err', '✕ ERR'); }
     } catch(e) { setSS('err', '✕ ERR'); }
   }
 
   let pushTimer = null;
-  function debouncedPush() {
-    clearTimeout(pushTimer);
-    pushTimer = setTimeout(() => pushBlob(), 500);
-  }
+  function debouncedPush() { clearTimeout(pushTimer); pushTimer = setTimeout(() => pushBlob(), 500); }
 
    
   window.cgOpenSettings = function() {
@@ -2660,7 +2575,6 @@
     document.getElementById('cg-ov-settings').classList.add('open');
   };
   window.cgCloseSettings = function() { document.getElementById('cg-ov-settings').classList.remove('open'); };
-
   window.cgApplySettings = function() {
     const v = document.getElementById('cg-blob-input').value.trim();
     if (v !== (blobId||'')) {
@@ -2668,7 +2582,6 @@
       if (blobId) try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
       else try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
     }
-    
     jbKey = document.getElementById('cg-jbkey-input').value.trim() || JB_KEY_DEFAULT;
     localStorage.setItem('cg_jb_key', jbKey);
     ghPat = document.getElementById('cg-gh-pat').value.trim();
@@ -2677,53 +2590,44 @@
     localStorage.setItem('cg_gh_owner', ghOwner);
     ghRepo = document.getElementById('cg-gh-repo').value.trim() || 'dtwant.github.io';
     localStorage.setItem('cg_gh_repo', ghRepo);
-
     toast('設定を適用しました', 'ok');
     if (blobId) cgSync(false);
     cgCloseSettings();
   };
-
   window.cgExport = function() {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = 'chrono_grid_backup.json'; a.click();
     toast('エクスポート完了', 'ok');
   };
-
   window.cgImport = function(input) {
     const file = input.files[0]; if (!file) return;
     const reader = new FileReader();
     reader.onload = e => {
       try {
         const imported = JSON.parse(e.target.result);
-        if (typeof imported !== 'object' || (!imported.attendance && !imported.events)) {
-          throw new Error('Invalid format');
-        }
-        data = mergeData(data, imported);
-        save(); renderAll(); debouncedPush();
+        if (typeof imported !== 'object' || (!imported.attendance && !imported.events)) throw new Error('Invalid format');
+        data = mergeData(data, imported); save(); renderAll(); debouncedPush();
         toast('インポート完了', 'ok');
       } catch(ex) { toast('インポート失敗', 'err'); }
     };
     reader.readAsText(file); input.value = '';
   };
-
   window.cgClearAll = function() {
     if (!confirm('全データを削除しますか？この操作は取り消せません。')) return;
     data = { attendance: {}, attendance_ts: {}, events: {} };
     save(); renderAll(); debouncedPush();
-    toast('全データを削除しました', 'info');
-    cgCloseSettings();
+    toast('全データを削除しました', 'info'); cgCloseSettings();
   };
 
    
   ['cg-ov-day','cg-ov-settings','cg-ov-preview','cg-ov-legend'].forEach(id => {
     document.getElementById(id).addEventListener('click', function(e) {
-      if (e.target === this) {
-        if (id === 'cg-ov-day') cgCloseDay();
-        else if (id === 'cg-ov-preview') cgClosePreview();
-        else if (id === 'cg-ov-legend') cgCloseLegend();
-        else this.classList.remove('open');
-      }
+      if (e.target !== this) return;
+      if (id === 'cg-ov-day') cgCloseDay();
+      else if (id === 'cg-ov-preview') cgClosePreview();
+      else if (id === 'cg-ov-legend') cgCloseLegend();
+      else this.classList.remove('open');
     });
   });
   document.addEventListener('keydown', e => {
@@ -2740,16 +2644,12 @@
    
   async function uploadToGitHub(file, dateStr) {
     if (!ghPat) throw new Error('CONFIG画面で GitHub PAT を設定してください。');
-    
-    
     const base64 = await new Promise((res, rej) => {
       const reader = new FileReader();
       reader.onload = () => res(reader.result.split(',')[1]);
       reader.onerror = rej;
       reader.readAsDataURL(file);
     });
-
-    
     let safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '');
     if (!safeName) safeName = 'file';
     if (!safeName.includes('.')) {
@@ -2757,35 +2657,17 @@
       else if (file.type === 'application/pdf') safeName += '.pdf';
       else safeName += '.bin';
     }
-
     const path = `attachments/${dateStr}_${Date.now()}_${safeName}`;
     const url = `https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`;
-    
-    const body = {
-      message: `Add attachment: ${safeName}`,
-      content: base64,
-      branch: 'main'
-    };
-
     const res = await fetch(url, {
       method: 'PUT',
-      headers: {
-        'Authorization': `token ${ghPat}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
+      headers: { 'Authorization': `token ${ghPat}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: `Add attachment: ${safeName}`, content: base64, branch: 'main' })
     });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.message || 'GitHubへのアップロードに失敗しました');
-    }
-
+    if (!res.ok) { const err = await res.json(); throw new Error(err.message || 'GitHubアップロード失敗'); }
     const resData = await res.json();
-    const rawUrl = `https://raw.githubusercontent.com/${ghOwner}/${ghRepo}/main/${path}`;
-    
     return {
-      url: rawUrl,
+      url: `https://raw.githubusercontent.com/${ghOwner}/${ghRepo}/main/${path}`,
       filename: file.name,
       type: file.type,
       sha: resData.content.sha,
@@ -2798,56 +2680,33 @@
     const match = url.match(/main\/(attachments\/.*)$/);
     if (!match) return;
     const path = match[1];
-    
-    const apiUrl = `https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`;
-    const body = {
-      message: `Delete attachment`,
-      sha: sha,
-      branch: 'main'
-    };
-
-    await fetch(apiUrl, {
+    await fetch(`https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `token ${ghPat}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
+      headers: { 'Authorization': `token ${ghPat}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Delete attachment', sha, branch: 'main' })
     });
   }
 
-  let curPrevId = null;
-  let curEvent = null;
-
-  window.cgOpenPreview = async function(id, title) {
-    curPrevId = id;
-    curEvent = data.events[selDate].find(e => e.id === id && !e.deleted);
-    if (!curEvent) return;
-    if (!curEvent.attachments) curEvent.attachments = [];
-    document.getElementById('cg-prev-title').textContent = title;
-    document.getElementById('cg-ov-preview').classList.add('open');
-    renderFileList();
-  };
-
-  window.cgClosePreview = function() {
-    curPrevId = null;
-    curEvent = null;
-    ghUrlCache.forEach((val) => { if (val.startsWith('blob:')) URL.revokeObjectURL(val); });
-    ghUrlCache.clear();
-    document.getElementById('cg-ov-preview').classList.remove('open');
-    document.getElementById('cg-fm-list').innerHTML = '';
-  };
-
+   
   const ghUrlCache = new Map();
 
   async function resolveGitHubUrl(url) {
     if (!ghPat) return url;
     if (!url.includes('githubusercontent.com') && !url.includes('api.github.com')) return url;
     if (ghUrlCache.has(url)) return ghUrlCache.get(url);
+
+    
     try {
       const res = await fetch(url, { headers: { 'Authorization': `token ${ghPat}` } });
-      if (res.ok) { const blob = await res.blob(); const bu = URL.createObjectURL(blob); ghUrlCache.set(url, bu); return bu; }
-    } catch(e) { console.warn("Direct fetch failed:", e); }
+      if (res.ok) {
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        ghUrlCache.set(url, blobUrl);
+        return blobUrl;
+      }
+    } catch(e) {   }
+
+    
     let owner = ghOwner, repo = ghRepo, path = '';
     const m = url.match(/github(?:usercontent)?\.com\/([^\/]+)\/([^\/]+)\/(?:main|contents|blob\/main|master)\/(attachments\/[^\?]+)/);
     if (m) { owner = m[1]; repo = m[2]; path = m[3]; }
@@ -2857,42 +2716,109 @@
       const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=main`, {
         headers: { 'Authorization': `token ${ghPat}`, 'Accept': 'application/vnd.github.v3+json', 'Cache-Control': 'no-cache' }
       });
-      if (r.ok) { const d = await r.json(); const u = d.download_url || url; ghUrlCache.set(url, u); return u; }
-    } catch(e) {}
+      if (r.ok) { const d = await r.json(); const fresh = d.download_url || url; ghUrlCache.set(url, fresh); return fresh; }
+    } catch(e) {   }
     return url;
   }
 
-  async function renderFileList() {
-    const list = document.getElementById('cg-fm-list');
-    if (!curEvent || curEvent.attachments.length === 0) {
-      list.innerHTML = '<div class="cg-fm-empty">添付ファイルはありません</div>';
+   
+  let curPrevEventId = null;
+  let curEvent = null;
+
+  window.cgOpenPreview = function(id, title) {
+    curPrevEventId = id;
+    curEvent = (data.events[selDate] || []).find(e => e.id === id && !e.deleted);
+    if (!curEvent) return;
+    if (!curEvent.attachments) curEvent.attachments = [];
+    document.getElementById('cg-prev-title').textContent = title;
+    document.getElementById('cg-ov-preview').classList.add('open');
+    renderFileManager();
+  };
+
+  window.cgClosePreview = function() {
+    
+    ghUrlCache.forEach((val) => { if (val.startsWith('blob:')) URL.revokeObjectURL(val); });
+    ghUrlCache.clear();
+    curPrevEventId = null;
+    curEvent = null;
+    document.getElementById('cg-fm-list').innerHTML = '';
+    document.getElementById('cg-ov-preview').classList.remove('open');
+  };
+
+  async function renderFileManager() {
+    const listEl = document.getElementById('cg-fm-list');
+    const countEl = document.getElementById('cg-fm-count');
+    const pathEl  = document.getElementById('cg-fm-path');
+
+    pathEl.textContent = `attachments / ${selDate}`;
+    const atts = curEvent ? (curEvent.attachments || []) : [];
+    countEl.textContent = `${atts.length} file${atts.length !== 1 ? 's' : ''}`;
+
+    if (atts.length === 0) {
+      listEl.innerHTML = `
+        <div class="cg-fm-empty">
+          <div class="cg-fm-empty-icon">📭</div>
+          <div style="color:#555; font-size:0.82rem;">添付ファイルはありません</div>
+          <div class="cg-fm-empty-text">下のボタンからファイルを追加できます</div>
+        </div>`;
       return;
     }
-    list.innerHTML = '<div style="color:#00f3ff;text-align:center;padding:1rem;font-size:0.8rem;">読み込み中...</div>';
-    const resolved = await Promise.all(curEvent.attachments.map(async (att, idx) => {
-      const resolvedUrl = await resolveGitHubUrl(att.url);
-      return { ...att, resolvedUrl, idx };
-    }));
-    if (!curEvent) return;
-    list.innerHTML = resolved.map(att => {
+
+    
+    listEl.innerHTML = atts.map((att, idx) => {
       const isImg = att.type && att.type.startsWith('image/');
       const isPdf = att.type === 'application/pdf';
-      const icon = isImg ? `<img src="${att.resolvedUrl}" alt="">` : isPdf ? '📄' : '📎';
       const typeLabel = isPdf ? 'PDF' : isImg ? 'IMAGE' : 'FILE';
-      return `<div class="cg-fm-item">
-        <div class="cg-fm-icon">${icon}</div>
-        <div class="cg-fm-info"><div class="cg-fm-name">${esc(att.filename||'file')}</div><div class="cg-fm-type">${typeLabel}</div></div>
-        <div class="cg-fm-actions">
-          <button class="cg-fm-open" onclick="cgOpenFile(${att.idx})">開く ↗</button>
-          <button class="cg-fm-del" onclick="cgDeleteFile(${att.idx})">🗑</button>
-        </div></div>`;
+      const iconFallback = isPdf ? '📄' : isImg ? '🖼' : '📎';
+      const dateLabel = fmtUploadedAt(att.uploadedAt);
+      return `
+        <div class="cg-fm-item" id="cg-fmitem-${idx}">
+          <div class="cg-fm-thumb" id="cg-fmthumb-${idx}">
+            <span>${iconFallback}</span>
+            ${isImg ? `<div class="cg-fm-thumb-loading" id="cg-fmtl-${idx}">…</div>` : ''}
+          </div>
+          <div class="cg-fm-info">
+            <div class="cg-fm-name" title="${esc(att.filename||'file')}">${esc(att.filename||'file')}</div>
+            <div class="cg-fm-meta">
+              <span class="cg-fm-type">${typeLabel}</span>
+              ${dateLabel ? `<span class="cg-fm-date">${dateLabel}</span>` : ''}
+            </div>
+          </div>
+          <div class="cg-fm-actions">
+            <button class="cg-fm-open" onclick="cgOpenFile(${idx})">開く ↗</button>
+            <button class="cg-fm-del" onclick="cgDeleteFile(${idx})" title="削除">🗑</button>
+          </div>
+        </div>`;
     }).join('');
+
+    
+    atts.forEach(async (att, idx) => {
+      if (!att.type || !att.type.startsWith('image/')) return;
+      try {
+        const resolved = await resolveGitHubUrl(att.url);
+        const thumbEl = document.getElementById(`cg-fmthumb-${idx}`);
+        const loadEl  = document.getElementById(`cg-fmtl-${idx}`);
+        if (!thumbEl) return;
+        const img = document.createElement('img');
+        img.onload = () => { thumbEl.innerHTML = ''; thumbEl.appendChild(img); };
+        img.onerror = () => { if (loadEl) loadEl.remove(); };
+        img.src = resolved;
+      } catch(e) {
+        const loadEl = document.getElementById(`cg-fmtl-${idx}`);
+        if (loadEl) loadEl.remove();
+      }
+    });
   }
 
   window.cgOpenFile = async function(idx) {
     if (!curEvent || !curEvent.attachments[idx]) return;
-    const url = await resolveGitHubUrl(curEvent.attachments[idx].url);
-    window.open(url, '_blank');
+    const att = curEvent.attachments[idx];
+    try {
+      const resolved = await resolveGitHubUrl(att.url);
+      window.open(resolved, '_blank');
+    } catch(e) {
+      toast('ファイルを開けませんでした', 'err');
+    }
   };
 
   window.cgHandleUpload = async function(input) {
@@ -2905,324 +2831,35 @@
         if (!curEvent.attachments) curEvent.attachments = [];
         curEvent.attachments.push(att);
       }
-      save(); debouncedPush(); renderFileList();
-      toast('アップロード成功', 'ok');
+      save(); debouncedPush();
+      renderFileManager();
+      toast('アップロード完了', 'ok');
     } catch(e) { toast(e.message, 'err'); }
     finally { loading.style.display = 'none'; input.value = ''; }
   };
 
   window.cgDeleteFile = async function(idx) {
     if (!curEvent || !curEvent.attachments[idx]) return;
-    if (!confirm('このファイルを削除しますか？')) return;
+    if (!confirm('このファイルを削除しますか？（GitHubからも削除されます）')) return;
     const loading = document.getElementById('cg-prev-loading');
     loading.style.display = '';
     try {
       const att = curEvent.attachments[idx];
       await deleteFromGitHub(att.sha, att.url);
+      
+      if (ghUrlCache.has(att.url)) { const burl = ghUrlCache.get(att.url); if (burl.startsWith('blob:')) URL.revokeObjectURL(burl); ghUrlCache.delete(att.url); }
       curEvent.attachments.splice(idx, 1);
-      save(); debouncedPush(); renderFileList();
+      save(); debouncedPush();
+      renderFileManager();
       toast('削除しました', 'info');
     } catch(e) { toast('削除失敗: ' + e.message, 'err'); }
     finally { loading.style.display = 'none'; }
   };
 
-  window.cgOpenPreview = async function(id, title) {
-    curPrevId = id;
-    curEvent = data.events[selDate].find(e => e.id === id && !e.deleted);
-    if (!curEvent) return;
-    if (!curEvent.attachments) curEvent.attachments = [];
-    curAttIdx = 0;
-
-    document.getElementById('cg-prev-title').textContent = title;
-    document.getElementById('cg-ov-preview').classList.add('open');
-    renderPreviewModal();
-  };
-
-  window.cgClosePreview = function() {
-    curPrevId = null;
-    curEvent = null;
-    if (curPdf) { try { curPdf.destroy(); } catch(e) {} curPdf = null; }
-    pdfContainer = null;
-    ghUrlCache.forEach((val, key) => {
-      if (val.startsWith('blob:')) URL.revokeObjectURL(val);
-    });
-    ghUrlCache.clear();
-    document.getElementById('cg-ov-preview').classList.remove('open');
-    document.getElementById('cg-prev-viewer').innerHTML = '';
-  };
-
-  const ghUrlCache = new Map();
-  let renderPreviewSeq = 0;
-  
-  async function resolveGitHubUrl(url) {
-    if (!ghPat) return url;
-    if (!url.includes('githubusercontent.com') && !url.includes('api.github.com')) return url;
-    
-    if (ghUrlCache.has(url)) return ghUrlCache.get(url);
-
-    
-    
-    try {
-      const res = await fetch(url, {
-        headers: { 'Authorization': `token ${ghPat}` }
-      });
-      if (res.ok) {
-        const blob = await res.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        ghUrlCache.set(url, blobUrl);
-        return blobUrl;
-      }
-    } catch(e) {
-      console.warn("Direct blob fetch failed, falling back to API:", e);
-    }
-
-    
-    let owner = ghOwner, repo = ghRepo, path = '';
-    const m = url.match(/github(?:usercontent)?\.com\/([^\/]+)\/([^\/]+)\/(?:main|contents|blob\/main|master)\/(attachments\/[^\?]+)/);
-    if (m) {
-      owner = m[1]; repo = m[2]; path = m[3];
-    } else {
-      const m2 = url.match(/(?:main|contents|master)\/(attachments\/[^\?]+)/);
-      if (m2) path = m2[1];
-    }
-    
-    if (!path) return url;
-
-    try {
-      
-      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=main`;
-      const res = await fetch(apiUrl, {
-        headers: {
-          'Authorization': `token ${ghPat}`,
-          'Accept': 'application/vnd.github.v3+json',
-          'Cache-Control': 'no-cache'
-        }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const freshUrl = data.download_url || url;
-        ghUrlCache.set(url, freshUrl);
-        return freshUrl;
-      } else {
-        console.error("API Resolve failed:", res.status);
-      }
-    } catch(e) {
-      console.error("API Resolve error:", e);
-    }
-    
-    return url;
-  }
-
-  async function renderPreviewModal() {
-    const viewer = document.getElementById('cg-prev-viewer');
-    const thumbs = document.getElementById('cg-prev-thumbs');
-    const delBtn = document.getElementById('cg-prev-del-btn');
-    const seq = ++renderPreviewSeq;
-    
-    if (curEvent.attachments.length === 0) {
-      thumbs.style.display = 'none';
-      delBtn.style.display = 'none';
-      viewer.innerHTML = `
-        <label class="cg-upload-zone">
-          <div style="font-size: 2.5rem; margin-bottom: 1rem; color: #00f3ff; filter: drop-shadow(0 0 10px rgba(0,243,255,0.4));">[ UPLOAD ]</div>
-          <div style="font-size: 1rem; color: #e2e8f0;">タップして写真やPDFを選択（複数可）</div>
-          <div style="font-size: 0.7rem; color: #64748b; margin-top: 0.5rem; font-family:'JetBrains Mono', monospace;">STORED ON GITHUB</div>
-          <input type="file" accept="image/*,application/pdf" multiple style="display:none" onchange="cgHandleUpload(this)">
-        </label>
-      `;
-    } else {
-      thumbs.style.display = 'flex';
-      delBtn.style.display = '';
-
-      viewer.innerHTML = '<div style="color:#00f3ff; margin:auto; font-family:\'JetBrains Mono\', monospace;">[ Resolving Media... ]</div>';
-
-      const resolvedAtts = await Promise.all(curEvent.attachments.map(async (att) => {
-        const resolvedUrl = await resolveGitHubUrl(att.url);
-        return { ...att, resolvedUrl };
-      }));
-      
-      if (seq !== renderPreviewSeq) return;
-
-      
-      thumbs.innerHTML = resolvedAtts.map((att, idx) => {
-        const isSel = idx === curAttIdx ? 'sel' : '';
-        let content = '';
-        if (att.type.startsWith('image/')) {
-          content = `<img src="${att.resolvedUrl}" style="width:100%;height:100%;object-fit:cover;">`;
-        } else {
-          content = `📄`;
-        }
-        return `<div class="cg-thumb ${isSel}" onclick="cgSelectAttachment(${idx})" title="${esc(att.filename)}">${content}</div>`;
-      }).join('');
-      
-      thumbs.innerHTML += `
-        <label class="cg-thumb-add" title="ファイルを追加">
-          +
-          <input type="file" accept="image/*,application/pdf" multiple style="display:none" onchange="cgHandleUpload(this)">
-        </label>
-      `;
-
-      
-      if (curAttIdx >= resolvedAtts.length) curAttIdx = resolvedAtts.length - 1;
-      const att = resolvedAtts[curAttIdx];
-      if (att.type.startsWith('image/')) {
-        viewer.innerHTML = `<img src="${att.resolvedUrl}" class="cg-preview-media">`;
-      } else if (att.type === 'application/pdf') {
-        renderPdfNative(att.resolvedUrl, viewer);
-      } else {
-        viewer.innerHTML = `<a href="${att.resolvedUrl}" target="_blank" style="color:#00f3ff;">[開く] ${esc(att.filename)}</a>`;
-      }
-    }
-  }
-
-  
-  let curPdf = null;
-  let curPdfPage = 1;
-  let curPdfTotal = 0;
-  let pdfContainer = null;
-  let pdfSwipeStartX = 0;
-
-  async function renderPdfNative(url, container) {
-    pdfContainer = container;
-    container.innerHTML = '<div style="color:#00f3ff; font-family:\'JetBrains Mono\', monospace; margin: auto;">Loading PDF...</div>';
-    try {
-      if (curPdf) { try { curPdf.destroy(); } catch(e) {} curPdf = null; }
-      
-      const loadingTask = pdfjsLib.getDocument(url);
-      if (url.startsWith('blob:')) {
-        loadingTask.disableAutoFetch = true;
-      }
-      curPdf = await loadingTask.promise;
-      curPdfTotal = curPdf.numPages;
-      curPdfPage = 1;
-      renderPdfPage(curPdfPage);
-    } catch(e) {
-      console.error('PDF load error:', e);
-      container.innerHTML = `<div style="color:#ef4444; margin: auto; padding: 1rem; text-align: center;">
-        <div style="margin-bottom: 0.5rem;">PDFの読み込みに失敗しました</div>
-        <div style="font-size: 0.7rem; color: #888;">${esc(e.message || '')}</div>
-      </div>`;
-    }
-  }
-
-  async function renderPdfPage(pageNum) {
-    if (!curPdf || !pdfContainer) return;
-    pdfContainer.innerHTML = '<div style="color:#00f3ff; font-family:\'JetBrains Mono\', monospace; margin: auto; padding: 2rem;">ページを読み込み中...</div>';
-    try {
-      const page = await curPdf.getPage(pageNum);
-      
-      const scale = Math.min(window.devicePixelRatio || 2, 3);
-      const viewport = page.getViewport({ scale: scale });
-
-      pdfContainer.innerHTML = '';
-
-      const canvas = document.createElement('canvas');
-      canvas.className = 'cg-pdf-page';
-      const context = canvas.getContext('2d');
-      if (!context) throw new Error('Canvas 2D context unavailable');
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-      
-      canvas.style.width = (viewport.width / scale) + 'px';
-      pdfContainer.appendChild(canvas);
-
-      await page.render({ canvasContext: context, viewport: viewport }).promise;
-
-      
-      canvas.addEventListener('touchstart', function(e) {
-        pdfSwipeStartX = e.touches[0].clientX;
-      }, { passive: true });
-      canvas.addEventListener('touchend', function(e) {
-        const dx = e.changedTouches[0].clientX - pdfSwipeStartX;
-        if (Math.abs(dx) > 50) {
-          if (dx < 0) cgPdfNext(); 
-          else cgPdfPrev(); 
-        }
-      }, { passive: true });
-
-      
-      const nav = document.createElement('div');
-      nav.className = 'cg-pdf-nav';
-      nav.innerHTML = `
-        <button onclick="cgPdfPrev()" ${pageNum <= 1 ? 'disabled' : ''}>◀ 前</button>
-        <span>${pageNum} / ${curPdfTotal}</span>
-        <button onclick="cgPdfNext()" ${pageNum >= curPdfTotal ? 'disabled' : ''}>次 ▶</button>
-      `;
-      pdfContainer.appendChild(nav);
-    } catch(e) {
-      console.error('PDF page render error:', e);
-      pdfContainer.innerHTML = '<div style="color:#ef4444; margin: auto;">ページの描画に失敗しました</div>';
-    }
-  }
-
-  window.cgPdfPrev = function() {
-    if (curPdfPage > 1) { curPdfPage--; renderPdfPage(curPdfPage); }
-  };
-  window.cgPdfNext = function() {
-    if (curPdfPage < curPdfTotal) { curPdfPage++; renderPdfPage(curPdfPage); }
-  };
-
-  window.cgSelectAttachment = function(idx) {
-    curAttIdx = idx;
-    renderPreviewModal();
-  };
-
-  window.cgHandleUpload = async function(input) {
-    if (!input.files || input.files.length === 0) return;
-    if (!curEvent) return;
-    
-    const loading = document.getElementById('cg-prev-loading');
-    loading.style.display = '';
-    const files = Array.from(input.files);
-    
-    try {
-      for (const file of files) {
-        const att = await uploadToGitHub(file, selDate);
-        if (!curEvent.attachments) curEvent.attachments = [];
-        curEvent.attachments.push(att);
-      }
-      save(); debouncedPush();
-      curAttIdx = curEvent.attachments.length - 1;
-      renderPreviewModal();
-      toast('アップロード成功', 'ok');
-    } catch(e) {
-      toast(e.message, 'err');
-    } finally {
-      loading.style.display = 'none';
-      input.value = '';
-    }
-  };
-
-  window.cgDeleteAttachment = async function() {
-    if (!curEvent || !curEvent.attachments || curEvent.attachments.length === 0) return;
-    if (!confirm('現在表示中の添付ファイルを完全に削除しますか？(GitHubからも削除されます)')) return;
-    
-    const loading = document.getElementById('cg-prev-loading');
-    loading.style.display = '';
-    
-    try {
-      const att = curEvent.attachments[curAttIdx];
-      await deleteFromGitHub(att.sha, att.url);
-      curEvent.attachments.splice(curAttIdx, 1);
-      
-      save(); debouncedPush();
-      
-      if (curAttIdx >= curEvent.attachments.length) {
-        curAttIdx = Math.max(0, curEvent.attachments.length - 1);
-      }
-      renderPreviewModal();
-      toast('削除しました', 'info');
-    } catch(e) {
-      toast('削除に失敗しました: ' + e.message, 'err');
-    } finally {
-      loading.style.display = 'none';
-    }
-  };
-
+   
   init();
 })();
 </script>
-
 
           
           
