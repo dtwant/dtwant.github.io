@@ -1547,7 +1547,8 @@
     border-radius: 6px; display: flex; flex-direction: column; overflow: hidden;
     position: relative;
   }
-  .cg-prev-viewer { flex: 1; min-height: 0; display: block; text-align: center; position: relative; background: #111; overflow-y: auto; overflow-x: hidden; padding: 1rem 0; }
+  .cg-prev-viewer { flex: 1; min-height: 0; display: block; text-align: center; position: relative; background: #111; overflow-y: auto; overflow-x: hidden; padding: 1rem 0; -webkit-overflow-scrolling: touch; }
+  .cg-ov-nozoom { touch-action: pan-x pan-y; }
   .cg-prev-thumbs { height: 80px; display: flex; gap: 10px; padding: 10px; background: rgba(0,243,255,0.05); overflow-x: auto; border-top: 1px solid rgba(0,243,255,0.2); }
   
   .cg-thumb {
@@ -1570,7 +1571,7 @@
   .cg-upload-zone:hover { background: rgba(0,243,255,0.05); }
   .cg-preview-media { max-width: 100%; object-fit: contain; margin: 0 auto; display: block; }
   
-  .cg-pdf-page { margin: 0 auto; max-width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.5); display: block; }
+  .cg-pdf-page { margin: 0 auto; max-width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.5); display: block; touch-action: pan-x pan-y; }
   .cg-pdf-nav {
     display: flex; align-items: center; justify-content: center; gap: 12px;
     padding: 8px 0; background: rgba(0,0,0,0.6); border-top: 1px solid rgba(0,243,255,0.15);
@@ -2840,7 +2841,11 @@
     curAttIdx = 0;
 
     document.getElementById('cg-prev-title').textContent = title;
+    
+    const vp = document.querySelector('meta[name="viewport"]');
+    if (vp) { vp._origContent = vp.content; vp.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'; }
     document.getElementById('cg-ov-preview').classList.add('open');
+    document.getElementById('cg-ov-preview').classList.add('cg-ov-nozoom');
     renderPreviewModal();
   };
 
@@ -2856,7 +2861,11 @@
     });
     ghUrlCache.clear();
     document.getElementById('cg-ov-preview').classList.remove('open');
+    document.getElementById('cg-ov-preview').classList.remove('cg-ov-nozoom');
     document.getElementById('cg-prev-viewer').innerHTML = '';
+    
+    const vp = document.querySelector('meta[name="viewport"]');
+    if (vp && vp._origContent) { vp.content = vp._origContent; delete vp._origContent; }
   };
 
   const ghUrlCache = new Map();
@@ -3019,13 +3028,8 @@
     try {
       const page = await curPdf.getPage(pageNum);
       
-      const containerWidth = pdfContainer.clientWidth - 20;
-      const unscaledViewport = page.getViewport({ scale: 1 });
-      let scale = containerWidth > 0 ? containerWidth / unscaledViewport.width : 1;
-      
-      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-      const renderScale = scale * pixelRatio;
-      const viewport = page.getViewport({ scale: renderScale });
+      const scale = Math.min(window.devicePixelRatio || 2, 3);
+      const viewport = page.getViewport({ scale: scale });
 
       pdfContainer.innerHTML = '';
 
@@ -3035,8 +3039,8 @@
       if (!context) throw new Error('Canvas 2D context unavailable');
       canvas.height = viewport.height;
       canvas.width = viewport.width;
-      canvas.style.width = (viewport.width / pixelRatio) + 'px';
-      canvas.style.height = (viewport.height / pixelRatio) + 'px';
+      
+      canvas.style.width = (viewport.width / scale) + 'px';
       pdfContainer.appendChild(canvas);
 
       await page.render({ canvasContext: context, viewport: viewport }).promise;
