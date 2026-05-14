@@ -1806,9 +1806,17 @@ function renderTable(){
   const alertIds=getAlertTaskIds();
   if(!tasks.length){tableEl.innerHTML='<tr><td style="padding:3rem;color:#555;font-family:Orbitron">NO_ACTIVE_TASKS</td></tr>';return}
   let h='<thead><tr><th class="ntc-date-col">DAY</th>';
-  tasks.forEach(t=>{h+=`<th data-action="stats" data-tid="${t.id}" style="cursor:pointer" title="タップで達成度"><span class="ntc-th-bar" style="background:${t.color||'#0ff'};box-shadow:0 0 5px ${t.color||'#0ff'}"></span><span class="ntc-th-name">${t.name}</span></th>`});
+  let midHeaderHtml = '<tr class="ntc-mid-header"><th class="ntc-date-col" style="position:static;z-index:1">DAY</th>';
+  tasks.forEach(t=>{
+    const thContent = `<span class="ntc-th-bar" style="background:${t.color||'#0ff'};box-shadow:0 0 5px ${t.color||'#0ff'}"></span><span class="ntc-th-name">${t.name}</span>`;
+    h+=`<th data-action="stats" data-tid="${t.id}" style="cursor:pointer" title="タップで達成度">${thContent}</th>`;
+    midHeaderHtml+=`<th data-action="stats" data-tid="${t.id}" style="cursor:pointer;position:static;z-index:1" title="タップで達成度">${thContent}</th>`;
+  });
   h+='</tr></thead><tbody>';
+  midHeaderHtml+='</tr>';
+
   for(let d=1;d<=days;d++){
+    if(d===15) h+=midHeaderHtml;
     const dow=getDayOfWeek(currentYear,currentMonth,d);
     const isToday=isCurrentMonth&&d===td.getDate();
     const isWknd=dow===0||dow===6;
