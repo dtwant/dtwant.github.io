@@ -230,7 +230,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "99"
+    "wordCount": "101"
   }]
   </script>
 
@@ -928,7 +928,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>99 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>101 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1638,6 +1638,40 @@
   .cg-fm-upload:hover { background: rgba(0,243,255,0.06); border-color: rgba(0,243,255,0.45); }
   .cg-fm-upload-icon { font-size: 1rem; }
 
+   
+  .cg-fm-preview-pane {
+    margin-top: 8px; border: 1px solid rgba(0,243,255,0.15); border-radius: 5px;
+    background: #0a0a12; overflow: hidden; position: relative; display: none;
+  }
+  .cg-fm-preview-pane.open { display: block; }
+  .cg-fm-preview-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 10px; background: rgba(0,0,0,0.5);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 0.65rem; color: #64748b; font-family: 'JetBrains Mono', monospace;
+  }
+  .cg-fm-preview-close {
+    background: none; border: 1px solid rgba(255,255,255,0.1); color: #888;
+    width: 22px; height: 22px; border-radius: 3px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+    transition: all 0.15s;
+  }
+  .cg-fm-preview-close:hover { background: rgba(255,255,255,0.05); color: #fff; }
+  .cg-fm-preview-body {
+    width: 100%; max-height: 60vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: auto; padding: 8px;
+  }
+  .cg-fm-preview-body img {
+    max-width: 100%; max-height: 58vh; object-fit: contain; display: block; margin: 0 auto;
+  }
+  .cg-fm-newtab-link {
+    display: block; text-align: center; padding: 6px;
+    font-size: 0.65rem; color: #00f3ff; font-family: 'JetBrains Mono', monospace;
+    opacity: 0.6; text-decoration: none; transition: opacity 0.15s;
+  }
+  .cg-fm-newtab-link:hover { opacity: 1; }
+
   .cg-btn-att {
     background: rgba(0,243,255,0.08); border: 1px solid rgba(0,243,255,0.3); color: #00f3ff;
     padding: 0.15rem 0.5rem; font-size: 0.65rem; border-radius: 3px; cursor: pointer; transition: all 0.2s;
@@ -1968,6 +2002,14 @@
     </div>
     
     <div id="cg-fm-list" class="cg-fm-list"></div>
+    
+    <div id="cg-fm-preview-pane" class="cg-fm-preview-pane">
+      <div class="cg-fm-preview-bar">
+        <span id="cg-fm-preview-name">preview</span>
+        <button class="cg-fm-preview-close" onclick="cgCloseInlinePreview()">&times;</button>
+      </div>
+      <div class="cg-fm-preview-body" id="cg-fm-preview-body"></div>
+    </div>
     
     <label class="cg-fm-upload">
       <span class="cg-fm-upload-icon">＋</span> ファイルを追加（画像・PDF）
@@ -2699,7 +2741,15 @@
     try {
       const res = await fetch(url, { headers: { 'Authorization': `token ${ghPat}` } });
       if (res.ok) {
-        const blob = await res.blob();
+        const rawBlob = await res.blob();
+        
+        let mime = rawBlob.type;
+        if (!mime || mime === 'application/octet-stream') {
+          const ext = url.split('.').pop().split('?')[0].toLowerCase();
+          const mimeMap = { pdf:'application/pdf', jpg:'image/jpeg', jpeg:'image/jpeg', png:'image/png', gif:'image/gif', webp:'image/webp', svg:'image/svg+xml' };
+          if (mimeMap[ext]) mime = mimeMap[ext];
+        }
+        const blob = (mime !== rawBlob.type) ? new Blob([rawBlob], { type: mime }) : rawBlob;
         const blobUrl = URL.createObjectURL(blob);
         ghUrlCache.set(url, blobUrl);
         return blobUrl;
@@ -2736,12 +2786,13 @@
   };
 
   window.cgClosePreview = function() {
-    
     ghUrlCache.forEach((val) => { if (val.startsWith('blob:')) URL.revokeObjectURL(val); });
     ghUrlCache.clear();
     curPrevEventId = null;
     curEvent = null;
     document.getElementById('cg-fm-list').innerHTML = '';
+    document.getElementById('cg-fm-preview-body').innerHTML = '';
+    document.getElementById('cg-fm-preview-pane').classList.remove('open');
     document.getElementById('cg-ov-preview').classList.remove('open');
   };
 
@@ -2813,12 +2864,34 @@
   window.cgOpenFile = async function(idx) {
     if (!curEvent || !curEvent.attachments[idx]) return;
     const att = curEvent.attachments[idx];
+    const isImg = att.type && att.type.startsWith('image/');
+
     try {
       const resolved = await resolveGitHubUrl(att.url);
-      window.open(resolved, '_blank');
+
+      if (isImg) {
+        
+        const pane = document.getElementById('cg-fm-preview-pane');
+        const body = document.getElementById('cg-fm-preview-body');
+        document.getElementById('cg-fm-preview-name').textContent = att.filename || 'preview';
+        body.innerHTML = '<div style="color:#00f3ff;font-size:0.8rem;">読み込み中...</div>';
+        pane.classList.add('open');
+        const img = new Image();
+        img.onload = () => { body.innerHTML = ''; body.appendChild(img); };
+        img.onerror = () => { body.innerHTML = '<div style="color:#ef4444;font-size:0.8rem;">画像の読み込みに失敗</div>'; };
+        img.src = resolved;
+      } else {
+        
+        window.open(resolved, '_blank');
+      }
     } catch(e) {
       toast('ファイルを開けませんでした', 'err');
     }
+  };
+
+  window.cgCloseInlinePreview = function() {
+    document.getElementById('cg-fm-preview-body').innerHTML = '';
+    document.getElementById('cg-fm-preview-pane').classList.remove('open');
   };
 
   window.cgHandleUpload = async function(input) {
