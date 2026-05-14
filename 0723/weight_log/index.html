@@ -230,7 +230,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "34"
+    "wordCount": "54"
   }]
   </script>
 
@@ -928,7 +928,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>34 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>54 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1104,6 +1104,8 @@
 
    
   .wl-root {
+    --theme-hex: #06b6d4;
+    --theme-rgb: 6, 182, 212;
     font-family: "Zen Kaku Gothic New", "JetBrains Mono", sans-serif;
     position: fixed;
     top: 0;
@@ -1113,12 +1115,15 @@
     max-width: none;
     margin: 0;
     padding: 2rem 1.5rem;
-    background-color: #020204;
+    background-color: #050508;
     background-image:
-      radial-gradient(ellipse at 15% 15%, rgba(6, 182, 212, 0.08), transparent 50%),
-      radial-gradient(ellipse at 85% 85%, rgba(16, 185, 129, 0.06), transparent 50%),
-      radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.9) 120%);
+      linear-gradient(rgba(var(--theme-rgb), 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--theme-rgb), 0.04) 1px, transparent 1px),
+      radial-gradient(ellipse at 20% 20%, rgba(var(--theme-rgb), 0.08), transparent 55%),
+      radial-gradient(ellipse at 80% 80%, rgba(var(--theme-rgb), 0.06), transparent 55%);
+    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
     color: #e2e8f0;
+    transition: background-image 0.5s ease;
     border: none;
     border-radius: 0;
     z-index: 999990;
@@ -1176,6 +1181,7 @@
   .wl-sync-status {
     display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 0.7rem;
     padding: 2px 10px; border-radius: 3px; margin-top: 0.5rem; transition: all 0.3s;
+    cursor: pointer;
   }
   .wl-sync-online { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; }
   .wl-sync-offline { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #facc15; }
@@ -1345,6 +1351,14 @@
   .wl-emoji-opt:hover { border-color: #06b6d4; transform: scale(1.1); }
   .wl-emoji-opt.selected { border-color: #06b6d4; background: rgba(6, 182, 212, 0.15); box-shadow: 0 0 10px rgba(6, 182, 212, 0.3); }
 
+  .wl-color-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.3rem; }
+  .wl-color-opt {
+    width: 36px; height: 36px; cursor: pointer; border: 2px solid transparent; border-radius: 4px;
+    transition: all 0.2s; opacity: 0.5;
+  }
+  .wl-color-opt:hover { opacity: 0.8; transform: scale(1.1); }
+  .wl-color-opt.selected { opacity: 1; border-color: #fff; box-shadow: 0 0 12px currentColor; transform: scale(1.15); }
+
   .wl-modal-btns { display: flex; gap: 0.8rem; margin-top: 1.5rem; }
   .wl-modal-btn {
     flex: 1; padding: 0.8rem; font-family: "Orbitron", sans-serif; font-size: 0.85rem; font-weight: 700;
@@ -1396,9 +1410,11 @@
         <div class="wl-title">WEIGHT_LOG</div>
         <div class="wl-desc">> BIO-MONITOR: ACTIVE</div>
       </div>
-      <div style="width: 60px;"></div>
+      <div style="display: flex; gap: 0.5rem;">
+        <button class="wl-btn-exit" id="wl-btn-config" style="border-color:#64748b; color:#94a3b8;">⚙ CONFIG</button>
+      </div>
     </div>
-    <div class="wl-sync-status wl-sync-offline" id="wl-sync-badge">LOCAL ONLY</div>
+    <div class="wl-sync-status wl-sync-offline" id="wl-sync-badge" title="タップして同期">LOCAL ONLY</div>
   </header>
 
   
@@ -1460,9 +1476,39 @@
       <span class="wl-label">アイコン (Icon)</span>
       <div class="wl-emoji-grid" id="wl-emoji-grid"></div>
     </div>
+    <div class="wl-form-group">
+      <span class="wl-label">テーマカラー (Theme Color)</span>
+      <div class="wl-color-grid" id="wl-color-grid"></div>
+    </div>
     <div class="wl-modal-btns">
       <button class="wl-modal-btn wl-btn-cancel" id="wl-btn-modal-cancel">CANCEL</button>
       <button class="wl-modal-btn wl-btn-submit" id="wl-btn-modal-submit">REGISTER</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="wl-modal-overlay" id="wl-modal-cfg">
+  <div class="wl-modal">
+    <div class="wl-modal-title">>> SYSTEM_CONFIG</div>
+    <div class="wl-form-group">
+      <span class="wl-label">JSONBIN BIN_ID</span>
+      <input type="text" id="wl-cfg-binid" class="wl-input" placeholder="Bin ID (空欄で新規作成)" style="font-family:'JetBrains Mono',monospace;">
+      <div style="font-size:0.6rem; color:#64748b; margin-top:0.4rem;">他の端末と同期する場合は、このBin IDを共有してください。</div>
+    </div>
+    <div class="wl-form-group" style="margin-top:1.5rem;">
+      <span class="wl-label">DATA_MANAGEMENT</span>
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+        <button class="wl-modal-btn wl-btn-submit" id="wl-cfg-export" style="flex:1;">📤 EXPORT</button>
+        <label class="wl-modal-btn wl-btn-submit" style="flex:1; text-align:center; cursor:pointer;">
+          📥 IMPORT<input type="file" accept=".json" id="wl-cfg-import" style="display:none;">
+        </label>
+        <button class="wl-modal-btn wl-btn-cancel" id="wl-cfg-clear" style="flex:1; border-color:#ef4444; color:#ef4444;">🗑 PURGE</button>
+      </div>
+    </div>
+    <div class="wl-modal-btns">
+      <button class="wl-modal-btn wl-btn-cancel" id="wl-btn-cfg-cancel">CANCEL</button>
+      <button class="wl-modal-btn wl-btn-submit" id="wl-btn-cfg-save">APPLY</button>
     </div>
   </div>
 </div>
@@ -1476,7 +1522,7 @@
   
   const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q'; 
   const LS_BIN_KEY = 'dt_weight_log_bin_id';
-  let BIN_ID = localStorage.getItem(LS_BIN_KEY) || '';
+  let BIN_ID = localStorage.getItem(LS_BIN_KEY) || '6a05f3eeadc21f119a9d9de2';
   const JSONBIN_HEADERS = () => ({
     'X-Master-Key': JSONBIN_KEY,
     'Content-Type': 'application/json',
@@ -1487,6 +1533,13 @@
 
   const LS_KEY = 'dt_weight_log_v1';
   const EMOJIS = ['🦎','🐍','🐸','🕷️','🐢','🐟','🐁','🦔','🐕','🐈','🐇','🦮','🐉'];
+  const COLORS = ['#06b6d4', '#10b981', '#d946ef', '#f97316', '#3b82f6', '#ef4444', '#eab308'];
+
+  
+  function hexToRgbStr(hex) {
+    const bigint = parseInt(hex.replace('#',''), 16);
+    return `${(bigint >> 16) & 255}, ${(bigint >> 8) & 255}, ${bigint & 255}`;
+  }
 
   
   let data = { animals: {}, weights: {} };
@@ -1504,6 +1557,7 @@
   const syncBadge = document.getElementById('wl-sync-badge');
   const toastEl = document.getElementById('wl-toast');
   const modalAdd = document.getElementById('wl-modal-add');
+  const modalCfg = document.getElementById('wl-modal-cfg');
   const historyListEl = document.getElementById('wl-history-list');
 
   
@@ -1518,7 +1572,15 @@
       
       const json = await res.json();
       const val = json.record || {};
-      data = { animals: val.animals || {}, weights: val.weights || {} };
+      
+      
+      if (data.lastModified && val.lastModified && data.lastModified > val.lastModified) {
+        console.log('[WEIGHT_LOG] Local data is newer, skipping fetch overwrite and pushing local instead.');
+        pushData();
+        return;
+      }
+      
+      data = { animals: val.animals || {}, weights: val.weights || {}, lastModified: val.lastModified || Date.now() };
       saveToLocal();
       syncOk = true;
     } catch(e) {
@@ -1551,6 +1613,7 @@
 
   let pushTimer = null;
   function pushData() {
+    data.lastModified = Date.now();
     saveToLocal();
     clearTimeout(pushTimer);
     pushTimer = setTimeout(async () => {
@@ -1570,6 +1633,8 @@
     }, 800);
   }
 
+  syncBadge.addEventListener('click', () => { toast('\u21bb Fetching...'); fetchFromBlob(); });
+
   function updateSyncBadge() {
     if (isSyncing) {
       syncBadge.textContent = '\u21bb SYNCING...'; syncBadge.className = 'wl-sync-status wl-sync-offline';
@@ -1585,6 +1650,7 @@
     try { const raw = localStorage.getItem(LS_KEY); if (raw) data = JSON.parse(raw); } catch (e) {}
     if (!data.animals) data.animals = {};
     if (!data.weights) data.weights = {};
+    if (!data.lastModified) data.lastModified = 0;
   }
 
   function toast(msg) {
@@ -1637,6 +1703,11 @@
     document.getElementById('wl-inp-date').value = getTodayString();
     document.getElementById('wl-inp-weight').value = '';
     
+    
+    const tColor = a.themeColor || '#06b6d4';
+    document.getElementById('wl-root').style.setProperty('--theme-hex', tColor);
+    document.getElementById('wl-root').style.setProperty('--theme-rgb', hexToRgbStr(tColor));
+    
     viewDash.classList.remove('active');
     viewDetail.classList.add('active');
     renderDetail();
@@ -1644,6 +1715,8 @@
 
   document.getElementById('wl-btn-back').addEventListener('click', () => {
     currentAnimalId = null;
+    document.getElementById('wl-root').style.setProperty('--theme-hex', '#06b6d4');
+    document.getElementById('wl-root').style.setProperty('--theme-rgb', hexToRgbStr('#06b6d4'));
     viewDetail.classList.remove('active');
     viewDash.classList.add('active');
     renderDash(); 
@@ -1658,6 +1731,9 @@
   function renderChart() {
     const ctx = document.getElementById('wlChart').getContext('2d');
     const animalData = data.weights[currentAnimalId] || {};
+    const a = data.animals[currentAnimalId] || {};
+    const tColor = a.themeColor || '#06b6d4';
+    const rgbStr = hexToRgbStr(tColor);
     const dates = Object.keys(animalData).sort();
     
     let filteredDates = dates;
@@ -1673,8 +1749,8 @@
     if (myChart) myChart.destroy();
     
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-    gradient.addColorStop(0, 'rgba(6, 182, 212, 0.4)');
-    gradient.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
+    gradient.addColorStop(0, `rgba(${rgbStr}, 0.4)`);
+    gradient.addColorStop(1, `rgba(${rgbStr}, 0.0)`);
 
     
     if (typeof Chart === 'undefined') return;
@@ -1685,11 +1761,11 @@
         labels: labels,
         datasets: [{
           data: dataPoints,
-          borderColor: '#06b6d4',
+          borderColor: tColor,
           backgroundColor: gradient,
           borderWidth: 3,
           pointBackgroundColor: '#020204',
-          pointBorderColor: '#10b981',
+          pointBorderColor: tColor,
           pointBorderWidth: 2,
           pointRadius: 4,
           pointHoverRadius: 6,
@@ -1794,6 +1870,7 @@
 
   
   let selectedEmoji = EMOJIS[0];
+  let selectedColor = COLORS[0];
   const gridEmoji = document.getElementById('wl-emoji-grid');
   EMOJIS.forEach(e => {
     const d = document.createElement('div');
@@ -1805,6 +1882,84 @@
       selectedEmoji = e;
     });
     gridEmoji.appendChild(d);
+  });
+
+  const gridColor = document.getElementById('wl-color-grid');
+  COLORS.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'wl-color-opt' + (c === selectedColor ? ' selected' : '');
+    d.style.backgroundColor = c;
+    d.style.color = c;
+    d.addEventListener('click', () => {
+      document.querySelectorAll('.wl-color-opt').forEach(el => el.classList.remove('selected'));
+      d.classList.add('selected');
+      selectedColor = c;
+    });
+    gridColor.appendChild(d);
+  });
+
+  
+  document.getElementById('wl-btn-config').addEventListener('click', () => {
+    document.getElementById('wl-cfg-binid').value = BIN_ID;
+    modalCfg.classList.add('show');
+  });
+
+  document.getElementById('wl-btn-cfg-cancel').addEventListener('click', () => {
+    modalCfg.classList.remove('show');
+  });
+
+  document.getElementById('wl-btn-cfg-save').addEventListener('click', () => {
+    const newBin = document.getElementById('wl-cfg-binid').value.trim();
+    BIN_ID = newBin;
+    if (BIN_ID) {
+      localStorage.setItem(LS_BIN_KEY, BIN_ID);
+    } else {
+      localStorage.removeItem(LS_BIN_KEY);
+      data = { animals: {}, weights: {}, lastModified: Date.now() };
+      saveToLocal();
+    }
+    modalCfg.classList.remove('show');
+    toast('✓ 設定を保存しました');
+    fetchFromBlob();
+  });
+
+  document.getElementById('wl-cfg-export').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'weight_log_backup.json';
+    a.click(); URL.revokeObjectURL(url);
+    toast('✓ エクスポート完了');
+  });
+
+  document.getElementById('wl-cfg-import').addEventListener('change', e => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const json = JSON.parse(ev.target.result);
+        if (json.animals) {
+          data = json;
+          data.lastModified = Date.now();
+          pushData();
+          renderDash();
+          toast('✓ インポート完了');
+          modalCfg.classList.remove('show');
+        }
+      } catch (err) { toast('✗ 読み込みエラー'); }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+
+  document.getElementById('wl-cfg-clear').addEventListener('click', () => {
+    if (confirm('ローカルデータを全て消去しますか？')) {
+      data = { animals: {}, weights: {}, lastModified: Date.now() };
+      pushData();
+      renderDash();
+      toast('🗑 データを初期化しました');
+      modalCfg.classList.remove('show');
+    }
   });
 
   document.getElementById('wl-btn-add-animal').addEventListener('click', () => {
@@ -1823,7 +1978,7 @@
     if (!name) { toast('✗ 名前を入力してください'); return; }
     
     const id = 'anim_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-    data.animals[id] = { id, name, species, emoji: selectedEmoji, createdAt: Date.now() };
+    data.animals[id] = { id, name, species, emoji: selectedEmoji, themeColor: selectedColor, createdAt: Date.now() };
     
     pushData();
     renderDash();
