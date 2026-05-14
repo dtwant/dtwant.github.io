@@ -234,7 +234,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "48"
+    "wordCount": "64"
   }]
   </script>
 
@@ -932,7 +932,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>48 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>64 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1100,687 +1100,244 @@
 
         <div class="article-content max-w-prose mb-20">
           
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+
 <style>
-  @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap");
+.ntc-root{font-family:"Zen Kaku Gothic New","JetBrains Mono",sans-serif;position:fixed;top:0;left:0;width:100vw;height:100vh;margin:0;padding:0;background-color:#050508;background-image:linear-gradient(rgba(0,243,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.04) 1px,transparent 1px),radial-gradient(ellipse at 20% 20%,rgba(0,255,255,0.07),transparent 55%),radial-gradient(ellipse at 80% 80%,rgba(255,0,255,0.06),transparent 55%);background-size:40px 40px,40px 40px,100% 100%,100% 100%;color:#e2e8f0;z-index:999990;overflow-y:auto;overflow-x:hidden;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+.ntc-root *,.ntc-root *::before,.ntc-root *::after{box-sizing:border-box}
+.ntc-root,.ntc-root *{text-decoration:none!important}
+.ntc-root::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at center,transparent 55%,rgba(0,0,0,0.55) 100%);pointer-events:none;z-index:10}
+.ntc-root::before{content:"";position:fixed;top:-10%;left:0;right:0;height:10vh;background:linear-gradient(to bottom,rgba(0,255,255,0) 0%,rgba(0,255,255,0.06) 50%,rgba(0,255,255,0.35) 100%);border-bottom:2px solid rgba(0,255,255,0.5);animation:ntc-scan 8s linear infinite;pointer-events:none;z-index:999999;box-shadow:0 5px 20px rgba(0,255,255,0.25)}
+@keyframes ntc-scan{0%{transform:translateY(-100%);opacity:0}5%{opacity:1}95%{opacity:1}100%{transform:translateY(1100%);opacity:0}}
+.ntc-wrap{max-width:1100px;width:100%;margin:0 auto;padding:2rem 1.5rem;min-height:100vh;position:relative;z-index:2}
+ 
+.ntc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid rgba(0,255,255,0.15);flex-wrap:wrap;gap:0.75rem}
+.ntc-title{font-family:'Orbitron',sans-serif;font-size:1.6rem;font-weight:900;color:#0ff;text-transform:uppercase;letter-spacing:0.12em;text-shadow:0 0 20px rgba(0,255,255,0.5)}
+.ntc-hdr-actions{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap}
+.ntc-btn{background:transparent;border:1px solid rgba(255,255,255,0.15);color:#a1a1aa;padding:0.35rem 0.75rem;font-family:'JetBrains Mono',monospace;font-size:0.7rem;cursor:pointer;transition:all 0.25s;letter-spacing:0.04em;border-radius:3px}
+.ntc-btn:hover{border-color:#0ff;color:#0ff;box-shadow:0 0 12px rgba(0,255,255,0.2)}
+.ntc-sync-badge{font-size:0.6rem;padding:0.2rem 0.6rem;letter-spacing:0.08em;font-family:'JetBrains Mono',monospace;border-radius:2px}
+.ntc-sync-badge.local{background:rgba(100,116,139,0.25);color:#94a3b8}
+.ntc-sync-badge.ok{background:rgba(0,255,255,0.15);color:#0ff;border:1px solid rgba(0,255,255,0.3)}
+.ntc-sync-badge.busy{background:rgba(250,204,21,0.2);color:#facc15}
+.ntc-sync-badge.err{background:rgba(255,0,255,0.15);color:#f0f}
+ 
+.ntc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;margin-bottom:1.5rem}
+.ntc-stat-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:1rem 0.5rem;text-align:center;transition:all 0.3s;position:relative;overflow:hidden}
+.ntc-stat-card::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,255,0.5),transparent)}
+.ntc-stat-card:hover{background:rgba(0,255,255,0.03);border-color:rgba(0,255,255,0.2)}
+.ntc-stat-val{font-family:'Orbitron',sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:0.02em}
+.ntc-stat-label{font-size:0.6rem;color:#64748b;text-transform:uppercase;letter-spacing:0.12em;margin-top:0.3rem;font-family:'JetBrains Mono',monospace}
+.ntc-c-rate{color:#0ff;text-shadow:0 0 12px rgba(0,255,255,0.4)}
+.ntc-c-done{color:#22c55e;text-shadow:0 0 8px rgba(34,197,94,0.4)}
+.ntc-c-streak{color:#f97316;text-shadow:0 0 8px rgba(249,115,22,0.4)}
+.ntc-c-best{color:#d946ef;text-shadow:0 0 8px rgba(217,70,239,0.4)}
+.ntc-ring-wrap{width:56px;height:56px;margin:0 auto 0.3rem}
+.ntc-ring-svg{transform:rotate(-90deg)}
+.ntc-ring-bg{fill:none;stroke:rgba(255,255,255,0.06);stroke-width:4}
+.ntc-ring-fg{fill:none;stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset 1s ease}
+.ntc-rate-bar-wrap{height:3px;background:rgba(255,255,255,0.05);margin-top:0.4rem;border-radius:2px;overflow:hidden}
+.ntc-rate-bar{height:100%;background:linear-gradient(90deg,#22c55e,#0ff,#d946ef);transition:width 0.8s ease;border-radius:2px}
+ 
+.ntc-month-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem}
+.ntc-month-center{display:flex;align-items:center;gap:0.5rem}
+.ntc-month-label{font-family:'Orbitron',sans-serif;font-size:1.3rem;color:#f1f5f9;letter-spacing:0.1em;cursor:pointer;transition:color 0.2s}
+.ntc-month-label:hover{color:#0ff}
+.ntc-month-sub{font-size:0.7rem;color:#64748b;font-family:'JetBrains Mono',monospace}
+.ntc-btn-nav{background:transparent;border:1px solid rgba(255,255,255,0.12);color:#a1a1aa;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:all 0.25s;border-radius:4px}
+.ntc-btn-nav:hover{border-color:#0ff;color:#0ff;background:rgba(0,255,255,0.06)}
+.ntc-nav-group{display:flex;gap:0.4rem;align-items:center}
+ 
+.ntc-jump{display:none;margin-bottom:1rem;padding:1rem;background:rgba(0,0,0,0.4);border:1px solid rgba(0,255,255,0.15);border-radius:6px;animation:ntc-fadeIn 0.2s}
+.ntc-jump.open{display:block}
+.ntc-jump-year{display:flex;gap:0.5rem;align-items:center;margin-bottom:0.75rem;justify-content:center;flex-wrap:wrap}
+.ntc-jump-ybtn{background:transparent;border:1px solid rgba(255,255,255,0.1);color:#888;padding:0.3rem 0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s}
+.ntc-jump-ybtn.sel{border-color:#0ff;color:#0ff;background:rgba(0,255,255,0.08)}
+.ntc-jump-months{display:grid;grid-template-columns:repeat(6,1fr);gap:0.4rem}
+.ntc-jump-m{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#666;padding:0.4rem 0;text-align:center;font-size:0.75rem;cursor:pointer;border-radius:3px;transition:all 0.2s;font-family:'JetBrains Mono',monospace}
+.ntc-jump-m.sel{border-color:#d946ef;color:#d946ef;background:rgba(217,70,239,0.08)}
+.ntc-jump-m:hover:not(.sel){border-color:rgba(255,255,255,0.2);color:#aaa}
+ 
+.ntc-views{display:flex;gap:2px;margin-bottom:1rem;background:rgba(255,255,255,0.02);border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,0.06)}
+.ntc-view-tab{flex:1;background:transparent;border:none;color:#555;padding:0.6rem 0.5rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:0.5px;transition:all 0.2s}
+.ntc-view-tab:hover{color:#94a3b8;background:rgba(255,255,255,0.02)}
+.ntc-view-tab.active{color:#0ff;background:rgba(0,255,255,0.08)}
+.ntc-view-panel{display:none;animation:ntc-fadeIn 0.3s}
+.ntc-view-panel.active{display:block}
+@keyframes ntc-fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+ 
+.ntc-tabs{display:flex;justify-content:center;margin-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,0.08)}
+.ntc-tab{background:transparent;border:none;color:#555;padding:0.8rem 1.5rem;font-family:'Orbitron',monospace;font-size:0.8rem;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1.5px;transition:all 0.3s;position:relative}
+.ntc-tab::after{content:'';position:absolute;bottom:-1px;left:0;width:100%;height:2px;background:transparent;transition:all 0.3s}
+.ntc-tab:hover{color:#fff}
+.ntc-tab.active{color:#0ff;text-shadow:0 0 10px rgba(0,255,255,0.5)}
+.ntc-tab.active::after{background:#0ff;box-shadow:0 0 10px #0ff}
+.ntc-panel{display:none}.ntc-panel.active{display:block}
+ 
+.ntc-filter-bar{display:flex;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap;align-items:center}
+.ntc-filter-chip{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:0.3rem 0.7rem;font-size:0.65rem;font-family:'JetBrains Mono',monospace;cursor:pointer;border-radius:20px;transition:all 0.2s;display:flex;align-items:center;gap:4px}
+.ntc-filter-chip:hover{border-color:rgba(255,255,255,0.3)}
+.ntc-filter-chip.active{border-color:var(--chip-color,#0ff);color:var(--chip-color,#0ff);background:rgba(0,255,255,0.06)}
+.ntc-filter-chip .ntc-chip-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ntc-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid rgba(255,255,255,0.08);border-radius:4px;margin-bottom:1.5rem;position:relative;background:rgba(0,0,0,0.3)}
+.ntc-table{width:100%;border-collapse:separate;border-spacing:0;min-width:max-content;table-layout:fixed}
+.ntc-table th,.ntc-table td{border-bottom:1px solid rgba(255,255,255,0.04);border-right:1px solid rgba(255,255,255,0.04);text-align:center;vertical-align:middle}
+.ntc-table th{background:#0a0a0f;font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.5px;padding:0.6rem 0.3rem;position:sticky;top:0;z-index:5;white-space:nowrap;color:#94a3b8}
+.ntc-th-bar{display:block;height:3px;width:100%;margin-bottom:5px;border-radius:2px}
+.ntc-table th .ntc-th-name{display:block;max-width:70px;overflow:hidden;text-overflow:ellipsis}
+.ntc-table .ntc-date-col{position:sticky;left:0;z-index:4;background:#08080d;color:#64748b;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:0.78rem;min-width:46px;width:46px;padding:0.4rem 0.2rem;cursor:pointer;transition:color 0.2s}
+.ntc-table .ntc-date-col:hover{color:#0ff}
+.ntc-table .ntc-date-today{color:#0ff;text-shadow:0 0 8px rgba(0,255,255,0.6);background:rgba(0,255,255,0.04)}
+.ntc-table .ntc-date-weekend{color:#d946ef}
+.ntc-cell{width:55px;min-width:55px;height:44px;cursor:pointer;transition:all 0.15s;user-select:none;-webkit-user-select:none;font-size:1.3rem;padding:0;position:relative;font-family:'JetBrains Mono',monospace}
+.ntc-cell:hover{background:rgba(0,255,255,0.05)}
+.ntc-cell:active{transform:scale(0.9)}
+.ntc-cell[data-v="✓"]{font-weight:700}
+.ntc-cell[data-v="-"]{color:#333;font-weight:400}
+.ntc-cell.ntc-cell-alert:not([data-v="✓"]){background:rgba(239,68,68,0.12);box-shadow:inset 0 0 12px rgba(239,68,68,0.5);border:1px solid rgba(239,68,68,0.3);animation:ntc-alert 1.5s infinite alternate}
+@keyframes ntc-alert{0%{box-shadow:inset 0 0 8px rgba(239,68,68,0.3)}100%{box-shadow:inset 0 0 18px rgba(239,68,68,0.8);background:rgba(239,68,68,0.25)}}
+.ntc-cell.has-memo::after{content:"";position:absolute;top:3px;right:3px;width:5px;height:5px;background:#fff;border-radius:50%;box-shadow:0 0 4px #fff}
+.ntc-row-today{background:rgba(0,255,255,0.02)}
+ 
+.ntc-cal-grid-header{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:2px}
+.ntc-cal-wh{text-align:center;padding:0.4rem 0;font-family:'Orbitron',sans-serif;font-size:0.65rem;color:#555;letter-spacing:0.1em}
+.ntc-cal-wh:first-child{color:rgba(239,68,68,0.5)}
+.ntc-cal-wh:last-child{color:rgba(0,255,255,0.5)}
+.ntc-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:1.5rem}
+.ntc-cal-cell{min-height:80px;padding:0.35rem;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);border-radius:3px;cursor:pointer;transition:all 0.2s;position:relative;display:flex;flex-direction:column}
+.ntc-cal-cell:hover{background:rgba(0,255,255,0.04);border-color:rgba(0,255,255,0.15)}
+.ntc-cal-cell.other{opacity:0.2;pointer-events:none}
+.ntc-cal-cell.today{border-color:rgba(217,70,239,0.5);background:rgba(217,70,239,0.04)}
+.ntc-cal-cell.today::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#d946ef,#0ff)}
+.ntc-cal-cell.sun .ntc-cal-day{color:rgba(239,68,68,0.6)}
+.ntc-cal-cell.sat .ntc-cal-day{color:rgba(0,255,255,0.6)}
+.ntc-cal-day{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#666;margin-bottom:0.2rem}
+.ntc-cal-cell.today .ntc-cal-day{color:#f1f5f9;font-weight:700}
+.ntc-cal-bar-wrap{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
+.ntc-cal-mini-bar{height:4px;border-radius:2px;transition:width 0.3s}
+.ntc-cal-count{font-size:0.55rem;color:#555;font-family:'JetBrains Mono',monospace;margin-top:2px}
+ 
+.ntc-heat-container{margin-bottom:1.5rem}
+.ntc-heat-label{font-family:'Orbitron',sans-serif;font-size:0.8rem;color:#64748b;letter-spacing:0.1em;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
+.ntc-heat-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06)}
+.ntc-heat-grid{display:flex;gap:3px;overflow-x:auto;padding-bottom:0.5rem}
+.ntc-heat-week{display:flex;flex-direction:column;gap:3px}
+.ntc-heat-day{width:14px;height:14px;border-radius:2px;background:rgba(255,255,255,0.04);transition:all 0.2s;cursor:pointer;position:relative}
+.ntc-heat-day:hover{transform:scale(1.3);z-index:5}
+.ntc-heat-day.l1{background:rgba(0,255,255,0.15)}
+.ntc-heat-day.l2{background:rgba(0,255,255,0.3)}
+.ntc-heat-day.l3{background:rgba(0,255,255,0.5)}
+.ntc-heat-day.l4{background:#0ff;box-shadow:0 0 6px rgba(0,255,255,0.4)}
+.ntc-heat-months{display:flex;gap:3px;margin-bottom:4px;padding-left:0}
+.ntc-heat-mlabel{font-size:0.5rem;color:#444;font-family:'JetBrains Mono',monospace;min-width:14px;text-align:center}
+.ntc-heat-legend{display:flex;align-items:center;gap:6px;margin-top:0.5rem;justify-content:flex-end}
+.ntc-heat-legend span{font-size:0.55rem;color:#555;font-family:'JetBrains Mono',monospace}
+.ntc-heat-legend-box{width:12px;height:12px;border-radius:2px}
+.ntc-heat-tooltip{position:fixed;background:#111;border:1px solid rgba(0,255,255,0.3);color:#e2e8f0;padding:0.4rem 0.6rem;font-size:0.7rem;font-family:'JetBrains Mono',monospace;border-radius:4px;pointer-events:none;z-index:999999;display:none;box-shadow:0 4px 12px rgba(0,0,0,0.6)}
 
-   
-  .ntc-root {
-    font-family: "Zen Kaku Gothic New", "JetBrains Mono", sans-serif;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
-    margin: 0;
-    padding: 2.5rem 1.5rem;
-    background-color: #030305;
-    background-image:
-      linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-      radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.8) 100%);
-    background-size: 30px 30px, 30px 30px, 100% 100%;
-    color: #e2e8f0;
-    border: none;
-    border-radius: 0;
-    z-index: 999990;
-    overflow-y: auto;
-    overflow-x: hidden;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-  }
-  
-   
-  .ntc-root::after {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0.15),
-      rgba(0, 0, 0, 0.15) 1px,
-      transparent 1px,
-      transparent 2px
-    );
-    pointer-events: none;
-    z-index: 10;
-  }
-  .ntc-root > * {
-    position: relative;
-    z-index: 2;
-    max-width: 1400px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .ntc-root *,
-  .ntc-root *::before,
-  .ntc-root *::after {
-    box-sizing: border-box;
-  }
-  .ntc-root, .ntc-root * {
-    text-decoration: none !important;
-  }
+ 
+.ntc-export-bar{display:flex;gap:0.6rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.ntc-export-btn{flex:1;min-width:120px;background:transparent;border:1px solid rgba(255,255,255,0.12);color:#94a3b8;padding:0.65rem 0.5rem;font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:700;cursor:pointer;border-radius:4px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.4rem}
+.ntc-export-btn:hover{border-color:#0ff;color:#0ff;box-shadow:0 0 12px rgba(0,255,255,0.15)}
+ 
+.ntc-task-list{margin-bottom:1.5rem}
+.ntc-task-item{display:flex;align-items:center;gap:0.7rem;padding:0.7rem 0.8rem;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.06);border-radius:4px;margin-bottom:0.4rem;transition:all 0.2s;position:relative}
+.ntc-task-item:hover{border-color:rgba(255,255,255,0.15)}
+.ntc-task-item.dragging{opacity:0.4;transform:scale(0.97);border-color:#0ff}
+.ntc-task-item.drag-over{border-top:2px solid #0ff}
+.ntc-task-drag{color:#475569;cursor:grab;padding:0 4px;font-size:1.1rem;display:flex;align-items:center;user-select:none;-webkit-user-select:none;touch-action:none}
+.ntc-task-color{width:6px;align-self:stretch;border-radius:2px;flex-shrink:0}
+.ntc-task-info{flex:1;min-width:0}
+.ntc-task-name{font-weight:700;font-size:0.9rem;color:#e2e8f0}
+.ntc-task-meta{font-size:0.65rem;color:#64748b;font-family:'JetBrains Mono',monospace;margin-top:0.15rem}
+.ntc-task-controls{display:flex;gap:0.4rem}
+.ntc-btn-icon{background:transparent;border:1px solid rgba(255,255,255,0.12);color:#888;width:32px;height:32px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:3px;transition:all 0.2s}
+.ntc-btn-icon:hover{border-color:#0ff;color:#0ff}
+.ntc-btn-icon.del:hover{border-color:#ef4444;color:#ef4444}
+ 
+.ntc-form{background:rgba(0,0,0,0.4);border:1px solid rgba(0,255,255,0.2);border-radius:6px;padding:1.5rem;position:relative}
+.ntc-form-label{font-family:'Orbitron',sans-serif;font-size:0.75rem;color:#0ff;letter-spacing:1.5px;margin-bottom:1rem;text-transform:uppercase}
+.ntc-form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.ntc-input-group{display:flex;flex-direction:column;gap:0.35rem}
+.ntc-input-lbl{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:#64748b;text-transform:uppercase;letter-spacing:0.5px}
+.ntc-input{width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.1);color:#e2e8f0;padding:0.7rem;font-family:'Zen Kaku Gothic New',sans-serif;font-size:0.95rem;border-radius:3px;outline:none;transition:all 0.2s}
+.ntc-input:focus{border-color:#0ff;box-shadow:0 0 12px rgba(0,255,255,0.15)}
+.ntc-color-picker{display:flex;gap:8px;flex-wrap:wrap}
+.ntc-color-opt{width:32px;height:32px;cursor:pointer;border:2px solid transparent;border-radius:4px;transition:all 0.2s;opacity:0.5}
+.ntc-color-opt:hover{opacity:0.8;transform:scale(1.1)}
+.ntc-color-opt.selected{opacity:1;border-color:#fff;box-shadow:0 0 12px currentColor;transform:scale(1.15)}
+.ntc-submit{width:100%;background:transparent;border:1px solid #0ff;color:#0ff;padding:0.8rem;font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;text-transform:uppercase;letter-spacing:2px;border-radius:4px;transition:all 0.3s;margin-top:0.5rem}
+.ntc-submit:hover{background:#0ff;color:#000;box-shadow:0 0 20px rgba(0,255,255,0.4)}
+ 
+.ntc-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(3,3,8,0.85);backdrop-filter:blur(6px);z-index:1000001;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;padding:1rem}
+.ntc-overlay.open{opacity:1;pointer-events:auto}
+.ntc-modal{background:#0c0c10;border:1px solid rgba(0,255,255,0.2);border-radius:8px;padding:1.5rem;width:100%;max-width:480px;box-shadow:0 8px 60px rgba(0,0,0,0.8),0 0 30px rgba(0,255,255,0.06);max-height:85vh;overflow-y:auto;animation:ntc-modalIn 0.3s ease}
+@keyframes ntc-modalIn{from{transform:translateY(15px) scale(0.97);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+.ntc-modal-title{font-family:'Orbitron',sans-serif;color:#0ff;font-size:0.95rem;margin-bottom:1rem;letter-spacing:1.5px;display:flex;align-items:center;gap:0.5rem;padding-bottom:0.6rem;border-bottom:1px solid rgba(255,255,255,0.06)}
+.ntc-modal textarea{width:100%;min-height:120px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.08);color:#e2e8f0;padding:0.8rem;font-family:'Zen Kaku Gothic New',sans-serif;font-size:0.95rem;outline:none;resize:vertical;border-radius:4px;margin-bottom:1rem}
+.ntc-modal textarea:focus{border-color:rgba(0,255,255,0.4)}
+.ntc-modal-meta{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#64748b;margin-bottom:1rem}
+.ntc-modal-btns{display:flex;gap:0.6rem}
+.ntc-modal-btn{flex:1;padding:0.65rem;background:transparent;border:1px solid;font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.75rem;cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;border-radius:4px}
+.ntc-modal-btn.save{border-color:#0ff;color:#0ff}
+.ntc-modal-btn.save:hover{background:#0ff;color:#000;box-shadow:0 0 12px #0ff}
+.ntc-modal-btn.del{border-color:#ef4444;color:#ef4444;flex:0 0 90px}
+.ntc-modal-btn.del:hover{background:#ef4444;color:#000}
+.ntc-modal-btn.cancel{border-color:#555;color:#888;flex:0 0 90px}
+.ntc-modal-btn.cancel:hover{border-color:#fff;color:#fff}
+ 
+.ntc-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(8,8,12,0.95);border:1px solid rgba(0,255,255,0.3);color:#0ff;padding:0.7rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.8rem;font-weight:700;z-index:9999999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 0 20px rgba(0,255,255,0.3);letter-spacing:0.05em;border-radius:6px}
+.ntc-toast.show{transform:translateX(-50%) translateY(0)}
+ 
+.ntc-particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999998}
+ 
+@media(max-width:768px){
+.ntc-wrap{padding:1rem 0.5rem}
+.ntc-title{font-size:1.15rem}
+.ntc-stats{gap:0.4rem}
+.ntc-stat-card{padding:0.6rem 0.3rem}
+.ntc-stat-val{font-size:1.2rem}
+.ntc-stat-label{font-size:0.5rem}
+.ntc-ring-wrap{width:44px;height:44px}
+.ntc-month-label{font-size:1.05rem}
+.ntc-month-sub{display:none}
+.ntc-form-row{grid-template-columns:1fr}
+.ntc-export-bar{flex-direction:column}
+.ntc-cell{width:44px;min-width:44px;height:38px;font-size:1.1rem}
+.ntc-table th{font-size:0.55rem;padding:0.4rem 0.2rem}
+.ntc-table th .ntc-th-name{max-width:42px;font-size:0.5rem}
+.ntc-table .ntc-date-col{min-width:38px;width:38px;font-size:0.68rem}
+.ntc-cal-cell{min-height:55px;padding:0.2rem}
+.ntc-cal-day{font-size:0.6rem}
+.ntc-cal-count{display:none}
+.ntc-jump-months{grid-template-columns:repeat(4,1fr)}
+.ntc-view-tab{font-size:0.6rem;padding:0.5rem 0.3rem}
+.ntc-heat-day{width:11px;height:11px}
+.ntc-filter-chip{font-size:0.58rem;padding:0.25rem 0.5rem}
+.ntc-modal{padding:1.2rem}
+.ntc-toast{left:10px;right:10px;transform:translateX(0) translateY(80px);text-align:center}
+.ntc-toast.show{transform:translateX(0) translateY(0)}
+}
 
-   
-  .ntc-root::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, transparent, #0ff, #f0f, #0ff, transparent);
-    background-size: 200% 100%;
-    animation: ntc-scanline 3s linear infinite;
-    z-index: 999999;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
-  }
-  @keyframes ntc-scanline {
-    0% { background-position: 100% 0; }
-    100% { background-position: -100% 0; }
-  }
-
-   
-  .ntc-header {
-    text-align: center;
-    padding-top: 2.5rem;
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    position: relative;
-  }
-  .ntc-header::after {
-    content: '';
-    position: absolute;
-    bottom: -1px; left: 50%;
-    transform: translateX(-50%);
-    width: 30%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #0ff, transparent);
-    box-shadow: 0 0 10px #0ff;
-  }
-  .ntc-exit-btn {
-    position: absolute;
-    top: 0; left: 0;
-    background: transparent;
-    border: 1px solid #0ff;
-    color: #0ff;
-    padding: 0.4rem 0.8rem;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.7rem;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: 0.3s;
-    z-index: 5;
-  }
-  .ntc-exit-btn:hover {
-    background: #0ff;
-    color: #000;
-    box-shadow: 0 0 15px #0ff;
-  }
-  .ntc-title {
-    font-family: "Orbitron", sans-serif;
-    font-size: 2rem;
-    font-weight: 900;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #0ff;
-    margin: 0 0 0.2rem 0;
-  }
-  .ntc-desc {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.8rem;
-    color: #0ff;
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 5px rgba(0,255,255,0.5);
-  }
-  .ntc-sync-status {
-    display: inline-block;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.7rem;
-    padding: 3px 12px;
-    border-radius: 2px;
-    margin-top: 0.8rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-  .ntc-sync-online {
-    background: rgba(0, 255, 255, 0.1);
-    color: #0ff;
-    border: 1px solid #0ff;
-    box-shadow: 0 0 10px rgba(0,255,255,0.3);
-  }
-  .ntc-sync-offline {
-    background: rgba(255, 0, 255, 0.1);
-    color: #f0f;
-    border: 1px solid #f0f;
-    box-shadow: 0 0 10px rgba(255,0,255,0.3);
-  }
-
-
-
-   
-  .ntc-month-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-  }
-  .ntc-month-btn {
-    background: transparent;
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    color: #0ff;
-    width: 48px;
-    height: 48px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s;
-    text-shadow: 0 0 5px #0ff;
-    box-shadow: inset 0 0 10px rgba(0,255,255,0.1);
-  }
-  .ntc-month-btn:hover {
-    background: rgba(0, 255, 255, 0.1);
-    box-shadow: 0 0 15px rgba(0,255,255,0.4), inset 0 0 10px rgba(0,255,255,0.3);
-    transform: scale(1.05);
-  }
-  .ntc-month-label {
-    font-family: "Orbitron", sans-serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.1em;
-    min-width: 180px;
-    text-align: center;
-    text-shadow: 0 0 15px rgba(255,255,255,0.6);
-  }
-  .ntc-today-btn {
-    background: transparent;
-    border: 1px solid #0ff;
-    color: #0ff;
-    padding: 6px 16px;
-    font-family: "Orbitron", monospace;
-    font-size: 0.75rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .ntc-today-btn:hover {
-    background: #0ff;
-    color: #000;
-    box-shadow: 0 0 15px #0ff;
-  }
-
-   
-  .ntc-table-wrap {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border: 1px solid rgba(255,255,255,0.1);
-    margin-bottom: 2rem;
-    position: relative;
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(10px);
-  }
-  .ntc-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: max-content;
-    table-layout: fixed;
-  }
-  .ntc-table th,
-  .ntc-table td {
-    border: 1px solid rgba(255,255,255,0.05);
-    text-align: center;
-    vertical-align: middle;
-  }
-  
-   
-  .ntc-table th {
-    background: rgba(0, 0, 0, 0.8);
-    font-family: "Zen Kaku Gothic New", sans-serif;
-    font-weight: 700;
-    font-size: 0.75rem;
-    letter-spacing: 0.5px;
-    padding: 0.8rem 0.4rem;
-    position: sticky;
-    top: 0;
-    z-index: 5;
-    white-space: nowrap;
-    border-bottom: 2px solid #333;
-  }
-  .ntc-th-color-bar {
-    display: block;
-    height: 3px;
-    width: 100%;
-    margin-bottom: 6px;
-    border-radius: 2px;
-  }
-  .ntc-table th .ntc-th-name {
-    display: block;
-    max-width: 80px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #fff;
-  }
-  
-   
-  .ntc-table .ntc-date-col {
-    position: sticky;
-    left: 0;
-    z-index: 4;
-    background: rgba(10, 10, 15, 0.95);
-    color: #64748b;
-    font-family: "Orbitron", monospace;
-    font-weight: 700;
-    font-size: 0.85rem;
-    min-width: 50px;
-    width: 50px;
-    padding: 0.5rem 0.2rem;
-    border-right: 2px solid rgba(255,255,255,0.1);
-  }
-  .ntc-table .ntc-date-today {
-    color: #0ff;
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
-    background: rgba(0, 255, 255, 0.05);
-  }
-  .ntc-table .ntc-date-weekend {
-    color: #f0f;
-  }
-
-   
-  .ntc-cell {
-    width: 60px;
-    min-width: 60px;
-    height: 50px;
-    cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
-    -webkit-user-select: none;
-    font-size: 1.4rem;
-    padding: 0;
-    position: relative;
-    font-family: "JetBrains Mono", monospace;
-  }
-  .ntc-cell:hover {
-    background: rgba(255, 255, 255, 0.05);
-  }
-  .ntc-cell:active {
-    transform: scale(0.9);
-  }
-  
-   
-  .ntc-cell[data-v="✓"] {
-    font-weight: 700;
-  }
-  .ntc-cell[data-v="-"] {
-    color: #475569;
-    font-weight: 400;
-  }
-
-   
-  .ntc-cell.ntc-cell-alert:not([data-v="✓"]) {
-    background: rgba(255, 0, 0, 0.1);
-    box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.3);
-    animation: ntc-alert-pulse 2s infinite alternate;
-  }
-  @keyframes ntc-alert-pulse {
-    0% { background: rgba(255, 0, 0, 0.05); }
-    100% { background: rgba(255, 0, 0, 0.2); }
-  }
-
-   
-  .ntc-export-bar {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  .ntc-export-btn {
-    flex: 1;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.2);
-    color: #fff;
-    padding: 0.8rem;
-    font-family: "Orbitron", sans-serif;
-    font-size: 0.85rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-  .ntc-export-btn:hover {
-    border-color: #0ff;
-    color: #0ff;
-    box-shadow: 0 0 15px rgba(0,255,255,0.3);
-  }
-  .ntc-export-btn:active {
-    transform: scale(0.98);
-  }
-
-   
-  .ntc-task-list {
-    margin-bottom: 2rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-  }
-  .ntc-task-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.1);
-    position: relative;
-    overflow: hidden;
-  }
-  .ntc-task-color-strip {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 6px;
-  }
-  .ntc-task-info {
-    flex: 1;
-    min-width: 0;
-  }
-  .ntc-task-name {
-    font-weight: 700;
-    font-size: 1rem;
-    color: #fff;
-    margin-bottom: 0.2rem;
-  }
-  .ntc-task-meta {
-    font-size: 0.7rem;
-    color: #94a3b8;
-    font-family: "JetBrains Mono", monospace;
-  }
-  .ntc-task-controls {
-    display: flex;
-    gap: 0.5rem;
-  }
-  .ntc-btn-icon {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.2);
-    color: #fff;
-    width: 36px; height: 36px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-  }
-  .ntc-btn-icon:hover {
-    border-color: #f0f;
-    color: #f0f;
-    box-shadow: 0 0 10px rgba(255,0,255,0.3);
-  }
-
-  .ntc-form {
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    padding: 2rem;
-    box-shadow: 0 0 30px rgba(0,255,255,0.05);
-    position: relative;
-  }
-  .ntc-form::before {
-    content: "NEW_TASK_ENTRY";
-    position: absolute;
-    top: -12px; left: 20px;
-    background: #030305;
-    padding: 0 10px;
-    font-family: "Orbitron", sans-serif;
-    font-size: 0.8rem;
-    color: #0ff;
-    letter-spacing: 2px;
-  }
-  .ntc-form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-  .ntc-input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .ntc-input-label {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.7rem;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .ntc-input {
-    width: 100%;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: #fff;
-    padding: 0.8rem;
-    font-family: "Zen Kaku Gothic New", sans-serif;
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.3s;
-  }
-  .ntc-input:focus {
-    border-color: #0ff;
-    background: rgba(0,255,255,0.05);
-    box-shadow: 0 0 15px rgba(0,255,255,0.2);
-  }
-  
-   
-  .ntc-color-picker {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .ntc-color-opt {
-    width: 36px; height: 36px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.2s;
-    opacity: 0.6;
-  }
-  .ntc-color-opt:hover {
-    opacity: 1;
-    transform: scale(1.1);
-  }
-  .ntc-color-opt.selected {
-    opacity: 1;
-    border-color: #fff;
-    box-shadow: 0 0 15px currentColor;
-    transform: scale(1.15);
-  }
-
-  .ntc-submit {
-    width: 100%;
-    background: transparent;
-    border: 1px solid #0ff;
-    color: #0ff;
-    padding: 1rem;
-    font-family: "Orbitron", sans-serif;
-    font-weight: 700;
-    font-size: 1.1rem;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    transition: all 0.3s;
-    margin-top: 1rem;
-  }
-  .ntc-submit:hover {
-    background: #0ff;
-    color: #000;
-    box-shadow: 0 0 20px #0ff;
-  }
-
-   
-  .ntc-tabs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-  .ntc-tab {
-    background: transparent;
-    border: none;
-    color: #64748b;
-    padding: 1rem 2rem;
-    font-family: "Orbitron", monospace;
-    font-size: 0.9rem;
-    font-weight: 700;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: all 0.3s;
-    position: relative;
-  }
-  .ntc-tab::after {
-    content: '';
-    position: absolute;
-    bottom: -1px; left: 0; width: 100%; height: 2px;
-    background: transparent;
-    transition: all 0.3s;
-  }
-  .ntc-tab:hover {
-    color: #fff;
-  }
-  .ntc-tab.active {
-    color: #0ff;
-    text-shadow: 0 0 10px rgba(0,255,255,0.5);
-  }
-  .ntc-tab.active::after {
-    background: #0ff;
-    box-shadow: 0 0 10px #0ff;
-  }
-  .ntc-panel { display: none; }
-  .ntc-panel.active { display: block; animation: fadeIn 0.4s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-   
-  .ntc-toast {
-    position: fixed;
-    bottom: 30px; left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: rgba(0,0,0,0.9);
-    border: 1px solid #0ff;
-    color: #0ff;
-    padding: 1rem 2rem;
-    font-family: "Orbitron", monospace;
-    font-size: 0.9rem;
-    font-weight: 700;
-    z-index: 9999999;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 0 20px rgba(0,255,255,0.4);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-  .ntc-toast.show { transform: translateX(-50%) translateY(0); }
-
-   
-  .ntc-cell.has-memo::after {
-    content: "";
-    position: absolute;
-    top: 4px; right: 4px;
-    width: 6px; height: 6px;
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 5px #fff;
-  }
-  .ntc-modal-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(5px);
-    z-index: 9999999;
-    display: flex; align-items: center; justify-content: center;
-    padding: 1rem;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.3s;
-  }
-  .ntc-modal-overlay.show { opacity: 1; pointer-events: all; }
-  .ntc-modal {
-    background: #0a0a0f;
-    border: 1px solid #0ff;
-    width: 100%; max-width: 500px;
-    padding: 2rem;
-    box-shadow: 0 0 40px rgba(0,255,255,0.15);
-  }
-  .ntc-modal-title {
-    font-family: "Orbitron", sans-serif;
-    font-size: 1.2rem; color: #0ff;
-    margin-bottom: 0.5rem; letter-spacing: 2px;
-  }
-  .ntc-modal-meta {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.8rem; color: #94a3b8;
-    margin-bottom: 1.5rem;
-  }
-  .ntc-modal textarea {
-    width: 100%; min-height: 150px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: #fff; padding: 1rem;
-    font-family: "Zen Kaku Gothic New", sans-serif;
-    font-size: 1rem;
-    outline: none; resize: vertical;
-    margin-bottom: 1.5rem;
-  }
-  .ntc-modal textarea:focus { border-color: #0ff; }
-  .ntc-modal-btns { display: flex; gap: 1rem; }
-  .ntc-modal-btn {
-    flex: 1; padding: 0.8rem;
-    background: transparent; border: 1px solid;
-    font-family: "Orbitron", sans-serif; font-weight: 700;
-    cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
-  }
-  .ntc-modal-btn.save { border-color: #0ff; color: #0ff; }
-  .ntc-modal-btn.save:hover { background: #0ff; color: #000; box-shadow: 0 0 15px #0ff; }
-  .ntc-modal-btn.del { border-color: #f0f; color: #f0f; flex: 0 0 100px; }
-  .ntc-modal-btn.del:hover { background: #f0f; color: #000; box-shadow: 0 0 15px #f0f; }
-  .ntc-modal-btn.cancel { border-color: #64748b; color: #94a3b8; flex: 0 0 100px; }
-  .ntc-modal-btn.cancel:hover { border-color: #fff; color: #fff; }
-
-   
-  @media (max-width: 768px) {
-    .ntc-root { padding: 1rem 0.5rem; }
-    .ntc-title { font-size: 1.3rem; letter-spacing: 0.1em; }
-    .ntc-exit-btn { font-size: 0.6rem; padding: 0.3rem 0.6rem; }
-    .ntc-month-nav { gap: 0.8rem; }
-    .ntc-month-label { font-size: 1.1rem; min-width: 140px; }
-    .ntc-month-btn { width: 40px; height: 40px; font-size: 1rem; }
-    .ntc-form-row { grid-template-columns: 1fr; gap: 1rem; }
-    .ntc-export-bar { flex-direction: column; }
-    .ntc-table th { padding: 0.6rem 0.2rem; font-size: 0.65rem; }
-    .ntc-cell { width: 45px; min-width: 45px; height: 40px; font-size: 1.1rem; }
-    .ntc-table .ntc-date-col { min-width: 40px; width: 40px; font-size: 0.75rem; }
-    .ntc-tab { padding: 0.8rem 1.2rem; font-size: 0.75rem; letter-spacing: 1px; }
-  }
 </style>
-
 <div class="ntc-root" id="ntc-root">
-  <header class="ntc-header">
-    <button class="ntc-exit-btn" onclick="window.history.back()">◀ EXIT</button>
-    <button class="ntc-exit-btn" style="left:auto;right:0;border-color:#f0f;color:#f0f;" id="ntc-config-btn">⚙ CONFIG</button>
-    <div class="ntc-title">TASK_ARCHIVE</div>
-    <div class="ntc-desc">>> ACTION_LOG_MONITOR : ONLINE</div>
-    <div class="ntc-sync-status ntc-sync-offline" id="ntc-sync-badge">LOCAL ONLY</div>
-  </header>
+<canvas class="ntc-particles" id="ntc-particles"></canvas>
+<div class="ntc-wrap">
+
+  <div class="ntc-header">
+    <div style="display:flex;align-items:center;gap:0.75rem">
+      <button onclick="window.history.back()" class="ntc-btn" style="color:#0ff;border-color:#0ff;font-weight:bold">◀ EXIT</button>
+      <div class="ntc-title">TASK_ARCHIVE</div>
+    </div>
+    <div class="ntc-hdr-actions">
+      <span class="ntc-sync-badge local" id="ntc-sync-badge">◌ LOCAL</span>
+      <button class="ntc-btn" id="ntc-sync-btn">⟳ SYNC</button>
+      <button class="ntc-btn" id="ntc-config-btn">⚙ CONFIG</button>
+    </div>
+  </div>
 
   <div class="ntc-tabs">
     <button class="ntc-tab active" data-tab="record">ACTION_LOG</button>
@@ -1789,70 +1346,130 @@
 
   
   <div class="ntc-panel active" id="ntc-panel-record">
+
+    
+    <div class="ntc-stats">
+      <div class="ntc-stat-card">
+        <div class="ntc-ring-wrap"><svg class="ntc-ring-svg" viewBox="0 0 56 56" width="100%" height="100%"><circle class="ntc-ring-bg" cx="28" cy="28" r="24"/><circle class="ntc-ring-fg" id="ntc-ring" cx="28" cy="28" r="24" stroke="#0ff" stroke-dasharray="150.8" stroke-dashoffset="150.8"/></svg></div>
+        <div class="ntc-stat-val ntc-c-rate" id="ntc-s-rate">0%</div>
+        <div class="ntc-stat-label">達成率</div>
+      </div>
+      <div class="ntc-stat-card">
+        <div class="ntc-stat-val ntc-c-done" id="ntc-s-done">0</div>
+        <div class="ntc-stat-label">実行数</div>
+      </div>
+      <div class="ntc-stat-card">
+        <div class="ntc-stat-val ntc-c-streak" id="ntc-s-streak">0</div>
+        <div class="ntc-stat-label">🔥 ストリーク</div>
+      </div>
+      <div class="ntc-stat-card">
+        <div class="ntc-stat-val ntc-c-best" id="ntc-s-best">0</div>
+        <div class="ntc-stat-label">最長記録</div>
+      </div>
+    </div>
+
+    
     <div class="ntc-month-nav">
-      <button class="ntc-month-btn" id="ntc-prev">◀</button>
-      <div class="ntc-month-label" id="ntc-month-label"></div>
-      <button class="ntc-month-btn" id="ntc-next">▶</button>
-      <button class="ntc-today-btn" id="ntc-today-btn">TODAY</button>
+      <div class="ntc-nav-group">
+        <button class="ntc-btn-nav" id="ntc-prev">◀</button>
+      </div>
+      <div class="ntc-month-center">
+        <span class="ntc-month-label" id="ntc-month-label" title="クリックで年月選択"></span>
+        <span class="ntc-month-sub" id="ntc-month-sub"></span>
+      </div>
+      <div class="ntc-nav-group">
+        <button class="ntc-btn ntc-btn-today" id="ntc-today-btn" style="font-size:0.65rem;padding:0.3rem 0.6rem">TODAY</button>
+        <button class="ntc-btn-nav" id="ntc-next">▶</button>
+      </div>
     </div>
 
-    <div class="ntc-table-wrap">
-      <table class="ntc-table" id="ntc-table"></table>
+    
+    <div class="ntc-jump" id="ntc-jump">
+      <div class="ntc-jump-year" id="ntc-jump-year"></div>
+      <div class="ntc-jump-months" id="ntc-jump-months"></div>
     </div>
 
+    
+    <div class="ntc-views">
+      <button class="ntc-view-tab active" data-view="table">TABLE</button>
+      <button class="ntc-view-tab" data-view="calendar">CALENDAR</button>
+      <button class="ntc-view-tab" data-view="heatmap">HEATMAP</button>
+    </div>
+
+    
+    <div class="ntc-view-panel active" id="ntc-vp-table">
+      <div class="ntc-filter-bar" id="ntc-filter-bar"></div>
+      <div class="ntc-table-wrap" id="ntc-table-wrap">
+        <table class="ntc-table" id="ntc-table"></table>
+      </div>
+    </div>
+
+    
+    <div class="ntc-view-panel" id="ntc-vp-calendar">
+      <div class="ntc-cal-grid-header">
+        <div class="ntc-cal-wh">SUN</div><div class="ntc-cal-wh">MON</div><div class="ntc-cal-wh">TUE</div><div class="ntc-cal-wh">WED</div><div class="ntc-cal-wh">THU</div><div class="ntc-cal-wh">FRI</div><div class="ntc-cal-wh">SAT</div>
+      </div>
+      <div class="ntc-cal-grid" id="ntc-cal-grid"></div>
+    </div>
+
+    
+    <div class="ntc-view-panel" id="ntc-vp-heatmap">
+      <div class="ntc-heat-container" id="ntc-heatmap"></div>
+    </div>
+
+    
     <div class="ntc-export-bar">
-      <button class="ntc-export-btn" id="ntc-export-png">📸 CAPTURE_PNG</button>
-      <button class="ntc-export-btn" id="ntc-export-pdf">📄 EXPORT_PDF</button>
+      <button class="ntc-export-btn" id="ntc-export-png">📸 CAPTURE</button>
+      <button class="ntc-export-btn" id="ntc-export-pdf">📄 PDF</button>
     </div>
   </div>
 
   
   <div class="ntc-panel" id="ntc-panel-manage">
     <div class="ntc-task-list" id="ntc-task-list"></div>
-
     <div class="ntc-form">
+      <div class="ntc-form-label">NEW_TASK_ENTRY</div>
       <form id="ntc-add-form">
         <div class="ntc-form-row">
           <div class="ntc-input-group">
-            <span class="ntc-input-label">TASK_NAME (タスク名)</span>
-            <input type="text" class="ntc-input" id="ntc-new-name" placeholder="Execute Protocol 01" required />
+            <span class="ntc-input-lbl">TASK_NAME</span>
+            <input type="text" class="ntc-input" id="ntc-new-name" placeholder="タスク名を入力" required/>
           </div>
           <div class="ntc-input-group">
-            <span class="ntc-input-label">ALERT_THRESHOLD (連続未実行アラート)</span>
-            <input type="number" class="ntc-input" id="ntc-new-alert" placeholder="例: 3 (空欄で無効)" min="1" max="30" />
+            <span class="ntc-input-lbl">ALERT_THRESHOLD (日)</span>
+            <input type="number" class="ntc-input" id="ntc-new-alert" placeholder="例: 3" min="1" max="30"/>
           </div>
         </div>
-        <div class="ntc-form-row">
-          <div class="ntc-input-group">
-            <span class="ntc-input-label">NEON_THEME (カラー)</span>
-            <div class="ntc-color-picker" id="ntc-color-picker">
-              
-            </div>
-          </div>
+        <div class="ntc-input-group" style="margin-bottom:0.8rem">
+          <span class="ntc-input-lbl">NEON_THEME</span>
+          <div class="ntc-color-picker" id="ntc-color-picker"></div>
         </div>
         <button type="submit" class="ntc-submit">INITIALIZE_TASK</button>
       </form>
     </div>
   </div>
+
+</div>
 </div>
 
 <div class="ntc-toast" id="ntc-toast"></div>
+<div class="ntc-heat-tooltip" id="ntc-heat-tip"></div>
 
 
-<div class="ntc-modal-overlay" id="ntc-config-overlay">
-  <div class="ntc-modal" style="max-width:450px;">
+<div class="ntc-overlay" id="ntc-cfg-overlay">
+  <div class="ntc-modal" style="max-width:420px">
     <div class="ntc-modal-title">⚙ SYSTEM_CONFIG</div>
-    <div style="margin-bottom:1.2rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem;">JSONBIN BIN_ID</div>
-      <input type="text" class="ntc-input" id="ntc-cfg-binid" placeholder="Bin IDを入力 (空欄で新規作成)" style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;">
-      <div style="font-size:0.6rem;color:#475569;margin-top:0.3rem;">別端末と同期するにはBin IDを共有してください</div>
+    <div style="margin-bottom:1rem">
+      <div class="ntc-input-lbl" style="margin-bottom:0.3rem">JSONBIN BIN_ID</div>
+      <input type="text" class="ntc-input" id="ntc-cfg-binid" placeholder="Bin ID (空欄で新規)" style="font-family:'JetBrains Mono',monospace;font-size:0.8rem">
+      <div style="font-size:0.55rem;color:#444;margin-top:0.2rem">別端末と同期するにはBin IDを共有</div>
     </div>
-    <div style="margin-bottom:1.2rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem;">DATA_MANAGEMENT</div>
-      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-        <button class="ntc-modal-btn save" id="ntc-cfg-export" style="flex:1;padding:0.6rem;font-size:0.7rem;">📤 EXPORT</button>
-        <label class="ntc-modal-btn save" style="flex:1;padding:0.6rem;font-size:0.7rem;text-align:center;cursor:pointer;">📥 IMPORT<input type="file" accept=".json" id="ntc-cfg-import" style="display:none;"></label>
-        <button class="ntc-modal-btn del" id="ntc-cfg-clear" style="flex:0 0 auto;padding:0.6rem;font-size:0.7rem;">🗑 PURGE_ALL</button>
+    <div style="margin-bottom:1rem">
+      <div class="ntc-input-lbl" style="margin-bottom:0.3rem">DATA_MANAGEMENT</div>
+      <div style="display:flex;gap:0.4rem;flex-wrap:wrap">
+        <button class="ntc-modal-btn save" id="ntc-cfg-export" style="flex:1;font-size:0.65rem">📤 EXPORT</button>
+        <label class="ntc-modal-btn save" style="flex:1;font-size:0.65rem;text-align:center;cursor:pointer">📥 IMPORT<input type="file" accept=".json" id="ntc-cfg-import" style="display:none"></label>
+        <button class="ntc-modal-btn del" id="ntc-cfg-clear" style="flex:0 0 auto;font-size:0.65rem">🗑 PURGE</button>
       </div>
     </div>
     <div class="ntc-modal-btns">
@@ -1863,23 +1480,11 @@
 </div>
 
 
-<div class="ntc-modal-overlay" id="ntc-list-overlay">
-  <div class="ntc-modal">
-    <div class="ntc-modal-title">ACTION_LOG_RECORD</div>
-    <div class="ntc-modal-meta" id="ntc-list-meta"></div>
-    <div id="ntc-list-content" style="max-height: 50vh; overflow-y: auto; margin-bottom: 1.5rem; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;"></div>
-    <div class="ntc-modal-btns">
-      <button class="ntc-modal-btn cancel" id="ntc-list-close" style="width:100%">CLOSE</button>
-    </div>
-  </div>
-</div>
-
-
-<div class="ntc-modal-overlay" id="ntc-memo-overlay">
+<div class="ntc-overlay" id="ntc-memo-overlay">
   <div class="ntc-modal">
     <div class="ntc-modal-title">LOG_ENTRY</div>
     <div class="ntc-modal-meta" id="ntc-memo-meta"></div>
-    <textarea id="ntc-memo-text" placeholder="Accessing memory banks..."></textarea>
+    <textarea id="ntc-memo-text" placeholder="メモを入力..."></textarea>
     <div class="ntc-modal-btns">
       <button class="ntc-modal-btn save" id="ntc-memo-save">COMMIT</button>
       <button class="ntc-modal-btn del" id="ntc-memo-del">PURGE</button>
@@ -1888,546 +1493,771 @@
   </div>
 </div>
 
+
+<div class="ntc-overlay" id="ntc-list-overlay">
+  <div class="ntc-modal">
+    <div class="ntc-modal-title">ACTION_LOG_RECORD</div>
+    <div class="ntc-modal-meta" id="ntc-list-meta"></div>
+    <div id="ntc-list-content" style="max-height:50vh;overflow-y:auto;margin-bottom:1rem;color:#fff;font-family:'JetBrains Mono',monospace;font-size:0.85rem"></div>
+    <div class="ntc-modal-btns">
+      <button class="ntc-modal-btn cancel" id="ntc-list-close" style="width:100%">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="ntc-overlay" id="ntc-edit-overlay">
+  <div class="ntc-modal" style="max-width:420px">
+    <div class="ntc-modal-title">EDIT_TASK</div>
+    <div class="ntc-input-group" style="margin-bottom:0.8rem">
+      <span class="ntc-input-lbl">TASK_NAME</span>
+      <input type="text" class="ntc-input" id="ntc-edit-name"/>
+    </div>
+    <div class="ntc-input-group" style="margin-bottom:0.8rem">
+      <span class="ntc-input-lbl">ALERT_THRESHOLD</span>
+      <input type="number" class="ntc-input" id="ntc-edit-alert" min="0" max="30"/>
+    </div>
+    <div class="ntc-input-group" style="margin-bottom:1rem">
+      <span class="ntc-input-lbl">COLOR</span>
+      <div class="ntc-color-picker" id="ntc-edit-colors"></div>
+    </div>
+    <div class="ntc-modal-btns">
+      <button class="ntc-modal-btn save" id="ntc-edit-save">SAVE</button>
+      <button class="ntc-modal-btn cancel" id="ntc-edit-cancel">CANCEL</button>
+    </div>
+  </div>
+</div>
 <script>
-  (function () {
-    "use strict";
+(function(){
+"use strict";
+const JSONBIN_KEY='$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+const LS_BIN_KEY='dt_task_cal_bin_id';
+let BIN_ID=localStorage.getItem(LS_BIN_KEY)||'6a004707adc21f119a7bbbff';
+const JSONBIN_HEADERS=()=>({'X-Master-Key':JSONBIN_KEY,'Content-Type':'application/json'});
+const getBinUrl=()=>`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
+const getBinPutUrl=()=>`https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const BIN_CREATE_URL='https://api.jsonbin.io/v3/b';
+const LS_KEY='dt_task_cal_v1';
+const MARKS=['','✓','-'];
+const COLORS=['#06b6d4','#10b981','#d946ef','#f97316','#3b82f6','#ef4444','#eab308','#8b5cf6','#ec4899','#14b8a6'];
+let selectedColor=COLORS[0];
+const DOW=["SUN","MON","TUE","WED","THU","FRI","SAT"];
 
-    
-    const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
-    const LS_BIN_KEY  = 'dt_task_cal_bin_id';
-    let BIN_ID = localStorage.getItem(LS_BIN_KEY) || '6a004707adc21f119a7bbbff';
-    const JSONBIN_HEADERS = () => ({
-      'X-Master-Key': JSONBIN_KEY,
-      'Content-Type': 'application/json',
+let data={tasks:{},records:{},memos:{}};
+let currentYear,currentMonth;
+let isSyncing=false,syncOk=false;
+let activeFilters=new Set();
+let currentView='table';
+
+const $=id=>document.getElementById(id);
+const root=$('ntc-root'),tableEl=$('ntc-table'),taskListEl=$('ntc-task-list');
+const monthLabel=$('ntc-month-label'),monthSub=$('ntc-month-sub');
+const syncBadge=$('ntc-sync-badge'),toastEl=$('ntc-toast');
+const colorPickerEl=$('ntc-color-picker'),filterBar=$('ntc-filter-bar');
+const particleCanvas=$('ntc-particles');
+const pCtx=particleCanvas.getContext('2d');
+
+const now=new Date();
+currentYear=now.getFullYear();currentMonth=now.getMonth()+1;
+
+
+function initColorPicker(container,current,onSelect){
+  container.innerHTML='';
+  COLORS.forEach(c=>{
+    const o=document.createElement('div');
+    o.className='ntc-color-opt'+(c===current?' selected':'');
+    o.style.backgroundColor=c;o.style.color=c;
+    o.addEventListener('click',()=>{
+      container.querySelectorAll('.ntc-color-opt').forEach(e=>e.classList.remove('selected'));
+      o.classList.add('selected');onSelect(c);
     });
-    const getBinUrl    = () => `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
-    const getBinPutUrl = () => `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-    const BIN_CREATE_URL = 'https://api.jsonbin.io/v3/b';
+    container.appendChild(o);
+  });
+}
+initColorPicker(colorPickerEl,selectedColor,c=>{selectedColor=c});
 
-    const LS_KEY = 'dt_task_cal_v1';
-    
-    
-    const MARKS = ['', '✓', '-'];
-    
-    
-    const COLORS = [
-      '#06b6d4', 
-      '#10b981', 
-      '#d946ef', 
-      '#f97316', 
-      '#3b82f6', 
-      '#ef4444', 
-      '#eab308'  
-    ];
-    let selectedColor = COLORS[0];
 
-    
-    let data = { tasks: {}, records: {}, memos: {} };
-    let currentYear, currentMonth;
-    let isSyncing = false;
-    let syncOk = false;
+async function fetchFromBlob(){
+  try{
+    isSyncing=true;updateSyncBadge();
+    if(!BIN_ID){await createNewBin();return}
+    const r=await fetch(getBinUrl(),{headers:{'X-Master-Key':JSONBIN_KEY},cache:'no-store'});
+    if(r.status===404){await createNewBin();return}
+    if(!r.ok)throw new Error(r.status);
+    const j=await r.json();const v=j.record||{};
+    data={tasks:v.tasks||{},records:v.records||{},memos:v.memos||{}};
+    saveToLocal();syncOk=true;
+  }catch(e){console.error('Fetch failed:',e);loadFromLocal();syncOk=false}
+  isSyncing=false;updateSyncBadge();render();
+}
+async function createNewBin(){
+  try{
+    const r=await fetch(BIN_CREATE_URL,{method:'POST',headers:{...JSONBIN_HEADERS(),'X-Bin-Name':'0723_task_calendar'},body:JSON.stringify(data)});
+    if(!r.ok)throw new Error(r.status);
+    const j=await r.json();BIN_ID=j.metadata.id;
+    localStorage.setItem(LS_BIN_KEY,BIN_ID);toast('LINK_ESTABLISHED');syncOk=true;
+  }catch(e){console.error(e);syncOk=false;toast('LINK_FAILED')}
+  isSyncing=false;updateSyncBadge();render();
+}
+let pushTimer=null;
+function pushData(){
+  saveToLocal();clearTimeout(pushTimer);
+  pushTimer=setTimeout(async()=>{
+    try{
+      isSyncing=true;updateSyncBadge();
+      if(!BIN_ID){await createNewBin();return}
+      const r=await fetch(getBinPutUrl(),{method:'PUT',headers:JSONBIN_HEADERS(),body:JSON.stringify(data)});
+      if(r.status===404){await createNewBin();return}
+      syncOk=r.ok;
+    }catch(e){syncOk=false}
+    isSyncing=false;updateSyncBadge();
+  },500);
+}
+function updateSyncBadge(){
+  if(isSyncing){syncBadge.textContent='⟳ SYNCING';syncBadge.className='ntc-sync-badge busy'}
+  else if(syncOk){syncBadge.textContent='● ONLINE';syncBadge.className='ntc-sync-badge ok'}
+  else{syncBadge.textContent='○ OFFLINE';syncBadge.className='ntc-sync-badge err'}
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')fetchFromBlob()});
+$('ntc-sync-btn').addEventListener('click',()=>fetchFromBlob());
 
-    
-    const root = document.getElementById('ntc-root');
-    const tableEl = document.getElementById('ntc-table');
-    const taskListEl = document.getElementById('ntc-task-list');
-    const monthLabel = document.getElementById('ntc-month-label');
-    const syncBadge = document.getElementById('ntc-sync-badge');
-    const toastEl = document.getElementById('ntc-toast');
-    const colorPickerEl = document.getElementById('ntc-color-picker');
+function saveToLocal(){try{localStorage.setItem(LS_KEY,JSON.stringify(data))}catch(e){}}
+function loadFromLocal(){
+  try{const r=localStorage.getItem(LS_KEY);if(r)data=JSON.parse(r)}catch(e){}
+  if(!data.tasks)data.tasks={};if(!data.records)data.records={};if(!data.memos)data.memos={};
+}
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');setTimeout(()=>toastEl.classList.remove('show'),2500)}
 
-    
-    const now = new Date();
-    currentYear = now.getFullYear();
-    currentMonth = now.getMonth() + 1;
 
-    
-    COLORS.forEach(c => {
-      const opt = document.createElement('div');
-      opt.className = 'ntc-color-opt';
-      opt.style.backgroundColor = c;
-      opt.style.color = c; 
-      if (c === selectedColor) opt.classList.add('selected');
-      opt.addEventListener('click', () => {
-        document.querySelectorAll('.ntc-color-opt').forEach(el => el.classList.remove('selected'));
-        opt.classList.add('selected');
-        selectedColor = c;
-      });
-      colorPickerEl.appendChild(opt);
-    });
+function getTasksSorted(){return Object.entries(data.tasks).sort((a,b)=>(a[1].order||0)-(b[1].order||0)).map(([id,t])=>({id,...t}))}
+function getDaysInMonth(y,m){return new Date(y,m,0).getDate()}
+function getDayOfWeek(y,m,d){return new Date(y,m-1,d).getDay()}
 
-    
-    async function fetchFromBlob() {
-      try {
-        isSyncing = true; updateSyncBadge();
-        if (!BIN_ID) { await createNewBin(); return; }
-        const res = await fetch(getBinUrl(), { headers: { 'X-Master-Key': JSONBIN_KEY }, cache: 'no-store' });
-        if (res.status === 404) { await createNewBin(); return; }
-        if (!res.ok) throw new Error('fetch failed: ' + res.status);
-        const json = await res.json();
-        const val  = json.record || {};
-        data = { tasks: val.tasks || {}, records: val.records || {}, memos: val.memos || {} };
-        saveToLocal(); syncOk = true;
-      } catch(e) {
-        console.error('Fetch failed, using localStorage:', e);
-        loadFromLocal(); syncOk = false;
-      }
-      isSyncing = false; updateSyncBadge(); render();
+function getAlertTaskIds(){
+  const alerts=new Set(),t=new Date(),tasks=getTasksSorted();
+  tasks.forEach(task=>{
+    if(!task.alert)return;let missed=0;
+    for(let i=0;i<30;i++){
+      const d=new Date(t.getFullYear(),t.getMonth(),t.getDate()-i);
+      const mk=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+      const rec=(data.records[mk]?.[task.id]||{})[String(d.getDate())];
+      if(rec==='✓')break;missed++;
     }
-
-    async function createNewBin() {
-      try {
-        const res = await fetch(BIN_CREATE_URL, {
-          method: 'POST',
-          headers: { ...JSONBIN_HEADERS(), 'X-Bin-Name': '0723_task_calendar' },
-          body: JSON.stringify(data)
-        });
-        if (!res.ok) throw new Error('create failed: ' + res.status);
-        const json = await res.json();
-        BIN_ID = json.metadata.id;
-        localStorage.setItem(LS_BIN_KEY, BIN_ID);
-        toast('LINK_ESTABLISHED');
-        syncOk = true;
-      } catch(e) {
-        console.error('createNewBin failed:', e);
-        syncOk = false; toast('LINK_FAILED');
-      }
-      isSyncing = false; updateSyncBadge(); render();
-    }
-
-    let pushTimer = null;
-    function pushData() {
-      saveToLocal();
-      clearTimeout(pushTimer);
-      pushTimer = setTimeout(async () => {
-        try {
-          isSyncing = true; updateSyncBadge();
-          if (!BIN_ID) { await createNewBin(); return; }
-          const res = await fetch(getBinPutUrl(), {
-            method: 'PUT', headers: JSONBIN_HEADERS(), body: JSON.stringify(data)
-          });
-          if (res.status === 404) { await createNewBin(); return; }
-          syncOk = res.ok;
-        } catch(e) {
-          syncOk = false;
-        }
-        isSyncing = false; updateSyncBadge();
-      }, 500);
-    }
-
-    function updateSyncBadge() {
-      if (isSyncing) {
-        syncBadge.textContent = 'SYNCING...';
-        syncBadge.className = 'ntc-sync-status ntc-sync-offline';
-        syncBadge.style.borderColor = '#f0f'; syncBadge.style.color = '#f0f';
-      } else if (syncOk) {
-        syncBadge.textContent = 'ONLINE';
-        syncBadge.className = 'ntc-sync-status ntc-sync-online';
-        syncBadge.style.borderColor = '#0ff'; syncBadge.style.color = '#0ff';
-      } else {
-        syncBadge.textContent = 'OFFLINE';
-        syncBadge.className = 'ntc-sync-status ntc-sync-offline';
-      }
-    }
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') fetchFromBlob();
-    });
-
-    
-    function saveToLocal() { try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch (e) {} }
-    function loadFromLocal() {
-      try { const raw = localStorage.getItem(LS_KEY); if (raw) data = JSON.parse(raw); } catch (e) {}
-      if (!data.tasks) data.tasks = {}; if (!data.records) data.records = {}; if (!data.memos) data.memos = {};
-    }
-
-    function toast(msg) {
-      toastEl.textContent = msg;
-      toastEl.classList.add("show");
-      setTimeout(() => toastEl.classList.remove("show"), 2500);
-    }
-
-    
-    document.querySelectorAll(".ntc-tab").forEach((tab) => {
-      tab.addEventListener("click", () => {
-        document.querySelectorAll(".ntc-tab").forEach((t) => t.classList.remove("active"));
-        document.querySelectorAll(".ntc-panel").forEach((p) => p.classList.remove("active"));
-        tab.classList.add("active");
-        document.getElementById("ntc-panel-" + tab.dataset.tab).classList.add("active");
-      });
-    });
-
-    
-    document.getElementById("ntc-prev").addEventListener("click", () => { currentMonth--; if (currentMonth < 1) { currentMonth = 12; currentYear--; } render(); });
-    document.getElementById("ntc-next").addEventListener("click", () => { currentMonth++; if (currentMonth > 12) { currentMonth = 1; currentYear++; } render(); });
-    document.getElementById("ntc-today-btn").addEventListener("click", () => { const n = new Date(); currentYear = n.getFullYear(); currentMonth = n.getMonth() + 1; render(); });
-
-    
-    function render() {
-      monthLabel.textContent = `${currentYear} . ${String(currentMonth).padStart(2,'0')}`;
-      renderTable();
-      renderTaskList();
-    }
-
-    function getTasksSorted() {
-      return Object.entries(data.tasks)
-        .sort((a, b) => (a[1].order || 0) - (b[1].order || 0))
-        .map(([id, t]) => ({ id, ...t }));
-    }
-
-    function getDaysInMonth(y, m) { return new Date(y, m, 0).getDate(); }
-    function getDayOfWeek(y, m, d) { return new Date(y, m - 1, d).getDay(); }
-
-    function getAlertTaskIds() {
-      const alerts = new Set();
-      const t = new Date();
-      const tasks = getTasksSorted();
-      
-      tasks.forEach(task => {
-        if (!task.alert) return;
-        let missed = 0;
-        
-        for (let i = 0; i < 30; i++) {
-          const d = new Date(t.getFullYear(), t.getMonth(), t.getDate() - i);
-          const mk = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-          const rec = (data.records[mk]?.[task.id] || {})[String(d.getDate())];
-          if (rec === "✓") break; 
-          missed++;
-        }
-        if (missed >= task.alert) alerts.add(task.id);
-      });
-      return alerts;
-    }
-
-    
-    const memoOverlay = document.getElementById('ntc-memo-overlay');
-    const memoMeta    = document.getElementById('ntc-memo-meta');
-    const memoText    = document.getElementById('ntc-memo-text');
-    let currentMemoKey = null;
-
-    function openMemo(tid, day, tName) {
-      const mk = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
-      currentMemoKey = `${mk}:${tid}:${day}`;
-      memoMeta.innerHTML = `<span style="color:#0ff">></span> ${tName} <br><span style="color:#f0f">></span> ${currentYear}.${currentMonth}.${day}`;
-      memoText.value = (data.memos || {})[currentMemoKey] || '';
-      memoOverlay.classList.add('show');
-      setTimeout(() => memoText.focus(), 100);
-    }
-    function closeMemo() { memoOverlay.classList.remove('show'); currentMemoKey = null; }
-    
-    document.getElementById('ntc-memo-save').addEventListener('click', () => {
-      const text = memoText.value.trim();
-      if (!data.memos) data.memos = {};
-      if (text) data.memos[currentMemoKey] = text; else delete data.memos[currentMemoKey];
-      pushData(); closeMemo(); renderTable();
-    });
-    document.getElementById('ntc-memo-del').addEventListener('click', () => {
-      if(data.memos) delete data.memos[currentMemoKey];
-      pushData(); closeMemo(); renderTable();
-    });
-    document.getElementById('ntc-memo-cancel').addEventListener('click', closeMemo);
-
-    
-    const listOverlay = document.getElementById('ntc-list-overlay');
-    const listMeta = document.getElementById('ntc-list-meta');
-    const listContent = document.getElementById('ntc-list-content');
-    
-    function openList(y, m, d) {
-       const mKey = `${y}-${String(m).padStart(2, '0')}`;
-       const records = data.records[mKey] || {};
-       const tasks = getTasksSorted();
-       let listHtml = '';
-       tasks.forEach(t => {
-          const rec = (records[t.id] || {})[String(d)] || "";
-          if (rec === "✓") {
-             listHtml += `<div style="padding: 0.5rem; border-bottom: 1px dashed rgba(255,255,255,0.2); display: flex; align-items: center; gap: 0.5rem;"><span style="color:${t.color || '#0ff'}; text-shadow:0 0 5px ${t.color || '#0ff'}">✓</span> ${t.name}</div>`;
-          }
-       });
-       if (!listHtml) listHtml = '<div style="color:#64748b;font-size:0.8rem;text-align:center;padding:1rem;">NO_ACTIONS_RECORDED</div>';
-       
-       listMeta.textContent = `${y}.${String(m).padStart(2, '0')}.${String(d).padStart(2, '0')} LOG`;
-       listContent.innerHTML = listHtml;
-       listOverlay.classList.add('show');
-    }
-    
-    document.getElementById('ntc-list-close').addEventListener('click', () => { listOverlay.classList.remove('show'); });
-    listOverlay.addEventListener('click', (e) => { if (e.target === listOverlay) listOverlay.classList.remove('show'); });
-
-    const DOW = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-
-    function renderTable() {
-      const tasks = getTasksSorted();
-      const days = getDaysInMonth(currentYear, currentMonth);
-      const monthKey = `${currentYear}-${String(currentMonth).padStart(2, "0")}`;
-      const monthRecords = data.records[monthKey] || {};
-      const todayDate = new Date();
-      const isCurrentMonth = todayDate.getFullYear() === currentYear && todayDate.getMonth() + 1 === currentMonth;
-      const alertIds = getAlertTaskIds();
-
-      if (tasks.length === 0) {
-        tableEl.innerHTML = '<tr><td style="padding:3rem;color:#64748b;font-family:Orbitron;">NO_ACTIVE_TASKS_FOUND</td></tr>';
-        return;
-      }
-
-      let html = '<thead><tr><th class="ntc-date-col">DAY</th>';
-      tasks.forEach((t) => {
-        html += `<th data-action="task-stats" data-tid="${t.id}" style="cursor:pointer;" title="タップで達成度を表示"><span class="ntc-th-color-bar" style="background:${t.color || '#0ff'};box-shadow:0 0 5px ${t.color || '#0ff'}"></span><span class="ntc-th-name">${t.name}</span></th>`;
-      });
-      html += "</tr></thead><tbody>";
-
-      for (let d = 1; d <= days; d++) {
-        const dow = getDayOfWeek(currentYear, currentMonth, d);
-        const isToday = isCurrentMonth && d === todayDate.getDate();
-        const isWeekend = dow === 0 || dow === 6;
-        const dateCls = ["ntc-date-col", isToday ? "ntc-date-today" : "", isWeekend ? "ntc-date-weekend" : ""].filter(Boolean).join(" ");
-        
-        const trStyle = isToday ? 'background: rgba(0,255,255,0.03);' : '';
-        html += `<tr style="${trStyle}"><td class="${dateCls}" data-action="list" data-y="${currentYear}" data-m="${currentMonth}" data-d="${d}" style="cursor:pointer;" title="タップで完了リストを表示">${String(d).padStart(2,'0')}<span style="font-size:0.5rem;display:block;opacity:0.5">${DOW[dow]}</span></td>`;
-
-        tasks.forEach((t) => {
-          const rec = (monthRecords[t.id] || {})[String(d)] || "";
-          const isAlertCell = isToday && alertIds.has(t.id);
-          const alertCls = isAlertCell ? " ntc-cell-alert" : "";
-          const colorStyle = rec === "✓" ? `color: ${t.color || '#0ff'}; text-shadow: 0 0 10px ${t.color || '#0ff'}; background: ${t.color}15;` : '';
-          
-          html += `<td class="ntc-cell${alertCls}" data-v="${rec}" data-tid="${t.id}" data-day="${d}" data-monthkey="${monthKey}" style="${colorStyle}">${rec}</td>`;
-        });
-        html += "</tr>";
-      }
-      html += "</tbody>";
-      tableEl.innerHTML = html;
-
-      
-      tableEl.querySelectorAll("th[data-action='task-stats']").forEach(th => {
-        th.addEventListener("click", () => {
-          const tid = th.dataset.tid;
-          const tName = data.tasks[tid].name;
-          let doneCount = 0;
-          Object.values(monthRecords[tid] || {}).forEach(v => { if (v === "✓") doneCount++; });
-          const passedDays = isCurrentMonth ? todayDate.getDate() : days;
-          toast(`【${tName}】 達成度: ${doneCount} / ${passedDays} 回`);
-        });
-      });
-
-      
-      tableEl.querySelectorAll(".ntc-date-col[data-action='list']").forEach(col => {
-         col.addEventListener('click', () => {
-            openList(col.dataset.y, col.dataset.m, col.dataset.d);
-         });
-      });
-
-      
-      tableEl.querySelectorAll(".ntc-cell").forEach((cell) => {
-        let pressTimer = null, didLongPress = false, startX = 0, startY = 0;
-        const THRESHOLD = 8;
-        const tid = cell.dataset.tid, day = cell.dataset.day, cMonthKey = cell.dataset.monthkey;
-        const memoKey = `${cMonthKey}:${tid}:${day}`;
-        if (data.memos?.[memoKey]) {
-          cell.classList.add('has-memo'); cell.title = data.memos[memoKey];
-        }
-
-        const onStart = (e) => {
-          if (e.touches && e.touches.length > 1) { onCancel(); return; }
-          const t = e.touches ? e.touches[0] : e;
-          startX = t.clientX; startY = t.clientY; didLongPress = false;
-          clearTimeout(pressTimer);
-          pressTimer = setTimeout(() => {
-            didLongPress = true; const tk = data.tasks[tid];
-            if (tk) openMemo(tid, day, tk.name);
-          }, 800); 
-        };
-        const onMove = (e) => {
-          if (!pressTimer) return;
-          const t = e.touches ? e.touches[0] : e;
-          const dist = Math.hypot(t.clientX - startX, t.clientY - startY);
-          if (dist > THRESHOLD) onCancel();
-        };
-        const onEnd = (e) => {
-          if (!pressTimer && !didLongPress) return;
-          const t = e.changedTouches ? e.changedTouches[0] : (e.touches ? e.touches[0] : e);
-          const dist = Math.hypot(t.clientX - startX, t.clientY - startY);
-          if (!didLongPress && dist < THRESHOLD) { e.preventDefault(); doTap(); }
-          onCancel();
-        };
-        const onCancel = () => { clearTimeout(pressTimer); pressTimer = null; };
-
-        const doTap = () => {
-          const cur = cell.dataset.v || "";
-          const next = MARKS[(MARKS.indexOf(cur) + 1) % MARKS.length];
-          if (!data.records[cMonthKey]) data.records[cMonthKey] = {};
-          if (!data.records[cMonthKey][tid]) data.records[cMonthKey][tid] = {};
-
-          if (next === "") {
-            delete data.records[cMonthKey][tid][day];
-            if (!Object.keys(data.records[cMonthKey][tid]).length) delete data.records[cMonthKey][tid];
-          } else {
-            data.records[cMonthKey][tid][day] = next;
-          }
-          pushData(); renderTable();
-        };
-
-        cell.addEventListener("touchstart", onStart, { passive: false });
-        cell.addEventListener("touchmove", onMove, { passive: true });
-        cell.addEventListener("touchend", onEnd);
-        cell.addEventListener("touchcancel", onCancel);
-        cell.addEventListener("mousedown", onStart);
-        cell.addEventListener("mousemove", onMove);
-        cell.addEventListener("mouseup", onEnd);
-        cell.addEventListener("mouseleave", onCancel);
-        cell.addEventListener("contextmenu", e => e.preventDefault());
-      });
+    if(missed>=task.alert)alerts.add(task.id);
+  });return alerts;
+}
 
 
-    }
+function calcStats(){
+  const tasks=getTasksSorted();if(!tasks.length)return{rate:0,done:0,streak:0,best:0};
+  const mk=`${currentYear}-${String(currentMonth).padStart(2,'0')}`;
+  const mRec=data.records[mk]||{};
+  const td=new Date(),isCurrentMonth=td.getFullYear()===currentYear&&td.getMonth()+1===currentMonth;
+  const passedDays=isCurrentMonth?td.getDate():getDaysInMonth(currentYear,currentMonth);
+  let done=0,possible=passedDays*tasks.length;
+  tasks.forEach(t=>{Object.values(mRec[t.id]||{}).forEach(v=>{if(v==='✓')done++})});
+  const rate=possible>0?Math.round(done/possible*100):0;
+  
+  let streak=0,best=0,cur=0;
+  for(let i=0;i<365;i++){
+    const d=new Date(td.getFullYear(),td.getMonth(),td.getDate()-i);
+    const dmk=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const dayRec=data.records[dmk]||{};
+    let anyDone=false;
+    tasks.forEach(t=>{if((dayRec[t.id]||{})[String(d.getDate())]==='✓')anyDone=true});
+    if(anyDone){cur++;if(i===0||cur>1){}if(cur>best)best=cur}
+    else{if(i===0){cur=0}else{if(cur>best)best=cur;cur=0}}
+  }
+  streak=0;
+  for(let i=0;i<365;i++){
+    const d=new Date(td.getFullYear(),td.getMonth(),td.getDate()-i);
+    const dmk=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const dayRec=data.records[dmk]||{};
+    let anyDone=false;
+    tasks.forEach(t=>{if((dayRec[t.id]||{})[String(d.getDate())]==='✓')anyDone=true});
+    if(anyDone)streak++;else break;
+  }
+  return{rate,done,streak,best};
+}
 
-    function renderTaskList() {
-      const tasks = getTasksSorted();
-      if (tasks.length === 0) {
-        taskListEl.innerHTML = '<div style="color:#64748b;font-family:Orbitron;">NO_TASKS_CONFIGURED</div>';
-        return;
-      }
-      let html = '';
-      tasks.forEach(t => {
-        html += `
-          <div class="ntc-task-item">
-            <div class="ntc-task-color-strip" style="background:${t.color || '#0ff'};box-shadow:0 0 10px ${t.color || '#0ff'}"></div>
-            <div class="ntc-task-info">
-              <div class="ntc-task-name">${t.name}</div>
-              <div class="ntc-task-meta">ALERT: ${t.alert ? t.alert + ' DAYS' : 'OFF'}</div>
-            </div>
-            <div class="ntc-task-controls">
-              <button class="ntc-btn-icon" onclick="deleteTask('${t.id}')">✗</button>
-            </div>
-          </div>
-        `;
-      });
-      taskListEl.innerHTML = html;
-    }
+function updateStats(){
+  const s=calcStats();
+  $('ntc-s-rate').textContent=s.rate+'%';
+  $('ntc-s-done').textContent=s.done;
+  $('ntc-s-streak').textContent=s.streak;
+  $('ntc-s-best').textContent=s.best;
+  
+  const circ=2*Math.PI*24;
+  const offset=circ-(s.rate/100)*circ;
+  const ring=$('ntc-ring');
+  ring.style.strokeDasharray=circ;ring.style.strokeDashoffset=offset;
+  if(s.rate>=80)ring.setAttribute('stroke','#22c55e');
+  else if(s.rate>=50)ring.setAttribute('stroke','#0ff');
+  else if(s.rate>=20)ring.setAttribute('stroke','#f97316');
+  else ring.setAttribute('stroke','#ef4444');
+}
 
-    
-    document.getElementById('ntc-add-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('ntc-new-name').value.trim();
-      const alertInput = document.getElementById('ntc-new-alert').value;
-      const alert = parseInt(alertInput, 10);
-      if (!name) return;
 
-      const id = 't_' + Date.now();
-      data.tasks[id] = { name, alert: isNaN(alert) || alert <= 0 ? 0 : alert, color: selectedColor, order: Date.now() };
-      pushData(); render();
-      e.target.reset();
-      toast('TASK_INITIALIZED');
-    });
 
-    window.deleteTask = function(id) {
-      if(confirm('PURGE TASK AND ALL ASSOCIATED LOGS?')) {
-        delete data.tasks[id];
-        Object.keys(data.records).forEach(mk => { if(data.records[mk][id]) delete data.records[mk][id]; });
-        pushData(); render(); toast('TASK_PURGED');
-      }
-    };
+document.querySelectorAll('.ntc-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.ntc-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.ntc-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    $('ntc-panel-'+tab.dataset.tab).classList.add('active');
+  });
+});
 
-    
-    document.getElementById("ntc-export-png").addEventListener("click", () => {
-      const w = document.getElementById("ntc-table-wrap");
-      w.style.overflow = "visible";
-      html2canvas(w, { backgroundColor: "#030305", scale: 2 }).then((canvas) => {
-        w.style.overflow = "auto";
-        const link = document.createElement("a");
-        link.download = `TASK_LOG_${currentYear}_${currentMonth}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      });
-    });
-    document.getElementById("ntc-export-pdf").addEventListener("click", () => {
-      const w = document.getElementById("ntc-table-wrap");
-      w.style.overflow = "visible";
-      html2canvas(w, { backgroundColor: "#030305", scale: 2 }).then((canvas) => {
-        w.style.overflow = "auto";
-        const pdf = new jspdf.jsPDF("p", "pt", "a4");
-        const imgData = canvas.toDataURL("image/png");
-        const pdfW = pdf.internal.pageSize.getWidth() - 40;
-        const pdfH = (canvas.height * pdfW) / canvas.width;
-        pdf.text(`TASK_LOG - ${currentYear}/${currentMonth}`, 20, 30);
-        pdf.addImage(imgData, "PNG", 20, 50, pdfW, pdfH);
-        pdf.save(`TASK_LOG_${currentYear}_${currentMonth}.pdf`);
-      });
-    });
 
-    
-    const cfgOverlay = document.getElementById('ntc-config-overlay');
-    const cfgBinInput = document.getElementById('ntc-cfg-binid');
+document.querySelectorAll('.ntc-view-tab').forEach(vt=>{
+  vt.addEventListener('click',()=>{
+    document.querySelectorAll('.ntc-view-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.ntc-view-panel').forEach(p=>p.classList.remove('active'));
+    vt.classList.add('active');currentView=vt.dataset.view;
+    $('ntc-vp-'+vt.dataset.view).classList.add('active');
+    renderCurrentView();
+  });
+});
 
-    document.getElementById('ntc-config-btn').addEventListener('click', () => {
-      cfgBinInput.value = BIN_ID || '';
-      cfgOverlay.classList.add('show');
-    });
-    document.getElementById('ntc-cfg-cancel').addEventListener('click', () => cfgOverlay.classList.remove('show'));
-    cfgOverlay.addEventListener('click', (e) => { if (e.target === cfgOverlay) cfgOverlay.classList.remove('show'); });
 
-    document.getElementById('ntc-cfg-apply').addEventListener('click', async () => {
-      const newId = cfgBinInput.value.trim();
-      if (newId && newId !== BIN_ID) {
-        BIN_ID = newId;
-        localStorage.setItem(LS_BIN_KEY, BIN_ID);
-        toast('BIN_ID_UPDATED');
-        cfgOverlay.classList.remove('show');
-        await fetchFromBlob();
-      } else if (!newId) {
-        BIN_ID = null;
-        localStorage.removeItem(LS_BIN_KEY);
-        toast('CREATING_NEW_BIN...');
-        cfgOverlay.classList.remove('show');
-        await createNewBin();
-      } else {
-        cfgOverlay.classList.remove('show');
-      }
-    });
+$('ntc-prev').addEventListener('click',()=>{currentMonth--;if(currentMonth<1){currentMonth=12;currentYear--}render()});
+$('ntc-next').addEventListener('click',()=>{currentMonth++;if(currentMonth>12){currentMonth=1;currentYear++}render()});
+$('ntc-today-btn').addEventListener('click',()=>{const n=new Date();currentYear=n.getFullYear();currentMonth=n.getMonth()+1;render()});
 
-    
-    document.getElementById('ntc-cfg-export').addEventListener('click', () => {
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = `task_archive_backup_${new Date().toISOString().slice(0,10)}.json`;
-      a.click(); URL.revokeObjectURL(url);
-      toast('EXPORTED');
-    });
 
-    
-    document.getElementById('ntc-cfg-import').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        try {
-          const imported = JSON.parse(ev.target.result);
-          if (imported.tasks && imported.records) {
-            data = { tasks: imported.tasks || {}, records: imported.records || {}, memos: imported.memos || {} };
-            pushData(); render();
-            toast('IMPORTED');
-          } else { toast('INVALID_FORMAT'); }
-        } catch (err) { toast('PARSE_ERROR'); }
-      };
-      reader.readAsText(file);
-      e.target.value = '';
-    });
+let jumpOpen=false;
+monthLabel.addEventListener('click',()=>{jumpOpen=!jumpOpen;$('ntc-jump').classList.toggle('open',jumpOpen);if(jumpOpen)renderJump()});
+function renderJump(){
+  const jy=$('ntc-jump-year'),jm=$('ntc-jump-months');
+  jy.innerHTML='';jm.innerHTML='';
+  for(let y=currentYear-2;y<=currentYear+2;y++){
+    const b=document.createElement('button');b.className='ntc-jump-ybtn'+(y===currentYear?' sel':'');
+    b.textContent=y;b.addEventListener('click',()=>{currentYear=y;render();renderJump()});
+    jy.appendChild(b);
+  }
+  const mNames=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  mNames.forEach((n,i)=>{
+    const b=document.createElement('button');
+    b.className='ntc-jump-m'+(i+1===currentMonth?' sel':'');
+    b.textContent=n;b.addEventListener('click',()=>{currentMonth=i+1;jumpOpen=false;$('ntc-jump').classList.remove('open');render()});
+    jm.appendChild(b);
+  });
+}
 
-    
-    document.getElementById('ntc-cfg-clear').addEventListener('click', () => {
-      if (confirm('全データを削除しますか？この操作は取り消せません。')) {
-        data = { tasks: {}, records: {}, memos: {} };
-        pushData(); render();
-        toast('ALL_DATA_PURGED');
-        cfgOverlay.classList.remove('show');
-      }
-    });
 
-    
-    loadFromLocal();
+let swipeStartX=0,swipeStartY=0;
+root.addEventListener('touchstart',e=>{if(e.touches.length===1){swipeStartX=e.touches[0].clientX;swipeStartY=e.touches[0].clientY}},{passive:true});
+root.addEventListener('touchend',e=>{
+  if(!e.changedTouches.length)return;
+  const dx=e.changedTouches[0].clientX-swipeStartX;
+  const dy=e.changedTouches[0].clientY-swipeStartY;
+  if(Math.abs(dx)>80&&Math.abs(dx)>Math.abs(dy)*1.5){
+    if(dx>0){currentMonth--;if(currentMonth<1){currentMonth=12;currentYear--}}
+    else{currentMonth++;if(currentMonth>12){currentMonth=1;currentYear++}}
     render();
-    fetchFromBlob();
-  })();
+  }
+},{passive:true});
+
+
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  if(e.key==='ArrowLeft'){currentMonth--;if(currentMonth<1){currentMonth=12;currentYear--}render()}
+  if(e.key==='ArrowRight'){currentMonth++;if(currentMonth>12){currentMonth=1;currentYear++}render()}
+});
+
+
+function render(){
+  const mNames=['','January','February','March','April','May','June','July','August','September','October','November','December'];
+  monthLabel.textContent=`${currentYear} . ${String(currentMonth).padStart(2,'0')}`;
+  monthSub.textContent=mNames[currentMonth];
+  updateStats();renderFilters();renderCurrentView();renderTaskList();
+}
+
+function renderCurrentView(){
+  if(currentView==='table')renderTable();
+  else if(currentView==='calendar')renderCalendarGrid();
+  else if(currentView==='heatmap')renderHeatmap();
+}
+
+
+function renderFilters(){
+  const tasks=getTasksSorted();
+  filterBar.innerHTML='';
+  if(tasks.length<=1)return;
+  tasks.forEach(t=>{
+    const chip=document.createElement('button');
+    chip.className='ntc-filter-chip'+(activeFilters.size===0||activeFilters.has(t.id)?' active':'');
+    chip.style.setProperty('--chip-color',t.color||'#0ff');
+    chip.innerHTML=`<span class="ntc-chip-dot" style="background:${t.color||'#0ff'}"></span>${t.name}`;
+    chip.addEventListener('click',()=>{
+      if(activeFilters.has(t.id)){activeFilters.delete(t.id)}
+      else{activeFilters.add(t.id)}
+      if(activeFilters.size===tasks.length)activeFilters.clear();
+      renderFilters();renderCurrentView();
+    });
+    filterBar.appendChild(chip);
+  });
+}
+
+function getVisibleTasks(){
+  const all=getTasksSorted();
+  if(activeFilters.size===0)return all;
+  return all.filter(t=>activeFilters.has(t.id));
+}
+
+
+function renderTable(){
+  const tasks=getVisibleTasks();
+  const days=getDaysInMonth(currentYear,currentMonth);
+  const monthKey=`${currentYear}-${String(currentMonth).padStart(2,'0')}`;
+  const mRec=data.records[monthKey]||{};
+  const td=new Date(),isCurrentMonth=td.getFullYear()===currentYear&&td.getMonth()+1===currentMonth;
+  const alertIds=getAlertTaskIds();
+  if(!tasks.length){tableEl.innerHTML='<tr><td style="padding:3rem;color:#555;font-family:Orbitron">NO_ACTIVE_TASKS</td></tr>';return}
+  let h='<thead><tr><th class="ntc-date-col">DAY</th>';
+  tasks.forEach(t=>{h+=`<th data-action="stats" data-tid="${t.id}" style="cursor:pointer" title="タップで達成度"><span class="ntc-th-bar" style="background:${t.color||'#0ff'};box-shadow:0 0 5px ${t.color||'#0ff'}"></span><span class="ntc-th-name">${t.name}</span></th>`});
+  h+='</tr></thead><tbody>';
+  for(let d=1;d<=days;d++){
+    const dow=getDayOfWeek(currentYear,currentMonth,d);
+    const isToday=isCurrentMonth&&d===td.getDate();
+    const isWknd=dow===0||dow===6;
+    const dc=['ntc-date-col',isToday?'ntc-date-today':'',isWknd?'ntc-date-weekend':''].filter(Boolean).join(' ');
+    h+=`<tr class="${isToday?'ntc-row-today':''}"><td class="${dc}" data-action="list" data-y="${currentYear}" data-m="${currentMonth}" data-d="${d}" style="cursor:pointer">${String(d).padStart(2,'0')}<span style="font-size:0.45rem;display:block;opacity:0.45">${DOW[dow]}</span></td>`;
+    tasks.forEach(t=>{
+      const rec=(mRec[t.id]||{})[String(d)]||'';
+      const isAlert=isToday&&alertIds.has(t.id);
+      const cs=rec==='✓'?`color:${t.color||'#0ff'};text-shadow:0 0 8px ${t.color||'#0ff'};background:${t.color}12`:'';
+      h+=`<td class="ntc-cell${isAlert?' ntc-cell-alert':''}" data-v="${rec}" data-tid="${t.id}" data-day="${d}" data-mk="${monthKey}" style="${cs}">${rec}</td>`;
+    });
+    h+='</tr>';
+  }
+  h+='</tbody>';tableEl.innerHTML=h;
+
+  
+  tableEl.querySelectorAll('th[data-action="stats"]').forEach(th=>{
+    th.addEventListener('click',()=>{
+      const tid=th.dataset.tid,tName=data.tasks[tid].name;
+      let dc=0;Object.values(mRec[tid]||{}).forEach(v=>{if(v==='✓')dc++});
+      const pd=isCurrentMonth?td.getDate():days;
+      toast(`【${tName}】${dc}/${pd} 回`);
+    });
+  });
+
+  
+  tableEl.querySelectorAll('.ntc-date-col[data-action="list"]').forEach(col=>{
+    col.addEventListener('click',()=>openList(col.dataset.y,col.dataset.m,col.dataset.d));
+  });
+
+  
+  tableEl.querySelectorAll('.ntc-cell').forEach(cell=>{
+    let pressTimer=null,didLong=false,sx=0,sy=0;
+    const TH=8,tid=cell.dataset.tid,day=cell.dataset.day,mk=cell.dataset.mk;
+    const memoKey=`${mk}:${tid}:${day}`;
+    if(data.memos?.[memoKey]){cell.classList.add('has-memo');cell.title=data.memos[memoKey]}
+    const onS=e=>{
+      if(e.touches&&e.touches.length>1){onC();return}
+      const t=e.touches?e.touches[0]:e;sx=t.clientX;sy=t.clientY;didLong=false;
+      clearTimeout(pressTimer);
+      pressTimer=setTimeout(()=>{didLong=true;const tk=data.tasks[tid];if(tk)openMemo(tid,day,tk.name)},800);
+    };
+    const onM=e=>{if(!pressTimer)return;const t=e.touches?e.touches[0]:e;if(Math.hypot(t.clientX-sx,t.clientY-sy)>TH)onC()};
+    const onE=e=>{
+      if(!pressTimer&&!didLong)return;
+      const t=e.changedTouches?e.changedTouches[0]:(e.touches?e.touches[0]:e);
+      if(!didLong&&Math.hypot(t.clientX-sx,t.clientY-sy)<TH){e.preventDefault();doTap(cell,tid,day,mk)}
+      onC();
+    };
+    const onC=()=>{clearTimeout(pressTimer);pressTimer=null};
+    cell.addEventListener('touchstart',onS,{passive:false});
+    cell.addEventListener('touchmove',onM,{passive:true});
+    cell.addEventListener('touchend',onE);
+    cell.addEventListener('touchcancel',onC);
+    cell.addEventListener('mousedown',onS);
+    cell.addEventListener('mousemove',onM);
+    cell.addEventListener('mouseup',onE);
+    cell.addEventListener('mouseleave',onC);
+    cell.addEventListener('contextmenu',e=>e.preventDefault());
+  });
+}
+
+function doTap(cell,tid,day,mk){
+  const cur=cell.dataset.v||'';
+  const next=MARKS[(MARKS.indexOf(cur)+1)%MARKS.length];
+  if(!data.records[mk])data.records[mk]={};
+  if(!data.records[mk][tid])data.records[mk][tid]={};
+  if(next===''){delete data.records[mk][tid][day];if(!Object.keys(data.records[mk][tid]).length)delete data.records[mk][tid]}
+  else{data.records[mk][tid][day]=next}
+  pushData();render();
+  
+  if(next==='✓')checkAllDone();
+}
+
+function checkAllDone(){
+  const td=new Date(),tasks=getTasksSorted();if(!tasks.length)return;
+  const mk=`${td.getFullYear()}-${String(td.getMonth()+1).padStart(2,'0')}`;
+  const mRec=data.records[mk]||{};
+  const allDone=tasks.every(t=>(mRec[t.id]||{})[String(td.getDate())]==='✓');
+  if(allDone)fireParticles();
+}
+
+
+
+
+function renderCalendarGrid(){
+  const grid=$('ntc-cal-grid');
+  const tasks=getVisibleTasks();
+  const days=getDaysInMonth(currentYear,currentMonth);
+  const firstDow=getDayOfWeek(currentYear,currentMonth,1);
+  const td=new Date(),isCurrentMonth=td.getFullYear()===currentYear&&td.getMonth()+1===currentMonth;
+  const mk=`${currentYear}-${String(currentMonth).padStart(2,'0')}`;
+  const mRec=data.records[mk]||{};
+  let h='';
+  
+  const prevDays=getDaysInMonth(currentYear,currentMonth-1||12);
+  for(let i=firstDow-1;i>=0;i--){
+    h+=`<div class="ntc-cal-cell other"><div class="ntc-cal-day">${prevDays-i}</div></div>`;
+  }
+  for(let d=1;d<=days;d++){
+    const dow=getDayOfWeek(currentYear,currentMonth,d);
+    const isToday=isCurrentMonth&&d===td.getDate();
+    const cls=['ntc-cal-cell',isToday?'today':'',dow===0?'sun':'',dow===6?'sat':''].filter(Boolean).join(' ');
+    let doneCount=0,totalTasks=tasks.length;
+    tasks.forEach(t=>{if((mRec[t.id]||{})[String(d)]==='✓')doneCount++});
+    const pct=totalTasks>0?doneCount/totalTasks:0;
+    let bars='';
+    tasks.forEach(t=>{
+      const done=(mRec[t.id]||{})[String(d)]==='✓';
+      if(done)bars+=`<div class="ntc-cal-mini-bar" style="background:${t.color||'#0ff'};width:100%;opacity:0.7"></div>`;
+    });
+    const countTxt=totalTasks>0?`${doneCount}/${totalTasks}`:'';
+    h+=`<div class="${cls}" data-day="${d}" data-action="cal-click">
+      <div class="ntc-cal-day">${d}</div>
+      <div class="ntc-cal-bar-wrap">${bars}</div>
+      <div class="ntc-cal-count">${countTxt}</div>
+    </div>`;
+  }
+  
+  const totalCells=firstDow+days;
+  const remaining=totalCells%7===0?0:7-totalCells%7;
+  for(let i=1;i<=remaining;i++){
+    h+=`<div class="ntc-cal-cell other"><div class="ntc-cal-day">${i}</div></div>`;
+  }
+  grid.innerHTML=h;
+  grid.querySelectorAll('[data-action="cal-click"]').forEach(cell=>{
+    cell.addEventListener('click',()=>openList(currentYear,currentMonth,cell.dataset.day));
+  });
+}
+
+
+function renderHeatmap(){
+  const container=$('ntc-heatmap');
+  const tasks=getTasksSorted();
+  const td=new Date();
+  const mLabels=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  
+  const dayData=[];
+  for(let i=364;i>=0;i--){
+    const d=new Date(td.getFullYear(),td.getMonth(),td.getDate()-i);
+    const mk=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const dayRec=data.records[mk]||{};
+    let done=0;
+    tasks.forEach(t=>{if((dayRec[t.id]||{})[String(d.getDate())]==='✓')done++});
+    const pct=tasks.length>0?done/tasks.length:0;
+    let lvl='';
+    if(pct>0.75)lvl='l4';else if(pct>0.5)lvl='l3';else if(pct>0.25)lvl='l2';else if(pct>0)lvl='l1';
+    dayData.push({date:d,done,total:tasks.length,pct,lvl,dow:d.getDay()});
+  }
+
+  let h='<div class="ntc-heat-label">ANNUAL_ACTIVITY_MAP</div>';
+  h+='<div style="overflow-x:auto;padding-bottom:8px"><div class="ntc-heat-grid">';
+
+  
+  let weekHtml='';let lastMonth=-1;let monthHeaders='';
+  for(let i=0;i<dayData.length;){
+    weekHtml+='<div class="ntc-heat-week">';
+    const weekStart=i;
+    for(let dow=0;dow<7&&i<dayData.length;dow++){
+      const dd=dayData[i];
+      if(dd.dow!==dow&&i===weekStart){weekHtml+=`<div class="ntc-heat-day" style="visibility:hidden"></div>`;continue}
+      if(dd.dow!==dow){break}
+      const dateStr=`${dd.date.getFullYear()}.${dd.date.getMonth()+1}.${dd.date.getDate()}`;
+      weekHtml+=`<div class="ntc-heat-day ${dd.lvl}" data-tip="${dateStr}: ${dd.done}/${dd.total}"></div>`;
+      i++;
+    }
+    weekHtml+='</div>';
+  }
+  h+=weekHtml+'</div></div>';
+  h+='<div class="ntc-heat-legend"><span>Less</span>';
+  ['','l1','l2','l3','l4'].forEach(l=>{h+=`<div class="ntc-heat-legend-box ntc-heat-day ${l}" style="cursor:default"></div>`});
+  h+='<span>More</span></div>';
+  container.innerHTML=h;
+
+  
+  const tip=$('ntc-heat-tip');
+  container.querySelectorAll('.ntc-heat-day[data-tip]').forEach(d=>{
+    d.addEventListener('mouseenter',e=>{tip.textContent=d.dataset.tip;tip.style.display='block';tip.style.left=e.clientX+10+'px';tip.style.top=e.clientY-30+'px'});
+    d.addEventListener('mousemove',e=>{tip.style.left=e.clientX+10+'px';tip.style.top=e.clientY-30+'px'});
+    d.addEventListener('mouseleave',()=>{tip.style.display='none'});
+  });
+}
+
+
+let particles=[];
+function fireParticles(){
+  particles=[];
+  const w=window.innerWidth,ht=window.innerHeight;
+  particleCanvas.width=w;particleCanvas.height=ht;
+  const colors=['#0ff','#f0f','#22c55e','#eab308','#3b82f6','#ef4444','#d946ef'];
+  for(let i=0;i<80;i++){
+    particles.push({
+      x:w/2,y:ht/2,
+      vx:(Math.random()-0.5)*12,vy:(Math.random()-0.5)*12-4,
+      size:Math.random()*4+2,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      life:1,decay:0.008+Math.random()*0.01
+    });
+  }
+  animateParticles();
+  toast('🎉 ALL_TASKS_COMPLETE!');
+}
+function animateParticles(){
+  if(!particles.length)return;
+  pCtx.clearRect(0,0,particleCanvas.width,particleCanvas.height);
+  particles=particles.filter(p=>{
+    p.x+=p.vx;p.y+=p.vy;p.vy+=0.15;p.life-=p.decay;
+    if(p.life<=0)return false;
+    pCtx.globalAlpha=p.life;pCtx.fillStyle=p.color;
+    pCtx.fillRect(p.x,p.y,p.size,p.size);
+    return true;
+  });
+  pCtx.globalAlpha=1;
+  if(particles.length)requestAnimationFrame(animateParticles);
+  else pCtx.clearRect(0,0,particleCanvas.width,particleCanvas.height);
+}
+
+
+const memoOverlay=$('ntc-memo-overlay'),memoMeta=$('ntc-memo-meta'),memoText=$('ntc-memo-text');
+let currentMemoKey=null;
+function openMemo(tid,day,tName){
+  const mk=`${currentYear}-${String(currentMonth).padStart(2,'0')}`;
+  currentMemoKey=`${mk}:${tid}:${day}`;
+  memoMeta.innerHTML=`<span style="color:#0ff">></span> ${tName} <br><span style="color:#d946ef">></span> ${currentYear}.${currentMonth}.${day}`;
+  memoText.value=(data.memos||{})[currentMemoKey]||'';
+  memoOverlay.classList.add('open');setTimeout(()=>memoText.focus(),100);
+}
+function closeMemo(){memoOverlay.classList.remove('open');currentMemoKey=null}
+$('ntc-memo-save').addEventListener('click',()=>{
+  const txt=memoText.value.trim();if(!data.memos)data.memos={};
+  if(txt)data.memos[currentMemoKey]=txt;else delete data.memos[currentMemoKey];
+  pushData();closeMemo();renderCurrentView();
+});
+$('ntc-memo-del').addEventListener('click',()=>{if(data.memos)delete data.memos[currentMemoKey];pushData();closeMemo();renderCurrentView()});
+$('ntc-memo-cancel').addEventListener('click',closeMemo);
+memoOverlay.addEventListener('click',e=>{if(e.target===memoOverlay)closeMemo()});
+
+
+const listOverlay=$('ntc-list-overlay'),listMeta=$('ntc-list-meta'),listContent=$('ntc-list-content');
+function openList(y,m,d){
+  const mk=`${y}-${String(m).padStart(2,'0')}`;
+  const mRec=data.records[mk]||{},tasks=getTasksSorted();
+  let h='';
+  tasks.forEach(t=>{
+    const rec=(mRec[t.id]||{})[String(d)]||'';
+    const icon=rec==='✓'?'✓':rec==='-'?'—':'·';
+    const clr=rec==='✓'?(t.color||'#0ff'):rec==='-'?'#333':'#555';
+    h+=`<div style="padding:0.5rem;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:0.6rem"><span style="color:${clr};text-shadow:0 0 5px ${clr};font-size:1.1rem;min-width:1.2rem">${icon}</span><span style="color:${rec==='✓'?'#e2e8f0':'#555'}">${t.name}</span></div>`;
+  });
+  if(!h)h='<div style="color:#444;text-align:center;padding:2rem;font-size:0.8rem">NO_DATA</div>';
+  listMeta.textContent=`${y}.${String(m).padStart(2,'0')}.${String(d).padStart(2,'0')} LOG`;
+  listContent.innerHTML=h;listOverlay.classList.add('open');
+}
+$('ntc-list-close').addEventListener('click',()=>listOverlay.classList.remove('open'));
+listOverlay.addEventListener('click',e=>{if(e.target===listOverlay)listOverlay.classList.remove('open')});
+
+
+
+
+function renderTaskList(){
+  const tasks=getTasksSorted();
+  if(!tasks.length){taskListEl.innerHTML='<div style="color:#444;font-family:Orbitron;padding:1rem;text-align:center">NO_TASKS_CONFIGURED</div>';return}
+  let h='';
+  tasks.forEach(t=>{
+    h+=`<div class="ntc-task-item" data-tid="${t.id}" draggable="false">
+      <div class="ntc-task-drag" data-drag="${t.id}">⠿</div>
+      <div class="ntc-task-color" style="background:${t.color||'#0ff'};box-shadow:0 0 8px ${t.color||'#0ff'}"></div>
+      <div class="ntc-task-info"><div class="ntc-task-name">${t.name}</div><div class="ntc-task-meta">ALERT: ${t.alert?t.alert+' DAYS':'OFF'}</div></div>
+      <div class="ntc-task-controls">
+        <button class="ntc-btn-icon" data-edit="${t.id}" title="編集">✎</button>
+        <button class="ntc-btn-icon del" data-del="${t.id}" title="削除">✗</button>
+      </div>
+    </div>`;
+  });
+  taskListEl.innerHTML=h;
+
+  
+  taskListEl.querySelectorAll('[data-del]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      if(confirm('PURGE TASK AND ALL LOGS?')){
+        const id=b.dataset.del;delete data.tasks[id];
+        Object.keys(data.records).forEach(mk=>{if(data.records[mk][id])delete data.records[mk][id]});
+        pushData();render();toast('TASK_PURGED');
+      }
+    });
+  });
+
+  
+  taskListEl.querySelectorAll('[data-edit]').forEach(b=>{
+    b.addEventListener('click',()=>openEditTask(b.dataset.edit));
+  });
+
+  
+  initDragDrop();
+}
+
+
+let editingTaskId=null;
+function openEditTask(tid){
+  editingTaskId=tid;const t=data.tasks[tid];if(!t)return;
+  $('ntc-edit-name').value=t.name;
+  $('ntc-edit-alert').value=t.alert||0;
+  let editColor=t.color||COLORS[0];
+  initColorPicker($('ntc-edit-colors'),editColor,c=>{editColor=c});
+  $('ntc-edit-overlay').classList.add('open');
+  
+  $('ntc-edit-save').onclick=()=>{
+    const name=$('ntc-edit-name').value.trim();if(!name)return;
+    const alert=parseInt($('ntc-edit-alert').value,10);
+    const selColor=$('ntc-edit-colors').querySelector('.selected');
+    data.tasks[editingTaskId].name=name;
+    data.tasks[editingTaskId].alert=isNaN(alert)||alert<=0?0:alert;
+    if(selColor)data.tasks[editingTaskId].color=selColor.style.backgroundColor;
+    pushData();render();$('ntc-edit-overlay').classList.remove('open');toast('TASK_UPDATED');
+  };
+}
+$('ntc-edit-cancel').addEventListener('click',()=>$('ntc-edit-overlay').classList.remove('open'));
+$('ntc-edit-overlay').addEventListener('click',e=>{if(e.target===$('ntc-edit-overlay'))$('ntc-edit-overlay').classList.remove('open')});
+
+
+function initDragDrop(){
+  const items=taskListEl.querySelectorAll('.ntc-task-item');
+  let dragSrc=null;
+  items.forEach(item=>{
+    const handle=item.querySelector('.ntc-task-drag');
+    let startY=0,isDragging=false;
+    handle.addEventListener('touchstart',e=>{
+      e.preventDefault();startY=e.touches[0].clientY;dragSrc=item;
+      item.classList.add('dragging');
+    },{passive:false});
+    handle.addEventListener('mousedown',e=>{
+      e.preventDefault();startY=e.clientY;dragSrc=item;
+      item.classList.add('dragging');
+    });
+  });
+
+  const onMove=e=>{
+    if(!dragSrc)return;
+    const y=e.touches?e.touches[0].clientY:e.clientY;
+    items.forEach(it=>{
+      it.classList.remove('drag-over');
+      const r=it.getBoundingClientRect();
+      if(y>r.top&&y<r.bottom&&it!==dragSrc)it.classList.add('drag-over');
+    });
+  };
+  const onEnd=e=>{
+    if(!dragSrc)return;
+    const target=taskListEl.querySelector('.drag-over');
+    if(target&&target!==dragSrc){
+      const fromId=dragSrc.dataset.tid,toId=target.dataset.tid;
+      const tasks=getTasksSorted();
+      const fromIdx=tasks.findIndex(t=>t.id===fromId);
+      const toIdx=tasks.findIndex(t=>t.id===toId);
+      if(fromIdx>=0&&toIdx>=0){
+        const moved=tasks.splice(fromIdx,1)[0];tasks.splice(toIdx,0,moved);
+        tasks.forEach((t,i)=>{data.tasks[t.id].order=i});
+        pushData();render();
+      }
+    }
+    items.forEach(it=>it.classList.remove('drag-over','dragging'));
+    dragSrc=null;
+  };
+  document.addEventListener('touchmove',onMove,{passive:true});
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('touchend',onEnd);
+  document.addEventListener('mouseup',onEnd);
+}
+
+
+$('ntc-add-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const name=$('ntc-new-name').value.trim();
+  const alertV=parseInt($('ntc-new-alert').value,10);
+  if(!name)return;
+  const id='t_'+Date.now();
+  data.tasks[id]={name,alert:isNaN(alertV)||alertV<=0?0:alertV,color:selectedColor,order:Date.now()};
+  pushData();render();e.target.reset();toast('TASK_INITIALIZED');
+});
+
+
+$('ntc-export-png').addEventListener('click',()=>{
+  const w=$('ntc-table-wrap');if(!w)return;
+  w.style.overflow='visible';
+  html2canvas(w,{backgroundColor:'#050508',scale:2}).then(canvas=>{
+    w.style.overflow='auto';
+    const a=document.createElement('a');a.download=`TASK_LOG_${currentYear}_${currentMonth}.png`;
+    a.href=canvas.toDataURL('image/png');a.click();
+  });
+});
+$('ntc-export-pdf').addEventListener('click',()=>{
+  const w=$('ntc-table-wrap');if(!w)return;
+  w.style.overflow='visible';
+  html2canvas(w,{backgroundColor:'#050508',scale:2}).then(canvas=>{
+    w.style.overflow='auto';
+    const pdf=new jspdf.jsPDF('p','pt','a4');
+    const imgData=canvas.toDataURL('image/png');
+    const pW=pdf.internal.pageSize.getWidth()-40;
+    const pH=canvas.height*pW/canvas.width;
+    pdf.text(`TASK_LOG - ${currentYear}/${currentMonth}`,20,30);
+    pdf.addImage(imgData,'PNG',20,50,pW,pH);
+    pdf.save(`TASK_LOG_${currentYear}_${currentMonth}.pdf`);
+  });
+});
+
+
+const cfgOverlay=$('ntc-cfg-overlay'),cfgBinInput=$('ntc-cfg-binid');
+$('ntc-config-btn').addEventListener('click',()=>{cfgBinInput.value=BIN_ID||'';cfgOverlay.classList.add('open')});
+$('ntc-cfg-cancel').addEventListener('click',()=>cfgOverlay.classList.remove('open'));
+cfgOverlay.addEventListener('click',e=>{if(e.target===cfgOverlay)cfgOverlay.classList.remove('open')});
+$('ntc-cfg-apply').addEventListener('click',async()=>{
+  const newId=cfgBinInput.value.trim();
+  if(newId&&newId!==BIN_ID){BIN_ID=newId;localStorage.setItem(LS_BIN_KEY,BIN_ID);toast('BIN_ID_UPDATED');cfgOverlay.classList.remove('open');await fetchFromBlob()}
+  else if(!newId){BIN_ID=null;localStorage.removeItem(LS_BIN_KEY);toast('CREATING_NEW_BIN...');cfgOverlay.classList.remove('open');await createNewBin()}
+  else cfgOverlay.classList.remove('open');
+});
+$('ntc-cfg-export').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=`task_archive_${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url);toast('EXPORTED');
+});
+$('ntc-cfg-import').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const imp=JSON.parse(ev.target.result);
+      if(imp.tasks&&imp.records){data={tasks:imp.tasks||{},records:imp.records||{},memos:imp.memos||{}};pushData();render();toast('IMPORTED')}
+      else toast('INVALID_FORMAT');
+    }catch(err){toast('PARSE_ERROR')}
+  };
+  reader.readAsText(file);e.target.value='';
+});
+$('ntc-cfg-clear').addEventListener('click',()=>{
+  if(confirm('全データを削除しますか？')){data={tasks:{},records:{},memos:{}};pushData();render();toast('ALL_DATA_PURGED');cfgOverlay.classList.remove('open')}
+});
+
+
+loadFromLocal();render();fetchFromBlob();
+})();
+
 </script>
 
 
