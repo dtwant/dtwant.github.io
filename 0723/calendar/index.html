@@ -1096,6 +1096,8 @@
 
         <div class="article-content max-w-prose mb-20">
           
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
@@ -1532,7 +1534,7 @@
   .cg-co-class::after { content: '授業'; }
 
    
-  .cg-preview-modal { max-width: 540px; width: 92%; }
+  .cg-preview-modal { max-width: 620px; width: 94%; }
 
    
   .cg-fm-bar {
@@ -1544,15 +1546,15 @@
   .cg-fm-bar-path { color: #00f3ff; flex: 1; }
   .cg-fm-count { color: #555; }
 
-   
   .cg-fm-list {
     display: flex; flex-direction: column; gap: 4px;
-    max-height: 55vh; overflow-y: auto;
+    max-height: 45vh; overflow-y: auto;
     padding-right: 2px;
+    scrollbar-width: thin; scrollbar-color: rgba(0,243,255,0.15) transparent;
   }
-  .cg-fm-list::-webkit-scrollbar { width: 4px; }
-  .cg-fm-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
-  .cg-fm-list::-webkit-scrollbar-thumb { background: rgba(0,243,255,0.2); border-radius: 2px; }
+  .cg-fm-list::-webkit-scrollbar { width: 2px; }
+  .cg-fm-list::-webkit-scrollbar-track { background: transparent; }
+  .cg-fm-list::-webkit-scrollbar-thumb { background: rgba(0,243,255,0.15); border-radius: 1px; }
 
   .cg-fm-item {
     display: flex; align-items: center; gap: 10px; padding: 8px 10px;
@@ -1642,13 +1644,15 @@
   .cg-fm-preview-pane {
     margin-top: 8px; border: 1px solid rgba(0,243,255,0.15); border-radius: 5px;
     background: #0a0a12; overflow: hidden; position: relative; display: none;
+    touch-action: pan-y;
   }
-  .cg-fm-preview-pane.open { display: block; }
+  .cg-fm-preview-pane.open { display: flex; flex-direction: column; }
   .cg-fm-preview-bar {
     display: flex; align-items: center; justify-content: space-between;
     padding: 6px 10px; background: rgba(0,0,0,0.5);
     border-bottom: 1px solid rgba(255,255,255,0.06);
     font-size: 0.65rem; color: #64748b; font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
   }
   .cg-fm-preview-close {
     background: none; border: 1px solid rgba(255,255,255,0.1); color: #888;
@@ -1658,12 +1662,39 @@
   }
   .cg-fm-preview-close:hover { background: rgba(255,255,255,0.05); color: #fff; }
   .cg-fm-preview-body {
-    width: 100%; max-height: 60vh;
-    display: flex; align-items: center; justify-content: center;
-    overflow: auto; padding: 8px;
+    width: 100%; max-height: 55vh; overflow-y: auto; overflow-x: hidden;
+    padding: 0; background: #0d0d14;
+    scrollbar-width: thin; scrollbar-color: rgba(0,243,255,0.1) transparent;
   }
+  .cg-fm-preview-body::-webkit-scrollbar { width: 2px; }
+  .cg-fm-preview-body::-webkit-scrollbar-track { background: transparent; }
+  .cg-fm-preview-body::-webkit-scrollbar-thumb { background: rgba(0,243,255,0.12); border-radius: 1px; }
   .cg-fm-preview-body img {
-    max-width: 100%; max-height: 58vh; object-fit: contain; display: block; margin: 0 auto;
+    max-width: 100%; object-fit: contain; display: block; margin: 0 auto;
+    padding: 4px;
+  }
+  .cg-fm-preview-body canvas {
+    display: block; width: 100%;
+    touch-action: none;
+  }
+   
+  .cg-fm-pdf-nav {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    padding: 8px 10px; background: rgba(0,0,0,0.6);
+    border-top: 1px solid rgba(0,243,255,0.1);
+    flex-shrink: 0;
+  }
+  .cg-fm-pdf-nav button {
+    background: rgba(0,243,255,0.1); border: 1px solid rgba(0,243,255,0.25); color: #00f3ff;
+    padding: 5px 14px; border-radius: 4px; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+    transition: all 0.15s;
+  }
+  .cg-fm-pdf-nav button:hover:not(:disabled) { background: rgba(0,243,255,0.2); }
+  .cg-fm-pdf-nav button:disabled { opacity: 0.25; cursor: default; }
+  .cg-fm-pdf-nav span {
+    color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+    min-width: 60px; text-align: center;
   }
   .cg-fm-newtab-link {
     display: block; text-align: center; padding: 6px;
@@ -2009,6 +2040,7 @@
         <button class="cg-fm-preview-close" onclick="cgCloseInlinePreview()">&times;</button>
       </div>
       <div class="cg-fm-preview-body" id="cg-fm-preview-body"></div>
+      <div class="cg-fm-pdf-nav" id="cg-fm-pdf-nav" style="display:none;"></div>
     </div>
     
     <label class="cg-fm-upload">
@@ -2786,6 +2818,7 @@
   };
 
   window.cgClosePreview = function() {
+    if (_pdf) { try { _pdf.destroy(); } catch(e){} _pdf = null; }
     ghUrlCache.forEach((val) => { if (val.startsWith('blob:')) URL.revokeObjectURL(val); });
     ghUrlCache.clear();
     curPrevEventId = null;
@@ -2861,36 +2894,91 @@
     });
   }
 
+  
+  let _pdf = null, _pdfPage = 1, _pdfTotal = 0;
+
   window.cgOpenFile = async function(idx) {
     if (!curEvent || !curEvent.attachments[idx]) return;
     const att = curEvent.attachments[idx];
     const isImg = att.type && att.type.startsWith('image/');
+    const isPdf = att.type === 'application/pdf';
+    const pane = document.getElementById('cg-fm-preview-pane');
+    const body = document.getElementById('cg-fm-preview-body');
+    document.getElementById('cg-fm-preview-name').textContent = att.filename || 'preview';
+    body.innerHTML = '<div style="color:#00f3ff;font-size:0.8rem;padding:2rem;">読み込み中...</div>';
+    pane.classList.add('open');
 
     try {
       const resolved = await resolveGitHubUrl(att.url);
 
       if (isImg) {
-        
-        const pane = document.getElementById('cg-fm-preview-pane');
-        const body = document.getElementById('cg-fm-preview-body');
-        document.getElementById('cg-fm-preview-name').textContent = att.filename || 'preview';
-        body.innerHTML = '<div style="color:#00f3ff;font-size:0.8rem;">読み込み中...</div>';
-        pane.classList.add('open');
         const img = new Image();
         img.onload = () => { body.innerHTML = ''; body.appendChild(img); };
         img.onerror = () => { body.innerHTML = '<div style="color:#ef4444;font-size:0.8rem;">画像の読み込みに失敗</div>'; };
         img.src = resolved;
-      } else {
+      } else if (isPdf) {
         
+        if (_pdf) { try { _pdf.destroy(); } catch(e){} _pdf = null; }
+        _pdf = await pdfjsLib.getDocument(resolved).promise;
+        _pdfTotal = _pdf.numPages;
+        _pdfPage = 1;
+        _renderPdfPage();
+      } else {
         window.open(resolved, '_blank');
+        pane.classList.remove('open');
       }
     } catch(e) {
+      body.innerHTML = '<div style="color:#ef4444;font-size:0.8rem;">読み込みに失敗しました</div>';
       toast('ファイルを開けませんでした', 'err');
     }
   };
 
+  async function _renderPdfPage() {
+    if (!_pdf) return;
+    const body = document.getElementById('cg-fm-preview-body');
+    const navEl = document.getElementById('cg-fm-pdf-nav');
+    body.innerHTML = '<div style="color:#00f3ff;font-size:0.75rem;padding:2rem;text-align:center;">ページ読み込み中...</div>';
+    try {
+      const page = await _pdf.getPage(_pdfPage);
+      
+      const baseVp = page.getViewport({ scale: 1 });
+      const containerW = body.clientWidth || 400;
+      
+      const fitScale = containerW / baseVp.width;
+      const scale = Math.max(fitScale * 2, 2);
+      const vp = page.getViewport({ scale });
+
+      body.innerHTML = '';
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = vp.width;
+      canvas.height = vp.height;
+      body.appendChild(canvas);
+      await page.render({ canvasContext: ctx, viewport: vp }).promise;
+      body.scrollTop = 0;
+
+      
+      if (_pdfTotal > 1) {
+        navEl.style.display = '';
+        navEl.innerHTML = `<button onclick="cgPdfPg(-1)" ${_pdfPage<=1?'disabled':''}>◀ 前</button><span>${_pdfPage} / ${_pdfTotal}</span><button onclick="cgPdfPg(1)" ${_pdfPage>=_pdfTotal?'disabled':''}>次 ▶</button>`;
+      } else {
+        navEl.style.display = 'none';
+      }
+    } catch(e) {
+      body.innerHTML = '<div style="color:#ef4444;font-size:0.8rem;padding:1rem;text-align:center;">ページ描画失敗</div>';
+      navEl.style.display = 'none';
+    }
+  }
+
+  window.cgPdfPg = function(d) {
+    const next = _pdfPage + d;
+    if (next >= 1 && next <= _pdfTotal) { _pdfPage = next; _renderPdfPage(); }
+  };
+
   window.cgCloseInlinePreview = function() {
+    if (_pdf) { try { _pdf.destroy(); } catch(e){} _pdf = null; }
     document.getElementById('cg-fm-preview-body').innerHTML = '';
+    document.getElementById('cg-fm-pdf-nav').style.display = 'none';
     document.getElementById('cg-fm-preview-pane').classList.remove('open');
   };
 
