@@ -230,7 +230,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "54"
+    "wordCount": "71"
   }]
   </script>
 
@@ -928,7 +928,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>54 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>71 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1208,7 +1208,10 @@
     transition: all 0.2s;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     position: relative; overflow: hidden;
+    user-select: none; -webkit-user-select: none; touch-action: pan-y;
   }
+  .wl-card.dragging { opacity: 0.5; transform: scale(0.95); border-color: #06b6d4; }
+  .wl-card.drag-over { border-top: 2px solid #06b6d4; background: rgba(6, 182, 212, 0.1); }
   .wl-card::before {
     content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
     background: linear-gradient(90deg, transparent, #06b6d4, transparent);
@@ -1434,6 +1437,7 @@
         <div class="wl-detail-name" id="wl-det-name">Name</div>
         <div class="wl-detail-species" id="wl-det-species">Species</div>
       </div>
+      <button class="wl-btn-exit" id="wl-btn-edit-anim" style="margin-top:0; border-color:#64748b; color:#94a3b8;">✎ EDIT</button>
     </div>
 
     <div class="wl-ranges" id="wl-ranges">
@@ -1484,6 +1488,34 @@
       <button class="wl-modal-btn wl-btn-cancel" id="wl-btn-modal-cancel">CANCEL</button>
       <button class="wl-modal-btn wl-btn-submit" id="wl-btn-modal-submit">REGISTER</button>
     </div>
+  </div>
+</div>
+
+
+<div class="wl-modal-overlay" id="wl-modal-edit">
+  <div class="wl-modal">
+    <div class="wl-modal-title">>> EDIT_ANIMAL</div>
+    <div class="wl-form-group">
+      <span class="wl-label">名前 (Name)</span>
+      <input type="text" id="wl-edit-name" class="wl-input">
+    </div>
+    <div class="wl-form-group">
+      <span class="wl-label">種類 (Species)</span>
+      <input type="text" id="wl-edit-species" class="wl-input">
+    </div>
+    <div class="wl-form-group">
+      <span class="wl-label">アイコン (Icon)</span>
+      <div class="wl-emoji-grid" id="wl-edit-emoji-grid"></div>
+    </div>
+    <div class="wl-form-group">
+      <span class="wl-label">テーマカラー (Theme Color)</span>
+      <div class="wl-color-grid" id="wl-edit-color-grid"></div>
+    </div>
+    <div class="wl-modal-btns" style="margin-bottom: 0.8rem;">
+      <button class="wl-modal-btn wl-btn-cancel" id="wl-btn-edit-cancel">CANCEL</button>
+      <button class="wl-modal-btn wl-btn-submit" id="wl-btn-edit-save">SAVE</button>
+    </div>
+    <button class="wl-modal-btn" id="wl-btn-edit-del" style="width:100%; border:1px solid #ef4444; color:#ef4444; background:transparent;">DELETE ANIMAL</button>
   </div>
 </div>
 
@@ -1557,6 +1589,7 @@
   const syncBadge = document.getElementById('wl-sync-badge');
   const toastEl = document.getElementById('wl-toast');
   const modalAdd = document.getElementById('wl-modal-add');
+  const modalEdit = document.getElementById('wl-modal-edit');
   const modalCfg = document.getElementById('wl-modal-cfg');
   const historyListEl = document.getElementById('wl-history-list');
 
@@ -1666,7 +1699,7 @@
 
   
   function renderDash() {
-    const animals = Object.values(data.animals).sort((a,b) => a.createdAt - b.createdAt);
+    const animals = Object.values(data.animals).sort((a,b) => (a.order || 0) - (b.order || 0) || a.createdAt - b.createdAt);
     if (animals.length === 0) {
       gridEl.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 2rem; font-family: 'JetBrains Mono'; border: 1px dashed #333; border-radius: 8px;">No animals registered.</div>`;
       return;
@@ -1680,7 +1713,7 @@
       const lastWeight = lastDate ? wData[lastDate].toFixed(1) : '--';
       
       html += `
-        <div class="wl-card" onclick="window.openDetail('${a.id}')">
+        <div class="wl-card" data-id="${a.id}">
           <div class="wl-card-emoji">${a.emoji}</div>
           <div class="wl-card-name">${a.name}</div>
           <div class="wl-card-weight">${lastWeight} <span style="font-size:0.7rem;color:#64748b">g</span></div>
@@ -1689,6 +1722,98 @@
       `;
     });
     gridEl.innerHTML = html;
+    
+    
+    gridEl.querySelectorAll('.wl-card').forEach(card => {
+      const id = card.getAttribute('data-id');
+      let pressTimer = null;
+      let isDragging = false;
+      let startX = 0, startY = 0;
+      
+      const onS = e => {
+        if (e.touches && e.touches.length > 1) { onC(); return; }
+        const t = e.touches ? e.touches[0] : e;
+        startX = t.clientX; startY = t.clientY;
+        pressTimer = setTimeout(() => {
+          isDragging = true;
+          card.classList.add('dragging');
+          card.setAttribute('draggable', 'true');
+        }, 500);
+      };
+      const onM = e => {
+        if (!pressTimer && !isDragging) return;
+        const t = e.touches ? e.touches[0] : e;
+        if (!isDragging && Math.hypot(t.clientX - startX, t.clientY - startY) > 10) onC();
+        if (isDragging && e.touches) {
+          e.preventDefault(); 
+          const overEl = document.elementFromPoint(t.clientX, t.clientY);
+          const dropTarget = overEl ? overEl.closest('.wl-card') : null;
+          gridEl.querySelectorAll('.wl-card').forEach(c => c.classList.remove('drag-over'));
+          if (dropTarget && dropTarget !== card) dropTarget.classList.add('drag-over');
+        }
+      };
+      const onE = e => {
+        onC();
+        if (isDragging) {
+          isDragging = false;
+          card.classList.remove('dragging');
+          card.removeAttribute('draggable');
+          let dropTarget = null;
+          if (e.changedTouches) {
+            const t = e.changedTouches[0];
+            const overEl = document.elementFromPoint(t.clientX, t.clientY);
+            dropTarget = overEl ? overEl.closest('.wl-card') : null;
+          }
+          gridEl.querySelectorAll('.wl-card').forEach(c => c.classList.remove('drag-over'));
+          if (dropTarget && dropTarget !== card) swapOrder(id, dropTarget.getAttribute('data-id'));
+        } else {
+          window.openDetail(id);
+        }
+      };
+      const onC = () => { clearTimeout(pressTimer); pressTimer = null; };
+      
+      card.addEventListener('touchstart', onS, {passive: false});
+      card.addEventListener('touchmove', onM, {passive: false});
+      card.addEventListener('touchend', onE);
+      card.addEventListener('touchcancel', onE);
+      
+      card.addEventListener('mousedown', onS);
+      card.addEventListener('mousemove', onM);
+      card.addEventListener('mouseup', onE);
+      card.addEventListener('mouseleave', onE);
+      card.addEventListener('contextmenu', e => { e.preventDefault(); });
+      
+      card.addEventListener('dragstart', e => {
+        card.classList.add('dragging');
+        e.dataTransfer.setData('text/plain', id);
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      card.addEventListener('dragend', e => {
+        card.classList.remove('dragging');
+        gridEl.querySelectorAll('.wl-card').forEach(c => c.classList.remove('drag-over'));
+      });
+      card.addEventListener('dragover', e => {
+        e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+        if (!card.classList.contains('dragging')) card.classList.add('drag-over');
+      });
+      card.addEventListener('dragleave', e => { card.classList.remove('drag-over'); });
+      card.addEventListener('drop', e => {
+        e.preventDefault(); card.classList.remove('drag-over');
+        const dragId = e.dataTransfer.getData('text/plain');
+        if (dragId && dragId !== id) swapOrder(dragId, id);
+      });
+    });
+  }
+
+  function swapOrder(idA, idB) {
+    const animals = Object.values(data.animals).sort((a,b) => (a.order || 0) - (b.order || 0) || a.createdAt - b.createdAt);
+    animals.forEach((a, i) => { a.order = i; });
+    const a = animals.find(x => x.id === idA);
+    const b = animals.find(x => x.id === idB);
+    if (!a || !b) return;
+    const temp = a.order; a.order = b.order; b.order = temp;
+    pushData();
+    renderDash();
   }
 
   
@@ -1899,6 +2024,88 @@
   });
 
   
+  let editSelectedEmoji = EMOJIS[0];
+  let editSelectedColor = COLORS[0];
+  const gridEditEmoji = document.getElementById('wl-edit-emoji-grid');
+  const gridEditColor = document.getElementById('wl-edit-color-grid');
+  
+  EMOJIS.forEach(e => {
+    const d = document.createElement('div');
+    d.className = 'wl-emoji-opt'; d.textContent = e;
+    d.addEventListener('click', () => {
+      gridEditEmoji.querySelectorAll('.wl-emoji-opt').forEach(el => el.classList.remove('selected'));
+      d.classList.add('selected'); editSelectedEmoji = e;
+    });
+    gridEditEmoji.appendChild(d);
+  });
+  
+  COLORS.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'wl-color-opt'; d.style.backgroundColor = c; d.style.color = c;
+    d.addEventListener('click', () => {
+      gridEditColor.querySelectorAll('.wl-color-opt').forEach(el => el.classList.remove('selected'));
+      d.classList.add('selected'); editSelectedColor = c;
+    });
+    gridEditColor.appendChild(d);
+  });
+  
+  document.getElementById('wl-btn-edit-anim').addEventListener('click', () => {
+    if(!currentAnimalId) return;
+    const a = data.animals[currentAnimalId];
+    if(!a) return;
+    document.getElementById('wl-edit-name').value = a.name;
+    document.getElementById('wl-edit-species').value = a.species || '';
+    editSelectedEmoji = a.emoji;
+    editSelectedColor = a.themeColor || '#06b6d4';
+    
+    gridEditEmoji.querySelectorAll('.wl-emoji-opt').forEach(el => el.classList.toggle('selected', el.textContent === editSelectedEmoji));
+    Array.from(gridEditColor.children).forEach((el, i) => el.classList.toggle('selected', COLORS[i] === editSelectedColor));
+    
+    modalEdit.classList.add('show');
+  });
+  
+  document.getElementById('wl-btn-edit-cancel').addEventListener('click', () => {
+    modalEdit.classList.remove('show');
+  });
+  
+  document.getElementById('wl-btn-edit-save').addEventListener('click', () => {
+    if(!currentAnimalId) return;
+    const name = document.getElementById('wl-edit-name').value.trim();
+    const species = document.getElementById('wl-edit-species').value.trim();
+    if(!name) { toast('✗ 名前を入力してください'); return; }
+    
+    data.animals[currentAnimalId].name = name;
+    data.animals[currentAnimalId].species = species;
+    data.animals[currentAnimalId].emoji = editSelectedEmoji;
+    data.animals[currentAnimalId].themeColor = editSelectedColor;
+    
+    pushData();
+    modalEdit.classList.remove('show');
+    toast('✓ 更新しました');
+    
+    
+    const a = data.animals[currentAnimalId];
+    document.getElementById('wl-det-emoji').textContent = a.emoji;
+    document.getElementById('wl-det-name').textContent = a.name;
+    document.getElementById('wl-det-species').textContent = a.species || 'Unknown';
+    document.getElementById('wl-root').style.setProperty('--theme-hex', a.themeColor || '#06b6d4');
+    document.getElementById('wl-root').style.setProperty('--theme-rgb', hexToRgbStr(a.themeColor || '#06b6d4'));
+    renderChart();
+  });
+  
+  document.getElementById('wl-btn-edit-del').addEventListener('click', () => {
+    if(!currentAnimalId) return;
+    if(confirm('本当にこの生体と全ての記録を削除しますか？\n（この操作は元に戻せません）')) {
+      delete data.animals[currentAnimalId];
+      delete data.weights[currentAnimalId];
+      pushData();
+      modalEdit.classList.remove('show');
+      document.getElementById('wl-btn-back').click();
+      toast('🗑 削除しました');
+    }
+  });
+
+  
   document.getElementById('wl-btn-config').addEventListener('click', () => {
     document.getElementById('wl-cfg-binid').value = BIN_ID;
     modalCfg.classList.add('show');
@@ -1978,7 +2185,8 @@
     if (!name) { toast('✗ 名前を入力してください'); return; }
     
     const id = 'anim_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-    data.animals[id] = { id, name, species, emoji: selectedEmoji, themeColor: selectedColor, createdAt: Date.now() };
+    const order = Object.keys(data.animals).length;
+    data.animals[id] = { id, name, species, emoji: selectedEmoji, themeColor: selectedColor, createdAt: Date.now(), order };
     
     pushData();
     renderDash();
