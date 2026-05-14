@@ -2228,13 +2228,17 @@
 
       let html =
         '<thead><tr><th class="fl-date-col" style="position:sticky;left:0;z-index:6;">日</th>';
+      let midHeaderHtml = '<tr class="fl-mid-header"><th class="fl-date-col" style="position:static;z-index:1;">日</th>';
       animals.forEach((a) => {
         const isAlert = alertIds.has(a.id);
         const deceasedCls = a.deceased ? " fl-th-deceased" : "";
         const nameDisp = a.name + (a.deceased ? " ✘" : "");
-        html += `<th class="${isAlert ? "fl-th-alert" : ""}${deceasedCls}"><span class="fl-th-emoji">${a.emoji}</span><span class="fl-th-name">${nameDisp}</span></th>`;
+        const thContent = `<span class="fl-th-emoji">${a.emoji}</span><span class="fl-th-name">${nameDisp}</span>`;
+        html += `<th class="${isAlert ? "fl-th-alert" : ""}${deceasedCls}">${thContent}</th>`;
+        midHeaderHtml += `<th class="${isAlert ? "fl-th-alert" : ""}${deceasedCls}" style="position:static;z-index:1;">${thContent}</th>`;
       });
       html += "</tr></thead><tbody>";
+      midHeaderHtml += "</tr>";
 
       
       let prevYear = currentYear;
@@ -2262,6 +2266,7 @@
       }
 
       for (let d = 1; d <= days; d++) {
+        if (d === 15) html += midHeaderHtml;
         const dow = getDayOfWeek(currentYear, currentMonth, d);
         const isToday = isCurrentMonth && d === todayDate.getDate();
         const isWeekend = dow === 0 || dow === 6;
