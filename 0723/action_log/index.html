@@ -234,7 +234,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "64"
+    "wordCount": "69"
   }]
   </script>
 
@@ -932,7 +932,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>64 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>69 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1426,6 +1426,10 @@
 
   
   <div class="ntc-panel" id="ntc-panel-manage">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+      <div style="font-family:'Orbitron',sans-serif;font-size:0.75rem;color:#0ff;letter-spacing:1px">REGISTERED_TASKS</div>
+      <button class="ntc-btn" id="ntc-sort-color" style="font-size:0.65rem;padding:0.3rem 0.6rem">🎨 SORT BY COLOR</button>
+    </div>
     <div class="ntc-task-list" id="ntc-task-list"></div>
     <div class="ntc-form">
       <div class="ntc-form-label">NEW_TASK_ENTRY</div>
@@ -1743,20 +1747,6 @@ function renderJump(){
     jm.appendChild(b);
   });
 }
-
-
-let swipeStartX=0,swipeStartY=0;
-root.addEventListener('touchstart',e=>{if(e.touches.length===1){swipeStartX=e.touches[0].clientX;swipeStartY=e.touches[0].clientY}},{passive:true});
-root.addEventListener('touchend',e=>{
-  if(!e.changedTouches.length)return;
-  const dx=e.changedTouches[0].clientX-swipeStartX;
-  const dy=e.changedTouches[0].clientY-swipeStartY;
-  if(Math.abs(dx)>80&&Math.abs(dx)>Math.abs(dy)*1.5){
-    if(dx>0){currentMonth--;if(currentMonth<1){currentMonth=12;currentYear--}}
-    else{currentMonth++;if(currentMonth>12){currentMonth=1;currentYear++}}
-    render();
-  }
-},{passive:true});
 
 
 document.addEventListener('keydown',e=>{
@@ -2077,13 +2067,44 @@ listOverlay.addEventListener('click',e=>{if(e.target===listOverlay)listOverlay.c
 
 
 
+$('ntc-sort-color').addEventListener('click',()=>{
+  const tasks=getTasksSorted();
+  if(tasks.length<=1)return;
+  const rgbToHsl=(r,g,b)=>{
+    r/=255;g/=255;b/=255;
+    const max=Math.max(r,g,b),min=Math.min(r,g,b);
+    let h=0;
+    if(max!==min){
+      const d=max-min;
+      if(max===r)h=(g-b)/d+(g<b?6:0);
+      else if(max===g)h=(b-r)/d+2;
+      else h=(r-g)/d+4;
+      h/=6;
+    }
+    return h;
+  };
+  const parseColor=(c)=>{
+    const hex=c.replace('#','');
+    if(hex.length===3)return{r:parseInt(hex[0]+hex[0],16),g:parseInt(hex[1]+hex[1],16),b:parseInt(hex[2]+hex[2],16)};
+    if(hex.length===6)return{r:parseInt(hex.slice(0,2),16),g:parseInt(hex.slice(2,4),16),b:parseInt(hex.slice(4,6),16)};
+    return{r:0,g:0,b:0};
+  };
+  tasks.sort((a,b)=>{
+    const ca=parseColor(a.color||'#0ff'),cb=parseColor(b.color||'#0ff');
+    const ha=rgbToHsl(ca.r,ca.g,ca.b),hb=rgbToHsl(cb.r,cb.g,cb.b);
+    return ha-hb;
+  });
+  tasks.forEach((t,i)=>{data.tasks[t.id].order=i});
+  pushData();render();toast('SORTED_BY_COLOR');
+});
+
+
 function renderTaskList(){
   const tasks=getTasksSorted();
   if(!tasks.length){taskListEl.innerHTML='<div style="color:#444;font-family:Orbitron;padding:1rem;text-align:center">NO_TASKS_CONFIGURED</div>';return}
   let h='';
   tasks.forEach(t=>{
     h+=`<div class="ntc-task-item" data-tid="${t.id}" draggable="false">
-      <div class="ntc-task-drag" data-drag="${t.id}">⠿</div>
       <div class="ntc-task-color" style="background:${t.color||'#0ff'};box-shadow:0 0 8px ${t.color||'#0ff'}"></div>
       <div class="ntc-task-info"><div class="ntc-task-name">${t.name}</div><div class="ntc-task-meta">ALERT: ${t.alert?t.alert+' DAYS':'OFF'}</div></div>
       <div class="ntc-task-controls">
@@ -2142,16 +2163,29 @@ function initDragDrop(){
   const items=taskListEl.querySelectorAll('.ntc-task-item');
   let dragSrc=null;
   items.forEach(item=>{
-    const handle=item.querySelector('.ntc-task-drag');
-    let startY=0,isDragging=false;
-    handle.addEventListener('touchstart',e=>{
-      e.preventDefault();startY=e.touches[0].clientY;dragSrc=item;
-      item.classList.add('dragging');
-    },{passive:false});
-    handle.addEventListener('mousedown',e=>{
-      e.preventDefault();startY=e.clientY;dragSrc=item;
-      item.classList.add('dragging');
+    let pressTimer=null;
+    const startDrag=()=>{dragSrc=item;item.classList.add('dragging');if(navigator.vibrate)navigator.vibrate(50)};
+    const clearTimer=()=>{clearTimeout(pressTimer);pressTimer=null};
+
+    item.addEventListener('touchstart',e=>{
+      if(e.target.closest('.ntc-btn-icon'))return;
+      clearTimer();
+      pressTimer=setTimeout(startDrag,400);
+    },{passive:true});
+    item.addEventListener('touchend',clearTimer);
+    item.addEventListener('touchcancel',clearTimer);
+    item.addEventListener('touchmove',e=>{if(!dragSrc)clearTimer()},{passive:true});
+
+    item.addEventListener('mousedown',e=>{
+      if(e.target.closest('.ntc-btn-icon'))return;
+      e.preventDefault();
+      clearTimer();
+      pressTimer=setTimeout(startDrag,200);
     });
+    item.addEventListener('mouseup',clearTimer);
+    item.addEventListener('mouseleave',clearTimer);
+    item.addEventListener('mousemove',e=>{if(!dragSrc)clearTimer()});
+    item.addEventListener('contextmenu',e=>{if(e.target.closest('.ntc-btn-icon'))return;e.preventDefault()});
   });
 
   const onMove=e=>{
