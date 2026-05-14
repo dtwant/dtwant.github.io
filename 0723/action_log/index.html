@@ -234,7 +234,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "69"
+    "wordCount": "73"
   }]
   </script>
 
@@ -932,7 +932,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>69 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>73 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1195,9 +1195,9 @@
 .ntc-cell{width:55px;min-width:55px;height:44px;cursor:pointer;transition:all 0.15s;user-select:none;-webkit-user-select:none;font-size:1.3rem;padding:0;position:relative;font-family:'JetBrains Mono',monospace}
 .ntc-cell:hover{background:rgba(0,255,255,0.05)}
 .ntc-cell:active{transform:scale(0.9)}
-.ntc-cell[data-v="✓"]{font-weight:700}
-.ntc-cell[data-v="-"]{color:#333;font-weight:400}
-.ntc-cell.ntc-cell-alert:not([data-v="✓"]){background:rgba(239,68,68,0.12);box-shadow:inset 0 0 12px rgba(239,68,68,0.5);border:1px solid rgba(239,68,68,0.3);animation:ntc-alert 1.5s infinite alternate}
+.ntc-cell[data-v="🔪"]{font-weight:700}
+.ntc-cell[data-v="🍑"]{color:#333;font-weight:400}
+.ntc-cell.ntc-cell-alert:not([data-v="🔪"]){background:rgba(239,68,68,0.12);box-shadow:inset 0 0 12px rgba(239,68,68,0.5);border:1px solid rgba(239,68,68,0.3);animation:ntc-alert 1.5s infinite alternate}
 @keyframes ntc-alert{0%{box-shadow:inset 0 0 8px rgba(239,68,68,0.3)}100%{box-shadow:inset 0 0 18px rgba(239,68,68,0.8);background:rgba(239,68,68,0.25)}}
 .ntc-cell.has-memo::after{content:"";position:absolute;top:3px;right:3px;width:5px;height:5px;background:#fff;border-radius:50%;box-shadow:0 0 4px #fff}
 .ntc-row-today{background:rgba(0,255,255,0.02)}
@@ -1350,13 +1350,14 @@
     
     <div class="ntc-stats">
       <div class="ntc-stat-card">
-        <div class="ntc-ring-wrap"><svg class="ntc-ring-svg" viewBox="0 0 56 56" width="100%" height="100%"><circle class="ntc-ring-bg" cx="28" cy="28" r="24"/><circle class="ntc-ring-fg" id="ntc-ring" cx="28" cy="28" r="24" stroke="#0ff" stroke-dasharray="150.8" stroke-dashoffset="150.8"/></svg></div>
-        <div class="ntc-stat-val ntc-c-rate" id="ntc-s-rate">0%</div>
-        <div class="ntc-stat-label">達成率</div>
+        <div class="ntc-ring-wrap"><svg class="ntc-ring-svg" viewBox="0 0 56 56" width="100%" height="100%"><circle class="ntc-ring-bg" cx="28" cy="28" r="24"/><circle class="ntc-ring-fg" id="ntc-ring-knife" cx="28" cy="28" r="24" stroke="#ef4444" stroke-dasharray="150.8" stroke-dashoffset="150.8"/></svg></div>
+        <div class="ntc-stat-val ntc-c-rate" id="ntc-s-rate-knife">0%</div>
+        <div class="ntc-stat-label">🔪 達成 <span id="ntc-s-done-knife" style="opacity:0.6;font-size:0.85em;margin-left:2px">(0)</span></div>
       </div>
       <div class="ntc-stat-card">
-        <div class="ntc-stat-val ntc-c-done" id="ntc-s-done">0</div>
-        <div class="ntc-stat-label">実行数</div>
+        <div class="ntc-ring-wrap"><svg class="ntc-ring-svg" viewBox="0 0 56 56" width="100%" height="100%"><circle class="ntc-ring-bg" cx="28" cy="28" r="24"/><circle class="ntc-ring-fg" id="ntc-ring-peach" cx="28" cy="28" r="24" stroke="#f9a8d4" stroke-dasharray="150.8" stroke-dashoffset="150.8"/></svg></div>
+        <div class="ntc-stat-val ntc-c-rate" id="ntc-s-rate-peach">0%</div>
+        <div class="ntc-stat-label">🍑 達成 <span id="ntc-s-done-peach" style="opacity:0.6;font-size:0.85em;margin-left:2px">(0)</span></div>
       </div>
       <div class="ntc-stat-card">
         <div class="ntc-stat-val ntc-c-streak" id="ntc-s-streak">0</div>
@@ -1542,7 +1543,7 @@ const getBinUrl=()=>`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
 const getBinPutUrl=()=>`https://api.jsonbin.io/v3/b/${BIN_ID}`;
 const BIN_CREATE_URL='https://api.jsonbin.io/v3/b';
 const LS_KEY='dt_task_cal_v1';
-const MARKS=['','✓','-'];
+const MARKS=['','🔪','🍑'];
 const COLORS=['#06b6d4','#10b981','#d946ef','#f97316','#3b82f6','#ef4444','#eab308','#8b5cf6','#ec4899','#14b8a6'];
 let selectedColor=COLORS[0];
 const DOW=["SUN","MON","TUE","WED","THU","FRI","SAT"];
@@ -1645,7 +1646,7 @@ function getAlertTaskIds(){
       const d=new Date(t.getFullYear(),t.getMonth(),t.getDate()-i);
       const mk=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
       const rec=(data.records[mk]?.[task.id]||{})[String(d.getDate())];
-      if(rec==='✓')break;missed++;
+      if(rec==='🔪')break;missed++;
     }
     if(missed>=task.alert)alerts.add(task.id);
   });return alerts;
@@ -1653,14 +1654,15 @@ function getAlertTaskIds(){
 
 
 function calcStats(){
-  const tasks=getTasksSorted();if(!tasks.length)return{rate:0,done:0,streak:0,best:0};
+  const tasks=getTasksSorted();if(!tasks.length)return{rate1:0,done1:0,rate2:0,done2:0,streak:0,best:0};
   const mk=`${currentYear}-${String(currentMonth).padStart(2,'0')}`;
   const mRec=data.records[mk]||{};
   const td=new Date(),isCurrentMonth=td.getFullYear()===currentYear&&td.getMonth()+1===currentMonth;
   const passedDays=isCurrentMonth?td.getDate():getDaysInMonth(currentYear,currentMonth);
-  let done=0,possible=passedDays*tasks.length;
-  tasks.forEach(t=>{Object.values(mRec[t.id]||{}).forEach(v=>{if(v==='✓')done++})});
-  const rate=possible>0?Math.round(done/possible*100):0;
+  let done1=0,done2=0,possible=passedDays*tasks.length;
+  tasks.forEach(t=>{Object.values(mRec[t.id]||{}).forEach(v=>{if(v==='🔪')done1++;else if(v==='🍑')done2++;})});
+  const rate1=possible>0?Math.round(done1/possible*100):0;
+  const rate2=possible>0?Math.round(done2/possible*100):0;
   
   let streak=0,best=0,cur=0;
   for(let i=0;i<365;i++){
@@ -1668,7 +1670,7 @@ function calcStats(){
     const dmk=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
     const dayRec=data.records[dmk]||{};
     let anyDone=false;
-    tasks.forEach(t=>{if((dayRec[t.id]||{})[String(d.getDate())]==='✓')anyDone=true});
+    tasks.forEach(t=>{const v=(dayRec[t.id]||{})[String(d.getDate())];if(v==='🔪'||v==='🍑')anyDone=true});
     if(anyDone){cur++;if(i===0||cur>1){}if(cur>best)best=cur}
     else{if(i===0){cur=0}else{if(cur>best)best=cur;cur=0}}
   }
@@ -1678,27 +1680,26 @@ function calcStats(){
     const dmk=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
     const dayRec=data.records[dmk]||{};
     let anyDone=false;
-    tasks.forEach(t=>{if((dayRec[t.id]||{})[String(d.getDate())]==='✓')anyDone=true});
+    tasks.forEach(t=>{const v=(dayRec[t.id]||{})[String(d.getDate())];if(v==='🔪'||v==='🍑')anyDone=true});
     if(anyDone)streak++;else break;
   }
-  return{rate,done,streak,best};
+  return{rate1,done1,rate2,done2,streak,best};
 }
 
 function updateStats(){
   const s=calcStats();
-  $('ntc-s-rate').textContent=s.rate+'%';
-  $('ntc-s-done').textContent=s.done;
+  $('ntc-s-rate-knife').textContent=s.rate1+'%';
+  $('ntc-s-done-knife').textContent=`(${s.done1}回)`;
+  $('ntc-s-rate-peach').textContent=s.rate2+'%';
+  $('ntc-s-done-peach').textContent=`(${s.done2}回)`;
   $('ntc-s-streak').textContent=s.streak;
   $('ntc-s-best').textContent=s.best;
   
   const circ=2*Math.PI*24;
-  const offset=circ-(s.rate/100)*circ;
-  const ring=$('ntc-ring');
-  ring.style.strokeDasharray=circ;ring.style.strokeDashoffset=offset;
-  if(s.rate>=80)ring.setAttribute('stroke','#22c55e');
-  else if(s.rate>=50)ring.setAttribute('stroke','#0ff');
-  else if(s.rate>=20)ring.setAttribute('stroke','#f97316');
-  else ring.setAttribute('stroke','#ef4444');
+  $('ntc-ring-knife').style.strokeDasharray=circ;
+  $('ntc-ring-knife').style.strokeDashoffset=circ-(s.rate1/100)*circ;
+  $('ntc-ring-peach').style.strokeDasharray=circ;
+  $('ntc-ring-peach').style.strokeDashoffset=circ-(s.rate2/100)*circ;
 }
 
 
@@ -1816,7 +1817,7 @@ function renderTable(){
     tasks.forEach(t=>{
       const rec=(mRec[t.id]||{})[String(d)]||'';
       const isAlert=isToday&&alertIds.has(t.id);
-      const cs=rec==='✓'?`color:${t.color||'#0ff'};text-shadow:0 0 8px ${t.color||'#0ff'};background:${t.color}12`:'';
+      const cs=rec==='🔪'?`color:${t.color||'#0ff'};text-shadow:0 0 8px ${t.color||'#0ff'};background:${t.color}12`:'';
       h+=`<td class="ntc-cell${isAlert?' ntc-cell-alert':''}" data-v="${rec}" data-tid="${t.id}" data-day="${d}" data-mk="${monthKey}" style="${cs}">${rec}</td>`;
     });
     h+='</tr>';
@@ -1827,7 +1828,7 @@ function renderTable(){
   tableEl.querySelectorAll('th[data-action="stats"]').forEach(th=>{
     th.addEventListener('click',()=>{
       const tid=th.dataset.tid,tName=data.tasks[tid].name;
-      let dc=0;Object.values(mRec[tid]||{}).forEach(v=>{if(v==='✓')dc++});
+      let dc=0;Object.values(mRec[tid]||{}).forEach(v=>{if(v==='🔪')dc++});
       const pd=isCurrentMonth?td.getDate():days;
       toast(`【${tName}】${dc}/${pd} 回`);
     });
@@ -1879,14 +1880,14 @@ function doTap(cell,tid,day,mk){
   else{data.records[mk][tid][day]=next}
   pushData();render();
   
-  if(next==='✓')checkAllDone();
+  if(next==='🔪')checkAllDone();
 }
 
 function checkAllDone(){
   const td=new Date(),tasks=getTasksSorted();if(!tasks.length)return;
   const mk=`${td.getFullYear()}-${String(td.getMonth()+1).padStart(2,'0')}`;
   const mRec=data.records[mk]||{};
-  const allDone=tasks.every(t=>(mRec[t.id]||{})[String(td.getDate())]==='✓');
+  const allDone=tasks.every(t=>(mRec[t.id]||{})[String(td.getDate())]==='🔪');
   if(allDone)fireParticles();
 }
 
@@ -1912,11 +1913,11 @@ function renderCalendarGrid(){
     const isToday=isCurrentMonth&&d===td.getDate();
     const cls=['ntc-cal-cell',isToday?'today':'',dow===0?'sun':'',dow===6?'sat':''].filter(Boolean).join(' ');
     let doneCount=0,totalTasks=tasks.length;
-    tasks.forEach(t=>{if((mRec[t.id]||{})[String(d)]==='✓')doneCount++});
+    tasks.forEach(t=>{if((mRec[t.id]||{})[String(d)]==='🔪')doneCount++});
     const pct=totalTasks>0?doneCount/totalTasks:0;
     let bars='';
     tasks.forEach(t=>{
-      const done=(mRec[t.id]||{})[String(d)]==='✓';
+      const done=(mRec[t.id]||{})[String(d)]==='🔪';
       if(done)bars+=`<div class="ntc-cal-mini-bar" style="background:${t.color||'#0ff'};width:100%;opacity:0.7"></div>`;
     });
     const countTxt=totalTasks>0?`${doneCount}/${totalTasks}`:'';
@@ -1951,7 +1952,7 @@ function renderHeatmap(){
     const mk=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
     const dayRec=data.records[mk]||{};
     let done=0;
-    tasks.forEach(t=>{if((dayRec[t.id]||{})[String(d.getDate())]==='✓')done++});
+    tasks.forEach(t=>{if((dayRec[t.id]||{})[String(d.getDate())]==='🔪')done++});
     const pct=tasks.length>0?done/tasks.length:0;
     let lvl='';
     if(pct>0.75)lvl='l4';else if(pct>0.5)lvl='l3';else if(pct>0.25)lvl='l2';else if(pct>0)lvl='l1';
@@ -2047,16 +2048,59 @@ memoOverlay.addEventListener('click',e=>{if(e.target===memoOverlay)closeMemo()})
 
 
 const listOverlay=$('ntc-list-overlay'),listMeta=$('ntc-list-meta'),listContent=$('ntc-list-content');
+const rgbToHsl=(r,g,b)=>{
+  r/=255;g/=255;b/=255;
+  const max=Math.max(r,g,b),min=Math.min(r,g,b);
+  let h=0;
+  if(max!==min){
+    const d=max-min;
+    if(max===r)h=(g-b)/d+(g<b?6:0);
+    else if(max===g)h=(b-r)/d+2;
+    else h=(r-g)/d+4;
+    h/=6;
+  }
+  return h;
+};
+const parseColor=(c)=>{
+  const hex=c.replace('#','');
+  if(hex.length===3)return{r:parseInt(hex[0]+hex[0],16),g:parseInt(hex[1]+hex[1],16),b:parseInt(hex[2]+hex[2],16)};
+  if(hex.length===6)return{r:parseInt(hex.slice(0,2),16),g:parseInt(hex.slice(2,4),16),b:parseInt(hex.slice(4,6),16)};
+  return{r:0,g:0,b:0};
+};
+const colorSortFn=(a,b)=>{
+  const ca=parseColor(a.color||'#0ff'),cb=parseColor(b.color||'#0ff');
+  return rgbToHsl(ca.r,ca.g,ca.b)-rgbToHsl(cb.r,cb.g,cb.b);
+};
+
 function openList(y,m,d){
   const mk=`${y}-${String(m).padStart(2,'0')}`;
   const mRec=data.records[mk]||{},tasks=getTasksSorted();
-  let h='';
+  const kGroup=[],pGroup=[],eGroup=[];
   tasks.forEach(t=>{
     const rec=(mRec[t.id]||{})[String(d)]||'';
-    const icon=rec==='✓'?'✓':rec==='-'?'—':'·';
-    const clr=rec==='✓'?(t.color||'#0ff'):rec==='-'?'#333':'#555';
-    h+=`<div style="padding:0.5rem;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:0.6rem"><span style="color:${clr};text-shadow:0 0 5px ${clr};font-size:1.1rem;min-width:1.2rem">${icon}</span><span style="color:${rec==='✓'?'#e2e8f0':'#555'}">${t.name}</span></div>`;
+    if(rec==='🔪')kGroup.push(t);
+    else if(rec==='🍑')pGroup.push(t);
+    else eGroup.push(t);
   });
+  kGroup.sort(colorSortFn);
+  pGroup.sort(colorSortFn);
+  eGroup.sort(colorSortFn);
+
+  let h='';
+  const renderGroup=(grp,icon,txtLabel)=>{
+    if(!grp.length)return;
+    h+=`<div style="font-family:'Orbitron',sans-serif;font-size:0.65rem;color:#0ff;margin:1rem 0 0.5rem 0;border-bottom:1px solid rgba(0,255,255,0.2);padding-bottom:0.2rem">${txtLabel}</div>`;
+    grp.forEach(t=>{
+      const clr=icon==='·'?'#555':(t.color||'#0ff');
+      const textClr=icon==='·'?'#555':'#e2e8f0';
+      const shadow=icon==='·'?'none':`0 0 5px ${clr}`;
+      h+=`<div style="padding:0.5rem;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:0.6rem"><span style="color:${clr};text-shadow:${shadow};font-size:1.1rem;min-width:1.2rem">${icon}</span><span style="color:${textClr}">${t.name}</span></div>`;
+    });
+  };
+  renderGroup(kGroup,'🔪','COMPLETED (KNIFE)');
+  renderGroup(pGroup,'🍑','COMPLETED (PEACH)');
+  renderGroup(eGroup,'·','PENDING');
+
   if(!h)h='<div style="color:#444;text-align:center;padding:2rem;font-size:0.8rem">NO_DATA</div>';
   listMeta.textContent=`${y}.${String(m).padStart(2,'0')}.${String(d).padStart(2,'0')} LOG`;
   listContent.innerHTML=h;listOverlay.classList.add('open');
@@ -2070,30 +2114,7 @@ listOverlay.addEventListener('click',e=>{if(e.target===listOverlay)listOverlay.c
 $('ntc-sort-color').addEventListener('click',()=>{
   const tasks=getTasksSorted();
   if(tasks.length<=1)return;
-  const rgbToHsl=(r,g,b)=>{
-    r/=255;g/=255;b/=255;
-    const max=Math.max(r,g,b),min=Math.min(r,g,b);
-    let h=0;
-    if(max!==min){
-      const d=max-min;
-      if(max===r)h=(g-b)/d+(g<b?6:0);
-      else if(max===g)h=(b-r)/d+2;
-      else h=(r-g)/d+4;
-      h/=6;
-    }
-    return h;
-  };
-  const parseColor=(c)=>{
-    const hex=c.replace('#','');
-    if(hex.length===3)return{r:parseInt(hex[0]+hex[0],16),g:parseInt(hex[1]+hex[1],16),b:parseInt(hex[2]+hex[2],16)};
-    if(hex.length===6)return{r:parseInt(hex.slice(0,2),16),g:parseInt(hex.slice(2,4),16),b:parseInt(hex.slice(4,6),16)};
-    return{r:0,g:0,b:0};
-  };
-  tasks.sort((a,b)=>{
-    const ca=parseColor(a.color||'#0ff'),cb=parseColor(b.color||'#0ff');
-    const ha=rgbToHsl(ca.r,ca.g,ca.b),hb=rgbToHsl(cb.r,cb.g,cb.b);
-    return ha-hb;
-  });
+  tasks.sort(colorSortFn);
   tasks.forEach((t,i)=>{data.tasks[t.id].order=i});
   pushData();render();toast('SORTED_BY_COLOR');
 });
