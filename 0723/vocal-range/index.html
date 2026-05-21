@@ -230,7 +230,7 @@
     "keywords": ["tool"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "76"
+    "wordCount": "74"
   }]
   </script>
 
@@ -928,7 +928,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>76 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>74 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1108,12 +1108,33 @@
   display:flex;flex-direction:column;
   overflow:hidden;
 }
+
+ 
 .vr-app::before{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
-    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(180,120,40,0.06), transparent),
-    radial-gradient(ellipse 70% 50% at 80% 90%, rgba(120,60,20,0.04), transparent),
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(200,140,40,0.07), transparent),
+    radial-gradient(ellipse 70% 50% at 80% 90%, rgba(140,70,25,0.05), transparent),
     radial-gradient(ellipse 120% 100% at 50% 100%, rgba(0,0,0,0.6), transparent 70%);
+}
+.vr-app::after{
+  content:"";position:fixed;top:0;left:0;right:0;height:2px;z-index:99998;pointer-events:none;
+  background:linear-gradient(90deg,transparent 5%,rgba(212,165,74,0.6) 30%,rgba(200,130,50,0.9) 50%,rgba(212,165,74,0.6) 70%,transparent 95%);
+  background-size:200% 100%;animation:vrTopBar 3s linear infinite;
+  box-shadow:0 0 8px rgba(212,165,74,0.4),0 0 20px rgba(212,165,74,0.15);
+}
+@keyframes vrTopBar{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.vr-grid{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(180,140,60,0.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(180,140,60,0.025) 1px,transparent 1px);
+  background-size:36px 36px;
+}
+ 
+.vr-scan{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px);
 }
 
  
@@ -1121,216 +1142,217 @@
   position:relative;z-index:10;flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;
   padding:1rem 1.5rem;gap:0.8rem;
-  background:linear-gradient(180deg,rgba(12,11,15,0.98),rgba(8,7,10,0.95));
+  background:linear-gradient(180deg,rgba(12,11,15,0.98),rgba(8,7,10,0.92));
   border-bottom:1px solid rgba(180,140,60,0.12);
+  backdrop-filter:blur(12px);
 }
 .vr-brand{display:flex;align-items:baseline;gap:0.6rem;}
 .vr-brand h1{
-  font-size:1.1rem;font-weight:700;letter-spacing:0.04em;
+  font-size:1.15rem;font-weight:700;letter-spacing:0.06em;
   color:#d4a54a;
-  text-shadow:0 0 20px rgba(212,165,74,0.25);
+  text-shadow:0 0 15px rgba(212,165,74,0.35),0 0 40px rgba(212,165,74,0.1);
 }
-.vr-brand span{font-size:0.6rem;color:#6b5c3e;font-weight:400;letter-spacing:0.08em;}
+.vr-brand span{font-size:0.6rem;color:#5a4e38;font-weight:500;letter-spacing:0.1em;font-family:'JetBrains Mono',monospace;}
 .vr-head-actions{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
 .vr-hbtn{
-  font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:500;
+  font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:500;
   padding:0.35rem 0.7rem;border-radius:4px;cursor:pointer;
-  border:1px solid rgba(180,140,60,0.2);background:rgba(180,140,60,0.06);
+  border:1px solid rgba(180,140,60,0.18);background:rgba(180,140,60,0.04);
   color:#b89244;transition:all 0.2s;letter-spacing:0.03em;
 }
-.vr-hbtn:hover{border-color:rgba(180,140,60,0.4);background:rgba(180,140,60,0.12);color:#d4a54a;}
-.vr-hbtn.exit{border-color:rgba(255,255,255,0.08);color:#7a7068;background:transparent;}
-.vr-hbtn.exit:hover{color:#a89888;border-color:rgba(255,255,255,0.15);}
+.vr-hbtn:hover{border-color:rgba(180,140,60,0.4);background:rgba(180,140,60,0.1);color:#d4a54a;box-shadow:0 0 10px rgba(212,165,74,0.08)}
+.vr-hbtn.exit{border-color:rgba(255,255,255,0.07);color:#6a6058;background:transparent}
+.vr-hbtn.exit:hover{color:#a89888;border-color:rgba(255,255,255,0.12)}
 .vr-sync-badge{
-  font-family:'JetBrains Mono',monospace;font-size:0.55rem;font-weight:500;
-  padding:0.2rem 0.55rem;border-radius:3px;letter-spacing:0.06em;
+  font-family:'JetBrains Mono',monospace;font-size:0.52rem;font-weight:500;
+  padding:0.2rem 0.5rem;border-radius:3px;letter-spacing:0.06em;
 }
-.vr-sync-badge.local{color:#6b5c3e;border:1px solid rgba(180,140,60,0.15);background:transparent;}
-.vr-sync-badge.ok{color:#76a95a;border:1px solid rgba(118,169,90,0.3);background:rgba(118,169,90,0.06);}
-.vr-sync-badge.busy{color:#d4a54a;border:1px solid rgba(212,165,74,0.3);background:rgba(212,165,74,0.06);animation:vrPulse 1s ease infinite;}
-.vr-sync-badge.err{color:#c45c4a;border:1px solid rgba(196,92,74,0.3);background:rgba(196,92,74,0.06);}
-@keyframes vrPulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.vr-sync-badge.local{color:#5a4e38;border:1px solid rgba(180,140,60,0.12);background:transparent}
+.vr-sync-badge.ok{color:#76a95a;border:1px solid rgba(118,169,90,0.25);background:rgba(118,169,90,0.05)}
+.vr-sync-badge.busy{color:#d4a54a;border:1px solid rgba(212,165,74,0.25);background:rgba(212,165,74,0.05);animation:vrPulse 1s ease infinite}
+.vr-sync-badge.err{color:#c45c4a;border:1px solid rgba(196,92,74,0.25);background:rgba(196,92,74,0.05)}
+@keyframes vrPulse{0%,100%{opacity:1}50%{opacity:0.35}}
 
  
 .vr-stats{
   display:flex;flex-shrink:0;position:relative;z-index:10;
-  background:rgba(12,11,15,0.7);border-bottom:1px solid rgba(180,140,60,0.08);
-  overflow-x:auto;scrollbar-width:none;
+  background:rgba(12,11,15,0.65);border-bottom:1px solid rgba(180,140,60,0.06);
+  backdrop-filter:blur(6px);overflow-x:auto;scrollbar-width:none;
 }
 .vr-stats::-webkit-scrollbar{display:none}
 .vr-stat-item{
-  flex:1;min-width:90px;padding:0.65rem 1rem;
-  border-right:1px solid rgba(180,140,60,0.06);
-  display:flex;flex-direction:column;gap:0.15rem;
+  flex:1;min-width:88px;padding:0.6rem 1rem;
+  border-right:1px solid rgba(180,140,60,0.05);
+  display:flex;flex-direction:column;gap:0.12rem;
 }
 .vr-stat-item:last-child{border-right:none}
-.vr-stat-val{font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700;line-height:1;}
-.vr-stat-lbl{font-size:0.5rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#6b5c3e;}
+.vr-stat-val{font-family:'JetBrains Mono',monospace;font-size:1.25rem;font-weight:700;line-height:1}
+.vr-stat-lbl{font-size:0.48rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#5a4e38}
 .vr-c-total{color:#e8e0d4}.vr-c-can{color:#76a95a}.vr-c-prac{color:#d4a54a}.vr-c-no{color:#c45c4a}
 .vr-c-hi{color:#a882d4}.vr-c-cov{color:#5a8fb8}
 
  
 .vr-controls{
   flex-shrink:0;position:relative;z-index:10;
-  background:rgba(12,11,15,0.6);border-bottom:1px solid rgba(180,140,60,0.08);
-  padding:0.6rem 1.5rem;display:flex;flex-direction:column;gap:0.5rem;
+  background:rgba(12,11,15,0.55);border-bottom:1px solid rgba(180,140,60,0.06);
+  padding:0.55rem 1.5rem;display:flex;flex-direction:column;gap:0.45rem;
+  backdrop-filter:blur(6px);
 }
-.vr-ctrl-row{display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;}
+.vr-ctrl-row{display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap}
 .vr-search{
   flex:1;min-width:140px;max-width:400px;
   font-family:'Noto Sans JP','Inter',sans-serif;font-size:0.85rem;
-  background:rgba(255,255,255,0.03);border:1px solid rgba(180,140,60,0.12);
-  border-radius:5px;color:#e8e0d4;padding:0.45rem 0.8rem;outline:none;
+  background:rgba(255,255,255,0.025);border:1px solid rgba(180,140,60,0.1);
+  border-radius:5px;color:#e8e0d4;padding:0.42rem 0.8rem;outline:none;
   transition:border-color 0.2s,box-shadow 0.2s;
 }
-.vr-search::placeholder{color:#5a5040}
-.vr-search:focus{border-color:rgba(180,140,60,0.35);box-shadow:0 0 0 2px rgba(180,140,60,0.06)}
+.vr-search::placeholder{color:#4a4038}
+.vr-search:focus{border-color:rgba(180,140,60,0.3);box-shadow:0 0 0 2px rgba(180,140,60,0.05),0 0 12px rgba(180,140,60,0.04)}
 .vr-sortsel{
-  font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:500;
-  background:rgba(255,255,255,0.03);border:1px solid rgba(180,140,60,0.12);
-  border-radius:4px;color:#a89888;padding:0.4rem 0.5rem;cursor:pointer;outline:none;
+  font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:500;
+  background:rgba(255,255,255,0.025);border:1px solid rgba(180,140,60,0.1);
+  border-radius:4px;color:#a89888;padding:0.38rem 0.5rem;cursor:pointer;outline:none;
 }
 .vr-sortsel option{background:#12111a}
 .vr-add-btn{
-  font-family:'Inter',sans-serif;font-size:0.7rem;font-weight:600;
-  padding:0.45rem 1rem;border-radius:5px;cursor:pointer;
+  font-family:'Inter',sans-serif;font-size:0.68rem;font-weight:600;
+  padding:0.42rem 1rem;border-radius:5px;cursor:pointer;
   border:none;background:linear-gradient(135deg,#d4a54a,#b88a34);color:#0a0908;
-  box-shadow:0 2px 12px rgba(212,165,74,0.2);transition:all 0.2s;letter-spacing:0.02em;
+  box-shadow:0 2px 12px rgba(212,165,74,0.2),0 0 20px rgba(212,165,74,0.06);
+  transition:all 0.2s;letter-spacing:0.02em;
 }
-.vr-add-btn:hover{box-shadow:0 4px 20px rgba(212,165,74,0.35);transform:translateY(-1px)}
-.vr-tabs{display:flex;gap:0.25rem;overflow-x:auto;scrollbar-width:none;padding-bottom:1px;}
+.vr-add-btn:hover{box-shadow:0 4px 20px rgba(212,165,74,0.35),0 0 30px rgba(212,165,74,0.1);transform:translateY(-1px)}
+.vr-tabs{display:flex;gap:0.25rem;overflow-x:auto;scrollbar-width:none;padding-bottom:1px}
 .vr-tabs::-webkit-scrollbar{display:none}
 .vr-ftab{
-  font-size:0.58rem;font-weight:600;letter-spacing:0.06em;
-  padding:0.28rem 0.7rem;border-radius:3px;cursor:pointer;
-  border:1px solid transparent;background:transparent;color:#6b5c3e;
+  font-size:0.56rem;font-weight:600;letter-spacing:0.06em;
+  padding:0.25rem 0.65rem;border-radius:3px;cursor:pointer;
+  border:1px solid transparent;background:transparent;color:#5a4e38;
   transition:all 0.15s;white-space:nowrap;
 }
 .vr-ftab:hover{color:#a89888}
-.vr-ftab.on{background:rgba(212,165,74,0.08);border-color:rgba(212,165,74,0.2);color:#d4a54a;}
-.vr-tag-row{display:flex;gap:0.25rem;flex-wrap:wrap;}
+.vr-ftab.on{background:rgba(212,165,74,0.08);border-color:rgba(212,165,74,0.18);color:#d4a54a;box-shadow:0 0 8px rgba(212,165,74,0.06)}
+.vr-tag-row{display:flex;gap:0.25rem;flex-wrap:wrap}
 .vr-tgchip{
   font-size:0.5rem;font-weight:600;letter-spacing:0.04em;
-  padding:0.18rem 0.45rem;border-radius:3px;cursor:pointer;
-  border:1px solid rgba(90,143,184,0.15);background:transparent;color:#5a8fb8;
+  padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;
+  border:1px solid rgba(90,143,184,0.12);background:transparent;color:#5a8fb8;
   transition:all 0.15s;
 }
-.vr-tgchip:hover{border-color:rgba(90,143,184,0.35)}
-.vr-tgchip.on{background:rgba(90,143,184,0.1);border-color:rgba(90,143,184,0.35)}
+.vr-tgchip:hover{border-color:rgba(90,143,184,0.3)}
+.vr-tgchip.on{background:rgba(90,143,184,0.08);border-color:rgba(90,143,184,0.3);box-shadow:0 0 6px rgba(90,143,184,0.06)}
 
  
 .vr-body{
   flex:1;overflow-y:auto;overflow-x:hidden;
   position:relative;z-index:5;
-  padding:0.8rem 1rem 6rem;
+  padding:0.7rem 1rem 5rem;
   -webkit-overflow-scrolling:touch;
-  scrollbar-width:thin;scrollbar-color:rgba(180,140,60,0.15) transparent;
+  scrollbar-width:thin;scrollbar-color:rgba(180,140,60,0.12) transparent;
 }
 .vr-body::-webkit-scrollbar{width:4px}
-.vr-body::-webkit-scrollbar-thumb{background:rgba(180,140,60,0.2);border-radius:2px}
+.vr-body::-webkit-scrollbar-thumb{background:rgba(180,140,60,0.18);border-radius:2px}
 
  
 .vr-card{
-  margin-bottom:0.6rem;border-radius:8px;overflow:hidden;
-  border:1px solid rgba(180,140,60,0.08);
-  background:linear-gradient(135deg,rgba(16,15,20,0.9),rgba(12,11,16,0.95));
-  transition:border-color 0.2s,box-shadow 0.2s;
+  margin-bottom:0.5rem;border-radius:8px;overflow:hidden;
+  border:1px solid rgba(180,140,60,0.07);
+  background:linear-gradient(145deg,rgba(16,15,20,0.92),rgba(12,11,16,0.97));
+  transition:border-color 0.25s,box-shadow 0.25s;
+  animation:vrCardIn 0.25s ease both;
 }
-.vr-card:hover{border-color:rgba(180,140,60,0.18);box-shadow:0 2px 15px rgba(0,0,0,0.3)}
+@keyframes vrCardIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.vr-card:hover{border-color:rgba(180,140,60,0.2);box-shadow:0 2px 18px rgba(0,0,0,0.3),0 0 12px rgba(212,165,74,0.03)}
 .vr-card-main{
-  display:flex;align-items:center;gap:0.7rem;
-  padding:0.75rem 1rem;cursor:pointer;
+  display:flex;align-items:center;gap:0.65rem;
+  padding:0.7rem 0.9rem;cursor:pointer;
   transition:background 0.15s;
 }
-.vr-card-main:hover{background:rgba(255,255,255,0.015)}
+.vr-card-main:hover{background:rgba(255,255,255,0.012)}
 
  
 .vr-dot{
-  width:8px;height:8px;border-radius:50%;flex-shrink:0;
-  box-shadow:0 0 5px currentColor;transition:all 0.2s;cursor:pointer;
+  width:9px;height:9px;border-radius:50%;flex-shrink:0;
+  transition:all 0.2s;cursor:pointer;position:relative;
 }
-.vr-dot.can{color:#76a95a;background:#76a95a}
-.vr-dot.prac{color:#d4a54a;background:#d4a54a;animation:vrPulse 2s ease infinite}
-.vr-dot.no{color:#c45c4a;background:transparent;border:2px solid #c45c4a;box-shadow:none}
+.vr-dot.can{background:#76a95a;box-shadow:0 0 6px rgba(118,169,90,0.5)}
+.vr-dot.prac{background:#d4a54a;box-shadow:0 0 6px rgba(212,165,74,0.4);animation:vrPulse 2s ease infinite}
+.vr-dot.no{background:transparent;border:2px solid #c45c4a;box-shadow:none}
 
  
-.vr-card-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:0.15rem;}
-.vr-card-title{font-size:0.95rem;font-weight:600;color:#ede5d8;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.vr-card-sub{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;font-size:0.72rem;color:#7a7068;}
+.vr-card-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:0.12rem}
+.vr-card-title{font-size:0.92rem;font-weight:600;color:#ede5d8;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vr-card-sub{display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;font-size:0.7rem;color:#6a6058}
 .vr-card-artist{color:#a89888}
-.vr-card-tags{display:flex;gap:0.2rem;flex-wrap:wrap}
-.vr-card-tag{font-size:0.48rem;font-weight:600;padding:0.1rem 0.3rem;border-radius:2px;border:1px solid rgba(90,143,184,0.15);color:#5a8fb8}
+.vr-card-covcount{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:#5a8fb8;letter-spacing:0.04em}
+.vr-card-tags{display:flex;gap:0.2rem;flex-wrap:wrap;margin-top:0.08rem}
+.vr-card-tag{font-size:0.46rem;font-weight:600;padding:0.08rem 0.28rem;border-radius:2px;border:1px solid rgba(90,143,184,0.12);color:#4a7a9a}
 
  
 .vr-nbadge{
   flex-shrink:0;font-family:'JetBrains Mono',monospace;
-  font-size:0.65rem;font-weight:700;padding:0.2rem 0.5rem;
-  border-radius:4px;text-align:center;min-width:46px;
-  background:rgba(0,0,0,0.4);border:1px solid currentColor;
+  font-size:0.63rem;font-weight:700;padding:0.2rem 0.45rem;
+  border-radius:4px;text-align:center;min-width:44px;
+  background:rgba(0,0,0,0.45);border:1px solid currentColor;
 }
-.vr-nb-low{color:#5a8fb8}
-.vr-nb-mid{color:#76a95a}
-.vr-nb-hi{color:#d4a54a;text-shadow:0 0 6px rgba(212,165,74,0.4)}
-.vr-nb-hihi{color:#c45c4a;text-shadow:0 0 8px rgba(196,92,74,0.5);animation:vrGlow 2.5s ease infinite}
-@keyframes vrGlow{0%,100%{box-shadow:0 0 3px rgba(196,92,74,0.2)}50%{box-shadow:0 0 10px rgba(196,92,74,0.4)}}
+.vr-nb-low{color:#5a8fb8;border-color:rgba(90,143,184,0.35)}
+.vr-nb-mid{color:#76a95a;border-color:rgba(118,169,90,0.35)}
+.vr-nb-hi{color:#d4a54a;border-color:rgba(212,165,74,0.35);text-shadow:0 0 6px rgba(212,165,74,0.35);box-shadow:0 0 6px rgba(212,165,74,0.08)}
+.vr-nb-hihi{color:#c45c4a;border-color:rgba(196,92,74,0.35);text-shadow:0 0 8px rgba(196,92,74,0.5);animation:vrNoteGlow 2.5s ease infinite}
+@keyframes vrNoteGlow{0%,100%{box-shadow:0 0 3px rgba(196,92,74,0.15)}50%{box-shadow:0 0 12px rgba(196,92,74,0.3)}}
 
  
-.vr-card-meta{display:flex;flex-direction:column;align-items:flex-end;gap:0.2rem;flex-shrink:0}
-.vr-card-diff{color:#d4a54a;font-size:0.65rem;letter-spacing:-1px}
-.vr-card-covcount{font-family:'JetBrains Mono',monospace;font-size:0.5rem;color:#5a8fb8;letter-spacing:0.04em;}
+.vr-card-meta{display:flex;flex-direction:column;align-items:flex-end;gap:0.15rem;flex-shrink:0}
+.vr-card-diff{color:#d4a54a;font-size:0.62rem;letter-spacing:-1px}
 .vr-card-edit{
-  background:none;border:none;color:#5a5040;cursor:pointer;
-  font-size:0.8rem;padding:0.15rem;transition:color 0.15s;line-height:1;
+  background:none;border:none;color:#4a4038;cursor:pointer;
+  font-size:0.8rem;padding:0.1rem;transition:color 0.15s;line-height:1;
 }
-.vr-card-edit:hover{color:#d4a54a}
+.vr-card-edit:hover{color:#d4a54a;text-shadow:0 0 8px rgba(212,165,74,0.3)}
 
  
 .vr-covers{
-  display:none;flex-direction:column;gap:0.5rem;
-  padding:0.6rem 1rem 0.8rem 2.2rem;
-  border-top:1px solid rgba(180,140,60,0.06);
-  background:rgba(0,0,0,0.25);
+  display:none;flex-direction:column;gap:0.45rem;
+  padding:0.6rem 0.9rem 0.7rem 2rem;
+  border-top:1px solid rgba(180,140,60,0.05);
+  background:rgba(0,0,0,0.2);
 }
 .vr-card.open .vr-covers{display:flex}
-.vr-cov-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.15rem}
-.vr-cov-label{font-size:0.55rem;font-weight:700;letter-spacing:0.08em;color:#5a8fb8;text-transform:uppercase}
+.vr-cov-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.1rem}
+.vr-cov-label{font-size:0.52rem;font-weight:700;letter-spacing:0.08em;color:#5a8fb8;text-transform:uppercase}
 .vr-cov-addbtn{
-  font-size:0.55rem;font-weight:600;padding:0.2rem 0.5rem;border-radius:3px;
-  border:1px dashed rgba(90,143,184,0.3);background:transparent;color:#5a8fb8;
+  font-size:0.52rem;font-weight:600;padding:0.18rem 0.45rem;border-radius:3px;
+  border:1px dashed rgba(90,143,184,0.25);background:transparent;color:#5a8fb8;
   cursor:pointer;transition:all 0.15s;
 }
-.vr-cov-addbtn:hover{border-color:rgba(90,143,184,0.5);background:rgba(90,143,184,0.06)}
-
+.vr-cov-addbtn:hover{border-color:rgba(90,143,184,0.45);background:rgba(90,143,184,0.05)}
 .vr-cov-item{
-  display:flex;align-items:center;gap:0.6rem;
-  padding:0.45rem 0.6rem;border-radius:5px;
-  background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);
-  transition:background 0.15s;
+  display:flex;align-items:center;gap:0.55rem;
+  padding:0.4rem 0.55rem;border-radius:5px;
+  background:rgba(255,255,255,0.018);border:1px solid rgba(255,255,255,0.03);
+  transition:background 0.15s,border-color 0.15s;
 }
-.vr-cov-item:hover{background:rgba(255,255,255,0.04)}
-.vr-cov-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:0.1rem}
-.vr-cov-name{font-size:0.8rem;font-weight:500;color:#ede5d8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.vr-cov-memo{font-size:0.6rem;color:#6b5c3e}
-
-.vr-cov-links{display:flex;gap:0.3rem;flex-shrink:0}
+.vr-cov-item:hover{background:rgba(255,255,255,0.035);border-color:rgba(255,255,255,0.06)}
+.vr-cov-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:0.08rem}
+.vr-cov-name{font-size:0.78rem;font-weight:500;color:#ede5d8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vr-cov-memo{font-size:0.58rem;color:#5a4e38}
+.vr-cov-links{display:flex;gap:0.25rem;flex-shrink:0}
 .vr-cov-link{
-  font-family:'JetBrains Mono',monospace;font-size:0.5rem;font-weight:500;
-  padding:0.25rem 0.5rem;border-radius:3px;text-decoration:none;
-  transition:all 0.15s;display:flex;align-items:center;gap:0.2rem;
+  font-family:'JetBrains Mono',monospace;font-size:0.48rem;font-weight:500;
+  padding:0.22rem 0.45rem;border-radius:3px;text-decoration:none;
+  transition:all 0.15s;display:flex;align-items:center;gap:0.15rem;
 }
-.vr-cov-link.yt{color:#e06050;border:1px solid rgba(224,96,80,0.25);background:rgba(224,96,80,0.06)}
-.vr-cov-link.yt:hover{background:rgba(224,96,80,0.15);box-shadow:0 0 8px rgba(224,96,80,0.15)}
-.vr-cov-link.ytm{color:#a882d4;border:1px solid rgba(168,130,212,0.25);background:rgba(168,130,212,0.06)}
-.vr-cov-link.ytm:hover{background:rgba(168,130,212,0.15);box-shadow:0 0 8px rgba(168,130,212,0.15)}
-.vr-cov-del{background:none;border:none;color:#5a5040;cursor:pointer;font-size:0.75rem;padding:0.1rem 0.25rem;transition:color 0.15s}
+.vr-cov-link.yt{color:#e06050;border:1px solid rgba(224,96,80,0.2);background:rgba(224,96,80,0.05)}
+.vr-cov-link.yt:hover{background:rgba(224,96,80,0.12);box-shadow:0 0 8px rgba(224,96,80,0.12)}
+.vr-cov-link.ytm{color:#a882d4;border:1px solid rgba(168,130,212,0.2);background:rgba(168,130,212,0.05)}
+.vr-cov-link.ytm:hover{background:rgba(168,130,212,0.12);box-shadow:0 0 8px rgba(168,130,212,0.12)}
+.vr-cov-del{background:none;border:none;color:#3a3530;cursor:pointer;font-size:0.72rem;padding:0.1rem 0.2rem;transition:color 0.15s}
 .vr-cov-del:hover{color:#c45c4a}
+.vr-cov-empty{font-size:0.58rem;color:#3a3530;padding:0.2rem 0}
 
-.vr-empty-state{
-  display:flex;flex-direction:column;align-items:center;gap:0.8rem;
-  padding:4rem 1rem;color:#3a3530;text-align:center;
-}
-.vr-empty-icon{font-size:2.5rem;opacity:0.3}
-.vr-empty-text{font-size:0.8rem;font-weight:500;letter-spacing:0.03em}
+.vr-empty-state{display:flex;flex-direction:column;align-items:center;gap:0.8rem;padding:4rem 1rem;color:#3a3530;text-align:center}
+.vr-empty-icon{font-size:2.5rem;opacity:0.25}
+.vr-empty-text{font-size:0.78rem;font-weight:500;letter-spacing:0.03em}
 
  
 .vr-overlay{
@@ -1341,114 +1363,137 @@
 .vr-overlay.open{display:flex}
 .vr-modal{
   background:linear-gradient(180deg,#14131a,#0e0d14);
-  border:1px solid rgba(180,140,60,0.15);border-radius:10px;
+  border:1px solid rgba(180,140,60,0.12);border-radius:10px;
   width:100%;max-width:460px;max-height:92vh;
   display:flex;flex-direction:column;overflow:hidden;
-  box-shadow:0 8px 40px rgba(0,0,0,0.6),0 0 30px rgba(180,140,60,0.04);
+  box-shadow:0 8px 40px rgba(0,0,0,0.6),0 0 25px rgba(180,140,60,0.03);
   animation:vrModalIn 0.25s ease;
 }
 @keyframes vrModalIn{from{opacity:0;transform:translateY(16px) scale(0.97)}to{opacity:1;transform:none}}
 .vr-mhead{
   display:flex;align-items:center;justify-content:space-between;
-  padding:1rem 1.25rem;border-bottom:1px solid rgba(180,140,60,0.1);flex-shrink:0;
+  padding:0.9rem 1.2rem;border-bottom:1px solid rgba(180,140,60,0.08);flex-shrink:0;
 }
-.vr-mhead-title{font-size:0.85rem;font-weight:700;color:#d4a54a;letter-spacing:0.03em}
-.vr-mclose{background:none;border:none;color:#5a5040;cursor:pointer;font-size:1.3rem;padding:0;transition:color 0.15s}
+.vr-mhead-title{font-size:0.82rem;font-weight:700;color:#d4a54a;letter-spacing:0.03em}
+.vr-mclose{background:none;border:none;color:#4a4038;cursor:pointer;font-size:1.3rem;padding:0;transition:color 0.15s}
 .vr-mclose:hover{color:#c45c4a}
-.vr-mbody{padding:1.25rem;display:flex;flex-direction:column;gap:0.9rem;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(180,140,60,0.15) transparent}
+.vr-mbody{padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:0.85rem;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(180,140,60,0.12) transparent}
 .vr-mbody::-webkit-scrollbar{width:4px}
-.vr-mbody::-webkit-scrollbar-thumb{background:rgba(180,140,60,0.2);border-radius:2px}
-.vr-fg{display:flex;flex-direction:column;gap:0.3rem}
-.vr-fg label{font-size:0.6rem;font-weight:600;letter-spacing:0.06em;color:#7a7068;text-transform:uppercase}
-.vr-fg .hint{font-size:0.5rem;color:#4a4038;margin-top:0.1rem}
+.vr-mbody::-webkit-scrollbar-thumb{background:rgba(180,140,60,0.18);border-radius:2px}
+.vr-fg{display:flex;flex-direction:column;gap:0.28rem}
+.vr-fg label{font-size:0.58rem;font-weight:600;letter-spacing:0.06em;color:#6a6058;text-transform:uppercase}
+.vr-fg .hint{font-size:0.5rem;color:#3a3530;margin-top:0.06rem}
 .vr-inp,.vr-ta,.vr-sel{
-  font-family:'Noto Sans JP','Inter',sans-serif;font-size:0.88rem;
-  background:rgba(255,255,255,0.03);border:1px solid rgba(180,140,60,0.1);
-  border-radius:5px;color:#e8e0d4;padding:0.5rem 0.75rem;outline:none;
+  font-family:'Noto Sans JP','Inter',sans-serif;font-size:0.86rem;
+  background:rgba(255,255,255,0.025);border:1px solid rgba(180,140,60,0.08);
+  border-radius:5px;color:#e8e0d4;padding:0.48rem 0.7rem;outline:none;
   transition:border-color 0.2s,box-shadow 0.2s;width:100%;
 }
-.vr-inp::placeholder,.vr-ta::placeholder{color:#4a4038;font-size:0.8rem}
-.vr-inp:focus,.vr-ta:focus,.vr-sel:focus{border-color:rgba(180,140,60,0.3);box-shadow:0 0 0 2px rgba(180,140,60,0.06)}
+.vr-inp::placeholder,.vr-ta::placeholder{color:#3a3530;font-size:0.78rem}
+.vr-inp:focus,.vr-ta:focus,.vr-sel:focus{border-color:rgba(180,140,60,0.25);box-shadow:0 0 0 2px rgba(180,140,60,0.04)}
 .vr-sel option{background:#14131a}
-.vr-ta{min-height:60px;resize:vertical}
-.vr-2col{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
-.vr-mfoot{display:flex;justify-content:flex-end;gap:0.5rem;padding:0.85rem 1.25rem;border-top:1px solid rgba(180,140,60,0.08);flex-shrink:0}
+.vr-ta{min-height:56px;resize:vertical}
+.vr-2col{display:grid;grid-template-columns:1fr 1fr;gap:0.7rem}
+.vr-mfoot{display:flex;justify-content:flex-end;gap:0.5rem;padding:0.8rem 1.2rem;border-top:1px solid rgba(180,140,60,0.06);flex-shrink:0}
 .vr-mbtn{
-  font-family:'Inter',sans-serif;font-size:0.65rem;font-weight:600;
-  padding:0.4rem 0.9rem;border-radius:5px;cursor:pointer;transition:all 0.15s;
-  border:1px solid rgba(180,140,60,0.15);background:transparent;color:#a89888;
+  font-family:'Inter',sans-serif;font-size:0.63rem;font-weight:600;
+  padding:0.38rem 0.85rem;border-radius:5px;cursor:pointer;transition:all 0.15s;
+  border:1px solid rgba(180,140,60,0.12);background:transparent;color:#a89888;
 }
-.vr-mbtn:hover{border-color:rgba(180,140,60,0.3);color:#e8e0d4}
-.vr-mbtn.save{border:none;background:linear-gradient(135deg,#d4a54a,#b88a34);color:#0a0908;font-weight:700;box-shadow:0 2px 10px rgba(212,165,74,0.2)}
-.vr-mbtn.save:hover{box-shadow:0 4px 16px rgba(212,165,74,0.35)}
-.vr-mbtn.del{border-color:rgba(196,92,74,0.3);color:#c45c4a}
-.vr-mbtn.del:hover{background:rgba(196,92,74,0.1)}
+.vr-mbtn:hover{border-color:rgba(180,140,60,0.25);color:#e8e0d4}
+.vr-mbtn.save{border:none;background:linear-gradient(135deg,#d4a54a,#b88a34);color:#0a0908;font-weight:700;box-shadow:0 2px 10px rgba(212,165,74,0.15)}
+.vr-mbtn.save:hover{box-shadow:0 4px 16px rgba(212,165,74,0.3)}
+.vr-mbtn.del{border-color:rgba(196,92,74,0.25);color:#c45c4a}
+.vr-mbtn.del:hover{background:rgba(196,92,74,0.08)}
+
+ 
+.vr-sr-list{display:flex;flex-direction:column;gap:0.35rem;max-height:260px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(180,140,60,0.1) transparent}
+.vr-sr-list::-webkit-scrollbar{width:3px}
+.vr-sr-list::-webkit-scrollbar-thumb{background:rgba(180,140,60,0.15);border-radius:2px}
+.vr-sr-item{
+  display:flex;align-items:center;gap:0.5rem;
+  padding:0.35rem 0.45rem;border-radius:5px;cursor:pointer;
+  border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.015);
+  transition:all 0.15s;
+}
+.vr-sr-item:hover{background:rgba(212,165,74,0.05);border-color:rgba(212,165,74,0.12)}
+.vr-sr-item.selected{background:rgba(212,165,74,0.08);border-color:rgba(212,165,74,0.2)}
+.vr-sr-thumb{width:56px;height:32px;border-radius:3px;object-fit:cover;flex-shrink:0;background:#1a1920}
+.vr-sr-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:0.04rem}
+.vr-sr-title{font-size:0.68rem;font-weight:500;color:#e8e0d4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vr-sr-ch{font-size:0.55rem;color:#6a6058;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vr-sr-dur{font-size:0.5rem;color:#4a4038;font-family:'JetBrains Mono',monospace;flex-shrink:0}
+.vr-sr-loading{text-align:center;padding:0.7rem;color:#5a4e38;font-size:0.68rem;animation:vrPulse 1s ease infinite}
+.vr-sr-err{text-align:center;padding:0.5rem;font-size:0.6rem;color:#6a6058}
+.vr-sr-err a{color:#5a8fb8;text-decoration:none;border-bottom:1px dashed rgba(90,143,184,0.3);padding-bottom:1px}
+.vr-sr-err a:hover{border-color:rgba(90,143,184,0.5)}
+.vr-divider{border-top:1px solid rgba(180,140,60,0.06);padding-top:0.4rem;margin-top:0.1rem}
+.vr-divider-label{font-size:0.5rem;color:#3a3530;text-align:center;margin-bottom:0.3rem;letter-spacing:0.08em}
 
  
 .vr-toast{
   position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(12px);
-  font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:600;
-  padding:0.6rem 1.2rem;border-radius:6px;letter-spacing:0.04em;
+  font-family:'JetBrains Mono',monospace;font-size:0.63rem;font-weight:600;
+  padding:0.55rem 1.1rem;border-radius:6px;letter-spacing:0.04em;
   pointer-events:none;opacity:0;transition:all 0.3s;z-index:9999999;
-  background:rgba(14,13,20,0.95);border:1px solid rgba(212,165,74,0.3);color:#d4a54a;
-  box-shadow:0 4px 20px rgba(0,0,0,0.4);
+  background:rgba(14,13,20,0.95);border:1px solid rgba(212,165,74,0.25);color:#d4a54a;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4),0 0 10px rgba(212,165,74,0.05);
 }
 .vr-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.vr-toast.err{border-color:rgba(196,92,74,0.4);color:#c45c4a}
+.vr-toast.err{border-color:rgba(196,92,74,0.35);color:#c45c4a}
 
  
 .vr-fab{
-  display:none;position:fixed;bottom:1.2rem;right:1.2rem;z-index:99999;
+  display:none;position:fixed;bottom:1.2rem;right:1.2rem;z-index:99998;
   width:48px;height:48px;border-radius:50%;border:none;
   background:linear-gradient(135deg,#d4a54a,#b88a34);color:#0a0908;
   font-size:1.5rem;font-weight:700;cursor:pointer;
-  box-shadow:0 4px 16px rgba(212,165,74,0.35);
+  box-shadow:0 4px 16px rgba(212,165,74,0.3),0 0 15px rgba(212,165,74,0.08);
   transition:all 0.2s;line-height:1;
 }
-.vr-fab:hover{box-shadow:0 6px 24px rgba(212,165,74,0.5);transform:scale(1.05)}
+.vr-fab:hover{box-shadow:0 6px 24px rgba(212,165,74,0.45);transform:scale(1.05)}
 
  
 @media(max-width:768px){
-  .vr-head{padding:0.7rem 1rem;gap:0.5rem}
-  .vr-brand h1{font-size:0.95rem}
+  .vr-head{padding:0.65rem 0.9rem;gap:0.4rem}
+  .vr-brand h1{font-size:0.92rem}
   .vr-brand span{display:none}
-  .vr-controls{padding:0.5rem 0.8rem}
-  .vr-body{padding:0.5rem 0.6rem 5rem}
-  .vr-stat-val{font-size:1rem}
-  .vr-stat-item{padding:0.5rem 0.7rem;min-width:70px}
-  .vr-card-main{padding:0.65rem 0.75rem;gap:0.5rem}
-  .vr-card-title{font-size:0.88rem}
-  .vr-covers{padding:0.5rem 0.75rem 0.65rem 1.4rem}
+  .vr-controls{padding:0.45rem 0.7rem}
+  .vr-body{padding:0.4rem 0.5rem 5rem}
+  .vr-stat-val{font-size:0.95rem}
+  .vr-stat-item{padding:0.45rem 0.65rem;min-width:68px}
+  .vr-card-main{padding:0.6rem 0.7rem;gap:0.45rem}
+  .vr-card-title{font-size:0.86rem}
+  .vr-covers{padding:0.45rem 0.65rem 0.55rem 1.2rem}
   .vr-add-btn{display:none}
   .vr-fab{display:flex;align-items:center;justify-content:center}
   .vr-2col{grid-template-columns:1fr}
   .vr-modal{max-height:100vh;height:100vh;border-radius:0}
 }
 @media(max-width:420px){
-  .vr-head{padding:0.55rem 0.7rem}
-  .vr-brand h1{font-size:0.85rem}
-  .vr-hbtn{padding:0.25rem 0.45rem;font-size:0.55rem}
-  .vr-controls{padding:0.4rem 0.6rem}
-  .vr-body{padding:0.35rem 0.4rem 5rem}
-  .vr-stat-val{font-size:0.85rem}
-  .vr-stat-item{padding:0.4rem 0.5rem;min-width:58px}
-  .vr-card-main{gap:0.4rem;padding:0.55rem 0.6rem}
-  .vr-card-title{font-size:0.82rem}
-  .vr-card-sub{font-size:0.65rem}
-  .vr-nbadge{font-size:0.58rem;padding:0.15rem 0.35rem;min-width:38px}
-  .vr-cov-item{gap:0.4rem;padding:0.35rem 0.4rem}
-  .vr-cov-name{font-size:0.72rem}
-  .vr-cov-link{font-size:0.45rem;padding:0.2rem 0.35rem}
+  .vr-head{padding:0.5rem 0.65rem}
+  .vr-brand h1{font-size:0.82rem}
+  .vr-hbtn{padding:0.22rem 0.4rem;font-size:0.52rem}
+  .vr-controls{padding:0.35rem 0.5rem}
+  .vr-body{padding:0.3rem 0.35rem 5rem}
+  .vr-stat-val{font-size:0.82rem}
+  .vr-stat-item{padding:0.35rem 0.45rem;min-width:55px}
+  .vr-card-main{gap:0.35rem;padding:0.5rem 0.55rem}
+  .vr-card-title{font-size:0.8rem}
+  .vr-card-sub{font-size:0.62rem}
+  .vr-nbadge{font-size:0.55rem;padding:0.14rem 0.32rem;min-width:36px}
+  .vr-cov-item{gap:0.35rem;padding:0.3rem 0.35rem}
+  .vr-cov-name{font-size:0.7rem}
+  .vr-cov-link{font-size:0.42rem;padding:0.18rem 0.3rem}
 }
 </style>
 
 <div class="vr-app">
-  
+  <div class="vr-grid"></div>
+  <div class="vr-scan"></div>
+
   <div class="vr-head">
-    <div class="vr-brand">
-      <h1>VOCAL RANGE</h1>
-      <span>音域レジストリ</span>
-    </div>
+    <div class="vr-brand"><h1>VOCAL RANGE</h1><span>// SYS_v4.0</span></div>
     <div class="vr-head-actions">
       <span class="vr-sync-badge local" id="vr-sbadge">LOCAL</span>
       <button class="vr-hbtn" onclick="VR.doSync(false)">SYNC</button>
@@ -1457,7 +1502,6 @@
     </div>
   </div>
 
-  
   <div class="vr-stats">
     <div class="vr-stat-item"><span class="vr-stat-val vr-c-total" id="s-total">0</span><span class="vr-stat-lbl">Total</span></div>
     <div class="vr-stat-item"><span class="vr-stat-val vr-c-can" id="s-can">0</span><span class="vr-stat-lbl">歌える</span></div>
@@ -1467,10 +1511,9 @@
     <div class="vr-stat-item"><span class="vr-stat-val vr-c-cov" id="s-cov">0</span><span class="vr-stat-lbl">Cover</span></div>
   </div>
 
-  
   <div class="vr-controls">
     <div class="vr-ctrl-row">
-      <input class="vr-search" id="vr-q" type="text" placeholder="曲名・アーティスト・カバーを検索...">
+      <input class="vr-search" id="vr-q" type="text" placeholder="曲名・アーティスト・カバーを検索…">
       <select class="vr-sortsel" id="vr-sort">
         <option value="new">新しい順</option>
         <option value="note_d">最高音↓</option>
@@ -1493,7 +1536,6 @@
     <div class="vr-ctrl-row vr-tag-row" id="vr-tagrow"></div>
   </div>
 
-  
   <div class="vr-body" id="vr-body">
     <div id="vr-list"></div>
     <div class="vr-empty-state" id="vr-empty" style="display:none">
@@ -1514,19 +1556,8 @@
       <div class="vr-fg"><label>曲名 *</label><input class="vr-inp" id="mt-title" placeholder="紅蓮華"></div>
       <div class="vr-fg"><label>アーティスト *</label><input class="vr-inp" id="mt-artist" placeholder="LiSA"></div>
       <div class="vr-2col">
-        <div class="vr-fg">
-          <label>最高音</label>
-          <input class="vr-inp" id="mt-note" placeholder="hiA, mid2G…">
-          <div class="hint">hiA, mid2G, hihiC 等の記法</div>
-        </div>
-        <div class="vr-fg">
-          <label>ステータス</label>
-          <select class="vr-sel" id="mt-status">
-            <option value="can_sing">歌える</option>
-            <option value="practicing">練習中</option>
-            <option value="cannot_sing">未到達</option>
-          </select>
-        </div>
+        <div class="vr-fg"><label>最高音</label><input class="vr-inp" id="mt-note" placeholder="hiA, mid2G…"><div class="hint">hiA, mid2G, hihiC 等</div></div>
+        <div class="vr-fg"><label>ステータス</label><select class="vr-sel" id="mt-status"><option value="can_sing">歌える</option><option value="practicing">練習中</option><option value="cannot_sing">未到達</option></select></div>
       </div>
       <div class="vr-2col">
         <div class="vr-fg"><label>タグ</label><input class="vr-inp" id="mt-tags" placeholder="アニソン, ボカロ…"></div>
@@ -1544,12 +1575,29 @@
 
 
 <div class="vr-overlay" id="vr-m-cover">
-  <div class="vr-modal" style="max-width:400px">
+  <div class="vr-modal" style="max-width:500px">
     <div class="vr-mhead"><span class="vr-mhead-title">カバーを追加</span><button class="vr-mclose" onclick="VR.closeM('vr-m-cover')">&times;</button></div>
     <div class="vr-mbody">
       <input type="hidden" id="mc-tid">
+
+      
+      <div class="vr-fg">
+        <label>🔍 カバーを検索</label>
+        <div style="display:flex;gap:0.35rem">
+          <input class="vr-inp" id="mc-sq" placeholder="曲名 カバー 歌ってみた…" style="flex:1">
+          <button class="vr-mbtn save" onclick="VR.searchCovers()" style="flex-shrink:0;padding:0.4rem 0.65rem">検索</button>
+        </div>
+      </div>
+      <div id="mc-results"></div>
+
+      
+      <div class="vr-divider">
+        <div class="vr-divider-label">— 手動入力 —</div>
+      </div>
+
+      
       <div class="vr-fg"><label>歌唱者</label><input class="vr-inp" id="mc-artist" placeholder="まふまふ（任意）"></div>
-      <div class="vr-fg"><label>YouTube / YT Music URL *</label><input class="vr-inp" id="mc-url" placeholder="https://youtu.be/..."></div>
+      <div class="vr-fg"><label>URL *</label><input class="vr-inp" id="mc-url" placeholder="https://youtu.be/…"></div>
       <div class="vr-fg"><label>メモ</label><input class="vr-inp" id="mc-memo" placeholder="キー+2（任意）"></div>
     </div>
     <div class="vr-mfoot">
@@ -1566,13 +1614,13 @@
     <div class="vr-mbody">
       <div class="vr-fg">
         <label>クラウド同期 (JSONBin)</label>
-        <div class="hint" style="line-height:1.6;margin-bottom:0.5rem">初回SYNCでリモートBinを自動作成。他端末では下のBLOB IDを入力して接続。</div>
-        <div style="padding:0.5rem;background:rgba(255,255,255,0.02);border:1px dashed rgba(180,140,60,0.15);border-radius:4px;color:#d4a54a;font-family:'JetBrains Mono',monospace;font-size:0.7rem;word-break:break-all;user-select:all" id="cfg-blob">未接続</div>
+        <div class="hint" style="line-height:1.6;margin-bottom:0.4rem">初回SYNCでリモートBinを自動作成。他端末では下のBLOB IDを入力して接続。</div>
+        <div style="padding:0.45rem;background:rgba(255,255,255,0.02);border:1px dashed rgba(180,140,60,0.12);border-radius:4px;color:#d4a54a;font-family:'JetBrains Mono',monospace;font-size:0.68rem;word-break:break-all;user-select:all" id="cfg-blob">未接続</div>
       </div>
       <div class="vr-fg"><label>BLOB ID</label><input class="vr-inp" id="cfg-bid" placeholder="接続先のIDを入力"></div>
       <div class="vr-fg">
         <label>ローカルデータ操作</label>
-        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+        <div style="display:flex;gap:0.4rem;flex-wrap:wrap">
           <button class="vr-mbtn" onclick="VR.exportJ()">エクスポート</button>
           <button class="vr-mbtn" onclick="document.getElementById('cfg-file').click()">インポート</button>
           <input type="file" id="cfg-file" accept=".json" style="display:none" onchange="VR.importJ(event)">
@@ -1601,6 +1649,9 @@ const JBK='$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
 const BURL='https://api.jsonbin.io/v3/b';
 const jbH=()=>({'X-Master-Key':JBK,'Content-Type':'application/json'});
 
+
+const PIPED=['https://pipedapi.kavin.rocks','https://pipedapi.adminforge.de','https://api.piped.yt'];
+
 let tracks=[],blobId=null,filter='all',activeTag=null,openCardId=null;
 
  
@@ -1609,8 +1660,7 @@ const PB={lowlow:12,low:24,mid1:36,mid2:48,hi:60,hihi:72,hihihi:84};
 
 function noteNum(s){
   if(!s)return 0;
-  s=s.trim();
-  const m=s.match(/^(lowlow|low|mid1|mid2|hihihi|hihi|hi)(C#?|D#?|E|F#?|G#?|A#?|B)$/i);
+  const m=s.trim().match(/^(lowlow|low|mid1|mid2|hihihi|hihi|hi)(C#?|D#?|E|F#?|G#?|A#?|B)$/i);
   if(!m)return 0;
   const base=PB[m[1].toLowerCase()];
   if(base===undefined)return 0;
@@ -1633,6 +1683,7 @@ function toast(msg,err){
   e.textContent=msg;e.className='vr-toast show'+(err?' err':'');
   clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),3000);
 }
+function fmtDur(s){if(!s||s<=0)return '';const m=Math.floor(s/60);return m+':'+(s%60<10?'0':'')+(s%60);}
 
  
 function load(){
@@ -1646,12 +1697,9 @@ function render(){
   const q=($('vr-q').value||'').toLowerCase();
   const sv=$('vr-sort').value;
 
-  
   let sc=0,sp=0,sn=0,cv=0,mx=0,mxs='—',tgm={};
   tracks.forEach(t=>{
-    if(t.status==='can_sing')sc++;
-    else if(t.status==='practicing')sp++;
-    else sn++;
+    if(t.status==='can_sing')sc++;else if(t.status==='practicing')sp++;else sn++;
     cv+=(t.covers||[]).length;
     if((t.highNoteNum||0)>mx){mx=t.highNoteNum;mxs=t.highNote||'—';}
     (t.tags||[]).forEach(g=>{tgm[g]=(tgm[g]||0)+1;});
@@ -1660,10 +1708,8 @@ function render(){
   $('s-can').textContent=sc;$('s-prac').textContent=sp;$('s-no').textContent=sn;
   $('s-hi').textContent=mxs;$('s-cov').textContent=cv;
 
-  
   renderTags(tgm);
 
-  
   let list=tracks.filter(t=>{
     if(filter!=='all'&&t.status!==filter)return false;
     if(activeTag&&!(t.tags||[]).includes(activeTag))return false;
@@ -1676,7 +1722,6 @@ function render(){
     return true;
   });
 
-  
   list.sort((a,b)=>{
     switch(sv){
       case'new':return(b.createdAt||0)-(a.createdAt||0);
@@ -1690,8 +1735,7 @@ function render(){
     }
   });
 
-  const c=$('vr-list');
-  c.textContent='';
+  const c=$('vr-list');c.textContent='';
 
   if(list.length===0){$('vr-empty').style.display='flex';return;}
   $('vr-empty').style.display='none';
@@ -1699,36 +1743,26 @@ function render(){
   list.forEach((t,i)=>{
     const card=document.createElement('div');
     card.className='vr-card'+(openCardId===t.id?' open':'');
-    card.style.animationDelay=Math.min(i*30,300)+'ms';
+    card.style.animationDelay=Math.min(i*25,250)+'ms';
     card.dataset.id=t.id;
 
-    
     const main=document.createElement('div');
     main.className='vr-card-main';
     main.onclick=()=>{openCardId=openCardId===t.id?null:t.id;render();};
 
-    
     const dot=document.createElement('div');
     dot.className='vr-dot '+(t.status==='can_sing'?'can':t.status==='practicing'?'prac':'no');
     dot.title={can_sing:'歌える',practicing:'練習中',cannot_sing:'未到達'}[t.status]||'';
     dot.onclick=e=>{e.stopPropagation();cycleStatus(t.id);};
 
-    
-    const info=document.createElement('div');
-    info.className='vr-card-info';
-    const tit=document.createElement('div');
-    tit.className='vr-card-title';tit.textContent=t.title;
-    const sub=document.createElement('div');
-    sub.className='vr-card-sub';
-    const art=document.createElement('span');
-    art.className='vr-card-artist';art.textContent=t.artist;
+    const info=document.createElement('div');info.className='vr-card-info';
+    const tit=document.createElement('div');tit.className='vr-card-title';tit.textContent=t.title;
+    const sub=document.createElement('div');sub.className='vr-card-sub';
+    const art=document.createElement('span');art.className='vr-card-artist';art.textContent=t.artist;
     sub.appendChild(art);
     if((t.covers||[]).length>0){
-      const cs=document.createElement('span');
-      cs.textContent='·';cs.style.color='#3a3530';sub.appendChild(cs);
-      const cc=document.createElement('span');
-      cc.className='vr-card-covcount';cc.textContent='Cover '+t.covers.length;
-      sub.appendChild(cc);
+      const sep=document.createElement('span');sep.textContent='·';sep.style.color='#3a3530';sub.appendChild(sep);
+      const cc=document.createElement('span');cc.className='vr-card-covcount';cc.textContent='Cover '+t.covers.length;sub.appendChild(cc);
     }
     info.appendChild(tit);info.appendChild(sub);
     if(t.tags&&t.tags.length){
@@ -1737,23 +1771,12 @@ function render(){
       info.appendChild(tgs);
     }
 
-    
     const nb=document.createElement('div');
-    if(t.highNote){
-      nb.className='vr-nbadge '+noteClass(t.highNoteNum||0);
-      nb.textContent=t.highNote;
-    }
+    if(t.highNote){nb.className='vr-nbadge '+noteClass(t.highNoteNum||0);nb.textContent=t.highNote;}
 
-    
-    const meta=document.createElement('div');
-    meta.className='vr-card-meta';
-    if(t.difficulty){
-      const df=document.createElement('div');df.className='vr-card-diff';
-      df.textContent='★'.repeat(t.difficulty)+'☆'.repeat(5-t.difficulty);
-      meta.appendChild(df);
-    }
-    const eb=document.createElement('button');
-    eb.className='vr-card-edit';eb.textContent='✎';eb.title='編集';
+    const meta=document.createElement('div');meta.className='vr-card-meta';
+    if(t.difficulty){const df=document.createElement('div');df.className='vr-card-diff';df.textContent='★'.repeat(t.difficulty)+'☆'.repeat(5-t.difficulty);meta.appendChild(df);}
+    const eb=document.createElement('button');eb.className='vr-card-edit';eb.textContent='✎';eb.title='編集';
     eb.onclick=e=>{e.stopPropagation();openTrack(t.id);};
     meta.appendChild(eb);
 
@@ -1761,9 +1784,7 @@ function render(){
     card.appendChild(main);
 
     
-    const covs=document.createElement('div');
-    covs.className='vr-covers';
-
+    const covs=document.createElement('div');covs.className='vr-covers';
     const ch=document.createElement('div');ch.className='vr-cov-header';
     const cl=document.createElement('span');cl.className='vr-cov-label';cl.textContent='Covers';
     const cab=document.createElement('button');cab.className='vr-cov-addbtn';cab.textContent='＋ 追加';
@@ -1772,39 +1793,26 @@ function render(){
 
     (t.covers||[]).forEach(cv=>{
       const ci=document.createElement('div');ci.className='vr-cov-item';
-
       const cinfo=document.createElement('div');cinfo.className='vr-cov-info';
-      const cn=document.createElement('div');cn.className='vr-cov-name';
-      cn.textContent=cv.subArtist||'(名前なし)';
+      const cn=document.createElement('div');cn.className='vr-cov-name';cn.textContent=cv.subArtist||'(名前なし)';
       cinfo.appendChild(cn);
       if(cv.memo){const cm=document.createElement('div');cm.className='vr-cov-memo';cm.textContent=cv.memo;cinfo.appendChild(cm);}
-
       const cls=document.createElement('div');cls.className='vr-cov-links';
       if(cv.url){
         const a=document.createElement('a');
         const isYtm=cv.platform==='ytmusic';
         a.className='vr-cov-link '+(isYtm?'ytm':'yt');
         a.href=cv.url;a.target='_blank';a.rel='noopener noreferrer';
-        a.textContent=isYtm?'♫ YT Music':'▶ YouTube';
-        cls.appendChild(a);
+        a.textContent=isYtm?'♫ YT Music':'▶ YouTube';cls.appendChild(a);
       }
-
       const db=document.createElement('button');db.className='vr-cov-del';db.textContent='✕';
       db.onclick=e=>{e.stopPropagation();delCover(t.id,cv.id);};
-
-      ci.appendChild(cinfo);ci.appendChild(cls);ci.appendChild(db);
-      covs.appendChild(ci);
+      ci.appendChild(cinfo);ci.appendChild(cls);ci.appendChild(db);covs.appendChild(ci);
     });
 
-    if(!(t.covers||[]).length){
-      const emp=document.createElement('div');
-      emp.style.cssText='font-size:0.6rem;color:#3a3530;padding:0.3rem 0;';
-      emp.textContent='カバーはまだ登録されていません';
-      covs.appendChild(emp);
-    }
+    if(!(t.covers||[]).length){const emp=document.createElement('div');emp.className='vr-cov-empty';emp.textContent='カバーはまだ登録されていません';covs.appendChild(emp);}
 
-    card.appendChild(covs);
-    c.appendChild(card);
+    card.appendChild(covs);c.appendChild(card);
   });
 }
 
@@ -1822,9 +1830,8 @@ function renderTags(m){
  
 function cycleStatus(id){
   const t=tracks.find(x=>x.id===id);if(!t)return;
-  const order=['can_sing','practicing','cannot_sing'];
-  t.status=order[(order.indexOf(t.status)+1)%3];
-  t.updatedAt=Date.now();save();render();pushSync();
+  const o=['can_sing','practicing','cannot_sing'];
+  t.status=o[(o.indexOf(t.status)+1)%3];t.updatedAt=Date.now();save();render();pushSync();
 }
 
  
@@ -1842,66 +1849,121 @@ function openTrack(id){
   $('mt-memo').value=t?t.memo||'':'';
   openM('vr-m-track');
 }
-
 function saveTrack(){
   const id=$('mt-id').value;
-  const title=$('mt-title').value.trim();
-  const artist=$('mt-artist').value.trim();
+  const title=$('mt-title').value.trim(),artist=$('mt-artist').value.trim();
   if(!title||!artist){toast('曲名とアーティストは必須です',true);return;}
-  const note=$('mt-note').value.trim();
-  const status=$('mt-status').value;
-  const diff=parseInt($('mt-diff').value)||0;
-  const memo=$('mt-memo').value.trim();
+  const note=$('mt-note').value.trim(),status=$('mt-status').value;
+  const diff=parseInt($('mt-diff').value)||0,memo=$('mt-memo').value.trim();
   const tags=$('mt-tags').value?$('mt-tags').value.split(',').map(x=>x.trim()).filter(Boolean):[];
-  const nn=noteNum(note);
-  const now=Date.now();
-
-  if(id){
-    const t=tracks.find(x=>x.id===id);
-    if(t){Object.assign(t,{title,artist,highNote:note,highNoteNum:nn,status,difficulty:diff,memo,tags,updatedAt:now});}
-  }else{
-    tracks.push({id:gid(),title,artist,highNote:note,highNoteNum:nn,status,difficulty:diff,memo,tags,covers:[],createdAt:now,updatedAt:now});
-  }
+  const nn=noteNum(note),now=Date.now();
+  if(id){const t=tracks.find(x=>x.id===id);if(t)Object.assign(t,{title,artist,highNote:note,highNoteNum:nn,status,difficulty:diff,memo,tags,updatedAt:now});}
+  else tracks.push({id:gid(),title,artist,highNote:note,highNoteNum:nn,status,difficulty:diff,memo,tags,covers:[],createdAt:now,updatedAt:now});
   save();render();closeM('vr-m-track');pushSync();
 }
-
 function delTrack(){
   
   if(!confirm('この曲を削除しますか？'))return;
-  const id=$('mt-id').value;
-  tracks=tracks.filter(x=>x.id!==id);
+  tracks=tracks.filter(x=>x.id!==$('mt-id').value);
   save();render();closeM('vr-m-track');pushSync();
 }
 
  
 function openCoverM(tid){
+  const t=tracks.find(x=>x.id===tid);
   $('mc-tid').value=tid;
   $('mc-artist').value='';$('mc-url').value='';$('mc-memo').value='';
+  
+  $('mc-sq').value=t?(t.title+' '+t.artist+' カバー 歌ってみた'):'';
+  $('mc-results').textContent='';
   openM('vr-m-cover');
 }
-
 function saveCover(){
-  const tid=$('mc-tid').value;
-  const url=$('mc-url').value.trim();
+  const tid=$('mc-tid').value,url=$('mc-url').value.trim();
   if(!url){toast('URLは必須です',true);return;}
   let platform='youtube';
   if(url.includes('music.youtube.com'))platform='ytmusic';
-  else if(!url.includes('youtube.com')&&!url.includes('youtu.be')){
-    toast('YouTube URLのみ対応',true);return;
-  }
+  else if(!url.includes('youtube.com')&&!url.includes('youtu.be')){toast('YouTube URLのみ対応',true);return;}
   const t=tracks.find(x=>x.id===tid);if(!t)return;
   if(!t.covers)t.covers=[];
   t.covers.push({id:gid(),subArtist:$('mc-artist').value.trim(),url,platform,memo:$('mc-memo').value.trim()});
-  t.updatedAt=Date.now();
-  save();render();closeM('vr-m-cover');pushSync();
+  t.updatedAt=Date.now();save();render();closeM('vr-m-cover');pushSync();
 }
-
 function delCover(tid,cid){
   if(!confirm('このカバーを削除しますか？'))return;
   const t=tracks.find(x=>x.id===tid);if(!t||!t.covers)return;
-  t.covers=t.covers.filter(x=>x.id!==cid);
-  t.updatedAt=Date.now();
+  t.covers=t.covers.filter(x=>x.id!==cid);t.updatedAt=Date.now();
   save();render();pushSync();
+}
+
+ 
+async function searchCovers(){
+  const q=$('mc-sq').value.trim();
+  if(!q){toast('検索キーワードを入力',true);return;}
+
+  const container=$('mc-results');
+  
+  container.textContent='';
+  const loading=document.createElement('div');loading.className='vr-sr-loading';loading.textContent='検索中…';
+  container.appendChild(loading);
+
+  let items=null;
+  for(const api of PIPED){
+    try{
+      const r=await fetch(api+'/search?q='+encodeURIComponent(q)+'&filter=videos',{signal:AbortSignal.timeout(6000)});
+      if(!r.ok)continue;
+      const d=await r.json();
+      items=(d.items||d).filter(x=>x.type==='stream');
+      if(items.length)break;
+    }catch(e){continue;}
+  }
+
+  container.textContent='';
+
+  if(!items||!items.length){
+    
+    const errDiv=document.createElement('div');errDiv.className='vr-sr-err';
+    const txt=document.createTextNode('検索結果がありません　');
+    const link=document.createElement('a');
+    link.href='https://www.youtube.com/results?search_query='+encodeURIComponent(q);
+    link.target='_blank';link.rel='noopener noreferrer';
+    link.textContent='YouTubeで直接検索 →';
+    errDiv.appendChild(txt);errDiv.appendChild(link);
+    container.appendChild(errDiv);
+    return;
+  }
+
+  const list=document.createElement('div');list.className='vr-sr-list';
+  items.slice(0,10).forEach(item=>{
+    const vid=(item.url||'').replace('/watch?v=','');
+    if(!vid)return;
+    const el=document.createElement('div');el.className='vr-sr-item';
+    el.onclick=()=>{
+      
+      $('mc-url').value='https://music.youtube.com/watch?v='+vid;
+      $('mc-artist').value=item.uploaderName||'';
+      
+      list.querySelectorAll('.vr-sr-item').forEach(x=>x.classList.remove('selected'));
+      el.classList.add('selected');
+      toast('選択しました — YT Music リンク');
+    };
+
+    const thumb=document.createElement('img');thumb.className='vr-sr-thumb';
+    thumb.src='https://i.ytimg.com/vi/'+vid+'/mqdefault.jpg';
+    thumb.alt='';thumb.loading='lazy';
+    thumb.onerror=()=>{thumb.style.display='none';};
+
+    const info=document.createElement('div');info.className='vr-sr-info';
+    const ttl=document.createElement('div');ttl.className='vr-sr-title';ttl.textContent=item.title||'';
+    const ch=document.createElement('div');ch.className='vr-sr-ch';ch.textContent=item.uploaderName||'';
+    info.appendChild(ttl);info.appendChild(ch);
+
+    const dur=document.createElement('div');dur.className='vr-sr-dur';dur.textContent=fmtDur(item.duration);
+
+    el.appendChild(thumb);el.appendChild(info);el.appendChild(dur);
+    list.appendChild(el);
+  });
+  container.appendChild(list);
 }
 
  
@@ -1916,14 +1978,10 @@ function setSB(st){
   else if(st==='ok'){b.textContent='同期済';b.className='vr-sync-badge ok';}
   else if(st==='err'){b.textContent='エラー';b.className='vr-sync-badge err';}
 }
-
 async function pushSync(){
   if(!blobId)return;
-  try{
-    await fetch(BURL+'/'+blobId,{method:'PUT',headers:jbH(),body:JSON.stringify({tracks})});
-  }catch(e){ }
+  try{await fetch(BURL+'/'+blobId,{method:'PUT',headers:jbH(),body:JSON.stringify({tracks})});}catch(e){}
 }
-
 async function doSync(silent){
   if(!blobId){
     if(silent)return;
@@ -1931,8 +1989,7 @@ async function doSync(silent){
     setSB('busy');
     try{
       const r=await fetch(BURL,{method:'POST',headers:jbH(),body:JSON.stringify({tracks})});
-      const d=await r.json();
-      blobId=d.metadata.id;localStorage.setItem(BK,blobId);
+      const d=await r.json();blobId=d.metadata.id;localStorage.setItem(BK,blobId);
       setSB('ok');toast('同期を開始しました');
     }catch(e){setSB('err');toast('初期化失敗',true);}
     return;
@@ -1941,29 +1998,19 @@ async function doSync(silent){
   try{
     const r=await fetch(BURL+'/'+blobId+'/latest',{headers:{'X-Master-Key':JBK}});
     if(!r.ok)throw new Error();
-    const d=await r.json();
-    const remote=d.record.tracks||[];
-
-    
-    const merged=new Map(tracks.map(t=>[t.id,t]));
-    let changed=false;
+    const d=await r.json();const remote=d.record.tracks||[];
+    const merged=new Map(tracks.map(t=>[t.id,t]));let changed=false;
     remote.forEach(rt=>{
       const lt=merged.get(rt.id);
       if(!lt){merged.set(rt.id,rt);changed=true;}
       else if((rt.updatedAt||0)>(lt.updatedAt||0)){merged.set(rt.id,rt);changed=true;}
     });
-    
     tracks.forEach(lt=>{if(!remote.find(x=>x.id===lt.id))changed=true;});
-
     tracks=Array.from(merged.values());
     if(changed){save();render();}
-
-    
     await fetch(BURL+'/'+blobId,{method:'PUT',headers:jbH(),body:JSON.stringify({tracks})});
     setSB('ok');if(!silent)toast('同期完了');
-  }catch(e){
-    setSB('err');if(!silent)toast('同期失敗',true);
-  }
+  }catch(e){setSB('err');if(!silent)toast('同期失敗',true);}
 }
 
  
@@ -1991,31 +2038,24 @@ function exportJ(){
 function importJ(e){
   const f=e.target.files[0];if(!f)return;
   const r=new FileReader();
-  r.onload=ev=>{
-    try{
-      const d=JSON.parse(ev.target.result);
-      if(d.tracks){tracks=d.tracks;save();render();toast('インポート完了');pushSync();}
-    }catch(err){toast('インポート失敗',true);}
-  };
+  r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(d.tracks){tracks=d.tracks;save();render();toast('インポート完了');pushSync();}}catch(err){toast('インポート失敗',true);}};
   r.readAsText(f);
 }
 
  
 document.querySelectorAll('.vr-ftab').forEach(b=>{
-  b.onclick=()=>{
-    document.querySelectorAll('.vr-ftab').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on');filter=b.dataset.f;render();
-  };
+  b.onclick=()=>{document.querySelectorAll('.vr-ftab').forEach(x=>x.classList.remove('on'));b.classList.add('on');filter=b.dataset.f;render();};
 });
 $('vr-q').addEventListener('input',render);
 $('vr-sort').addEventListener('change',render);
 
- 
-load();render();setSB(blobId?'ok':'local');
-if(blobId)doSync(true);
+$('mc-sq').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();searchCovers();}});
 
-return{openTrack,saveTrack,delTrack,openCoverM,saveCover,delCover,
-  openM,closeM,doSync,openCfg,applyCfg,purge,exportJ,importJ};
+ 
+load();render();setSB(blobId?'ok':'local');if(blobId)doSync(true);
+
+return{openTrack,saveTrack,delTrack,openCoverM:openCoverM,saveCover,delCover,
+  openM,closeM,doSync,openCfg,applyCfg,purge,exportJ,importJ,searchCovers};
 })();
 </script>
 
