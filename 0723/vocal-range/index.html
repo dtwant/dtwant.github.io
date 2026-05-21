@@ -1650,7 +1650,7 @@ const BURL='https://api.jsonbin.io/v3/b';
 const jbH=()=>({'X-Master-Key':JBK,'Content-Type':'application/json'});
 
 
-const PIPED=['https://pipedapi.kavin.rocks','https://pipedapi.adminforge.de','https://api.piped.yt'];
+const PIPED=['https://pipedapi.kavin.rocks','https://pipedapi.adminforge.de','https://api.piped.yt','https://piped-api.lunar.icu'];
 
 let tracks=[],blobId=null,filter='all',activeTag=null,openCardId=null;
 
@@ -1874,7 +1874,7 @@ function openCoverM(tid){
   $('mc-tid').value=tid;
   $('mc-artist').value='';$('mc-url').value='';$('mc-memo').value='';
   
-  $('mc-sq').value=t?(t.title+' '+t.artist+' カバー 歌ってみた'):'';
+  $('mc-sq').value=t?(t.title+' '+t.artist):'';
   $('mc-results').textContent='';
   openM('vr-m-cover');
 }
@@ -1902,50 +1902,45 @@ async function searchCovers(){
   if(!q){toast('検索キーワードを入力',true);return;}
 
   const container=$('mc-results');
-  
   container.textContent='';
   const loading=document.createElement('div');loading.className='vr-sr-loading';loading.textContent='検索中…';
   container.appendChild(loading);
 
-  let items=null;
-  for(const api of PIPED){
-    try{
-      const r=await fetch(api+'/search?q='+encodeURIComponent(q)+'&filter=videos',{signal:AbortSignal.timeout(6000)});
-      if(!r.ok)continue;
+  let items=[];
+  try{
+    const r=await fetch(ITUNES_API+'?term='+encodeURIComponent(q)+'&entity=song&limit=15',{signal:AbortSignal.timeout(6000)});
+    if(r.ok){
       const d=await r.json();
-      items=(d.items||d).filter(x=>x.type==='stream');
-      if(items.length)break;
-    }catch(e){continue;}
-  }
+      items=d.results||[];
+    }
+  }catch(e){}
 
   container.textContent='';
 
-  if(!items||!items.length){
-    
+  if(!items.length){
     const errDiv=document.createElement('div');errDiv.className='vr-sr-err';
     const txt=document.createTextNode('検索結果がありません　');
     const link=document.createElement('a');
-    link.href='https://www.youtube.com/results?search_query='+encodeURIComponent(q);
+    link.href='https://music.youtube.com/search?q='+encodeURIComponent(q);
     link.target='_blank';link.rel='noopener noreferrer';
-    link.textContent='YouTubeで直接検索 →';
+    link.textContent='YT Musicで直接検索 →';
     errDiv.appendChild(txt);errDiv.appendChild(link);
     container.appendChild(errDiv);
     return;
   }
 
   const list=document.createElement('div');list.className='vr-sr-list';
-  items.slice(0,10).forEach(item=>{
-    const vid=(item.url||'').replace('/watch?v=','');
-    if(!vid)return;
+  items.forEach(item=>{
     const el=document.createElement('div');el.className='vr-sr-item';
     el.onclick=()=>{
       
-      $('mc-url').value='https://music.youtube.com/watch?v='+vid;
-      $('mc-artist').value=item.uploaderName||'';
+      const sq = item.artistName + ' ' + item.trackName;
+      $('mc-url').value='https://music.youtube.com/search?q='+encodeURIComponent(sq);
+      $('mc-artist').value=item.artistName||'';
       
       list.querySelectorAll('.vr-sr-item').forEach(x=>x.classList.remove('selected'));
       el.classList.add('selected');
-      toast('選択しました — YT Music リンク');
+      toast('YT Music検索リンクをセットしました');
     };
 
     const thumb=document.createElement('img');thumb.className='vr-sr-thumb';
