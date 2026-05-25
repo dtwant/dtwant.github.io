@@ -749,338 +749,828 @@
       </h1>
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
-      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-/* --- カラー & 変数定義 --- */
+/* === RESET === */
 :root {
-  --cyber-cyan: #00f3ff;
-  --cyber-pink: #ff0055;
-  --cyber-green: #00ff66;
-  --cyber-dark: #050505;
-  --cyber-grid: rgba(0, 243, 255, 0.1);
-  --scan-line: rgba(0, 243, 255, 0.3);
+  --cyan: #00f3ff;
+  --pink: #ff0055;
+  --green: #00ff66;
+  --purple: #bc13fe;
+  --amber: #ffaa00;
+  --dark: #030308;
+  --card-bg: rgba(3,3,12,0.75);
+  --border-dim: rgba(0,243,255,0.15);
+  --border-bright: rgba(0,243,255,0.4);
 }
-
-/* --- 全体設定 --- */
+h1:not(.sr-title) { display: none !important; }
 body {
-  background-color: var(--cyber-dark) !important;
-  color: var(--cyber-cyan) !important;
-  font-family: 'Orbitron', sans-serif;
+  margin: 0; padding: 0;
+  background: var(--dark) !important;
+  color: #e0f8ff;
+  font-family: 'JetBrains Mono', monospace;
   overflow-x: hidden;
-  background-image: 
-    linear-gradient(var(--cyber-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--cyber-grid) 1px, transparent 1px);
-  background-size: 30px 30px;
-  background-position: center center;
 }
 
-body::after {
-  content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px);
-  pointer-events: none; z-index: 100;
-  animation: scanline-scroll 10s linear infinite;
+/* === BACKGROUND === */
+.sr-bg {
+  position: fixed; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse at 30% 20%, rgba(0,243,255,0.06) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 80%, rgba(255,0,85,0.04) 0%, transparent 50%),
+              var(--dark);
 }
-@keyframes scanline-scroll { from { background-position: 0 0; } to { background-position: 0 100%; } }
-
-/* --- メインコンテナ (HUD風デザイン) --- */
-.cyber-hud-container {
-  position: relative; max-width: 800px; margin: 10vh auto 2rem; padding: 3rem;
-  background: rgba(5, 5, 5, 0.8); border: 2px solid var(--cyber-cyan);
-  box-shadow: 0 0 30px rgba(0, 243, 255, 0.2), inset 0 0 20px rgba(0, 243, 255, 0.1);
-  overflow: hidden;
-  /* 初期状態はぼかし（ロック画面用） */
-  filter: blur(8px); opacity: 0.3; transition: all 1s ease-out;
+.sr-grid {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0,243,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,243,255,0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
-.cyber-hud-container.unlocked { filter: blur(0); opacity: 1; }
-
-.hud-corner { position: absolute; width: 30px; height: 30px; border-color: var(--cyber-cyan); border-style: solid; z-index: 10; }
-.tl { top: 0; left: 0; border-width: 4px 0 0 4px; }
-.tr { top: 0; right: 0; border-width: 4px 4px 0 0; }
-.bl { bottom: 0; left: 0; border-width: 0 0 4px 4px; }
-.br { bottom: 0; right: 0; border-width: 0 4px 4px 0; }
-
-.scan-beam-inner {
-  position: absolute; top: -50%; left: -50%; width: 200%; height: 50%;
-  background: linear-gradient(to bottom, transparent, var(--scan-line), transparent);
-  transform: rotate(-45deg); animation: beam-scan 5s ease-in-out infinite;
-  opacity: 0.5; pointer-events: none;
+.sr-scanline {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent 0px, transparent 2px,
+    rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px
+  );
 }
-@keyframes beam-scan { 0% { top: -150%; } 100% { top: 150%; } }
-
-/* --- テキストエフェクト --- */
-h1.cyber-title {
-  font-size: 3rem; font-weight: 900; text-align: center; margin-bottom: 0.5rem; position: relative;
-  text-shadow: 0 0 10px var(--cyber-cyan), 0 0 20px var(--cyber-cyan);
-  animation: glitch-skew 2s infinite linear alternate-reverse;
+.sr-vignette {
+  position: fixed; inset: 0; z-index: 3; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%);
 }
-h1.cyber-title::before, h1.cyber-title::after {
-  content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8;
-}
-h1.cyber-title::before { color: var(--cyber-pink); z-index: -1; animation: glitch-anim-1 0.4s infinite linear alternate-reverse; }
-h1.cyber-title::after { color: #00ff00; z-index: -2; animation: glitch-anim-2 0.4s infinite linear alternate-reverse; }
 
-.cyber-subtitle {
-  text-align: center; font-family: 'JetBrains Mono', monospace; color: #fff;
-  letter-spacing: 0.2em; margin-bottom: 3rem; opacity: 0.8;
+/* Floating particles */
+.sr-particle {
+  position: fixed; z-index: 4; pointer-events: none;
+  width: 2px; height: 2px; border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+  opacity: 0;
+  animation: sr-float var(--d, 4s) var(--delay, 0s) ease-in-out infinite;
+  left: var(--x, 50%); top: var(--y, 50%);
 }
-.cyber-subtitle::before { content: "[ "; color: var(--cyber-cyan); }
-.cyber-subtitle::after { content: " ]"; color: var(--cyber-cyan); }
-
-.cyber-content { font-family: 'JetBrains Mono', monospace; color: #e0e0e0; line-height: 1.8; border-top: 1px dashed var(--cyber-cyan); padding-top: 2rem; }
-ul.cyber-list { list-style: none; padding: 0; margin-top: 2rem; }
-ul.cyber-list li { margin-bottom: 1.5rem; padding-left: 1.5rem; position: relative; }
-ul.cyber-list li::before { content: ">"; position: absolute; left: 0; color: var(--cyber-cyan); font-weight: bold; animation: blink 1s infinite; }
-
-a.cyber-link {
-  text-decoration: none; color: var(--cyber-cyan); font-weight: 700; letter-spacing: 0.1em;
-  position: relative; transition: all 0.3s; padding: 0.5rem 1rem; border: 1px solid transparent;
+@keyframes sr-float {
+  0%   { opacity: 0; transform: translateY(0) translateX(0); }
+  20%  { opacity: var(--o, 0.6); }
+  80%  { opacity: var(--o, 0.6); }
+  100% { opacity: 0; transform: translateY(-40px) translateX(15px); }
 }
-a.cyber-link:hover { background: rgba(0, 243, 255, 0.1); border-color: var(--cyber-cyan); box-shadow: 0 0 15px var(--cyber-cyan); text-shadow: 0 0 5px #fff; }
-a.cyber-link.pink { color: var(--cyber-pink); }
-a.cyber-link.pink:hover { background: rgba(255, 0, 85, 0.1); border-color: var(--cyber-pink); box-shadow: 0 0 15px var(--cyber-pink); }
 
-/* --- 🌟 パターンロック画面 🌟 --- */
-#pattern-lock-screen {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
-  z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center;
-  transition: opacity 0.8s ease-out, visibility 0.8s;
+/* === LOCK SCREEN === */
+#sr-lock {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(12px);
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  transition: opacity 0.8s, visibility 0.8s;
 }
-#pattern-lock-screen.unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
+#sr-lock.unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
+#sr-lock::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px,
+    transparent 1px, transparent 2px
+  );
+  pointer-events: none;
+}
 
-.lock-info {
-  text-align: center; margin-bottom: 2rem; font-family: 'JetBrains Mono', monospace;
-  color: var(--cyber-cyan); text-shadow: 0 0 8px var(--cyber-cyan);
+.lock-box {
+  width: 90%; max-width: 480px;
+  background: rgba(2,2,15,0.85);
+  border: 1px solid var(--cyan);
+  box-shadow: 0 0 40px rgba(0,243,255,0.12), inset 0 0 30px rgba(0,243,255,0.05);
+  padding: 3rem 2rem 2rem; position: relative;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center;
 }
-.lock-info h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 0.5rem; letter-spacing: 2px; }
-.lock-msg { font-size: 0.9rem; min-height: 1.2rem; }
-.lock-msg.error { color: var(--cyber-pink); text-shadow: 0 0 8px var(--cyber-pink); animation: shake 0.3s; }
-.lock-msg.success { color: var(--cyber-green); text-shadow: 0 0 8px var(--cyber-green); }
+.lock-box::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--pink), var(--cyan), transparent);
+  background-size: 200% 100%;
+  animation: lock-scan 3s linear infinite;
+}
+@keyframes lock-scan { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 
-/* 3x3グリッドコンテナ */
-.pattern-container {
-  position: relative; width: 300px; height: 300px;
-  touch-action: none; /* スマホのスワイプスクロール防止 */
+.lock-badge {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: #030308; padding: 4px 16px;
+  font-family: 'Orbitron', sans-serif; font-size: 0.8rem;
+  color: var(--pink); letter-spacing: 2px;
+  border: 1px solid var(--pink); white-space: nowrap;
 }
-/* 線を描画するSVGレイヤー */
-#pattern-svg {
+.lock-text {
+  margin: 0 0 0.5rem; font-size: 0.9rem; line-height: 1.6;
+  color: var(--cyan); text-shadow: 0 0 5px rgba(0,243,255,0.5);
+}
+.lock-text .pink { color: var(--pink); text-shadow: 0 0 5px rgba(255,0,85,0.5); font-weight: bold; }
+.lock-text .blink { animation: blink-c 1s step-end infinite; }
+@keyframes blink-c { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+.lock-radar {
+  position: absolute; width: 320px; height: 320px;
+  border-radius: 50%; border: 1px dashed rgba(0,243,255,0.15);
+  z-index: 0; pointer-events: none;
+  animation: lock-spin 20s linear infinite;
+}
+.lock-radar::after {
+  content: ''; position: absolute; inset: 15%;
+  border-radius: 50%; border: 1px solid rgba(188,19,254,0.15);
+}
+@keyframes lock-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* Pattern lock */
+.pat-container {
+  position: relative; width: 260px; height: 260px;
+  margin-top: 1.5rem; touch-action: none; z-index: 2;
+}
+#pat-svg {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;
 }
-#pattern-svg polyline, #pattern-svg line {
-  stroke: var(--cyber-cyan); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round;
-  filter: drop-shadow(0 0 8px var(--cyber-cyan)); transition: stroke 0.3s;
+#pat-svg polyline, #pat-svg line {
+  stroke: var(--cyan); stroke-width: 3;
+  stroke-linecap: round; stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px var(--cyan));
+  transition: stroke 0.3s;
 }
-
-/* 9つのノード（点） */
-.pattern-grid {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+.pat-grid {
+  position: absolute; inset: 0;
+  display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr);
   z-index: 2;
 }
-.node-wrap {
-  display: flex; justify-content: center; align-items: center; cursor: crosshair;
+.pat-node {
+  display: flex; justify-content: center; align-items: center;
+  cursor: crosshair;
 }
-.node {
-  width: 20px; height: 20px; border-radius: 50%;
-  background: transparent; border: 2px solid var(--cyber-cyan);
-  box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-  transition: all 0.2s; pointer-events: none; /* 判定はwrapで行う */
+.pat-dot {
+  width: 14px; height: 14px;
+  background: rgba(0,243,255,0.15); border: 1px solid var(--cyan);
+  box-shadow: 0 0 6px rgba(0,243,255,0.4);
+  transform: rotate(45deg); transition: all 0.2s;
+  pointer-events: none;
 }
-/* 通過したノード */
-.node-wrap.active .node {
-  background: var(--cyber-cyan); transform: scale(1.5);
-  box-shadow: 0 0 20px var(--cyber-cyan);
+.pat-node.active .pat-dot {
+  background: var(--cyan); transform: rotate(45deg) scale(1.8);
+  box-shadow: 0 0 18px var(--cyan);
+}
+.pat-container.error #pat-svg polyline,
+.pat-container.error #pat-svg line { stroke: var(--pink); filter: drop-shadow(0 0 8px var(--pink)); }
+.pat-container.error .pat-node.active .pat-dot { background: var(--pink); border-color: var(--pink); box-shadow: 0 0 15px var(--pink); }
+.pat-container.success #pat-svg polyline,
+.pat-container.success #pat-svg line { stroke: var(--green); filter: drop-shadow(0 0 8px var(--green)); }
+.pat-container.success .pat-node.active .pat-dot { background: var(--green); border-color: var(--green); box-shadow: 0 0 15px var(--green); }
+
+.lock-msg {
+  margin-top: 1rem; height: 1.2em;
+  font-family: 'Orbitron', sans-serif; font-size: 0.8rem;
+  color: var(--pink); text-shadow: 0 0 5px rgba(255,0,85,0.5);
+  opacity: 0; transition: opacity 0.3s;
+}
+.lock-msg.show { opacity: 1; animation: glitch-shake 0.2s 3; }
+.lock-msg.success { color: var(--green); text-shadow: 0 0 5px rgba(0,255,102,0.5); }
+@keyframes glitch-shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
 }
 
-/* --- エラー／成功時のカラー変更 --- */
-.pattern-container.error #pattern-svg polyline, .pattern-container.error #pattern-svg line { stroke: var(--cyber-pink); filter: drop-shadow(0 0 8px var(--cyber-pink)); }
-.pattern-container.error .node-wrap.active .node { background: var(--cyber-pink); border-color: var(--cyber-pink); box-shadow: 0 0 20px var(--cyber-pink); }
-.pattern-container.success #pattern-svg polyline, .pattern-container.success #pattern-svg line { stroke: var(--cyber-green); filter: drop-shadow(0 0 8px var(--cyber-green)); }
-.pattern-container.success .node-wrap.active .node { background: var(--cyber-green); border-color: var(--cyber-green); box-shadow: 0 0 20px var(--cyber-green); }
+/* === HUB (post-unlock) === */
+.sr-hub {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  overflow-y: auto; overflow-x: hidden;
+  z-index: 10;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 3rem 1.5rem 4rem;
+  filter: blur(8px); opacity: 0.3;
+  transition: all 1s ease-out;
+  scrollbar-width: thin;
+  scrollbar-color: var(--pink) transparent;
+}
+.sr-hub::-webkit-scrollbar { width: 4px; }
+.sr-hub::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 2px; }
+.sr-hub.unlocked { filter: blur(0); opacity: 1; }
+.sr-hub-inner {
+  width: 100%; max-width: 900px;
+}
 
-/* アニメーション */
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-@keyframes glitch-skew { 0% { transform: skew(0deg); } 20% { transform: skew(0deg); } 21% { transform: skew(2deg); } 22% { transform: skew(-2deg); } 23% { transform: skew(0deg); } 100% { transform: skew(0deg); } }
-@keyframes glitch-anim-1 { 0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 2px); } 100% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -2px); } }
-@keyframes glitch-anim-2 { 0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -2px); } 100% { clip-path: inset(80% 0 20% 0); transform: translate(-2px, 2px); } }
+/* Header */
+.sr-header {
+  text-align: center; margin-bottom: 3rem;
+  padding: 2.5rem 2rem; position: relative;
+  border: 1px solid var(--border-dim);
+  background: var(--card-bg);
+  overflow: hidden;
+}
+.sr-header::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), var(--pink), transparent);
+}
+.sr-header::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-bright), transparent);
+}
+
+.sr-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.4rem, 5vw, 2.8rem); font-weight: 900;
+  color: #fff; letter-spacing: 0.15em;
+  margin: 0 0 0.5rem;
+  text-shadow: 0 0 20px rgba(0,243,255,0.4), 0 0 40px rgba(0,243,255,0.15);
+  position: relative;
+  animation: sr-glitch-skew 4s infinite linear;
+}
+.sr-title::before, .sr-title::after {
+  content: attr(data-text);
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+}
+.sr-title::before { color: var(--pink); z-index: -1; animation: sr-glitch1 0.3s infinite alternate-reverse; opacity: 0.7; }
+.sr-title::after { color: var(--cyan); z-index: -2; animation: sr-glitch2 0.3s infinite alternate-reverse; opacity: 0.5; }
+@keyframes sr-glitch-skew {
+  0%,95%,100% { transform: skew(0deg); }
+  96% { transform: skew(2deg); }
+  97% { transform: skew(-1deg); }
+}
+@keyframes sr-glitch1 {
+  0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
+  100% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+}
+@keyframes sr-glitch2 {
+  0% { clip-path: inset(10% 0 60% 0); transform: translate(1px, -1px); }
+  100% { clip-path: inset(80% 0 20% 0); transform: translate(-1px, 1px); }
+}
+
+.sr-subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: clamp(0.6rem, 2vw, 0.85rem); color: rgba(0,243,255,0.7);
+  letter-spacing: 0.2em; margin: 0;
+}
+.sr-subtitle::before { content: '[ '; color: var(--pink); }
+.sr-subtitle::after { content: ' ]'; color: var(--pink); }
+
+/* Status bar */
+.sr-status {
+  display: flex; justify-content: center; align-items: center;
+  gap: 1rem; flex-wrap: wrap;
+  margin-top: 1.5rem; padding-top: 1rem;
+  border-top: 1px solid var(--border-dim);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: clamp(0.58rem, 1.5vw, 0.72rem); color: rgba(0,243,255,0.5);
+}
+.sr-stat { display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+.sr-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 6px var(--green);
+  animation: sr-pulse 2s infinite; flex-shrink: 0;
+}
+.sr-dot.purple { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
+.sr-dot.amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+@keyframes sr-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* Access Panels */
+.sr-panels {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1.5rem; margin-bottom: 2.5rem;
+}
+
+.sr-panel {
+  display: flex; flex-direction: column;
+  text-decoration: none !important;
+  background: var(--card-bg);
+  border: 1px solid var(--border-dim);
+  padding: 2rem 1.8rem;
+  position: relative; overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25,0.8,0.25,1);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  min-height: 260px;
+}
+.sr-panel::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  transition: all 0.4s;
+}
+.sr-panel::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-dim), transparent);
+}
+.sr-panel:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent, var(--cyan));
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px var(--glow, rgba(0,243,255,0.15));
+}
+.sr-panel:hover::before {
+  background: linear-gradient(90deg, transparent, var(--accent, var(--cyan)), transparent);
+}
+
+/* Panel icon area */
+.sr-panel-icon {
+  width: 64px; height: 64px;
+  margin-bottom: 1.2rem; position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.sr-panel-icon svg {
+  width: 48px; height: 48px;
+  stroke: var(--accent, var(--cyan));
+  stroke-width: 1.5; fill: none;
+  filter: drop-shadow(0 0 8px var(--glow, rgba(0,243,255,0.5)));
+  transition: all 0.4s;
+}
+.sr-panel:hover .sr-panel-icon svg {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 15px var(--glow, rgba(0,243,255,0.8)));
+}
+
+/* Panel icon ring */
+.sr-panel-icon::before {
+  content: ''; position: absolute;
+  width: 64px; height: 64px; border-radius: 50%;
+  border: 1px dashed var(--border-dim);
+  animation: sr-ring 8s linear infinite;
+}
+@keyframes sr-ring { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+.sr-panel-id {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem; color: var(--accent, var(--cyan));
+  letter-spacing: 2px; opacity: 0.6;
+  margin-bottom: 0.5rem;
+}
+.sr-panel-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.3rem; font-weight: 700;
+  color: #fff; letter-spacing: 0.1em;
+  margin: 0 0 0.8rem;
+  text-shadow: 0 0 10px var(--glow, rgba(0,243,255,0.4));
+  transition: all 0.3s;
+}
+.sr-panel:hover .sr-panel-title {
+  text-shadow: 0 0 20px var(--glow, rgba(0,243,255,0.6));
+}
+.sr-panel-desc {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.78rem; color: rgba(200,220,240,0.6);
+  line-height: 1.7; margin: 0 0 1rem;
+  flex: 1;
+}
+.sr-panel-status {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.58rem; letter-spacing: 1.5px;
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-top: auto;
+}
+.sr-panel-status .sr-dot { width: 5px; height: 5px; }
+
+/* Panel scan effect */
+.sr-panel-scan {
+  position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0,243,255,0.04), transparent);
+  transition: left 0.6s;
+  pointer-events: none;
+}
+.sr-panel:hover .sr-panel-scan { left: 100%; }
+
+/* Panel: Command Center - pink accent */
+.sr-panel.cmd {
+  --accent: var(--pink);
+  --glow: rgba(255,0,85,0.3);
+}
+.sr-panel.cmd .sr-panel-status { color: var(--pink); }
+
+/* Panel: Vault - cyan accent */
+.sr-panel.vault {
+  --accent: var(--cyan);
+  --glow: rgba(0,243,255,0.3);
+}
+.sr-panel.vault .sr-panel-status { color: var(--cyan); }
+
+/* Corner decorations on panels */
+.sr-corner {
+  position: absolute; width: 12px; height: 12px;
+  border-style: solid; pointer-events: none;
+  opacity: 0.4; transition: opacity 0.3s;
+}
+.sr-panel:hover .sr-corner { opacity: 0.8; }
+.sr-corner.tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; border-color: var(--accent, var(--cyan)); }
+.sr-corner.tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; border-color: var(--accent, var(--cyan)); }
+.sr-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; border-color: var(--accent, var(--cyan)); }
+.sr-corner.br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; border-color: var(--accent, var(--cyan)); }
+
+/* Security Classification */
+.sr-classification {
+  text-align: center; margin-bottom: 2rem;
+  padding: 0.8rem;
+  border: 1px solid rgba(255,0,85,0.2);
+  background: rgba(255,0,85,0.03);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem; letter-spacing: 3px;
+  color: var(--pink); opacity: 0.7;
+}
+
+/* Footer */
+.sr-footer {
+  text-align: center; padding-top: 2rem;
+  border-top: 1px solid var(--border-dim);
+}
+.sr-footer-link {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem; color: rgba(0,243,255,0.5);
+  text-decoration: none; letter-spacing: 0.1em;
+  transition: all 0.3s; padding: 0.6rem 1.2rem;
+  border: 1px solid transparent;
+  display: inline-block;
+}
+.sr-footer-link:hover {
+  color: var(--cyan); border-color: var(--cyan);
+  background: rgba(0,243,255,0.05);
+  box-shadow: 0 0 15px rgba(0,243,255,0.1);
+}
+.sr-footer-link::before { content: '> '; color: var(--pink); }
+
+/* Boot sequence */
+.sr-boot {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem; color: var(--cyan);
+  text-shadow: 0 0 5px rgba(0,243,255,0.5);
+  z-index: 11; pointer-events: none;
+  opacity: 0; white-space: nowrap;
+}
+.sr-boot.active {
+  animation: sr-boot-in 0.3s ease-out forwards;
+}
+.sr-boot.fade {
+  animation: sr-boot-out 0.5s ease-in forwards;
+}
+@keyframes sr-boot-in { from { opacity: 0; transform: translate(-50%, -50%) translateY(10px); } to { opacity: 1; transform: translate(-50%, -50%) translateY(0); } }
+@keyframes sr-boot-out { from { opacity: 1; } to { opacity: 0; } }
+
+/* === RESPONSIVE === */
+/* Tablet landscape */
+@media (max-width: 900px) {
+  .sr-hub { padding: 2.5rem 1.2rem 3rem; }
+  .sr-header { padding: 2rem 1.5rem; margin-bottom: 2rem; }
+  .sr-panels { gap: 1.2rem; }
+  .sr-panel { padding: 1.5rem; min-height: 240px; }
+}
+/* Tablet portrait / large phone */
+@media (max-width: 700px) {
+  .sr-panels { grid-template-columns: 1fr; gap: 1rem; }
+  .sr-panel { min-height: auto; padding: 1.5rem; }
+  .sr-panel-icon { margin-bottom: 0.8rem; }
+  .sr-panel-icon svg { width: 40px; height: 40px; }
+  .sr-header { padding: 1.5rem 1rem; margin-bottom: 1.5rem; }
+  .sr-hub { padding: 2rem 1rem 3rem; }
+  .sr-classification { font-size: 0.55rem; letter-spacing: 2px; padding: 0.6rem; }
+  .sr-footer-link { font-size: 0.72rem; }
+  .lock-box { padding: 2.5rem 1.2rem 1.5rem; }
+  .pat-container { width: 220px; height: 220px; }
+  .lock-text { font-size: 0.8rem; }
+}
+/* Standard phone */
+@media (max-width: 500px) {
+  .sr-hub { padding: 1.5rem 0.8rem 2.5rem; }
+  .sr-header { padding: 1.2rem 0.8rem; margin-bottom: 1.2rem; }
+  .sr-panel { padding: 1.2rem; }
+  .sr-panel-icon svg { width: 36px; height: 36px; }
+  .sr-panel-icon::before { width: 50px; height: 50px; }
+  .sr-panel-title { font-size: 1rem; letter-spacing: 0.05em; }
+  .sr-panel-desc { font-size: 0.68rem; line-height: 1.6; }
+  .sr-panel-id { font-size: 0.55rem; letter-spacing: 1px; }
+  .sr-panel-status { font-size: 0.52rem; }
+  .sr-status { gap: 0.6rem; margin-top: 1rem; padding-top: 0.8rem; }
+  .sr-classification { font-size: 0.5rem; letter-spacing: 1.5px; padding: 0.5rem; margin-bottom: 1.2rem; }
+  .sr-panels { margin-bottom: 1.5rem; }
+  .lock-badge { font-size: 0.6rem; padding: 3px 10px; }
+  .pat-container { width: 200px; height: 200px; }
+  .lock-text { font-size: 0.75rem; }
+  .lock-msg { font-size: 0.7rem; }
+}
+/* Small phone */
+@media (max-width: 380px) {
+  .sr-hub { padding: 1rem 0.5rem 2rem; }
+  .sr-header { padding: 1rem 0.6rem; }
+  .sr-panel { padding: 1rem; }
+  .sr-panel-icon svg { width: 32px; height: 32px; }
+  .sr-panel-icon::before { width: 44px; height: 44px; }
+  .sr-panel-title { font-size: 0.9rem; }
+  .sr-panel-desc { font-size: 0.65rem; }
+  .sr-status { gap: 0.4rem; }
+  .sr-classification { font-size: 0.45rem; letter-spacing: 1px; }
+  .lock-box { padding: 2rem 0.8rem 1.2rem; max-width: 300px; }
+  .pat-container { width: 180px; height: 180px; }
+  .lock-text { font-size: 0.68rem; }
+  .lock-badge { font-size: 0.55rem; top: -12px; }
+  .sr-footer-link { font-size: 0.65rem; padding: 0.5rem 0.8rem; }
+}
 </style>
-<div id="pattern-lock-screen">
-  <div class="lock-info">
-    <h2>RESTRICTED_AREA</h2>
-    <div id="lock-msg" class="lock-msg">> INPUT_SECURITY_PATTERN_</div>
-  </div>
-  <div class="pattern-container" id="pattern-container">
-    <svg id="pattern-svg">
-      <polyline id="pattern-path" fill="none" points=""></polyline>
-      <line id="dynamic-line" x1="0" y1="0" x2="0" y2="0" style="display:none;"></line>
-    </svg>
-    <div class="pattern-grid" id="pattern-grid">
-      <div class="node-wrap" data-id="1"><div class="node"></div></div>
-      <div class="node-wrap" data-id="2"><div class="node"></div></div>
-      <div class="node-wrap" data-id="3"><div class="node"></div></div>
-      <div class="node-wrap" data-id="4"><div class="node"></div></div>
-      <div class="node-wrap" data-id="5"><div class="node"></div></div>
-      <div class="node-wrap" data-id="6"><div class="node"></div></div>
-      <div class="node-wrap" data-id="7"><div class="node"></div></div>
-      <div class="node-wrap" data-id="8"><div class="node"></div></div>
-      <div class="node-wrap" data-id="9"><div class="node"></div></div>
+<!-- Background layers -->
+<div class="sr-bg"></div>
+<div class="sr-grid"></div>
+<div class="sr-scanline"></div>
+<div class="sr-vignette"></div>
+<!-- Particles -->
+<div class="sr-particle" style="--x:10%;--y:20%;--d:3.2s;--delay:0s;--o:0.5"></div>
+<div class="sr-particle" style="--x:85%;--y:15%;--d:4.1s;--delay:0.5s;--o:0.4"></div>
+<div class="sr-particle" style="--x:50%;--y:70%;--d:3.8s;--delay:1s;--o:0.6"></div>
+<div class="sr-particle" style="--x:25%;--y:55%;--d:2.9s;--delay:0.3s;--o:0.3"></div>
+<div class="sr-particle" style="--x:75%;--y:40%;--d:4.5s;--delay:0.8s;--o:0.5"></div>
+<div class="sr-particle" style="--x:15%;--y:80%;--d:3.5s;--delay:1.2s;--o:0.4"></div>
+<div class="sr-particle" style="--x:90%;--y:60%;--d:3.0s;--delay:0.2s;--o:0.3"></div>
+<div class="sr-particle" style="--x:60%;--y:10%;--d:4.3s;--delay:0.7s;--o:0.5"></div>
+<!-- Pattern Lock Screen -->
+<div id="sr-lock">
+  <div class="lock-box">
+    <div class="lock-badge">CLEARANCE REQUIRED</div>
+    <p class="lock-text">> SECURE CONNECTION ESTABLISHED.</p>
+    <p class="lock-text">> WARNING: <span class="pink">UNAUTHORIZED ACCESS DETECTED.</span></p>
+    <p class="lock-text">> ALIGN NEURAL NODES TO PROCEED<span class="blink">_</span></p>
+    <div class="lock-radar"></div>
+    <div class="pat-container" id="pat-container">
+      <svg id="pat-svg" width="100%" height="100%">
+        <polyline id="pat-path" fill="none" points=""></polyline>
+        <line id="pat-line" x1="0" y1="0" x2="0" y2="0" style="display:none;"></line>
+      </svg>
+      <div class="pat-grid" id="pat-grid">
+        <div class="pat-node" data-id="1"><div class="pat-dot"></div></div>
+        <div class="pat-node" data-id="2"><div class="pat-dot"></div></div>
+        <div class="pat-node" data-id="3"><div class="pat-dot"></div></div>
+        <div class="pat-node" data-id="4"><div class="pat-dot"></div></div>
+        <div class="pat-node" data-id="5"><div class="pat-dot"></div></div>
+        <div class="pat-node" data-id="6"><div class="pat-dot"></div></div>
+        <div class="pat-node" data-id="7"><div class="pat-dot"></div></div>
+        <div class="pat-node" data-id="8"><div class="pat-dot"></div></div>
+        <div class="pat-node" data-id="9"><div class="pat-dot"></div></div>
+      </div>
     </div>
+    <div class="lock-msg" id="lock-msg">ACCESS DENIED</div>
   </div>
 </div>
-<div class="cyber-hud-container" id="main-hud">
-  <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
-  <div class="hud-corner bl"></div><div class="hud-corner br"></div>
-  <div class="scan-beam-inner"></div>
-  <h1 class="cyber-title" data-text="SYSTEM ROOT">SYSTEM ROOT</h1>
-  <p class="cyber-subtitle">AUTHENTICATION VERIFIED.</p>
-  <div class="cyber-content">
-    <p>表向きには公開しないリンク集や記事を載せる。</p>
-    <ul class="cyber-list">
-      <li><a href="/0723/" class="cyber-link pink">>> ACCESS SECRET SECTOR</a></li>
-      <li><a href="/" class="cyber-link">>> RETURN TO SURFACE</a></li>
-    </ul>
-  </div>
+<div class="sr-hub" id="sr-hub">
+<div class="sr-boot" id="sr-boot"></div>
+<div class="sr-hub-inner">
+<div class="sr-header">
+<h1 class="sr-title" data-text="SYSTEM ROOT">SYSTEM ROOT</h1>
+<p class="sr-subtitle">AUTHENTICATION VERIFIED ─ SUBSYSTEM ACCESS GRANTED</p>
+<div class="sr-status">
+<div class="sr-stat"><span class="sr-dot"></span> SYSTEM ONLINE</div>
+<div class="sr-stat"><span class="sr-dot purple"></span> SESSION: <span id="sr-uptime">00:00:00</span></div>
+<div class="sr-stat"><span class="sr-dot amber"></span> THREAT: NOMINAL</div>
+<div class="sr-stat"><span class="sr-dot"></span> NODE: DT-ROOT</div>
+</div>
+</div>
+<div class="sr-classification">
+▲ CLASSIFIED ─ LEVEL 5 CLEARANCE ─ AUTHORIZED PERSONNEL ONLY ▲
+</div>
+<div class="sr-panels">
+<a href="/0723/" class="sr-panel cmd" id="panel-cmd">
+<div class="sr-corner tl"></div><div class="sr-corner tr"></div>
+<div class="sr-corner bl"></div><div class="sr-corner br"></div>
+<div class="sr-panel-scan"></div>
+<div class="sr-panel-icon">
+<svg viewBox="0 0 48 48">
+<rect x="4" y="6" width="40" height="30" rx="2"/>
+<line x1="4" y1="12" x2="44" y2="12"/>
+<circle cx="8" cy="9" r="1.5"/>
+<circle cx="13" cy="9" r="1.5"/>
+<circle cx="18" cy="9" r="1.5"/>
+<line x1="10" y1="18" x2="30" y2="18"/>
+<line x1="10" y1="23" x2="25" y2="23"/>
+<line x1="10" y1="28" x2="35" y2="28"/>
+<rect x="33" y="16" width="7" height="7" rx="1"/>
+<line x1="14" y1="36" x2="14" y2="42"/>
+<line x1="34" y1="36" x2="34" y2="42"/>
+<line x1="10" y1="42" x2="38" y2="42"/>
+</svg>
+</div>
+<div class="sr-panel-id">MODULE_001</div>
+<div class="sr-panel-title">COMMAND CENTER</div>
+<p class="sr-panel-desc">機密セクターへのアクセスポイント。<br>ツール、アーカイブ、時間割、視覚ログ等の管理コンソール。<br>二次認証パターンが必要。</p>
+<div class="sr-panel-status">
+<span class="sr-dot"></span> STATUS: ACTIVE ─ CLEARANCE LV.5
+</div>
+</a>
+<a href="/project-x/data-vault/" class="sr-panel vault" id="panel-vault">
+<div class="sr-corner tl"></div><div class="sr-corner tr"></div>
+<div class="sr-corner bl"></div><div class="sr-corner br"></div>
+<div class="sr-panel-scan"></div>
+<div class="sr-panel-icon">
+<svg viewBox="0 0 48 48">
+<rect x="6" y="8" width="36" height="34" rx="2"/>
+<line x1="6" y1="16" x2="42" y2="16"/>
+<circle cx="24" cy="30" r="6"/>
+<circle cx="24" cy="30" r="2"/>
+<line x1="24" y1="24" x2="24" y2="26"/>
+<line x1="24" y1="34" x2="24" y2="36"/>
+<line x1="18" y1="30" x2="20" y2="30"/>
+<line x1="28" y1="30" x2="30" y2="30"/>
+<rect x="10" y="10" width="4" height="4" rx="1"/>
+<rect x="16" y="10" width="4" height="4" rx="1"/>
+<path d="M16 8 L24 2 L32 8"/>
+</svg>
+</div>
+<div class="sr-panel-id">MODULE_002</div>
+<div class="sr-panel-title">DATA VAULT</div>
+<p class="sr-panel-desc">暗号化データ保管庫。<br>PDF、画像、URL等の機密ファイルを格納。<br>アクセスコードによる追加認証が必要。</p>
+<div class="sr-panel-status">
+<span class="sr-dot"></span> STATUS: SECURED ─ ENCRYPTED
+</div>
+</a>
+</div>
+<div class="sr-footer">
+<a href="/" class="sr-footer-link">RETURN TO SURFACE</a>
+</div>
+</div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // ★ ここで解除パターンを設定 (数字は 1〜9)
-  // 例: 1 -> 4 -> 7 -> 8 -> 9 (L字型)
-  const SECRET_PATTERN = [1, 4, 7, 8, 9];
+  // Move elements to body root
+  const bg = document.querySelector('.sr-bg');
+  const grid = document.querySelector('.sr-grid');
+  const scanline = document.querySelector('.sr-scanline');
+  const vignette = document.querySelector('.sr-vignette');
+  const lock = document.getElementById('sr-lock');
+  const hub = document.getElementById('sr-hub');
+  const particles = document.querySelectorAll('.sr-particle');
 
-  const lockScreen = document.getElementById('pattern-lock-screen');
-  const mainHud = document.getElementById('main-hud');
-  const container = document.getElementById('pattern-container');
-  const grid = document.getElementById('pattern-grid');
-  const pathEl = document.getElementById('pattern-path');
-  const dynamicLine = document.getElementById('dynamic-line');
+  [bg, grid, scanline, vignette, lock, hub].forEach(el => { if (el) document.body.appendChild(el); });
+  particles.forEach(el => document.body.appendChild(el));
+
+  // Hide theme elements
+  const KEEP = {'HEADER':1,'STYLE':1,'LINK':1,'SCRIPT':1,'NOSCRIPT':1,'META':1};
+  Array.from(document.body.children).forEach(el => {
+    const ours = el.classList.contains('sr-bg') || el.classList.contains('sr-grid') ||
+                 el.classList.contains('sr-scanline') || el.classList.contains('sr-vignette') ||
+                 el.classList.contains('sr-particle') ||
+                 el.id === 'sr-lock' || el.id === 'sr-hub';
+    if (!ours && !KEEP[el.tagName]) el.style.setProperty('display','none','important');
+  });
+
+  // === Pattern Lock ===
+  const SECRET = [1, 4, 7, 8, 9];
+  const lockScreen = document.getElementById('sr-lock');
+  const hubEl = document.getElementById('sr-hub');
+  const container = document.getElementById('pat-container');
+  const patGrid = document.getElementById('pat-grid');
+  const pathEl = document.getElementById('pat-path');
+  const dynLine = document.getElementById('pat-line');
   const msgEl = document.getElementById('lock-msg');
-  
-  let isDrawing = false;
-  let currentPath = []; // 通過したノードIDの配列
-  let pointsStr = "";   // SVGのpolyline用座標文字列
 
-  // ノードの中心座標を取得する関数
-  const getNodeCenter = (nodeWrap) => {
-    const rect = nodeWrap.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    return {
-      x: rect.left - containerRect.left + rect.width / 2,
-      y: rect.top - containerRect.top + rect.height / 2
-    };
+  let drawing = false, path = [], pts = '';
+
+  const nodeCenter = (n) => {
+    const r = n.getBoundingClientRect();
+    const c = container.getBoundingClientRect();
+    return { x: r.left - c.left + r.width/2, y: r.top - c.top + r.height/2 };
   };
 
-  // ノードを追加処理する関数
-  const addNode = (nodeWrap) => {
-    const id = parseInt(nodeWrap.getAttribute('data-id'));
-    // まだ通っていないノードのみ追加
-    if (!currentPath.includes(id)) {
-      currentPath.push(id);
-      nodeWrap.classList.add('active');
-      
-      const center = getNodeCenter(nodeWrap);
-      pointsStr += `${pointsStr ? ' ' : ''}${center.x},${center.y}`;
-      pathEl.setAttribute('points', pointsStr);
-      
-      // 動的線の起点を最新のノードに更新
-      dynamicLine.setAttribute('x1', center.x);
-      dynamicLine.setAttribute('y1', center.y);
-      dynamicLine.style.display = 'block';
-    }
+  const intermediate = (a, b) => {
+    const m = {'1,3':2,'3,1':2,'4,6':5,'6,4':5,'7,9':8,'9,7':8,
+               '1,7':4,'7,1':4,'2,8':5,'8,2':5,'3,9':6,'9,3':6,
+               '1,9':5,'9,1':5,'3,7':5,'7,3':5};
+    return m[`${a},${b}`];
   };
 
-  // マウス/タッチ座標から要素を取得して処理
-  const handleMove = (clientX, clientY) => {
-    if (!isDrawing) return;
-    
-    // 動的線の終点をカーソル/指に追従させる
-    const containerRect = container.getBoundingClientRect();
-    dynamicLine.setAttribute('x2', clientX - containerRect.left);
-    dynamicLine.setAttribute('y2', clientY - containerRect.top);
-
-    // 座標下にある要素を取得
-    const el = document.elementFromPoint(clientX, clientY);
-    if (el && el.classList.contains('node-wrap')) {
-      addNode(el);
+  const addNode = (n) => {
+    const id = +n.dataset.id;
+    if (path.includes(id)) return;
+    if (path.length > 0) {
+      const mid = intermediate(path[path.length-1], id);
+      if (mid && !path.includes(mid)) {
+        const midNode = document.querySelector(`.pat-node[data-id="${mid}"]`);
+        if (midNode) addNode(midNode);
+      }
     }
+    path.push(id);
+    n.classList.add('active');
+    const c = nodeCenter(n);
+    pts += `${pts ? ' ' : ''}${c.x},${c.y}`;
+    pathEl.setAttribute('points', pts);
+    dynLine.setAttribute('x1', c.x);
+    dynLine.setAttribute('y1', c.y);
+    dynLine.style.display = 'block';
   };
 
-  // --- イベントリスナー (PC / マウス) ---
-  grid.addEventListener('mousedown', (e) => {
-    if (e.target.classList.contains('node-wrap')) {
-      resetPattern();
-      isDrawing = true;
-      addNode(e.target);
-    }
-  });
-  window.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
-  window.addEventListener('mouseup', () => { if (isDrawing) checkPattern(); });
+  const handleMove = (cx, cy) => {
+    if (!drawing) return;
+    const cr = container.getBoundingClientRect();
+    const x = cx - cr.left, y = cy - cr.top;
+    dynLine.setAttribute('x2', x);
+    dynLine.setAttribute('y2', y);
+    document.querySelectorAll('.pat-node').forEach(n => {
+      if (path.includes(+n.dataset.id)) return;
+      const c = nodeCenter(n);
+      if (Math.hypot(x - c.x, y - c.y) < 35) addNode(n);
+    });
+  };
 
-  // --- イベントリスナー (スマホ / タッチ) ---
-  grid.addEventListener('touchstart', (e) => {
-    e.preventDefault(); // スクロール防止
-    const touch = e.touches[0];
-    const el = document.elementFromPoint(touch.clientX, touch.clientY);
-    if (el && el.classList.contains('node-wrap')) {
-      resetPattern();
-      isDrawing = true;
-      addNode(el);
-    }
-  });
-  window.addEventListener('touchmove', (e) => {
-    if(!isDrawing) return;
-    e.preventDefault();
-    const touch = e.touches[0];
-    handleMove(touch.clientX, touch.clientY);
-  }, { passive: false });
-  window.addEventListener('touchend', () => { if (isDrawing) checkPattern(); });
+  const handleStart = (cx, cy) => {
+    reset();
+    const cr = container.getBoundingClientRect();
+    const x = cx - cr.left, y = cy - cr.top;
+    document.querySelectorAll('.pat-node').forEach(n => {
+      const c = nodeCenter(n);
+      if (Math.hypot(x - c.x, y - c.y) < 35) { drawing = true; addNode(n); }
+    });
+  };
 
-  // リセット処理
-  const resetPattern = () => {
-    currentPath = [];
-    pointsStr = "";
-    pathEl.setAttribute('points', "");
-    dynamicLine.style.display = 'none';
+  const reset = () => {
+    path = []; pts = '';
+    pathEl.setAttribute('points', '');
+    dynLine.style.display = 'none';
     container.classList.remove('error', 'success');
-    document.querySelectorAll('.node-wrap').forEach(n => n.classList.remove('active'));
-    msgEl.innerText = "> INPUT_SECURITY_PATTERN_";
-    msgEl.className = "lock-msg";
+    document.querySelectorAll('.pat-node').forEach(n => n.classList.remove('active'));
+    msgEl.classList.remove('show', 'success');
   };
 
-  // 判定処理
-  const checkPattern = () => {
-    isDrawing = false;
-    dynamicLine.style.display = 'none'; // 追従線を消す
-    
-    // パターンが空なら何もしない
-    if (currentPath.length === 0) return;
-
-    // 配列同士の比較
-    const isCorrect = JSON.stringify(currentPath) === JSON.stringify(SECRET_PATTERN);
-
-    if (isCorrect) {
-      // 成功！
+  const check = () => {
+    drawing = false;
+    dynLine.style.display = 'none';
+    if (path.length === 0) return;
+    if (JSON.stringify(path) === JSON.stringify(SECRET)) {
       container.classList.add('success');
-      msgEl.innerText = "> ACCESS_GRANTED";
-      msgEl.className = "lock-msg success";
-      
-      // 1.5秒後にロック画面をフェードアウトし、HUDをクリアにする
+      msgEl.innerText = '> ACCESS GRANTED';
+      msgEl.classList.add('show', 'success');
       setTimeout(() => {
         lockScreen.classList.add('unlocked');
-        mainHud.classList.add('unlocked');
-      }, 1000);
+        hubEl.classList.add('unlocked');
+        runBoot();
+      }, 800);
     } else {
-      // 失敗
       container.classList.add('error');
-      msgEl.innerText = "> ERROR: INVALID_PATTERN";
-      msgEl.className = "lock-msg error";
-      
-      // 少し待ってからリセット
-      setTimeout(() => {
-        if (!isDrawing) resetPattern();
-      }, 1000);
+      msgEl.innerText = 'ACCESS DENIED. INVALID PATTERN.';
+      msgEl.classList.remove('show');
+      void msgEl.offsetWidth;
+      msgEl.classList.add('show');
+      setTimeout(() => { if (!drawing) reset(); }, 1000);
     }
   };
+
+  patGrid.addEventListener('mousedown', e => handleStart(e.clientX, e.clientY));
+  window.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
+  window.addEventListener('mouseup', () => { if (drawing) check(); });
+  patGrid.addEventListener('touchstart', e => { e.preventDefault(); handleStart(e.touches[0].clientX, e.touches[0].clientY); });
+  window.addEventListener('touchmove', e => { if (!drawing) return; e.preventDefault(); handleMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+  window.addEventListener('touchend', () => { if (drawing) check(); });
+
+  // === Boot Sequence ===
+  const bootEl = document.getElementById('sr-boot');
+  const bootLines = [
+    'INITIALIZING SECURE SUBSYSTEM...',
+    'LOADING ENCRYPTED MODULES...',
+    'VERIFYING CLEARANCE LEVEL...',
+    'DECRYPTING ACCESS NODES...',
+    'ALL SYSTEMS OPERATIONAL.'
+  ];
+  const runBoot = () => {
+    let i = 0;
+    const next = () => {
+      if (i >= bootLines.length) {
+        bootEl.classList.remove('active');
+        bootEl.classList.add('fade');
+        return;
+      }
+      bootEl.textContent = '> ' + bootLines[i];
+      bootEl.classList.remove('active');
+      void bootEl.offsetWidth;
+      bootEl.classList.add('active');
+      i++;
+      setTimeout(next, 400);
+    };
+    next();
+  };
+
+  // === Uptime Counter ===
+  const start = Date.now();
+  setInterval(() => {
+    const s = Math.floor((Date.now() - start) / 1000);
+    const el = document.getElementById('sr-uptime');
+    if (el) el.textContent =
+      String(Math.floor(s/3600)).padStart(2,'0') + ':' +
+      String(Math.floor((s%3600)/60)).padStart(2,'0') + ':' +
+      String(s%60).padStart(2,'0');
+  }, 1000);
+
+  // === Glitch text on header ===
+  const glitchTargets = document.querySelectorAll('.sr-panel-id, .sr-classification');
+  glitchTargets.forEach(target => {
+    const orig = target.textContent;
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&_';
+    let iter = 0;
+    const iv = setInterval(() => {
+      target.textContent = orig.split('').map((ch, idx) => {
+        if (idx < iter) return orig[idx];
+        if (ch === ' ' || ch === '─' || ch === '▲') return ch;
+        return chars[Math.floor(Math.random() * chars.length)];
+      }).join('');
+      if (iter >= orig.length) clearInterval(iv);
+      iter += 0.5;
+    }, 30);
+  });
+
+  console.log('%c SYSTEM ROOT :: READY ', 'background: #00f3ff; color: #000; padding: 5px; font-weight: bold;');
 });
 </script>
     </section>
