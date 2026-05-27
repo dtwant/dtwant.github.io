@@ -229,7 +229,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "104"
+    "wordCount": "75"
   }]
   </script>
 
@@ -792,6 +792,12 @@
       
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
 
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+
 <style>
  
 :root {
@@ -1156,7 +1162,10 @@ button { font-family: inherit; cursor: pointer; }
   border-left: 2px solid var(--v-cyan);
 }
 .ve-file-icon { font-size: 1.1rem; text-align: center; }
-.ve-file-name { color: var(--v-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ve-file-name {
+  color: var(--v-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  display: flex; align-items: center; gap: 6px;
+}
 .ve-file-size { color: var(--v-text-dim); font-size: 0.7rem; text-align: right; }
 .ve-file-date { color: var(--v-text-dim); font-size: 0.68rem; }
 .ve-file-type {
@@ -1198,6 +1207,7 @@ button { font-family: inherit; cursor: pointer; }
   font-size: 0.7rem; color: var(--v-text);
   word-break: break-all; line-height: 1.3;
   max-height: 2.6em; overflow: hidden;
+  display: block;
 }
 .ve-file-card .ve-file-type { margin-top: auto; }
 
@@ -1223,14 +1233,17 @@ button { font-family: inherit; cursor: pointer; }
   flex-shrink: 0;
 }
 .ve-status-sep { width: 1px; height: 14px; background: var(--v-border); }
-.ve-status-secure {
+.ve-status-sync {
   margin-left: auto;
-  color: var(--v-green);
   display: flex; align-items: center; gap: 4px;
+  color: var(--v-green);
 }
-.ve-status-dot {
+.ve-status-sync.syncing { color: var(--v-amber); }
+.ve-status-sync.offline { color: var(--v-pink); }
+.ve-status-sync.error { color: var(--v-pink); }
+.ve-sync-dot {
   width: 5px; height: 5px; border-radius: 50%;
-  background: var(--v-green); box-shadow: 0 0 5px var(--v-green);
+  background: currentColor; box-shadow: 0 0 5px currentColor;
   animation: sr-pulse 2s infinite;
 }
 @keyframes sr-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
@@ -1338,6 +1351,7 @@ button { font-family: inherit; cursor: pointer; }
   color: var(--v-text); transition: all 0.2s;
 }
 .ve-btn:hover { background: rgba(0,243,255,0.15); border-color: var(--v-cyan); color: #fff; }
+.ve-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .ve-btn.primary {
   background: rgba(0,243,255,0.12);
   border-color: var(--v-cyan); color: var(--v-cyan);
@@ -1353,22 +1367,76 @@ button { font-family: inherit; cursor: pointer; }
 .ve-upload-zone {
   border: 2px dashed var(--v-border);
   background: rgba(0,243,255,0.02);
-  padding: 18px 14px;
+  padding: 24px 14px;
   text-align: center; cursor: pointer;
   transition: all 0.25s;
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.75rem; color: var(--v-text-dim);
+  min-height: 100px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
 }
 .ve-upload-zone:hover, .ve-upload-zone.dragover {
   border-color: var(--v-cyan);
   background: rgba(0,243,255,0.06);
   color: var(--v-cyan);
 }
-.ve-upload-zone .ve-upload-icon { font-size: 1.8rem; margin-bottom: 6px; display: block; }
-.ve-upload-zone .ve-upload-hint { font-size: 0.65rem; opacity: 0.6; margin-top: 4px; }
-.ve-upload-zone .ve-upload-info {
-  color: var(--v-green); font-size: 0.72rem; margin-top: 6px;
+.ve-upload-zone .ve-upload-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+.ve-upload-zone .ve-upload-hint { font-size: 0.65rem; opacity: 0.6; margin-top: 6px; }
+
+ 
+.ve-upload-selected {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px;
+  background: rgba(0,243,255,0.04);
+  border: 1px solid rgba(0,243,255,0.15);
+  margin-top: 8px;
 }
+.ve-upload-thumb {
+  width: 48px; height: 48px;
+  object-fit: cover;
+  border: 1px solid var(--v-border);
+  flex-shrink: 0;
+}
+.ve-upload-file-icon {
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+.ve-upload-file-info {
+  flex: 1; min-width: 0;
+  font-family: 'Share Tech Mono', monospace;
+}
+.ve-upload-file-name {
+  font-size: 0.72rem; color: var(--v-text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ve-upload-file-size {
+  font-size: 0.62rem; color: var(--v-text-dim); margin-top: 2px;
+}
+.ve-upload-remove {
+  background: none; border: 1px solid var(--v-border);
+  color: var(--v-text-dim); padding: 4px 8px;
+  font-size: 0.7rem; cursor: pointer;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.ve-upload-remove:hover { color: var(--v-pink); border-color: var(--v-pink); }
+
+ 
+.ve-upload-progress {
+  width: 100%; height: 4px;
+  background: rgba(0,243,255,0.1);
+  margin-top: 8px; display: none;
+  overflow: hidden;
+}
+.ve-upload-progress.visible { display: block; }
+.ve-upload-progress-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--v-cyan), var(--v-green));
+  transition: width 0.3s;
+}
+
 .ve-type-tabs {
   display: flex; gap: 0; margin-bottom: 14px;
 }
@@ -1389,11 +1457,6 @@ button { font-family: inherit; cursor: pointer; }
   color: var(--v-cyan);
 }
 .ve-type-tab:hover:not(.active) { background: rgba(0,243,255,0.05); color: var(--v-text); }
-.ve-size-warn {
-  font-size: 0.62rem; color: var(--v-amber);
-  margin-top: 4px; display: none;
-}
-.ve-size-warn.show { display: block; }
 
  
 .ve-preview {
@@ -1436,6 +1499,10 @@ button { font-family: inherit; cursor: pointer; }
   font-family: 'Zen Kaku Gothic New', sans-serif;
 }
 .ve-preview-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.ve-preview-img {
+  max-width: 100%; border: 1px solid var(--v-border);
+  margin: 8px 0;
+}
 
  
 .ve-toolbar-btn {
@@ -1448,6 +1515,69 @@ button { font-family: inherit; cursor: pointer; }
 }
 .ve-toolbar-btn:hover { color: var(--v-cyan); border-color: var(--v-cyan); background: rgba(0,243,255,0.06); }
 .ve-toolbar-sep { width: 1px; height: 24px; background: var(--v-border); flex-shrink: 0; }
+
+ 
+.ve-toast-container {
+  position: fixed; top: 20px; right: 20px;
+  z-index: 10000;
+  display: flex; flex-direction: column; gap: 8px;
+  pointer-events: none;
+}
+.ve-toast {
+  padding: 10px 16px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  border: 1px solid var(--v-border);
+  background: rgba(8,8,20,0.95);
+  backdrop-filter: blur(12px);
+  animation: toast-in 0.3s ease-out;
+  display: flex; align-items: center; gap: 8px;
+  pointer-events: auto;
+  max-width: 320px;
+}
+.ve-toast.success { border-color: var(--v-green); color: var(--v-green); }
+.ve-toast.error { border-color: var(--v-pink); color: var(--v-pink); }
+.ve-toast.info { border-color: var(--v-cyan); color: var(--v-cyan); }
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+ 
+.ve-link-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px;
+  background: rgba(0,243,255,0.04);
+  border: 1px solid rgba(0,243,255,0.12);
+  cursor: pointer; transition: all 0.2s;
+  text-decoration: none; color: inherit;
+  width: 100%;
+}
+.ve-link-card:hover {
+  background: rgba(0,243,255,0.08);
+  border-color: var(--v-cyan);
+}
+.ve-link-favicon {
+  width: 20px; height: 20px;
+  border-radius: 2px; flex-shrink: 0;
+}
+.ve-link-info { flex: 1; min-width: 0; }
+.ve-link-domain {
+  font-size: 0.72rem; color: var(--v-cyan);
+  font-family: 'Share Tech Mono', monospace;
+}
+.ve-link-url {
+  font-size: 0.58rem; color: var(--v-text-dim);
+  overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; margin-top: 2px;
+}
+.ve-link-arrow {
+  color: var(--v-text-dim); font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+ 
+.ve-url-preview { margin-top: 8px; }
 
  
 @media (max-width: 768px) {
@@ -1464,6 +1594,8 @@ button { font-family: inherit; cursor: pointer; }
   .code-box { max-width: 320px; padding: 2rem 1.2rem 1.5rem; }
   .code-key { padding: 10px 0; }
   .ve-dialog { max-width: 90vw; }
+  .ve-toast-container { top: 10px; right: 10px; left: 10px; }
+  .ve-toast { max-width: 100%; }
 }
 @media (max-width: 500px) {
   .ve-sidebar { width: 48px; overflow: hidden; }
@@ -1547,7 +1679,7 @@ button { font-family: inherit; cursor: pointer; }
     <div class="ve-dot red"></div>
     <div class="ve-dot yellow"></div>
     <div class="ve-dot green"></div>
-    <span class="ve-titlebar-text">DATA_VAULT v1.0 ─ ENCRYPTED FILE SYSTEM</span>
+    <span class="ve-titlebar-text">DATA_VAULT v2.0 ─ CLOUD SYNCED</span>
     <a href="/project-x/" class="ve-titlebar-close" title="Close">✕</a>
   </div>
 
@@ -1561,8 +1693,6 @@ button { font-family: inherit; cursor: pointer; }
     </div>
     <div class="ve-toolbar-sep"></div>
     <button class="ve-toolbar-btn" id="ve-add-btn">＋ <span>NEW</span></button>
-    <button class="ve-toolbar-btn" id="ve-export-btn">⇩ <span>EXPORT</span></button>
-    <button class="ve-toolbar-btn" id="ve-import-btn">⇧ <span>IMPORT</span></button>
   </div>
 
   
@@ -1587,8 +1717,9 @@ button { font-family: inherit; cursor: pointer; }
     <span id="ve-status-count">0 items</span>
     <div class="ve-status-sep"></div>
     <span id="ve-status-size">0 B</span>
-    <div class="ve-status-secure">
-      <span class="ve-status-dot"></span> VAULT: ENCRYPTED
+    <div class="ve-status-sync" id="ve-status-sync">
+      <span class="ve-sync-dot"></span>
+      <span id="ve-sync-label">CONNECTING...</span>
     </div>
   </div>
 </div>
@@ -1624,20 +1755,19 @@ button { font-family: inherit; cursor: pointer; }
       <div class="ve-input-group" id="ve-group-file">
         <div class="ve-upload-zone" id="ve-upload-zone">
           <span class="ve-upload-icon">📂</span>
-          <div>TAP TO SELECT FILE</div>
-          <div class="ve-upload-hint">Images, PDF, etc. (Max 5MB)</div>
-          <div class="ve-upload-info" id="ve-upload-info"></div>
+          <div>ファイルを選択 or ドラッグ&ドロップ</div>
+          <div class="ve-upload-hint">画像, PDF, etc. (最大10MB)</div>
         </div>
+        <div id="ve-upload-selected-container"></div>
         <input type="file" id="ve-file-input" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.json,.zip" style="display:none;">
-        <div class="ve-size-warn" id="ve-size-warn">⚠ File exceeds 5MB. Large files may slow the vault.</div>
+        <div class="ve-upload-progress" id="ve-upload-progress">
+          <div class="ve-upload-progress-bar" id="ve-upload-progress-bar"></div>
+        </div>
       </div>
       <div class="ve-input-group" id="ve-group-url" style="display:none;">
         <label class="ve-input-label">URL</label>
-        <input type="text" class="ve-input" id="ve-inp-url" placeholder="https://example.com/page">
-      </div>
-      <div class="ve-input-group">
-        <label class="ve-input-label">SIZE</label>
-        <input type="text" class="ve-input" id="ve-inp-size" placeholder="Auto-detected for uploads" readonly>
+        <input type="url" class="ve-input" id="ve-inp-url" placeholder="https://example.com/page">
+        <div class="ve-url-preview" id="ve-url-preview"></div>
       </div>
       <div class="ve-input-group">
         <label class="ve-input-label">MEMO</label>
@@ -1652,198 +1782,240 @@ button { font-family: inherit; cursor: pointer; }
 </div>
 
 
-<div class="ve-overlay" id="ve-import-overlay">
-  <div class="ve-dialog">
-    <div class="ve-dialog-header">IMPORT ENCRYPTED DATA</div>
-    <div class="ve-dialog-body">
-      <div class="ve-input-group">
-        <label class="ve-input-label">PASTE ENCRYPTED DATA OR SELECT FILE</label>
-        <textarea class="ve-textarea" id="ve-import-data" style="min-height:120px;" placeholder="Paste encrypted vault data here..."></textarea>
-      </div>
-      <input type="file" id="ve-import-file" accept=".vault,.json,.txt" style="display:none;">
-      <button class="ve-btn" id="ve-import-file-btn" style="margin-bottom:10px;">📁 SELECT FILE</button>
+<div class="ve-overlay" id="ve-confirm-overlay">
+  <div class="ve-dialog" style="max-width:360px;">
+    <div class="ve-dialog-header">⚠ CONFIRM</div>
+    <div class="ve-dialog-body" style="text-align:center;">
+      <div id="ve-confirm-msg" style="font-size:0.8rem;line-height:1.6;"></div>
     </div>
     <div class="ve-dialog-footer">
-      <button class="ve-btn" id="ve-import-cancel">CANCEL</button>
-      <button class="ve-btn primary" id="ve-import-confirm">IMPORT</button>
+      <button class="ve-btn" id="ve-confirm-no">CANCEL</button>
+      <button class="ve-btn danger" id="ve-confirm-yes">DELETE</button>
     </div>
   </div>
 </div>
+
+
+<div class="ve-toast-container" id="ve-toast-container"></div>
 
 <script>
 (function() {
   'use strict';
 
   
-  document.addEventListener('DOMContentLoaded', () => {
-    const els = ['.vault-bg','.vault-grid','.vault-scanline','#vault-lock','#vault-explorer','#ve-context','.ve-overlay'];
-    els.forEach(sel => {
-      document.querySelectorAll(sel).forEach(el => document.body.appendChild(el));
+  document.addEventListener('DOMContentLoaded', function() {
+    var sels = ['.vault-bg','.vault-grid','.vault-scanline','#vault-lock','#vault-explorer','#ve-context','.ve-overlay','.ve-toast-container'];
+    sels.forEach(function(sel) {
+      document.querySelectorAll(sel).forEach(function(el) { document.body.appendChild(el); });
     });
-    const KEEP = {'HEADER':1,'STYLE':1,'LINK':1,'SCRIPT':1,'NOSCRIPT':1,'META':1};
-    Array.from(document.body.children).forEach(el => {
-      const ours = el.classList.contains('vault-bg') || el.classList.contains('vault-grid') ||
-                   el.classList.contains('vault-scanline') || el.id === 'vault-lock' ||
-                   el.id === 'vault-explorer' || el.id === 've-context' ||
-                   el.classList.contains('ve-overlay');
+    var KEEP = {'HEADER':1,'STYLE':1,'LINK':1,'SCRIPT':1,'NOSCRIPT':1,'META':1};
+    Array.from(document.body.children).forEach(function(el) {
+      var ours = el.classList.contains('vault-bg') || el.classList.contains('vault-grid') ||
+                 el.classList.contains('vault-scanline') || el.id === 'vault-lock' ||
+                 el.id === 'vault-explorer' || el.id === 've-context' ||
+                 el.classList.contains('ve-overlay') || el.classList.contains('ve-toast-container');
       if (!ours && !KEEP[el.tagName]) el.style.setProperty('display','none','important');
     });
     init();
   });
 
   
-  const sha256 = async (str) => {
-    const buf = new TextEncoder().encode(str);
-    const hash = await crypto.subtle.digest('SHA-256', buf);
-    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+  
+  
+  var firebaseConfig = {
+    apiKey: "AIzaSyAxaNmvvdJMcNn06IDUAlrax7rKdeApDqQ",
+    authDomain: "dt-vault.firebaseapp.com",
+    projectId: "dt-vault",
+    storageBucket: "dt-vault.firebasestorage.app",
+    messagingSenderId: "458861249888",
+    appId: "1:458861249888:web:ff9f0352c03b457ab68a05"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.firestore();
+  var storageRef = firebase.storage();
+  var auth = firebase.auth();
+
+  
+  db.enablePersistence().catch(function() {   });
+
+  
+  var sha256 = function(str) {
+    var buf = new TextEncoder().encode(str);
+    return crypto.subtle.digest('SHA-256', buf).then(function(hash) {
+      return Array.from(new Uint8Array(hash)).map(function(b) { return b.toString(16).padStart(2,'0'); }).join('');
+    });
   };
 
   
-  const deriveKey = async (code) => {
-    const enc = new TextEncoder().encode(code);
-    const keyMaterial = await crypto.subtle.importKey('raw', enc, 'PBKDF2', false, ['deriveKey']);
-    return crypto.subtle.deriveKey(
-      { name: 'PBKDF2', salt: new TextEncoder().encode('DT_VAULT_SALT_2026'), iterations: 100000, hash: 'SHA-256' },
-      keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['encrypt','decrypt']
-    );
-  };
+  var vaultCode = '';
+  var vaultHash = '';
+  var vaultData = { folders: ['docs','img','url','misc'], files: [] };
+  var currentFolder = 'all';
+  var viewMode = 'list';
+  var selectedFile = null;
+  var editingId = null;
+  var failCount = 0;
+  var lockoutUntil = 0;
+  var pendingFile = null;
+  var pendingFileDataUrl = null;
+  var dialogMode = 'file';
+  var unsubscribeSnapshot = null;
+  var confirmCallback = null;
+  var isOnline = true;
+  var isSaving = false;
 
-  const encrypt = async (data, code) => {
-    const key = await deriveKey(code);
-    const iv = crypto.getRandomValues(new Uint8Array(12));
-    const encoded = new TextEncoder().encode(JSON.stringify(data));
-    const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encoded);
-    const combined = new Uint8Array(iv.length + encrypted.byteLength);
-    combined.set(iv);
-    combined.set(new Uint8Array(encrypted), iv.length);
-    return btoa(String.fromCharCode(...combined));
-  };
-
-  const decrypt = async (b64, code) => {
-    const key = await deriveKey(code);
-    const raw = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-    const iv = raw.slice(0, 12);
-    const data = raw.slice(12);
-    const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
-    return JSON.parse(new TextDecoder().decode(decrypted));
-  };
+  var STORAGE_KEY = 'dt_vault_data';
+  var MAX_FILE_SIZE = 10 * 1024 * 1024; 
 
   
-
-  
-  let vaultCode = '';
-  let vaultData = { folders: ['docs','img','url','misc'], files: [] };
-  let currentFolder = 'all';
-  let viewMode = 'list';
-  let selectedFile = null;
-  let editingId = null;
-  let failCount = 0;
-  let lockoutUntil = 0;
-  let pendingFileData = null; 
-  let dialogMode = 'file'; 
-
-  const STORAGE_KEY = 'dt_vault_data';
-  const MAX_FILE_SIZE = 5 * 1024 * 1024; 
-
-  
-  const FOLDER_META = {
+  var FOLDER_META = {
     all:  { icon: '🗂️', label: 'ALL FILES' },
     docs: { icon: '📄', label: 'Documents' },
     img:  { icon: '🖼️', label: 'Images' },
     url:  { icon: '🔗', label: 'URLs' },
     misc: { icon: '📦', label: 'Misc' }
   };
-
-  const FILE_ICONS = {
-    docs: '📄', img: '🖼️', url: '🔗', misc: '📦'
-  };
+  var FILE_ICONS = { docs: '📄', img: '🖼️', url: '🔗', misc: '📦' };
 
   
-  function detectCategory(file) {
-    if (!file) return 'misc';
-    const t = file.type || '';
-    const n = file.name || '';
-    if (t.startsWith('image/') || /\.(jpg|jpeg|png|gif|svg|webp|bmp|ico)$/i.test(n)) return 'img';
-    if (t === 'application/pdf' || /\.(pdf|doc|docx|txt|csv|xls|xlsx|ppt|pptx)$/i.test(n)) return 'docs';
-    return 'misc';
+  function cel(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  
+  function showToast(msg, type) {
+    type = type || 'info';
+    var container = document.getElementById('ve-toast-container');
+    var toast = cel('div', 've-toast ' + type, msg);
+    container.appendChild(toast);
+    setTimeout(function() {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s';
+      setTimeout(function() { toast.remove(); }, 300);
+    }, 3000);
+  }
+
+  
+  function showConfirm(msg, cb) {
+    document.getElementById('ve-confirm-msg').textContent = msg;
+    confirmCallback = cb;
+    document.getElementById('ve-confirm-overlay').classList.add('visible');
+  }
+
+  
+  function setSyncStatus(status) {
+    var el = document.getElementById('ve-status-sync');
+    var label = document.getElementById('ve-sync-label');
+    el.className = 've-status-sync';
+    if (status === 'synced') {
+      label.textContent = 'CLOUD: SYNCED';
+    } else if (status === 'syncing') {
+      label.textContent = 'SYNCING...';
+      el.classList.add('syncing');
+    } else if (status === 'offline') {
+      label.textContent = 'OFFLINE';
+      el.classList.add('offline');
+      isOnline = false;
+    } else if (status === 'error') {
+      label.textContent = 'SYNC ERROR';
+      el.classList.add('error');
+    }
   }
 
   
   function init() {
     setupCodeLock();
+    setupConfirmModal();
+  }
+
+  function setupConfirmModal() {
+    document.getElementById('ve-confirm-yes').addEventListener('click', function() {
+      document.getElementById('ve-confirm-overlay').classList.remove('visible');
+      if (confirmCallback) confirmCallback();
+      confirmCallback = null;
+    });
+    document.getElementById('ve-confirm-no').addEventListener('click', function() {
+      document.getElementById('ve-confirm-overlay').classList.remove('visible');
+      confirmCallback = null;
+    });
   }
 
   
   function setupCodeLock() {
-    const display = document.getElementById('code-display');
-    const digits = display.querySelectorAll('.code-digit');
-    const msgEl = document.getElementById('code-msg');
-    const lockoutEl = document.getElementById('code-lockout');
-    let code = '';
+    var display = document.getElementById('code-display');
+    var digits = display.querySelectorAll('.code-digit');
+    var msgEl = document.getElementById('code-msg');
+    var lockoutEl = document.getElementById('code-lockout');
+    var code = '';
 
-    const updateDisplay = () => {
-      digits.forEach((d, i) => {
+    var updateDisplay = function() {
+      digits.forEach(function(d, i) {
         d.textContent = i < code.length ? '●' : '';
         d.classList.toggle('filled', i < code.length);
       });
     };
 
-    const showMsg = (text, isSuccess) => {
+    var showMsg = function(text, isSuccess) {
       msgEl.textContent = text;
       msgEl.classList.add('show');
       if (isSuccess) msgEl.classList.add('success');
       else msgEl.classList.remove('success');
     };
 
-    const checkLockout = () => {
+    var checkLockout = function() {
       if (Date.now() < lockoutUntil) {
-        const remaining = Math.ceil((lockoutUntil - Date.now()) / 1000);
+        var remaining = Math.ceil((lockoutUntil - Date.now()) / 1000);
         lockoutEl.style.display = 'block';
-        lockoutEl.textContent = `LOCKOUT: ${remaining}s REMAINING`;
+        lockoutEl.textContent = 'LOCKOUT: ' + remaining + 's REMAINING';
         return true;
       }
       lockoutEl.style.display = 'none';
       return false;
     };
 
-    const verifyCode = async () => {
+    var verifyCode = function() {
       if (checkLockout()) { code = ''; updateDisplay(); return; }
 
-      const hash = await sha256(code);
-      const expected = '0a8bf07b347ecafa18abeb1a6ae4fdb75f00368de2ca0265e97aa42ea142b138';
+      sha256(code).then(function(hash) {
+        var expected = '0a8bf07b347ecafa18abeb1a6ae4fdb75f00368de2ca0265e97aa42ea142b138';
 
-      if (hash === expected) {
-        vaultCode = code;
-        digits.forEach(d => d.classList.add('success'));
-        showMsg('> ACCESS GRANTED', true);
-        failCount = 0;
-        setTimeout(() => {
-          document.getElementById('vault-lock').classList.add('unlocked');
-          openExplorer();
-        }, 600);
-      } else {
-        digits.forEach(d => d.classList.add('error'));
-        showMsg('> INVALID ACCESS CODE', false);
-        failCount++;
-        if (failCount >= 3) {
-          lockoutUntil = Date.now() + 30000;
-          showMsg('> SECURITY LOCKOUT ACTIVATED', false);
+        if (hash === expected) {
+          vaultCode = code;
+          digits.forEach(function(d) { d.classList.add('success'); });
+          showMsg('> ACCESS GRANTED', true);
+          failCount = 0;
+          setTimeout(function() {
+            document.getElementById('vault-lock').classList.add('unlocked');
+            openExplorer();
+          }, 600);
+        } else {
+          digits.forEach(function(d) { d.classList.add('error'); });
+          showMsg('> INVALID ACCESS CODE', false);
+          failCount++;
+          if (failCount >= 3) {
+            lockoutUntil = Date.now() + 30000;
+            showMsg('> SECURITY LOCKOUT ACTIVATED', false);
+          }
+          setTimeout(function() {
+            code = '';
+            updateDisplay();
+            digits.forEach(function(d) { d.classList.remove('error'); });
+            msgEl.classList.remove('show');
+            checkLockout();
+          }, 1200);
         }
-        setTimeout(() => {
-          code = '';
-          updateDisplay();
-          digits.forEach(d => d.classList.remove('error'));
-          msgEl.classList.remove('show');
-          checkLockout();
-        }, 1200);
-      }
+      });
     };
 
-    document.getElementById('code-keypad').addEventListener('click', (e) => {
-      const btn = e.target.closest('.code-key');
+    document.getElementById('code-keypad').addEventListener('click', function(e) {
+      var btn = e.target.closest('.code-key');
       if (!btn) return;
       if (checkLockout()) return;
-      const v = btn.dataset.v;
+      var v = btn.dataset.v;
       if (v === 'clear') { code = ''; updateDisplay(); }
       else if (v === 'back') { code = code.slice(0, -1); updateDisplay(); }
       else if (code.length < 6) {
@@ -1853,7 +2025,7 @@ button { font-family: inherit; cursor: pointer; }
       }
     });
 
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', function(e) {
       if (document.getElementById('vault-lock').classList.contains('unlocked')) return;
       if (checkLockout()) return;
       if (e.key >= '0' && e.key <= '9' && code.length < 6) {
@@ -1870,79 +2042,236 @@ button { font-family: inherit; cursor: pointer; }
   }
 
   
-  function openExplorer() {
-    loadData();
-    const explorer = document.getElementById('vault-explorer');
-    explorer.classList.add('visible');
-    renderSidebar();
-    renderFiles();
-    setupExplorerEvents();
+  function initFirebase() {
+    setSyncStatus('syncing');
+    return auth.signInAnonymously().then(function() {
+      
+      return sha256('DT_VAULT_FB_' + vaultCode);
+    }).then(function(hash) {
+      vaultHash = hash;
+      return migrateLocalData();
+    }).then(function() {
+      subscribeToFiles();
+    }).catch(function(err) {
+      console.error('Firebase init failed');
+      setSyncStatus('offline');
+      
+      loadLocalData();
+    });
   }
 
-  function loadData() {
+  function subscribeToFiles() {
+    if (unsubscribeSnapshot) unsubscribeSnapshot();
+
+    unsubscribeSnapshot = db.collection('vaults').doc(vaultHash).collection('files')
+      .orderBy('date', 'desc')
+      .onSnapshot(function(snapshot) {
+        vaultData.files = [];
+        snapshot.forEach(function(doc) {
+          var data = doc.data();
+          data.id = doc.id;
+          vaultData.files.push(data);
+        });
+        
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(vaultData));
+        } catch(e) {   }
+        setSyncStatus('synced');
+        isOnline = true;
+        renderSidebar();
+        renderFiles();
+        if (selectedFile) showPreview(selectedFile);
+      }, function(err) {
+        console.error('Firestore sync error');
+        setSyncStatus('error');
+      });
+  }
+
+  function migrateLocalData() {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      var stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) return Promise.resolve();
+
+      var localData = JSON.parse(stored);
+      if (!localData.files || localData.files.length === 0) return Promise.resolve();
+
+      
+      var filesToMigrate = localData.files.filter(function(f) { return f.fileData; });
+      if (filesToMigrate.length === 0) {
+        
+        return db.collection('vaults').doc(vaultHash).collection('files').limit(1).get()
+          .then(function(snapshot) {
+            if (!snapshot.empty) return; 
+            
+            var batch = db.batch();
+            localData.files.forEach(function(file) {
+              var docRef = db.collection('vaults').doc(vaultHash).collection('files').doc(file.id);
+              var item = {
+                name: file.name || '',
+                category: file.category || 'misc',
+                url: file.url || '',
+                storageUrl: '',
+                size: file.size || '',
+                memo: file.memo || '',
+                date: file.date || new Date().toISOString()
+              };
+              batch.set(docRef, item);
+            });
+            return batch.commit().then(function() {
+              showToast('ローカルデータをクラウドに移行しました', 'success');
+            });
+          });
+      }
+
+      
+      return db.collection('vaults').doc(vaultHash).collection('files').limit(1).get()
+        .then(function(snapshot) {
+          if (!snapshot.empty) return; 
+
+          showToast('データ移行中...', 'info');
+          var promises = localData.files.map(function(file) {
+            var fileId = file.id;
+            var uploadPromise = Promise.resolve('');
+
+            if (file.fileData) {
+              try {
+                var parts = file.fileData.split(',');
+                var mimeMatch = parts[0].match(/:(.*?);/);
+                var mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+                var binary = atob(parts[1]);
+                var arr = new Uint8Array(binary.length);
+                for (var i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
+                var blob = new Blob([arr], { type: mime });
+
+                var ref = storageRef.ref('vaults/' + vaultHash + '/files/' + fileId + '/' + file.name);
+                uploadPromise = ref.put(blob).then(function() {
+                  return ref.getDownloadURL();
+                }).catch(function() { return ''; });
+              } catch(e) {
+                uploadPromise = Promise.resolve('');
+              }
+            }
+
+            return uploadPromise.then(function(downloadUrl) {
+              return db.collection('vaults').doc(vaultHash).collection('files').doc(fileId).set({
+                name: file.name || '',
+                category: file.category || 'misc',
+                url: file.url || '',
+                storageUrl: downloadUrl,
+                size: file.size || '',
+                memo: file.memo || '',
+                date: file.date || new Date().toISOString()
+              });
+            });
+          });
+
+          return Promise.all(promises).then(function() {
+            showToast('移行完了！', 'success');
+          });
+        });
+    } catch(e) {
+      return Promise.resolve();
+    }
+  }
+
+  function loadLocalData() {
+    try {
+      var stored = localStorage.getItem(STORAGE_KEY);
       if (stored) vaultData = JSON.parse(stored);
     } catch(e) {   }
     if (!vaultData.folders) vaultData.folders = ['docs','img','url','misc'];
     if (!vaultData.files) vaultData.files = [];
   }
 
-  function saveData() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(vaultData));
-    } catch(e) {
-      alert('STORAGE ERROR: Vault data may be too large. Try deleting some files or exporting first.');
-    }
+  
+  function openExplorer() {
+    var explorer = document.getElementById('vault-explorer');
+    explorer.classList.add('visible');
+
+    
+    loadLocalData();
+    renderSidebar();
+    renderFiles();
+    setupExplorerEvents();
+
+    
+    initFirebase();
   }
 
+  
   function renderSidebar() {
-    const sidebar = document.getElementById('ve-sidebar');
-    sidebar.innerHTML = '<div class="ve-sidebar-header">DIRECTORIES</div>';
-    const allCount = vaultData.files.length;
-    sidebar.appendChild(createFolder('all', FOLDER_META.all.icon, FOLDER_META.all.label, allCount));
-    vaultData.folders.forEach(f => {
-      const meta = FOLDER_META[f] || { icon: '📁', label: f.toUpperCase() };
-      const count = vaultData.files.filter(file => file.category === f).length;
-      sidebar.appendChild(createFolder(f, meta.icon, meta.label, count));
+    var sidebar = document.getElementById('ve-sidebar');
+    sidebar.replaceChildren();
+    var header = cel('div', 've-sidebar-header', 'DIRECTORIES');
+    sidebar.appendChild(header);
+
+    var allCount = vaultData.files.length;
+    sidebar.appendChild(createFolderEl('all', FOLDER_META.all.icon, FOLDER_META.all.label, allCount));
+    vaultData.folders.forEach(function(f) {
+      var meta = FOLDER_META[f] || { icon: '📁', label: f.toUpperCase() };
+      var count = vaultData.files.filter(function(file) { return file.category === f; }).length;
+      sidebar.appendChild(createFolderEl(f, meta.icon, meta.label, count));
     });
   }
 
-  function createFolder(id, icon, label, count) {
-    const el = document.createElement('div');
-    el.className = 've-folder' + (currentFolder === id ? ' active' : '');
-    el.innerHTML = `<span class="ve-folder-icon">${icon}</span><span>${label}</span><span class="ve-folder-count">${count}</span>`;
-    el.addEventListener('click', () => {
+  function createFolderEl(id, icon, label, count) {
+    var el = cel('div', 've-folder' + (currentFolder === id ? ' active' : ''));
+    var iconSpan = cel('span', 've-folder-icon', icon);
+    var labelSpan = cel('span', null, label);
+    var countSpan = cel('span', 've-folder-count', String(count));
+    el.appendChild(iconSpan);
+    el.appendChild(labelSpan);
+    el.appendChild(countSpan);
+    el.addEventListener('click', function() {
       currentFolder = id; selectedFile = null;
       renderSidebar(); renderFiles(); hidePreview();
     });
     return el;
   }
 
+  
   function getFilteredFiles() {
-    const search = (document.getElementById('ve-search').value || '').toLowerCase();
-    return vaultData.files.filter(f => {
-      const matchFolder = currentFolder === 'all' || f.category === currentFolder;
-      const matchSearch = !search || f.name.toLowerCase().includes(search) || (f.memo || '').toLowerCase().includes(search);
+    var search = (document.getElementById('ve-search').value || '').toLowerCase();
+    return vaultData.files.filter(function(f) {
+      var matchFolder = currentFolder === 'all' || f.category === currentFolder;
+      var matchSearch = !search || f.name.toLowerCase().indexOf(search) >= 0 || (f.memo || '').toLowerCase().indexOf(search) >= 0;
       return matchFolder && matchSearch;
     });
   }
 
   function renderFiles() {
-    const container = document.getElementById('ve-files');
-    const files = getFilteredFiles();
-    const pathEl = document.getElementById('ve-path');
-    const folderLabel = (FOLDER_META[currentFolder] || {}).label || currentFolder;
-    pathEl.innerHTML = `<span class="ve-path-part" data-f="all">VAULT:</span><span class="ve-path-sep">/</span><span class="ve-path-part">${folderLabel}</span>`;
-    pathEl.querySelector('[data-f="all"]').addEventListener('click', () => {
+    var container = document.getElementById('ve-files');
+    var files = getFilteredFiles();
+
+    
+    var pathEl = document.getElementById('ve-path');
+    pathEl.replaceChildren();
+    var vaultPart = cel('span', 've-path-part', 'VAULT:');
+    vaultPart.addEventListener('click', function() {
       currentFolder = 'all'; selectedFile = null;
       renderSidebar(); renderFiles(); hidePreview();
     });
-    document.getElementById('ve-status-count').textContent = `${files.length} item${files.length !== 1 ? 's' : ''}`;
-    const totalSize = files.reduce((acc, f) => acc + (parseSize(f.size) || 0), 0);
+    var sep = cel('span', 've-path-sep', '/');
+    var folderLabel = (FOLDER_META[currentFolder] || {}).label || currentFolder;
+    var folderPart = cel('span', 've-path-part', folderLabel);
+    pathEl.appendChild(vaultPart);
+    pathEl.appendChild(sep);
+    pathEl.appendChild(folderPart);
+
+    
+    document.getElementById('ve-status-count').textContent = files.length + ' item' + (files.length !== 1 ? 's' : '');
+    var totalSize = files.reduce(function(acc, f) { return acc + (parseSize(f.size) || 0); }, 0);
     document.getElementById('ve-status-size').textContent = formatSize(totalSize);
+
     if (files.length === 0) {
-      container.innerHTML = `<div class="ve-empty"><div class="ve-empty-icon">📂</div><div>NO FILES IN THIS DIRECTORY</div><div style="font-size:0.7rem;opacity:0.5;">Click + NEW to add items</div></div>`;
+      container.replaceChildren();
+      var empty = cel('div', 've-empty');
+      empty.appendChild(cel('div', 've-empty-icon', '📂'));
+      empty.appendChild(cel('div', null, 'NO FILES IN THIS DIRECTORY'));
+      var hint = cel('div', null, 'Click + NEW to add items');
+      hint.style.cssText = 'font-size:0.7rem;opacity:0.5;';
+      empty.appendChild(hint);
+      container.appendChild(empty);
       return;
     }
     if (viewMode === 'list') renderListView(container, files);
@@ -1950,46 +2279,91 @@ button { font-family: inherit; cursor: pointer; }
   }
 
   function renderListView(container, files) {
-    container.innerHTML = '';
-    const list = document.createElement('div');
-    list.className = 've-file-list';
-    const header = document.createElement('div');
-    header.className = 've-file-header';
-    header.innerHTML = '<span></span><span>NAME</span><span style="text-align:right">SIZE</span><span>DATE</span><span>TYPE</span>';
+    container.replaceChildren();
+    var list = cel('div', 've-file-list');
+
+    
+    var header = cel('div', 've-file-header');
+    header.appendChild(cel('span'));
+    header.appendChild(cel('span', null, 'NAME'));
+    var sizeHead = cel('span', null, 'SIZE');
+    sizeHead.style.textAlign = 'right';
+    header.appendChild(sizeHead);
+    header.appendChild(cel('span', null, 'DATE'));
+    header.appendChild(cel('span', null, 'TYPE'));
     list.appendChild(header);
-    files.forEach(f => {
-      const row = document.createElement('div');
-      row.className = 've-file-row' + (selectedFile === f.id ? ' selected' : '');
+
+    files.forEach(function(f) {
+      var row = cel('div', 've-file-row' + (selectedFile === f.id ? ' selected' : ''));
       row.dataset.id = f.id;
-      const icon = FILE_ICONS[f.category] || '📄';
-      const date = f.date ? new Date(f.date).toLocaleDateString('ja-JP', { year:'2-digit', month:'2-digit', day:'2-digit' }) : '-';
-      row.innerHTML = `<span class="ve-file-icon">${icon}</span><span class="ve-file-name">${escHtml(f.name)}</span><span class="ve-file-size">${f.size || '-'}</span><span class="ve-file-date">${date}</span><span class="ve-file-type">${(f.category || '').toUpperCase()}</span>`;
-      row.addEventListener('click', () => selectFile(f.id));
-      row.addEventListener('dblclick', () => openFile(f));
-      row.addEventListener('contextmenu', (e) => showContext(e, f));
+
+      var icon = FILE_ICONS[f.category] || '📄';
+      row.appendChild(cel('span', 've-file-icon', icon));
+
+      
+      var nameCell = cel('span', 've-file-name');
+      if (f.category === 'url' && f.url) {
+        var favicon = document.createElement('img');
+        favicon.className = 've-link-favicon';
+        favicon.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(extractDomain(f.url)) + '&sz=32';
+        favicon.alt = '';
+        favicon.style.cssText = 'width:14px;height:14px;flex-shrink:0;';
+        nameCell.appendChild(favicon);
+      }
+      var nameText = document.createTextNode(f.name);
+      nameCell.appendChild(nameText);
+      row.appendChild(nameCell);
+
+      row.appendChild(cel('span', 've-file-size', f.size || '-'));
+      var date = f.date ? new Date(f.date).toLocaleDateString('ja-JP', { year:'2-digit', month:'2-digit', day:'2-digit' }) : '-';
+      row.appendChild(cel('span', 've-file-date', date));
+      row.appendChild(cel('span', 've-file-type', (f.category || '').toUpperCase()));
+
+      row.addEventListener('click', function() { selectFile(f.id); });
+      row.addEventListener('dblclick', function() { openFile(f); });
+      row.addEventListener('contextmenu', function(e) { showContext(e, f); });
       list.appendChild(row);
     });
     container.appendChild(list);
   }
 
   function renderGridView(container, files) {
-    container.innerHTML = '';
-    const grid = document.createElement('div');
-    grid.className = 've-file-grid';
-    files.forEach(f => {
-      const card = document.createElement('div');
-      card.className = 've-file-card' + (selectedFile === f.id ? ' selected' : '');
+    container.replaceChildren();
+    var grid = cel('div', 've-file-grid');
+
+    files.forEach(function(f) {
+      var card = cel('div', 've-file-card' + (selectedFile === f.id ? ' selected' : ''));
       card.dataset.id = f.id;
-      const icon = FILE_ICONS[f.category] || '📄';
-      card.innerHTML = `<span class="ve-file-icon">${icon}</span><span class="ve-file-name">${escHtml(f.name)}</span><span class="ve-file-type">${(f.category || '').toUpperCase()}</span>`;
-      card.addEventListener('click', () => selectFile(f.id));
-      card.addEventListener('dblclick', () => openFile(f));
-      card.addEventListener('contextmenu', (e) => showContext(e, f));
+
+      var icon = FILE_ICONS[f.category] || '📄';
+
+      
+      if (f.category === 'url' && f.url) {
+        var linkIcon = cel('span', 've-file-icon');
+        var favicon = document.createElement('img');
+        favicon.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(extractDomain(f.url)) + '&sz=64';
+        favicon.alt = '';
+        favicon.style.cssText = 'width:32px;height:32px;margin-bottom:4px;';
+        linkIcon.replaceChildren();
+        linkIcon.appendChild(favicon);
+        card.appendChild(linkIcon);
+      } else {
+        card.appendChild(cel('span', 've-file-icon', icon));
+      }
+
+      var nameSpan = cel('span', 've-file-name', f.name);
+      card.appendChild(nameSpan);
+      card.appendChild(cel('span', 've-file-type', (f.category || '').toUpperCase()));
+
+      card.addEventListener('click', function() { selectFile(f.id); });
+      card.addEventListener('dblclick', function() { openFile(f); });
+      card.addEventListener('contextmenu', function(e) { showContext(e, f); });
       grid.appendChild(card);
     });
     container.appendChild(grid);
   }
 
+  
   function selectFile(id) {
     selectedFile = id;
     renderFiles();
@@ -1997,29 +2371,69 @@ button { font-family: inherit; cursor: pointer; }
   }
 
   function showPreview(id) {
-    const f = vaultData.files.find(x => x.id === id);
+    var f = vaultData.files.find(function(x) { return x.id === id; });
     if (!f) return;
-    const panel = document.getElementById('ve-preview');
-    const content = document.getElementById('ve-preview-content');
-    const icon = FILE_ICONS[f.category] || '📄';
-    const date = f.date ? new Date(f.date).toLocaleDateString('ja-JP') : '-';
-    const sourceLabel = f.fileData ? 'Embedded File' : (f.url || '-');
-    content.innerHTML = `
-      <div class="ve-preview-icon">${icon}</div>
-      <div class="ve-preview-name">${escHtml(f.name)}</div>
-      <div class="ve-preview-meta">
-        <div class="ve-preview-row"><span class="ve-preview-key">Category</span><span class="ve-preview-val">${(f.category || '').toUpperCase()}</span></div>
-        <div class="ve-preview-row"><span class="ve-preview-key">Size</span><span class="ve-preview-val">${f.size || '-'}</span></div>
-        <div class="ve-preview-row"><span class="ve-preview-key">Added</span><span class="ve-preview-val">${date}</span></div>
-        <div class="ve-preview-row"><span class="ve-preview-key">Source</span><span class="ve-preview-val" style="word-break:break-all;font-size:0.6rem;">${f.fileData ? '📎 Embedded' : escHtml(f.url || '-')}</span></div>
-      </div>
-      ${f.memo ? `<div class="ve-preview-memo">${escHtml(f.memo)}</div>` : ''}
-      <div class="ve-preview-actions">
-        <button class="ve-btn primary" onclick="window._vault.openFile('${f.id}')">OPEN</button>
-        <button class="ve-btn" onclick="window._vault.editFile('${f.id}')">EDIT</button>
-        <button class="ve-btn danger" onclick="window._vault.deleteFile('${f.id}')">DELETE</button>
-      </div>
-    `;
+    var panel = document.getElementById('ve-preview');
+    var content = document.getElementById('ve-preview-content');
+    content.replaceChildren();
+
+    var icon = FILE_ICONS[f.category] || '📄';
+
+    
+    if (f.category === 'img' && f.storageUrl) {
+      var img = document.createElement('img');
+      img.src = f.storageUrl;
+      img.alt = f.name;
+      img.className = 've-preview-img';
+      content.appendChild(img);
+    } else {
+      content.appendChild(cel('div', 've-preview-icon', icon));
+    }
+
+    content.appendChild(cel('div', 've-preview-name', f.name));
+
+    
+    var meta = cel('div', 've-preview-meta');
+    var rows = [
+      ['Category', (f.category || '').toUpperCase()],
+      ['Size', f.size || '-'],
+      ['Added', f.date ? new Date(f.date).toLocaleDateString('ja-JP') : '-'],
+      ['Source', f.storageUrl ? '☁️ Cloud' : (f.url ? 'URL' : '-')]
+    ];
+    rows.forEach(function(r) {
+      var row = cel('div', 've-preview-row');
+      row.appendChild(cel('span', 've-preview-key', r[0]));
+      var val = cel('span', 've-preview-val', r[1]);
+      if (r[0] === 'Source') val.style.cssText = 'word-break:break-all;font-size:0.6rem;';
+      row.appendChild(val);
+      meta.appendChild(row);
+    });
+    content.appendChild(meta);
+
+    
+    if (f.category === 'url' && f.url) {
+      content.appendChild(createLinkCard(f.url));
+    }
+
+    
+    if (f.memo) {
+      var memo = cel('div', 've-preview-memo', f.memo);
+      content.appendChild(memo);
+    }
+
+    
+    var actions = cel('div', 've-preview-actions');
+    var openBtn = cel('button', 've-btn primary', 'OPEN');
+    openBtn.addEventListener('click', function() { openFile(f.id); });
+    var editBtn = cel('button', 've-btn', 'EDIT');
+    editBtn.addEventListener('click', function() { editFile(f.id); });
+    var delBtn = cel('button', 've-btn danger', 'DELETE');
+    delBtn.addEventListener('click', function() { deleteFile(f.id); });
+    actions.appendChild(openBtn);
+    actions.appendChild(editBtn);
+    actions.appendChild(delBtn);
+    content.appendChild(actions);
+
     panel.classList.add('visible');
   }
 
@@ -2027,51 +2441,59 @@ button { font-family: inherit; cursor: pointer; }
     document.getElementById('ve-preview').classList.remove('visible');
   }
 
+  
   function openFile(f) {
-    if (typeof f === 'string') f = vaultData.files.find(x => x.id === f);
+    if (typeof f === 'string') f = vaultData.files.find(function(x) { return x.id === f; });
     if (!f) return;
     
-    if (f.fileData) {
-      try {
-        const parts = f.fileData.split(',');
-        const mime = parts[0].match(/:(.*?);/)[1];
-        const binary = atob(parts[1]);
-        const arr = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
-        const blob = new Blob([arr], { type: mime });
-        const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
-        setTimeout(() => URL.revokeObjectURL(url), 60000);
-      } catch(e) {
-        console.error('Failed to open embedded file:', e);
-      }
+    if (f.storageUrl) {
+      window.open(f.storageUrl, '_blank');
       return;
     }
-    if (f.url) window.open(f.url, '_blank');
+    
+    if (f.url) {
+      try {
+        var parsed = new URL(f.url);
+        if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+          window.open(f.url, '_blank');
+        }
+      } catch(e) {   }
+    }
   }
 
   
   function showContext(e, file) {
     e.preventDefault();
-    const menu = document.getElementById('ve-context');
-    menu.innerHTML = `
-      <div class="ve-context-item" data-action="open"><span class="ve-context-icon">↗</span>Open</div>
-      <div class="ve-context-item" data-action="edit"><span class="ve-context-icon">✎</span>Edit</div>
-      <div class="ve-context-sep"></div>
-      <div class="ve-context-item danger" data-action="delete"><span class="ve-context-icon">✕</span>Delete</div>
-    `;
+    var menu = document.getElementById('ve-context');
+    menu.replaceChildren();
+
+    var items = [
+      { icon: '↗', label: 'Open', action: 'open' },
+      { icon: '✎', label: 'Edit', action: 'edit' },
+      { type: 'sep' },
+      { icon: '✕', label: 'Delete', action: 'delete', danger: true }
+    ];
+
+    items.forEach(function(item) {
+      if (item.type === 'sep') {
+        menu.appendChild(cel('div', 've-context-sep'));
+        return;
+      }
+      var el = cel('div', 've-context-item' + (item.danger ? ' danger' : ''));
+      el.appendChild(cel('span', 've-context-icon', item.icon));
+      el.appendChild(document.createTextNode(item.label));
+      el.addEventListener('click', function() {
+        if (item.action === 'open') openFile(file);
+        else if (item.action === 'edit') editFile(file.id);
+        else if (item.action === 'delete') deleteFile(file.id);
+        hideContext();
+      });
+      menu.appendChild(el);
+    });
+
     menu.style.left = Math.min(e.clientX, window.innerWidth - 200) + 'px';
     menu.style.top = Math.min(e.clientY, window.innerHeight - 150) + 'px';
     menu.classList.add('visible');
-    menu.querySelectorAll('.ve-context-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const action = item.dataset.action;
-        if (action === 'open') openFile(file);
-        else if (action === 'edit') editFile(file.id);
-        else if (action === 'delete') deleteFile(file.id);
-        hideContext();
-      });
-    });
   }
 
   function hideContext() {
@@ -2079,197 +2501,341 @@ button { font-family: inherit; cursor: pointer; }
   }
 
   
+  function detectCategory(file) {
+    if (!file) return 'misc';
+    var t = file.type || '';
+    var n = file.name || '';
+    if (t.startsWith('image/') || /\.(jpg|jpeg|png|gif|svg|webp|bmp|ico)$/i.test(n)) return 'img';
+    if (t === 'application/pdf' || /\.(pdf|doc|docx|txt|csv|xls|xlsx|ppt|pptx)$/i.test(n)) return 'docs';
+    return 'misc';
+  }
+
   function setDialogMode(mode) {
     dialogMode = mode;
-    const fileTab = document.getElementById('ve-tab-file');
-    const urlTab = document.getElementById('ve-tab-url');
-    const fileGroup = document.getElementById('ve-group-file');
-    const urlGroup = document.getElementById('ve-group-url');
-    const sizeInput = document.getElementById('ve-inp-size');
+    var fileTab = document.getElementById('ve-tab-file');
+    var urlTab = document.getElementById('ve-tab-url');
+    var fileGroup = document.getElementById('ve-group-file');
+    var urlGroup = document.getElementById('ve-group-url');
     if (mode === 'file') {
       fileTab.classList.add('active'); urlTab.classList.remove('active');
       fileGroup.style.display = ''; urlGroup.style.display = 'none';
-      sizeInput.readOnly = true; sizeInput.placeholder = 'Auto-detected for uploads';
     } else {
       urlTab.classList.add('active'); fileTab.classList.remove('active');
       urlGroup.style.display = ''; fileGroup.style.display = 'none';
-      sizeInput.readOnly = false; sizeInput.placeholder = 'e.g. 2.3 MB';
     }
   }
 
   function resetUploadZone() {
-    pendingFileData = null;
-    const info = document.getElementById('ve-upload-info');
-    const warn = document.getElementById('ve-size-warn');
-    info.textContent = '';
-    warn.classList.remove('show');
+    pendingFile = null;
+    pendingFileDataUrl = null;
+    document.getElementById('ve-upload-selected-container').replaceChildren();
     document.getElementById('ve-file-input').value = '';
+    var zone = document.getElementById('ve-upload-zone');
+    zone.style.display = '';
+    hideUploadProgress();
+  }
+
+  function showUploadProgress(pct) {
+    var prog = document.getElementById('ve-upload-progress');
+    var bar = document.getElementById('ve-upload-progress-bar');
+    prog.classList.add('visible');
+    bar.style.width = pct + '%';
+  }
+
+  function hideUploadProgress() {
+    var prog = document.getElementById('ve-upload-progress');
+    prog.classList.remove('visible');
+    document.getElementById('ve-upload-progress-bar').style.width = '0%';
   }
 
   function showAddDialog() {
     editingId = null;
-    pendingFileData = null;
+    pendingFile = null;
+    pendingFileDataUrl = null;
     document.getElementById('ve-dialog-title').textContent = 'NEW ITEM';
     document.getElementById('ve-inp-name').value = '';
     document.getElementById('ve-inp-cat').value = currentFolder !== 'all' ? currentFolder : 'docs';
     document.getElementById('ve-inp-url').value = '';
-    document.getElementById('ve-inp-size').value = '';
     document.getElementById('ve-inp-memo').value = '';
+    document.getElementById('ve-url-preview').replaceChildren();
     resetUploadZone();
     setDialogMode('file');
+    document.getElementById('ve-dialog-save').disabled = false;
+    document.getElementById('ve-dialog-save').textContent = 'SAVE';
     document.getElementById('ve-dialog-overlay').classList.add('visible');
     document.getElementById('ve-inp-name').focus();
   }
 
   function editFile(id) {
-    if (typeof id === 'string') {
-      const f = vaultData.files.find(x => x.id === id);
-      if (!f) return;
-      editingId = id;
-      pendingFileData = f.fileData || null;
-      document.getElementById('ve-dialog-title').textContent = 'EDIT ITEM';
-      document.getElementById('ve-inp-name').value = f.name;
-      document.getElementById('ve-inp-cat').value = f.category;
-      document.getElementById('ve-inp-url').value = f.url || '';
-      document.getElementById('ve-inp-size').value = f.size || '';
-      document.getElementById('ve-inp-memo').value = f.memo || '';
-      resetUploadZone();
-      if (f.fileData) {
-        setDialogMode('file');
-        document.getElementById('ve-upload-info').textContent = '✓ File attached';
-      } else {
-        setDialogMode('url');
-      }
-      document.getElementById('ve-dialog-overlay').classList.add('visible');
-      document.getElementById('ve-inp-name').focus();
+    if (typeof id !== 'string') return;
+    var f = vaultData.files.find(function(x) { return x.id === id; });
+    if (!f) return;
+    editingId = id;
+    pendingFile = null;
+    pendingFileDataUrl = null;
+    document.getElementById('ve-dialog-title').textContent = 'EDIT ITEM';
+    document.getElementById('ve-inp-name').value = f.name;
+    document.getElementById('ve-inp-cat').value = f.category;
+    document.getElementById('ve-inp-url').value = f.url || '';
+    document.getElementById('ve-inp-memo').value = f.memo || '';
+    resetUploadZone();
+
+    if (f.storageUrl) {
+      setDialogMode('file');
+      
+      var selContainer = document.getElementById('ve-upload-selected-container');
+      selContainer.replaceChildren();
+      var sel = cel('div', 've-upload-selected');
+      sel.appendChild(cel('div', 've-upload-file-icon', FILE_ICONS[f.category] || '📄'));
+      var info = cel('div', 've-upload-file-info');
+      info.appendChild(cel('div', 've-upload-file-name', f.name));
+      info.appendChild(cel('div', 've-upload-file-size', '☁️ Cloud: ' + (f.size || '-')));
+      sel.appendChild(info);
+      selContainer.appendChild(sel);
+      document.getElementById('ve-upload-zone').style.display = 'none';
+    } else if (f.url) {
+      setDialogMode('url');
+      updateUrlPreview(f.url);
+    } else {
+      setDialogMode('file');
     }
+
+    document.getElementById('ve-dialog-save').disabled = false;
+    document.getElementById('ve-dialog-save').textContent = 'SAVE';
+    document.getElementById('ve-dialog-overlay').classList.add('visible');
+    document.getElementById('ve-inp-name').focus();
   }
 
   function handleFileSelect(file) {
     if (!file) return;
-    const info = document.getElementById('ve-upload-info');
-    const warn = document.getElementById('ve-size-warn');
-    const nameInput = document.getElementById('ve-inp-name');
-    const sizeInput = document.getElementById('ve-inp-size');
-    const catInput = document.getElementById('ve-inp-cat');
+    if (file.size > MAX_FILE_SIZE) {
+      showToast('ファイルサイズが10MBを超えています', 'error');
+      return;
+    }
 
-    
+    pendingFile = file;
+    var nameInput = document.getElementById('ve-inp-name');
     if (!nameInput.value.trim()) nameInput.value = file.name;
+    document.getElementById('ve-inp-cat').value = detectCategory(file);
 
     
-    catInput.value = detectCategory(file);
+    document.getElementById('ve-upload-zone').style.display = 'none';
+    var selContainer = document.getElementById('ve-upload-selected-container');
+    selContainer.replaceChildren();
+
+    var sel = cel('div', 've-upload-selected');
 
     
-    sizeInput.value = formatSize(file.size);
-    warn.classList.toggle('show', file.size > MAX_FILE_SIZE);
+    if (file.type.startsWith('image/')) {
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        pendingFileDataUrl = ev.target.result;
+        var img = document.createElement('img');
+        img.className = 've-upload-thumb';
+        img.src = ev.target.result;
+        img.alt = file.name;
+        sel.insertBefore(img, sel.firstChild);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      var iconEl = cel('div', 've-upload-file-icon', FILE_ICONS[detectCategory(file)] || '📄');
+      sel.appendChild(iconEl);
+    }
 
-    
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      pendingFileData = ev.target.result;
-      info.textContent = `✓ ${file.name} (${formatSize(file.size)})`;
-    };
-    reader.onerror = () => {
-      info.textContent = '✕ Failed to read file';
-      pendingFileData = null;
-    };
-    reader.readAsDataURL(file);
+    var info = cel('div', 've-upload-file-info');
+    info.appendChild(cel('div', 've-upload-file-name', file.name));
+    info.appendChild(cel('div', 've-upload-file-size', formatSize(file.size)));
+    sel.appendChild(info);
+
+    var removeBtn = cel('button', 've-upload-remove', '✕');
+    removeBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      resetUploadZone();
+      nameInput.value = '';
+    });
+    sel.appendChild(removeBtn);
+
+    selContainer.appendChild(sel);
   }
 
   function saveItem() {
-    const name = document.getElementById('ve-inp-name').value.trim();
-    if (!name) return;
+    var name = document.getElementById('ve-inp-name').value.trim();
+    if (!name) {
+      showToast('名前を入力してください', 'error');
+      return;
+    }
+    if (isSaving) return;
 
-    const item = {
-      id: editingId || genId(),
-      name,
-      category: document.getElementById('ve-inp-cat').value,
-      url: dialogMode === 'url' ? document.getElementById('ve-inp-url').value.trim() : '',
-      fileData: dialogMode === 'file' ? pendingFileData : null,
-      size: document.getElementById('ve-inp-size').value.trim(),
-      memo: document.getElementById('ve-inp-memo').value.trim(),
-      date: editingId ? (vaultData.files.find(f=>f.id===editingId)||{}).date || new Date().toISOString() : new Date().toISOString()
-    };
-
-    if (editingId) {
-      const idx = vaultData.files.findIndex(f => f.id === editingId);
-      if (idx >= 0) vaultData.files[idx] = item;
-    } else {
-      vaultData.files.push(item);
+    
+    if (dialogMode === 'url') {
+      var urlVal = document.getElementById('ve-inp-url').value.trim();
+      if (urlVal) {
+        try {
+          var parsed = new URL(urlVal);
+          if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+            showToast('URLはhttp://またはhttps://で始まる必要があります', 'error');
+            return;
+          }
+        } catch(e) {
+          showToast('無効なURLです', 'error');
+          return;
+        }
+      }
     }
 
-    saveData();
-    closeDialog();
-    renderSidebar();
-    renderFiles();
+    isSaving = true;
+    var saveBtn = document.getElementById('ve-dialog-save');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'SAVING...';
+
+    var fileId = editingId || genId();
+    var existingFile = editingId ? vaultData.files.find(function(f) { return f.id === editingId; }) : null;
+
+    var uploadPromise;
+
+    if (dialogMode === 'file' && pendingFile) {
+      
+      showUploadProgress(0);
+      var ref = storageRef.ref('vaults/' + vaultHash + '/files/' + fileId + '/' + pendingFile.name);
+      var uploadTask = ref.put(pendingFile);
+
+      uploadPromise = new Promise(function(resolve, reject) {
+        uploadTask.on('state_changed',
+          function(snapshot) {
+            var pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            showUploadProgress(pct);
+          },
+          function(err) { reject(err); },
+          function() {
+            ref.getDownloadURL().then(function(url) {
+              resolve({ storageUrl: url, size: formatSize(pendingFile.size) });
+            }).catch(reject);
+          }
+        );
+      });
+    } else {
+      uploadPromise = Promise.resolve({
+        storageUrl: existingFile ? (existingFile.storageUrl || '') : '',
+        size: existingFile ? (existingFile.size || '') : ''
+      });
+    }
+
+    uploadPromise.then(function(result) {
+      var item = {
+        name: name,
+        category: document.getElementById('ve-inp-cat').value,
+        url: dialogMode === 'url' ? document.getElementById('ve-inp-url').value.trim() : '',
+        storageUrl: result.storageUrl,
+        size: result.size,
+        memo: document.getElementById('ve-inp-memo').value.trim(),
+        date: editingId ? (existingFile ? existingFile.date : new Date().toISOString()) : new Date().toISOString()
+      };
+
+      return db.collection('vaults').doc(vaultHash).collection('files').doc(fileId).set(item);
+    }).then(function() {
+      showToast('保存しました', 'success');
+      closeDialog();
+    }).catch(function(err) {
+      console.error('Save failed');
+      showToast('保存に失敗しました', 'error');
+    }).finally(function() {
+      isSaving = false;
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'SAVE';
+      hideUploadProgress();
+    });
   }
 
   function deleteFile(id) {
-    if (typeof id === 'string') {
-      vaultData.files = vaultData.files.filter(f => f.id !== id);
-      saveData();
-      selectedFile = null;
-      hidePreview();
-      renderSidebar();
-      renderFiles();
-    }
+    if (typeof id !== 'string') return;
+    showConfirm('このファイルを削除しますか？', function() {
+      var file = vaultData.files.find(function(f) { return f.id === id; });
+
+      
+      var storagePromise = Promise.resolve();
+      if (file && file.storageUrl) {
+        try {
+          var ref = storageRef.refFromURL(file.storageUrl);
+          storagePromise = ref.delete().catch(function() {   });
+        } catch(e) {   }
+      }
+
+      storagePromise.then(function() {
+        return db.collection('vaults').doc(vaultHash).collection('files').doc(id).delete();
+      }).then(function() {
+        selectedFile = null;
+        hidePreview();
+        showToast('削除しました', 'success');
+      }).catch(function(err) {
+        console.error('Delete failed');
+        showToast('削除に失敗しました', 'error');
+      });
+    });
   }
 
   function closeDialog() {
     document.getElementById('ve-dialog-overlay').classList.remove('visible');
     editingId = null;
-    pendingFileData = null;
+    pendingFile = null;
+    pendingFileDataUrl = null;
   }
 
   
-  async function exportData() {
+  function extractDomain(url) {
     try {
-      const encrypted = await encrypt(vaultData, vaultCode);
-      const blob = new Blob([encrypted], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `vault_backup_${new Date().toISOString().slice(0,10)}.vault`;
-      a.click();
-      URL.revokeObjectURL(url);
+      return new URL(url).hostname;
     } catch(e) {
-      console.error('Export failed:', e);
+      return url;
     }
   }
 
-  function showImportDialog() {
-    document.getElementById('ve-import-data').value = '';
-    document.getElementById('ve-import-overlay').classList.add('visible');
+  function createLinkCard(url) {
+    var domain = extractDomain(url);
+    var card = cel('div', 've-link-card');
+    card.addEventListener('click', function() {
+      try {
+        var parsed = new URL(url);
+        if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+          window.open(url, '_blank');
+        }
+      } catch(e) {   }
+    });
+
+    var favicon = document.createElement('img');
+    favicon.className = 've-link-favicon';
+    favicon.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(domain) + '&sz=32';
+    favicon.alt = '';
+    card.appendChild(favicon);
+
+    var info = cel('div', 've-link-info');
+    info.appendChild(cel('div', 've-link-domain', domain));
+    info.appendChild(cel('div', 've-link-url', url));
+    card.appendChild(info);
+
+    card.appendChild(cel('span', 've-link-arrow', '↗'));
+    return card;
   }
 
-  async function importData() {
-    const raw = document.getElementById('ve-import-data').value.trim();
-    if (!raw) return;
+  function updateUrlPreview(url) {
+    var previewContainer = document.getElementById('ve-url-preview');
+    previewContainer.replaceChildren();
+    if (!url) return;
     try {
-      const data = await decrypt(raw, vaultCode);
-      if (data && data.files) {
-        vaultData = data;
-        if (!vaultData.folders) vaultData.folders = ['docs','img','url','misc'];
-        saveData();
-        renderSidebar();
-        renderFiles();
-        document.getElementById('ve-import-overlay').classList.remove('visible');
-      }
-    } catch(e) {
-      alert('DECRYPTION FAILED: Invalid data or wrong code.');
-    }
+      new URL(url);
+      previewContainer.appendChild(createLinkCard(url));
+    } catch(e) {   }
   }
 
   
   function setupExplorerEvents() {
     
-    document.getElementById('ve-list-btn').addEventListener('click', () => {
+    document.getElementById('ve-list-btn').addEventListener('click', function() {
       viewMode = 'list';
       document.getElementById('ve-list-btn').classList.add('active');
       document.getElementById('ve-grid-btn').classList.remove('active');
       renderFiles();
     });
-    document.getElementById('ve-grid-btn').addEventListener('click', () => {
+    document.getElementById('ve-grid-btn').addEventListener('click', function() {
       viewMode = 'grid';
       document.getElementById('ve-grid-btn').classList.add('active');
       document.getElementById('ve-list-btn').classList.remove('active');
@@ -2277,28 +2843,43 @@ button { font-family: inherit; cursor: pointer; }
     });
 
     
-    document.getElementById('ve-search').addEventListener('input', () => renderFiles());
+    document.getElementById('ve-search').addEventListener('input', function() { renderFiles(); });
 
     
     document.getElementById('ve-add-btn').addEventListener('click', showAddDialog);
 
     
-    document.getElementById('ve-tab-file').addEventListener('click', () => setDialogMode('file'));
-    document.getElementById('ve-tab-url').addEventListener('click', () => setDialogMode('url'));
+    document.getElementById('ve-tab-file').addEventListener('click', function() { setDialogMode('file'); });
+    document.getElementById('ve-tab-url').addEventListener('click', function() {
+      setDialogMode('url');
+      
+      document.getElementById('ve-inp-cat').value = 'url';
+    });
 
     
-    const uploadZone = document.getElementById('ve-upload-zone');
-    const fileInput = document.getElementById('ve-file-input');
+    document.getElementById('ve-inp-url').addEventListener('input', function(e) {
+      updateUrlPreview(e.target.value.trim());
+      
+      var nameInput = document.getElementById('ve-inp-name');
+      if (!nameInput.value.trim()) {
+        var url = e.target.value.trim();
+        if (url) nameInput.value = extractDomain(url);
+      }
+    });
 
-    uploadZone.addEventListener('click', () => fileInput.click());
-    uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
-    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
-    uploadZone.addEventListener('drop', (e) => {
+    
+    var uploadZone = document.getElementById('ve-upload-zone');
+    var fileInput = document.getElementById('ve-file-input');
+
+    uploadZone.addEventListener('click', function() { fileInput.click(); });
+    uploadZone.addEventListener('dragover', function(e) { e.preventDefault(); uploadZone.classList.add('dragover'); });
+    uploadZone.addEventListener('dragleave', function() { uploadZone.classList.remove('dragover'); });
+    uploadZone.addEventListener('drop', function(e) {
       e.preventDefault();
       uploadZone.classList.remove('dragover');
       if (e.dataTransfer.files[0]) handleFileSelect(e.dataTransfer.files[0]);
     });
-    fileInput.addEventListener('change', (e) => {
+    fileInput.addEventListener('change', function(e) {
       if (e.target.files[0]) handleFileSelect(e.target.files[0]);
     });
 
@@ -2307,43 +2888,23 @@ button { font-family: inherit; cursor: pointer; }
     document.getElementById('ve-dialog-cancel').addEventListener('click', closeDialog);
 
     
-    document.getElementById('ve-export-btn').addEventListener('click', exportData);
-    document.getElementById('ve-import-btn').addEventListener('click', showImportDialog);
-    document.getElementById('ve-import-confirm').addEventListener('click', importData);
-    document.getElementById('ve-import-cancel').addEventListener('click', () => {
-      document.getElementById('ve-import-overlay').classList.remove('visible');
-    });
-
-    
-    document.getElementById('ve-import-file-btn').addEventListener('click', () => {
-      document.getElementById('ve-import-file').click();
-    });
-    document.getElementById('ve-import-file').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => { document.getElementById('ve-import-data').value = ev.target.result; };
-      reader.readAsText(file);
-    });
-
-    
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', function(e) {
       if (!e.target.closest('.ve-context')) hideContext();
     });
 
     
-    document.getElementById('ve-files').addEventListener('click', (e) => {
+    document.getElementById('ve-files').addEventListener('click', function(e) {
       if (!e.target.closest('.ve-file-row') && !e.target.closest('.ve-file-card')) {
         selectedFile = null; hidePreview(); renderFiles();
       }
     });
 
     
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', function(e) {
       if (document.getElementById('vault-lock').classList.contains('unlocked')) {
         if (e.key === 'Escape') {
           closeDialog();
-          document.getElementById('ve-import-overlay').classList.remove('visible');
+          document.getElementById('ve-confirm-overlay').classList.remove('visible');
           hideContext();
         }
         if (e.key === 'Delete' && selectedFile) deleteFile(selectedFile);
@@ -2353,13 +2914,12 @@ button { font-family: inherit; cursor: pointer; }
 
   
   function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-  function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
   function parseSize(s) {
     if (!s) return 0;
-    const m = s.match(/([\d.]+)\s*(B|KB|MB|GB)/i);
+    var m = s.match(/([\d.]+)\s*(B|KB|MB|GB)/i);
     if (!m) return 0;
-    const n = parseFloat(m[1]);
-    const u = m[2].toUpperCase();
+    var n = parseFloat(m[1]);
+    var u = m[2].toUpperCase();
     if (u === 'GB') return n * 1073741824;
     if (u === 'MB') return n * 1048576;
     if (u === 'KB') return n * 1024;
@@ -2373,7 +2933,8 @@ button { font-family: inherit; cursor: pointer; }
   }
 
   
-  window._vault = { openFile, editFile, deleteFile };
+  
+  
 })();
 </script>
 
