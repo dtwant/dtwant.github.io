@@ -229,7 +229,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "75"
+    "wordCount": "78"
   }]
   </script>
 
@@ -790,6 +790,7 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       
+
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
 
 
@@ -806,24 +807,31 @@
   --v-green: #00ff66;
   --v-purple: #bc13fe;
   --v-amber: #ffaa00;
-  --v-dark: #0a0a14;
-  --v-darker: #050508;
-  --v-card: rgba(8,8,20,0.85);
-  --v-border: rgba(0,243,255,0.18);
-  --v-border-hi: rgba(0,243,255,0.4);
-  --v-text: #c8dce8;
-  --v-text-dim: rgba(160,190,210,0.5);
-  --v-sidebar-w: 220px;
-  --v-toolbar-h: 44px;
-  --v-titlebar-h: 36px;
-  --v-statusbar-h: 28px;
+  --v-dark: #0d0d1a;
+  --v-darker: #08080f;
+  --v-card: rgba(13,13,26,0.95);
+  --v-panel: rgba(10,10,22,0.9);
+  --v-border: rgba(0,243,255,0.12);
+  --v-border-hi: rgba(0,243,255,0.3);
+  --v-text: #d0dce6;
+  --v-text-dim: rgba(160,185,210,0.5);
+  --v-text-muted: rgba(140,160,180,0.35);
+  --v-hover: rgba(0,243,255,0.05);
+  --v-select: rgba(0,243,255,0.1);
+  --v-select-hi: rgba(0,243,255,0.18);
+  --v-sidebar-w: 240px;
+  --v-toolbar-h: 40px;
+  --v-navbar-h: 38px;
+  --v-titlebar-h: 32px;
+  --v-statusbar-h: 26px;
+  --v-radius: 0px;
 }
 h1 { display: none !important; }
 body {
   margin: 0; padding: 0;
   background: var(--v-darker) !important;
   color: var(--v-text);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'Segoe UI', monospace;
   overflow: hidden;
   height: 100vh;
 }
@@ -834,20 +842,20 @@ button { font-family: inherit; cursor: pointer; }
 .vault-bg {
   position: fixed; inset: 0; z-index: 0;
   background:
-    radial-gradient(ellipse at 20% 30%, rgba(0,243,255,0.04) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 70%, rgba(188,19,254,0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 30%, rgba(0,243,255,0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 70%, rgba(188,19,254,0.02) 0%, transparent 60%),
     var(--v-darker);
 }
 .vault-grid {
   position: fixed; inset: 0; z-index: 1; pointer-events: none;
   background-image:
-    linear-gradient(rgba(0,243,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,243,255,0.04) 1px, transparent 1px);
-  background-size: 32px 32px;
+    linear-gradient(rgba(0,243,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,243,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 .vault-scanline {
   position: fixed; inset: 0; z-index: 2; pointer-events: none;
-  background: repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+  background: repeating-linear-gradient(0deg, transparent 0px, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 6px);
 }
 
  
@@ -891,7 +899,6 @@ button { font-family: inherit; cursor: pointer; }
   text-shadow: 0 0 5px rgba(0,243,255,0.4);
 }
 
- 
 .code-display {
   display: flex; justify-content: center; gap: 8px;
   margin-bottom: 1.5rem;
@@ -925,7 +932,6 @@ button { font-family: inherit; cursor: pointer; }
 }
 @keyframes code-shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
- 
 .code-keypad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -978,101 +984,240 @@ button { font-family: inherit; cursor: pointer; }
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 94vw; height: 88vh;
-  max-width: 1100px; max-height: 700px;
+  width: 96vw; height: 92vh;
+  max-width: 1200px; max-height: 780px;
   z-index: 100;
-  display: none;  
+  display: none;
   flex-direction: column;
   background: var(--v-card);
   border: 1px solid var(--v-border);
-  box-shadow: 0 8px 60px rgba(0,0,0,0.7), 0 0 40px rgba(0,243,255,0.08);
-  backdrop-filter: blur(12px);
+  border-radius: var(--v-radius);
+  box-shadow: 0 8px 60px rgba(0,0,0,0.8), 0 0 60px rgba(0,243,255,0.05);
   overflow: hidden;
 }
-#vault-explorer.visible { display: flex; animation: vault-open 0.5s ease-out; }
+#vault-explorer.visible { display: flex; animation: vault-open 0.4s ease-out; }
 @keyframes vault-open {
-  from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
   to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
  
-.ve-corner { position: absolute; width: 14px; height: 14px; border-style: solid; z-index: 10; pointer-events: none; }
-.ve-corner.tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; border-color: var(--v-cyan); }
-.ve-corner.tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; border-color: var(--v-pink); }
-.ve-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; border-color: var(--v-pink); }
-.ve-corner.br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; border-color: var(--v-cyan); }
-
- 
 .ve-titlebar {
   height: var(--v-titlebar-h);
-  background: linear-gradient(90deg, rgba(0,243,255,0.08), rgba(188,19,254,0.05));
+  background: rgba(8,8,18,0.95);
   border-bottom: 1px solid var(--v-border);
   display: flex; align-items: center;
-  padding: 0 12px; gap: 10px;
+  padding: 0 0 0 12px;
   flex-shrink: 0;
-  -webkit-app-region: drag;
+  user-select: none;
 }
-.ve-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.ve-dot.red { background: var(--v-pink); box-shadow: 0 0 4px var(--v-pink); }
-.ve-dot.yellow { background: var(--v-amber); box-shadow: 0 0 4px var(--v-amber); }
-.ve-dot.green { background: var(--v-green); box-shadow: 0 0 4px var(--v-green); }
+.ve-titlebar-icon {
+  font-size: 0.8rem;
+  margin-right: 8px;
+  opacity: 0.9;
+}
 .ve-titlebar-text {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.68rem; color: var(--v-text);
-  letter-spacing: 2px; margin-left: auto; margin-right: auto;
-  text-shadow: 0 0 5px rgba(0,243,255,0.3);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem; color: var(--v-text);
+  letter-spacing: 1px;
+  flex: 1;
+  opacity: 0.8;
 }
-.ve-titlebar-close {
+.ve-win-controls {
+  display: flex; align-items: stretch;
+  height: 100%;
+  margin-left: auto;
+}
+.ve-win-btn {
   background: none; border: none;
-  color: var(--v-text-dim); font-size: 1rem;
-  padding: 2px 6px; transition: all 0.2s;
+  color: var(--v-text-dim);
+  width: 46px; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem;
+  transition: all 0.15s;
+  font-family: 'Share Tech Mono', monospace;
   text-decoration: none;
 }
-.ve-titlebar-close:hover { color: var(--v-pink); text-shadow: 0 0 8px var(--v-pink); }
+.ve-win-btn:hover {
+  background: rgba(255,255,255,0.06);
+  color: var(--v-text);
+}
+.ve-win-btn.close:hover {
+  background: var(--v-pink);
+  color: #fff;
+}
+
+ 
+.ve-navbar {
+  height: var(--v-navbar-h);
+  background: rgba(10,10,22,0.8);
+  border-bottom: 1px solid var(--v-border);
+  display: flex; align-items: center;
+  padding: 0 8px;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.ve-nav-btn {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--v-text-dim);
+  width: 30px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.ve-nav-btn:hover:not(:disabled) {
+  background: var(--v-hover);
+  border-color: var(--v-border);
+  color: var(--v-cyan);
+}
+.ve-nav-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+.ve-nav-sep {
+  width: 1px; height: 20px;
+  background: var(--v-border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+ 
+.ve-addressbar {
+  flex: 1;
+  display: flex; align-items: center;
+  height: 28px;
+  background: rgba(0,243,255,0.03);
+  border: 1px solid var(--v-border);
+  padding: 0 10px;
+  gap: 4px;
+  min-width: 0;
+  transition: border-color 0.2s;
+}
+.ve-addressbar:hover {
+  border-color: var(--v-border-hi);
+}
+.ve-path-icon {
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+.ve-path-part {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--v-text);
+  cursor: pointer;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.ve-path-part:hover { color: var(--v-cyan); }
+.ve-path-sep {
+  color: var(--v-text-muted);
+  font-size: 0.65rem;
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+
+ 
+.ve-search-box {
+  width: 200px;
+  height: 28px;
+  display: flex; align-items: center;
+  background: rgba(0,243,255,0.03);
+  border: 1px solid var(--v-border);
+  padding: 0 8px;
+  gap: 6px;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+.ve-search-box:focus-within {
+  border-color: var(--v-cyan);
+  box-shadow: 0 0 8px rgba(0,243,255,0.1);
+}
+.ve-search-icon {
+  font-size: 0.7rem;
+  color: var(--v-text-dim);
+  flex-shrink: 0;
+}
+.ve-search {
+  background: none; border: none;
+  color: var(--v-text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  width: 100%; outline: none;
+}
+.ve-search::placeholder { color: var(--v-text-muted); }
 
  
 .ve-toolbar {
   height: var(--v-toolbar-h);
-  background: rgba(5,5,15,0.6);
+  background: rgba(10,10,22,0.6);
   border-bottom: 1px solid var(--v-border);
   display: flex; align-items: center;
-  padding: 0 10px; gap: 8px;
+  padding: 0 8px;
+  gap: 2px;
   flex-shrink: 0;
 }
-.ve-path {
-  display: flex; align-items: center; gap: 4px;
+.ve-toolbar-btn {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--v-text-dim);
+  padding: 5px 12px;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.72rem; color: var(--v-cyan);
-  background: rgba(0,243,255,0.04);
-  border: 1px solid var(--v-border);
-  padding: 4px 10px; flex: 1;
-  min-width: 0; overflow: hidden;
+  font-size: 0.68rem;
+  letter-spacing: 0.5px;
+  transition: all 0.15s;
+  display: flex; align-items: center; gap: 5px;
   white-space: nowrap;
 }
-.ve-path-sep { color: var(--v-pink); opacity: 0.5; }
-.ve-path-part { cursor: pointer; transition: color 0.2s; }
-.ve-path-part:hover { color: #fff; }
-.ve-search {
-  background: rgba(0,243,255,0.04);
-  border: 1px solid var(--v-border);
-  color: var(--v-text);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.72rem;
-  padding: 4px 10px; width: 180px;
-  outline: none; transition: all 0.2s;
+.ve-toolbar-btn:hover:not(:disabled) {
+  background: var(--v-hover);
+  border-color: var(--v-border);
+  color: var(--v-cyan);
 }
-.ve-search:focus { border-color: var(--v-cyan); box-shadow: 0 0 8px rgba(0,243,255,0.15); }
-.ve-search::placeholder { color: var(--v-text-dim); }
-.ve-view-btns { display: flex; gap: 2px; }
+.ve-toolbar-btn.danger {
+  color: var(--v-pink);
+}
+.ve-toolbar-btn.danger:hover:not(:disabled) {
+  background: rgba(255, 0, 85, 0.08);
+  border-color: rgba(255, 0, 85, 0.2);
+  color: #ff0055;
+  text-shadow: 0 0 8px rgba(255, 0, 85, 0.4);
+}
+.ve-toolbar-btn:disabled {
+  color: var(--v-text-muted);
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: none !important;
+  border-color: transparent !important;
+  text-shadow: none !important;
+}
+.ve-toolbar-sep {
+  width: 1px; height: 22px;
+  background: var(--v-border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+.ve-view-btns { display: flex; gap: 0; margin-left: auto; }
 .ve-view-btn {
-  background: rgba(0,243,255,0.04);
+  background: none;
   border: 1px solid var(--v-border);
   color: var(--v-text-dim);
-  padding: 4px 8px; font-size: 0.75rem;
-  transition: all 0.2s;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  transition: all 0.15s;
 }
-.ve-view-btn.active { color: var(--v-cyan); border-color: var(--v-cyan); background: rgba(0,243,255,0.1); }
-.ve-view-btn:hover { color: var(--v-cyan); }
+.ve-view-btn:first-child { border-right: none; }
+.ve-view-btn.active {
+  color: var(--v-cyan);
+  background: rgba(0,243,255,0.08);
+  border-color: rgba(0,243,255,0.2);
+}
+.ve-view-btn:hover:not(.active) {
+  color: var(--v-text);
+  background: var(--v-hover);
+}
 
  
 .ve-body {
@@ -1082,134 +1227,322 @@ button { font-family: inherit; cursor: pointer; }
  
 .ve-sidebar {
   width: var(--v-sidebar-w);
-  background: rgba(5,5,15,0.5);
+  background: var(--v-panel);
   border-right: 1px solid var(--v-border);
-  padding: 10px 0;
-  overflow-y: auto; flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.ve-sidebar-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
   scrollbar-width: thin;
-  scrollbar-color: var(--v-pink) transparent;
+  scrollbar-color: rgba(0,243,255,0.2) transparent;
 }
-.ve-sidebar::-webkit-scrollbar { width: 3px; }
-.ve-sidebar::-webkit-scrollbar-thumb { background: var(--v-pink); }
+.ve-sidebar-scroll::-webkit-scrollbar { width: 4px; }
+.ve-sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(0,243,255,0.2); }
 
-.ve-folder {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 14px;
-  color: var(--v-text-dim);
-  font-size: 0.75rem; cursor: pointer;
-  transition: all 0.2s; border-left: 2px solid transparent;
-  font-family: 'Share Tech Mono', monospace;
+.ve-tree-section {
+  padding: 0 0 4px;
 }
-.ve-folder:hover { color: var(--v-text); background: rgba(0,243,255,0.04); }
-.ve-folder.active {
-  color: var(--v-cyan); border-left-color: var(--v-cyan);
-  background: rgba(0,243,255,0.06);
-  text-shadow: 0 0 5px rgba(0,243,255,0.3);
-}
-.ve-folder-icon { font-size: 0.9rem; flex-shrink: 0; opacity: 0.8; }
-.ve-folder-count {
-  margin-left: auto;
-  font-size: 0.6rem; color: var(--v-text-dim);
-  background: rgba(0,243,255,0.06);
-  padding: 1px 6px; border-radius: 2px;
-}
-
-.ve-sidebar-header {
+.ve-tree-header {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.58rem; color: var(--v-text-dim);
-  letter-spacing: 2px; padding: 6px 14px 8px;
-  border-bottom: 1px solid var(--v-border);
-  margin-bottom: 4px;
+  font-size: 0.52rem;
+  color: var(--v-text-muted);
+  letter-spacing: 2px;
+  padding: 10px 16px 6px;
+  text-transform: uppercase;
+}
+.ve-tree-divider {
+  height: 1px;
+  background: var(--v-border);
+  margin: 4px 12px;
+}
+
+ 
+.ve-tree-item {
+  display: flex; align-items: center;
+  padding: 6px 12px 6px 16px;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.12s;
+  border-left: 2px solid transparent;
+  position: relative;
+  user-select: none;
+}
+.ve-tree-item:hover {
+  background: var(--v-hover);
+}
+.ve-tree-item.active {
+  background: var(--v-select);
+  border-left-color: var(--v-cyan);
+}
+.ve-tree-item.active .ve-tree-label {
+  color: var(--v-cyan);
+  text-shadow: 0 0 8px rgba(0,243,255,0.2);
+}
+.ve-tree-icon {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+}
+.ve-tree-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--v-text);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.15s;
+}
+.ve-tree-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--v-text-dim);
+  background: rgba(0,243,255,0.05);
+  padding: 1px 6px;
+  flex-shrink: 0;
+  min-width: 20px;
+  text-align: center;
+}
+
+ 
+.ve-sidebar-footer {
+  border-top: 1px solid var(--v-border);
+  padding: 6px 8px;
+  flex-shrink: 0;
+}
+.ve-new-folder-btn {
+  width: 100%;
+  background: rgba(0,243,255,0.03);
+  border: 1px dashed var(--v-border);
+  color: var(--v-text-dim);
+  padding: 6px 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  display: flex; align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.ve-new-folder-btn:hover {
+  background: rgba(0,243,255,0.06);
+  border-color: var(--v-cyan);
+  color: var(--v-cyan);
 }
 
  
 .ve-files {
   flex: 1; overflow-y: auto; padding: 0;
   scrollbar-width: thin;
-  scrollbar-color: var(--v-cyan) transparent;
+  scrollbar-color: rgba(0,243,255,0.15) transparent;
 }
-.ve-files::-webkit-scrollbar { width: 3px; }
-.ve-files::-webkit-scrollbar-thumb { background: var(--v-cyan); }
+.ve-files::-webkit-scrollbar { width: 4px; }
+.ve-files::-webkit-scrollbar-thumb { background: rgba(0,243,255,0.15); }
 
  
 .ve-file-list { display: flex; flex-direction: column; }
-.ve-file-list .ve-file-header {
+.ve-file-header {
   display: grid;
-  grid-template-columns: 30px 1fr 80px 100px 60px;
-  gap: 8px; align-items: center;
-  padding: 6px 14px;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.58rem; color: var(--v-text-dim);
-  letter-spacing: 1px;
+  grid-template-columns: 32px 1fr 80px 100px 60px 40px;
+  gap: 0; align-items: center;
+  padding: 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--v-text-dim);
+  letter-spacing: 0.5px;
   border-bottom: 1px solid var(--v-border);
-  background: rgba(0,243,255,0.03);
+  background: rgba(0,243,255,0.02);
   position: sticky; top: 0; z-index: 2;
+  user-select: none;
 }
+.ve-col-header {
+  padding: 7px 10px;
+  border-right: 1px solid var(--v-border);
+  cursor: default;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.ve-col-header:last-child { border-right: none; }
+.ve-col-header:hover {
+  background: rgba(0,243,255,0.04);
+  color: var(--v-text);
+}
+.ve-col-icon { text-align: center; padding: 7px 4px; border-right: 1px solid var(--v-border); }
+
+ 
 .ve-file-row {
   display: grid;
-  grid-template-columns: 30px 1fr 80px 100px 60px;
-  gap: 8px; align-items: center;
-  padding: 8px 14px;
-  font-size: 0.75rem;
-  border-bottom: 1px solid rgba(0,243,255,0.06);
-  cursor: pointer; transition: all 0.15s;
+  grid-template-columns: 32px 1fr 80px 100px 60px 40px;
+  gap: 0; align-items: center;
+  padding: 0;
+  font-size: 0.73rem;
+  border-bottom: 1px solid rgba(0,243,255,0.04);
+  cursor: pointer;
+  transition: background 0.1s;
 }
 .ve-file-row:hover {
-  background: rgba(0,243,255,0.06);
+  background: var(--v-hover);
 }
 .ve-file-row.selected {
-  background: rgba(0,243,255,0.1);
-  border-left: 2px solid var(--v-cyan);
+  background: var(--v-select);
 }
-.ve-file-icon { font-size: 1.1rem; text-align: center; }
-.ve-file-name {
-  color: var(--v-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+.ve-file-row.selected:hover {
+  background: var(--v-select-hi);
+}
+.ve-file-cell {
+  padding: 7px 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ve-file-icon-cell {
+  text-align: center;
+  font-size: 1rem;
+  padding: 7px 4px;
+}
+.ve-file-name-cell {
+  color: var(--v-text);
   display: flex; align-items: center; gap: 6px;
+  padding: 7px 10px;
+  overflow: hidden;
 }
-.ve-file-size { color: var(--v-text-dim); font-size: 0.7rem; text-align: right; }
-.ve-file-date { color: var(--v-text-dim); font-size: 0.68rem; }
-.ve-file-type {
+.ve-file-name-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ve-file-size-cell {
+  color: var(--v-text-dim);
+  font-size: 0.68rem;
+  text-align: right;
+  padding: 7px 10px;
+}
+.ve-file-date-cell {
+  color: var(--v-text-dim);
+  font-size: 0.66rem;
+  padding: 7px 10px;
+}
+.ve-file-type-cell {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.55rem; color: var(--v-cyan);
-  background: rgba(0,243,255,0.06);
-  border: 1px solid rgba(0,243,255,0.15);
-  padding: 1px 6px; text-align: center;
-  letter-spacing: 1px;
+  font-size: 0.5rem;
+  color: var(--v-cyan);
+  letter-spacing: 0.5px;
+  padding: 7px 10px;
+  text-align: center;
 }
 
  
 .ve-file-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px; padding: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px; padding: 12px;
 }
 .ve-file-card {
+  position: relative;
   display: flex; flex-direction: column; align-items: center;
-  padding: 16px 10px 12px;
-  border: 1px solid rgba(0,243,255,0.08);
-  background: rgba(5,5,15,0.4);
-  cursor: pointer; transition: all 0.2s;
-  text-align: center; gap: 6px;
+  padding: 14px 8px 10px;
+  border: 1px solid rgba(0,243,255,0.06);
+  background: rgba(8,8,20,0.4);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center; gap: 4px;
 }
 .ve-file-card:hover {
-  border-color: var(--v-cyan);
-  background: rgba(0,243,255,0.06);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  border-color: rgba(0,243,255,0.2);
+  background: var(--v-hover);
 }
 .ve-file-card.selected {
   border-color: var(--v-cyan);
-  background: rgba(0,243,255,0.1);
-  box-shadow: 0 0 15px rgba(0,243,255,0.1);
+  background: var(--v-select);
+  box-shadow: 0 0 12px rgba(0,243,255,0.08);
 }
-.ve-file-card .ve-file-icon { font-size: 2rem; margin-bottom: 4px; }
-.ve-file-card .ve-file-name {
-  font-size: 0.7rem; color: var(--v-text);
+.ve-file-card .ve-file-icon-cell { font-size: 2rem; padding: 4px; }
+.ve-file-card .ve-file-name-cell {
+  font-size: 0.68rem; color: var(--v-text);
   word-break: break-all; line-height: 1.3;
   max-height: 2.6em; overflow: hidden;
-  display: block;
+  display: block; padding: 2px 4px;
 }
-.ve-file-card .ve-file-type { margin-top: auto; }
+.ve-file-card .ve-file-type-cell {
+  margin-top: auto;
+  background: rgba(0,243,255,0.05);
+  border: 1px solid rgba(0,243,255,0.1);
+  padding: 2px 8px;
+}
+
+ 
+.ve-file-row-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 4px;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+  padding-right: 4px;
+}
+.ve-file-row:hover .ve-file-row-actions {
+  opacity: 1;
+}
+.ve-row-action-btn {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--v-text-dim);
+  padding: 2px 6px;
+  font-size: 0.72rem;
+  transition: all 0.15s;
+}
+.ve-row-action-btn:hover {
+  background: var(--v-hover);
+  border-color: var(--v-border);
+  color: var(--v-cyan);
+}
+.ve-row-action-btn.danger:hover {
+  background: rgba(255, 0, 85, 0.08);
+  border-color: rgba(255, 0, 85, 0.2);
+  color: #ff0055;
+}
+
+ 
+.ve-file-card-actions {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 5;
+}
+.ve-file-card:hover .ve-file-card-actions {
+  opacity: 1;
+}
+.ve-card-action-btn {
+  background: rgba(10, 10, 22, 0.85);
+  border: 1px solid var(--v-border);
+  color: var(--v-text-dim);
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  transition: all 0.15s;
+}
+.ve-card-action-btn:hover {
+  background: var(--v-hover);
+  border-color: var(--v-cyan);
+  color: var(--v-cyan);
+}
+.ve-card-action-btn.danger:hover {
+  background: rgba(255, 0, 85, 0.15);
+  border-color: #ff0055;
+  color: #ff0055;
+}
 
  
 .ve-empty {
@@ -1217,25 +1550,30 @@ button { font-family: inherit; cursor: pointer; }
   align-items: center; justify-content: center;
   height: 100%; color: var(--v-text-dim);
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.8rem; gap: 10px;
+  font-size: 0.8rem; gap: 8px;
 }
-.ve-empty-icon { font-size: 3rem; opacity: 0.3; }
+.ve-empty-icon { font-size: 2.5rem; opacity: 0.2; }
+.ve-empty-hint {
+  font-size: 0.65rem; opacity: 0.4;
+}
 
  
 .ve-statusbar {
   height: var(--v-statusbar-h);
-  background: rgba(5,5,15,0.7);
+  background: rgba(8,8,18,0.9);
   border-top: 1px solid var(--v-border);
   display: flex; align-items: center;
-  padding: 0 14px; gap: 16px;
+  padding: 0 12px;
+  gap: 12px;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.65rem; color: var(--v-text-dim);
+  font-size: 0.6rem;
+  color: var(--v-text-dim);
   flex-shrink: 0;
 }
-.ve-status-sep { width: 1px; height: 14px; background: var(--v-border); }
+.ve-status-sep { width: 1px; height: 12px; background: var(--v-border); }
 .ve-status-sync {
   margin-left: auto;
-  display: flex; align-items: center; gap: 4px;
+  display: flex; align-items: center; gap: 5px;
   color: var(--v-green);
 }
 .ve-status-sync.syncing { color: var(--v-amber); }
@@ -1243,7 +1581,8 @@ button { font-family: inherit; cursor: pointer; }
 .ve-status-sync.error { color: var(--v-pink); }
 .ve-sync-dot {
   width: 5px; height: 5px; border-radius: 50%;
-  background: currentColor; box-shadow: 0 0 5px currentColor;
+  background: currentColor;
+  box-shadow: 0 0 4px currentColor;
   animation: sr-pulse 2s infinite;
 }
 @keyframes sr-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
@@ -1251,9 +1590,9 @@ button { font-family: inherit; cursor: pointer; }
  
 .ve-context {
   position: fixed; z-index: 9000;
-  background: rgba(10,10,25,0.95);
+  background: rgba(12,12,28,0.97);
   border: 1px solid var(--v-border);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.7), 0 0 1px rgba(0,243,255,0.15);
   backdrop-filter: blur(12px);
   min-width: 180px;
   display: none; padding: 4px 0;
@@ -1261,17 +1600,18 @@ button { font-family: inherit; cursor: pointer; }
 .ve-context.visible { display: block; }
 .ve-context-item {
   display: flex; align-items: center; gap: 10px;
-  padding: 8px 14px; font-size: 0.75rem;
+  padding: 7px 14px; font-size: 0.72rem;
   color: var(--v-text); cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.12s;
+  font-family: 'Share Tech Mono', monospace;
 }
 .ve-context-item:hover {
-  background: rgba(0,243,255,0.1);
+  background: var(--v-select);
   color: var(--v-cyan);
 }
 .ve-context-item.danger:hover { background: rgba(255,0,85,0.1); color: var(--v-pink); }
 .ve-context-sep { height: 1px; background: var(--v-border); margin: 4px 0; }
-.ve-context-icon { width: 16px; text-align: center; font-size: 0.8rem; }
+.ve-context-icon { width: 18px; text-align: center; font-size: 0.8rem; }
 
  
 .ve-overlay {
@@ -1284,149 +1624,147 @@ button { font-family: inherit; cursor: pointer; }
 
 .ve-dialog {
   width: 90%; max-width: 460px;
-  background: rgba(8,8,20,0.95);
-  border: 1px solid var(--v-cyan);
-  box-shadow: 0 0 40px rgba(0,243,255,0.1);
+  background: rgba(12,12,28,0.97);
+  border: 1px solid var(--v-border-hi);
+  box-shadow: 0 0 40px rgba(0,0,0,0.5), 0 0 1px rgba(0,243,255,0.2);
   padding: 0; overflow: hidden;
 }
 .ve-dialog-header {
   display: flex; align-items: center; gap: 8px;
-  padding: 12px 16px;
-  background: rgba(0,243,255,0.06);
+  padding: 10px 16px;
+  background: rgba(0,243,255,0.04);
   border-bottom: 1px solid var(--v-border);
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.72rem; color: var(--v-cyan);
+  font-size: 0.68rem; color: var(--v-cyan);
   letter-spacing: 1px;
 }
-.ve-dialog-body { padding: 20px 16px; }
+.ve-dialog-body { padding: 16px; }
 .ve-dialog-footer {
   display: flex; justify-content: flex-end; gap: 8px;
-  padding: 12px 16px;
+  padding: 10px 16px;
   border-top: 1px solid var(--v-border);
 }
 
-.ve-input-group { margin-bottom: 14px; }
+.ve-input-group { margin-bottom: 12px; }
 .ve-input-label {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.6rem; color: var(--v-text-dim);
+  font-size: 0.55rem; color: var(--v-text-dim);
   letter-spacing: 1px; margin-bottom: 4px;
   display: block;
 }
 .ve-input {
   width: 100%;
-  background: rgba(0,243,255,0.04);
+  background: rgba(0,243,255,0.03);
   border: 1px solid var(--v-border);
   color: var(--v-text);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.78rem;
-  padding: 8px 10px; outline: none;
+  font-size: 0.75rem;
+  padding: 7px 10px; outline: none;
   transition: border-color 0.2s;
 }
 .ve-input:focus { border-color: var(--v-cyan); }
 .ve-select {
-  width: 100%; background: rgba(0,243,255,0.04);
+  width: 100%; background: rgba(0,243,255,0.03);
   border: 1px solid var(--v-border);
   color: var(--v-text);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.78rem; padding: 8px 10px;
+  font-size: 0.75rem; padding: 7px 10px;
   outline: none; cursor: pointer;
 }
-.ve-select option { background: #0a0a14; color: var(--v-text); }
+.ve-select option { background: #0d0d1a; color: var(--v-text); }
 .ve-textarea {
-  width: 100%; min-height: 60px; resize: vertical;
-  background: rgba(0,243,255,0.04);
+  width: 100%; min-height: 50px; resize: vertical;
+  background: rgba(0,243,255,0.03);
   border: 1px solid var(--v-border);
   color: var(--v-text);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem; padding: 8px 10px;
+  font-size: 0.72rem; padding: 7px 10px;
   outline: none;
 }
 .ve-textarea:focus { border-color: var(--v-cyan); }
 
 .ve-btn {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.65rem; letter-spacing: 1px;
-  padding: 8px 18px; border: 1px solid var(--v-border);
-  background: rgba(0,243,255,0.05);
-  color: var(--v-text); transition: all 0.2s;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  padding: 7px 16px;
+  border: 1px solid var(--v-border);
+  background: rgba(0,243,255,0.04);
+  color: var(--v-text); transition: all 0.15s;
 }
-.ve-btn:hover { background: rgba(0,243,255,0.15); border-color: var(--v-cyan); color: #fff; }
-.ve-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.ve-btn:hover { background: rgba(0,243,255,0.1); border-color: var(--v-border-hi); color: #fff; }
+.ve-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 .ve-btn.primary {
-  background: rgba(0,243,255,0.12);
-  border-color: var(--v-cyan); color: var(--v-cyan);
+  background: rgba(0,243,255,0.1);
+  border-color: rgba(0,243,255,0.3); color: var(--v-cyan);
 }
 .ve-btn.primary:hover {
-  background: rgba(0,243,255,0.25); color: #fff;
-  box-shadow: 0 0 12px rgba(0,243,255,0.2);
+  background: rgba(0,243,255,0.2); color: #fff;
+  box-shadow: 0 0 10px rgba(0,243,255,0.15);
 }
-.ve-btn.danger { border-color: var(--v-pink); color: var(--v-pink); }
-.ve-btn.danger:hover { background: rgba(255,0,85,0.15); }
+.ve-btn.danger { border-color: rgba(255,0,85,0.3); color: var(--v-pink); }
+.ve-btn.danger:hover { background: rgba(255,0,85,0.12); }
 
  
 .ve-upload-zone {
   border: 2px dashed var(--v-border);
   background: rgba(0,243,255,0.02);
-  padding: 24px 14px;
+  padding: 20px 14px;
   text-align: center; cursor: pointer;
-  transition: all 0.25s;
+  transition: all 0.2s;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.75rem; color: var(--v-text-dim);
-  min-height: 100px;
+  font-size: 0.72rem; color: var(--v-text-dim);
+  min-height: 90px;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
 }
 .ve-upload-zone:hover, .ve-upload-zone.dragover {
   border-color: var(--v-cyan);
-  background: rgba(0,243,255,0.06);
+  background: rgba(0,243,255,0.05);
   color: var(--v-cyan);
 }
-.ve-upload-zone .ve-upload-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
-.ve-upload-zone .ve-upload-hint { font-size: 0.65rem; opacity: 0.6; margin-top: 6px; }
+.ve-upload-zone .ve-upload-icon { font-size: 1.8rem; margin-bottom: 6px; display: block; }
+.ve-upload-zone .ve-upload-hint { font-size: 0.6rem; opacity: 0.5; margin-top: 4px; }
 
- 
 .ve-upload-selected {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px;
-  background: rgba(0,243,255,0.04);
-  border: 1px solid rgba(0,243,255,0.15);
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px;
+  background: rgba(0,243,255,0.03);
+  border: 1px solid rgba(0,243,255,0.1);
   margin-top: 8px;
 }
 .ve-upload-thumb {
-  width: 48px; height: 48px;
+  width: 44px; height: 44px;
   object-fit: cover;
   border: 1px solid var(--v-border);
   flex-shrink: 0;
 }
 .ve-upload-file-icon {
-  width: 48px; height: 48px;
+  width: 44px; height: 44px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.8rem;
-  flex-shrink: 0;
+  font-size: 1.6rem; flex-shrink: 0;
 }
 .ve-upload-file-info {
   flex: 1; min-width: 0;
   font-family: 'Share Tech Mono', monospace;
 }
 .ve-upload-file-name {
-  font-size: 0.72rem; color: var(--v-text);
+  font-size: 0.7rem; color: var(--v-text);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .ve-upload-file-size {
-  font-size: 0.62rem; color: var(--v-text-dim); margin-top: 2px;
+  font-size: 0.6rem; color: var(--v-text-dim); margin-top: 2px;
 }
 .ve-upload-remove {
   background: none; border: 1px solid var(--v-border);
   color: var(--v-text-dim); padding: 4px 8px;
   font-size: 0.7rem; cursor: pointer;
-  transition: all 0.2s; flex-shrink: 0;
+  transition: all 0.15s; flex-shrink: 0;
 }
 .ve-upload-remove:hover { color: var(--v-pink); border-color: var(--v-pink); }
 
- 
 .ve-upload-progress {
-  width: 100%; height: 4px;
-  background: rgba(0,243,255,0.1);
+  width: 100%; height: 3px;
+  background: rgba(0,243,255,0.08);
   margin-top: 8px; display: none;
   overflow: hidden;
 }
@@ -1438,102 +1776,127 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 .ve-type-tabs {
-  display: flex; gap: 0; margin-bottom: 14px;
+  display: flex; gap: 0; margin-bottom: 12px;
 }
 .ve-type-tab {
-  flex: 1; padding: 8px 12px;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.6rem; letter-spacing: 1px;
+  flex: 1; padding: 7px 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.64rem;
   text-align: center; cursor: pointer;
-  background: rgba(0,243,255,0.03);
+  background: rgba(0,243,255,0.02);
   border: 1px solid var(--v-border);
   color: var(--v-text-dim);
-  transition: all 0.2s;
+  transition: all 0.15s;
 }
 .ve-type-tab:first-child { border-right: none; }
 .ve-type-tab.active {
-  background: rgba(0,243,255,0.1);
-  border-color: var(--v-cyan);
+  background: rgba(0,243,255,0.08);
+  border-color: rgba(0,243,255,0.25);
   color: var(--v-cyan);
 }
-.ve-type-tab:hover:not(.active) { background: rgba(0,243,255,0.05); color: var(--v-text); }
+.ve-type-tab:hover:not(.active) { background: var(--v-hover); color: var(--v-text); }
 
  
 .ve-preview {
-  width: 280px;
-  background: rgba(5,5,15,0.5);
+  width: 260px;
+  background: var(--v-panel);
   border-left: 1px solid var(--v-border);
-  padding: 14px; overflow-y: auto;
-  display: none; flex-direction: column; gap: 12px;
+  padding: 12px; overflow-y: auto;
+  display: none; flex-direction: column; gap: 10px;
   flex-shrink: 0;
 }
 .ve-preview.visible { display: flex; }
 .ve-preview-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.6rem; color: var(--v-text-dim);
+  font-size: 0.52rem; color: var(--v-text-muted);
   letter-spacing: 2px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--v-border);
 }
-.ve-preview-icon { font-size: 3rem; text-align: center; margin: 10px 0; }
+.ve-preview-icon { font-size: 2.5rem; text-align: center; margin: 8px 0; }
 .ve-preview-name {
-  font-size: 0.82rem; color: var(--v-text);
+  font-size: 0.78rem; color: var(--v-text);
   word-break: break-all; text-align: center;
+  font-family: 'Share Tech Mono', monospace;
 }
 .ve-preview-meta {
-  display: flex; flex-direction: column; gap: 6px;
-  font-size: 0.7rem;
+  display: flex; flex-direction: column; gap: 4px;
+  font-size: 0.68rem;
 }
 .ve-preview-row {
   display: flex; justify-content: space-between;
-  padding: 4px 0;
-  border-bottom: 1px solid rgba(0,243,255,0.06);
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(0,243,255,0.04);
 }
-.ve-preview-key { color: var(--v-text-dim); }
-.ve-preview-val { color: var(--v-cyan); }
+.ve-preview-key { color: var(--v-text-dim); font-family: 'Share Tech Mono', monospace; }
+.ve-preview-val { color: var(--v-cyan); font-family: 'Share Tech Mono', monospace; }
 .ve-preview-memo {
-  font-size: 0.72rem; color: var(--v-text);
+  font-size: 0.7rem; color: var(--v-text);
   line-height: 1.6; padding: 8px;
-  background: rgba(0,243,255,0.03);
-  border: 1px solid rgba(0,243,255,0.08);
+  background: rgba(0,243,255,0.02);
+  border: 1px solid rgba(0,243,255,0.06);
   font-family: 'Zen Kaku Gothic New', sans-serif;
 }
-.ve-preview-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.ve-preview-actions { display: flex; gap: 4px; flex-wrap: wrap; }
 .ve-preview-img {
   max-width: 100%; border: 1px solid var(--v-border);
-  margin: 8px 0;
+  margin: 6px 0;
 }
 
  
-.ve-toolbar-btn {
-  background: none; border: 1px solid var(--v-border);
-  color: var(--v-text-dim); padding: 4px 10px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.7rem; transition: all 0.2s;
-  display: flex; align-items: center; gap: 4px;
-  white-space: nowrap;
+.ve-link-card {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  background: rgba(0,243,255,0.03);
+  border: 1px solid rgba(0,243,255,0.08);
+  cursor: pointer; transition: all 0.15s;
+  text-decoration: none; color: inherit;
+  width: 100%;
 }
-.ve-toolbar-btn:hover { color: var(--v-cyan); border-color: var(--v-cyan); background: rgba(0,243,255,0.06); }
-.ve-toolbar-sep { width: 1px; height: 24px; background: var(--v-border); flex-shrink: 0; }
+.ve-link-card:hover {
+  background: rgba(0,243,255,0.06);
+  border-color: var(--v-cyan);
+}
+.ve-link-favicon {
+  width: 18px; height: 18px;
+  border-radius: 2px; flex-shrink: 0;
+}
+.ve-link-info { flex: 1; min-width: 0; }
+.ve-link-domain {
+  font-size: 0.7rem; color: var(--v-cyan);
+  font-family: 'Share Tech Mono', monospace;
+}
+.ve-link-url {
+  font-size: 0.56rem; color: var(--v-text-dim);
+  overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; margin-top: 1px;
+}
+.ve-link-arrow {
+  color: var(--v-text-dim); font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+ 
+.ve-url-preview { margin-top: 8px; }
 
  
 .ve-toast-container {
-  position: fixed; top: 20px; right: 20px;
+  position: fixed; top: 16px; right: 16px;
   z-index: 10000;
-  display: flex; flex-direction: column; gap: 8px;
+  display: flex; flex-direction: column; gap: 6px;
   pointer-events: none;
 }
 .ve-toast {
-  padding: 10px 16px;
+  padding: 8px 14px;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   border: 1px solid var(--v-border);
-  background: rgba(8,8,20,0.95);
+  background: rgba(12,12,28,0.97);
   backdrop-filter: blur(12px);
   animation: toast-in 0.3s ease-out;
   display: flex; align-items: center; gap: 8px;
   pointer-events: auto;
-  max-width: 320px;
+  max-width: 300px;
 }
 .ve-toast.success { border-color: var(--v-green); color: var(--v-green); }
 .ve-toast.error { border-color: var(--v-pink); color: var(--v-pink); }
@@ -1544,72 +1907,36 @@ button { font-family: inherit; cursor: pointer; }
 }
 
  
-.ve-link-card {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 12px;
-  background: rgba(0,243,255,0.04);
-  border: 1px solid rgba(0,243,255,0.12);
-  cursor: pointer; transition: all 0.2s;
-  text-decoration: none; color: inherit;
-  width: 100%;
-}
-.ve-link-card:hover {
-  background: rgba(0,243,255,0.08);
-  border-color: var(--v-cyan);
-}
-.ve-link-favicon {
-  width: 20px; height: 20px;
-  border-radius: 2px; flex-shrink: 0;
-}
-.ve-link-info { flex: 1; min-width: 0; }
-.ve-link-domain {
-  font-size: 0.72rem; color: var(--v-cyan);
-  font-family: 'Share Tech Mono', monospace;
-}
-.ve-link-url {
-  font-size: 0.58rem; color: var(--v-text-dim);
-  overflow: hidden; text-overflow: ellipsis;
-  white-space: nowrap; margin-top: 2px;
-}
-.ve-link-arrow {
-  color: var(--v-text-dim); font-size: 0.8rem;
-  flex-shrink: 0;
-}
-
- 
-.ve-url-preview { margin-top: 8px; }
-
- 
 @media (max-width: 768px) {
-  #vault-explorer { width: 100vw; height: 100vh; max-width: none; max-height: none; top: 0; left: 0; transform: none; border: none; }
+  #vault-explorer { width: 100vw; height: 100vh; max-width: none; max-height: none; top: 0; left: 0; transform: none; border: none; border-radius: 0; }
   @keyframes vault-open { from { opacity: 0; } to { opacity: 1; } }
-  .ve-sidebar { width: 160px; }
+  .ve-sidebar { width: 180px; }
   .ve-preview { display: none !important; }
-  .ve-file-list .ve-file-header,
-  .ve-file-row { grid-template-columns: 30px 1fr 60px; }
-  .ve-file-date, .ve-file-type { display: none; }
-  .ve-search { width: 120px; }
-  .ve-file-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; padding: 10px; }
-  .ve-titlebar-text { font-size: 0.55rem; letter-spacing: 1px; }
+  .ve-file-header, .ve-file-row { grid-template-columns: 32px 1fr 60px 32px; }
+  .ve-file-date-cell, .ve-file-type-cell { display: none; }
+  .ve-search-box { width: 140px; }
+  .ve-file-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 6px; padding: 8px; }
+  .ve-titlebar-text { font-size: 0.6rem; }
   .code-box { max-width: 320px; padding: 2rem 1.2rem 1.5rem; }
   .code-key { padding: 10px 0; }
   .ve-dialog { max-width: 90vw; }
-  .ve-toast-container { top: 10px; right: 10px; left: 10px; }
+  .ve-toast-container { top: 8px; right: 8px; left: 8px; }
   .ve-toast { max-width: 100%; }
 }
 @media (max-width: 500px) {
-  .ve-sidebar { width: 48px; overflow: hidden; }
-  .ve-folder span:not(.ve-folder-icon) { display: none; }
-  .ve-folder { padding: 10px; justify-content: center; }
-  .ve-folder-count { display: none; }
-  .ve-sidebar-header { display: none; }
-  .ve-search { width: 80px; font-size: 0.65rem; }
+  .ve-sidebar { width: 44px; overflow: hidden; }
+  .ve-tree-label, .ve-tree-count, .ve-tree-header, .ve-tree-divider { display: none; }
+  .ve-tree-item { padding: 8px; justify-content: center; }
+  .ve-sidebar-footer { padding: 4px; }
+  .ve-new-folder-btn span { display: none; }
+  .ve-new-folder-btn { padding: 6px; }
+  .ve-search-box { width: 100px; }
+  .ve-nav-btn { width: 26px; height: 24px; font-size: 0.75rem; }
   .ve-toolbar-btn span { display: none; }
-  .ve-toolbar { gap: 4px; padding: 0 6px; }
-  .ve-path { font-size: 0.6rem; padding: 3px 6px; }
-  .ve-statusbar { padding: 0 8px; font-size: 0.58rem; gap: 8px; }
-  .ve-file-row { padding: 6px 8px; font-size: 0.7rem; }
-  .ve-file-header { padding: 4px 8px; }
+  .ve-toolbar { gap: 2px; padding: 0 4px; }
+  .ve-addressbar { font-size: 0.6rem; padding: 0 6px; }
+  .ve-statusbar { padding: 0 6px; font-size: 0.55rem; gap: 6px; }
+  .ve-file-row { font-size: 0.68rem; }
   .code-display { gap: 5px; }
   .code-digit { width: 30px; height: 38px; font-size: 1.2rem; }
   .code-keypad { max-width: 200px; gap: 6px; }
@@ -1619,16 +1946,15 @@ button { font-family: inherit; cursor: pointer; }
   .code-badge { font-size: 0.6rem; }
 }
 @media (max-width: 380px) {
-  .ve-toolbar { flex-wrap: wrap; height: auto; padding: 4px 6px; }
-  .ve-path { order: 1; flex: 1 0 100%; }
-  .ve-search { order: 2; flex: 1; width: auto; }
-  .ve-view-btns { order: 3; }
-  .ve-toolbar-sep { display: none; }
-  .ve-toolbar-btn { order: 4; }
-  .ve-file-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 6px; padding: 8px; }
-  .ve-file-card { padding: 10px 6px 8px; }
-  .ve-file-card .ve-file-icon { font-size: 1.5rem; }
-  .ve-file-card .ve-file-name { font-size: 0.62rem; }
+  .ve-navbar { flex-wrap: wrap; height: auto; padding: 4px; }
+  .ve-addressbar { order: 1; flex: 1 0 100%; }
+  .ve-search-box { order: 2; flex: 1; width: auto; }
+  .ve-nav-btn { order: 0; }
+  .ve-nav-sep { display: none; }
+  .ve-file-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 4px; padding: 6px; }
+  .ve-file-card { padding: 8px 4px 6px; }
+  .ve-file-card .ve-file-icon-cell { font-size: 1.5rem; }
+  .ve-file-card .ve-file-name-cell { font-size: 0.6rem; }
 }
 </style>
 
@@ -1671,35 +1997,50 @@ button { font-family: inherit; cursor: pointer; }
 
 
 <div id="vault-explorer">
-  <div class="ve-corner tl"></div><div class="ve-corner tr"></div>
-  <div class="ve-corner bl"></div><div class="ve-corner br"></div>
 
   
   <div class="ve-titlebar">
-    <div class="ve-dot red"></div>
-    <div class="ve-dot yellow"></div>
-    <div class="ve-dot green"></div>
+    <span class="ve-titlebar-icon">📦</span>
     <span class="ve-titlebar-text">DATA_VAULT v2.0 ─ CLOUD SYNCED</span>
-    <a href="/project-x/" class="ve-titlebar-close" title="Close">✕</a>
+    <div class="ve-win-controls">
+      <a href="/project-x/" class="ve-win-btn close" title="Close">✕</a>
+    </div>
+  </div>
+
+  
+  <div class="ve-navbar">
+    <button class="ve-nav-btn" id="ve-nav-back" title="Back" disabled>←</button>
+    <button class="ve-nav-btn" id="ve-nav-forward" title="Forward" disabled>→</button>
+    <button class="ve-nav-btn" id="ve-nav-up" title="Up to All Files">↑</button>
+    <div class="ve-nav-sep"></div>
+    <div class="ve-addressbar" id="ve-addressbar"></div>
+    <div class="ve-search-box">
+      <span class="ve-search-icon">🔍</span>
+      <input type="text" class="ve-search" id="ve-search" placeholder="Search...">
+    </div>
   </div>
 
   
   <div class="ve-toolbar">
-    <div class="ve-path" id="ve-path"></div>
-    <input type="text" class="ve-search" id="ve-search" placeholder="Search...">
-    <div class="ve-view-btns">
-      <button class="ve-view-btn active" id="ve-list-btn" title="List">☰</button>
-      <button class="ve-view-btn" id="ve-grid-btn" title="Grid">⊞</button>
-    </div>
-    <div class="ve-toolbar-sep"></div>
     <button class="ve-toolbar-btn" id="ve-add-btn">＋ <span>NEW</span></button>
+    <button class="ve-toolbar-btn danger" id="ve-delete-btn" disabled>✕ <span>DELETE</span></button>
+    <div class="ve-toolbar-sep"></div>
+    <div class="ve-view-btns">
+      <button class="ve-view-btn active" id="ve-list-btn" title="Details">☰</button>
+      <button class="ve-view-btn" id="ve-grid-btn" title="Icons">⊞</button>
+    </div>
   </div>
 
   
   <div class="ve-body">
     
     <div class="ve-sidebar" id="ve-sidebar">
-      <div class="ve-sidebar-header">DIRECTORIES</div>
+      <div class="ve-sidebar-scroll" id="ve-sidebar-scroll"></div>
+      <div class="ve-sidebar-footer">
+        <button class="ve-new-folder-btn" id="ve-new-folder-btn">
+          ＋ <span>NEW FOLDER</span>
+        </button>
+      </div>
     </div>
 
     
@@ -1707,7 +2048,7 @@ button { font-family: inherit; cursor: pointer; }
 
     
     <div class="ve-preview" id="ve-preview">
-      <div class="ve-preview-title">FILE DETAILS</div>
+      <div class="ve-preview-title">DETAILS</div>
       <div id="ve-preview-content"></div>
     </div>
   </div>
@@ -1737,13 +2078,8 @@ button { font-family: inherit; cursor: pointer; }
         <input type="text" class="ve-input" id="ve-inp-name" placeholder="file_name.pdf">
       </div>
       <div class="ve-input-group">
-        <label class="ve-input-label">CATEGORY</label>
-        <select class="ve-select" id="ve-inp-cat">
-          <option value="docs">📄 Documents</option>
-          <option value="img">🖼️ Images</option>
-          <option value="url">🔗 URLs / Links</option>
-          <option value="misc">📦 Misc</option>
-        </select>
+        <label class="ve-input-label">FOLDER</label>
+        <select class="ve-select" id="ve-inp-cat"></select>
       </div>
       <div class="ve-input-group">
         <label class="ve-input-label">SOURCE TYPE</label>
@@ -1756,10 +2092,10 @@ button { font-family: inherit; cursor: pointer; }
         <div class="ve-upload-zone" id="ve-upload-zone">
           <span class="ve-upload-icon">📂</span>
           <div>ファイルを選択 or ドラッグ&ドロップ</div>
-          <div class="ve-upload-hint">画像, PDF, etc. (最大10MB)</div>
+          <div class="ve-upload-hint">全ファイルタイプ対応 (最大100MB)</div>
         </div>
         <div id="ve-upload-selected-container"></div>
-        <input type="file" id="ve-file-input" accept="image/*,.pdf,.doc,.docx,.txt,.csv,.json,.zip" style="display:none;">
+        <input type="file" id="ve-file-input" style="display:none;">
         <div class="ve-upload-progress" id="ve-upload-progress">
           <div class="ve-upload-progress-bar" id="ve-upload-progress-bar"></div>
         </div>
@@ -1786,11 +2122,28 @@ button { font-family: inherit; cursor: pointer; }
   <div class="ve-dialog" style="max-width:360px;">
     <div class="ve-dialog-header">⚠ CONFIRM</div>
     <div class="ve-dialog-body" style="text-align:center;">
-      <div id="ve-confirm-msg" style="font-size:0.8rem;line-height:1.6;"></div>
+      <div id="ve-confirm-msg" style="font-size:0.78rem;line-height:1.6;"></div>
     </div>
     <div class="ve-dialog-footer">
       <button class="ve-btn" id="ve-confirm-no">CANCEL</button>
       <button class="ve-btn danger" id="ve-confirm-yes">DELETE</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="ve-overlay" id="ve-folder-overlay">
+  <div class="ve-dialog" style="max-width:360px;">
+    <div class="ve-dialog-header" id="ve-folder-dialog-title">📁 NEW FOLDER</div>
+    <div class="ve-dialog-body">
+      <div class="ve-input-group">
+        <label class="ve-input-label">FOLDER NAME</label>
+        <input type="text" class="ve-input" id="ve-folder-name-input" placeholder="New Folder" maxlength="50">
+      </div>
+    </div>
+    <div class="ve-dialog-footer">
+      <button class="ve-btn" id="ve-folder-cancel">CANCEL</button>
+      <button class="ve-btn primary" id="ve-folder-save">CREATE</button>
     </div>
   </div>
 </div>
@@ -1850,7 +2203,8 @@ button { font-family: inherit; cursor: pointer; }
   
   var vaultCode = '';
   var vaultHash = '';
-  var vaultData = { folders: ['docs','img','url','misc'], files: [] };
+  var vaultData = { files: [] };
+  var customFolders = []; 
   var currentFolder = 'all';
   var viewMode = 'list';
   var selectedFile = null;
@@ -1861,21 +2215,27 @@ button { font-family: inherit; cursor: pointer; }
   var pendingFileDataUrl = null;
   var dialogMode = 'file';
   var unsubscribeSnapshot = null;
+  var unsubscribeConfig = null;
   var confirmCallback = null;
   var isOnline = true;
   var isSaving = false;
+  var folderHistory = ['all'];
+  var folderHistoryIdx = 0;
+  var folderDialogMode = 'create'; 
+  var folderDialogTarget = null;
 
   var STORAGE_KEY = 'dt_vault_data';
-  var MAX_FILE_SIZE = 10 * 1024 * 1024; 
+  var FOLDER_STORAGE_KEY = 'dt_vault_folders';
+  var MAX_FILE_SIZE = 100 * 1024 * 1024; 
+  
 
   
-  var FOLDER_META = {
-    all:  { icon: '🗂️', label: 'ALL FILES' },
-    docs: { icon: '📄', label: 'Documents' },
-    img:  { icon: '🖼️', label: 'Images' },
-    url:  { icon: '🔗', label: 'URLs' },
-    misc: { icon: '📦', label: 'Misc' }
-  };
+  var DEFAULT_FOLDERS = [
+    { id: 'docs', icon: '📄', label: 'Documents' },
+    { id: 'img',  icon: '🖼️', label: 'Images' },
+    { id: 'url',  icon: '🔗', label: 'URLs' },
+    { id: 'misc', icon: '📦', label: 'Misc' }
+  ];
   var FILE_ICONS = { docs: '📄', img: '🖼️', url: '🔗', misc: '📦' };
 
   
@@ -1907,6 +2267,14 @@ button { font-family: inherit; cursor: pointer; }
   }
 
   
+  function updateDeleteButtonState() {
+    var btn = document.getElementById('ve-delete-btn');
+    if (btn) {
+      btn.disabled = !selectedFile;
+    }
+  }
+
+  
   function setSyncStatus(status) {
     var el = document.getElementById('ve-status-sync');
     var label = document.getElementById('ve-sync-label');
@@ -1930,6 +2298,7 @@ button { font-family: inherit; cursor: pointer; }
   function init() {
     setupCodeLock();
     setupConfirmModal();
+    setupFolderDialog();
   }
 
   function setupConfirmModal() {
@@ -1942,6 +2311,55 @@ button { font-family: inherit; cursor: pointer; }
       document.getElementById('ve-confirm-overlay').classList.remove('visible');
       confirmCallback = null;
     });
+  }
+
+  
+  function setupFolderDialog() {
+    document.getElementById('ve-folder-save').addEventListener('click', function() {
+      var nameInput = document.getElementById('ve-folder-name-input');
+      
+      var name = nameInput.value.trim();
+      if (!name) {
+        showToast('フォルダ名を入力してください', 'error');
+        return;
+      }
+      if (name.length > 50) {
+        showToast('フォルダ名は50文字以内にしてください', 'error');
+        return;
+      }
+      if (folderDialogMode === 'create') {
+        createFolder(name);
+      } else if (folderDialogMode === 'rename' && folderDialogTarget) {
+        renameFolder(folderDialogTarget, name);
+      }
+      closeFolderDialog();
+    });
+    document.getElementById('ve-folder-cancel').addEventListener('click', closeFolderDialog);
+  }
+
+  function showFolderDialog(mode, targetId, currentName) {
+    folderDialogMode = mode;
+    folderDialogTarget = targetId || null;
+    var title = document.getElementById('ve-folder-dialog-title');
+    var saveBtn = document.getElementById('ve-folder-save');
+    var nameInput = document.getElementById('ve-folder-name-input');
+
+    if (mode === 'create') {
+      title.textContent = '📁 NEW FOLDER';
+      saveBtn.textContent = 'CREATE';
+      nameInput.value = '';
+    } else {
+      title.textContent = '✎ RENAME FOLDER';
+      saveBtn.textContent = 'RENAME';
+      nameInput.value = currentName || '';
+    }
+    document.getElementById('ve-folder-overlay').classList.add('visible');
+    setTimeout(function() { nameInput.focus(); }, 100);
+  }
+
+  function closeFolderDialog() {
+    document.getElementById('ve-folder-overlay').classList.remove('visible');
+    folderDialogTarget = null;
   }
 
   
@@ -2051,13 +2469,35 @@ button { font-family: inherit; cursor: pointer; }
       vaultHash = hash;
       return migrateLocalData();
     }).then(function() {
+      subscribeToConfig();
       subscribeToFiles();
     }).catch(function(err) {
-      console.error('Firebase init failed');
+      console.error('Firebase init failed:', err);
       setSyncStatus('offline');
-      
       loadLocalData();
+      loadLocalFolders();
     });
+  }
+
+  function subscribeToConfig() {
+    if (unsubscribeConfig) unsubscribeConfig();
+
+    unsubscribeConfig = db.collection('vaults').doc(vaultHash).collection('meta').doc('config')
+      .onSnapshot(function(doc) {
+        if (doc.exists) {
+          var data = doc.data();
+          customFolders = data.customFolders || [];
+        } else {
+          customFolders = [];
+        }
+        try {
+          localStorage.setItem(FOLDER_STORAGE_KEY, JSON.stringify(customFolders));
+        } catch(e) {   }
+        renderSidebar();
+        populateFolderSelect();
+      }, function(err) {
+        console.error('Config sync error');
+      });
   }
 
   function subscribeToFiles() {
@@ -2072,7 +2512,6 @@ button { font-family: inherit; cursor: pointer; }
           data.id = doc.id;
           vaultData.files.push(data);
         });
-        
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(vaultData));
         } catch(e) {   }
@@ -2095,14 +2534,11 @@ button { font-family: inherit; cursor: pointer; }
       var localData = JSON.parse(stored);
       if (!localData.files || localData.files.length === 0) return Promise.resolve();
 
-      
       var filesToMigrate = localData.files.filter(function(f) { return f.fileData; });
       if (filesToMigrate.length === 0) {
-        
         return db.collection('vaults').doc(vaultHash).collection('files').limit(1).get()
           .then(function(snapshot) {
-            if (!snapshot.empty) return; 
-            
+            if (!snapshot.empty) return;
             var batch = db.batch();
             localData.files.forEach(function(file) {
               var docRef = db.collection('vaults').doc(vaultHash).collection('files').doc(file.id);
@@ -2123,10 +2559,9 @@ button { font-family: inherit; cursor: pointer; }
           });
       }
 
-      
       return db.collection('vaults').doc(vaultHash).collection('files').limit(1).get()
         .then(function(snapshot) {
-          if (!snapshot.empty) return; 
+          if (!snapshot.empty) return;
 
           showToast('データ移行中...', 'info');
           var promises = localData.files.map(function(file) {
@@ -2143,8 +2578,9 @@ button { font-family: inherit; cursor: pointer; }
                 for (var i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
                 var blob = new Blob([arr], { type: mime });
 
-                var ref = storageRef.ref('vaults/' + vaultHash + '/files/' + fileId + '/' + file.name);
-                uploadPromise = ref.put(blob).then(function() {
+                var ref = storageRef.ref('vaults/' + vaultHash + '/files/' + fileId + '/' + genId() + '_' + (file.name || 'file').replace(/[^a-zA-Z0-9._-]/g, '_'));
+                var uploadMeta = { contentType: mime };
+                uploadPromise = ref.put(blob, uploadMeta).then(function() {
                   return ref.getDownloadURL();
                 }).catch(function() { return ''; });
               } catch(e) {
@@ -2179,8 +2615,143 @@ button { font-family: inherit; cursor: pointer; }
       var stored = localStorage.getItem(STORAGE_KEY);
       if (stored) vaultData = JSON.parse(stored);
     } catch(e) {   }
-    if (!vaultData.folders) vaultData.folders = ['docs','img','url','misc'];
     if (!vaultData.files) vaultData.files = [];
+  }
+
+  function loadLocalFolders() {
+    try {
+      var stored = localStorage.getItem(FOLDER_STORAGE_KEY);
+      if (stored) customFolders = JSON.parse(stored);
+    } catch(e) {   }
+    renderSidebar();
+    populateFolderSelect();
+  }
+
+  
+  function createFolder(name) {
+    var id = 'f_' + genId();
+    var newFolder = { id: id, name: name };
+    customFolders.push(newFolder);
+    saveFoldersToFirestore().then(function() {
+      showToast('フォルダを作成しました: ' + name, 'success');
+      navigateToFolder(id);
+    }).catch(function() {
+      customFolders.pop();
+      showToast('フォルダの作成に失敗しました', 'error');
+    });
+  }
+
+  function renameFolder(id, newName) {
+    var folder = customFolders.find(function(f) { return f.id === id; });
+    if (!folder) return;
+    var oldName = folder.name;
+    folder.name = newName;
+    saveFoldersToFirestore().then(function() {
+      showToast('フォルダ名を変更しました', 'success');
+    }).catch(function() {
+      folder.name = oldName;
+      showToast('名前変更に失敗しました', 'error');
+    });
+  }
+
+  function deleteFolder(id) {
+    showConfirm('このフォルダを削除しますか？中のファイルはMiscに移動されます。', function() {
+      var idx = customFolders.findIndex(function(f) { return f.id === id; });
+      if (idx < 0) return;
+      var removed = customFolders.splice(idx, 1);
+
+      
+      var filesToMove = vaultData.files.filter(function(f) { return f.category === id; });
+      var promises = filesToMove.map(function(f) {
+        return db.collection('vaults').doc(vaultHash).collection('files').doc(f.id)
+          .update({ category: 'misc' });
+      });
+      promises.push(saveFoldersToFirestore());
+
+      Promise.all(promises).then(function() {
+        if (currentFolder === id) navigateToFolder('all');
+        showToast('フォルダを削除しました', 'success');
+      }).catch(function() {
+        customFolders.splice(idx, 0, removed[0]);
+        showToast('フォルダの削除に失敗しました', 'error');
+      });
+    });
+  }
+
+  function saveFoldersToFirestore() {
+    return db.collection('vaults').doc(vaultHash).collection('meta').doc('config')
+      .set({ customFolders: customFolders }, { merge: true });
+  }
+
+  function getAllFolders() {
+    var all = DEFAULT_FOLDERS.map(function(f) { return { id: f.id, icon: f.icon, label: f.label, isDefault: true }; });
+    customFolders.forEach(function(f) {
+      all.push({ id: f.id, icon: '📁', label: f.name, isDefault: false });
+    });
+    return all;
+  }
+
+  function getFolderLabel(id) {
+    if (id === 'all') return 'ALL FILES';
+    var df = DEFAULT_FOLDERS.find(function(f) { return f.id === id; });
+    if (df) return df.label;
+    var cf = customFolders.find(function(f) { return f.id === id; });
+    if (cf) return cf.name;
+    return id;
+  }
+
+  function getFolderIcon(id) {
+    if (id === 'all') return '🗂️';
+    var df = DEFAULT_FOLDERS.find(function(f) { return f.id === id; });
+    if (df) return df.icon;
+    return '📁';
+  }
+
+  
+  function navigateToFolder(id) {
+    if (currentFolder === id) return;
+    
+    folderHistory = folderHistory.slice(0, folderHistoryIdx + 1);
+    folderHistory.push(id);
+    folderHistoryIdx = folderHistory.length - 1;
+    currentFolder = id;
+    selectedFile = null;
+    hidePreview();
+    renderSidebar();
+    renderFiles();
+    updateNavButtons();
+  }
+
+  function navBack() {
+    if (folderHistoryIdx <= 0) return;
+    folderHistoryIdx--;
+    currentFolder = folderHistory[folderHistoryIdx];
+    selectedFile = null;
+    hidePreview();
+    renderSidebar();
+    renderFiles();
+    updateNavButtons();
+  }
+
+  function navForward() {
+    if (folderHistoryIdx >= folderHistory.length - 1) return;
+    folderHistoryIdx++;
+    currentFolder = folderHistory[folderHistoryIdx];
+    selectedFile = null;
+    hidePreview();
+    renderSidebar();
+    renderFiles();
+    updateNavButtons();
+  }
+
+  function navUp() {
+    if (currentFolder !== 'all') navigateToFolder('all');
+  }
+
+  function updateNavButtons() {
+    document.getElementById('ve-nav-back').disabled = folderHistoryIdx <= 0;
+    document.getElementById('ve-nav-forward').disabled = folderHistoryIdx >= folderHistory.length - 1;
+    document.getElementById('ve-nav-up').disabled = currentFolder === 'all';
   }
 
   
@@ -2188,45 +2759,136 @@ button { font-family: inherit; cursor: pointer; }
     var explorer = document.getElementById('vault-explorer');
     explorer.classList.add('visible');
 
-    
     loadLocalData();
+    loadLocalFolders();
     renderSidebar();
     renderFiles();
+    populateFolderSelect();
     setupExplorerEvents();
+    updateNavButtons();
 
-    
     initFirebase();
   }
 
   
   function renderSidebar() {
-    var sidebar = document.getElementById('ve-sidebar');
-    sidebar.replaceChildren();
-    var header = cel('div', 've-sidebar-header', 'DIRECTORIES');
-    sidebar.appendChild(header);
+    var scroll = document.getElementById('ve-sidebar-scroll');
+    scroll.replaceChildren();
 
+    
+    var header1 = cel('div', 've-tree-header', 'QUICK ACCESS');
+    scroll.appendChild(header1);
+
+    
     var allCount = vaultData.files.length;
-    sidebar.appendChild(createFolderEl('all', FOLDER_META.all.icon, FOLDER_META.all.label, allCount));
-    vaultData.folders.forEach(function(f) {
-      var meta = FOLDER_META[f] || { icon: '📁', label: f.toUpperCase() };
-      var count = vaultData.files.filter(function(file) { return file.category === f; }).length;
-      sidebar.appendChild(createFolderEl(f, meta.icon, meta.label, count));
+    scroll.appendChild(createTreeItem('all', '🗂️', 'ALL FILES', allCount, true));
+
+    scroll.appendChild(cel('div', 've-tree-divider'));
+
+    
+    var header2 = cel('div', 've-tree-header', 'SYSTEM');
+    scroll.appendChild(header2);
+
+    DEFAULT_FOLDERS.forEach(function(f) {
+      var count = vaultData.files.filter(function(file) { return file.category === f.id; }).length;
+      scroll.appendChild(createTreeItem(f.id, f.icon, f.label, count, true));
     });
+
+    
+    if (customFolders.length > 0) {
+      scroll.appendChild(cel('div', 've-tree-divider'));
+      var header3 = cel('div', 've-tree-header', 'CUSTOM');
+      scroll.appendChild(header3);
+
+      customFolders.forEach(function(f) {
+        var count = vaultData.files.filter(function(file) { return file.category === f.id; }).length;
+        scroll.appendChild(createTreeItem(f.id, '📁', f.name, count, false));
+      });
+    }
   }
 
-  function createFolderEl(id, icon, label, count) {
-    var el = cel('div', 've-folder' + (currentFolder === id ? ' active' : ''));
-    var iconSpan = cel('span', 've-folder-icon', icon);
-    var labelSpan = cel('span', null, label);
-    var countSpan = cel('span', 've-folder-count', String(count));
-    el.appendChild(iconSpan);
-    el.appendChild(labelSpan);
-    el.appendChild(countSpan);
+  function createTreeItem(id, icon, label, count, isDefault) {
+    var el = cel('div', 've-tree-item' + (currentFolder === id ? ' active' : ''));
+
+    var iconEl = cel('span', 've-tree-icon', icon);
+    var labelEl = cel('span', 've-tree-label', label);
+    var countEl = cel('span', 've-tree-count', String(count));
+
+    el.appendChild(iconEl);
+    el.appendChild(labelEl);
+    el.appendChild(countEl);
+
     el.addEventListener('click', function() {
-      currentFolder = id; selectedFile = null;
-      renderSidebar(); renderFiles(); hidePreview();
+      navigateToFolder(id);
     });
+
+    
+    if (!isDefault && id !== 'all') {
+      el.addEventListener('contextmenu', function(e) {
+        showFolderContextMenu(e, id, label);
+      });
+    }
+
     return el;
+  }
+
+  
+  function showFolderContextMenu(e, folderId, folderName) {
+    e.preventDefault();
+    e.stopPropagation();
+    var menu = document.getElementById('ve-context');
+    menu.replaceChildren();
+
+    var items = [
+      { icon: '✎', label: 'Rename', action: 'rename' },
+      { type: 'sep' },
+      { icon: '✕', label: 'Delete', action: 'delete', danger: true }
+    ];
+
+    items.forEach(function(item) {
+      if (item.type === 'sep') {
+        menu.appendChild(cel('div', 've-context-sep'));
+        return;
+      }
+      var el = cel('div', 've-context-item' + (item.danger ? ' danger' : ''));
+      el.appendChild(cel('span', 've-context-icon', item.icon));
+      el.appendChild(document.createTextNode(item.label));
+      el.addEventListener('click', function() {
+        if (item.action === 'rename') showFolderDialog('rename', folderId, folderName);
+        else if (item.action === 'delete') deleteFolder(folderId);
+        hideContext();
+      });
+      menu.appendChild(el);
+    });
+
+    menu.style.left = Math.min(e.clientX, window.innerWidth - 200) + 'px';
+    menu.style.top = Math.min(e.clientY, window.innerHeight - 120) + 'px';
+    menu.classList.add('visible');
+  }
+
+  
+  function populateFolderSelect() {
+    var select = document.getElementById('ve-inp-cat');
+    if (!select) return;
+    select.replaceChildren();
+
+    DEFAULT_FOLDERS.forEach(function(f) {
+      var opt = cel('option', null, f.icon + ' ' + f.label);
+      opt.value = f.id;
+      select.appendChild(opt);
+    });
+
+    if (customFolders.length > 0) {
+      var sep = cel('option', null, '── Custom Folders ──');
+      sep.disabled = true;
+      select.appendChild(sep);
+
+      customFolders.forEach(function(f) {
+        var opt = cel('option', null, '📁 ' + f.name);
+        opt.value = f.id;
+        select.appendChild(opt);
+      });
+    }
   }
 
   
@@ -2240,23 +2902,25 @@ button { font-family: inherit; cursor: pointer; }
   }
 
   function renderFiles() {
+    updateDeleteButtonState();
     var container = document.getElementById('ve-files');
     var files = getFilteredFiles();
 
     
-    var pathEl = document.getElementById('ve-path');
-    pathEl.replaceChildren();
-    var vaultPart = cel('span', 've-path-part', 'VAULT:');
-    vaultPart.addEventListener('click', function() {
-      currentFolder = 'all'; selectedFile = null;
-      renderSidebar(); renderFiles(); hidePreview();
-    });
-    var sep = cel('span', 've-path-sep', '/');
-    var folderLabel = (FOLDER_META[currentFolder] || {}).label || currentFolder;
-    var folderPart = cel('span', 've-path-part', folderLabel);
-    pathEl.appendChild(vaultPart);
-    pathEl.appendChild(sep);
-    pathEl.appendChild(folderPart);
+    var addressbar = document.getElementById('ve-addressbar');
+    addressbar.replaceChildren();
+    var pathIcon = cel('span', 've-path-icon', '📦');
+    addressbar.appendChild(pathIcon);
+    var vaultPart = cel('span', 've-path-part', 'VAULT');
+    vaultPart.addEventListener('click', function() { navigateToFolder('all'); });
+    addressbar.appendChild(vaultPart);
+    if (currentFolder !== 'all') {
+      var sep = cel('span', 've-path-sep', '›');
+      addressbar.appendChild(sep);
+      var folderLabel = getFolderLabel(currentFolder);
+      var folderPart = cel('span', 've-path-part', folderLabel);
+      addressbar.appendChild(folderPart);
+    }
 
     
     document.getElementById('ve-status-count').textContent = files.length + ' item' + (files.length !== 1 ? 's' : '');
@@ -2268,8 +2932,7 @@ button { font-family: inherit; cursor: pointer; }
       var empty = cel('div', 've-empty');
       empty.appendChild(cel('div', 've-empty-icon', '📂'));
       empty.appendChild(cel('div', null, 'NO FILES IN THIS DIRECTORY'));
-      var hint = cel('div', null, 'Click + NEW to add items');
-      hint.style.cssText = 'font-size:0.7rem;opacity:0.5;';
+      var hint = cel('div', 've-empty-hint', 'Click ＋ NEW to add items');
       empty.appendChild(hint);
       container.appendChild(empty);
       return;
@@ -2284,24 +2947,30 @@ button { font-family: inherit; cursor: pointer; }
 
     
     var header = cel('div', 've-file-header');
-    header.appendChild(cel('span'));
-    header.appendChild(cel('span', null, 'NAME'));
-    var sizeHead = cel('span', null, 'SIZE');
-    sizeHead.style.textAlign = 'right';
-    header.appendChild(sizeHead);
-    header.appendChild(cel('span', null, 'DATE'));
-    header.appendChild(cel('span', null, 'TYPE'));
+    var colIcon = cel('div', 've-col-icon');
+    header.appendChild(colIcon);
+    var colName = cel('div', 've-col-header', 'Name');
+    header.appendChild(colName);
+    var colSize = cel('div', 've-col-header', 'Size');
+    colSize.style.textAlign = 'right';
+    header.appendChild(colSize);
+    var colDate = cel('div', 've-col-header', 'Date');
+    header.appendChild(colDate);
+    var colType = cel('div', 've-col-header', 'Type');
+    header.appendChild(colType);
+    var colActions = cel('div', 've-col-header', '');
+    header.appendChild(colActions);
     list.appendChild(header);
 
     files.forEach(function(f) {
       var row = cel('div', 've-file-row' + (selectedFile === f.id ? ' selected' : ''));
       row.dataset.id = f.id;
 
-      var icon = FILE_ICONS[f.category] || '📄';
-      row.appendChild(cel('span', 've-file-icon', icon));
+      var icon = getFileIcon(f);
+      var iconCell = cel('span', 've-file-icon-cell', icon);
+      row.appendChild(iconCell);
 
-      
-      var nameCell = cel('span', 've-file-name');
+      var nameCell = cel('span', 've-file-name-cell');
       if (f.category === 'url' && f.url) {
         var favicon = document.createElement('img');
         favicon.className = 've-link-favicon';
@@ -2310,14 +2979,32 @@ button { font-family: inherit; cursor: pointer; }
         favicon.style.cssText = 'width:14px;height:14px;flex-shrink:0;';
         nameCell.appendChild(favicon);
       }
-      var nameText = document.createTextNode(f.name);
+      var nameText = cel('span', 've-file-name-text', f.name);
       nameCell.appendChild(nameText);
       row.appendChild(nameCell);
 
-      row.appendChild(cel('span', 've-file-size', f.size || '-'));
+      var sizeCell = cel('span', 've-file-size-cell', f.size || '-');
+      row.appendChild(sizeCell);
+
       var date = f.date ? new Date(f.date).toLocaleDateString('ja-JP', { year:'2-digit', month:'2-digit', day:'2-digit' }) : '-';
-      row.appendChild(cel('span', 've-file-date', date));
-      row.appendChild(cel('span', 've-file-type', (f.category || '').toUpperCase()));
+      var dateCell = cel('span', 've-file-date-cell', date);
+      row.appendChild(dateCell);
+
+      var typeLabel = getFolderLabel(f.category);
+      if (typeLabel.length > 8) typeLabel = typeLabel.substring(0, 8);
+      var typeCell = cel('span', 've-file-type-cell', typeLabel.toUpperCase());
+      row.appendChild(typeCell);
+
+      
+      var actionsCell = cel('div', 've-file-row-actions');
+      var rowDelBtn = cel('button', 've-row-action-btn danger', '🗑️');
+      rowDelBtn.title = 'Delete';
+      rowDelBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        deleteFile(f.id);
+      });
+      actionsCell.appendChild(rowDelBtn);
+      row.appendChild(actionsCell);
 
       row.addEventListener('click', function() { selectFile(f.id); });
       row.addEventListener('dblclick', function() { openFile(f); });
@@ -2335,25 +3022,38 @@ button { font-family: inherit; cursor: pointer; }
       var card = cel('div', 've-file-card' + (selectedFile === f.id ? ' selected' : ''));
       card.dataset.id = f.id;
 
-      var icon = FILE_ICONS[f.category] || '📄';
+      var icon = getFileIcon(f);
 
-      
       if (f.category === 'url' && f.url) {
-        var linkIcon = cel('span', 've-file-icon');
+        var linkIcon = cel('span', 've-file-icon-cell');
         var favicon = document.createElement('img');
         favicon.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(extractDomain(f.url)) + '&sz=64';
         favicon.alt = '';
-        favicon.style.cssText = 'width:32px;height:32px;margin-bottom:4px;';
+        favicon.style.cssText = 'width:32px;height:32px;';
         linkIcon.replaceChildren();
         linkIcon.appendChild(favicon);
         card.appendChild(linkIcon);
       } else {
-        card.appendChild(cel('span', 've-file-icon', icon));
+        card.appendChild(cel('span', 've-file-icon-cell', icon));
       }
 
-      var nameSpan = cel('span', 've-file-name', f.name);
+      var nameSpan = cel('span', 've-file-name-cell', f.name);
       card.appendChild(nameSpan);
-      card.appendChild(cel('span', 've-file-type', (f.category || '').toUpperCase()));
+
+      var typeLabel = getFolderLabel(f.category);
+      if (typeLabel.length > 8) typeLabel = typeLabel.substring(0, 8);
+      card.appendChild(cel('span', 've-file-type-cell', typeLabel.toUpperCase()));
+
+      
+      var actionsDiv = cel('div', 've-file-card-actions');
+      var cardDelBtn = cel('button', 've-card-action-btn danger', '🗑️');
+      cardDelBtn.title = 'Delete';
+      cardDelBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        deleteFile(f.id);
+      });
+      actionsDiv.appendChild(cardDelBtn);
+      card.appendChild(actionsDiv);
 
       card.addEventListener('click', function() { selectFile(f.id); });
       card.addEventListener('dblclick', function() { openFile(f); });
@@ -2361,6 +3061,11 @@ button { font-family: inherit; cursor: pointer; }
       grid.appendChild(card);
     });
     container.appendChild(grid);
+  }
+
+  function getFileIcon(f) {
+    if (FILE_ICONS[f.category]) return FILE_ICONS[f.category];
+    return '📄';
   }
 
   
@@ -2377,9 +3082,8 @@ button { font-family: inherit; cursor: pointer; }
     var content = document.getElementById('ve-preview-content');
     content.replaceChildren();
 
-    var icon = FILE_ICONS[f.category] || '📄';
+    var icon = getFileIcon(f);
 
-    
     if (f.category === 'img' && f.storageUrl) {
       var img = document.createElement('img');
       img.src = f.storageUrl;
@@ -2392,10 +3096,10 @@ button { font-family: inherit; cursor: pointer; }
 
     content.appendChild(cel('div', 've-preview-name', f.name));
 
-    
     var meta = cel('div', 've-preview-meta');
+    var folderLabel = getFolderLabel(f.category);
     var rows = [
-      ['Category', (f.category || '').toUpperCase()],
+      ['Folder', folderLabel],
       ['Size', f.size || '-'],
       ['Added', f.date ? new Date(f.date).toLocaleDateString('ja-JP') : '-'],
       ['Source', f.storageUrl ? '☁️ Cloud' : (f.url ? 'URL' : '-')]
@@ -2404,30 +3108,27 @@ button { font-family: inherit; cursor: pointer; }
       var row = cel('div', 've-preview-row');
       row.appendChild(cel('span', 've-preview-key', r[0]));
       var val = cel('span', 've-preview-val', r[1]);
-      if (r[0] === 'Source') val.style.cssText = 'word-break:break-all;font-size:0.6rem;';
+      if (r[0] === 'Source') val.style.cssText = 'word-break:break-all;font-size:0.58rem;';
       row.appendChild(val);
       meta.appendChild(row);
     });
     content.appendChild(meta);
 
-    
     if (f.category === 'url' && f.url) {
       content.appendChild(createLinkCard(f.url));
     }
 
-    
     if (f.memo) {
       var memo = cel('div', 've-preview-memo', f.memo);
       content.appendChild(memo);
     }
 
-    
     var actions = cel('div', 've-preview-actions');
     var openBtn = cel('button', 've-btn primary', 'OPEN');
     openBtn.addEventListener('click', function() { openFile(f.id); });
     var editBtn = cel('button', 've-btn', 'EDIT');
     editBtn.addEventListener('click', function() { editFile(f.id); });
-    var delBtn = cel('button', 've-btn danger', 'DELETE');
+    var delBtn = cel('button', 've-btn danger', 'DEL');
     delBtn.addEventListener('click', function() { deleteFile(f.id); });
     actions.appendChild(openBtn);
     actions.appendChild(editBtn);
@@ -2445,7 +3146,6 @@ button { font-family: inherit; cursor: pointer; }
   function openFile(f) {
     if (typeof f === 'string') f = vaultData.files.find(function(x) { return x.id === f; });
     if (!f) return;
-    
     if (f.storageUrl) {
       window.open(f.storageUrl, '_blank');
       return;
@@ -2552,9 +3252,15 @@ button { font-family: inherit; cursor: pointer; }
     editingId = null;
     pendingFile = null;
     pendingFileDataUrl = null;
-    document.getElementById('ve-dialog-title').textContent = 'NEW ITEM';
+    document.getElementById('ve-dialog-title').textContent = '＋ NEW ITEM';
     document.getElementById('ve-inp-name').value = '';
-    document.getElementById('ve-inp-cat').value = currentFolder !== 'all' ? currentFolder : 'docs';
+    populateFolderSelect();
+    var catSelect = document.getElementById('ve-inp-cat');
+    if (currentFolder !== 'all') {
+      catSelect.value = currentFolder;
+    } else {
+      catSelect.value = 'docs';
+    }
     document.getElementById('ve-inp-url').value = '';
     document.getElementById('ve-inp-memo').value = '';
     document.getElementById('ve-url-preview').replaceChildren();
@@ -2573,8 +3279,9 @@ button { font-family: inherit; cursor: pointer; }
     editingId = id;
     pendingFile = null;
     pendingFileDataUrl = null;
-    document.getElementById('ve-dialog-title').textContent = 'EDIT ITEM';
+    document.getElementById('ve-dialog-title').textContent = '✎ EDIT ITEM';
     document.getElementById('ve-inp-name').value = f.name;
+    populateFolderSelect();
     document.getElementById('ve-inp-cat').value = f.category;
     document.getElementById('ve-inp-url').value = f.url || '';
     document.getElementById('ve-inp-memo').value = f.memo || '';
@@ -2582,11 +3289,10 @@ button { font-family: inherit; cursor: pointer; }
 
     if (f.storageUrl) {
       setDialogMode('file');
-      
       var selContainer = document.getElementById('ve-upload-selected-container');
       selContainer.replaceChildren();
       var sel = cel('div', 've-upload-selected');
-      sel.appendChild(cel('div', 've-upload-file-icon', FILE_ICONS[f.category] || '📄'));
+      sel.appendChild(cel('div', 've-upload-file-icon', getFileIcon(f)));
       var info = cel('div', 've-upload-file-info');
       info.appendChild(cel('div', 've-upload-file-name', f.name));
       info.appendChild(cel('div', 've-upload-file-size', '☁️ Cloud: ' + (f.size || '-')));
@@ -2618,14 +3324,12 @@ button { font-family: inherit; cursor: pointer; }
     if (!nameInput.value.trim()) nameInput.value = file.name;
     document.getElementById('ve-inp-cat').value = detectCategory(file);
 
-    
     document.getElementById('ve-upload-zone').style.display = 'none';
     var selContainer = document.getElementById('ve-upload-selected-container');
     selContainer.replaceChildren();
 
     var sel = cel('div', 've-upload-selected');
 
-    
     if (file.type.startsWith('image/')) {
       var reader = new FileReader();
       reader.onload = function(ev) {
@@ -2667,6 +3371,12 @@ button { font-family: inherit; cursor: pointer; }
     if (isSaving) return;
 
     
+    if (!vaultHash) {
+      showToast('クラウド接続を待っています...しばらくお待ちください', 'error');
+      return;
+    }
+
+    
     if (dialogMode === 'url') {
       var urlVal = document.getElementById('ve-inp-url').value.trim();
       if (urlVal) {
@@ -2694,10 +3404,11 @@ button { font-family: inherit; cursor: pointer; }
     var uploadPromise;
 
     if (dialogMode === 'file' && pendingFile) {
-      
       showUploadProgress(0);
-      var ref = storageRef.ref('vaults/' + vaultHash + '/files/' + fileId + '/' + pendingFile.name);
-      var uploadTask = ref.put(pendingFile);
+      var storagePath = 'vaults/' + vaultHash + '/files/' + fileId + '/' + genId() + '_' + pendingFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      var ref = storageRef.ref(storagePath);
+      var metadata = { contentType: pendingFile.type || 'application/octet-stream' };
+      var uploadTask = ref.put(pendingFile, metadata);
 
       uploadPromise = new Promise(function(resolve, reject) {
         uploadTask.on('state_changed',
@@ -2705,11 +3416,17 @@ button { font-family: inherit; cursor: pointer; }
             var pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             showUploadProgress(pct);
           },
-          function(err) { reject(err); },
+          function(err) {
+            console.error('Upload error:', err.code, err.message);
+            reject(err);
+          },
           function() {
             ref.getDownloadURL().then(function(url) {
               resolve({ storageUrl: url, size: formatSize(pendingFile.size) });
-            }).catch(reject);
+            }).catch(function(dlErr) {
+              console.error('Download URL error:', dlErr.code, dlErr.message);
+              reject(dlErr);
+            });
           }
         );
       });
@@ -2736,8 +3453,15 @@ button { font-family: inherit; cursor: pointer; }
       showToast('保存しました', 'success');
       closeDialog();
     }).catch(function(err) {
-      console.error('Save failed');
-      showToast('保存に失敗しました', 'error');
+      console.error('Save failed:', err);
+      var errMsg = '保存に失敗しました';
+      if (err && err.code) {
+        if (err.code === 'storage/unauthorized') errMsg += ' (権限エラー)';
+        else if (err.code === 'storage/canceled') errMsg += ' (キャンセル)';
+        else if (err.code === 'storage/retry-limit-exceeded') errMsg += ' (リトライ上限)';
+        else errMsg += ' (' + err.code + ')';
+      }
+      showToast(errMsg, 'error');
     }).finally(function() {
       isSaving = false;
       saveBtn.disabled = false;
@@ -2748,10 +3472,9 @@ button { font-family: inherit; cursor: pointer; }
 
   function deleteFile(id) {
     if (typeof id !== 'string') return;
-    showConfirm('このファイルを削除しますか？', function() {
-      var file = vaultData.files.find(function(f) { return f.id === id; });
-
-      
+    var file = vaultData.files.find(function(f) { return f.id === id; });
+    var displayName = file ? file.name : '不明なファイル';
+    showConfirm('本当にこのファイルを削除しますか？\n対象: ' + displayName, function() {
       var storagePromise = Promise.resolve();
       if (file && file.storageUrl) {
         try {
@@ -2829,6 +3552,11 @@ button { font-family: inherit; cursor: pointer; }
   
   function setupExplorerEvents() {
     
+    document.getElementById('ve-nav-back').addEventListener('click', navBack);
+    document.getElementById('ve-nav-forward').addEventListener('click', navForward);
+    document.getElementById('ve-nav-up').addEventListener('click', navUp);
+
+    
     document.getElementById('ve-list-btn').addEventListener('click', function() {
       viewMode = 'list';
       document.getElementById('ve-list-btn').classList.add('active');
@@ -2849,17 +3577,28 @@ button { font-family: inherit; cursor: pointer; }
     document.getElementById('ve-add-btn').addEventListener('click', showAddDialog);
 
     
+    var delBtn = document.getElementById('ve-delete-btn');
+    if (delBtn) {
+      delBtn.addEventListener('click', function() {
+        if (selectedFile) deleteFile(selectedFile);
+      });
+    }
+
+    
+    document.getElementById('ve-new-folder-btn').addEventListener('click', function() {
+      showFolderDialog('create');
+    });
+
+    
     document.getElementById('ve-tab-file').addEventListener('click', function() { setDialogMode('file'); });
     document.getElementById('ve-tab-url').addEventListener('click', function() {
       setDialogMode('url');
-      
       document.getElementById('ve-inp-cat').value = 'url';
     });
 
     
     document.getElementById('ve-inp-url').addEventListener('input', function(e) {
       updateUrlPreview(e.target.value.trim());
-      
       var nameInput = document.getElementById('ve-inp-name');
       if (!nameInput.value.trim()) {
         var url = e.target.value.trim();
@@ -2904,10 +3643,18 @@ button { font-family: inherit; cursor: pointer; }
       if (document.getElementById('vault-lock').classList.contains('unlocked')) {
         if (e.key === 'Escape') {
           closeDialog();
+          closeFolderDialog();
           document.getElementById('ve-confirm-overlay').classList.remove('visible');
           hideContext();
         }
         if (e.key === 'Delete' && selectedFile) deleteFile(selectedFile);
+      }
+    });
+
+    
+    document.getElementById('ve-folder-name-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        document.getElementById('ve-folder-save').click();
       }
     });
   }

@@ -1030,7 +1030,7 @@ body {
 
 /* Access Panels */
 .sr-panels {
-  display: grid; grid-template-columns: 1fr 1fr;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem; margin-bottom: 2.5rem;
 }
 
@@ -1145,6 +1145,13 @@ body {
 }
 .sr-panel.vault .sr-panel-status { color: var(--cyan); }
 
+/* Panel: Timetable - amber accent */
+.sr-panel.timetable {
+  --accent: var(--amber);
+  --glow: rgba(255,170,0,0.3);
+}
+.sr-panel.timetable .sr-panel-status { color: var(--amber); }
+
 /* Corner decorations on panels */
 .sr-corner {
   position: absolute; width: 12px; height: 12px;
@@ -1190,13 +1197,16 @@ body {
 
 /* Boot sequence */
 .sr-boot {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+  position: fixed; top: 20px; right: 20px;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.75rem; color: var(--cyan);
+  font-size: 0.65rem; color: var(--cyan);
   text-shadow: 0 0 5px rgba(0,243,255,0.5);
   z-index: 11; pointer-events: none;
   opacity: 0; white-space: nowrap;
+  background: rgba(2, 2, 15, 0.85);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  padding: 4px 10px;
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
 }
 .sr-boot.active {
   animation: sr-boot-in 0.3s ease-out forwards;
@@ -1204,7 +1214,7 @@ body {
 .sr-boot.fade {
   animation: sr-boot-out 0.5s ease-in forwards;
 }
-@keyframes sr-boot-in { from { opacity: 0; transform: translate(-50%, -50%) translateY(10px); } to { opacity: 1; transform: translate(-50%, -50%) translateY(0); } }
+@keyframes sr-boot-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes sr-boot-out { from { opacity: 1; } to { opacity: 0; } }
 
 /* === RESPONSIVE === */
@@ -1376,6 +1386,26 @@ body {
 <p class="sr-panel-desc">暗号化データ保管庫。<br>PDF、画像、URL等の機密ファイルを格納。<br>アクセスコードによる追加認証が必要。</p>
 <div class="sr-panel-status">
 <span class="sr-dot"></span> STATUS: SECURED ─ ENCRYPTED
+</div>
+</a>
+<a href="/project-x/timetable/" class="sr-panel timetable" id="panel-timetable">
+<div class="sr-corner tl"></div><div class="sr-corner tr"></div>
+<div class="sr-corner bl"></div><div class="sr-corner br"></div>
+<div class="sr-panel-scan"></div>
+<div class="sr-panel-icon">
+<svg viewBox="0 0 48 48">
+<rect x="6" y="6" width="36" height="36" rx="2" stroke="var(--accent)" stroke-width="2" fill="none"/>
+<line x1="6" y1="15" x2="42" y2="15" stroke="var(--accent)" stroke-width="2"/>
+<line x1="15" y1="15" x2="15" y2="42" stroke="var(--accent)" stroke-width="2"/>
+<line x1="6" y1="24" x2="42" y2="24" stroke="var(--accent)" stroke-width="1.5"/>
+<line x1="6" y1="33" x2="42" y2="33" stroke="var(--accent)" stroke-width="1.5"/>
+</svg>
+</div>
+<div class="sr-panel-id">MODULE_003</div>
+<div class="sr-panel-title">TIMETABLE LOG</div>
+<p class="sr-panel-desc">時間割 ＆ 授業進行モニター。<br>日課表・時限予定および進行・出欠管理ログ。<br>オリジン共有型オートシンク。</p>
+<div class="sr-panel-status">
+<span class="sr-dot"></span> STATUS: LINKED ─ ACTIVE
 </div>
 </a>
 </div>
