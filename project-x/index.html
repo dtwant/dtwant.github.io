@@ -823,6 +823,7 @@ body {
   display: flex; flex-direction: column;
   justify-content: center; align-items: center;
   transition: opacity 0.8s, visibility 0.8s;
+  touch-action: none; /* スマホでの誤スクロール・干渉を完全遮断 */
 }
 #sr-lock.unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
 #sr-lock::before {
@@ -1871,11 +1872,8 @@ body {
 <div class="sr-panel-scan"></div>
 <div class="sr-panel-icon">
 <svg viewBox="0 0 48 48">
-<rect x="6" y="8" width="36" height="32" rx="3" stroke="var(--accent)" stroke-width="2" fill="none"/>
-<circle cx="16" cy="18" r="4" stroke="var(--accent)" stroke-width="2" fill="none"/>
-<path d="M6 32l10-10 12 12 4-4 10 10" stroke="var(--accent)" stroke-width="2" fill="none"/>
-<path d="M22 28a6 3 0 0 1 8 0" stroke="var(--pink)" stroke-width="2" fill="none"/>
-<circle cx="26" cy="28" r="1.5" fill="var(--pink)"/>
+<rect x="6" y="8" width="36" height="32" rx="3"/>
+<path d="M14 26 L24 16 L34 26 M24 16 L24 38"/>
 </svg>
 </div>
 <div class="sr-panel-id">MODULE_006</div>
@@ -1944,10 +1942,10 @@ function initializeSystem() {
 
   let drawing = false, path = [], pts = '';
 
-  const nodeCenter = (n) => {
-    const r = n.getBoundingClientRect();
-    const c = container.getBoundingClientRect();
-    return { x: r.left - c.left + r.width/2, y: r.top - c.top + r.height/2 };
+  const getNodeCenter = (n) => {
+    const rect = n.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    return { x: rect.left - containerRect.left + rect.width / 2, y: rect.top - containerRect.top + rect.height / 2 };
   };
 
   const intermediate = (a, b) => {
@@ -1958,45 +1956,48 @@ function initializeSystem() {
   };
 
   const addNode = (n) => {
-    const id = +n.dataset.id;
-    if (path.includes(id)) return;
-    if (path.length > 0) {
-      const mid = intermediate(path[path.length-1], id);
-      if (mid && !path.includes(mid)) {
-        const midNode = document.querySelector(`.pat-node[data-id="${mid}"]`);
-        if (midNode) addNode(midNode);
+    const id = parseInt(n.getAttribute('data-id'));
+    if (!path.includes(id)) {
+      if (path.length > 0) {
+        const lastId = path[path.length - 1];
+        const midId = intermediate(lastId, id);
+        if (midId && !path.includes(midId)) {
+          const midNode = document.querySelector(`.pat-node[data-id="${midId}"]`);
+          if (midNode) addNode(midNode);
+        }
       }
+      path.push(id);
+      n.classList.add('active');
+      const center = getNodeCenter(n);
+      pts += `${pts ? ' ' : ''}${center.x},${center.y}`;
+      pathEl.setAttribute('points', pts);
+      dynLine.setAttribute('x1', center.x);
+      dynLine.setAttribute('y1', center.y);
+      dynLine.style.display = 'block';
     }
-    path.push(id);
-    n.classList.add('active');
-    const c = nodeCenter(n);
-    pts += `${pts ? ' ' : ''}${c.x},${c.y}`;
-    pathEl.setAttribute('points', pts);
-    dynLine.setAttribute('x1', c.x);
-    dynLine.setAttribute('y1', c.y);
-    dynLine.style.display = 'block';
   };
 
-  const handleMove = (cx, cy) => {
+  const handleMove = (clientX, clientY) => {
     if (!drawing) return;
-    const cr = container.getBoundingClientRect();
-    const x = cx - cr.left, y = cy - cr.top;
+    const containerRect = container.getBoundingClientRect();
+    const x = clientX - containerRect.left, y = clientY - containerRect.top;
     dynLine.setAttribute('x2', x);
     dynLine.setAttribute('y2', y);
     document.querySelectorAll('.pat-node').forEach(n => {
-      if (path.includes(+n.dataset.id)) return;
-      const c = nodeCenter(n);
-      if (Math.hypot(x - c.x, y - c.y) < 35) addNode(n);
+      const id = parseInt(n.getAttribute('data-id'));
+      if (path.includes(id)) return;
+      const center = getNodeCenter(n);
+      if (Math.hypot(x - center.x, y - center.y) < 35) addNode(n);
     });
   };
 
-  const handleStart = (cx, cy) => {
+  const handleStart = (clientX, clientY) => {
     reset();
-    const cr = container.getBoundingClientRect();
-    const x = cx - cr.left, y = cy - cr.top;
+    const containerRect = container.getBoundingClientRect();
+    const x = clientX - containerRect.left, y = clientY - containerRect.top;
     document.querySelectorAll('.pat-node').forEach(n => {
-      const c = nodeCenter(n);
-      if (Math.hypot(x - c.x, y - c.y) < 35) { drawing = true; addNode(n); }
+      const center = getNodeCenter(n);
+      if (Math.hypot(x - center.x, y - center.y) < 35) { drawing = true; addNode(n); }
     });
   };
 
@@ -2032,11 +2033,11 @@ function initializeSystem() {
     }
   };
 
-  patGrid.addEventListener('mousedown', e => handleStart(e.clientX, e.clientY));
-  window.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
+  patGrid.addEventListener('mousedown', (e) => handleStart(e.clientX, e.clientY));
+  window.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
   window.addEventListener('mouseup', () => { if (drawing) check(); });
-  patGrid.addEventListener('touchstart', e => { e.preventDefault(); handleStart(e.touches[0].clientX, e.touches[0].clientY); });
-  window.addEventListener('touchmove', e => { if (!drawing) return; e.preventDefault(); handleMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+  patGrid.addEventListener('touchstart', (e) => { e.preventDefault(); handleStart(e.touches[0].clientX, e.touches[0].clientY); });
+  window.addEventListener('touchmove', (e) => { if(!drawing) return; e.preventDefault(); handleMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
   window.addEventListener('touchend', () => { if (drawing) check(); });
 
   // === Boot Sequence ===
