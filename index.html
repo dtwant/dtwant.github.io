@@ -1250,6 +1250,144 @@ h3.dt-heading::before {
   line-height: 1.5;
   opacity: 0.8;
 }
+
+/* --- CHANGELOG スタイル (軍用タクティカル仕様) --- */
+.cl-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.cl-item {
+  border: 1px solid rgba(0, 243, 255, 0.15);
+  background: rgba(0, 243, 255, 0.02);
+  padding: 1.2rem;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.cl-item.recent {
+  border-color: rgba(255, 0, 85, 0.3);
+  background: rgba(255, 0, 85, 0.02);
+  box-shadow: inset 0 0 10px rgba(255, 0, 85, 0.05);
+}
+.cl-item::before {
+  content: 'TACTICAL_LOG_SEC';
+  position: absolute;
+  top: -8px; right: 10px;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.55rem;
+  color: rgba(0, 243, 255, 0.4);
+  background: var(--bg-color);
+  padding: 0 5px;
+  letter-spacing: 1px;
+}
+.cl-item.recent::before {
+  content: 'SYS_UPDATE_CRITICAL';
+  color: rgba(255, 0, 85, 0.6);
+}
+.cl-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+  padding-bottom: 0.5rem;
+}
+.cl-version {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--accent-primary);
+  text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+}
+.cl-item.recent .cl-version {
+  color: var(--accent-secondary);
+  text-shadow: 0 0 5px rgba(255, 0, 85, 0.5);
+}
+.cl-date {
+  font-family: 'M PLUS 1 Code', monospace;
+  font-size: 0.8rem;
+  color: rgba(224, 248, 255, 0.6);
+}
+.cl-badge {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 1px;
+}
+.badge-new {
+  background: rgba(0, 255, 102, 0.15);
+  color: #00ff66;
+  border: 1px solid rgba(0, 255, 102, 0.3);
+}
+.badge-fix {
+  background: rgba(255, 0, 85, 0.15);
+  color: #ff0055;
+  border: 1px solid rgba(255, 0, 85, 0.3);
+}
+.badge-imp {
+  background: rgba(0, 243, 255, 0.15);
+  color: #00f3ff;
+  border: 1px solid rgba(0, 243, 255, 0.3);
+}
+.cl-content {
+  font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace !important;
+  font-size: 0.85rem !important;
+  line-height: 1.7;
+}
+.cl-content p {
+  margin: 0 0 0.5rem 0;
+  color: #e0f8ff;
+}
+.cl-content ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: rgba(224, 248, 255, 0.85);
+}
+.cl-content li {
+  margin-bottom: 0.4rem;
+}
+.cl-content strong {
+  color: var(--accent-primary);
+}
+.cl-item.recent .cl-content strong {
+  color: var(--accent-secondary);
+}
+
+/* アコーディオン */
+.cl-history {
+  margin-top: 1rem;
+  border: 1px dashed rgba(0, 243, 255, 0.2);
+  border-radius: 4px;
+}
+.cl-history-trigger {
+  padding: 1rem;
+  font-family: 'Orbitron', 'M PLUS 1 Code', sans-serif;
+  font-size: 0.8rem;
+  color: var(--accent-primary);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s;
+  outline: none;
+  background: rgba(0, 243, 255, 0.01);
+}
+.cl-history-trigger:hover {
+  background: rgba(0, 243, 255, 0.05);
+  color: #fff;
+  text-shadow: 0 0 5px var(--accent-primary);
+}
+.cl-history-content {
+  padding: 1rem;
+  border-top: 1px dashed rgba(0, 243, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  background: rgba(0, 0, 0, 0.2);
+}
 </style>
 <div class="dt-container">
 <div class="dt-card">
@@ -1609,6 +1747,73 @@ actionBtn.classList.remove('done-mode');
     <div class="ql-title">KNOWLEDGE_SYS</div>
     <div class="ql-desc">興味</div>
   </a>
+</div>
+</div>
+<div class="dt-card">
+<h3 class="dt-heading">SYSTEM_CHANGELOG</h3>
+<div class="cl-container">
+  <!-- 最新のアップデート -->
+  <div class="cl-item recent">
+    <div class="cl-meta">
+      <span class="cl-version">v2.5.0</span>
+      <span class="cl-date">2026-05-29</span>
+      <span class="cl-badge badge-new">NEW</span>
+    </div>
+    <div class="cl-content">
+      <p>SYSTEM ROOT (Project-X) に新規モジュール3基をデプロイしました。</p>
+      <ul>
+        <li><strong>PROOF_ARCHIVE (M_004)</strong>: math/physics の証明を全網羅し、分野・手法・難易度で検索可能な統合データベース。</li>
+        <li><strong>PASSWORD_GENERATOR (M_005)</strong>: 安全度エントロピー解析および解読時間推定を備えたタクティカル乱数暗号生成器。</li>
+        <li><strong>STEGANOGRAPHY_TOOL (M_006)</strong>: 画像のLSB(最低位ビット)を利用した、ブラウザ完結型の秘密メッセージ埋め込み・抽出モジュール。</li>
+      </ul>
+    </div>
+  </div>
+  <!-- 過去ログアコーディオン -->
+  <details class="cl-history">
+    <summary class="cl-history-trigger">▶ SYSTEM ARCHIVE LOGS (過去の更新履歴を展開)</summary>
+    <div class="cl-history-content">
+      <div class="cl-item">
+        <div class="cl-meta">
+          <span class="cl-version">v2.4.1</span>
+          <span class="cl-date">2026-05-28</span>
+          <span class="cl-badge badge-fix">FIX</span>
+        </div>
+        <div class="cl-content">
+          <p>生体認証スキャナーおよびログインバイパスセキュリティの最適化を実行。</p>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-meta">
+          <span class="cl-version">v2.4.0</span>
+          <span class="cl-date">2026-05-15</span>
+          <span class="cl-badge badge-imp">IMP</span>
+        </div>
+        <div class="cl-content">
+          <p>データ保管庫 (DATA VAULT) の UI 設計をサイバータクティカルテーマに一新。</p>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-meta">
+          <span class="cl-version">v2.3.0</span>
+          <span class="cl-date">2026-04-10</span>
+          <span class="cl-badge badge-new">NEW</span>
+        </div>
+        <div class="cl-content">
+          <p>Labツール群に「ボーカルレンジ・ソルバー」および「フラクタル探索エンジン」を追加。</p>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-meta">
+          <span class="cl-version">v1.0.0</span>
+          <span class="cl-date">2025-06-01</span>
+          <span class="cl-badge badge-new">NEW</span>
+        </div>
+        <div class="cl-content">
+          <p>DT_WORLD 第1世代コアシステム構築。数学・物理の検証記事および基本ログ機能が稼働開始。</p>
+        </div>
+      </div>
+    </div>
+  </details>
 </div>
 </div>
 <div class="alert-spacer">

@@ -1275,6 +1275,427 @@ body {
   .lock-badge { font-size: 0.55rem; top: -12px; }
   .sr-footer-link { font-size: 0.65rem; padding: 0.5rem 0.8rem; }
 }
+
+/* === APP MODAL & WINDOWS (軍用タクティカル仕様) === */
+.app-modal {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(2, 2, 8, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: none; justify-content: center; align-items: center;
+  padding: 1.5rem;
+}
+.app-modal.active {
+  display: flex;
+}
+.app-window {
+  width: 100%; max-width: 820px;
+  height: 85vh; max-height: 720px;
+  background: rgba(3, 3, 10, 0.95);
+  border: 1px solid var(--accent, var(--cyan));
+  box-shadow: 0 0 30px rgba(0, 243, 255, 0.15), inset 0 0 20px rgba(0, 243, 255, 0.05);
+  display: flex; flex-direction: column;
+  position: relative;
+  animation: app-boot 0.35s cubic-bezier(0.15, 0.85, 0.35, 1) forwards;
+}
+@keyframes app-boot {
+  0% { transform: scale(0.92); opacity: 0; filter: blur(4px); }
+  100% { transform: scale(1); opacity: 1; filter: blur(0); }
+}
+.app-header {
+  height: 42px; background: rgba(0, 243, 255, 0.05);
+  border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1rem;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+  position: relative;
+  flex-shrink: 0;
+}
+.app-header::before {
+  content: ''; position: absolute; bottom: 0; left: 0; width: 80px; height: 1px;
+  background: var(--pink); box-shadow: 0 0 5px var(--pink);
+}
+.app-title-area {
+  display: flex; align-items: center; gap: 0.8rem;
+  font-size: 0.85rem;
+}
+.app-title-id {
+  color: var(--pink); font-weight: bold;
+  text-shadow: 0 0 5px rgba(255, 0, 85, 0.5);
+  border: 1px solid rgba(255, 0, 85, 0.3);
+  padding: 1px 6px; font-size: 0.7rem;
+  background: rgba(255, 0, 85, 0.1);
+}
+.app-title-name {
+  color: #fff; text-shadow: 0 0 5px var(--accent, var(--cyan));
+}
+.app-close-btn {
+  background: transparent; border: none;
+  color: var(--pink); font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem; cursor: pointer;
+  padding: 4px 8px; border: 1px solid transparent;
+  transition: all 0.2s;
+}
+.app-close-btn:hover {
+  background: rgba(255, 0, 85, 0.15);
+  border-color: var(--pink);
+  text-shadow: 0 0 5px var(--pink);
+}
+.app-body {
+  flex: 1; overflow-y: auto; padding: 1.5rem;
+  scrollbar-width: thin; scrollbar-color: var(--accent, var(--cyan)) transparent;
+  position: relative;
+}
+.app-body::-webkit-scrollbar { width: 4px; }
+.app-body::-webkit-scrollbar-thumb { background: var(--accent, var(--cyan)); }
+
+/* Corner frame brackets for Tactical UI */
+.app-bracket {
+  position: absolute; width: 14px; height: 14px;
+  border-style: solid; pointer-events: none; opacity: 0.7;
+}
+.app-bracket.tl { top: 8px; left: 8px; border-width: 2px 0 0 2px; border-color: var(--accent, var(--cyan)); }
+.app-bracket.tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; border-color: var(--accent, var(--cyan)); }
+.app-bracket.bl { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; border-color: var(--accent, var(--cyan)); }
+.app-bracket.br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; border-color: var(--accent, var(--cyan)); }
+
+/* === MODULE: PROOF ARCHIVE === */
+.pa-filter-bar {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  margin-bottom: 1.5rem; background: rgba(0, 0, 0, 0.3);
+  padding: 1rem; border: 1px solid rgba(0, 243, 255, 0.1);
+  border-radius: 2px;
+}
+.pa-search-input {
+  flex: 1; min-width: 200px;
+  background: rgba(2, 2, 8, 0.8);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  color: #fff; padding: 0.5rem 0.8rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+  outline: none; transition: all 0.3s;
+}
+.pa-search-input:focus {
+  border-color: var(--cyan); box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+}
+.pa-select {
+  background: rgba(2, 2, 8, 0.8);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  color: var(--cyan); padding: 0.5rem 2rem 0.5rem 0.8rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+  outline: none; cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='%2300f3ff' d='M0 2l4 4 4-4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+}
+.pa-select:focus {
+  border-color: var(--cyan);
+}
+.pa-grid {
+  display: grid; grid-template-columns: 1fr; gap: 1rem;
+}
+.pa-card {
+  background: rgba(0, 243, 255, 0.01);
+  border: 1px solid rgba(0, 243, 255, 0.15);
+  padding: 1.2rem; position: relative;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+.pa-card:hover {
+  border-color: rgba(0, 243, 255, 0.5);
+  background: rgba(0, 243, 255, 0.03);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.08);
+}
+.pa-card-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 0.8rem; gap: 1rem;
+}
+.pa-card-title {
+  font-family: 'Orbitron', 'JetBrains Mono', monospace;
+  font-size: 0.95rem; font-weight: 700; color: #fff;
+  margin: 0; line-height: 1.4;
+}
+.pa-card-meta {
+  display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.8rem;
+}
+.pa-badge {
+  font-size: 0.6rem; font-family: 'Share Tech Mono', monospace;
+  padding: 2px 6px; border-radius: 1px;
+}
+.pa-badge.field { background: rgba(0, 243, 255, 0.1); color: var(--cyan); border: 1px solid rgba(0, 243, 255, 0.2); }
+.pa-badge.difficulty { background: rgba(255, 170, 0, 0.1); color: var(--amber); border: 1px solid rgba(255, 170, 0, 0.2); }
+.pa-card-formula {
+  background: rgba(0, 0, 0, 0.4);
+  border-left: 2px solid var(--pink);
+  padding: 0.8rem; margin: 0.8rem 0;
+  font-size: 0.9rem; overflow-x: auto;
+  color: #fff; text-shadow: 0 0 2px rgba(255,255,255,0.5);
+  font-family: 'JetBrains Mono', monospace;
+}
+.pa-card-desc {
+  font-size: 0.75rem; color: rgba(200, 220, 240, 0.7);
+  line-height: 1.6; margin-bottom: 1rem;
+}
+.pa-card-methods {
+  display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem;
+}
+.pa-method-tag {
+  font-size: 0.6rem; font-family: 'JetBrains Mono', monospace;
+  background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.6);
+  padding: 1px 5px; border-radius: 2px;
+}
+.pa-card-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: 'Share Tech Mono', monospace; font-size: 0.75rem;
+  color: var(--pink); text-decoration: none;
+  padding: 4px 10px; border: 1px solid rgba(255, 0, 85, 0.3);
+  background: rgba(255, 0, 85, 0.02); transition: all 0.2s;
+}
+.pa-card-btn:hover {
+  background: rgba(255, 0, 85, 0.15); border-color: var(--pink);
+  text-shadow: 0 0 5px var(--pink); box-shadow: 0 0 10px rgba(255, 0, 85, 0.2);
+}
+
+/* === MODULE: PASSWORD GENERATOR === */
+.pg-container {
+  display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem;
+}
+@media (max-width: 700px) {
+  .pg-container { grid-template-columns: 1fr; }
+}
+.pg-panel {
+  background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 243, 255, 0.08);
+  padding: 1.2rem; display: flex; flex-direction: column; gap: 1.2rem;
+}
+.pg-display-box {
+  background: rgba(2, 2, 8, 0.9); border: 1px solid rgba(0, 243, 255, 0.2);
+  padding: 1rem; border-radius: 2px; position: relative;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pg-display {
+  font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+  font-size: clamp(0.9rem, 2.5vw, 1.3rem); color: var(--green);
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
+  word-break: break-all; padding-right: 2.5rem;
+  letter-spacing: 1px; min-height: 1.5em;
+}
+.pg-copy-btn {
+  background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.3);
+  color: var(--cyan); padding: 6px 12px; font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem; cursor: pointer; transition: all 0.2s;
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+}
+.pg-copy-btn:hover {
+  background: rgba(0, 243, 255, 0.2); border-color: var(--cyan);
+  box-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+}
+.pg-slider-group {
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.pg-label {
+  font-family: 'Orbitron', 'Share Tech Mono', monospace; font-size: 0.75rem;
+  color: rgba(0, 243, 255, 0.7); display: flex; justify-content: space-between;
+}
+.pg-label span.value { color: var(--pink); font-weight: bold; }
+.pg-slider {
+  -webkit-appearance: none; width: 100%; height: 6px;
+  background: rgba(0, 243, 255, 0.15); outline: none; border-radius: 3px;
+}
+.pg-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--pink); cursor: pointer; box-shadow: 0 0 8px var(--pink);
+}
+.pg-slider::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%; border: none;
+  background: var(--pink); cursor: pointer; box-shadow: 0 0 8px var(--pink);
+}
+.pg-options {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;
+}
+@media (max-width: 480px) {
+  .pg-options { grid-template-columns: 1fr; }
+}
+.pg-checkbox-label {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-family: 'Share Tech Mono', monospace; font-size: 0.75rem;
+  color: rgba(224, 248, 255, 0.85); cursor: pointer;
+  user-select: none;
+}
+.pg-checkbox-label input { display: none; }
+.pg-custom-box {
+  width: 14px; height: 14px; border: 1px solid rgba(0, 243, 255, 0.4);
+  background: rgba(2, 2, 8, 0.8); display: flex; align-items: center; justify-content: center;
+  position: relative; transition: all 0.2s;
+}
+.pg-checkbox-label input:checked + .pg-custom-box {
+  border-color: var(--pink); background: rgba(255, 0, 85, 0.1);
+  box-shadow: 0 0 6px var(--pink);
+}
+.pg-checkbox-label input:checked + .pg-custom-box::after {
+  content: ''; width: 6px; height: 6px; background: var(--pink);
+  box-shadow: 0 0 3px var(--pink);
+}
+.pg-gen-btn {
+  background: linear-gradient(135deg, var(--pink) 0%, #aa003b 100%);
+  border: 1px solid var(--pink); color: #fff;
+  font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: bold;
+  padding: 0.8rem; cursor: pointer; letter-spacing: 2px;
+  transition: all 0.2s; margin-top: 0.5rem;
+}
+.pg-gen-btn:hover {
+  filter: brightness(1.1); box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+  transform: translateY(-1px);
+}
+.pg-stats-panel {
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.pg-stat-card {
+  background: rgba(2, 2, 8, 0.6); border: 1px solid rgba(0, 243, 255, 0.05);
+  padding: 0.8rem 1rem; display: flex; flex-direction: column; gap: 0.4rem;
+}
+.pg-stat-title {
+  font-family: 'Orbitron', 'Share Tech Mono', monospace; font-size: 0.6rem;
+  color: rgba(0, 243, 255, 0.5); letter-spacing: 1px;
+}
+.pg-stat-val {
+  font-family: 'Orbitron', 'JetBrains Mono', monospace; font-size: 0.9rem;
+  font-weight: 700; color: #fff;
+}
+.pg-stat-val.secure { color: var(--green); text-shadow: 0 0 5px rgba(0,255,102,0.4); }
+.pg-stat-val.warning { color: var(--amber); text-shadow: 0 0 5px rgba(255,170,0,0.4); }
+.pg-stat-val.danger { color: var(--pink); text-shadow: 0 0 5px rgba(255,0,85,0.4); }
+.pg-meter-bg {
+  width: 100%; height: 4px; background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px; overflow: hidden; margin-top: 2px;
+}
+.pg-meter-fill {
+  height: 100%; width: 0; background: var(--pink);
+  transition: width 0.4s ease, background 0.4s ease;
+}
+.pg-logs {
+  background: rgba(2, 2, 8, 0.8); border: 1px solid rgba(0, 243, 255, 0.05);
+  padding: 0.8rem; font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem; height: 110px; overflow-y: auto;
+  color: rgba(200, 220, 240, 0.6); display: flex; flex-direction: column; gap: 0.3rem;
+  scrollbar-width: thin; scrollbar-color: rgba(0, 243, 255, 0.2) transparent;
+}
+.pg-logs::-webkit-scrollbar { width: 3px; }
+.pg-logs::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.2); }
+.pg-log-entry {
+  display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.02);
+  padding-bottom: 2px; cursor: pointer;
+}
+.pg-log-entry:hover { color: var(--cyan); }
+.pg-log-time { color: rgba(255, 0, 85, 0.5); margin-right: 8px; }
+
+/* === MODULE: STEGANOGRAPHY === */
+.steg-tabs {
+  display: flex; gap: 0.5rem; margin-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+}
+.steg-tab {
+  background: transparent; border: none;
+  padding: 0.6rem 1.2rem; font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem; color: rgba(0, 243, 255, 0.5);
+  cursor: pointer; position: relative; transition: all 0.3s;
+}
+.steg-tab.active {
+  color: var(--cyan); text-shadow: 0 0 5px var(--cyan);
+}
+.steg-tab.active::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px;
+  background: var(--cyan); box-shadow: 0 0 8px var(--cyan);
+}
+.steg-pane { display: none; flex-direction: column; gap: 1.2rem; }
+.steg-pane.active { display: flex; }
+.steg-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+}
+@media (max-width: 600px) {
+  .steg-row { grid-template-columns: 1fr; }
+}
+.steg-upload-zone {
+  border: 1px dashed rgba(0, 243, 255, 0.3);
+  background: rgba(0, 243, 255, 0.01);
+  height: 180px; display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  cursor: pointer; text-align: center; padding: 1rem;
+  transition: all 0.3s; position: relative;
+}
+.steg-upload-zone:hover {
+  border-color: var(--cyan); background: rgba(0, 243, 255, 0.04);
+}
+.steg-upload-zone svg {
+  width: 44px; height: 44px; stroke: rgba(0, 243, 255, 0.4);
+  stroke-width: 1.5; fill: none; margin-bottom: 0.8rem;
+  transition: all 0.3s;
+}
+.steg-upload-zone:hover svg {
+  stroke: var(--cyan); filter: drop-shadow(0 0 5px var(--cyan));
+}
+.steg-upload-text {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.75rem;
+  color: rgba(200, 220, 240, 0.6); line-height: 1.5;
+}
+.steg-preview-box {
+  background: rgba(2, 2, 8, 0.9); border: 1px solid rgba(0, 243, 255, 0.15);
+  height: 180px; display: flex; justify-content: center; align-items: center;
+  position: relative; overflow: hidden;
+}
+.steg-preview-img {
+  max-width: 100%; max-height: 100%; object-fit: contain;
+}
+.steg-preview-placeholder {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.7rem;
+  color: rgba(0, 243, 255, 0.3); letter-spacing: 1px;
+}
+.steg-input-group {
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.steg-textarea {
+  background: rgba(2, 2, 8, 0.8); border: 1px solid rgba(0, 243, 255, 0.2);
+  color: #fff; padding: 0.8rem; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem; min-height: 80px; resize: vertical; outline: none;
+  transition: all 0.3s;
+}
+.steg-textarea:focus {
+  border-color: var(--cyan); box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+}
+.steg-btn {
+  background: transparent; border: 1px solid var(--accent, var(--cyan));
+  color: var(--accent, var(--cyan)); font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem; font-weight: bold; padding: 0.8rem;
+  cursor: pointer; letter-spacing: 1.5px; transition: all 0.2s;
+  text-align: center; display: inline-block; text-decoration: none;
+}
+.steg-btn:hover:not(:disabled) {
+  background: rgba(0, 243, 255, 0.1); box-shadow: 0 0 12px var(--accent, var(--cyan));
+  text-shadow: 0 0 5px var(--accent, var(--cyan));
+}
+.steg-btn:disabled {
+  opacity: 0.3; cursor: not-allowed; border-color: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3);
+}
+.steg-dl-btn {
+  border-color: var(--green); color: var(--green);
+}
+.steg-dl-btn:hover:not(:disabled) {
+  background: rgba(0, 255, 102, 0.1); box-shadow: 0 0 12px var(--green) !important;
+  text-shadow: 0 0 5px var(--green) !important;
+}
+.steg-decode-result {
+  background: rgba(2, 2, 8, 0.9); border: 1px dashed rgba(0, 255, 102, 0.2);
+  padding: 1rem; min-height: 80px; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem; color: var(--green); word-break: break-all;
+  text-shadow: 0 0 3px rgba(0, 255, 102, 0.3); line-height: 1.6;
+}
+.steg-decode-result.error {
+  border-color: rgba(255, 0, 85, 0.3); color: var(--pink);
+  text-shadow: 0 0 3px rgba(255, 0, 85, 0.3);
+}
+.steg-alert {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.7rem;
+  color: var(--pink); text-shadow: 0 0 3px var(--pink); margin-top: 5px;
+}
 </style>
 <!-- Background layers -->
 <div class="sr-bg"></div>
@@ -1408,6 +1829,79 @@ body {
 <span class="sr-dot"></span> STATUS: LINKED ─ ACTIVE
 </div>
 </a>
+<a href="javascript:void(0)" class="sr-panel proof" id="panel-proof" onclick="openApp('proof-archive')" style="--accent: var(--cyan); --glow: rgba(0,243,255,0.25);">
+<div class="sr-corner tl"></div><div class="sr-corner tr"></div>
+<div class="sr-corner bl"></div><div class="sr-corner br"></div>
+<div class="sr-panel-scan"></div>
+<div class="sr-panel-icon">
+<svg viewBox="0 0 48 48">
+<path d="M12 38c-3.3 0-6-2.7-6-6V8c0-3.3 2.7-6 6-6h24c3.3 0 6 2.7 6 6v24c0 3.3-2.7 6-6 6H12z" stroke="var(--accent)" stroke-width="2" fill="none"/>
+<path d="M12 32h30M12 38h30" stroke="var(--accent)" stroke-width="2"/>
+<path d="M18 10h12M18 16h12M18 22h8" stroke="var(--accent)" stroke-width="1.5"/>
+</svg>
+</div>
+<div class="sr-panel-id">MODULE_004</div>
+<div class="sr-panel-title">PROOF ARCHIVE</div>
+<p class="sr-panel-desc">定理の証明データベース。<br>分野・手法・難易度による多次元フィルタリングおよびLaTeX表記による証明詳細。<br>ナレッジコア同期システム。</p>
+<div class="sr-panel-status">
+<span class="sr-dot"></span> STATUS: MOUNTED ─ SECURE
+</div>
+</a>
+<a href="javascript:void(0)" class="sr-panel cmd" id="panel-password" onclick="openApp('password-generator')">
+<div class="sr-corner tl"></div><div class="sr-corner tr"></div>
+<div class="sr-corner bl"></div><div class="sr-corner br"></div>
+<div class="sr-panel-scan"></div>
+<div class="sr-panel-icon">
+<svg viewBox="0 0 48 48">
+<rect x="8" y="22" width="32" height="20" rx="3" stroke="var(--accent)" stroke-width="2" fill="none"/>
+<circle cx="24" cy="30" r="3" stroke="var(--accent)" stroke-width="2" fill="none"/>
+<path d="M16 22V14c0-4.4 3.6-8 8-8s8 3.6 8 8v8" stroke="var(--accent)" stroke-width="2" fill="none"/>
+</svg>
+</div>
+<div class="sr-panel-id">MODULE_005</div>
+<div class="sr-panel-title">PASS GENERATOR</div>
+<p class="sr-panel-desc">暗号論的強度を備えた乱数生成器。<br>パスワードの複雑度とエントロピーの可視化、及びブルートフォース解読推定時間の算出。<br>ローカル暗号鍵生成器。</p>
+<div class="sr-panel-status">
+<span class="sr-dot"></span> STATUS: ONLINE ─ STANDBY
+</div>
+</a>
+<a href="javascript:void(0)" class="sr-panel vault" id="panel-steganography" onclick="openApp('steganography')">
+<div class="sr-corner tl"></div><div class="sr-corner tr"></div>
+<div class="sr-corner bl"></div><div class="sr-corner br"></div>
+<div class="sr-panel-scan"></div>
+<div class="sr-panel-icon">
+<svg viewBox="0 0 48 48">
+<rect x="6" y="8" width="36" height="32" rx="3" stroke="var(--accent)" stroke-width="2" fill="none"/>
+<circle cx="16" cy="18" r="4" stroke="var(--accent)" stroke-width="2" fill="none"/>
+<path d="M6 32l10-10 12 12 4-4 10 10" stroke="var(--accent)" stroke-width="2" fill="none"/>
+<path d="M22 28a6 3 0 0 1 8 0" stroke="var(--pink)" stroke-width="2" fill="none"/>
+<circle cx="26" cy="28" r="1.5" fill="var(--pink)"/>
+</svg>
+</div>
+<div class="sr-panel-id">MODULE_006</div>
+<div class="sr-panel-title">STEGANO TOOL</div>
+<p class="sr-panel-desc">画像内隠蔽通信システム。<br>LSB（最低位ビット）アルゴリズムに基づき、任意の画像内に極秘テキストを非破壊で埋め込み/復元。<br>ローカルサンドボックス解析。</p>
+<div class="sr-panel-status">
+<span class="sr-dot"></span> STATUS: OPERATIONAL
+</div>
+</a>
+</div>
+<!-- App Modal Container -->
+<div id="app-modal" class="app-modal">
+  <div class="app-window" id="app-window">
+    <div class="app-bracket tl"></div><div class="app-bracket tr"></div>
+    <div class="app-bracket bl"></div><div class="app-bracket br"></div>
+    <div class="app-header">
+      <div class="app-title-area">
+        <span class="app-title-id" id="modal-app-id">MODULE_000</span>
+        <span class="app-title-name" id="modal-app-title">SYSTEM MODULE</span>
+      </div>
+      <button class="app-close-btn" onclick="closeApp()">[ DISCONNECT ]</button>
+    </div>
+    <div class="app-body" id="modal-app-body">
+      <!-- Content dynamically loaded by JS -->
+    </div>
+  </div>
 </div>
 <div class="sr-footer">
 <a href="/" class="sr-footer-link">RETURN TO SURFACE</a>
@@ -1600,9 +2094,729 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 30);
   });
 
-  console.log('%c SYSTEM ROOT :: READY ', 'background: #00f3ff; color: #000; padding: 5px; font-weight: bold;');
+  // ==========================================
+  // === SYSTEM MODULES ENGINE (M_004, M_005, M_006) ===
+  // ==========================================
+  const modalEl = document.getElementById('app-modal');
+  const windowEl = document.getElementById('app-window');
+  const bodyEl = document.getElementById('modal-app-body');
+  const modalIdEl = document.getElementById('modal-app-id');
+  const modalTitleEl = document.getElementById('modal-app-title');
+
+  // Proof Archive Database
+  const PROOFS_DB = [
+    {
+      id: 1, title: "級数等式 \\sum_{k=1}^{\\infty}\\frac{(3^k-1)\\zeta(k+1)}{4^k} = \\pi",
+      field: "解析学", difficulty: 3, link: "/posts/2025-12-10-proof1/",
+      formula: "\\sum_{k=1}^{\\infty} \\frac{(3^k - 1)\\zeta(k+1)}{4^k} = \\pi",
+      summary: "ゼータ関数の積分表示と指数関数のマクローリン展開を応用し、ゼータ級数を円周率 \\pi に収束させる極めて美しい等式。"
+    },
+    {
+      id: 2, title: "級数等式 \\sum_{n=0}^{\\infty}\\frac{\\zeta(2n+2)}{16^n} = 8 - 2\\pi",
+      field: "解析学", difficulty: 3, link: "/posts/2025-12-10-proof2/",
+      formula: "\\sum_{n=0}^{\\infty} \\frac{\\zeta(2n+2)}{16^n} = 8 - 2\\pi",
+      summary: "偶数ゼータ関数と 16^{-n} の積の無限和が、円周率を含む有理数表現に収束する。sinhの展開と部分分数分解を使用。"
+    },
+    {
+      id: 3, title: "級数等式 \\sum_{n=0}^{\\infty}\\frac{(-1)^n(n+2)(n+3)\\zeta(n+4)}{2^n} = 32 - 24\\zeta(3)",
+      field: "解析学", difficulty: 4, link: "/posts/2025-12-11-proof3/",
+      formula: "\\sum_{n=0}^{\\infty} \\frac{(-1)^n(n+2)(n+3)\\zeta(n+4)}{2^n} = 32 - 24\\zeta(3)",
+      summary: "交代級数と多項式係数、ゼータ関数の積の和。アペリーの定数 \\zeta(3) の奇数項分解を利用する高度な評価。"
+    },
+    {
+      id: 4, title: "定積分 \\int_{0}^{\\frac{1}{2}} \\ln \\Gamma (x + \\frac{1}{8}) dx = ...",
+      field: "解析学", difficulty: 5, link: "/posts/2025-12-14-proof4/",
+      formula: "\\int_{0}^{\\frac{1}{2}} \\ln \\Gamma \\left( x + \\frac{1}{8} \\right) dx = \\frac{1}{4}\\ln(2\\pi) - \\frac{1}{4\\pi} \\left( Cl_2\\left(\\frac{\\pi}{4}\right) + Cl_2\\left(\\frac{3\\pi}{4}\right) \\right)",
+      summary: "対数ガンマ関数の区間定積分。クンマーのフーリエ級数展開を用いて、クラウゼン関数 Cl_2(\\theta) に帰着させる難関証明。"
+    },
+    {
+      id: 5, title: "母関数等式 \\sum_{n=0}^{\\infty} x^{2n} \\zeta(2+2n) = ...",
+      field: "解析学", difficulty: 3, link: "/posts/2025-12-14-proof5/",
+      formula: "\\sum_{n=0}^{\\infty} x^{2n} \\zeta(2+2n) = \\frac{1 - \\pi x \\cot(\\pi x)}{2x^2} \\quad (|x| < 1)",
+      summary: "偶数ゼータ関数の母関数が余接関数 \\cot(\\pi x) の部分分数展開に一致することを示す美しい等式。"
+    },
+    {
+      id: 6, title: "定積分 \\int_{0}^{\\frac{\\pi}{2}} \\ln^2 \\sin x dx = ...",
+      field: "解析学", difficulty: 4, link: "/posts/2025-12-14-proof6/",
+      formula: "\\int_{0}^{\\frac{\\pi}{2}} \\ln^2 \\sin x \\, dx = \\frac{\\pi \\ln^2 2}{2} + \\frac{\\pi^3}{24}",
+      summary: "対数正弦の二乗積分。\\ln(2\\sin x) のフーリエ展開と三角関数の直交性を巧みに用いてバーゼル問題に帰着。"
+    },
+    {
+      id: 10, title: "級数等式 \\sum_{n \\ge 0} \\frac{1}{(2n+1)^2} = \\frac{\\pi^2}{8}",
+      field: "解析学", difficulty: 2, link: "/posts/2025-12-25-proof10/",
+      formula: "\\sum_{n \\ge 0} \\frac{1}{(2n+1)^2} = \\frac{\\pi^2}{8}",
+      summary: "奇数の逆二乗和の極限。複素対数の積分による美しい直接証明。バーゼル問題の派生。"
+    },
+    {
+      id: 11, title: "入れ子積分 \\int_{0}^{\\frac{\\pi}{2}} \\sin(x \\sin(x \\sin ...)) dx = ...",
+      field: "解析学", difficulty: 5, link: "/posts/2026-01-14-proof11/",
+      formula: "\\int_{0}^{\\frac{\\pi}{2}} \\sin(x \\sin(x \\sin \\dots)) \\, dx = \\frac{\\pi}{2}(1 - \\log 2)",
+      summary: "無限の入れ子構造（自己相似構造）を持つ関数の定積分。逆関数への置換と部分積分により、対数正弦積分に帰着。"
+    }
+  ];
+
+  window.openApp = (appId) => {
+    modalEl.style.display = 'flex';
+    modalEl.classList.add('active');
+    
+    // Reset modal accents
+    windowEl.style.setProperty('--accent', 'var(--cyan)');
+    modalIdEl.style.borderColor = 'rgba(0, 243, 255, 0.3)';
+    modalIdEl.style.color = 'var(--pink)';
+    modalTitleEl.style.color = '#fff';
+
+    if (appId === 'proof-archive') {
+      windowEl.style.setProperty('--accent', 'var(--cyan)');
+      modalIdEl.textContent = 'MODULE_004';
+      modalTitleEl.textContent = 'PROOF ARCHIVE // 構造化証明アーカイブ';
+      initProofArchive();
+    } else if (appId === 'password-generator') {
+      windowEl.style.setProperty('--accent', 'var(--pink)');
+      modalIdEl.textContent = 'MODULE_005';
+      modalIdEl.style.color = 'var(--cyan)';
+      modalIdEl.style.borderColor = 'rgba(0, 243, 255, 0.3)';
+      modalTitleEl.textContent = 'PASS GENERATOR // タクティカル暗号鍵生成システム';
+      initPasswordGenerator();
+    } else if (appId === 'steganography') {
+      windowEl.style.setProperty('--accent', 'var(--green)');
+      modalIdEl.textContent = 'MODULE_006';
+      modalTitleEl.textContent = 'STEGANO TOOL // 画像内隠蔽通信システム';
+      initSteganography();
+    }
+    
+    // Add micro vibration on modal open
+    if (navigator.vibrate) navigator.vibrate(30);
+  };
+
+  window.closeApp = () => {
+    modalEl.classList.remove('active');
+    modalEl.style.display = 'none';
+    bodyEl.innerHTML = '';
+  };
+
+  // Close modal when clicking outside the window
+  modalEl.addEventListener('click', (e) => {
+    if (e.target === modalEl) closeApp();
+  });
+
+  // ==========================================
+  // === PROOF ARCHIVE ENGINE ===
+  // ==========================================
+  function initProofArchive() {
+    bodyEl.innerHTML = `
+      <div class="pa-filter-bar">
+        <input type="text" id="pa-search" class="pa-search-input" placeholder="定理・手法・キーワードを入力...">
+        <select id="pa-difficulty" class="pa-select">
+          <option value="">難易度: すべて</option>
+          <option value="2">★2 (標準)</option>
+          <option value="3">★3 (応用)</option>
+          <option value="4">★4 (上級)</option>
+          <option value="5">★5 (極限)</option>
+        </select>
+      </div>
+      <div class="pa-grid" id="pa-grid"></div>
+    `;
+
+    const searchInput = document.getElementById('pa-search');
+    const diffSelect = document.getElementById('pa-difficulty');
+    
+    const render = () => {
+      const query = searchInput.value.toLowerCase();
+      const diff = diffSelect.value;
+      const grid = document.getElementById('pa-grid');
+      
+      const filtered = PROOFS_DB.filter(item => {
+        const matchesQuery = item.title.toLowerCase().includes(query) || 
+                             item.summary.toLowerCase().includes(query) || 
+                             item.field.toLowerCase().includes(query);
+        const matchesDiff = diff === "" || item.difficulty === parseInt(diff);
+        return matchesQuery && matchesDiff;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="text-align:center; padding: 2rem; color: rgba(0,243,255,0.4); font-family:'Share Tech Mono', monospace;">> NO COMPATIBLE ARCHIVES FOUND.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => `
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <h4 class="pa-card-title">Proof#${item.id}: ${item.title}</h4>
+            <div class="pa-card-meta">
+              <span class="pa-badge field">${item.field}</span>
+              <span class="pa-badge difficulty">Level ${'★'.repeat(item.difficulty)}</span>
+            </div>
+          </div>
+          <div class="pa-card-formula">
+            $$${item.formula}$$
+          </div>
+          <div class="pa-card-desc">${item.summary}</div>
+          <a href="${item.link}" class="pa-card-btn">> ACCESS ARCHIVE LOG</a>
+        </div>
+      `).join('');
+
+      // If MathJax is present, re-render formulas
+      if (window.MathJax) {
+        if (typeof MathJax.typesetPromise === 'function') {
+          MathJax.typesetPromise();
+        } else if (typeof MathJax.Hub === 'object' && typeof MathJax.Hub.Queue === 'function') {
+          MathJax.Hub.Queue(["Typeset", MathJax.Hub, grid]);
+        }
+      }
+    };
+
+    searchInput.addEventListener('input', render);
+    diffSelect.addEventListener('change', render);
+    render();
+  }
+
+  // ==========================================
+  // === PASSWORD GENERATOR ENGINE ===
+  // ==========================================
+  let genHistory = [];
+
+  function initPasswordGenerator() {
+    bodyEl.innerHTML = `
+      <div class="pg-container">
+        <div class="pg-panel">
+          <div class="pg-display-box">
+            <div id="pg-display" class="pg-display">-- SELECT SYSTEM KEY --</div>
+            <button id="pg-copy" class="pg-copy-btn" disabled>COPY</button>
+          </div>
+          
+          <div class="pg-slider-group">
+            <div class="pg-label">
+              <span>KEY LENGTH</span>
+              <span class="value" id="pg-len-val">16</span>
+            </div>
+            <input type="range" id="pg-len" class="pg-slider" min="8" max="64" value="16">
+          </div>
+
+          <div class="pg-options">
+            <label class="pg-checkbox-label">
+              <input type="checkbox" id="pg-opt-upper" checked>
+              <div class="pg-custom-box"></div>
+              <span>A-Z (UPPERCASE)</span>
+            </label>
+            <label class="pg-checkbox-label">
+              <input type="checkbox" id="pg-opt-lower" checked>
+              <div class="pg-custom-box"></div>
+              <span>a-z (LOWERCASE)</span>
+            </label>
+            <label class="pg-checkbox-label">
+              <input type="checkbox" id="pg-opt-num" checked>
+              <div class="pg-custom-box"></div>
+              <span>0-9 (NUMBERS)</span>
+            </label>
+            <label class="pg-checkbox-label">
+              <input type="checkbox" id="pg-opt-sym" checked>
+              <div class="pg-custom-box"></div>
+              <span>[!@#$...] (SYMBOLS)</span>
+            </label>
+            <label class="pg-checkbox-label">
+              <input type="checkbox" id="pg-opt-cyber">
+              <div class="pg-custom-box"></div>
+              <span>[☣☠☯⚡Ξ...] (CYBER_GLYPH)</span>
+            </label>
+            <label class="pg-checkbox-label">
+              <input type="checkbox" id="pg-opt-math">
+              <div class="pg-custom-box"></div>
+              <span>[∫∑√∂π...] (MATH_GLYPH)</span>
+            </label>
+          </div>
+
+          <button id="pg-generate" class="pg-gen-btn">GENERATE SECURE KEY</button>
+        </div>
+
+        <div class="pg-stats-panel">
+          <div class="pg-stat-card">
+            <span class="pg-stat-title">ENTROPY STRENGTH</span>
+            <span class="pg-stat-val" id="pg-entropy">0 bits</span>
+            <div class="pg-meter-bg">
+              <div id="pg-entropy-bar" class="pg-meter-fill"></div>
+            </div>
+          </div>
+          <div class="pg-stat-card">
+            <span class="pg-stat-title">SECURITY LEVEL</span>
+            <span class="pg-stat-val" id="pg-sec-level">--</span>
+          </div>
+          <div class="pg-stat-card">
+            <span class="pg-stat-title">DECRYPTION TIME (ESTIMATED)</span>
+            <span class="pg-stat-val" id="pg-crack-time">--</span>
+          </div>
+          <div class="pg-stat-card" style="flex: 1; min-height: 120px;">
+            <span class="pg-stat-title">LOCAL KEY LOGS</span>
+            <div class="pg-logs" id="pg-logs-area">
+              ${genHistory.length === 0 ? '<div style="opacity:0.3;">> STANDBY. LOG IS EMPTY.</div>' : ''}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const lengthSlider = document.getElementById('pg-len');
+    const lengthVal = document.getElementById('pg-len-val');
+    const generateBtn = document.getElementById('pg-generate');
+    const copyBtn = document.getElementById('pg-copy');
+    const displayBox = document.getElementById('pg-display');
+    const logsArea = document.getElementById('pg-logs-area');
+
+    lengthSlider.addEventListener('input', () => {
+      lengthVal.textContent = lengthSlider.value;
+    });
+
+    copyBtn.addEventListener('click', () => {
+      if (displayBox.textContent && displayBox.textContent !== '-- SELECT SYSTEM KEY --') {
+        navigator.clipboard.writeText(displayBox.textContent).then(() => {
+          const originalText = copyBtn.textContent;
+          copyBtn.textContent = 'COPIED';
+          copyBtn.style.color = 'var(--green)';
+          copyBtn.style.borderColor = 'var(--green)';
+          setTimeout(() => {
+            copyBtn.textContent = originalText;
+            copyBtn.style.color = '';
+            copyBtn.style.borderColor = '';
+          }, 1000);
+        });
+      }
+    });
+
+    generateBtn.addEventListener('click', () => {
+      const length = parseInt(lengthSlider.value);
+      const upper = document.getElementById('pg-opt-upper').checked;
+      const lower = document.getElementById('pg-opt-lower').checked;
+      const num = document.getElementById('pg-opt-num').checked;
+      const sym = document.getElementById('pg-opt-sym').checked;
+      const cyber = document.getElementById('pg-opt-cyber').checked;
+      const math = document.getElementById('pg-opt-math').checked;
+
+      // Build character set
+      let charset = '';
+      let poolSize = 0;
+      if (upper) { charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; poolSize += 26; }
+      if (lower) { charset += 'abcdefghijklmnopqrstuvwxyz'; poolSize += 26; }
+      if (num) { charset += '0123456789'; poolSize += 10; }
+      if (sym) { charset += '!@#$%^&*()_+-=[]{}|;:,.<>?'; poolSize += 26; }
+      if (cyber) { charset += '☣☠☯⚡ΞΨΦΩ★☢❄☄💧🔥'; poolSize += 16; }
+      if (math) { charset += '∫∑√∂π∞±≠≈≡≤≥∝'; poolSize += 13; }
+
+      if (charset === '') {
+        displayBox.textContent = 'ERROR: SELECT CHAR TYPE';
+        displayBox.className = 'pg-display danger';
+        return;
+      }
+
+      generateBtn.disabled = true;
+      let duration = 300;
+      let interval = 30;
+      let elapsed = 0;
+
+      // Hacky matrix typing effect
+      const spin = setInterval(() => {
+        let tempPass = '';
+        for (let i = 0; i < length; i++) {
+          tempPass += charset.charAt(Math.floor(Math.random() * charset.length));
+        }
+        displayBox.textContent = tempPass;
+        displayBox.style.color = 'var(--pink)';
+        displayBox.style.textShadow = '0 0 8px rgba(255, 0, 85, 0.4)';
+        elapsed += interval;
+        if (elapsed >= duration) {
+          clearInterval(spin);
+          finalizePassword(charset, poolSize, length);
+        }
+      }, interval);
+    });
+
+    function finalizePassword(charset, poolSize, length) {
+      let finalPass = '';
+      const array = new Uint32Array(length);
+      window.crypto.getRandomValues(array);
+      for (let i = 0; i < length; i++) {
+        finalPass += charset.charAt(array[i] % charset.length);
+      }
+
+      displayBox.textContent = finalPass;
+      displayBox.style.color = 'var(--green)';
+      displayBox.style.textShadow = '0 0 8px rgba(0, 255, 102, 0.4)';
+      copyBtn.disabled = false;
+      generateBtn.disabled = false;
+
+      // Calculate stats
+      const entropy = Math.round(length * Math.log2(poolSize));
+      document.getElementById('pg-entropy').textContent = `${entropy} bits`;
+      
+      const entropyBar = document.getElementById('pg-entropy-bar');
+      const secLevel = document.getElementById('pg-sec-level');
+      
+      entropyBar.style.width = `${Math.min(100, (entropy / 160) * 100)}%`;
+      
+      if (entropy < 60) {
+        secLevel.textContent = 'WEAK // 自滅的強度';
+        secLevel.className = 'pg-stat-val danger';
+        entropyBar.style.backgroundColor = 'var(--pink)';
+      } else if (entropy < 100) {
+        secLevel.textContent = 'STANDARD // 標準保護';
+        secLevel.className = 'pg-stat-val warning';
+        entropyBar.style.backgroundColor = 'var(--amber)';
+      } else {
+        secLevel.textContent = 'MILITARY_GRADE // 軍用最高暗号強度';
+        secLevel.className = 'pg-stat-val secure';
+        entropyBar.style.backgroundColor = 'var(--green)';
+      }
+
+      // Calculate Decryption time
+      // Assume 1 trillion guesses per second (top supercomputer)
+      const guesses = Math.pow(poolSize, length);
+      const seconds = guesses / 1e12;
+      
+      const timeVal = document.getElementById('pg-crack-time');
+      if (seconds < 1) {
+        timeVal.textContent = '0.001 seconds (Instant)';
+      } else if (seconds < 3600 * 24) {
+        timeVal.textContent = 'A few hours (Medium Threat)';
+      } else if (seconds < 3600 * 24 * 365) {
+        timeVal.textContent = 'A few months (Highly Secure)';
+      } else {
+        const years = Math.round(seconds / (3600 * 24 * 365));
+        timeVal.textContent = years > 1e10 ? 'Infinite (Universe-level Age)' : `${years.toLocaleString()} years`;
+      }
+
+      // Add to session logs
+      const time = new Date().toLocaleTimeString();
+      genHistory.unshift({ time, pass: finalPass });
+      if (genHistory.length > 8) genHistory.pop();
+
+      logsArea.innerHTML = genHistory.map((item, idx) => `
+        <div class="pg-log-entry" onclick="copyFromLog(${idx})">
+          <span><span class="pg-log-time">[${item.time}]</span> ${item.pass.substring(0, 18)}...</span>
+          <span style="color:var(--cyan); font-size:0.55rem;">[COPY]</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  window.copyFromLog = (idx) => {
+    const item = genHistory[idx];
+    if (item) {
+      navigator.clipboard.writeText(item.pass);
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+  };
+
+  // ==========================================
+  // === STEGANOGRAPHY ENGINE ===
+  // ==========================================
+  let stegImg = null;
+  let stegEncodedUrl = null;
+
+  function initSteganography() {
+    stegImg = null;
+    stegEncodedUrl = null;
+
+    bodyEl.innerHTML = `
+      <div class="steg-tabs">
+        <button class="steg-tab active" id="tab-steg-enc" onclick="switchStegTab('enc')">ENCODE // 秘密埋め込み</button>
+        <button class="steg-tab" id="tab-steg-dec" onclick="switchStegTab('dec')">DECODE // 秘密抽出</button>
+      </div>
+
+      <!-- ENCODE PANE -->
+      <div class="steg-pane active" id="pane-steg-enc">
+        <div class="steg-row">
+          <div class="steg-input-group">
+            <span class="pg-stat-title">STEP 1: CARRIER IMAGE (原画アップロード)</span>
+            <div class="steg-upload-zone" onclick="document.getElementById('steg-file-enc').click()">
+              <svg viewBox="0 0 48 48">
+                <rect x="6" y="8" width="36" height="32" rx="3"/>
+                <circle cx="16" cy="18" r="4"/>
+                <path d="M6 32l10-10 12 12 4-4 10 10"/>
+              </svg>
+              <div class="steg-upload-text">DRAG & DROP IMAGE OR CLICK TO SELECT<br>(PNG/JPG/BMP)</div>
+              <input type="file" id="steg-file-enc" style="display:none;" accept="image/*">
+            </div>
+            <div id="steg-enc-alert" class="steg-alert" style="display:none;"></div>
+          </div>
+          <div class="steg-input-group">
+            <span class="pg-stat-title">IMAGE PREVIEW (原画プレビュー)</span>
+            <div class="steg-preview-box">
+              <img id="steg-prev-enc" class="steg-preview-img" style="display:none;">
+              <span id="steg-holder-enc" class="steg-preview-placeholder">> CARRIER SIGNAL OFFLINE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="steg-input-group">
+          <span class="pg-stat-title">STEP 2: ENCRYPTED MESSAGE (隠したい秘密メッセージ)</span>
+          <textarea id="steg-msg" class="steg-textarea" placeholder="ここに極秘テキストを入力してください..."></textarea>
+<pre><code>    &lt;/div&gt;
+
+    &lt;button id=&quot;steg-run-enc&quot; class=&quot;steg-btn&quot; disabled&gt;EXECUTE ENCODE MODULE&lt;/button&gt;
+    
+    &lt;div class=&quot;steg-input-group&quot; id=&quot;steg-result-area&quot; style=&quot;display:none;&quot;&gt;
+      &lt;span class=&quot;pg-stat-title&quot;&gt;STEP 3: DEPLOYMENT READY (埋め込み完了画像)&lt;/span&gt;
+      &lt;div style=&quot;display:flex; gap: 1rem; align-items:center;&quot;&gt;
+        &lt;div class=&quot;steg-preview-box&quot; style=&quot;flex:1; height: 120px;&quot;&gt;
+          &lt;img id=&quot;steg-final-img&quot; class=&quot;steg-preview-img&quot;&gt;
+        &lt;/div&gt;
+        &lt;a id=&quot;steg-download&quot; class=&quot;steg-btn steg-dl-btn&quot; style=&quot;flex:1; line-height:3;&quot; href=&quot;#&quot; download=&quot;steg_tactical.png&quot;&gt;DOWNLOAD SECURED IMAGE&lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- DECODE PANE --&gt;
+  &lt;div class=&quot;steg-pane&quot; id=&quot;pane-steg-dec&quot;&gt;
+    &lt;div class=&quot;steg-row&quot;&gt;
+      &lt;div class=&quot;steg-input-group&quot;&gt;
+        &lt;span class=&quot;pg-stat-title&quot;&gt;STEP 1: SECURED TARGET IMAGE (解析画像の取り込み)&lt;/span&gt;
+        &lt;div class=&quot;steg-upload-zone&quot; onclick=&quot;document.getElementById('steg-file-dec').click()&quot;&gt;
+          &lt;svg viewBox=&quot;0 0 48 48&quot;&gt;
+            &lt;rect x=&quot;6&quot; y=&quot;8&quot; width=&quot;36&quot; height=&quot;32&quot; rx=&quot;3&quot;/&gt;
+            &lt;path d=&quot;M14 26 L24 16 L34 26 M24 16 L24 38&quot;/&gt;
+          &lt;/svg&gt;
+          &lt;div class=&quot;steg-upload-text&quot;&gt;SELECT SECURED SIGNAL CARRIER PNG IMAGE&lt;/div&gt;
+          &lt;input type=&quot;file&quot; id=&quot;steg-file-dec&quot; style=&quot;display:none;&quot; accept=&quot;image/*&quot;&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;steg-input-group&quot;&gt;
+        &lt;span class=&quot;pg-stat-title&quot;&gt;IMAGE SIGNAL SCANNER (解析プレビュー)&lt;/span&gt;
+        &lt;div class=&quot;steg-preview-box&quot;&gt;
+          &lt;img id=&quot;steg-prev-dec&quot; class=&quot;steg-preview-img&quot; style=&quot;display:none;&quot;&gt;
+          &lt;span id=&quot;steg-holder-dec&quot; class=&quot;steg-preview-placeholder&quot;&gt;&gt; ANALYZING TARGET SIGNAL OFFLINE&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;button id=&quot;steg-run-dec&quot; class=&quot;steg-btn&quot; style=&quot;--accent: var(--green);&quot; disabled&gt;RUN MULTI-CHANNEL SCANNER&lt;/button&gt;
+
+    &lt;div class=&quot;steg-input-group&quot;&gt;
+      &lt;span class=&quot;pg-stat-title&quot;&gt;RESTORED MESSAGE DATA (解読完了テキスト)&lt;/span&gt;
+      &lt;div id=&quot;steg-result-dec&quot; class=&quot;steg-decode-result&quot;&gt;&gt; WAITING FOR STABILIZATION SCANS...&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+`;
+
+// File inputs handlers
+const fileEnc = document.getElementById('steg-file-enc');
+const fileDec = document.getElementById('steg-file-dec');
+const prevEnc = document.getElementById('steg-prev-enc');
+const prevDec = document.getElementById('steg-prev-dec');
+const holderEnc = document.getElementById('steg-holder-enc');
+const holderDec = document.getElementById('steg-holder-dec');
+const runEncBtn = document.getElementById('steg-run-enc');
+const runDecBtn = document.getElementById('steg-run-dec');
+const encAlert = document.getElementById('steg-enc-alert');
+
+// Drag and drop events
+document.querySelectorAll('.steg-upload-zone').forEach(zone =&gt; {
+  zone.addEventListener('dragover', (e) =&gt; { e.preventDefault(); zone.style.borderColor = 'var(--cyan)'; });
+  zone.addEventListener('dragleave', () =&gt; { zone.style.borderColor = ''; });
+  zone.addEventListener('drop', (e) =&gt; {
+    e.preventDefault();
+    zone.style.borderColor = '';
+    const files = e.dataTransfer.files;
+    if (files.length &gt; 0) {
+      const input = zone.querySelector('input[type=&quot;file&quot;]');
+      input.files = files;
+      input.dispatchEvent(new Event('change'));
+    }
+  });
 });
-</script>
+
+fileEnc.addEventListener('change', () =&gt; {
+  const file = fileEnc.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) =&gt; {
+      stegImg = new Image();
+      stegImg.onload = () =&gt; {
+        prevEnc.src = e.target.result;
+        prevEnc.style.display = 'block';
+        holderEnc.style.display = 'none';
+        runEncBtn.disabled = false;
+        encAlert.style.display = 'none';
+      };
+      stegImg.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+fileDec.addEventListener('change', () =&gt; {
+  const file = fileDec.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) =&gt; {
+      stegImg = new Image();
+      stegImg.onload = () =&gt; {
+        prevDec.src = e.target.result;
+        prevDec.style.display = 'block';
+        holderDec.style.display = 'none';
+        runDecBtn.disabled = false;
+      };
+      stegImg.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// LSB Encoding Execution
+runEncBtn.addEventListener('click', () =&gt; {
+  const msg = document.getElementById('steg-msg').value;
+  if (!msg) {
+    encAlert.textContent = 'ERROR: SECRET TEXT CANNOT BE BLANK.';
+    encAlert.style.display = 'block';
+    return;
+  }
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = stegImg.width;
+  canvas.height = stegImg.height;
+  ctx.drawImage(stegImg, 0, 0);
+
+  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imgData.data;
+
+  // Encode UTF-8 message into byte stream
+  const encoder = new TextEncoder();
+  const msgBytes = encoder.encode(msg);
+  
+  const msgLength = msgBytes.length;
+  const headerBytes = new Uint8Array(4);
+  headerBytes[0] = (msgLength &gt;&gt; 24) &amp; 0xFF;
+  headerBytes[1] = (msgLength &gt;&gt; 16) &amp; 0xFF;
+  headerBytes[2] = (msgLength &gt;&gt; 8) &amp; 0xFF;
+  headerBytes[3] = msgLength &amp; 0xFF;
+
+  const totalBytes = new Uint8Array(headerBytes.length + msgBytes.length);
+  totalBytes.set(headerBytes, 0);
+  totalBytes.set(msgBytes, headerBytes.length);
+
+  if (totalBytes.length * 8 &gt; data.length) {
+    encAlert.textContent = 'ERROR: IMAGE PIXEL CAPACITY EXCEEDED. CHOOSE A LARGER CARRIER IMAGE OR DECREASE MSG SIZE.';
+    encAlert.style.display = 'block';
+    return;
+  }
+
+  runEncBtn.disabled = true;
+  runEncBtn.textContent = 'CALCULATING QUANTUM VECTORS...';
+
+  setTimeout(() =&gt; {
+    let byteIdx = 0;
+    let bitIdx = 0;
+
+    for (let i = 0; i &lt; totalBytes.length * 8; i++) {
+      const bit = (totalBytes[byteIdx] &gt;&gt; (7 - bitIdx)) &amp; 1;
+      data[i] = (data[i] &amp; 0xFE) | bit;
+      bitIdx++;
+      if (bitIdx === 8) { bitIdx = 0; byteIdx++; }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+    stegEncodedUrl = canvas.toDataURL(&quot;image/png&quot;);
+
+    document.getElementById('steg-final-img').src = stegEncodedUrl;
+    document.getElementById('steg-download').href = stegEncodedUrl;
+    document.getElementById('steg-result-area').style.display = 'block';
+    
+    runEncBtn.disabled = false;
+    runEncBtn.textContent = 'EXECUTE ENCODE MODULE';
+    if (navigator.vibrate) navigator.vibrate([30, 30, 30]);
+  }, 500);
+});
+
+// LSB Decoding Execution
+runDecBtn.addEventListener('click', () =&gt; {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = stegImg.width;
+  canvas.height = stegImg.height;
+  ctx.drawImage(stegImg, 0, 0);
+
+  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imgData.data;
+
+  const resultBox = document.getElementById('steg-result-dec');
+  resultBox.classList.remove('error');
+  resultBox.textContent = 'INITIALIZING DEEP CORE LAYER SCANNER...';
+  
+  runDecBtn.disabled = true;
+
+  setTimeout(() =&gt; {
+    try {
+      // Read 32 bits of header size
+      let lengthBytes = new Uint8Array(4);
+      let byteIdx = 0;
+      let bitIdx = 0;
+
+      for (let i = 0; i &lt; 32; i++) {
+        const bit = data[i] &amp; 1;
+        lengthBytes[byteIdx] = (lengthBytes[byteIdx] &lt;&lt; 1) | bit;
+        bitIdx++;
+        if (bitIdx === 8) { bitIdx = 0; byteIdx++; }
+      }
+
+      const msgLength = (lengthBytes[0] &lt;&lt; 24) | (lengthBytes[1] &lt;&lt; 16) | (lengthBytes[2] &lt;&lt; 8) | lengthBytes[3];
+
+      if (msgLength &lt;= 0 || msgLength * 8 + 32 &gt; data.length) {
+        throw new Error(&quot;SECRET METADATA SIGNATURE NOT DETECTED. INVALID SECURED STREAM.&quot;);
+      }
+
+      const msgBytes = new Uint8Array(msgLength);
+      byteIdx = 0;
+      bitIdx = 0;
+
+      for (let i = 32; i &lt; 32 + msgLength * 8; i++) {
+        const bit = data[i] &amp; 1;
+        msgBytes[byteIdx] = (msgBytes[byteIdx] &lt;&lt; 1) | bit;
+        bitIdx++;
+        if (bitIdx === 8) { bitIdx = 0; byteIdx++; }
+      }
+
+      const decoder = new TextDecoder();
+      const restoredText = decoder.decode(msgBytes);
+
+      // Typing animation on restoration success
+      resultBox.textContent = '';
+      let typeIdx = 0;
+      const speed = restoredText.length &gt; 100 ? 5 : 20;
+      
+      const type = setInterval(() =&gt; {
+        resultBox.textContent += restoredText.charAt(typeIdx);
+        typeIdx++;
+        if (typeIdx &gt;= restoredText.length) {
+          clearInterval(type);
+          runDecBtn.disabled = false;
+        }
+      }, speed);
+
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+
+    } catch (err) {
+      resultBox.textContent = `CRITICAL_ERROR: ${err.message}`;
+      resultBox.classList.add('error');
+      runDecBtn.disabled = false;
+    }
+  }, 800);
+});
+</code></pre>
+<p>}</p>
+<p>window.switchStegTab = (tab) =&gt; {
+document.querySelectorAll(&rsquo;.steg-tab&rsquo;).forEach(t =&gt; t.classList.remove(&lsquo;active&rsquo;));
+document.querySelectorAll(&rsquo;.steg-pane&rsquo;).forEach(p =&gt; p.classList.remove(&lsquo;active&rsquo;));</p>
+<pre><code>if (tab === 'enc') {
+  document.getElementById('tab-steg-enc').classList.add('active');
+  document.getElementById('pane-steg-enc').classList.add('active');
+} else {
+  document.getElementById('tab-steg-dec').classList.add('active');
+  document.getElementById('pane-steg-dec').classList.add('active');
+}
+</code></pre>
+<p>};</p>
+<p>console.log(&rsquo;%c SYSTEM ROOT :: READY &lsquo;, &lsquo;background: #00f3ff; color: #000; padding: 5px; font-weight: bold;&rsquo;);
+});
+</script></p>
+
     </section>
     <footer class="pt-8">
       
