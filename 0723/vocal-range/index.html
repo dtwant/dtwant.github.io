@@ -3429,11 +3429,11 @@
     let prefs = { lastTags: '', lastStatus: 'can_sing' }; 
 
      
-    const NS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const NS = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
     const PB = { lowlow: 12, low: 24, mid1: 36, mid2: 48, hi: 60, hihi: 72, hihihi: 84 };
     function noteNum(s) {
       if (!s) return 0;
-      const m = s.trim().match(/^(lowlow|low|mid1|mid2|hihihi|hihi|hi)(C#?|D#?|E|F#?|G#?|A#?|B)$/i);
+      const m = s.trim().match(/^(lowlow|low|mid1|mid2|hihihi|hihi|hi)(A#?|B|C#?|D#?|E|F#?|G#?)$/i);
       if (!m) return 0; const base = PB[m[1].toLowerCase()];
       if (base === undefined) return 0;
       const idx = NS.indexOf(m[2][0].toUpperCase() + (m[2].length > 1 ? '#' : ''));
@@ -3459,6 +3459,20 @@
       try { tracks = JSON.parse(localStorage.getItem(SK)) || []; } catch (e) { tracks = []; }
       blobId = localStorage.getItem(BK) || null;
       try { prefs = JSON.parse(localStorage.getItem(PK)) || { lastTags: '', lastStatus: 'can_sing' }; } catch (e) { }
+      
+      let migrated = false;
+      tracks.forEach(t => {
+        if (t.highNote) {
+          const newNum = noteNum(t.highNote);
+          if (t.highNoteNum !== newNum) {
+            t.highNoteNum = newNum;
+            migrated = true;
+          }
+        }
+      });
+      if (migrated) {
+        save();
+      }
     }
     function save() { localStorage.setItem(SK, JSON.stringify(tracks)); }
     function savePrefs() { localStorage.setItem(PK, JSON.stringify(prefs)); }
