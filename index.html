@@ -1251,142 +1251,58 @@ h3.dt-heading::before {
   opacity: 0.8;
 }
 
-/* --- CHANGELOG スタイル (軍用タクティカル仕様) --- */
-.cl-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+/* --- CHANGELOG スタイル (シンプル＆高追記性) --- */
+.dt-changelog-area {
   margin-top: 1rem;
-}
-.cl-item {
-  border: 1px solid rgba(0, 243, 255, 0.15);
-  background: rgba(0, 243, 255, 0.02);
-  padding: 1.2rem;
-  border-radius: 4px;
-  position: relative;
-  transition: all 0.3s ease;
-}
-.cl-item.recent {
-  border-color: rgba(255, 0, 85, 0.3);
-  background: rgba(255, 0, 85, 0.02);
-  box-shadow: inset 0 0 10px rgba(255, 0, 85, 0.05);
-}
-.cl-item::before {
-  content: 'TACTICAL_LOG_SEC';
-  position: absolute;
-  top: -8px; right: 10px;
-  font-family: 'Orbitron', monospace;
-  font-size: 0.55rem;
-  color: rgba(0, 243, 255, 0.4);
-  background: var(--bg-color);
-  padding: 0 5px;
-  letter-spacing: 1px;
-}
-.cl-item.recent::before {
-  content: 'SYS_UPDATE_CRITICAL';
-  color: rgba(255, 0, 85, 0.6);
-}
-.cl-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.8rem;
-  border-bottom: 1px solid rgba(0, 243, 255, 0.1);
-  padding-bottom: 0.5rem;
-}
-.cl-version {
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--accent-primary);
-  text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
-}
-.cl-item.recent .cl-version {
-  color: var(--accent-secondary);
-  text-shadow: 0 0 5px rgba(255, 0, 85, 0.5);
-}
-.cl-date {
-  font-family: 'M PLUS 1 Code', monospace;
-  font-size: 0.8rem;
-  color: rgba(224, 248, 255, 0.6);
-}
-.cl-badge {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 2px;
-  letter-spacing: 1px;
-}
-.badge-new {
-  background: rgba(0, 255, 102, 0.15);
-  color: #00ff66;
-  border: 1px solid rgba(0, 255, 102, 0.3);
-}
-.badge-fix {
-  background: rgba(255, 0, 85, 0.15);
-  color: #ff0055;
-  border: 1px solid rgba(255, 0, 85, 0.3);
-}
-.badge-imp {
-  background: rgba(0, 243, 255, 0.15);
-  color: #00f3ff;
-  border: 1px solid rgba(0, 243, 255, 0.3);
-}
-.cl-content {
   font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace !important;
-  font-size: 0.85rem !important;
-  line-height: 1.7;
-}
-.cl-content p {
-  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem !important;
   color: #e0f8ff;
 }
-.cl-content ul {
+.dt-changelog-area > ul {
+  list-style: none;
+  padding-left: 0;
   margin: 0;
+}
+.dt-changelog-area > ul > li {
+  position: relative;
   padding-left: 1.2rem;
-  color: rgba(224, 248, 255, 0.85);
+  margin-bottom: 1rem;
+  border-left: 1px solid rgba(0, 243, 255, 0.2);
 }
-.cl-content li {
-  margin-bottom: 0.4rem;
-}
-.cl-content strong {
-  color: var(--accent-primary);
-}
-.cl-item.recent .cl-content strong {
+.dt-changelog-area > ul > li::before {
+  content: '>';
+  position: absolute;
+  left: 0.2rem;
+  top: 0;
   color: var(--accent-secondary);
+  font-weight: bold;
+  animation: blink 2s infinite;
 }
-
-/* アコーディオン */
-.cl-history {
-  margin-top: 1rem;
-  border: 1px dashed rgba(0, 243, 255, 0.2);
-  border-radius: 4px;
-}
-.cl-history-trigger {
-  padding: 1rem;
-  font-family: 'Orbitron', 'M PLUS 1 Code', sans-serif;
-  font-size: 0.8rem;
+.dt-changelog-area strong {
   color: var(--accent-primary);
-  cursor: pointer;
-  user-select: none;
-  transition: all 0.3s;
-  outline: none;
-  background: rgba(0, 243, 255, 0.01);
+  font-size: 0.85rem;
+  margin-right: 0.6rem;
 }
-.cl-history-trigger:hover {
-  background: rgba(0, 243, 255, 0.05);
-  color: #fff;
-  text-shadow: 0 0 5px var(--accent-primary);
+.dt-changelog-area code {
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 0.65rem !important;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 2px;
+  background: rgba(0, 243, 255, 0.1);
+  color: var(--accent-primary);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  margin-left: 0.4rem;
+  letter-spacing: 0.5px;
 }
-.cl-history-content {
-  padding: 1rem;
-  border-top: 1px dashed rgba(0, 243, 255, 0.2);
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  background: rgba(0, 0, 0, 0.2);
+.dt-changelog-area ul ul {
+  list-style: square;
+  padding-left: 1.5rem;
+  margin-top: 0.3rem;
+  color: rgba(224, 248, 255, 0.8);
+}
+.dt-changelog-area ul ul li {
+  margin-bottom: 0.2rem;
 }
 </style>
 <div class="dt-container">
@@ -1749,73 +1665,6 @@ actionBtn.classList.remove('done-mode');
   </a>
 </div>
 </div>
-<div class="dt-card">
-<h3 class="dt-heading">SYSTEM_CHANGELOG</h3>
-<div class="cl-container">
-  <!-- 最新のアップデート -->
-  <div class="cl-item recent">
-    <div class="cl-meta">
-      <span class="cl-version">v2.5.0</span>
-      <span class="cl-date">2026-05-29</span>
-      <span class="cl-badge badge-new">NEW</span>
-    </div>
-    <div class="cl-content">
-      <p>SYSTEM ROOT (Project-X) に新規モジュール3基をデプロイしました。</p>
-      <ul>
-        <li><strong>PROOF_ARCHIVE (M_004)</strong>: math/physics の証明を全網羅し、分野・手法・難易度で検索可能な統合データベース。</li>
-        <li><strong>PASSWORD_GENERATOR (M_005)</strong>: 安全度エントロピー解析および解読時間推定を備えたタクティカル乱数暗号生成器。</li>
-        <li><strong>STEGANOGRAPHY_TOOL (M_006)</strong>: 画像のLSB(最低位ビット)を利用した、ブラウザ完結型の秘密メッセージ埋め込み・抽出モジュール。</li>
-      </ul>
-    </div>
-  </div>
-  <!-- 過去ログアコーディオン -->
-  <details class="cl-history">
-    <summary class="cl-history-trigger">▶ SYSTEM ARCHIVE LOGS (過去の更新履歴を展開)</summary>
-    <div class="cl-history-content">
-      <div class="cl-item">
-        <div class="cl-meta">
-          <span class="cl-version">v2.4.1</span>
-          <span class="cl-date">2026-05-28</span>
-          <span class="cl-badge badge-fix">FIX</span>
-        </div>
-        <div class="cl-content">
-          <p>生体認証スキャナーおよびログインバイパスセキュリティの最適化を実行。</p>
-        </div>
-      </div>
-      <div class="cl-item">
-        <div class="cl-meta">
-          <span class="cl-version">v2.4.0</span>
-          <span class="cl-date">2026-05-15</span>
-          <span class="cl-badge badge-imp">IMP</span>
-        </div>
-        <div class="cl-content">
-          <p>データ保管庫 (DATA VAULT) の UI 設計をサイバータクティカルテーマに一新。</p>
-        </div>
-      </div>
-      <div class="cl-item">
-        <div class="cl-meta">
-          <span class="cl-version">v2.3.0</span>
-          <span class="cl-date">2026-04-10</span>
-          <span class="cl-badge badge-new">NEW</span>
-        </div>
-        <div class="cl-content">
-          <p>Labツール群に「ボーカルレンジ・ソルバー」および「フラクタル探索エンジン」を追加。</p>
-        </div>
-      </div>
-      <div class="cl-item">
-        <div class="cl-meta">
-          <span class="cl-version">v1.0.0</span>
-          <span class="cl-date">2025-06-01</span>
-          <span class="cl-badge badge-new">NEW</span>
-        </div>
-        <div class="cl-content">
-          <p>DT_WORLD 第1世代コアシステム構築。数学・物理の検証記事および基本ログ機能が稼働開始。</p>
-        </div>
-      </div>
-    </div>
-  </details>
-</div>
-</div>
 <div class="alert-spacer">
 
   
@@ -1988,12 +1837,14 @@ scanner.addEventListener('contextmenu', (e) => {
 
     
     
-      
-      
-    
 
     
     
+      
+        
+        
+          
+        
       
     
   
@@ -2003,16 +1854,25 @@ scanner.addEventListener('contextmenu', (e) => {
 <article
   class="relative min-h-full min-w-full overflow-hidden rounded border border-2 border-neutral-200 shadow-2xl dark:border-neutral-700">
   
+    <div class="flex-none relative overflow-hidden thumbnail_card">
+      <img
+        src="/posts/2026-05-29-change/featured_hu_250358948d5236f9.JPG"
+        alt="変更点"
+        loading="lazy"
+        decoding="async"
+        class="not-prose absolute inset-0 w-full h-full object-cover">
+    </div>
+  
   
   <div class="px-6 py-4">
     <header>
       <a
         
-          href="/lab/resource/"
+          href="/posts/2026-05-29-change/"
         
         class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
         <h2>
-          Resource Dashboard
+          変更点
           
         </h2>
       </a>
@@ -2064,7 +1924,7 @@ scanner.addEventListener('contextmenu', (e) => {
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>108 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
+      <time datetime="2026-05-29T14:33:00&#43;09:00">29 May 2026</time><span class="px-2 text-primary-500">&middot;</span><span>50 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
     
 
     
@@ -2100,6 +1960,18 @@ scanner.addEventListener('contextmenu', (e) => {
         
       
         
+          
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/site/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Site
+  </span>
+</span>
+
+              </a>
+            
           
         
       
@@ -2147,12 +2019,14 @@ scanner.addEventListener('contextmenu', (e) => {
 
     
     
-      
-      
-    
 
     
     
+      
+        
+        
+          
+        
       
     
   
@@ -2162,16 +2036,25 @@ scanner.addEventListener('contextmenu', (e) => {
 <article
   class="relative min-h-full min-w-full overflow-hidden rounded border border-2 border-neutral-200 shadow-2xl dark:border-neutral-700">
   
+    <div class="flex-none relative overflow-hidden thumbnail_card">
+      <img
+        src="/posts/2026-02-07-r5ee/featured_hu_7969692c237ea242.JPG"
+        alt="R5 EE-exam1 解答"
+        loading="lazy"
+        decoding="async"
+        class="not-prose absolute inset-0 w-full h-full object-cover">
+    </div>
+  
   
   <div class="px-6 py-4">
     <header>
       <a
         
-          href="/lab/heatmap/"
+          href="/posts/2026-02-07-r5ee/"
         
         class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
         <h2>
-          Habit Heatmap
+          R5 EE-exam1 解答
           
         </h2>
       </a>
@@ -2223,7 +2106,7 @@ scanner.addEventListener('contextmenu', (e) => {
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>119 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
+      <time datetime="2026-02-07T00:00:00&#43;09:00">7 February 2026</time><span class="px-2 text-primary-500">&middot;</span><span>824 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">4 mins</span>
     
 
     
@@ -2259,6 +2142,58 @@ scanner.addEventListener('contextmenu', (e) => {
         
       
         
+          
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/information/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Information
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/physics/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Physics
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/school/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    School
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/specialized/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Specialized
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/2i/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    2I
+  </span>
+</span>
+
+              </a>
+            
           
         
       
@@ -2306,12 +2241,14 @@ scanner.addEventListener('contextmenu', (e) => {
 
     
     
-      
-      
-    
 
     
     
+      
+        
+        
+          
+        
       
     
   
@@ -2321,16 +2258,25 @@ scanner.addEventListener('contextmenu', (e) => {
 <article
   class="relative min-h-full min-w-full overflow-hidden rounded border border-2 border-neutral-200 shadow-2xl dark:border-neutral-700">
   
+    <div class="flex-none relative overflow-hidden thumbnail_card">
+      <img
+        src="/posts/2026-01-14-proof11/featured_hu_1d60fd81a056ccb2.png"
+        alt="Proof#11"
+        loading="lazy"
+        decoding="async"
+        class="not-prose absolute inset-0 w-full h-full object-cover">
+    </div>
+  
   
   <div class="px-6 py-4">
     <header>
       <a
         
-          href="/lab/tech-tree/"
+          href="/posts/2026-01-14-proof11/"
         
         class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
         <h2>
-          Tech Tree Tracker
+          Proof#11
           
         </h2>
       </a>
@@ -2382,7 +2328,7 @@ scanner.addEventListener('contextmenu', (e) => {
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2026-03-22T00:00:00&#43;09:00">22 March 2026</time><span class="px-2 text-primary-500">&middot;</span><span>118 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
+      <time datetime="2026-01-14T00:00:00&#43;09:00">14 January 2026</time><span class="px-2 text-primary-500">&middot;</span><span>303 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">2 mins</span>
     
 
     
@@ -2418,6 +2364,38 @@ scanner.addEventListener('contextmenu', (e) => {
         
       
         
+          
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/math/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Math
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/integral/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Integral
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/proof/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Proof
+  </span>
+</span>
+
+              </a>
+            
           
         
       
@@ -2465,12 +2443,14 @@ scanner.addEventListener('contextmenu', (e) => {
 
     
     
-      
-      
-    
 
     
     
+      
+        
+        
+          
+        
       
     
   
@@ -2480,16 +2460,25 @@ scanner.addEventListener('contextmenu', (e) => {
 <article
   class="relative min-h-full min-w-full overflow-hidden rounded border border-2 border-neutral-200 shadow-2xl dark:border-neutral-700">
   
+    <div class="flex-none relative overflow-hidden thumbnail_card">
+      <img
+        src="/posts/2025-12-25-proof10/featured_hu_e06587f41e9a7de3.png"
+        alt="Proof#10"
+        loading="lazy"
+        decoding="async"
+        class="not-prose absolute inset-0 w-full h-full object-cover">
+    </div>
+  
   
   <div class="px-6 py-4">
     <header>
       <a
         
-          href="/lab/deadline/"
+          href="/posts/2025-12-25-proof10/"
         
         class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
         <h2>
-          Deadline Manager
+          Proof#10
           
         </h2>
       </a>
@@ -2514,6 +2503,8 @@ scanner.addEventListener('contextmenu', (e) => {
   
 
   
+    
+  
 
   
 
@@ -2521,6 +2512,8 @@ scanner.addEventListener('contextmenu', (e) => {
     
   
 
+  
+    
   
 
   
@@ -2537,7 +2530,7 @@ scanner.addEventListener('contextmenu', (e) => {
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>164 words</span>
+      <time datetime="2025-12-25T12:00:00&#43;09:00">25 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>224 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">2 mins</span>
     
 
     
@@ -2573,6 +2566,38 @@ scanner.addEventListener('contextmenu', (e) => {
         
       
         
+          
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/math/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Math
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/series/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Series
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/proof/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Proof
+  </span>
+</span>
+
+              </a>
+            
           
         
       
@@ -2620,12 +2645,14 @@ scanner.addEventListener('contextmenu', (e) => {
 
     
     
-      
-      
-    
 
     
     
+      
+        
+        
+          
+        
       
     
   
@@ -2635,16 +2662,25 @@ scanner.addEventListener('contextmenu', (e) => {
 <article
   class="relative min-h-full min-w-full overflow-hidden rounded border border-2 border-neutral-200 shadow-2xl dark:border-neutral-700">
   
+    <div class="flex-none relative overflow-hidden thumbnail_card">
+      <img
+        src="/posts/2025-12-24-math3/featured_hu_fc74ef3ab0ad662b.png"
+        alt="Proof#9"
+        loading="lazy"
+        decoding="async"
+        class="not-prose absolute inset-0 w-full h-full object-cover">
+    </div>
+  
   
   <div class="px-6 py-4">
     <header>
       <a
         
-          href="/lab/attendance/"
+          href="/posts/2025-12-24-math3/"
         
         class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
         <h2>
-          Attendance Monitor
+          Proof#9
           
         </h2>
       </a>
@@ -2669,6 +2705,8 @@ scanner.addEventListener('contextmenu', (e) => {
   
 
   
+    
+  
 
   
 
@@ -2676,6 +2714,8 @@ scanner.addEventListener('contextmenu', (e) => {
     
   
 
+  
+    
   
 
   
@@ -2692,7 +2732,7 @@ scanner.addEventListener('contextmenu', (e) => {
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>76 words</span>
+      <time datetime="2025-12-24T02:00:00&#43;09:00">24 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>156 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span>
     
 
     
@@ -2728,6 +2768,38 @@ scanner.addEventListener('contextmenu', (e) => {
         
       
         
+          
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/math/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Math
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/integral/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Integral
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/proof/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Proof
+  </span>
+</span>
+
+              </a>
+            
           
         
       
@@ -2775,12 +2847,14 @@ scanner.addEventListener('contextmenu', (e) => {
 
     
     
-      
-      
-    
 
     
     
+      
+        
+        
+          
+        
       
     
   
@@ -2790,16 +2864,25 @@ scanner.addEventListener('contextmenu', (e) => {
 <article
   class="relative min-h-full min-w-full overflow-hidden rounded border border-2 border-neutral-200 shadow-2xl dark:border-neutral-700">
   
+    <div class="flex-none relative overflow-hidden thumbnail_card">
+      <img
+        src="/posts/2025-12-24-math2/featured_hu_5c2ef2923663d607.png"
+        alt="Proof#8"
+        loading="lazy"
+        decoding="async"
+        class="not-prose absolute inset-0 w-full h-full object-cover">
+    </div>
+  
   
   <div class="px-6 py-4">
     <header>
       <a
         
-          href="/lab/mdeditor/"
+          href="/posts/2025-12-24-math2/"
         
         class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
         <h2>
-          Markdown Editor
+          Proof#8
           
         </h2>
       </a>
@@ -2824,6 +2907,8 @@ scanner.addEventListener('contextmenu', (e) => {
   
 
   
+    
+  
 
   
 
@@ -2831,6 +2916,8 @@ scanner.addEventListener('contextmenu', (e) => {
     
   
 
+  
+    
   
 
   
@@ -2847,7 +2934,7 @@ scanner.addEventListener('contextmenu', (e) => {
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>67 words</span>
+      <time datetime="2025-12-24T01:00:00&#43;09:00">24 December 2025</time><span class="px-2 text-primary-500">&middot;</span><span>278 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">2 mins</span>
     
 
     
@@ -2883,6 +2970,38 @@ scanner.addEventListener('contextmenu', (e) => {
         
       
         
+          
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/math/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Math
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/integral/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Integral
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/tags/proof/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Proof
+  </span>
+</span>
+
+              </a>
+            
           
         
       
