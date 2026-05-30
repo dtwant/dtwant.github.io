@@ -995,9 +995,26 @@ body {
 .sr-header {
   text-align: center; margin-bottom: 3rem;
   padding: 2.5rem 2rem; position: relative;
-  border: 1px solid var(--border-dim);
-  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08); /* 白線を繊細で上品な太さに抑制 */
+  
+  /* ガラス表面の斜めの鏡面光沢反射（specular reflection）グラデーション */
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.12) 0%, 
+    rgba(255, 255, 255, 0.02) 30%, 
+    rgba(10, 8, 28, 0.25) 70%, 
+    rgba(2, 2, 6, 0.50) 100%
+  );
   overflow: hidden;
+  backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%); /* SVG屈折歪み ＋ 彩度濃縮 */
+  -webkit-backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%);
+  
+  /* 極細ハイライトと重厚なブラックインナーシャドウ */
+  box-shadow: 
+    inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.22),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.08),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.55),
+    inset -3px -3px 10px rgba(0, 0, 0, 0.65),
+    0 12px 36px rgba(2, 2, 8, 0.55);
 }
 .sr-header::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
@@ -1078,27 +1095,30 @@ body {
   text-decoration: none !important;
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.15); /* 境界線をやや明瞭にしてガラスの端を際立たせる */
-  /* 左上から右下に差し込む光と屈折を再現するグラデーション */
+  border: 1px solid rgba(255, 255, 255, 0.09); /* 白線を繊細で上品な太さに抑制 */
+  
+  /* ガラス表面の斜めの鏡面光沢反射（specular reflection）と透過影を組み合わせたグラデーション */
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.12) 0%, 
-    rgba(10, 8, 28, 0.30) 45%, 
-    rgba(3, 3, 12, 0.55) 100%
+    rgba(255, 255, 255, 0.14) 0%,   /* 左上のツルッとした表面 of 鏡面光沢 */
+    rgba(255, 255, 255, 0.03) 30%,  /* 透過面への滑らかな遷移 */
+    rgba(10, 8, 28, 0.25) 70%, 
+    rgba(2, 2, 6, 0.50) 100%
   );
   padding: 1.2rem;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   clip-path: polygon(8% 0%, 92% 0%, 100% 15%, 100% 85%, 92% 100%, 8% 100%, 0% 85%, 0% 15%);
   min-height: 150px;
   cursor: pointer;
-  backdrop-filter: blur(18px) url(#liquid-refract) saturate(140%); /* SVGの屈折歪みと絶妙なボケ量の融合 */
-  -webkit-backdrop-filter: blur(18px) url(#liquid-refract) saturate(140%);
+  backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%); /* 彩度を上げて背面を濃縮 */
+  -webkit-backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%);
   
-  /* 多重屈折ハイライト ＋ 厚み（3Dインナーシャドウ） ＋ 物理ドロップシャドウ */
+  /* 白く太い線を防ぎ、極細で鋭いハイライトと重厚なブラックインナーシャドウで光学コントラストを極大化 */
   box-shadow: 
-    inset 1px 1px 0px rgba(255, 255, 255, 0.35),   /* 最外殻の鋭い屈折ハイライト */
-    inset 2px 2px 6px rgba(255, 255, 255, 0.15),   /* 内側に少し回り込む光の散乱 */
-    inset -2px -2px 6px rgba(0, 0, 0, 0.45),        /* 底部・右端のガラス内部の吸光（厚みの影） */
-    0 12px 32px rgba(3, 3, 12, 0.5);                /* 浮かび上がらせるソフトな外影 */
+    inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.22),  /* 繊細で極細の鋭い光の屈折フチ */
+    inset 2px 2px 5px rgba(255, 255, 255, 0.08),     /* 内側への極めて淡い光の散乱 */
+    inset -1px -1px 3px rgba(0, 0, 0, 0.55),          /* 底部のガラス特有の濃い吸光影 */
+    inset -3px -3px 10px rgba(0, 0, 0, 0.65),         /* 3Dガラスの重厚な内部影 */
+    0 12px 36px rgba(2, 2, 8, 0.55);                  /* 地面に浮遊させるソフトな本物の影 */
 }
 .hex-tile::before {
   content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
@@ -1109,16 +1129,18 @@ body {
   border-color: var(--accent, var(--cyan));
   /* ホバー時は光をより吸い込み、コントラストを高める */
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.20) 0%, 
-    rgba(10, 8, 28, 0.25) 45%, 
-    rgba(3, 3, 12, 0.45) 100%
+    rgba(255, 255, 255, 0.22) 0%, 
+    rgba(255, 255, 255, 0.05) 30%, 
+    rgba(10, 8, 28, 0.20) 70%, 
+    rgba(2, 2, 6, 0.40) 100%
   );
   transform: scale(1.04) translateY(-3px);
-  /* 光沢を強調しつつ、背面ネオングローがガラス内部を透過して滲む光学表現 */
+  /* ホバー時もフチは白くせず、極細ハイライトとネオングローのコントラストを融合 */
   box-shadow: 
-    inset 1px 1px 0px rgba(255, 255, 255, 0.55),
-    inset 2px 2px 10px rgba(255, 255, 255, 0.25),
-    inset -2px -2px 8px rgba(0, 0, 0, 0.35),
+    inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.35),
+    inset 2px 2px 8px rgba(255, 255, 255, 0.15),
+    inset -2px -2px 6px rgba(0, 0, 0, 0.45),
+    inset -4px -4px 12px rgba(0, 0, 0, 0.55),
     0 16px 40px var(--glow, rgba(0, 243, 255, 0.4));
 }
 .hex-tile:hover::before { left: 100%; }

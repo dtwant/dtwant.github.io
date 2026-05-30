@@ -779,7 +779,29 @@ body { padding: 0 !important; background-color: var(--bg-dark) !important; color
 .secret-container.unlocked { filter: blur(0); opacity: 1; }
 
 /* --- 3. COMMAND HEADER --- */
-.cmd-header { position: relative; margin-bottom: 2.5rem; padding: 1.5rem; border: 1px solid rgba(0,255,102,0.25); background: linear-gradient(135deg, rgba(0,255,102,0.03), rgba(188,19,254,0.03)); overflow: hidden; }
+.cmd-header {
+  position: relative; margin-bottom: 2.5rem; padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08); /* 白線を繊細で上品な太さに抑制 */
+  
+  /* ガラス表面の斜めの鏡面光沢反射（specular reflection）グラデーション */
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.12) 0%, 
+    rgba(255, 255, 255, 0.02) 30%, 
+    rgba(10, 8, 28, 0.25) 70%, 
+    rgba(2, 2, 6, 0.50) 100%
+  );
+  overflow: hidden;
+  backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%); /* SVG屈折歪み ＋ 彩度濃縮 */
+  -webkit-backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%);
+  
+  /* 極細ハイライトと重厚なブラックインナーシャドウ */
+  box-shadow: 
+    inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.22),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.08),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.55),
+    inset -3px -3px 10px rgba(0, 0, 0, 0.65),
+    0 12px 36px rgba(2, 2, 8, 0.55);
+}
 .cmd-header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--cmd-green), var(--cmd-purple), transparent); }
 .cmd-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,255,102,0.3), transparent); }
 
@@ -807,9 +829,57 @@ body { padding: 0 !important; background-color: var(--bg-dark) !important; color
 
 /* --- 5. HEX GRID --- */
 .hex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
-.hex-tile { display: block; text-decoration: none !important; position: relative; overflow: hidden; border: 1px solid rgba(0,255,102,0.2); background: rgba(0,10,5,0.6); padding: 1.2rem; transition: all 0.3s ease; clip-path: polygon(10% 0%, 90% 0%, 100% 20%, 100% 80%, 90% 100%, 10% 100%, 0% 80%, 0% 20%); }
-.hex-tile::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(0,255,102,0.1), transparent); transition: left 0.5s; }
-.hex-tile:hover { border-color: var(--cmd-purple); background: rgba(188,19,254,0.08); transform: scale(1.04); box-shadow: 0 0 25px rgba(188,19,254,0.2); }
+.hex-tile {
+  display: block;
+  text-decoration: none !important;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.09); /* 白線を繊細で上品な太さに抑制 */
+  
+  /* ガラス表面の斜めの鏡面光沢反射（specular reflection）と透過影を組み合わせたグラデーション */
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.14) 0%,   /* 左上のツルッとした表面 of 鏡面光沢 */
+    rgba(255, 255, 255, 0.03) 30%,  /* 透過面への滑らかな遷移 */
+    rgba(10, 8, 28, 0.25) 70%, 
+    rgba(2, 2, 6, 0.50) 100%
+  );
+  padding: 1.2rem;
+  transition: all 0.3s ease;
+  clip-path: polygon(10% 0%, 90% 0%, 100% 20%, 100% 80%, 90% 100%, 10% 100%, 0% 80%, 0% 20%);
+  backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%); /* 彩度を上げて背面を濃縮 */
+  -webkit-backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%);
+  
+  /* 白く太い線を防ぎ、極細で鋭いハイライトと重厚なブラックインナーシャドウで光学コントラストを極大化 */
+  box-shadow: 
+    inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.22),  /* 繊細で極細の鋭い光の屈折フチ */
+    inset 2px 2px 5px rgba(255, 255, 255, 0.08),     /* 内側への極めて淡い光の散乱 */
+    inset -1px -1px 3px rgba(0, 0, 0, 0.55),          /* 底部のガラス特有の濃い吸光影 */
+    inset -3px -3px 10px rgba(0, 0, 0, 0.65),         /* 3Dガラスの重厚な内部影 */
+    0 12px 36px rgba(2, 2, 8, 0.55);                  /* 地面に浮遊させるソフトな本物の影 */
+}
+.hex-tile::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  transition: left 0.5s;
+}
+.hex-tile:hover {
+  border-color: var(--cmd-purple);
+  /* ホバー時は光をより吸い込み、コントラストを高める */
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.22) 0%, 
+    rgba(255, 255, 255, 0.05) 30%, 
+    rgba(10, 8, 20, 0.20) 70%, 
+    rgba(2, 2, 6, 0.40) 100%
+  );
+  transform: scale(1.04);
+  /* ホバー時もフチは白くせず、極細ハイライトとネオングローのコントラストを融合 */
+  box-shadow: 
+    inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.35),
+    inset 2px 2px 8px rgba(255, 255, 255, 0.15),
+    inset -2px -2px 6px rgba(0, 0, 0, 0.45),
+    inset -4px -4px 12px rgba(0, 0, 0, 0.55),
+    0 16px 40px rgba(188, 19, 254, 0.35);
+}
 .hex-tile:hover::before { left: 100%; }
 .hex-inner { display: flex; flex-direction: column; gap: 0.3rem; position: relative; z-index: 1; min-height: 80px; }
 .hex-scanline { position: absolute; top: 0; left: 0; right: 0; height: 100%; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,255,102,0.02) 3px, rgba(0,255,102,0.02) 4px); pointer-events: none; }
@@ -1321,6 +1391,15 @@ body { padding: 0 !important; background-color: var(--bg-dark) !important; color
 <div class="error-msg" id="error-msg">ACCESS DENIED. INVALID PATTERN.</div>
 </div>
 </div>
+<!-- SVG: LIQUID GLASS REFRACTION FILTER -->
+<svg style="position: absolute; width: 0; height: 0; pointer-events: none;">
+  <defs>
+    <filter id="liquid-refract" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
 <div class="cyber-bg"><div class="cyber-bg-image"></div><div class="cyber-bg-vignette"></div></div>
 <div class="cyber-grid"></div>
 <div class="scanline"></div>
