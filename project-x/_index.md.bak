@@ -21,9 +21,9 @@ robots: "noindex, nofollow"
   --purple: #bc13fe;
   --amber: #ffaa00;
   --dark: #030308;
-  --card-bg: rgba(3,3,12,0.75);
-  --border-dim: rgba(0,243,255,0.15);
-  --border-bright: rgba(0,243,255,0.4);
+  --card-bg: rgba(3, 3, 12, 0.75);
+  --border-dim: rgba(0, 255, 102, 0.15);
+  --border-bright: rgba(0, 255, 102, 0.4);
 }
 h1:not(.sr-title) { display: none !important; }
 body {
@@ -32,32 +32,44 @@ body {
   color: #e0f8ff;
   font-family: 'JetBrains Mono', monospace;
   overflow-x: hidden;
+  width: 100vw;
+  min-height: 100vh;
 }
+*, *::before, *::after { box-sizing: border-box; }
 
-/* === BACKGROUND === */
-.sr-bg {
-  position: fixed; inset: 0; z-index: 0;
-  background: radial-gradient(ellipse at 30% 20%, rgba(0,243,255,0.06) 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 80%, rgba(255,0,85,0.04) 0%, transparent 50%),
-              var(--dark);
+/* === BACKGROUND (COMMAND PORTED) === */
+.cyber-bg {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0;
+  overflow: hidden; background: #0a0518;
 }
-.sr-grid {
-  position: fixed; inset: 0; z-index: 1; pointer-events: none;
-  background-image:
-    linear-gradient(rgba(0,243,255,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,243,255,0.06) 1px, transparent 1px);
-  background-size: 40px 40px;
+.cyber-bg-image {
+  position: absolute; inset: -5%; width: 110%; height: 110%;
+  background-image: url('/img/cmd_center_bg.png');
+  background-size: cover; background-position: center;
+  filter: brightness(0.7) contrast(1.15) saturate(1.4);
 }
-.sr-scanline {
-  position: fixed; inset: 0; z-index: 2; pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg, transparent 0px, transparent 2px,
-    rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px
-  );
-}
-.sr-vignette {
-  position: fixed; inset: 0; z-index: 3; pointer-events: none;
+.cyber-bg-vignette {
+  position: absolute; inset: 0;
   background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%);
+}
+.cyber-grid {
+  position: fixed; top: -50%; left: -50%; width: 200vw; height: 200vh;
+  background: linear-gradient(transparent 0%, rgba(0, 255, 102, 0.05) 1%, transparent 2%),
+              linear-gradient(90deg, transparent 0%, rgba(188, 19, 254, 0.05) 1%, transparent 2%);
+  background-size: 40px 40px;
+  transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px);
+  animation: grid-move 8s linear infinite;
+  z-index: 1; pointer-events: none;
+}
+@keyframes grid-move {
+  0% { transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px); }
+  100% { transform: perspective(300px) rotateX(60deg) translateY(40px) translateZ(-100px); }
+}
+.scanline {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+  background-size: 100% 3px; pointer-events: none; z-index: 100;
+  opacity: 0.12; mix-blend-mode: overlay;
 }
 
 /* Floating particles */
@@ -80,7 +92,7 @@ body {
 /* === 6DIGIT PIN LOCK SCREEN === */
 #sr-lock {
   position: fixed; inset: 0; z-index: 9999;
-  background: rgba(0,0,0,0.92);
+  background: rgba(3, 3, 12, 0.92);
   backdrop-filter: blur(12px);
   display: flex; flex-direction: column;
   justify-content: center; align-items: center;
@@ -91,7 +103,7 @@ body {
   content: '';
   position: absolute; inset: 0;
   background: repeating-linear-gradient(
-    0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px,
+    0deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px,
     transparent 1px, transparent 2px
   );
   pointer-events: none;
@@ -99,9 +111,9 @@ body {
 
 .lock-box {
   width: 90%; max-width: 380px;
-  background: rgba(2,2,15,0.85);
+  background: rgba(2, 2, 15, 0.85);
   border: 1px solid var(--cyan);
-  box-shadow: 0 0 40px rgba(0,243,255,0.12), inset 0 0 30px rgba(0,243,255,0.05);
+  box-shadow: 0 0 40px rgba(0, 243, 255, 0.12), inset 0 0 30px rgba(0, 243, 255, 0.05);
   padding: 3rem 2rem 2rem; position: relative;
   text-align: center;
   display: flex; flex-direction: column; align-items: center;
@@ -124,11 +136,11 @@ body {
 }
 .lock-text {
   margin: 0 0 0.5rem; font-size: 0.9rem; line-height: 1.6;
-  color: var(--cyan); text-shadow: 0 0 5px rgba(0,243,255,0.5);
+  color: var(--cyan); text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
 }
-.lock-text .pink { color: var(--pink); text-shadow: 0 0 5px rgba(255,0,85,0.5); font-weight: bold; }
+.lock-text .pink { color: var(--pink); text-shadow: 0 0 5px rgba(255, 0, 85, 0.5); font-weight: bold; }
 .lock-text .blink { animation: blink-c 1s step-end infinite; }
-@keyframes blink-c { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes blink-c { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
 /* PIN Display Styles */
 .code-display {
@@ -137,32 +149,32 @@ body {
 }
 .code-digit {
   width: 36px; height: 44px;
-  background: rgba(0,243,255,0.05);
+  background: rgba(0, 243, 255, 0.05);
   border: 1px solid var(--border-dim);
   display: flex; align-items: center; justify-content: center;
   font-family: 'Orbitron', sans-serif;
   font-size: 1.4rem; font-weight: 700;
   color: var(--cyan);
-  text-shadow: 0 0 8px rgba(0,243,255,0.6);
+  text-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
   transition: all 0.2s;
 }
 .code-digit.filled {
   border-color: var(--cyan);
-  background: rgba(0,243,255,0.1);
-  box-shadow: 0 0 10px rgba(0,243,255,0.2);
+  background: rgba(0, 243, 255, 0.1);
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
 }
 .code-digit.error {
   border-color: var(--pink);
   color: var(--pink);
-  text-shadow: 0 0 8px rgba(255,0,85,0.6);
+  text-shadow: 0 0 8px rgba(255, 0, 85, 0.6);
   animation: code-shake 0.3s;
 }
 .code-digit.success {
   border-color: var(--green);
   color: var(--green);
-  text-shadow: 0 0 8px rgba(0,255,102,0.6);
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
 }
-@keyframes code-shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+@keyframes code-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
 /* Keypad Styles */
 .code-keypad {
@@ -170,7 +182,7 @@ body {
   gap: 8px; width: 100%; max-width: 260px; margin: 0 auto;
 }
 .code-key {
-  background: rgba(0,243,255,0.04);
+  background: rgba(0, 243, 255, 0.04);
   border: 1px solid var(--border-dim);
   color: #e0f8ff;
   font-family: 'Orbitron', sans-serif;
@@ -180,31 +192,31 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 .code-key:hover {
-  background: rgba(0,243,255,0.1);
+  background: rgba(0, 243, 255, 0.1);
   border-color: var(--cyan);
   color: #fff;
-  box-shadow: 0 0 10px rgba(0,243,255,0.15);
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.15);
 }
 .code-key:active {
   transform: scale(0.95);
-  background: rgba(0,243,255,0.15);
+  background: rgba(0, 243, 255, 0.15);
 }
 .code-key.fn {
   font-size: 0.7rem; letter-spacing: 1px;
-  color: rgba(160,185,210,0.6);
+  color: rgba(160, 185, 210, 0.6);
 }
 .code-key.fn:hover { color: var(--pink); border-color: var(--pink); }
 
 .lock-msg {
   margin-top: 1rem; height: 1.2em;
   font-family: 'Orbitron', sans-serif; font-size: 0.8rem;
-  color: var(--pink); text-shadow: 0 0 5px rgba(255,0,85,0.5);
+  color: var(--pink); text-shadow: 0 0 5px rgba(255, 0, 85, 0.5);
   opacity: 0; transition: opacity 0.3s;
 }
 .lock-msg.show { opacity: 1; animation: glitch-shake 0.2s 3; }
-.lock-msg.success { color: var(--green); text-shadow: 0 0 5px rgba(0,255,102,0.5); }
+.lock-msg.success { color: var(--green); text-shadow: 0 0 5px rgba(0, 255, 102, 0.5); }
 @keyframes glitch-shake {
-  0%,100% { transform: translateX(0); }
+  0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-3px); }
   75% { transform: translateX(3px); }
 }
@@ -212,7 +224,7 @@ body {
 .code-lockout {
   font-family: 'Orbitron', sans-serif; font-size: 0.7rem;
   color: var(--pink); margin-top: 0.5rem;
-  text-shadow: 0 0 5px rgba(255,0,85,0.5);
+  text-shadow: 0 0 5px rgba(255, 0, 85, 0.5);
 }
 
 /* === HUB (post-unlock) === */
@@ -231,7 +243,15 @@ body {
 .sr-hub.unlocked { filter: blur(0); opacity: 1; }
 .sr-hub::-webkit-scrollbar { width: 4px; }
 .sr-hub::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 2px; }
-.sr-hub-inner { width: 100%; max-width: 900px; }
+.sr-hub-inner {
+  width: 100%; max-width: 960px;
+  background: rgba(3, 3, 12, 0.65);
+  border-left: 1px solid rgba(0, 255, 102, 0.2);
+  border-right: 1px solid rgba(0, 255, 102, 0.2);
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(4px);
+  padding: 2rem 2.5rem;
+}
 
 /* Header */
 .sr-header {
@@ -255,7 +275,7 @@ body {
   font-size: clamp(1.4rem, 5vw, 2.8rem); font-weight: 900;
   color: #fff; letter-spacing: 0.15em;
   margin: 0 0 0.5rem;
-  text-shadow: 0 0 20px rgba(0,243,255,0.4), 0 0 40px rgba(0,243,255,0.15);
+  text-shadow: 0 0 20px rgba(0, 243, 255, 0.4), 0 0 40px rgba(0, 243, 255, 0.15);
   position: relative;
   animation: sr-glitch-skew 4s infinite linear;
 }
@@ -266,7 +286,7 @@ body {
 .sr-title::before { color: var(--pink); z-index: -1; animation: sr-glitch1 0.3s infinite alternate-reverse; opacity: 0.7; }
 .sr-title::after { color: var(--cyan); z-index: -2; animation: sr-glitch2 0.3s infinite alternate-reverse; opacity: 0.5; }
 @keyframes sr-glitch-skew {
-  0%,95%,100% { transform: skew(0deg); }
+  0%, 95%, 100% { transform: skew(0deg); }
   96% { transform: skew(2deg); }
   97% { transform: skew(-1deg); }
 }
@@ -281,7 +301,7 @@ body {
 
 .sr-subtitle {
   font-family: 'Share Tech Mono', monospace;
-  font-size: clamp(0.6rem, 2vw, 0.85rem); color: rgba(0,243,255,0.7);
+  font-size: clamp(0.6rem, 2vw, 0.85rem); color: rgba(0, 243, 255, 0.7);
   letter-spacing: 0.2em; margin: 0;
 }
 .sr-subtitle::before { content: '[ '; color: var(--pink); }
@@ -290,11 +310,11 @@ body {
 /* Status bar */
 .sr-status {
   display: flex; justify-content: center; align-items: center;
-  gap: 1rem; flex-wrap: wrap;
+  gap: 1.5rem; flex-wrap: wrap;
   margin-top: 1.5rem; padding-top: 1rem;
   border-top: 1px solid var(--border-dim);
   font-family: 'Share Tech Mono', monospace;
-  font-size: clamp(0.58rem, 1.5vw, 0.72rem); color: rgba(0,243,255,0.5);
+  font-size: clamp(0.6rem, 1.5vw, 0.75rem); color: rgba(0, 243, 255, 0.5);
 }
 .sr-stat { display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
 .sr-dot {
@@ -304,124 +324,113 @@ body {
 }
 .sr-dot.purple { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
 .sr-dot.amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
-@keyframes sr-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.sr-dot.cyan { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+@keyframes sr-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-/* Access Panels */
-.sr-panels {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem; margin-bottom: 2.5rem;
+/* === HEX GRID / HEX TILE (PORTED FROM 0723 & CUSTOMIZED) === */
+.hex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 3rem;
 }
 
-.sr-panel {
-  display: flex; flex-direction: column;
+.hex-tile {
+  display: block;
   text-decoration: none !important;
-  background: var(--card-bg);
+  position: relative;
+  overflow: hidden;
   border: 1px solid var(--border-dim);
-  padding: 2rem 1.8rem;
-  position: relative; overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.25,0.8,0.25,1);
-  backdrop-filter: blur(8px);
+  background: rgba(2, 2, 8, 0.75);
+  padding: 1.2rem;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  clip-path: polygon(8% 0%, 92% 0%, 100% 15%, 100% 85%, 92% 100%, 8% 100%, 0% 85%, 0% 15%);
+  min-height: 150px;
   cursor: pointer;
-  min-height: 260px;
+  backdrop-filter: blur(8px);
 }
-.sr-panel::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-  transition: all 0.4s;
+.hex-tile::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  transition: left 0.5s;
 }
-.sr-panel::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border-dim), transparent);
-}
-.sr-panel:hover {
-  transform: translateY(-6px);
+.hex-tile:hover {
   border-color: var(--accent, var(--cyan));
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px var(--glow, rgba(0,243,255,0.15));
+  background: var(--hover-bg, rgba(0, 243, 255, 0.05));
+  transform: scale(1.04) translateY(-3px);
+  box-shadow: 0 0 25px var(--glow, rgba(0, 243, 255, 0.2));
 }
-.sr-panel:hover::before {
-  background: linear-gradient(90deg, transparent, var(--accent, var(--cyan)), transparent);
-}
+.hex-tile:hover::before { left: 100%; }
 
-/* Panel icons & structure */
-.sr-panel-icon {
-  width: 64px; height: 64px;
-  margin-bottom: 1.2rem; position: relative;
-  display: flex; align-items: center; justify-content: center;
+.hex-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+  z-index: 1;
+  height: 100%;
 }
-.sr-panel-icon svg {
-  width: 48px; height: 48px;
-  stroke: var(--accent, var(--cyan));
-  stroke-width: 1.5; fill: none;
-  filter: drop-shadow(0 0 8px var(--glow, rgba(0,243,255,0.5)));
-  transition: all 0.4s;
+.hex-header-row {
+  display: flex; justify-content: space-between; align-items: center;
 }
-.sr-panel:hover .sr-panel-icon svg {
-  transform: scale(1.1);
-  filter: drop-shadow(0 0 15px var(--glow, rgba(0,243,255,0.8)));
-}
-.sr-panel-icon::before {
-  content: ''; position: absolute;
-  width: 64px; height: 64px; border-radius: 50%;
-  border: 1px dashed var(--border-dim);
-  animation: sr-ring 8s linear infinite;
-}
-@keyframes sr-ring { from { transform: rotate(0); } to { transform: rotate(360deg); } }
-
-.sr-panel-id {
+.hex-index {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.6rem; color: var(--accent, var(--cyan));
-  letter-spacing: 2px; opacity: 0.6;
-  margin-bottom: 0.5rem;
+  letter-spacing: 2px;
 }
-.sr-panel-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.3rem; font-weight: 700;
-  color: #fff; letter-spacing: 0.1em;
-  margin: 0 0 0.8rem;
-  text-shadow: 0 0 10px var(--glow, rgba(0,243,255,0.4));
-  transition: all 0.3s;
-}
-.sr-panel:hover .sr-panel-title {
-  text-shadow: 0 0 20px var(--glow, rgba(0,243,255,0.6));
-}
-.sr-panel-desc {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.78rem; color: rgba(200,220,240,0.6);
-  line-height: 1.7; margin: 0 0 1rem;
-  flex: 1;
-}
-.sr-panel-status {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.58rem; letter-spacing: 1.5px;
+.hex-title-area {
   display: flex; align-items: center; gap: 0.5rem;
-  margin-top: auto;
 }
-.sr-panel-status .sr-dot { width: 5px; height: 5px; }
-
-/* Panel configurations */
-.sr-panel-scan {
-  position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0,243,255,0.04), transparent);
-  transition: left 0.6s; pointer-events: none;
+.hex-icon {
+  width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
 }
-.sr-panel:hover .sr-panel-scan { left: 100%; }
+.hex-icon svg {
+  width: 100%; height: 100%; stroke: var(--accent, var(--cyan)); stroke-width: 2; fill: none;
+  filter: drop-shadow(0 0 3px var(--glow, rgba(0, 243, 255, 0.5)));
+}
+.hex-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem; font-weight: 700;
+  color: #fff; letter-spacing: 1px;
+  text-shadow: 0 0 8px var(--glow, rgba(0, 243, 255, 0.3));
+}
+.hex-tile:hover .hex-title {
+  text-shadow: 0 0 12px var(--glow, rgba(0, 243, 255, 0.6));
+}
+.hex-desc {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 0.72rem; color: rgba(200, 220, 240, 0.65);
+  line-height: 1.5; margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+.hex-status {
+  font-family: 'Orbitron', 'Share Tech Mono', monospace;
+  font-size: 0.58rem; color: var(--accent, var(--cyan));
+  letter-spacing: 1px; margin-top: auto;
+  display: flex; align-items: center; gap: 0.4rem;
+}
 
-.sr-panel.cmd { --accent: var(--pink); --glow: rgba(255,0,85,0.3); }
-.sr-panel.cmd .sr-panel-status { color: var(--pink); }
+/* Accent types */
+.hex-tile.cmd { --accent: var(--pink); --glow: rgba(255, 0, 85, 0.4); --hover-bg: rgba(255, 0, 85, 0.04); }
+.hex-tile.vault { --accent: var(--cyan); --glow: rgba(0, 243, 255, 0.4); --hover-bg: rgba(0, 243, 255, 0.04); }
+.hex-tile.timetable { --accent: var(--amber); --glow: rgba(255, 170, 0, 0.4); --hover-bg: rgba(255, 170, 0, 0.04); }
+.hex-tile.proof { --accent: var(--cyan); --glow: rgba(0, 243, 255, 0.4); --hover-bg: rgba(0, 243, 255, 0.04); }
+.hex-tile.password { --accent: var(--pink); --glow: rgba(255, 0, 85, 0.4); --hover-bg: rgba(255, 0, 85, 0.04); }
+.hex-tile.steganography { --accent: var(--green); --glow: rgba(0, 255, 102, 0.4); --hover-bg: rgba(0, 255, 102, 0.04); }
+.hex-tile.xbinder { --accent: var(--purple); --glow: rgba(188, 19, 254, 0.4); --hover-bg: rgba(188, 19, 254, 0.04); }
 
-.sr-panel.vault { --accent: var(--cyan); --glow: rgba(0,243,255,0.3); }
-.sr-panel.vault .sr-panel-status { color: var(--cyan); }
-
-.sr-panel.timetable { --accent: var(--amber); --glow: rgba(255,170,0,0.3); }
-.sr-panel.timetable .sr-panel-status { color: var(--amber); }
 
 /* Corner frame lines */
 .sr-corner {
-  position: absolute; width: 12px; height: 12px;
+  position: absolute; width: 10px; height: 10px;
   border-style: solid; pointer-events: none;
   opacity: 0.4; transition: opacity 0.3s;
 }
-.sr-panel:hover .sr-corner { opacity: 0.8; }
+.hex-tile:hover .sr-corner { opacity: 0.8; }
 .sr-corner.tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; border-color: var(--accent, var(--cyan)); }
 .sr-corner.tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; border-color: var(--accent, var(--cyan)); }
 .sr-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; border-color: var(--accent, var(--cyan)); }
@@ -429,27 +438,27 @@ body {
 
 .sr-classification {
   text-align: center; margin-bottom: 2rem; padding: 0.8rem;
-  border: 1px solid rgba(255,0,85,0.2); background: rgba(255,0,85,0.03);
+  border: 1px solid rgba(255, 0, 85, 0.2); background: rgba(255, 0, 85, 0.03);
   font-family: 'Orbitron', sans-serif; font-size: 0.65rem; letter-spacing: 3px;
   color: var(--pink); opacity: 0.7;
 }
 
 .sr-footer { text-align: center; padding-top: 2rem; border-top: 1px solid var(--border-dim); }
 .sr-footer-link {
-  font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: rgba(0,243,255,0.5);
+  font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: rgba(0, 243, 255, 0.5);
   text-decoration: none; letter-spacing: 0.1em; transition: all 0.3s; padding: 0.6rem 1.2rem;
   border: 1px solid transparent; display: inline-block;
 }
 .sr-footer-link:hover {
-  color: var(--cyan); border-color: var(--cyan); background: rgba(0,243,255,0.05);
-  box-shadow: 0 0 15px rgba(0,243,255,0.1);
+  color: var(--cyan); border-color: var(--cyan); background: rgba(0, 243, 255, 0.05);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
 }
 .sr-footer-link::before { content: '> '; color: var(--pink); }
 
 .sr-boot {
   position: fixed; top: 20px; right: 20px;
   font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: var(--cyan);
-  text-shadow: 0 0 5px rgba(0,243,255,0.5); z-index: 11; pointer-events: none;
+  text-shadow: 0 0 5px rgba(0, 243, 255, 0.5); z-index: 11; pointer-events: none;
   opacity: 0; white-space: nowrap; background: rgba(2, 2, 15, 0.85);
   border: 1px solid rgba(0, 243, 255, 0.3); padding: 4px 10px;
   box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
@@ -459,150 +468,40 @@ body {
 @keyframes sr-boot-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes sr-boot-out { from { opacity: 1; } to { opacity: 0; } }
 
-/* === APP MODAL & MODULES UI === */
-.app-modal {
-  position: fixed; inset: 0; z-index: 10000;
-  background: rgba(2, 2, 8, 0.9); backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px); display: none;
-  justify-content: center; align-items: center; padding: 1.5rem;
-}
-.app-modal.active { display: flex; }
-.app-window {
-  width: 100%; max-width: 820px; height: 85vh; max-height: 720px;
-  background: rgba(3, 3, 10, 0.95); border: 1px solid var(--accent, var(--cyan));
-  box-shadow: 0 0 30px rgba(0, 243, 255, 0.15), inset 0 0 20px rgba(0, 243, 255, 0.05);
-  display: flex; flex-direction: column; position: relative;
-  animation: app-boot 0.35s cubic-bezier(0.15, 0.85, 0.35, 1) forwards;
-}
-@keyframes app-boot {
-  0% { transform: scale(0.92); opacity: 0; filter: blur(4px); }
-  100% { transform: scale(1); opacity: 1; filter: blur(0); }
-}
-.app-header {
-  height: 42px; background: rgba(0, 243, 255, 0.05); border-bottom: 1px solid rgba(0, 243, 255, 0.2);
-  display: flex; align-items: center; justify-content: space-between; padding: 0 1rem;
-  font-family: 'Orbitron', sans-serif; letter-spacing: 1px; position: relative; flex-shrink: 0;
-}
-.app-header::before {
-  content: ''; position: absolute; bottom: 0; left: 0; width: 80px; height: 1px;
-  background: var(--pink); box-shadow: 0 0 5px var(--pink);
-}
-.app-title-area { display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem; }
-.app-title-id {
-  color: var(--pink); font-weight: bold; text-shadow: 0 0 5px rgba(255, 0, 85, 0.5);
-  border: 1px solid rgba(255, 0, 85, 0.3); padding: 1px 6px; font-size: 0.7rem; background: rgba(255, 0, 85, 0.1);
-}
-.app-title-name { color: #fff; text-shadow: 0 0 5px var(--accent, var(--cyan)); }
-.app-close-btn {
-  background: transparent; border: none; color: var(--pink); font-family: 'Share Tech Mono', monospace;
-  font-size: 0.8rem; cursor: pointer; padding: 4px 8px; border: 1px solid transparent; transition: all 0.2s;
-}
-.app-close-btn:hover { background: rgba(255, 0, 85, 0.15); border-color: var(--pink); text-shadow: 0 0 5px var(--pink); }
-.app-body {
-  flex: 1; overflow-y: auto; padding: 1.5rem; scrollbar-width: thin;
-  scrollbar-color: var(--accent, var(--cyan)) transparent; position: relative;
-}
-.app-body::-webkit-scrollbar { width: 4px; }
-.app-body::-webkit-scrollbar-thumb { background: var(--accent, var(--cyan)); }
-
-.app-bracket { position: absolute; width: 14px; height: 14px; border-style: solid; pointer-events: none; opacity: 0.7; }
-.app-bracket.tl { top: 8px; left: 8px; border-width: 2px 0 0 2px; border-color: var(--accent, var(--cyan)); }
-.app-bracket.tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; border-color: var(--accent, var(--cyan)); }
-.app-bracket.bl { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; border-color: var(--accent, var(--cyan)); }
-.app-bracket.br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; border-color: var(--accent, var(--cyan)); }
-
-/* === MODULE CODE SHIFTED SYSTEM === */
-.pa-filter-bar { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; background: rgba(0, 0, 0, 0.3); padding: 1rem; border: 1px solid rgba(0, 243, 255, 0.1); border-radius: 2px; }
-.pa-search-input { flex: 1; min-width: 200px; background: rgba(2, 2, 8, 0.8); border: 1px solid rgba(0, 243, 255, 0.3); color: #fff; padding: 0.5rem 0.8rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; outline: none; transition: all 0.3s; }
-.pa-search-input:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); }
-.pa-select { background: rgba(2, 2, 8, 0.8); border: 1px solid rgba(0, 243, 255, 0.3); color: var(--cyan); padding: 0.5rem 2rem 0.5rem 0.8rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='%2300f3ff' d='M0 2l4 4 4-4z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
-.pa-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-.pa-card { background: rgba(0, 243, 255, 0.01); border: 1px solid rgba(0, 243, 255, 0.15); padding: 1.2rem; position: relative; transition: all 0.3s ease; border-radius: 2px; }
-.pa-card:hover { border-color: rgba(0, 243, 255, 0.5); background: rgba(0, 243, 255, 0.03); box-shadow: 0 0 15px rgba(0, 243, 255, 0.08); }
-.pa-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem; gap: 1rem; }
-.pa-card-title { font-family: 'Orbitron', 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0; line-height: 1.4; }
-.pa-card-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
-.pa-badge { font-size: 0.6rem; font-family: 'Share Tech Mono', monospace; padding: 2px 6px; border-radius: 1px; }
-.pa-badge.field { background: rgba(0, 243, 255, 0.1); color: var(--cyan); border: 1px solid rgba(0, 243, 255, 0.2); }
-.pa-badge.difficulty { background: rgba(255, 170, 0, 0.1); color: var(--amber); border: 1px solid rgba(255, 170, 0, 0.2); }
-.pa-card-formula { background: rgba(0, 0, 0, 0.4); border-left: 2px solid var(--pink); padding: 0.8rem; margin: 0.8rem 0; font-size: 0.9rem; overflow-x: auto; color: #fff; text-shadow: 0 0 2px rgba(255,255,255,0.5); font-family: 'JetBrains Mono', monospace; }
-.pa-card-desc { font-size: 0.75rem; color: rgba(200, 220, 240, 0.7); line-height: 1.6; margin-bottom: 1rem; }
-.pa-card-btn { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--pink); text-decoration: none; padding: 4px 10px; border: 1px solid rgba(255, 0, 85, 0.3); background: rgba(255, 0, 85, 0.02); transition: all 0.2s; }
-.pa-card-btn:hover { background: rgba(255, 0, 85, 0.15); border-color: var(--pink); text-shadow: 0 0 5px var(--pink); box-shadow: 0 0 10px rgba(255, 0, 85, 0.2); }
-
-/* PASS GENERATOR */
-.pg-container { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; }
-.pg-panel { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 243, 255, 0.08); padding: 1.2rem; display: flex; flex-direction: column; gap: 1.2rem; }
-.pg-display-box { background: rgba(2, 2, 8, 0.9); border: 1px solid rgba(0, 243, 255, 0.2); padding: 1rem; border-radius: 2px; position: relative; display: flex; align-items: center; justify-content: space-between; }
-.pg-display { font-family: 'JetBrains Mono', 'Share Tech Mono', monospace; font-size: clamp(0.9rem, 2.5vw, 1.3rem); color: var(--green); text-shadow: 0 0 8px rgba(0, 255, 102, 0.4); word-break: break-all; padding-right: 2.5rem; letter-spacing: 1px; min-height: 1.5em; }
-.pg-copy-btn { background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.3); color: var(--cyan); padding: 6px 12px; font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); }
-.pg-copy-btn:hover { background: rgba(0, 243, 255, 0.2); border-color: var(--cyan); box-shadow: 0 0 8px rgba(0, 243, 255, 0.4); }
-.pg-slider-group { display: flex; flex-direction: column; gap: 0.5rem; }
-.pg-label { font-family: 'Orbitron', 'Share Tech Mono', monospace; font-size: 0.75rem; color: rgba(0, 243, 255, 0.7); display: flex; justify-content: space-between; }
-.pg-label span.value { color: var(--pink); font-weight: bold; }
-.pg-slider { -webkit-appearance: none; width: 100%; height: 6px; background: rgba(0, 243, 255, 0.15); outline: none; border-radius: 3px; }
-.pg-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--pink); cursor: pointer; box-shadow: 0 0 8px var(--pink); }
-.pg-slider::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; border: none; background: var(--pink); cursor: pointer; box-shadow: 0 0 8px var(--pink); }
-.pg-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
-.pg-checkbox-label { display: flex; align-items: center; gap: 0.6rem; font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: rgba(224, 248, 255, 0.85); cursor: pointer; user-select: none; }
-.pg-checkbox-label input { display: none; }
-.pg-custom-box { width: 14px; height: 14px; border: 1px solid rgba(0, 243, 255, 0.4); background: rgba(2, 2, 8, 0.8); display: flex; align-items: center; justify-content: center; position: relative; transition: all 0.2s; }
-.pg-checkbox-label input:checked + .pg-custom-box { border-color: var(--pink); background: rgba(255, 0, 85, 0.1); box-shadow: 0 0 6px var(--pink); }
-.pg-checkbox-label input:checked + .pg-custom-box::after { content: ''; width: 6px; height: 6px; background: var(--pink); box-shadow: 0 0 3px var(--pink); }
-.pg-gen-btn { background: linear-gradient(135deg, var(--pink) 0%, #aa003b 100%); border: 1px solid var(--pink); color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: bold; padding: 0.8rem; cursor: pointer; letter-spacing: 2px; transition: all 0.2s; margin-top: 0.5rem; }
-.pg-gen-btn:hover { filter: brightness(1.1); box-shadow: 0 0 15px rgba(255, 0, 85, 0.4); transform: translateY(-1px); }
-.pg-stats-panel { display: flex; flex-direction: column; gap: 1rem; }
-.pg-stat-card { background: rgba(2, 2, 8, 0.6); border: 1px solid rgba(0, 243, 255, 0.05); padding: 0.8rem 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
-.pg-stat-title { font-family: 'Orbitron', 'Share Tech Mono', monospace; font-size: 0.6rem; color: rgba(0, 243, 255, 0.5); letter-spacing: 1px; }
-.pg-stat-val { font-family: 'Orbitron', 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 700; color: #fff; }
-.pg-stat-val.secure { color: var(--green); text-shadow: 0 0 5px rgba(0,255,102,0.4); }
-.pg-stat-val.warning { color: var(--amber); text-shadow: 0 0 5px rgba(255,170,0,0.4); }
-.pg-stat-val.danger { color: var(--pink); text-shadow: 0 0 5px rgba(255,0,85,0.4); }
-.pg-meter-bg { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.05); border-radius: 2px; overflow: hidden; margin-top: 2px; }
-.pg-meter-fill { height: 100%; width: 0; background: var(--pink); transition: width 0.4s ease, background 0.4s ease; }
-.pg-logs { background: rgba(2, 2, 8, 0.8); border: 1px solid rgba(0, 243, 255, 0.05); padding: 0.8rem; font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; height: 110px; overflow-y: auto; color: rgba(200, 220, 240, 0.6); display: flex; flex-direction: column; gap: 0.3rem; scrollbar-width: thin; scrollbar-color: rgba(0, 243, 255, 0.2) transparent; }
-.pg-log-entry { display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.02); padding-bottom: 2px; cursor: pointer; }
-.pg-log-entry:hover { color: var(--cyan); }
-.pg-log-time { color: rgba(255, 0, 85, 0.5); margin-right: 8px; }
-
-/* STEGANOGRAPHY */
-.steg-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.2rem; border-bottom: 1px solid rgba(0, 243, 255, 0.1); }
-.steg-tab { background: transparent; border: none; padding: 0.6rem 1.2rem; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; color: rgba(0, 243, 255, 0.5); cursor: pointer; position: relative; transition: all 0.3s; }
-.steg-tab.active { color: var(--cyan); text-shadow: 0 0 5px var(--cyan); }
-.steg-tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
-.steg-pane { display: none; flex-direction: column; gap: 1.2rem; }
-.steg-pane.active { display: flex; }
-.steg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-.steg-upload-zone { border: 1px dashed rgba(0, 243, 255, 0.3); background: rgba(0, 243, 255, 0.01); height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; text-align: center; padding: 1rem; transition: all 0.3s; position: relative; }
-.steg-upload-zone:hover { border-color: var(--cyan); background: rgba(0, 243, 255, 0.04); }
-.steg-upload-zone svg { width: 44px; height: 44px; stroke: rgba(0, 243, 255, 0.4); stroke-width: 1.5; fill: none; margin-bottom: 0.8rem; transition: all 0.3s; }
-.steg-upload-zone:hover svg { stroke: var(--cyan); filter: drop-shadow(0 0 5px var(--cyan)); }
-.steg-upload-text { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: rgba(200, 220, 240, 0.6); line-height: 1.5; }
-.steg-preview-box { background: rgba(2, 2, 8, 0.9); border: 1px solid rgba(0, 243, 255, 0.15); height: 180px; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; }
-.steg-preview-img { max-width: 100%; max-height: 100%; object-fit: contain; }
-.steg-preview-placeholder { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: rgba(0, 243, 255, 0.3); letter-spacing: 1px; }
-.steg-input-group { display: flex; flex-direction: column; gap: 0.5rem; }
-.steg-textarea { background: rgba(2, 2, 8, 0.8); border: 1px solid rgba(0, 243, 255, 0.2); color: #fff; padding: 0.8rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; min-height: 80px; resize: vertical; outline: none; transition: all 0.3s; }
-.steg-textarea:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(0, 243, 255, 0.1); }
-.steg-btn { background: transparent; border: 1px solid var(--accent, var(--cyan)); color: var(--accent, var(--cyan)); font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: bold; padding: 0.8rem; cursor: pointer; letter-spacing: 1.5px; transition: all 0.2s; text-align: center; display: inline-block; text-decoration: none; }
-.steg-btn:hover:not(:disabled) { background: rgba(0, 243, 255, 0.1); box-shadow: 0 0 12px var(--accent, var(--cyan)); text-shadow: 0 0 5px var(--accent, var(--cyan)); }
-.steg-btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); }
-.steg-dl-btn { border-color: var(--green); color: var(--green); }
-.steg-dl-btn:hover:not(:disabled) { background: rgba(0, 255, 102, 0.1); box-shadow: 0 0 12px var(--green) !important; text-shadow: 0 0 5px var(--green) !important; }
-.steg-decode-result { background: rgba(2, 2, 8, 0.9); border: 1px dashed rgba(0, 255, 102, 0.2); padding: 1rem; min-height: 80px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--green); word-break: break-all; text-shadow: 0 0 3px rgba(0, 255, 102, 0.3); line-height: 1.6; }
-.steg-decode-result.error { border-color: rgba(255, 0, 85, 0.3); color: var(--pink); text-shadow: 0 0 3px rgba(255, 0, 85, 0.3); }
-.steg-alert { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: var(--pink); text-shadow: 0 0 3px var(--pink); margin-top: 5px; }
-
 /* === RESPONSIVE RECONSTRUCTIONS === */
-@media (max-width: 900px) { .sr-hub { padding: 2.5rem 1.2rem 3rem; } .sr-header { padding: 2rem 1.5rem; margin-bottom: 2rem; } .sr-panels { gap: 1.2rem; } .sr-panel { padding: 1.5rem; min-height: 240px; } }
-@media (max-width: 700px) { .sr-panels { grid-template-columns: 1fr; gap: 1rem; } .sr-panel { min-height: auto; padding: 1.5rem; } .sr-panel-icon svg { width: 40px; height: 40px; } .sr-header { padding: 1.5rem 1rem; margin-bottom: 1.5rem; } .sr-hub { padding: 2rem 1rem 3rem; } .lock-box { padding: 2.5rem 1.2rem 1.5rem; } .pg-container { grid-template-columns: 1fr; } }
-@media (max-width: 500px) { .sr-hub { padding: 1.5rem 0.8rem 2.5rem; } .sr-header { padding: 1.2rem 0.8rem; margin-bottom: 1.2rem; } .sr-panel { padding: 1.2rem; } .sr-panel-icon svg { width: 36px; height: 36px; } .sr-panel-title { font-size: 1rem; } .sr-panel-desc { font-size: 0.68rem; } .code-digit { width: 30px; height: 38px; font-size: 1.2rem; } .code-keypad { max-width: 200px; gap: 6px; } .code-key { font-size: 0.95rem; padding: 10px 0; } .lock-box { max-width: 300px; } }
+@media (max-width: 900px) {
+  .sr-hub { padding: 2.5rem 1.2rem 3rem; }
+  .sr-hub-inner { padding: 1.5rem 1.5rem; }
+  .sr-header { padding: 2rem 1.5rem; margin-bottom: 2rem; }
+  .hex-grid { gap: 1rem; }
+  .hex-tile { padding: 1rem; min-height: 140px; }
+}
+@media (max-width: 700px) {
+  .sr-hub-inner { border: none; padding: 1rem 0.5rem; background: transparent; box-shadow: none; }
+  .hex-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+  .hex-tile { min-height: 130px; padding: 0.9rem; clip-path: polygon(6% 0%, 94% 0%, 100% 15%, 100% 85%, 94% 100%, 6% 100%, 0% 85%, 0% 15%); }
+  .hex-title { font-size: 0.75rem; }
+  .hex-desc { -webkit-line-clamp: 2; font-size: 0.68rem; }
+  .sr-header { padding: 1.5rem 1rem; margin-bottom: 1.5rem; }
+  .sr-hub { padding: 2rem 1rem 3rem; }
+  .lock-box { padding: 2.5rem 1.2rem 1.5rem; }
+}
+@media (max-width: 500px) {
+  .sr-hub { padding: 1.5rem 0.8rem 2.5rem; }
+  .sr-header { padding: 1.2rem 0.8rem; margin-bottom: 1.2rem; }
+  .hex-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+  .hex-tile { clip-path: none; border-radius: 2px; }
+  .hex-desc { -webkit-line-clamp: 3; }
+  .code-digit { width: 30px; height: 38px; font-size: 1.2rem; }
+  .code-keypad { max-width: 200px; gap: 6px; }
+  .code-key { font-size: 0.95rem; padding: 10px 0; }
+  .lock-box { max-width: 300px; }
+}
 </style>
 
-<div class="sr-bg"></div>
-<div class="sr-grid"></div>
-<div class="sr-scanline"></div>
-<div class="sr-vignette"></div>
+<div class="cyber-bg"><div class="cyber-bg-image"></div><div class="cyber-bg-vignette"></div></div>
+<div class="cyber-grid"></div>
+<div class="scanline"></div>
 
 <div class="sr-particle" style="--x:10%;--y:20%;--d:3.2s;--delay:0s;--o:0.5"></div>
 <div class="sr-particle" style="--x:85%;--y:15%;--d:4.1s;--delay:0.5s;--o:0.4"></div>
@@ -613,13 +512,11 @@ body {
 <div class="sr-particle" style="--x:90%;--y:60%;--d:3.0s;--delay:0.2s;--o:0.3"></div>
 <div class="sr-particle" style="--x:60%;--y:10%;--d:4.3s;--delay:0.7s;--o:0.5"></div>
 
+<!-- PIN GATE -->
 <div id="sr-lock">
 <div class="lock-box">
 <div class="lock-badge">CLEARANCE REQUIRED</div>
-<p class="lock-text">> SECURE CONNECTION ESTABLISHED.</p>
-<p class="lock-text">> WARNING: <span class="pink">UNAUTHORIZED ACCESS DETECTED.</span></p>
 <p class="lock-text">> ENTER 6-DIGIT CORE CODES<span class="blink">_</span></p>
-
 <div class="code-display" id="code-display">
 <div class="code-digit" data-i="0"></div>
 <div class="code-digit" data-i="1"></div>
@@ -628,7 +525,6 @@ body {
 <div class="code-digit" data-i="4"></div>
 <div class="code-digit" data-i="5"></div>
 </div>
-
 <div class="code-keypad" id="code-keypad">
 <button class="code-key" data-v="1">1</button>
 <button class="code-key" data-v="2">2</button>
@@ -643,12 +539,12 @@ body {
 <button class="code-key" data-v="0">0</button>
 <button class="code-key fn" data-v="back">DEL</button>
 </div>
-
 <div class="lock-msg" id="lock-msg">ACCESS DENIED</div>
 <div class="code-lockout" id="code-lockout" style="display:none;"></div>
 </div>
 </div>
 
+<!-- UNLOCKED HUB SYSTEM -->
 <div class="sr-hub" id="sr-hub">
 <div class="sr-boot" id="sr-boot"></div>
 <div class="sr-hub-inner">
@@ -665,12 +561,14 @@ body {
 <div class="sr-classification">
 ▲ CLASSIFIED ─ LEVEL 5 CLEARANCE ─ AUTHORIZED PERSONNEL ONLY ▲
 </div>
-<div class="sr-panels">
-<a href="/0723/" class="sr-panel cmd" id="panel-cmd">
+<div class="hex-grid">
+<a href="/0723/" class="hex-tile cmd" id="panel-cmd">
 <div class="sr-corner tl"></div><div class="sr-corner tr"></div>
 <div class="sr-corner bl"></div><div class="sr-corner br"></div>
-<div class="sr-panel-scan"></div>
-<div class="sr-panel-icon">
+<div class="hex-inner">
+<div class="hex-header-row">
+<span class="hex-index">MODULE_001</span>
+<div class="hex-icon">
 <svg viewBox="0 0 48 48">
 <rect x="4" y="6" width="40" height="30" rx="2"/>
 <line x1="4" y1="12" x2="44" y2="12"/>
@@ -686,18 +584,21 @@ body {
 <line x1="10" y1="42" x2="38" y2="42"/>
 </svg>
 </div>
-<div class="sr-panel-id">MODULE_001</div>
-<div class="sr-panel-title">COMMAND CENTER</div>
-<p class="sr-panel-desc">機密セクターへのアクセスポイント。<br>ツール、アーカイブ、時間割、視覚ログ等の管理コンソール。<br>二次認証パターンが必要。</p>
-<div class="sr-panel-status">
-<span class="sr-dot"></span> STATUS: ACTIVE ─ CLEARANCE LV.5
+</div>
+<span class="hex-title">COMMAND CENTER</span>
+<p class="hex-desc">セクターハブへの二次認証ゲートウェイ。管理コンソールおよび各種ログへのアクセス。</p>
+<div class="hex-status">
+<span class="sr-dot"></span> ACTIVE ─ LV.5
+</div>
 </div>
 </a>
-<a href="/project-x/data-vault/" class="sr-panel vault" id="panel-vault">
+<a href="/project-x/data-vault/" class="hex-tile vault" id="panel-vault">
 <div class="sr-corner tl"></div><div class="sr-corner tr"></div>
 <div class="sr-corner bl"></div><div class="sr-corner br"></div>
-<div class="sr-panel-scan"></div>
-<div class="sr-panel-icon">
+<div class="hex-inner">
+<div class="hex-header-row">
+<span class="hex-index">MODULE_002</span>
+<div class="hex-icon">
 <svg viewBox="0 0 48 48">
 <rect x="6" y="8" width="36" height="34" rx="2"/>
 <line x1="6" y1="16" x2="42" y2="16"/>
@@ -712,109 +613,130 @@ body {
 <path d="M16 8 L24 2 L32 8"/>
 </svg>
 </div>
-<div class="sr-panel-id">MODULE_002</div>
-<div class="sr-panel-title">DATA VAULT</div>
-<p class="sr-panel-desc">暗号化データ保管庫。<br>PDF、画像、URL等の機密ファイルを格納。<br>アクセスコードによる追加認証が必要。</p>
-<div class="sr-panel-status">
-<span class="sr-dot"></span> STATUS: SECURED ─ ENCRYPTED
+</div>
+<span class="hex-title">DATA VAULT</span>
+<p class="hex-desc">暗号化データストレージ。機密ファイルおよび隔離対象URL of 安全な保管。</p>
+<div class="hex-status">
+<span class="sr-dot"></span> SECURED
+</div>
 </div>
 </a>
-<a href="/project-x/timetable/" class="sr-panel timetable" id="panel-timetable">
+<a href="/project-x/timetable/" class="hex-tile timetable" id="panel-timetable">
 <div class="sr-corner tl"></div><div class="sr-corner tr"></div>
 <div class="sr-corner bl"></div><div class="sr-corner br"></div>
-<div class="sr-panel-scan"></div>
-<div class="sr-panel-icon">
+<div class="hex-inner">
+<div class="hex-header-row">
+<span class="hex-index">MODULE_003</span>
+<div class="hex-icon">
 <svg viewBox="0 0 48 48">
-<rect x="6" y="6" width="36" height="36" rx="2" stroke="var(--accent)" stroke-width="2" fill="none"/>
-<line x1="6" y1="15" x2="42" y2="15" stroke="var(--accent)" stroke-width="2"/>
-<line x1="15" y1="15" x2="15" y2="42" stroke="var(--accent)" stroke-width="2"/>
-<line x1="6" y1="24" x2="42" y2="24" stroke="var(--accent)" stroke-width="1.5"/>
-<line x1="6" y1="33" x2="42" y2="33" stroke="var(--accent)" stroke-width="1.5"/>
+<rect x="6" y="6" width="36" height="36" rx="2"/>
+<line x1="6" y1="15" x2="42" y2="15"/>
+<line x1="15" y1="15" x2="15" y2="42"/>
+<line x1="6" y1="24" x2="42" y2="24"/>
+<line x1="6" y1="33" x2="42" y2="33"/>
 </svg>
 </div>
-<div class="sr-panel-id">MODULE_003</div>
-<div class="sr-panel-title">TIMETABLE LOG</div>
-<p class="sr-panel-desc">時間割 ＆ 授業進行モニター。<br>日課表・時限予定および進行・出欠管理ログ。<br>オリジン共有型オートシンク。</p>
-<div class="sr-panel-status">
-<span class="sr-dot"></span> STATUS: LINKED ─ ACTIVE
+</div>
+<span class="hex-title">TIMETABLE LOG</span>
+<p class="hex-desc">時間割および授業進行モニター。日課予定とリアルタイム出欠管理ログ。</p>
+<div class="hex-status">
+<span class="sr-dot"></span> SYNCED
+</div>
 </div>
 </a>
-<a href="javascript:void(0)" class="sr-panel proof" id="panel-proof" onclick="openApp('proof-archive')" style="--accent: var(--cyan); --glow: rgba(0,243,255,0.25);">
+<a href="/project-x/proof-archive/" class="hex-tile proof" id="panel-proof">
 <div class="sr-corner tl"></div><div class="sr-corner tr"></div>
 <div class="sr-corner bl"></div><div class="sr-corner br"></div>
-<div class="sr-panel-scan"></div>
-<div class="sr-panel-icon">
+<div class="hex-inner">
+<div class="hex-header-row">
+<span class="hex-index">MODULE_004</span>
+<div class="hex-icon">
 <svg viewBox="0 0 48 48">
-<path d="M12 38c-3.3 0-6-2.7-6-6V8c0-3.3 2.7-6 6-6h24c3.3 0 6 2.7 6 6v24c0 3.3-2.7 6-6 6H12z" stroke="var(--accent)" stroke-width="2" fill="none"/>
-<path d="M12 32h30M12 38h30" stroke="var(--accent)" stroke-width="2"/>
-<path d="M18 10h12M18 16h12M18 22h8" stroke="var(--accent)" stroke-width="1.5"/>
+<path d="M12 38c-3.3 0-6-2.7-6-6V8c0-3.3 2.7-6 6-6h24c3.3 0 6 2.7 6 6v24c0 3.3-2.7 6-6 6H12z"/>
+<path d="M12 32h30M12 38h30"/>
+<path d="M18 10h12M18 16h12M18 22h8"/>
 </svg>
 </div>
-<div class="sr-panel-id">MODULE_004</div>
-<div class="sr-panel-title">PROOF ARCHIVE</div>
-<p class="sr-panel-desc">定理の証明データベース。<br>分野・手法・難易度による多次元フィルタリングおよびLaTeX表記による証明詳細。<br>ナレッジコア同期システム。</p>
-<div class="sr-panel-status">
-<span class="sr-dot"></span> STATUS: MOUNTED ─ SECURE
+</div>
+<span class="hex-title">PROOF ARCHIVE</span>
+<p class="hex-desc">数理証明アーカイブ。多次元フィルタ対応LaTeX数式データベース。</p>
+<div class="hex-status">
+<span class="sr-dot"></span> MOUNTED
+</div>
+</div>
+</a>
+<a href="/project-x/password-generator/" class="hex-tile password" id="panel-password">
+<div class="sr-corner tl"></div><div class="sr-corner tr"></div>
+<div class="sr-corner bl"></div><div class="sr-corner br"></div>
+<div class="hex-inner">
+<div class="hex-header-row">
+<span class="hex-index">MODULE_005</span>
+<div class="hex-icon">
+<svg viewBox="0 0 48 48">
+<rect x="8" y="22" width="32" height="20" rx="3"/>
+<circle cx="24" cy="30" r="3"/>
+<path d="M16 22V14c0-4.4 3.6-8 8-8s8 3.6 8 8v8"/>
+</svg>
+</div>
+</div>
+<span class="hex-title">PASS GENERATOR</span>
+<p class="hex-desc">暗号鍵ジェネレータ。エントロピー解析機能付きローカルキー生成器。</p>
+<div class="hex-status">
+<span class="sr-dot"></span> STANDBY
+</div>
+</div>
+</a>
+<a href="/project-x/steganography/" class="hex-tile steganography" id="panel-steganography">
+<div class="sr-corner tl"></div><div class="sr-corner tr"></div>
+<div class="sr-corner bl"></div><div class="sr-corner br"></div>
+<div class="hex-inner">
+<div class="hex-header-row">
+<span class="hex-index">MODULE_006</span>
+<div class="hex-icon">
+<svg viewBox="0 0 48 48">
+<rect x="6" y="8" width="36" height="32" rx="3"/>
+<circle cx="16" cy="18" r="4"/>
+<path d="M6 32l10-10 12 12 4-4 10 10"/>
+<path d="M22 28a6 3 0 0 1 8 0"/>
+<circle cx="26" cy="28" r="1.5"/>
+</svg>
+</div>
+</div>
+<span class="hex-title">STEGANO TOOL</span>
+<p class="hex-desc">LSBステガノグラフィ。画像ピクセルへのテキスト埋め込み・抽出チャネル。</p>
+<div class="hex-status">
+<span class="sr-dot"></span> OPERATIONAL
+</div>
+</div>
+</a>
+<a href="/project-x/x-curi-binder/" class="hex-tile xbinder" id="panel-xbinder">
+<div class="sr-corner tl"></div><div class="sr-corner tr"></div>
+<div class="sr-corner bl"></div><div class="sr-corner br"></div>
+<div class="hex-inner">
+<div class="hex-header-row">
+<span class="hex-index">MODULE_007</span>
+<div class="hex-icon">
+<svg viewBox="0 0 48 48">
+<path d="M12 8c0-2.2 1.8-4 4-4h16c2.2 0 4 1.8 4 4v32c0 2.2-1.8 4-4 4H16c-2.2 0-4-1.8-4-4V8z" fill="none" stroke="currentColor" stroke-width="2"/>
+<line x1="12" y1="14" x2="36" y2="14" stroke="currentColor" stroke-width="2"/>
+<line x1="12" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="2"/>
+<circle cx="20" cy="28" r="2" fill="currentColor"/>
+<circle cx="28" cy="28" r="2" fill="currentColor"/>
+<circle cx="20" cy="34" r="2" fill="currentColor"/>
+<circle cx="28" cy="34" r="2" fill="currentColor"/>
+</svg>
+</div>
+</div>
+<span class="hex-title">X_CURI_BINDER</span>
+<p class="hex-desc">インテリジェントX魚拓。フォルダ分類、Markdown/LaTeX注釈、関連バインド知識ベース。</p>
+<div class="hex-status">
+<span class="sr-dot"></span> MOUNTED
+</div>
 </div>
 </a>
 
-<a href="javascript:void(0)" class="sr-panel cmd" id="panel-password" onclick="openApp('password-generator')">
-<div class="sr-corner tl"></div><div class="sr-corner tr"></div>
-<div class="sr-corner bl"></div><div class="sr-corner br"></div>
-<div class="sr-panel-scan"></div>
-<div class="sr-panel-icon">
-<svg viewBox="0 0 48 48">
-<rect x="8" y="22" width="32" height="20" rx="3" stroke="var(--accent)" stroke-width="2" fill="none"/>
-<circle cx="24" cy="30" r="3" stroke="var(--accent)" stroke-width="2" fill="none"/>
-<path d="M16 22V14c0-4.4 3.6-8 8-8s8 3.6 8 8v8" stroke="var(--accent)" stroke-width="2" fill="none"/>
-</svg>
-</div>
-<div class="sr-panel-id">MODULE_005</div>
-<div class="sr-panel-title">PASS GENERATOR</div>
-<p class="sr-panel-desc">暗号論的強度を備えた乱数生成器。<br>パスワードの複雑度とエントロピーの可視化、及びブルートフォース解読推定時間の算出。<br>ローカル暗号鍵生成器。</p>
-<div class="sr-panel-status">
-<span class="sr-dot"></span> STATUS: ONLINE ─ STANDBY
-</div>
-</a>
 
-<a href="javascript:void(0)" class="sr-panel vault" id="panel-steganography" onclick="openApp('steganography')">
-<div class="sr-corner tl"></div><div class="sr-corner tr"></div>
-<div class="sr-corner bl"></div><div class="sr-corner br"></div>
-<div class="sr-panel-scan"></div>
-<div class="sr-panel-icon">
-<svg viewBox="0 0 48 48">
-<rect x="6" y="8" width="36" height="32" rx="3" stroke="var(--accent)" stroke-width="2" fill="none"/>
-<circle cx="16" cy="18" r="4" stroke="var(--accent)" stroke-width="2" fill="none"/>
-<path d="M6 32l10-10 12 12 4-4 10 10" stroke="var(--accent)" stroke-width="2" fill="none"/>
-<path d="M22 28a6 3 0 0 1 8 0" stroke="var(--pink)" stroke-width="2" fill="none"/>
-<circle cx="26" cy="28" r="1.5" fill="var(--pink)"/>
-</svg>
 </div>
-<div class="sr-panel-id">MODULE_006</div>
-<div class="sr-panel-title">STEGANO TOOL</div>
-<p class="sr-panel-desc">画像内隠蔽通信システム。<br>LSB（最低位ビット）アルゴリズムに基づき、任意の画像内に極秘テキストを非破壊で埋め込み/復元。<br>ローカルサンドボックス解析。</p>
-<div class="sr-panel-status">
-<span class="sr-dot"></span> STATUS: OPERATIONAL
-</div>
-</a>
-</div>
-
-<div id="app-modal" class="app-modal">
-<div class="app-window" id="app-window">
-<div class="app-bracket tl"></div><div class="app-bracket tr"></div>
-<div class="app-bracket bl"></div><div class="app-bracket br"></div>
-<div class="app-header">
-<div class="app-title-area">
-<span class="app-title-id" id="modal-app-id">MODULE_000</span>
-<span class="app-title-name" id="modal-app-title">SYSTEM MODULE</span>
-</div>
-<button class="app-close-btn" onclick="closeApp()">[ DISCONNECT ]</button>
-</div>
-<div class="app-body" id="modal-app-body">
-</div>
-</div>
-</div>
-
 <div class="sr-footer">
 <a href="/" class="sr-footer-link">RETURN TO SURFACE</a>
 </div>
@@ -823,47 +745,50 @@ body {
 
 <script>
 function initializeSystem() {
-  // Move layers to proper alignment
-  const bg = document.querySelector('.sr-bg');
-  const grid = document.querySelector('.sr-grid');
-  const scanline = document.querySelector('.sr-scanline');
-  const vignette = document.querySelector('.sr-vignette');
+  const bg = document.querySelector('.cyber-bg');
+  const grid = document.querySelector('.cyber-grid');
+  const scanline = document.querySelector('.scanline');
   const lock = document.getElementById('sr-lock');
   const hub = document.getElementById('sr-hub');
   const particles = document.querySelectorAll('.sr-particle');
-  [bg, grid, scanline, vignette, lock, hub].forEach(el => { if (el) document.body.appendChild(el); });
+  
+  [bg, grid, scanline, lock, hub].forEach(el => { if (el) document.body.appendChild(el); });
   particles.forEach(el => document.body.appendChild(el));
-  // Hide external elements
+  
   const KEEP = {'HEADER':1,'STYLE':1,'LINK':1,'SCRIPT':1,'NOSCRIPT':1,'META':1};
   Array.from(document.body.children).forEach(el => {
-    const ours = el.classList.contains('sr-bg') || el.classList.contains('sr-grid') ||
-                 el.classList.contains('sr-scanline') || el.classList.contains('sr-vignette') ||
-                 el.classList.contains('sr-particle') || el.id === 'sr-lock' || el.id === 'sr-hub';
+    const ours = el.classList.contains('cyber-bg') || el.classList.contains('cyber-grid') ||
+                 el.classList.contains('scanline') || el.classList.contains('sr-particle') ||
+                 el.id === 'sr-lock' || el.id === 'sr-hub';
     if (!ours && !KEEP[el.tagName]) el.style.setProperty('display','none','important');
   });
-  // === 6-DIGIT PIN AUTH MECHANISM ===
+
   const TARGET_PIN = "210723";
   let inputCode = "";
   let failCount = 0;
   let lockoutUntil = 0;
+  
   const displayEl = document.getElementById('code-display');
   const digits = displayEl.querySelectorAll('.code-digit');
   const msgEl = document.getElementById('lock-msg');
   const lockoutEl = document.getElementById('code-lockout');
   const hubEl = document.getElementById('sr-hub');
   const lockScreen = document.getElementById('sr-lock');
+
   const updatePINDisplay = () => {
     digits.forEach((d, i) => {
       d.textContent = i < inputCode.length ? '●' : '';
       d.classList.toggle('filled', i < inputCode.length);
     });
   };
+
   const showLockMessage = (text, isSuccess) => {
     msgEl.textContent = text;
     msgEl.classList.add('show');
     if (isSuccess) msgEl.classList.add('success');
     else msgEl.classList.remove('success');
   };
+
   const checkLockout = () => {
     if (Date.now() < lockoutUntil) {
       let remaining = Math.ceil((lockoutUntil - Date.now()) / 1000);
@@ -874,6 +799,7 @@ function initializeSystem() {
     lockoutEl.style.display = 'none';
     return false;
   };
+
   const verifyPIN = () => {
     if (checkLockout()) { inputCode = ''; updatePINDisplay(); return; }
     if (inputCode === TARGET_PIN) {
@@ -902,7 +828,7 @@ function initializeSystem() {
       }, 1200);
     }
   };
-  // Keypad processing interface
+
   document.getElementById('code-keypad').addEventListener('click', function(e) {
     const btn = e.target.closest('.code-key');
     if (!btn) return;
@@ -916,7 +842,7 @@ function initializeSystem() {
       if (inputCode.length === 6) setTimeout(verifyPIN, 200);
     }
   });
-  // Keyboard processing link
+
   document.addEventListener('keydown', function(e) {
     if (lockScreen.classList.contains('unlocked')) return;
     if (checkLockout()) return;
@@ -929,8 +855,9 @@ function initializeSystem() {
       inputCode = ''; updatePINDisplay();
     }
   });
+
   setInterval(checkLockout, 1000);
-  // === Boot Sequence ===
+
   const bootEl = document.getElementById('sr-boot');
   const bootLines = [
     'INITIALIZING SECURE SUBSYSTEM...',
@@ -939,6 +866,7 @@ function initializeSystem() {
     'DECRYPTING ACCESS NODES...',
     'ALL SYSTEMS OPERATIONAL.'
   ];
+
   const runBoot = () => {
     let i = 0;
     const next = () => {
@@ -956,7 +884,7 @@ function initializeSystem() {
     };
     next();
   };
-  // === Uptime Counter ===
+
   const start = Date.now();
   setInterval(() => {
     const s = Math.floor((Date.now() - start) / 1000);
@@ -966,8 +894,8 @@ function initializeSystem() {
       String(Math.floor((s%3600)/60)).padStart(2,'0') + ':' +
       String(s%60).padStart(2,'0');
   }, 1000);
-  // === Matrix code shifting text effect ===
-  const glitchTargets = document.querySelectorAll('.sr-panel-id, .sr-classification');
+
+  const glitchTargets = document.querySelectorAll('.hex-index, .sr-classification');
   glitchTargets.forEach(target => {
     const orig = target.textContent;
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&_';
@@ -982,329 +910,8 @@ function initializeSystem() {
       iter += 0.5;
     }, 30);
   });
-  // ==========================================
-  // === MODULES CORE CONSOLES SYSTEM ===
-  // ==========================================
-  const modalEl = document.getElementById('app-modal');
-  const windowEl = document.getElementById('app-window');
-  const bodyEl = document.getElementById('modal-app-body');
-  const modalIdEl = document.getElementById('modal-app-id');
-  const modalTitleEl = document.getElementById('modal-app-title');
-  // Proof Archive Database Array
-  const PROOFS_DB = [
-    { id: 1, title: "級数等式 \\sum_{k=1}^{\\infty}\\frac{(3^k-1)\\zeta(k+1)}{4^k} = \\pi", field: "解析学", difficulty: 3, link: "/posts/2025-12-10-proof1/", formula: "\\sum_{k=1}^{\\infty} \\frac{(3^k - 1)\\zeta(k+1)}{4^k} = \\pi", summary: "ゼータ関数の積分表示と指数関数のマクローリン展開を応用し、ゼータ級数を円周率 \\pi に収束させる極めて美しい等式。" },
-    { id: 2, title: "級数等式 \\sum_{n=0}^{\\infty}\\frac{\\zeta(2n+2)}{16^n} = 8 - 2\\pi", field: "解析学", difficulty: 3, link: "/posts/2025-12-10-proof2/", formula: "\\sum_{n=0}^{\\infty} \\frac{\\zeta(2n+2)}{16^n} = 8 - 2\\pi", summary: "偶数ゼータ関数と 16^{-n} の積の無限和が、円周率を含む有理数表現に収束する。sinhの展開と部分分数分解を使用。" },
-    { id: 3, title: "級数等式 \\sum_{n=0}^{\\infty}\\frac{\\delta(n) (-1)^n(n+2)(n+3)\\zeta(n+4)}{2^n} = 32 - 24\\zeta(3)", field: "解析学", difficulty: 4, link: "/posts/2025-12-11-proof3/", formula: "\\sum_{n=0}^{\\infty} \\frac{(-1)^n(n+2)(n+3)\\zeta(n+4)}{2^n} = 32 - 24\\zeta(3)", summary: "交代級数と多項式係数、ゼータ関数の積の和。アペリーの定数 \\zeta(3) の奇数項分解を利用する高度な評価。" },
-    { id: 4, title: "定積分 \\int_{0}^{\\frac{1}{2}} \\ln \\Gamma (x + \\frac{1}{8}) dx = ...", field: "解析学", difficulty: 5, link: "/posts/2025-12-14-proof4/", formula: "\\int_{0}^{\\frac{1}{2}} \\ln \\Gamma \\left( x + \\frac{1}{8} \\right) dx = \\frac{1}{4}\\ln(2\\pi) - \\frac{1}{4\\pi} \\left( Cl_2\\left(\\frac{\\pi}{4}\right) + Cl_2\\left(\\frac{3\\pi}{4}\right) \\right)", summary: "対数ガンマ関数の区間定積分。クンマーのフーリエ級数展開を用いて、クラウゼン関数 Cl_2(\\theta) に帰着させる難関証明。" },
-    { id: 5, title: "母関数等式 \\sum_{n=0}^{\\infty} x^{2n} \\zeta(2+2n) = ...", field: "解析学", difficulty: 3, link: "/posts/2025-12-14-proof5/", formula: "\\sum_{n=0}^{\\infty} x^{2n} \\zeta(2+2n) = \\frac{1 - \\pi x \\ cot(\\pi x)}{2x^2} \\quad (|x| < 1)", summary: "偶数ゼータ関数の母関数が余接関数 \\cot(\\pi x) の部分分数展開に一致することを示す美しい等式。" },
-    { id: 6, title: "定積分 \\int_{0}^{\\frac{\\pi}{2}} \\ln^2 \\sin x dx = ...", field: "解析学", difficulty: 4, link: "/posts/2025-12-14-proof6/", formula: "\\int_{0}^{\\frac{\\pi}{2}} \\ln^2 \\sin x \\, dx = \\frac{\\pi \\ln^2 2}{2} + \\frac{\\pi^3}{24}", summary: "対数正弦の二乗積分。\\ln(2\\sin x) のフーリエ展開と三角関数の直交性を巧みに用いてバーゼル問題に帰着。" },
-    { id: 10, title: "級数等式 \\sum_{n \\ge 0} \\frac{1}{(2n+1)^2} = \\frac{\\pi^2}{8}", field: "解析学", difficulty: 2, link: "/posts/2025-12-25-proof10/", formula: "\\sum_{n \\ge 0} \\frac{1}{(2n+1)^2} = \\frac{\\pi^2}{8}", summary: "奇数の逆二乗和の極限。複素対数の積分による美しい直接証明。バーゼル問題の派生。" },
-    { id: 11, title: "入れ子積分 \\int_{0}^{\\frac{\\pi}{2}} \\sin(x \\sin(x \\sin ...)) dx = ...", field: "解析学", difficulty: 5, link: "/posts/2026-01-14-proof11/", formula: "\\int_{0}^{\\frac{\\pi}{2}} \\sin(x \\sin(x \\sin \\dots)) \\, dx = \\frac{\\pi}{2}(1 - \\log 2)", summary: "無限の入れ子構造（自己相似構造）を持つ関数の定積分。逆関数への置換と部分積分により、対数正弦積分に帰着。" }
-  ];
-  window.openApp = (appId) => {
-    modalEl.style.display = 'flex';
-    modalEl.classList.add('active');
-    windowEl.style.setProperty('--accent', 'var(--cyan)');
-    modalIdEl.style.borderColor = 'rgba(0, 243, 255, 0.3)';
-    modalIdEl.style.color = 'var(--pink)';
-    modalTitleEl.style.color = '#fff';
-    if (appId === 'proof-archive') {
-      windowEl.style.setProperty('--accent', 'var(--cyan)');
-      modalIdEl.textContent = 'MODULE_004';
-      modalTitleEl.textContent = 'PROOF ARCHIVE // 構造化証明アーカイブ';
-      initProofArchive();
-    } else if (appId === 'password-generator') {
-      windowEl.style.setProperty('--accent', 'var(--pink)');
-      modalIdEl.textContent = 'MODULE_005';
-      modalIdEl.style.color = 'var(--cyan)';
-      modalIdEl.style.borderColor = 'rgba(0, 243, 255, 0.3)';
-      modalTitleEl.textContent = 'PASS GENERATOR // タクティカル暗号鍵生成システム';
-      initPasswordGenerator();
-    } else if (appId === 'steganography') {
-      windowEl.style.setProperty('--accent', 'var(--green)');
-      modalIdEl.textContent = 'MODULE_006';
-      modalTitleEl.textContent = 'STEGANO TOOL // 画像内隠蔽通信システム';
-      initSteganography();
-    }
-    if (navigator.vibrate) navigator.vibrate(30);
-  };
-  window.closeApp = () => {
-    modalEl.classList.remove('active');
-    modalEl.style.display = 'none';
-    bodyEl.innerHTML = '';
-  };
-  modalEl.addEventListener('click', (e) => { if (e.target === modalEl) closeApp(); });
-  // --- PROOF ARCHIVE ENGINE ---
-  function initProofArchive() {
-    bodyEl.innerHTML = `
-      <div class="pa-filter-bar">
-        <input type="text" id="pa-search" class="pa-search-input" placeholder="定理・手法・キーワードを入力...">
-        <select id="pa-difficulty" class="pa-select">
-          <option value="">難易度: すべて</option>
-          <option value="2">★2 (標準)</option>
-          <option value="3">★3 (応用)</option>
-          <option value="4">★4 (上級)</option>
-          <option value="5">★5 (極限)</option>
-        </select>
-      </div>
-      <div class="pa-grid" id="pa-grid"></div>
-    `;
-    const searchInput = document.getElementById('pa-search');
-    const diffSelect = document.getElementById('pa-difficulty');
-    const render = () => {
-      const query = searchInput.value.toLowerCase();
-      const diff = diffSelect.value;
-      const grid = document.getElementById('pa-grid');
-      const filtered = PROOFS_DB.filter(item => {
-        return (item.title.toLowerCase().includes(query) || item.summary.toLowerCase().includes(query) || item.field.toLowerCase().includes(query)) && (diff === "" || item.difficulty === parseInt(diff));
-      });
-      if (filtered.length === 0) {
-        grid.innerHTML = `<div style="text-align:center; padding: 2rem; color: rgba(0,243,255,0.4); font-family:'Share Tech Mono', monospace;">> NO COMPATIBLE ARCHIVES FOUND.</div>`;
-        return;
-      }
-      grid.innerHTML = filtered.map(item => `
-        <div class="pa-card">
-          <div class="pa-card-header">
-            <h4 class="pa-card-title">Proof#${item.id}: ${item.title}</h4>
-            <div class="pa-card-meta">
-              <span class="pa-badge field">${item.field}</span>
-              <span class="pa-badge difficulty">Level ${'★'.repeat(item.difficulty)}</span>
-            </div>
-          </div>
-          <div class="pa-card-formula">$$${item.formula}$$</div>
-          <div class="pa-card-desc">${item.summary}</div>
-          <a href="${item.link}" class="pa-card-btn">> ACCESS ARCHIVE LOG</a>
-        </div>
-      `).join('');
-      if (window.MathJax) {
-        if (typeof MathJax.typesetPromise === 'function') MathJax.typesetPromise();
-        else if (typeof MathJax.Hub === 'object' && typeof MathJax.Hub.Queue === 'function') MathJax.Hub.Queue(["Typeset", MathJax.Hub, grid]);
-      }
-    };
-    searchInput.addEventListener('input', render);
-    diffSelect.addEventListener('change', render);
-    render();
-  }
-  // --- PASSWORD GENERATOR ENGINE ---
-  let genHistory = [];
-  function initPasswordGenerator() {
-    bodyEl.innerHTML = `
-      <div class="pg-container">
-        <div class="pg-panel">
-          <div class="pg-display-box">
-            <div id="pg-display" class="pg-display">-- SELECT SYSTEM KEY --</div>
-            <button id="pg-copy" class="pg-copy-btn" disabled>COPY</button>
-          </div>
-          <div class="pg-slider-group">
-            <div class="pg-label"><span>KEY LENGTH</span><span class="value" id="pg-len-val">16</span></div>
-            <input type="range" id="pg-len" class="pg-slider" min="8" max="64" value="16">
-          </div>
-          <div class="pg-options">
-            <label class="pg-checkbox-label"><input type="checkbox" id="pg-opt-upper" checked><div class="pg-custom-box"></div><span>A-Z (UPPERCASE)</span></label>
-            <label class="pg-checkbox-label"><input type="checkbox" id="pg-opt-lower" checked><div class="pg-custom-box"></div><span>a-z (LOWERCASE)</span></label>
-            <label class="pg-checkbox-label"><input type="checkbox" id="pg-opt-num" checked><div class="pg-custom-box"></div><span>0-9 (NUMBERS)</span></label>
-            <label class="pg-checkbox-label"><input type="checkbox" id="pg-opt-sym" checked><div class="pg-custom-box"></div><span>[!@#$...] (SYMBOLS)</span></label>
-            <label class="pg-checkbox-label"><input type="checkbox" id="pg-opt-cyber"><div class="pg-custom-box"></div><span>[☣☠☯⚡...] (CYBER)</span></label>
-            <label class="pg-checkbox-label"><input type="checkbox" id="pg-opt-math"><div class="pg-custom-box"></div><span>[∫∑√∂...] (MATH)</span></label>
-          </div>
-          <button id="pg-generate" class="pg-gen-btn">GENERATE SECURE KEY</button>
-        </div>
-        <div class="pg-stats-panel">
-          <div class="pg-stat-card"><span class="pg-stat-title">ENTROPY STRENGTH</span><span class="pg-stat-val" id="pg-entropy">0 bits</span><div class="pg-meter-bg"><div id="pg-entropy-bar" class="pg-meter-fill"></div></div></div>
-          <div class="pg-stat-card"><span class="pg-stat-title">SECURITY LEVEL</span><span class="pg-stat-val" id="pg-sec-level">--</span></div>
-          <div class="pg-stat-card"><span class="pg-stat-title">DECRYPTION TIME</span><span class="pg-stat-val" id="pg-crack-time">--</span></div>
-          <div class="pg-stat-card" style="flex:1; min-height:120px;"><span class="pg-stat-title">LOCAL KEY LOGS</span><div class="pg-logs" id="pg-logs-area"><div style="opacity:0.3;">> STANDBY. LOG IS EMPTY.</div></div></div>
-        </div>
-      </div>
-    `;
-    const lengthSlider = document.getElementById('pg-len');
-    const lengthVal = document.getElementById('pg-len-val');
-    const generateBtn = document.getElementById('pg-generate');
-    const copyBtn = document.getElementById('pg-copy');
-    const displayBox = document.getElementById('pg-display');
-    const logsArea = document.getElementById('pg-logs-area');
-    lengthSlider.addEventListener('input', () => { lengthVal.textContent = lengthSlider.value; });
-    copyBtn.addEventListener('click', () => {
-      if (displayBox.textContent && displayBox.textContent !== '-- SELECT SYSTEM KEY --') {
-        navigator.clipboard.writeText(displayBox.textContent).then(() => {
-          const original = copyBtn.textContent; copyBtn.textContent = 'COPIED';
-          copyBtn.style.color = 'var(--green)'; copyBtn.style.borderColor = 'var(--green)';
-          setTimeout(() => { copyBtn.textContent = original; copyBtn.style.color = ''; copyBtn.style.borderColor = ''; }, 1000);
-        });
-      }
-    });
-    generateBtn.addEventListener('click', () => {
-      const len = parseInt(lengthSlider.value);
-      let charset = ''; let poolSize = 0;
-      if (document.getElementById('pg-opt-upper').checked) { charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; poolSize += 26; }
-      if (document.getElementById('pg-opt-lower').checked) { charset += 'abcdefghijklmnopqrstuvwxyz'; poolSize += 26; }
-      if (document.getElementById('pg-opt-num').checked) { charset += '0123456789'; poolSize += 10; }
-      if (document.getElementById('pg-opt-sym').checked) { charset += '!@#$%^&*()_+-=[]{}|;:,.<>?'; poolSize += 26; }
-      if (document.getElementById('pg-opt-cyber').checked) { charset += '☣☠☯⚡ΞΨΦΩ★☢❄☄💧🔥'; poolSize += 16; }
-      if (document.getElementById('pg-opt-math').checked) { charset += '∫∑√∂π∞±≠≈≡≤≥∝'; poolSize += 13; }
-      if (charset === '') { displayBox.textContent = 'ERROR: SELECT CHAR TYPE'; return; }
-      generateBtn.disabled = true;
-      let elapsed = 0;
-      const spin = setInterval(() => {
-        let temp = ''; for (let i = 0; i < len; i++) temp += charset.charAt(Math.floor(Math.random() * charset.length));
-        displayBox.textContent = temp; displayBox.style.color = 'var(--pink)';
-        elapsed += 30;
-        if (elapsed >= 300) { clearInterval(spin); finalizePassword(charset, poolSize, len); }
-      }, 30);
-    });
-    function finalizePassword(charset, poolSize, len) {
-      let finalPass = ''; const array = new Uint32Array(len); window.crypto.getRandomValues(array);
-      for (let i = 0; i < len; i++) finalPass += charset.charAt(array[i] % charset.length);
-      displayBox.textContent = finalPass; displayBox.style.color = 'var(--green)';
-      copyBtn.disabled = false; generateBtn.disabled = false;
-      const entropy = Math.round(len * Math.log2(poolSize));
-      document.getElementById('pg-entropy').textContent = `${entropy} bits`;
-      const bar = document.getElementById('pg-entropy-bar');
-      const secLevel = document.getElementById('pg-sec-level');
-      bar.style.width = `${Math.min(100, (entropy / 160) * 100)}%`;
-      if (entropy < 60) { secLevel.textContent = 'WEAK // 低保護強度'; secLevel.className = 'pg-stat-val danger'; bar.style.backgroundColor = 'var(--pink)'; }
-      else if (entropy < 100) { secLevel.textContent = 'STANDARD // 標準保護強度'; secLevel.className = 'pg-stat-val warning'; bar.style.backgroundColor = 'var(--amber)'; }
-      else { secLevel.textContent = 'MILITARY_GRADE // 軍用最高暗号強度'; secLevel.className = 'pg-stat-val secure'; bar.style.backgroundColor = 'var(--green)'; }
-      const guesses = Math.pow(poolSize, len); const seconds = guesses / 1e12;
-      const timeVal = document.getElementById('pg-crack-time');
-      if (seconds < 1) timeVal.textContent = '0.001 seconds (Instant)';
-      else if (seconds < 86400) timeVal.textContent = 'A few hours (Medium Threat)';
-      else if (seconds < 31536000) timeVal.textContent = 'A few months (Highly Secure)';
-      else { const years = Math.round(seconds / 31536000); timeVal.textContent = years > 1e10 ? 'Infinite (Universe-level Age)' : `${years.toLocaleString()} years`; }
-      const time = new Date().toLocaleTimeString(); genHistory.unshift({ time, pass: finalPass });
-      if (genHistory.length > 8) genHistory.pop();
-      logsArea.innerHTML = genHistory.map((item, idx) => `<div class="pg-log-entry" onclick="copyFromLog(${idx})"><span><span class="pg-log-time">[${item.time}]</span> ${item.pass.substring(0, 18)}...</span><span style="color:var(--cyan); font-size:0.55rem;">[COPY]</span></div>`).join('');
-    }
-  }
-  window.copyFromLog = (idx) => { if (genHistory[idx]) { navigator.clipboard.writeText(genHistory[idx].pass); if (navigator.vibrate) navigator.vibrate(20); } };
-  // --- STEGANOGRAPHY ENGINE ---
-  let stegImg = null; let stegEncodedUrl = null;
-  function initSteganography() {
-    stegImg = null; stegEncodedUrl = null;
-    bodyEl.innerHTML = `
-      <div class="steg-tabs">
-        <button class="steg-tab active" id="tab-steg-enc" onclick="switchStegTab('enc')">ENCODE // 秘密埋め込み</button>
-        <button class="steg-tab" id="tab-steg-dec" onclick="switchStegTab('dec')">DECODE // 秘密抽出</button>
-      </div>
-      <div class="steg-pane active" id="pane-steg-enc">
-        <div class="steg-row">
-          <div class="steg-input-group"><span class="pg-stat-title">STEP 1: CARRIER IMAGE (原画)</span><div class="steg-upload-zone" onclick="document.getElementById('steg-file-enc').click()"><svg viewBox="0 0 48 48"><rect x="6" y="8" width="36" height="32" rx="3"/><circle cx="16" cy="18" r="4"/><path d="M6 32l10-10 12 12 4-4 10 10"/></svg><div class="steg-upload-text">DRAG & DROP IMAGE OR CLICK TO SELECT</div><input type="file" id="steg-file-enc" style="display:none;" accept="image/*"></div><div id="steg-enc-alert" class="steg-alert" style="display:none;"></div></div>
-          <div class="steg-input-group"><span class="pg-stat-title">IMAGE PREVIEW (プレビュー)</span><div class="steg-preview-box"><img id="steg-prev-enc" class="steg-preview-img" style="display:none;"><span id="steg-holder-enc" class="steg-preview-placeholder">> CARRIER SIGNAL OFFLINE</span></div></div>
-        </div>
-        <div class="steg-input-group"><span class="pg-stat-title">STEP 2: ENCRYPTED MESSAGE (埋め込む秘密メッセージ)</span><textarea id="steg-msg" class="steg-textarea" placeholder="ここに極秘テキストを入力してください..."></textarea></div>
-        <button id="steg-run-enc" class="steg-btn" disabled>EXECUTE ENCODE MODULE</button>
-        <div class="steg-input-group" id="steg-result-area" style="display:none;"><span class="pg-stat-title">STEP 3: DEPLOYMENT READY (生成完了)</span><div style="display:flex; gap: 1rem; align-items:center;"><div class="steg-preview-box" style="flex:1; height:120px;"><img id="steg-final-img" class="steg-preview-img"></div><a id="steg-download" class="steg-btn steg-dl-btn" style="flex:1; line-height:3;" href="#" download="steg_secured.png">DOWNLOAD SECURED IMAGE</a></div></div>
-      </div>
-      <div class="steg-pane" id="pane-steg-dec">
-        <div class="steg-row">
-          <div class="steg-input-group"><span class="pg-stat-title">STEP 1: TARGET IMAGE (解析画像の取り込み)</span><div class="steg-upload-zone" onclick="document.getElementById('steg-file-dec').click()"><svg viewBox="0 0 48 48"><rect x="6" y="8" width="36" height="32" rx="3"/><path d="M14 26 L24 16 L34 26 M24 16 L24 38"/></svg><div class="steg-upload-text">SELECT SECURED SIGNAL CARRIER PNG</div><input type="file" id="steg-file-dec" style="display:none;" accept="image/*"></div></div>
-          <div class="steg-input-group"><span class="pg-stat-title">IMAGE SIGNAL SCANNER (スキャン)</span><div class="steg-preview-box"><img id="steg-prev-dec" class="steg-preview-img" style="display:none;"><span id="steg-holder-dec" class="steg-preview-placeholder">> ANALYZING TARGET SIGNAL OFFLINE</span></div></div>
-        </div>
-        <button id="steg-run-dec" class="steg-btn" style="--accent: var(--green);" disabled>RUN MULTI-CHANNEL SCANNER</button>
-        <div class="steg-input-group"><span class="pg-stat-title">RESTORED MESSAGE DATA (抽出完了)</span><div id="steg-result-dec" class="steg-decode-result">> WAITING FOR STABILIZATION SCANS...</div></div>
-      </div>
-    `;
-    const fileEnc = document.getElementById('steg-file-enc'); const fileDec = document.getElementById('steg-file-dec');
-    const prevEnc = document.getElementById('steg-prev-enc'); const prevDec = document.getElementById('steg-prev-dec');
-    const holderEnc = document.getElementById('steg-holder-enc'); const holderDec = document.getElementById('steg-holder-dec');
-    const runEncBtn = document.getElementById('steg-run-enc'); const runDecBtn = document.getElementById('steg-run-dec');
-    const encAlert = document.getElementById('steg-enc-alert');
-    document.querySelectorAll('.steg-upload-zone').forEach(zone => {
-      zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.style.borderColor = 'var(--cyan)'; });
-      zone.addEventListener('dragleave', () => { zone.style.borderColor = ''; });
-      zone.addEventListener('drop', (e) => {
-        e.preventDefault(); zone.style.borderColor = ''; const files = e.dataTransfer.files;
-        if (files.length > 0) { const input = zone.querySelector('input[type="file"]'); input.files = files; input.dispatchEvent(new Event('change')); }
-      });
-    });
-    fileEnc.addEventListener('change', () => {
-      const file = fileEnc.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          stegImg = new Image(); stegImg.onload = () => { prevEnc.src = e.target.result; prevEnc.style.display = 'block'; holderEnc.style.display = 'none'; runEncBtn.disabled = false; encAlert.style.display = 'none'; };
-          stegImg.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-    fileDec.addEventListener('change', () => {
-      const file = fileDec.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          stegImg = new Image(); stegImg.onload = () => { prevDec.src = e.target.result; prevDec.style.display = 'block'; holderDec.style.display = 'none'; runDecBtn.disabled = false; };
-          stegImg.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-    runEncBtn.addEventListener('click', () => {
-      const msg = document.getElementById('steg-msg').value;
-      if (!msg) { encAlert.textContent = 'ERROR: SECRET TEXT CANNOT BE BLANK.'; encAlert.style.display = 'block'; return; }
-      const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
-      canvas.width = stegImg.width; canvas.height = stegImg.height; ctx.drawImage(stegImg, 0, 0);
-      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height); const data = imgData.data;
-      const encoder = new TextEncoder(); const msgBytes = encoder.encode(msg); const msgLength = msgBytes.length;
-      const headerBytes = new Uint8Array(4);
-      headerBytes[0] = (msgLength >> 24) & 0xFF; headerBytes[1] = (msgLength >> 16) & 0xFF; headerBytes[2] = (msgLength >> 8) & 0xFF; headerBytes[3] = msgLength & 0xFF;
-      const totalBytes = new Uint8Array(headerBytes.length + msgBytes.length); totalBytes.set(headerBytes, 0); totalBytes.set(msgBytes, headerBytes.length);
-      if (totalBytes.length * 8 > data.length) { encAlert.textContent = 'ERROR: PIXEL CAPACITY EXCEEDED. CHOOSE LARGER IMAGE.'; encAlert.style.display = 'block'; return; }
-      runEncBtn.disabled = true; runEncBtn.textContent = 'CALCULATING QUANTUM VECTORS...';
-      setTimeout(() => {
-        let byteIdx = 0; let bitIdx = 0;
-        for (let i = 0; i < totalBytes.length * 8; i++) {
-          const bit = (totalBytes[byteIdx] >> (7 - bitIdx)) & 1;
-          data[i] = (data[i] & 0xFE) | bit; bitIdx++; if (bitIdx === 8) { bitIdx = 0; byteIdx++; }
-        }
-        ctx.putImageData(imgData, 0, 0); stegEncodedUrl = canvas.toDataURL("image/png");
-        document.getElementById('steg-final-img').src = stegEncodedUrl; document.getElementById('steg-download').href = stegEncodedUrl;
-        document.getElementById('steg-result-area').style.display = 'block'; runEncBtn.disabled = false; runEncBtn.textContent = 'EXECUTE ENCODE MODULE';
-        if (navigator.vibrate) navigator.vibrate([30, 30, 30]);
-      }, 500);
-    });
-    runDecBtn.addEventListener('click', () => {
-      const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
-      canvas.width = stegImg.width; canvas.height = stegImg.height; ctx.drawImage(stegImg, 0, 0);
-      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height); const data = imgData.data;
-      const resultBox = document.getElementById('steg-result-dec');
-      resultBox.classList.remove('error'); resultBox.textContent = 'INITIALIZING DEEP CORE SCANNER...';
-      runDecBtn.disabled = true;
-      setTimeout(() => {
-        try {
-          let lengthBytes = new Uint8Array(4); let byteIdx = 0; let bitIdx = 0;
-          for (let i = 0; i < 32; i++) {
-            const bit = data[i] & 1; lengthBytes[byteIdx] = (lengthBytes[byteIdx] << 1) | bit;
-            bitIdx++; if (bitIdx === 8) { bitIdx = 0; byteIdx++; }
-          }
-          const msgLength = (lengthBytes[0] << 24) | (lengthBytes[1] << 16) | (lengthBytes[2] << 8) | lengthBytes[3];
-          if (msgLength <= 0 || msgLength * 8 + 32 > data.length) throw new Error("SECRET SIGNATURE NOT DETECTED.");
-          const msgBytes = new Uint8Array(msgLength); byteIdx = 0; bitIdx = 0;
-          for (let i = 32; i < 32 + msgLength * 8; i++) {
-            const bit = data[i] & 1; msgBytes[byteIdx] = (msgBytes[byteIdx] << 1) | bit;
-            bitIdx++; if (bitIdx === 8) { bitIdx = 0; byteIdx++; }
-          }
-          const decoder = new TextDecoder(); const restoredText = decoder.decode(msgBytes);
-          resultBox.textContent = ''; let typeIdx = 0; const speed = restoredText.length > 100 ? 5 : 20;
-          const type = setInterval(() => {
-            resultBox.textContent += restoredText.charAt(typeIdx); typeIdx++;
-            if (typeIdx >= restoredText.length) { clearInterval(type); runDecBtn.disabled = false; }
-          }, speed);
-          if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-        } catch (err) {
-          resultBox.textContent = `CRITICAL_ERROR: ${err.message}`; resultBox.classList.add('error'); runDecBtn.disabled = false;
-        }
-      }, 800);
-    });
-  }
-  window.switchStegTab = (tab) => {
-    document.querySelectorAll('.steg-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.steg-pane').forEach(p => p.classList.remove('active'));
-    if (tab === 'enc') { document.getElementById('tab-steg-enc').classList.add('active'); document.getElementById('pane-steg-enc').classList.add('active'); }
-    else { document.getElementById('tab-steg-dec').classList.add('active'); document.getElementById('pane-steg-dec').classList.add('active'); }
-  };
-  console.log('%c SYSTEM PIN INITIALIZATION COMPLETE ', 'background: #ff0055; color: #fff; padding: 5px; font-weight: bold;');
 }
+
 if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initializeSystem); }
 else { initializeSystem(); }
 </script>
