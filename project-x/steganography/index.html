@@ -827,6 +827,7 @@ body {
     linear-gradient(rgba(0, 255, 102, 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 255, 102, 0.06) 1px, transparent 1px);
   background-size: 40px 40px;
+  filter: url(#liquid-refract);
 }
 .sr-scanline {
   position: fixed; inset: 0; z-index: 2; pointer-events: none;
@@ -873,9 +874,23 @@ body {
 .sr-header {
   text-align: center; margin-bottom: 2rem;
   padding: 2.5rem 2rem; position: relative;
-  border: 1px solid var(--border-dim);
-  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.10) 0%, 
+    rgba(255, 255, 255, 0.02) 30%, 
+    rgba(10, 8, 28, 0.20) 80%, 
+    rgba(2, 2, 6, 0.50) 100%
+  );
+  backdrop-filter: blur(18px) url(#liquid-refract) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) url(#liquid-refract) saturate(135%);
   overflow: hidden;
+  box-shadow: 
+    inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.18),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.04),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.45),
+    inset -3px -3px 8px rgba(0, 0, 0, 0.55),
+    0 15px 40px rgba(0, 0, 0, 0.6);
 }
 .sr-header::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
@@ -996,9 +1011,24 @@ body {
   display: grid; grid-template-columns: 1fr 1.3fr; gap: 1.5rem;
 }
 .steg-panel {
-  background: var(--card-bg); border: 1px solid var(--border-dim);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
   padding: 1.5rem; display: flex; flex-direction: column; gap: 1.2rem;
   position: relative;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.10) 0%, 
+    rgba(255, 255, 255, 0.02) 30%, 
+    rgba(10, 8, 28, 0.20) 80%, 
+    rgba(2, 2, 6, 0.50) 100%
+  );
+  backdrop-filter: blur(18px) url(#liquid-refract) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) url(#liquid-refract) saturate(135%);
+  box-shadow: 
+    inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.18),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.04),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.45),
+    inset -3px -3px 8px rgba(0, 0, 0, 0.55),
+    0 20px 50px rgba(0, 0, 0, 0.65);
 }
 .steg-panel::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
@@ -1011,9 +1041,18 @@ body {
 }
 .steg-preview-wrapper {
   position: relative; width: 100%; height: 220px;
-  background: rgba(2, 2, 8, 0.95); border: 1px solid rgba(0, 255, 102, 0.2);
+  background: rgba(2, 2, 8, 0.4); 
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
   display: flex; justify-content: center; align-items: center;
-  overflow: hidden; box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.05);
+  overflow: hidden; 
+  backdrop-filter: blur(14px) url(#liquid-refract) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) url(#liquid-refract) saturate(120%);
+  box-shadow: 
+    inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.15),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.03),
+    inset 0 0 20px rgba(0, 255, 102, 0.05),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.40);
 }
 
  
@@ -1047,8 +1086,21 @@ body {
   display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;
 }
 .steg-hud-card {
-  background: rgba(2, 2, 8, 0.6); border: 1px solid rgba(0, 255, 102, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
   padding: 0.6rem 0.8rem; display: flex; flex-direction: column; gap: 0.2rem;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.08) 0%, 
+    rgba(255, 255, 255, 0.01) 30%, 
+    rgba(10, 8, 28, 0.10) 80%, 
+    rgba(2, 2, 6, 0.35) 100%
+  );
+  backdrop-filter: blur(10px) url(#liquid-refract) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) url(#liquid-refract) saturate(120%);
+  box-shadow: 
+    inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.12),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.02),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.35);
 }
 .steg-hud-title {
   font-family: 'Orbitron', 'Share Tech Mono', monospace; font-size: 0.55rem;
@@ -1185,6 +1237,13 @@ body {
   .steg-container { grid-template-columns: 1fr; gap: 1.5rem; }
 }
 </style>
+
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <filter id="liquid-refract">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
 
 <div class="sr-bg"></div>
 <div class="sr-grid"></div>

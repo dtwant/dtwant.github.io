@@ -838,7 +838,23 @@
   @keyframes lx-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
 
    
-  #cyber-latex-app .lx-panel { background:var(--panel-bg); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 20px rgba(0,0,0,0.8),inset 0 0 30px rgba(0,243,255,0.05); backdrop-filter:blur(5px); }
+  #cyber-latex-app .lx-panel {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.10) 0%, 
+      rgba(255, 255, 255, 0.02) 30%, 
+      rgba(10, 8, 28, 0.20) 80%, 
+      rgba(2, 2, 6, 0.50) 100%
+    );
+    backdrop-filter: blur(18px) url(#liquid-refract) saturate(135%);
+    -webkit-backdrop-filter: blur(18px) url(#liquid-refract) saturate(135%);
+    box-shadow: 
+      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.18),
+      inset 2px 2px 5px rgba(255, 255, 255, 0.04),
+      inset -1px -1px 3px rgba(0, 0, 0, 0.45),
+      inset -3px -3px 10px rgba(0, 0, 0, 0.60),
+      0 20px 40px rgba(0, 0, 0, 0.65);
+  }
   #cyber-latex-app .lx-clip { clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
 
   #cyber-latex-app .lx-main { width:100%; max-width:1100px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
@@ -882,7 +898,22 @@
   #cyber-latex-app .lx-textarea::-webkit-scrollbar-thumb { background:var(--accent); }
 
    
-  #cyber-latex-app .lx-controls { background:rgba(0,0,0,0.5); border:1px solid #1f2937; padding:16px; margin-bottom:16px; }
+  #cyber-latex-app .lx-controls {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.08) 0%, 
+      rgba(255, 255, 255, 0.01) 30%, 
+      rgba(10, 8, 28, 0.10) 80%, 
+      rgba(2, 2, 6, 0.35) 100%
+    );
+    backdrop-filter: blur(10px) url(#liquid-refract) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) url(#liquid-refract) saturate(120%);
+    box-shadow: 
+      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.12),
+      inset 2px 2px 5px rgba(255, 255, 255, 0.02),
+      inset -1px -1px 3px rgba(0, 0, 0, 0.35);
+    padding: 16px; margin-bottom: 16px;
+  }
   #cyber-latex-app .lx-control-panel { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
   @media(max-width:640px) { #cyber-latex-app .lx-control-panel { grid-template-columns:1fr; } }
 
@@ -911,7 +942,22 @@
   #cyber-latex-app .lx-actions { margin-bottom:16px; display:flex; justify-content:flex-end; }
 
    
-  #cyber-latex-app .lx-preview-container { background:rgba(24,24,27,0.95) !important; border:1px solid #333 !important; min-height:150px; padding:20px; display:flex; justify-content:center; align-items:center; position:relative; overflow:hidden; }
+  #cyber-latex-app .lx-preview-container {
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.10) 0%, 
+      rgba(255, 255, 255, 0.02) 30%, 
+      rgba(10, 8, 28, 0.15) 80%, 
+      rgba(2, 2, 6, 0.40) 100%
+    ) !important;
+    backdrop-filter: blur(14px) url(#liquid-refract) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract) saturate(120%) !important;
+    box-shadow: 
+      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.18),
+      inset 2px 2px 5px rgba(255, 255, 255, 0.04),
+      inset -1px -1px 3px rgba(0, 0, 0, 0.45);
+    min-height:150px; padding:20px; display:flex; justify-content:center; align-items:center; position:relative; overflow:hidden;
+  }
 
    
   #cyber-latex-app .lx-preview-box { background-color:#ffffff !important; color:#000000 !important; display:inline-flex; justify-content:center; align-items:center; padding:30px; font-size:20px !important; line-height:normal !important; box-shadow:none !important; border:1px solid #ddd; transform-origin:center center; transition:transform 0.2s ease; }
@@ -987,6 +1033,12 @@
       </div>
     </div>
   </div>
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="liquid-refract">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
 </div>
 
 <script>

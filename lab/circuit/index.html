@@ -838,7 +838,11 @@
   }
   .circ-container { position: relative; z-index: 10; display: flex; flex-direction: column; width: 100%; height: 100%; }
   .circ-header {
-    background: rgba(0,0,0,0.95); border-bottom: 2px solid rgba(0,255,65,0.4);
+    background: linear-gradient(180deg, rgba(10, 20, 10, 0.75), rgba(5, 10, 5, 0.85));
+    backdrop-filter: blur(12px) url(#liquid-refract) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border-bottom: 2px solid rgba(0, 255, 65, 0.25);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
     padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
   }
   .circ-title {
@@ -862,23 +866,29 @@
   .circ-ws { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
   @media(min-width: 900px) { .circ-ws { flex-direction: row; } }
   .circ-side {
-    width: 100%; max-height: 38vh; background: rgba(5,5,5,0.9); border-right: 1px solid rgba(0,255,65,0.2);
+    width: 100%; max-height: 38vh;
+    background: linear-gradient(135deg, rgba(10, 15, 10, 0.75), rgba(5, 10, 5, 0.85));
+    backdrop-filter: blur(16px) url(#liquid-refract) saturate(110%);
+    -webkit-backdrop-filter: blur(16px) saturate(110%);
+    border-right: 1px solid rgba(0, 255, 65, 0.25);
     display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; padding: 12px; gap: 10px;
+    box-shadow: inset -1px 0 0 rgba(255,255,255,0.05);
   }
   @media(min-width: 900px) { .circ-side { width: 300px; max-height: none; } }
   .circ-side::-webkit-scrollbar { width: 4px; }
   .circ-side::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.3); }
   .circ-ctrl {
-    background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 10px;
-    border-left: 3px solid #333; transition: border-color 0.3s;
+    background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08); padding: 10px;
+    border-left: 3px solid rgba(0,255,65,0.4); transition: all 0.3s;
+    border-radius: 4px;
   }
   .circ-ctrl:hover { border-left-color: var(--neon-green); }
   .circ-lbl-en { font-family: 'Orbitron', sans-serif; font-size: 0.6rem; color: var(--neon-cyan); letter-spacing: 1px; display: block; }
   .circ-lbl-jp { font-size: 0.78rem; color: #fff; font-weight: bold; margin-bottom: 4px; display: block; }
   .circ-select, .circ-input {
-    width: 100%; background: #000; border: 1px solid #444; color: #fff;
+    width: 100%; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); color: #fff;
     font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.82rem; padding: 7px;
-    outline: none; transition: all 0.2s; font-weight: bold;
+    outline: none; transition: all 0.2s; font-weight: bold; border-radius: 4px;
   }
   .circ-select:focus, .circ-input:focus { border-color: var(--neon-green); box-shadow: 0 0 10px rgba(0,255,65,0.2); }
   .circ-btn-row { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
@@ -886,6 +896,7 @@
     flex: 1; min-width: 50px; background: transparent; border: 1px solid var(--neon-green); color: var(--neon-green);
     font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.75rem; font-weight: bold; padding: 7px 3px;
     cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 1px;
+    border-radius: 4px;
   }
   .circ-btn-en { font-family: 'Orbitron', sans-serif; font-size: 0.45rem; opacity: 0.8; }
   .circ-btn:hover { background: rgba(0,255,65,0.2); box-shadow: 0 0 12px rgba(0,255,65,0.3); }
@@ -898,15 +909,22 @@
   .circ-canvas-wrap {
     flex: 2; position: relative; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,255,65,0.15);
     margin: 8px; overflow: hidden; cursor: crosshair; min-height: 200px;
+    border-radius: 6px;
   }
   .circ-canvas-wrap canvas { display: block; width: 100%; height: 100%; }
   .circ-chart-area { flex: 1; display: flex; flex-direction: column; gap: 4px; padding: 4px 8px 8px 0; min-width: 200px; }
   @media(max-width: 1099px) { .circ-chart-area { flex-direction: row; padding: 0 8px 8px 8px; min-height: 140px; } }
   .circ-chart-box {
-    flex: 1; background: rgba(0,0,0,0.6); border: 1px solid #333; display: flex; flex-direction: column; overflow: hidden;
+    flex: 1;
+    background: linear-gradient(135deg, rgba(15, 20, 15, 0.65), rgba(5, 10, 5, 0.75));
+    backdrop-filter: blur(14px) url(#liquid-refract) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.08); display: flex; flex-direction: column; overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
   }
   .circ-chart-hdr {
-    background: rgba(0,0,0,0.8); border-bottom: 1px solid #333; padding: 4px 8px;
+    background: rgba(0,0,0,0.35); border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding: 4px 8px;
     display: flex; justify-content: space-between; align-items: center;
   }
   .circ-chart-t { font-size: 0.7rem; font-weight: bold; color: #fff; }
@@ -915,8 +933,13 @@
   .circ-chart-body canvas { width: 100% !important; height: 100% !important; }
   .circ-stats { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 8px 8px 8px; }
   .circ-stat {
-    background: rgba(0,0,0,0.8); border: 1px solid rgba(0,255,65,0.3);
+    background: linear-gradient(135deg, rgba(10, 20, 10, 0.65), rgba(5, 10, 5, 0.75));
+    backdrop-filter: blur(10px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 65, 0.25);
     padding: 6px 10px; flex: 1; min-width: 90px; position: relative;
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
   }
   .circ-stat::before { content: ''; position: absolute; top:0; left:0; width:3px; height:100%; background: var(--neon-green); opacity: 0.5; }
   .circ-stat-en { font-family: 'Orbitron', sans-serif; font-size: 0.5rem; color: #888; letter-spacing: 1px; }
@@ -924,9 +947,14 @@
   .circ-stat-v { font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #fff; }
   .circ-stat-v.hl { color: var(--neon-yellow); }
   .circ-results {
-    background: rgba(0,0,0,0.7); border: 1px solid #333; padding: 8px 12px; margin: 0 8px 8px 8px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 12px; margin: 0 8px 8px 8px;
     font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--neon-green);
     max-height: 80px; overflow-y: auto; line-height: 1.6;
+    border-radius: 6px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
   .circ-node-tbl {
     width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
@@ -956,6 +984,13 @@
 </style>
 
 <div id="circ-app">
+  
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="liquid-refract">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015 0.02" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
   <div class="circ-bg"></div>
   <div class="circ-scan"></div>
   <div class="circ-container">

@@ -1101,14 +1101,7 @@
     margin: 0;
     padding: 2rem 1.5rem;
     background-color: #050508;
-    background-image:
-      linear-gradient(rgba(var(--theme-rgb), 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(var(--theme-rgb), 0.04) 1px, transparent 1px),
-      radial-gradient(ellipse at 20% 20%, rgba(var(--theme-rgb), 0.08), transparent 55%),
-      radial-gradient(ellipse at 80% 80%, rgba(var(--theme-rgb), 0.06), transparent 55%);
-    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
     color: #e2e8f0;
-    transition: background-image 0.5s ease;
     border: none;
     border-radius: 0;
     z-index: 999990;
@@ -1116,6 +1109,18 @@
     overflow-x: hidden;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+  }
+  .wl-bg-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(var(--theme-rgb), 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--theme-rgb), 0.04) 1px, transparent 1px),
+      radial-gradient(ellipse at 20% 20%, rgba(var(--theme-rgb), 0.08), transparent 55%),
+      radial-gradient(ellipse at 80% 80%, rgba(var(--theme-rgb), 0.06), transparent 55%);
+    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
+    filter: url(#liquid-refract);
+    pointer-events: none;
+    transition: background-image 0.5s ease;
   }
   .wl-root::after {
     content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -1140,9 +1145,28 @@
    
   .wl-header {
     text-align: center;
-    padding-bottom: 1.2rem;
+    padding: 1.5rem;
     margin-bottom: 1.5rem;
-    border-bottom: 1px solid #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.08);  
+    
+     
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.12) 0%, 
+      rgba(255, 255, 255, 0.02) 30%, 
+      rgba(10, 8, 28, 0.25) 70%, 
+      rgba(2, 2, 6, 0.50) 100%
+    );
+    border-radius: 8px;
+    backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%);  
+    -webkit-backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%);
+    
+     
+    box-shadow: 
+      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.22),
+      inset 2px 2px 5px rgba(255, 255, 255, 0.08),
+      inset -1px -1px 3px rgba(0, 0, 0, 0.55),
+      inset -3px -3px 10px rgba(0, 0, 0, 0.65),
+      0 12px 36px rgba(2, 2, 8, 0.55);
     position: relative;
   }
   .wl-header-top {
@@ -1184,16 +1208,18 @@
     margin-bottom: 2rem;
   }
   .wl-card {
-    background: rgba(15, 23, 42, 0.4);
-    border: 1px solid #1e293b;
+    background: rgba(15, 23, 42, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 8px;
     padding: 1.2rem 0.5rem;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     position: relative; overflow: hidden;
     user-select: none; -webkit-user-select: none; touch-action: pan-y;
+    backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), inset 0 -2px 6px rgba(0, 0, 0, 0.3);
   }
   .wl-card.dragging { opacity: 0.5; transform: scale(0.95); border-color: #06b6d4; }
   .wl-card.drag-over { border-top: 2px solid #06b6d4; background: rgba(6, 182, 212, 0.1); }
@@ -1309,10 +1335,15 @@
   }
   .wl-modal-overlay.show { opacity: 1; pointer-events: all; }
   .wl-modal {
-    background: #0b0f19; border: 1px solid #06b6d4; border-radius: 8px;
+    background: rgba(11, 15, 25, 0.75); border: 1px solid rgba(var(--theme-rgb), 0.25); border-radius: 8px;
     max-width: 400px; width: 100%; padding: 1.5rem;
-    box-shadow: 0 0 40px rgba(6, 182, 212, 0.15), 0 0 80px rgba(0,0,0,0.8);
+    box-shadow: 
+      0 0 40px rgba(var(--theme-rgb), 0.15), 
+      0 20px 60px rgba(0, 0, 0, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      inset 0 -3px 15px rgba(0, 0, 0, 0.6);
     position: relative;
+    backdrop-filter: blur(14px);
   }
   .wl-modal::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
@@ -1390,7 +1421,15 @@
   }
 </style>
 
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <filter id="liquid-refract">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
+
 <div class="wl-root" id="wl-root">
+  <div class="wl-bg-grid"></div>
   <header class="wl-header">
     <div class="wl-header-top">
       <button class="wl-btn-exit" onclick="window.history.back()">◀ EXIT</button>

@@ -1065,6 +1065,15 @@
   font-family:var(--f-mono); color:var(--c-text);
   background:transparent; overflow:hidden;
 }
+.mt-bg-grid {
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(245,158,11,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,158,11,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  filter: url(#liquid-refract);
+  pointer-events: none;
+}
 
  
 #mt-root::after {
@@ -1099,8 +1108,11 @@
  
 .mt-header {
   position:relative; z-index:20; flex-shrink:0;
-  background:linear-gradient(180deg, rgba(14,9,5,0.99), rgba(18,13,8,0.95));
-  border-bottom:1px solid var(--c-border2);
+  background:rgba(14, 9, 5, 0.65);
+  border-bottom:1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(14px) url(#liquid-refract);
+  -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -4px 12px rgba(0, 0, 0, 0.35);
 }
  
 .mt-header::after {
@@ -1194,8 +1206,10 @@
  
 .mt-stats {
   display:flex; flex-shrink:0; position:relative; z-index:20;
-  background:rgba(14,9,5,0.92); border-bottom:1px solid var(--c-border2);
-  backdrop-filter:blur(8px);
+  background:rgba(14, 9, 5, 0.45); border-bottom:1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter:blur(10px) url(#liquid-refract);
+  -webkit-backdrop-filter:blur(10px) url(#liquid-refract);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -4px 8px rgba(0, 0, 0, 0.3);
 }
 .mt-stat {
   flex:1; min-width:0;
@@ -1231,8 +1245,10 @@
  
 .mt-toolbar {
   display:flex; flex-direction:column; flex-shrink:0; position:relative; z-index:20;
-  background:rgba(10,7,3,0.9); border-bottom:1px solid var(--c-border);
-  backdrop-filter:blur(8px);
+  background:rgba(10, 7, 3, 0.4); border-bottom:1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter:blur(10px) url(#liquid-refract);
+  -webkit-backdrop-filter:blur(10px) url(#liquid-refract);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -4px 8px rgba(0, 0, 0, 0.3);
 }
 .mt-toolbar-row1 { display:flex; align-items:center; gap:0.75rem; padding:0.65rem 2rem 0.5rem; }
 .mt-toolbar-row2 { padding:0 2rem 0.6rem; }
@@ -1248,20 +1264,23 @@
 .mt-search-clear.visible { display:block; }
 .mt-search {
   width:100%;
-  background:rgba(14,9,5,0.8);
-  border:1px solid var(--c-border2);
+  background:rgba(14, 9, 5, 0.55);
+  border:1px solid rgba(255, 255, 255, 0.08);
   border-left:2px solid var(--c-amber);
   color:var(--c-bright);
   font-family:var(--f-mono); font-size:0.82rem;
   padding:0.45rem 2rem 0.45rem 2.8rem !important;
   outline:none;
+  backdrop-filter: blur(6px) url(#liquid-refract);
+  -webkit-backdrop-filter: blur(6px) url(#liquid-refract);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 6px rgba(0, 0, 0, 0.3);
   transition:border-color 0.15s, box-shadow 0.15s;
   clip-path:polygon(0 0, 100% 0, 100% 100%, 6px 100%);
 }
 .mt-search::placeholder { color:var(--c-dim); font-size:0.75rem; }
 .mt-search:focus {
   border-color:var(--c-amber);
-  box-shadow:0 0 0 1px rgba(245,158,11,0.15), 0 0 20px rgba(245,158,11,0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), 0 0 0 1px rgba(245,158,11,0.15), 0 0 20px rgba(245,158,11,0.08);
 }
 
 .mt-sort-sel {
@@ -1454,17 +1473,20 @@
 }
 .mt-overlay.open { display:flex; }
 .mt-modal {
-  background:rgba(10,7,4,0.98);
-  border:1px solid var(--c-border2);
-  border-top:2px solid var(--c-amber);
+  background: rgba(10, 7, 4, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-top: 2px solid var(--c-amber);
   width:100%; max-width:520px; max-height:90vh;
   display:flex; flex-direction:column; overflow:hidden;
   box-shadow:
-    0 0 0 1px rgba(245,158,11,0.1),
     0 0 60px rgba(245,158,11,0.06),
-    0 30px 90px rgba(0,0,0,0.9);
+    0 30px 90px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -4px 16px rgba(0, 0, 0, 0.6);
   animation:mt-modal-in 0.22s ease;
   position:relative;
+  backdrop-filter: blur(14px) url(#liquid-refract);
+  -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
 }
  
 .mt-modal::before, .mt-modal::after {
@@ -1502,15 +1524,20 @@
 }
 .mt-input, .mt-textarea, .mt-select {
   font-family:var(--f-jp); font-size:0.88rem;
-  background:rgba(14,9,5,0.9); border:1px solid var(--c-border2);
+  background:rgba(14, 9, 5, 0.55);
+  border:1px solid rgba(255, 255, 255, 0.08);
   border-left:2px solid var(--c-border2);
   color:var(--c-bright); padding:0.45rem 0.75rem;
-  outline:none; transition:border-color 0.15s, box-shadow 0.15s; width:100%;
+  outline:none;
+  backdrop-filter: blur(8px) url(#liquid-refract);
+  -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 8px rgba(0, 0, 0, 0.3);
+  transition:border-color 0.15s, box-shadow 0.15s; width:100%;
 }
 .mt-input::placeholder, .mt-textarea::placeholder { color:var(--c-dim); font-family:var(--f-mono); font-size:0.75rem; }
 .mt-input:focus, .mt-textarea:focus, .mt-select:focus {
   border-color:var(--c-amber); border-left-color:var(--c-amber);
-  box-shadow:0 0 0 1px rgba(245,158,11,0.1), 0 0 16px rgba(245,158,11,0.05);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), 0 0 0 1px rgba(245,158,11,0.1), 0 0 16px rgba(245,158,11,0.05);
 }
 .mt-textarea { resize:vertical; min-height:68px; }
 .mt-select option { background:#0a0703; }
@@ -1699,11 +1726,19 @@
 }
 </style>
 
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <filter id="liquid-refract">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
+
 
 <canvas id="mt-bg-canvas"></canvas>
 
 
 <div id="mt-root">
+  <div class="mt-bg-grid"></div>
   <div id="mt-root-vignette"></div>
 
   

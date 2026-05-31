@@ -801,7 +801,7 @@ LaTeXとmarkdownでの出力に対応している.</p>
 
   #cyber-rg-app {
     --neon-pink: #ff0055; --neon-cyan: #00f3ff; --neon-green: #00ff41;
-    --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #050505; --panel-bg: rgba(10,14,18,0.95);
+    --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #050505; --panel-bg: rgba(5, 5, 5, 0.45);
     font-family: 'JetBrains Mono', monospace; color: #e0e0e0;
     background-color: var(--bg-dark);
     background-image: linear-gradient(rgba(176,38,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(176,38,255,0.05) 1px,transparent 1px);
@@ -822,12 +822,26 @@ LaTeXとmarkdownでの出力に対応している.</p>
   @keyframes rg-g1 { 0%{clip:rect(14px,9999px,122px,0)} 5%{clip:rect(82px,9999px,92px,0)} 100%{clip:rect(5px,9999px,133px,0)} }
   @keyframes rg-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
 
-  #cyber-rg-app .rg-panel { background:var(--panel-bg); border:1px solid rgba(176,38,255,0.3); box-shadow:0 0 20px rgba(0,0,0,0.8),inset 0 0 30px rgba(176,38,255,0.05); backdrop-filter:blur(5px); }
+  #cyber-rg-app .rg-panel {
+    background: var(--panel-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+  }
   #cyber-rg-app .rg-main { width:100%; max-width:1400px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
   @media(min-width:768px) { #cyber-rg-app .rg-main { padding:0 0 32px 0; margin-top:32px; } }
 
    
-  #cyber-rg-app .rg-hbar { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; padding:0 4px; opacity:0.8; }
+  #cyber-rg-app .rg-hbar {
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding:6px 12px;
+    background: rgba(5, 5, 5, 0.4);
+    backdrop-filter: blur(10px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(10px) url(#liquid-refract);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
   #cyber-rg-app .rg-sysver { font-size:9px; color:#b026ff; font-family:monospace; letter-spacing:2px; }
   @media(min-width:768px) { #cyber-rg-app .rg-sysver { font-size:12px; } }
   #cyber-rg-app .rg-status { font-size:9px; font-family:monospace; display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:4px; border:1px solid rgba(0,255,65,0.3); color:#4ade80; white-space:nowrap; }
@@ -850,7 +864,13 @@ LaTeXとmarkdownでの出力に対応している.</p>
   @media(min-width:768px) { #cyber-rg-app .rg-config-toggle { font-size:12px; padding:8px 24px; } }
   #cyber-rg-app .rg-config-toggle:hover { background:rgba(176,38,255,0.1); box-shadow:0 0 10px rgba(176,38,255,0.2); }
   
-  #cyber-rg-app .rg-settings-panel { display:none; padding:16px; background:rgba(0,0,0,0.4); border:1px solid #1f2937; margin-bottom:16px; }
+  #cyber-rg-app .rg-settings-panel {
+    display:none; padding:16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    margin-bottom:16px;
+  }
   #cyber-rg-app .rg-settings-panel.open { display:block; }
 
    
@@ -894,9 +914,17 @@ LaTeXとmarkdownでの出力に対応している.</p>
   #cyber-rg-app .rg-stats-btn:hover { background:rgba(0,243,255,0.2); }
 
    
-  #cyber-rg-app .rg-textarea { width:100%; height:500px; background:rgba(0,0,0,0.8); border:1px solid #444; color:#e0e0e0; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.6; padding:16px; resize:vertical; outline:none; transition:all 0.3s; }
+  #cyber-rg-app .rg-textarea {
+    width:100%; height:500px;
+    background: rgba(5, 5, 5, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color:#e0e0e0; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.6; padding:16px; resize:vertical; outline:none; transition:all 0.3s;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 15px rgba(0,0,0,0.3);
+  }
   @media(min-width:768px) { #cyber-rg-app .rg-textarea { height:650px; font-size:14px; } }
-  #cyber-rg-app .rg-textarea:focus { border-color:var(--neon-purple); background:#000; box-shadow:inset 0 0 10px rgba(176,38,255,0.1); }
+  #cyber-rg-app .rg-textarea:focus { border-color:var(--neon-purple); background:rgba(0,0,0,0.9); box-shadow:inset 0 0 10px rgba(176,38,255,0.1); }
   #cyber-rg-app .rg-textarea::-webkit-scrollbar { width:8px; }
   #cyber-rg-app .rg-textarea::-webkit-scrollbar-track { background:rgba(0,0,0,0.5); }
   #cyber-rg-app .rg-textarea::-webkit-scrollbar-thumb { background:var(--neon-purple); }
@@ -924,7 +952,14 @@ LaTeXとmarkdownでの出力に対応している.</p>
   #cyber-rg-app .rg-btn:hover::before { left:100%; }
 
    
-  #cyber-rg-app .rg-bank { border:1px solid #1f2937; background:rgba(0,0,0,0.4); padding:16px; flex:1; display:flex; flex-direction:column; overflow-y:auto; max-height:800px; }
+  #cyber-rg-app .rg-bank {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(5, 5, 5, 0.45);
+    backdrop-filter: blur(10px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(10px) url(#liquid-refract);
+    padding:16px; flex:1; display:flex; flex-direction:column; overflow-y:auto; max-height:800px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 20px rgba(0,0,0,0.3);
+  }
   #cyber-rg-app .rg-bank-lbl { font-size:10px; color:var(--neon-cyan); font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; border-bottom:1px solid #1f2937; padding-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
   #cyber-rg-app .rg-bank-lbl button { background:transparent; border:1px solid #444; color:#fff; font-size:10px; cursor:pointer; padding:2px 6px; }
   #cyber-rg-app .rg-bank-lbl button:hover { border-color:var(--neon-cyan); color:var(--neon-cyan); }
@@ -963,6 +998,13 @@ LaTeXとmarkdownでの出力に対応している.</p>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <div id="cyber-rg-app">
+  
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="liquid-refract">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
   <div class="rg-scan"></div>
   <div class="rg-main">
     <div class="rg-hbar" style="align-items: center;">

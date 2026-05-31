@@ -869,11 +869,13 @@
 
    
   .ps-header {
-    background: rgba(0,0,0,0.95);
-    border-bottom: 2px solid rgba(0, 243, 255, 0.4);
+    background: rgba(5, 5, 5, 0.5);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding: 10px 15px;
     display: flex; justify-content: space-between; align-items: center;
-    flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    flex-shrink: 0; box-shadow: 0 4px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
   }
   .ps-title {
     font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
@@ -901,13 +903,17 @@
 
    
   .ps-panel-left {
-    width: 100%; background: rgba(5,5,5,0.9);
-    border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+    width: 100%;
+    background: rgba(5, 5, 5, 0.45);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     display: flex; flex-direction: column; padding: 15px; overflow-y: auto;
     flex-shrink: 0;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
   }
   @media(min-width: 800px) { 
-    .ps-panel-left { width: 320px; border-bottom: none; border-right: 1px solid rgba(0, 243, 255, 0.2); } 
+    .ps-panel-left { width: 320px; border-bottom: none; border-right: 1px solid rgba(255, 255, 255, 0.08); } 
   }
   .ps-panel-left::-webkit-scrollbar { width: 4px; }
   .ps-panel-left::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.3); }
@@ -973,13 +979,18 @@
 
    
   .ps-step {
-    background: rgba(10, 15, 20, 0.8); border: 1px solid #222; border-left: 3px solid #444;
-    padding: 15px 20px; margin-bottom: 15px; border-radius: 2px; backdrop-filter: blur(4px);
+    background: rgba(5, 5, 5, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-left: 3px solid #444;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 4px 15px rgba(0,0,0,0.2);
+    padding: 15px 20px; margin-bottom: 15px; border-radius: 2px;
     opacity: 0; transform: translateY(10px); animation: fadeInUp 0.4s forwards;
   }
-  .ps-step:hover { border-color: #333; }
-  .ps-step.important { border-left-color: var(--neon-pink); background: rgba(255,0,85,0.05); }
-  .ps-step.result { border-left-color: var(--neon-green); background: rgba(0,255,65,0.05); }
+  .ps-step:hover { border-color: rgba(255,255,255,0.12); }
+  .ps-step.important { border-left-color: var(--neon-pink); background: rgba(255,0,85,0.08); }
+  .ps-step.result { border-left-color: var(--neon-green); background: rgba(0,255,65,0.08); }
 
   @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
@@ -1027,6 +1038,13 @@
 <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js"></script>
 
 <div id="ps-app">
+  
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="liquid-refract">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
   <div class="ps-bg-grid"></div>
   <div class="ps-scanline"></div>
 

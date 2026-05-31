@@ -1109,8 +1109,11 @@
    
   .hud {
     position: absolute; top: 1rem; left: 1rem; z-index: 20;
-    background: rgba(9, 9, 11, 0.88); border: 1px solid rgba(139, 92, 246, 0.4);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(139, 92, 246, 0.1);
+    background: rgba(5, 5, 5, 0.45);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
     padding: 1rem; border-radius: 4px; display: flex; flex-direction: column; gap: 0.4rem;
     pointer-events: auto; min-width: 260px; max-height: calc(100vh - 2rem); overflow-y: auto;
     transition: transform 0.3s;
@@ -1169,11 +1172,15 @@
    
   .node {
     position: absolute; transform: translate(-50%, -50%);
-    width: 130px; background: rgba(5, 5, 8, 0.9);
-    border: 2px solid #333; border-radius: 4px;
+    width: 130px;
+    background: rgba(5, 5, 8, 0.45);
+    backdrop-filter: blur(10px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(10px) url(#liquid-refract);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
     padding: 0.6rem; text-align: center; cursor: pointer; z-index: 2;
     transition: box-shadow 0.3s, border-color 0.3s;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
     display: flex; flex-direction: column; gap: 0.2rem;
   }
   .node.locked { filter: grayscale(100%) brightness(0.5); opacity: 0.7;}
@@ -1210,13 +1217,27 @@
 
    
   .zoom-controls { position: absolute; bottom: 1.5rem; right: 1.5rem; z-index: 20; display: flex; flex-direction: column; gap: 0.3rem; }
-  .zoom-btn { background: rgba(9,9,11,0.9); border: 1px solid #8b5cf6; color: #8b5cf6; width: 36px; height: 36px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; font-family: 'Orbitron', sans-serif; }
+  .zoom-btn {
+    background: rgba(5, 5, 5, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+    color: #8b5cf6; width: 36px; height: 36px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; font-family: 'Orbitron', sans-serif;
+  }
   .zoom-btn:hover { background: rgba(139,92,246,0.2); box-shadow: 0 0 10px #8b5cf6; }
   .zoom-label { font-size: 0.5rem; text-align: center; color: #64748b; }
 
    
   .cy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-  .cy-modal-content { background: rgba(9, 9, 11, 0.95); border: 1px solid #8b5cf6; padding: 1.5rem; width: 90%; max-width: 600px; position: relative; font-family: "Zen Kaku Gothic New", sans-serif; box-shadow: 0 0 30px rgba(139, 92, 246, 0.2); max-height: 90vh; overflow-y: auto; }
+  .cy-modal-content {
+    background: rgba(5, 5, 5, 0.75);
+    backdrop-filter: blur(16px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(16px) url(#liquid-refract);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+    padding: 1.5rem; width: 90%; max-width: 600px; position: relative; font-family: "Zen Kaku Gothic New", sans-serif; max-height: 90vh; overflow-y: auto;
+  }
   .cy-modal-title { font-family: 'Orbitron', sans-serif; color: #8b5cf6; font-size: 1.3rem; margin-top: 0; margin-bottom: 0.8rem; border-bottom: 1px solid #333; padding-bottom: 0.4rem; }
   .cy-modal-body { font-size: 0.85rem; line-height: 1.5; color: #e2e8f0; }
   .cy-modal-close { position: absolute; top: 0.8rem; right: 0.8rem; background: none; border: none; color: #ef4444; font-size: 1.5rem; cursor: pointer; }
@@ -1240,6 +1261,13 @@
 </style>
 
 <div class="cy-root">
+  
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="liquid-refract">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
   
   <div class="tree-container" id="pan-container">
     <div class="tree-canvas" id="zoom-canvas">

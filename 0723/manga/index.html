@@ -1051,6 +1051,7 @@
   --ms-font-jp:   'DotGothic16', monospace;
   --ms-font-mono: 'Share Tech Mono', monospace;
 }
+.ms-bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(6,182,212,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(6,182,212,0.03) 1px,transparent 1px);background-size:40px 40px;filter:url(#liquid-refract);z-index:9002;pointer-events:none}
 
  
 #ms-bg-canvas {
@@ -1125,11 +1126,14 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.9rem 2rem;
-  background: linear-gradient(180deg, rgba(3,4,11,0.98) 0%, rgba(6,8,20,0.92) 100%);
-  border-bottom: 1px solid var(--ms-border);
+  background: rgba(12, 12, 20, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
   flex-shrink: 0;
   gap: 1rem;
   flex-wrap: wrap;
+  backdrop-filter: blur(14px) url(#liquid-refract);
+  -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -4px 12px rgba(0, 0, 0, 0.35);
 }
 .ms-header::after {
   content: '';
@@ -1223,9 +1227,11 @@
   flex-shrink: 0;
   position: relative;
   z-index: 20;
-  background: rgba(6,8,20,0.85);
-  border-bottom: 1px solid var(--ms-border);
-  backdrop-filter: blur(8px);
+  background: rgba(12, 12, 20, 0.45);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px) url(#liquid-refract);
+  -webkit-backdrop-filter: blur(12px) url(#liquid-refract);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -4px 8px rgba(0, 0, 0, 0.3);
 }
 .ms-stat {
   flex: 1;
@@ -1266,9 +1272,11 @@
   flex-shrink: 0;
   position: relative;
   z-index: 20;
-  background: rgba(6,8,20,0.8);
-  border-bottom: 1px solid var(--ms-border);
-  backdrop-filter: blur(8px);
+  background: rgba(12, 12, 20, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px) url(#liquid-refract);
+  -webkit-backdrop-filter: blur(12px) url(#liquid-refract);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -4px 8px rgba(0, 0, 0, 0.3);
 }
 .ms-toolbar-row1 {
   display: flex;
@@ -1295,18 +1303,21 @@
 }
 .ms-search {
   width: 100%;
-  background: rgba(9,12,30,0.8);
-  border: 1px solid var(--ms-border);
+  background: rgba(14, 12, 20, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 2px;
   color: var(--ms-bright);
   font-family: var(--ms-font-mono);
   font-size: 0.85rem;
   padding: 0.45rem 1rem 0.45rem 3.0rem !important;
   outline: none;
+  backdrop-filter: blur(8px) url(#liquid-refract);
+  -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 6px rgba(0, 0, 0, 0.3);
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .ms-search::placeholder { color: var(--ms-dim); }
-.ms-search:focus { border-color: var(--ms-cyan); box-shadow: 0 0 0 1px rgba(0,255,229,0.12), 0 0 16px rgba(0,255,229,0.06); }
+.ms-search:focus { border-color: var(--ms-cyan); box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), 0 0 0 1px rgba(0,255,229,0.12), 0 0 16px rgba(0,255,229,0.06); }
 .ms-sort-sel {
   font-family: var(--ms-font-ui);
   font-size: 0.58rem;
@@ -1373,8 +1384,9 @@
 
  
 .ms-card {
-  background: rgba(9,12,30,0.75);
-  border: 1px solid var(--ms-border);
+  background: rgba(12, 12, 20, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -2px 8px rgba(0, 0, 0, 0.3);
   border-radius: 3px;
   overflow: hidden;
   cursor: pointer;
@@ -1382,7 +1394,8 @@
   display: flex;
   flex-direction: column;
   animation: ms-fadein 0.3s ease both;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px) url(#liquid-refract);
+  -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
   min-width: 0; min-height: 0;
 }
 @keyframes ms-fadein { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
@@ -1533,8 +1546,8 @@
 }
 .ms-overlay.open { display: flex; }
 .ms-modal {
-  background: rgba(7,9,22,0.97);
-  border: 1px solid var(--ms-border2);
+  background: rgba(10, 14, 18, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 4px;
   width: 100%;
   max-width: 500px;
@@ -1542,7 +1555,9 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 0 80px rgba(0,255,229,0.07), 0 30px 80px rgba(0,0,0,0.8);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -4px 16px rgba(0,0,0,0.6);
+  backdrop-filter: blur(16px) url(#liquid-refract);
+  -webkit-backdrop-filter: blur(16px) url(#liquid-refract);
   animation: ms-modal-in 0.22s ease;
 }
 @keyframes ms-modal-in { from{opacity:0;transform:scale(0.95) translateY(10px)} to{opacity:1;transform:none} }
@@ -1584,19 +1599,22 @@
 .ms-input,.ms-textarea,.ms-select {
   font-family: var(--ms-font-jp);
   font-size: 0.9rem;
-  background: rgba(9,12,30,0.9);
-  border: 1px solid var(--ms-border);
+  background: rgba(14, 12, 20, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 2px;
   color: var(--ms-bright);
   padding: 0.45rem 0.7rem;
   outline: none;
+  backdrop-filter: blur(8px) url(#liquid-refract);
+  -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 8px rgba(0, 0, 0, 0.3);
   transition: border-color 0.15s, box-shadow 0.15s;
   width: 100%;
 }
 .ms-input::placeholder,.ms-textarea::placeholder { color: var(--ms-dim); font-family: var(--ms-font-mono); font-size: 0.8rem; }
 .ms-input:focus,.ms-textarea:focus,.ms-select:focus {
   border-color: var(--ms-cyan);
-  box-shadow: 0 0 0 1px rgba(0,255,229,0.12);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), 0 0 0 1px rgba(0,255,229,0.12);
 }
 .ms-textarea { resize: vertical; min-height: 70px; }
 .ms-select option { background: #090c1e; }
@@ -1790,12 +1808,19 @@
   .ms-grid { grid-template-columns:repeat(3,1fr); }
 }
 </style>
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <filter id="liquid-refract">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
 
 
 <canvas id="ms-bg-canvas"></canvas>
 
 
 <div id="ms-root">
+<div class="ms-bg-grid"></div>
 <div id="ms-root-vignette"></div>
 
   <div class="ms-header">

@@ -840,8 +840,12 @@
   }
   .fc-container { position: relative; z-index: 10; display: flex; flex-direction: column; width: 100%; height: 100%; }
   .fc-header {
-    background: rgba(0,0,0,0.95); border-bottom: 2px solid rgba(252,238,10,0.4);
+    background: rgba(5, 5, 5, 0.5);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
   }
   .fc-title {
     font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
@@ -864,17 +868,26 @@
   .fc-ws { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
   @media(min-width: 900px) { .fc-ws { flex-direction: row; } }
   .fc-side {
-    width: 100%; max-height: 35vh; background: rgba(5,5,5,0.9); border-right: 1px solid rgba(252,238,10,0.2);
+    width: 100%; max-height: 35vh;
+    background: rgba(5, 5, 5, 0.45);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
     display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; padding: 12px; gap: 10px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
   }
   @media(min-width: 900px) { .fc-side { width: 290px; max-height: none; } }
   .fc-side::-webkit-scrollbar { width: 4px; }
   .fc-side::-webkit-scrollbar-thumb { background: rgba(252,238,10,0.3); }
   .fc-ctrl {
-    background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 10px;
-    border-left: 3px solid #333; transition: border-color 0.3s;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-left: 3px solid var(--neon-yellow);
+    padding: 10px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 2px 10px rgba(0,0,0,0.3);
+    transition: all 0.3s;
   }
-  .fc-ctrl:hover { border-left-color: var(--neon-yellow); }
+  .fc-ctrl:hover { border-color: rgba(255, 255, 255, 0.12); border-left-color: var(--neon-yellow); background: rgba(252,238,10,0.02); }
   .fc-lbl-en { font-family: 'Orbitron', sans-serif; font-size: 0.6rem; color: var(--neon-cyan); letter-spacing: 1px; display: block; }
   .fc-lbl-jp { font-size: 0.78rem; color: #fff; font-weight: bold; margin-bottom: 4px; display: block; }
   .fc-select, .fc-input {
@@ -915,7 +928,12 @@
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     backface-visibility: hidden; -webkit-backface-visibility: hidden;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 30px; background: rgba(0,0,0,0.7); border: 2px solid rgba(252,238,10,0.3);
+    padding: 30px;
+    background: rgba(5, 5, 5, 0.45);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
     overflow: auto;
   }
   .fc-card-front { border-color: rgba(252,238,10,0.4); }
@@ -958,7 +976,11 @@
   .fc-progress-fill { height: 100%; background: var(--neon-yellow); transition: width 0.3s; }
   .fc-stats { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 20px; width: 100%; max-width: 600px; }
   .fc-stat {
-    background: rgba(0,0,0,0.8); border: 1px solid rgba(252,238,10,0.2);
+    background: rgba(5, 5, 5, 0.4);
+    backdrop-filter: blur(10px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(10px) url(#liquid-refract);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
     padding: 6px 10px; flex: 1; min-width: 80px; text-align: center;
   }
   .fc-stat-en { font-family: 'Orbitron', sans-serif; font-size: 0.5rem; color: #888; letter-spacing: 1px; }
@@ -983,6 +1005,13 @@
 </style>
 
 <div id="fc-app">
+  
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="liquid-refract">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
   <div class="fc-bg"></div>
   <div class="fc-scan"></div>
   <div class="fc-container">

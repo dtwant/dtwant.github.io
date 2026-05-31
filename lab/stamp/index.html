@@ -231,7 +231,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "10"
+    "wordCount": "11"
   }]
   </script>
 
@@ -793,11 +793,11 @@
     <section class="max-w-full mt-6 prose dark:prose-invert">
       <p>入力した金額に対し， <strong>2024年10月改定以降</strong>の普通切手（現在販売されているもの）を用いて，枚数が最も少なくなる組み合わせを計算する.</p>
 <div class="stamp-tool-wrapper">
-  <div style="margin-bottom: 1rem;">
-    <button onclick="window.history.back()" style="background: transparent; border: 1px solid #333; color: #333; padding: 0.4rem 0.8rem; border-radius: 8px; cursor: pointer; font-weight: bold;">◀ EXIT</button>
+  <div style="margin-bottom: 1.5rem;">
+    <button onclick="window.history.back()" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: #8e8e93; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: inherit; font-size: 0.75rem; transition: all 0.2s; backdrop-filter: blur(8px); display: flex; align-items: center; gap: 0.35rem;" onmouseover="this.style.color='#f5f5f7'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.background='rgba(255,255,255,0.08)';" onmouseout="this.style.color='#8e8e93'; this.style.borderColor='rgba(255,255,255,0.08)'; this.style.background='rgba(255,255,255,0.03)';">◀ EXIT</button>
   </div>
   <div class="input-card">
-    <label for="targetPrice">📪郵便料金を入力</label>
+    <label for="targetPrice">📪 郵便料金を入力</label>
     <div class="input-row">
       <div class="input-field">
         <input type="number" id="targetPrice" placeholder="110" min="1">
@@ -818,68 +818,220 @@
 </div>
 
 <style>
-   
   .stamp-tool-wrapper { 
     max-width: 600px; 
     margin: 2rem auto; 
-    font-family: inherit;
-    color: inherit; 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #f5f5f7; 
   }
 
    
   .input-card { 
-    background: #fff; 
-    padding: 2rem; 
-    border-radius: 16px; 
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
-    border: 1px solid #eee; 
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.10) 0%, 
+      rgba(255, 255, 255, 0.02) 40%, 
+      rgba(15, 12, 28, 0.30) 100%
+    ); 
+    padding: 2.2rem; 
+    border-radius: 20px; 
+    border: 1px solid rgba(255, 255, 255, 0.09); 
     text-align: center;
-    color: #333;  
+    backdrop-filter: blur(14px) url(#liquid-refract) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract) saturate(140%);
+    box-shadow: 
+      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.18),
+      inset 2px 2px 5px rgba(255, 255, 255, 0.05),
+      inset -2px -2px 8px rgba(0, 0, 0, 0.45),
+      0 12px 35px rgba(0, 0, 0, 0.35);
   }
   
-  .input-card label { display: block; font-weight: bold; margin-bottom: 1rem; color: #333; }
+  .input-card label { 
+    display: block; 
+    font-weight: 600; 
+    margin-bottom: 1.2rem; 
+    color: #f5f5f7; 
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  }
   
-  .input-row { display: flex; gap: 12px; justify-content: center; align-items: stretch; flex-wrap: wrap; }
-  .input-field { position: relative; display: flex; align-items: center; }
-  .input-field input { font-size: 1.5rem; padding: 12px 40px 12px 16px; border: 2px solid #ddd; border-radius: 12px; width: 160px; outline: none; font-weight: bold; color: #333; background: #fff; }
-  .input-field .unit { position: absolute; right: 14px; color: #333; font-weight: bold; pointer-events: none; }
+  .input-row { 
+    display: flex; 
+    gap: 14px; 
+    justify-content: center; 
+    align-items: center; 
+    flex-wrap: wrap; 
+  }
   
-  .calc-btn { background-color: #333; color: #fff; border: none; padding: 0 24px; border-radius: 12px; font-size: 1rem; font-weight: bold; cursor: pointer; min-height: 50px; }
-  .calc-btn:hover { opacity: 0.9; }
+  .input-field { 
+    position: relative; 
+    display: flex; 
+    align-items: center; 
+  }
   
-  .result-container { margin-top: 2rem; }
+  .input-field input { 
+    font-size: 1.4rem; 
+    padding: 12px 42px 12px 16px; 
+    border: 1px solid rgba(255, 255, 255, 0.12); 
+    border-radius: 12px; 
+    width: 170px; 
+    outline: none; 
+    font-weight: 700; 
+    color: #ffffff; 
+    background: rgba(0, 0, 0, 0.35); 
+    transition: all 0.25s ease;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
   
-   
+  .input-field input:focus {
+    border-color: #0A84FF;
+    box-shadow: 
+      inset 0 2px 6px rgba(0, 0, 0, 0.3),
+      0 0 12px rgba(10, 132, 255, 0.3);
+  }
+  
+  .input-field .unit { 
+    position: absolute; 
+    right: 16px; 
+    color: rgba(255, 255, 255, 0.6); 
+    font-weight: bold; 
+    pointer-events: none; 
+    font-size: 0.95rem;
+  }
+  
+  .calc-btn { 
+    background: linear-gradient(135deg, #0A84FF 0%, #5856D6 100%); 
+    color: #fff; 
+    border: none; 
+    padding: 0 28px; 
+    border-radius: 12px; 
+    font-size: 1rem; 
+    font-weight: 600; 
+    cursor: pointer; 
+    min-height: 52px; 
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 15px rgba(88, 86, 214, 0.25);
+  }
+  
+  .calc-btn:hover { 
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(88, 86, 214, 0.4);
+    filter: brightness(1.15);
+  }
+  .calc-btn:active {
+    transform: translateY(1px);
+  }
+  
+  .result-container { margin-top: 2.2rem; }
+  
   .total-summary { 
     text-align: center; 
-    margin-bottom: 1.5rem;
-     
+    margin-bottom: 1.8rem;
     display: flex;
     justify-content: center;
     align-items: baseline;
-    gap: 0.5rem; 
+    gap: 0.6rem; 
   }
   
   .total-summary .label { 
     font-size: 1rem; 
-    font-weight: normal;
-     
+    font-weight: 500;
+    color: #8e8e93;
   }
   
   .total-summary .suffix { 
     font-size: 1rem; 
-    font-weight: normal;
+    font-weight: 500;
+    color: #8e8e93;
   }
-
-  .total-summary .count { font-size: 2.5rem; font-weight: 800; color: #d946ef; line-height: 1; }
+ 
+  .total-summary .count { 
+    font-size: 2.8rem; 
+    font-weight: 800; 
+    color: #FF8A9A; 
+    line-height: 1; 
+    text-shadow: 0 0 15px rgba(255, 138, 154, 0.35);
+  }
   
-  .stamp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; justify-content: center; }
-  .stamp-card { background: #fff; border: 2px dashed #ccc; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #333;   }
-  .stamp-value { font-family: "Georgia", serif; font-size: 1.8rem; font-weight: bold; color: #2d3748; }
-  .stamp-yen { font-size: 0.8rem; color: #888; }
-  .stamp-badge { margin-top: 8px; background: #edf2f7; color: #2d3748; padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; }
-  @media (max-width: 480px) { .input-row { flex-direction: column; } .input-field input, .calc-btn { width: 100%; } }
+  .stamp-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); 
+    gap: 16px; 
+    justify-content: center; 
+  }
+  
+   
+  .stamp-card { 
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.08) 0%, 
+      rgba(255, 255, 255, 0.01) 50%, 
+      rgba(0, 0, 0, 0.25) 100%
+    ); 
+    border: 2px dashed rgba(255, 255, 255, 0.15); 
+    border-radius: 12px; 
+    padding: 20px 16px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    color: #f5f5f7; 
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 
+      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.15),
+      inset -1px -1px 3px rgba(0, 0, 0, 0.35),
+      0 6px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.25s ease;
+  }
+  
+  .stamp-card:hover {
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 
+      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.25),
+      inset -1px -1px 3px rgba(0, 0, 0, 0.35),
+      0 10px 22px rgba(0, 0, 0, 0.35);
+  }
+  
+  .stamp-value { 
+    font-family: "Georgia", serif; 
+    font-size: 2rem; 
+    font-weight: bold; 
+    color: #ffffff; 
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  
+  .stamp-yen { 
+    font-size: 0.85rem; 
+    color: rgba(255, 255, 255, 0.5); 
+    margin-left: 2px;
+  }
+  
+  .stamp-badge { 
+    margin-top: 10px; 
+    background: rgba(255, 255, 255, 0.08); 
+    color: #30D158; 
+    padding: 4px 12px; 
+    border-radius: 20px; 
+    font-size: 0.85rem; 
+    font-weight: 700; 
+    border: 1px solid rgba(48, 209, 88, 0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  }
+  
+  @media (max-width: 480px) { 
+    .input-row { flex-direction: column; align-items: stretch; } 
+    .input-field input, .calc-btn { width: 100%; } 
+  }
 </style>
+
+
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <filter id="liquid-refract">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() { setupCalculator(); });

@@ -868,16 +868,29 @@
     max-width: 900px;
     width: 100%;
     margin: 0 auto;
-    background-color: rgba(9, 9, 11, 0.95);
+    background: transparent;
     padding: 2.5rem;
-    border: 1px solid rgba(34, 211, 238, 0.4);
-    border-radius: 4px;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(34, 211, 238, 0.05);
-    backdrop-filter: blur(4px);
-    color: #e2e8f0;
+    border: 1px solid rgba(34, 211, 238, 0.22);
+    border-radius: 8px;
+    box-shadow: 
+      0 25px 60px rgba(0, 0, 0, 0.75), 
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 -3px 15px rgba(0, 0, 0, 0.65);
     position: relative;
     overflow: hidden;
+    color: #e2e8f0;
   }
+  .dm-container::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(9, 9, 12, 0.85) 60%, rgba(0, 0, 0, 0.95) 100%);
+    backdrop-filter: blur(18px);
+    filter: url(#liquid-refract);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .dm-container > * { position: relative; z-index: 1; }
+  .dm-corner { z-index: 2 !important; }
 
    
   .dm-corner {
@@ -1032,9 +1045,13 @@
     flex: 1;
     text-align: center;
     padding: 0.6rem 0.4rem;
-    border-right: 1px solid #1e293b;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.01);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), inset 0 -10px 20px rgba(0, 0, 0, 0.2);
   }
   .dm-stat:last-child { border-right: none; }
   .dm-stat:hover { background: rgba(34,211,238,0.05); }
@@ -1135,8 +1152,12 @@
     gap: 15px; 
     margin-bottom: 1.5rem; 
     padding: 1.5rem; 
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid #333;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.2));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
   
    
@@ -1205,11 +1226,15 @@
     gap: 15px;
     margin-bottom: 1.5rem;
     padding: 0 1.5rem 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid #333;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.2));
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-top: none;
     margin-top: -1.5rem;
     padding-top: 0.75rem;
+    border-radius: 0 0 6px 6px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
   }
 
   .dm-textarea {
@@ -1275,13 +1300,17 @@
     gap: 1rem;
     padding: 1.25rem 1.5rem;
     margin-bottom: 0.5rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid #1e293b;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.3));
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-left: 3px solid #22c55e;
-    transition: all 0.3s;
+    transition: all 0.25s;
     position: relative;
     overflow: hidden;
     animation: dm-task-in 0.3s ease-out;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -2px 6px rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
   }
   @keyframes dm-task-in {
     from { opacity: 0; transform: translateX(-10px); }
@@ -1493,11 +1522,14 @@
     justify-content: space-between;
     padding: 0.5rem 1rem;
     margin-bottom: 0.25rem;
-    background: rgba(34, 197, 94, 0.03);
-    border: 1px solid rgba(34, 197, 94, 0.1);
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.04), rgba(0, 0, 0, 0.2));
+    border: 1px solid rgba(34, 197, 94, 0.15);
     border-left: 3px solid rgba(34, 197, 94, 0.4);
     opacity: 0.6;
     transition: opacity 0.2s;
+    border-radius: 4px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
   .dm-task-done:hover { opacity: 0.9; }
   .dm-task-done .dm-done-title {
@@ -1598,15 +1630,20 @@
     pointer-events: auto;
   }
   .dm-modal {
-    background: #0c0c14;
-    border: 1px solid rgba(34,211,238,0.3);
+    background: rgba(12, 12, 20, 0.75);
+    border: 1px solid rgba(34, 211, 238, 0.25);
     max-width: 480px;
     width: 100%;
     max-height: 85vh;
     display: flex;
     flex-direction: column;
     animation: dm-modal-in 0.25s ease-out;
-    box-shadow: 0 0 60px rgba(0,0,0,0.8), 0 0 30px rgba(34,211,238,0.1);
+    box-shadow: 
+      0 20px 60px rgba(0, 0, 0, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      inset 0 -3px 15px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(14px);
+    border-radius: 6px;
   }
   @keyframes dm-modal-in {
     from { transform: scale(0.95) translateY(10px); opacity: 0; }
@@ -1863,6 +1900,13 @@
   }
 
 </style>
+
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <filter id="liquid-refract">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
 
 <div class="dm-root">
 <div class="dm-container">

@@ -817,9 +817,13 @@
   }
   .ps-container { position: relative; z-index: 10; display: flex; flex-direction: column; width: 100%; height: 100%; }
   .ps-header {
-    background: rgba(0,0,0,0.95); border-bottom: 2px solid rgba(0, 255, 65, 0.4);
+    background: linear-gradient(180deg, rgba(10, 15, 10, 0.75), rgba(5, 10, 5, 0.85));
+    backdrop-filter: blur(12px) url(#liquid-refract) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    border-bottom: 1px solid rgba(0, 255, 65, 0.25);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
     padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;
-    flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,0.8); gap: 8px; min-height: 44px;
+    flex-shrink: 0; gap: 8px; min-height: 44px;
   }
   .ps-title {
     font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 900;
@@ -846,18 +850,29 @@
   .ps-workspace { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
   @media(min-width: 1000px) { .ps-workspace { flex-direction: row; overflow: hidden; } }
   .ps-sidebar {
-    width: 100%; background: rgba(5,5,5,0.9); border-right: none;
+    width: 100%;
+    background: linear-gradient(135deg, rgba(10, 15, 10, 0.75), rgba(5, 10, 5, 0.85));
+    backdrop-filter: blur(16px) url(#liquid-refract) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border-right: none;
     display: flex; flex-direction: column; flex-shrink: 0;
-    padding: 10px; gap: 8px; border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+    padding: 10px; gap: 8px; border-bottom: 1px solid rgba(0, 255, 65, 0.25);
+    box-shadow: inset -1px 0 0 rgba(255,255,255,0.05);
   }
   @media(min-width: 1000px) {
-    .ps-sidebar { width: 320px; overflow-y: auto; border-right: 1px solid rgba(0, 255, 65, 0.2); border-bottom: none; box-shadow: inset -10px 0 20px rgba(0,0,0,0.5); padding: 15px; gap: 12px; }
+    .ps-sidebar {
+      width: 320px; overflow-y: auto;
+      border-right: 1px solid rgba(0, 255, 65, 0.25); border-bottom: none;
+      box-shadow: 10px 0 30px rgba(0,0,0,0.4), inset -1px 0 0 rgba(255,255,255,0.05);
+      padding: 15px; gap: 12px;
+    }
   }
   .ps-sidebar::-webkit-scrollbar { width: 4px; }
   .ps-sidebar::-webkit-scrollbar-thumb { background: rgba(0, 255, 65, 0.3); }
   .ps-control-group {
-    background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 10px;
-    border-left: 3px solid #333; transition: border-color 0.3s;
+    background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08); padding: 10px;
+    border-left: 3px solid rgba(0,255,65,0.4); transition: all 0.3s;
+    border-radius: 4px;
   }
   @media(min-width: 768px) { .ps-control-group { padding: 12px; } }
   .ps-control-group:hover { border-left-color: var(--neon-green); background: rgba(0, 255, 65, 0.02); }
@@ -865,9 +880,9 @@
   .ps-label-jp { font-size: 0.8rem; color: #fff; font-weight: bold; margin-bottom: 6px; display: block; }
   .ps-desc { font-size: 0.65rem; color: #888; margin-top: 4px; line-height: 1.4; }
   .ps-select, .ps-input {
-    width: 100%; background: #000; border: 1px solid #444; color: #fff;
+    width: 100%; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); color: #fff;
     font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.85rem; padding: 8px;
-    outline: none; transition: all 0.2s; font-weight: bold;
+    outline: none; transition: all 0.2s; font-weight: bold; border-radius: 4px;
   }
   .ps-select:focus, .ps-input:focus { border-color: var(--neon-green); box-shadow: 0 0 10px rgba(0,255,65,0.2); }
   .ps-btn-group { display: flex; gap: 8px; margin-top: 12px; }
@@ -875,6 +890,7 @@
     flex: 1; background: transparent; border: 1px solid var(--neon-green); color: var(--neon-green);
     font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.85rem; font-weight: bold; padding: 10px;
     cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    border-radius: 4px;
   }
   .ps-btn-en { font-family: 'Orbitron', sans-serif; font-size: 0.55rem; opacity: 0.8; }
   .ps-btn:hover { background: rgba(0,255,65,0.2); box-shadow: 0 0 15px rgba(0,255,65,0.4); }
@@ -889,9 +905,14 @@
   .ps-telemetry { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
   @media(min-width: 768px) { .ps-telemetry { grid-template-columns: repeat(4, 1fr); gap: 10px; } }
   .ps-stat-box {
-    background: rgba(0,0,0,0.8); border: 1px solid rgba(0,243,255,0.3);
+    background: linear-gradient(135deg, rgba(10, 20, 10, 0.6), rgba(5, 10, 5, 0.75));
+    backdrop-filter: blur(10px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0,243,255,0.25);
     padding: 8px 10px; position: relative;
-    display: flex; flex-direction: column; justify-content: flex-end; backdrop-filter: blur(4px); overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden;
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
   }
   @media(min-width: 768px) { .ps-stat-box { padding: 10px 15px; } }
   .ps-stat-box::before { content: ''; position: absolute; top:0; left:0; width:3px; height:100%; background: var(--neon-cyan); opacity: 0.5; }
@@ -907,9 +928,18 @@
   .ps-charts-container { flex-grow: 1; display: flex; flex-direction: column; gap: 12px; min-height: 300px; }
   @media(min-width: 768px) { .ps-charts-container { gap: 15px; min-height: 400px; } }
   @media(min-width: 1200px) { .ps-charts-container { flex-direction: row; } }
-  .ps-chart-card { flex: 1; background: rgba(0,0,0,0.6); border: 1px solid #333; display: flex; flex-direction: column; backdrop-filter: blur(5px); overflow: hidden; }
+  .ps-chart-card {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(15, 20, 15, 0.65), rgba(5, 10, 5, 0.75));
+    backdrop-filter: blur(14px) url(#liquid-refract) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex; flex-direction: column; overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
   .ps-chart-header {
-    background: rgba(0,0,0,0.8); border-bottom: 1px solid #333; padding: 6px 10px;
+    background: rgba(0,0,0,0.35); border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding: 6px 10px;
     display: flex; justify-content: space-between; align-items: center;
   }
   @media(min-width: 768px) { .ps-chart-header { padding: 8px 12px; } }
@@ -931,6 +961,13 @@
 </style>
 
 <div id="ps-app">
+  
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="liquid-refract">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
   <div class="ps-bg-grid"></div>
   <div class="ps-scanline"></div>
   <div class="ps-container">

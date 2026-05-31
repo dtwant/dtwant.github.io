@@ -799,6 +799,14 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
 
 <div id="cyber-graph-app">
+    
+    <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+      <filter id="liquid-refract">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
+
     <style>
         #cyber-graph-app {
             --neon-pink: #ff0055;
@@ -861,9 +869,11 @@
         @keyframes gp-glitch2 { 0% { clip: rect(65px, 9999px, 100px, 0); } 100% { clip: rect(10px, 9999px, 111px, 0); } }
 
         #cyber-graph-app .gp-panel {
-            background: var(--panel-bg); border: 1px solid rgba(0, 243, 255, 0.3);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 243, 255, 0.05);
-            backdrop-filter: blur(5px);
+            background: rgba(10, 14, 18, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.12), inset 0 -4px 16px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(14px) url(#liquid-refract);
+            -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
         }
 
          
@@ -930,11 +940,17 @@
 
         #cyber-graph-app .gp-func-input-wrap {
             flex: 1; display: flex; align-items: center; position: relative;
-            background: rgba(0,0,0,0.7); border: 1px solid #444; transition: all 0.3s;
+            background: rgba(10, 14, 18, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 8px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px) url(#liquid-refract);
+            -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
+            transition: all 0.3s;
             padding: 2px 4px 2px 12px; min-height: 44px; cursor: text;
         }
         #cyber-graph-app .gp-func-input-wrap.gp-editing {
-            border-color: var(--neon-green); box-shadow: 0 0 15px rgba(0,255,65,0.15);
+            border-color: var(--neon-green);
+            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), 0 0 15px rgba(0, 255, 65, 0.2);
         }
 
         #cyber-graph-app .gp-func-prefix {
@@ -1062,7 +1078,12 @@
 
         #cyber-graph-app .gp-terminal {
             font-family: 'JetBrains Mono', monospace; height: 80px; padding: 8px;
-            background: rgba(0,0,0,0.5); border: 1px solid #111827; font-size: 10px;
+            background: rgba(10, 14, 18, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 8px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px) url(#liquid-refract);
+            -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
+            font-size: 10px;
             border-radius: 4px; overflow-y: auto; word-break: break-all; white-space: pre-wrap;
         }
         @media (min-width: 768px) { #cyber-graph-app .gp-terminal { height: 96px; font-size: 12px; } }

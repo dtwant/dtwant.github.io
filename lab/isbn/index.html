@@ -799,22 +799,23 @@
 
   #cyber-isbn-app {
     --neon-pink: #ff0055; --neon-cyan: #00f3ff; --neon-green: #00ff41;
-    --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #050505;
-    --panel-bg: rgba(10,14,18,0.90);
+    --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #070510;
+    --panel-bg: rgba(26, 22, 44, 0.35);
     font-family: 'JetBrains Mono', 'Zen Kaku Gothic New', sans-serif; color: #e0e0e0;
     background-color: var(--bg-dark);
-    background-image: linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px);
-    background-size: 40px 40px; animation: isbn-bg 20s linear infinite;
+    background-image: 
+      radial-gradient(circle 500px at 15% 15%, rgba(88, 86, 214, 0.15), transparent),
+      radial-gradient(circle 600px at 85% 20%, rgba(10, 132, 255, 0.12), transparent),
+      radial-gradient(circle 700px at 50% 85%, rgba(255, 138, 154, 0.08), transparent);
     min-height: calc(100vh - 100px); width: 100%; position: relative; z-index: 10; margin: 0; padding: 0;
   }
   #cyber-isbn-app * { box-sizing: border-box; margin: 0; }
-  #cyber-isbn-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:#050505; z-index:-2; }
-  #cyber-isbn-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-image:linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px); background-size:40px 40px; animation:isbn-bg 20s linear infinite; z-index:-1; }
-  #cyber-isbn-app .isbn-scan { position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1)); background-size:100% 4px; pointer-events:none; z-index:50; opacity:0.6; }
-  @keyframes isbn-bg { 0%{background-position:0 0}100%{background-position:40px 40px} }
+  #cyber-isbn-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:#070510; z-index:-2; }
+  #cyber-isbn-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-image:radial-gradient(circle 600px at 50% 50%, rgba(88, 86, 214, 0.08), transparent); z-index:-1; }
+  #cyber-isbn-app .isbn-scan { position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1)); background-size:100% 4px; pointer-events:none; z-index:50; opacity:0.3; }
 
    
-  #cyber-isbn-app .isbn-glitch { font-family:'Orbitron',sans-serif; position:relative; color:var(--neon-cyan); text-shadow:2px 2px var(--neon-pink); }
+  #cyber-isbn-app .isbn-glitch { font-family:'Orbitron',sans-serif; position:relative; color:#ffffff; text-shadow:2px 2px var(--neon-cyan); }
   #cyber-isbn-app .isbn-glitch::before,#cyber-isbn-app .isbn-glitch::after { content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%; background:transparent; }
   #cyber-isbn-app .isbn-glitch::before { left:2px; text-shadow:-1px 0 var(--neon-pink); clip:rect(24px,550px,90px,0); animation:isbn-g2 3s infinite linear alternate-reverse; }
   #cyber-isbn-app .isbn-glitch::after { left:-2px; text-shadow:-1px 0 var(--neon-green); clip:rect(85px,550px,140px,0); animation:isbn-g1 2.5s infinite linear alternate-reverse; }
@@ -822,22 +823,37 @@
   @keyframes isbn-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
 
    
-  #cyber-isbn-app .isbn-panel { background:var(--panel-bg); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 20px rgba(0,0,0,0.8),inset 0 0 30px rgba(0,243,255,0.05); backdrop-filter:blur(5px); clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
+  #cyber-isbn-app .isbn-panel { 
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.12) 0%, 
+      rgba(255, 255, 255, 0.03) 35%, 
+      rgba(15, 12, 28, 0.35) 100%
+    ); 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    box-shadow: 
+      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.20),
+      inset 2px 2px 6px rgba(255, 255, 255, 0.08),
+      inset -2px -2px 10px rgba(0, 0, 0, 0.60),
+      0 20px 50px rgba(0,0,0,0.5); 
+    backdrop-filter: blur(20px) url(#liquid-refract) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) url(#liquid-refract) saturate(140%);
+    clip-path: polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); 
+  }
 
   #cyber-isbn-app .isbn-main { width:100%; max-width:900px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-main { padding:0 0 32px 0; margin-top:32px; } }
 
    
   #cyber-isbn-app .isbn-hbar { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; padding:0 4px; opacity:0.8; }
-  #cyber-isbn-app .isbn-sysver { font-size:9px; color:var(--neon-cyan); font-family:monospace; letter-spacing:2px; white-space:nowrap; }
+  #cyber-isbn-app .isbn-sysver { font-size:9px; color:rgba(255,255,255,0.6); font-family:monospace; letter-spacing:2px; white-space:nowrap; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-sysver { font-size:12px; } }
-  #cyber-isbn-app .isbn-status { font-size:9px; font-family:monospace; display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:4px; border:1px solid rgba(0,255,65,0.3); color:#4ade80; white-space:nowrap; }
+  #cyber-isbn-app .isbn-status { font-size:9px; font-family:monospace; display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.35); padding:4px 8px; border-radius:4px; border:1px solid rgba(0,255,65,0.2); color:#4ade80; white-space:nowrap; backdrop-filter:blur(8px); }
   @media(min-width:768px) { #cyber-isbn-app .isbn-status { font-size:12px; padding:4px 12px; gap:8px; } }
   #cyber-isbn-app .isbn-pulse { animation:isbn-p 1.5s ease-in-out infinite; }
   @keyframes isbn-p { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
    
-  #cyber-isbn-app .isbn-corner { position:absolute; width:24px; height:24px; border-color:var(--neon-cyan); opacity:0.5; }
+  #cyber-isbn-app .isbn-corner { position:absolute; width:24px; height:24px; border-color:var(--neon-cyan); opacity:0.3; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-corner { width:32px; height:32px; } }
   #cyber-isbn-app .isbn-c-tl { top:0; left:0; border-top:2px solid; border-left:2px solid; }
   #cyber-isbn-app .isbn-c-tr { top:0; right:0; border-top:2px solid; border-right:2px solid; }
@@ -845,56 +861,56 @@
   #cyber-isbn-app .isbn-c-br { bottom:0; right:0; border-bottom:2px solid; border-right:2px solid; }
 
    
-  #cyber-isbn-app .isbn-title-sec { margin-bottom:16px; text-align:center; border-bottom:1px solid #1f2937; padding-bottom:16px; position:relative; padding-top:24px; }
+  #cyber-isbn-app .isbn-title-sec { margin-bottom:16px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:16px; position:relative; padding-top:24px; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-title-sec { text-align:left; padding-top:0; margin-bottom:24px; padding-bottom:20px; } }
   #cyber-isbn-app .isbn-title { font-size:24px; font-weight:700; letter-spacing:-0.05em; margin-bottom:4px; margin-top:8px; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-title { font-size:48px; margin-top:0; } }
-  #cyber-isbn-app .isbn-sub { font-size:10px; color:#9ca3af; font-family:monospace; letter-spacing:0.1em; text-transform:uppercase; }
+  #cyber-isbn-app .isbn-sub { font-size:10px; color:#8e8e93; font-family:monospace; letter-spacing:0.1em; text-transform:uppercase; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-sub { font-size:14px; letter-spacing:0.2em; } }
 
    
-  #cyber-isbn-app .isbn-input-wrap { background:rgba(0,0,0,0.7); border:1px solid #444; transition:all 0.3s; display:flex; align-items:center; padding:4px 12px; margin-bottom:8px; clip-path:polygon(15px 0,100% 0,100% 100%,0 100%,0 15px); }
-  #cyber-isbn-app .isbn-input-wrap:focus-within { border-color:var(--neon-green); box-shadow:0 0 20px rgba(0,255,65,0.2); }
-  #cyber-isbn-app .isbn-prompt { color:var(--neon-pink); font-weight:bold; font-size:14px; margin-right:8px; font-family:monospace; animation:isbn-p 1.5s ease-in-out infinite; }
+  #cyber-isbn-app .isbn-input-wrap { background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.08); transition:all 0.3s; display:flex; align-items:center; padding:4px 12px; margin-bottom:8px; clip-path:polygon(15px 0,100% 0,100% 100%,0 100%,0 15px); }
+  #cyber-isbn-app .isbn-input-wrap:focus-within { border-color:var(--neon-cyan); box-shadow:0 0 20px rgba(0,243,255,0.25); }
+  #cyber-isbn-app .isbn-prompt { color:var(--neon-cyan); font-weight:bold; font-size:14px; margin-right:8px; font-family:monospace; animation:isbn-p 1.5s ease-in-out infinite; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-prompt { font-size:18px; } }
-  #cyber-isbn-app .isbn-input { width:100%; background:transparent; border:none; color:#4ade80; padding:12px 0; font-family:'JetBrains Mono',monospace; font-size:16px; outline:none; }
+  #cyber-isbn-app .isbn-input { width:100%; background:transparent; border:none; color:#ffffff; padding:12px 0; font-family:'JetBrains Mono',monospace; font-size:16px; outline:none; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-input { font-size:20px; padding:20px 0; } }
-  #cyber-isbn-app .isbn-input::placeholder { color:#374151; }
+  #cyber-isbn-app .isbn-input::placeholder { color:rgba(255,255,255,0.25); }
   #cyber-isbn-app .isbn-input-info { display:flex; justify-content:space-between; padding:0 4px; margin-bottom:24px; }
-  #cyber-isbn-app .isbn-input-info span { font-size:9px; font-family:monospace; color:#6b7280; }
+  #cyber-isbn-app .isbn-input-info span { font-size:9px; font-family:monospace; color:#8e8e93; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-input-info span { font-size:10px; } }
   #cyber-isbn-app .isbn-mode { color:var(--neon-pink) !important; font-weight:bold; }
 
    
-  #cyber-isbn-app .isbn-mobile-btn { display:block; color:var(--neon-cyan); padding:8px; border:1px solid rgba(0,243,255,0.3); background:rgba(0,243,255,0.1); border-radius:4px; margin-left:4px; flex-shrink:0; cursor:pointer; }
+  #cyber-isbn-app .isbn-mobile-btn { display:block; color:var(--neon-cyan); padding:8px; border:1px solid rgba(255,255,255,0.08); background:rgba(0,243,255,0.1); border-radius:4px; margin-left:4px; flex-shrink:0; cursor:pointer; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-mobile-btn { display:none; } }
   #cyber-isbn-app .isbn-mobile-btn svg { width:24px; height:24px; }
 
    
-  #cyber-isbn-app .isbn-exec-btn { display:none; width:100%; padding:16px; margin-bottom:32px; font-family:'Orbitron',sans-serif; font-weight:700; font-size:16px; letter-spacing:2px; background:linear-gradient(90deg,transparent 0%,rgba(0,255,65,0.1) 50%,transparent 100%); border:1px solid var(--neon-green); color:var(--neon-green); cursor:pointer; transition:all 0.3s; position:relative; overflow:hidden; clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
+  #cyber-isbn-app .isbn-exec-btn { display:none; width:100%; padding:16px; margin-bottom:32px; font-family:'Orbitron',sans-serif; font-weight:700; font-size:16px; letter-spacing:2px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); color:#ffffff; cursor:pointer; transition:all 0.3s; position:relative; overflow:hidden; clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
   @media(min-width:768px) { #cyber-isbn-app .isbn-exec-btn { display:block; font-size:20px; letter-spacing:3px; } }
-  #cyber-isbn-app .isbn-exec-btn:hover:not(:disabled) { background:var(--neon-green); color:#000; box-shadow:0 0 25px var(--neon-green); }
-  #cyber-isbn-app .isbn-exec-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent); transition:0.5s; }
+  #cyber-isbn-app .isbn-exec-btn:hover:not(:disabled) { background:var(--neon-cyan); color:#000; border-color:var(--neon-cyan); box-shadow:0 0 25px rgba(0,243,255,0.4); }
+  #cyber-isbn-app .isbn-exec-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent); transition:0.5s; }
   #cyber-isbn-app .isbn-exec-btn:hover::before { left:100%; }
-  #cyber-isbn-app .isbn-exec-btn:disabled { border-color:#333; color:#444; background:transparent; cursor:not-allowed; }
+  #cyber-isbn-app .isbn-exec-btn:disabled { border-color:rgba(255,255,255,0.04); color:rgba(255,255,255,0.1); background:transparent; cursor:not-allowed; }
 
    
   #cyber-isbn-app .isbn-output-sec { position:relative; margin-top:40px; margin-bottom:16px; }
-  #cyber-isbn-app .isbn-output-label { position:absolute; top:-12px; left:8px; background:rgba(0,0,0,0.9); padding:0 8px; font-size:10px; color:var(--neon-cyan); font-weight:bold; text-transform:uppercase; letter-spacing:0.15em; font-family:'Orbitron',sans-serif; border:1px solid rgba(0,243,255,0.2); backdrop-filter:blur(5px); transform:skewX(12deg); z-index:20; }
+  #cyber-isbn-app .isbn-output-label { position:absolute; top:-12px; left:8px; background:rgba(26,22,44,0.9); padding:0 8px; font-size:10px; color:var(--neon-cyan); font-weight:bold; text-transform:uppercase; letter-spacing:0.15em; font-family:'Orbitron',sans-serif; border:1px solid rgba(255,255,255,0.1); backdrop-filter:blur(5px); transform:skewX(12deg); z-index:20; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-output-label { font-size:12px; left:16px; top:-14px; } }
 
-  #cyber-isbn-app .isbn-output-box { border:1px solid #1f2937; background:rgba(0,0,0,0.4); padding:16px; min-height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; width:100%; }
+  #cyber-isbn-app .isbn-output-box { border:1px solid rgba(255,255,255,0.06); background:rgba(0,0,0,0.25); padding:16px; min-height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; width:100%; backdrop-filter:blur(8px); }
   @media(min-width:768px) { #cyber-isbn-app .isbn-output-box { padding:24px; min-height:220px; } }
-  #cyber-isbn-app .isbn-output-box::before { content:''; position:absolute; inset:0; opacity:0.1; background-image:radial-gradient(#333 1px,transparent 1px); background-size:10px 10px; pointer-events:none; }
+  #cyber-isbn-app .isbn-output-box::before { content:''; position:absolute; inset:0; opacity:0.04; background-image:radial-gradient(#fff 1px,transparent 1px); background-size:10px 10px; pointer-events:none; }
 
    
-  #cyber-isbn-app .isbn-loader { display:none; width:40px; height:40px; border:3px solid rgba(0,243,255,0.3); border-radius:50%; border-top-color:var(--neon-cyan); animation:isbn-spin 1s ease-in-out infinite; position:relative; z-index:10; }
+  #cyber-isbn-app .isbn-loader { display:none; width:40px; height:40px; border:3px solid rgba(0,243,255,0.15); border-radius:50%; border-top-color:var(--neon-cyan); animation:isbn-spin 1s ease-in-out infinite; position:relative; z-index:10; }
   @keyframes isbn-spin { to{transform:rotate(360deg)} }
 
    
-  #cyber-isbn-app .isbn-no-result { color:#4b5563; font-size:12px; font-family:monospace; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; z-index:10; text-align:center; }
+  #cyber-isbn-app .isbn-no-result { color:#8e8e93; font-size:12px; font-family:monospace; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; z-index:10; text-align:center; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-no-result { font-size:14px; } }
-  #cyber-isbn-app .isbn-divider { height:1px; width:64px; background:#1f2937; }
+  #cyber-isbn-app .isbn-divider { height:1px; width:64px; background:rgba(255,255,255,0.1); }
   @media(min-width:768px) { #cyber-isbn-app .isbn-divider { width:80px; } }
 
    
@@ -902,37 +918,37 @@
   @media(min-width:768px) { #cyber-isbn-app .isbn-book-data { flex-direction:row; gap:24px; } }
 
    
-  #cyber-isbn-app .isbn-cover-wrap { border:1px solid #444; background:#111; display:flex; align-items:center; justify-content:center; position:relative; box-shadow:0 0 15px rgba(0,0,0,0.8); flex-shrink:0; width:120px; height:180px; margin:0 auto; }
+  #cyber-isbn-app .isbn-cover-wrap { border:1px solid rgba(255,255,255,0.08); background:rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; position:relative; box-shadow:0 10px 25px rgba(0,0,0,0.4); flex-shrink:0; width:120px; height:180px; margin:0 auto; backdrop-filter:blur(5px); }
   @media(min-width:768px) { #cyber-isbn-app .isbn-cover-wrap { width:160px; height:230px; margin:0; } }
   #cyber-isbn-app .isbn-cover-img { max-width:100%; max-height:100%; object-fit:contain; }
-  #cyber-isbn-app .isbn-cover-placeholder { color:#4b5563; font-size:10px; text-align:center; font-family:monospace; padding:8px; }
+  #cyber-isbn-app .isbn-cover-placeholder { color:#8e8e93; font-size:10px; text-align:center; font-family:monospace; padding:8px; }
 
    
   #cyber-isbn-app .isbn-details { flex-grow:1; display:flex; flex-direction:column; justify-content:center; width:100%; }
-  #cyber-isbn-app .isbn-detail-row { display:flex; flex-direction:column; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:6px; margin-bottom:8px; word-break:break-word; }
+  #cyber-isbn-app .isbn-detail-row { display:flex; flex-direction:column; border-bottom:1px dashed rgba(255,255,255,0.06); padding-bottom:6px; margin-bottom:8px; word-break:break-word; }
   #cyber-isbn-app .isbn-detail-label { font-size:10px; color:var(--neon-cyan); text-transform:uppercase; font-family:'Orbitron',sans-serif; margin-bottom:2px; letter-spacing:1px; }
-  #cyber-isbn-app .isbn-detail-value { font-size:14px; color:#fff; line-height:1.3; font-family:monospace; }
+  #cyber-isbn-app .isbn-detail-value { font-size:14px; color:#f5f5f7; line-height:1.3; font-family:monospace; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-detail-value { font-size:16px; } }
-  #cyber-isbn-app .isbn-detail-title { color:var(--neon-pink); font-weight:bold; font-size:18px; text-shadow:0 0 8px rgba(255,0,85,0.4); }
+  #cyber-isbn-app .isbn-detail-title { color:var(--neon-pink); font-weight:bold; font-size:18px; text-shadow:0 0 8px rgba(255,0,85,0.2); }
   @media(min-width:768px) { #cyber-isbn-app .isbn-detail-title { font-size:24px; } }
   #cyber-isbn-app .isbn-meta-grid { display:grid; grid-template-columns:1fr; gap:8px; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-meta-grid { grid-template-columns:1fr 1fr; gap:16px; } }
 
    
-  #cyber-isbn-app .isbn-log-sec { border-top:1px solid rgba(31,41,55,0.5); padding-top:12px; margin-top:24px; }
+  #cyber-isbn-app .isbn-log-sec { border-top:1px solid rgba(255,255,255,0.06); padding-top:12px; margin-top:24px; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-log-sec { padding-top:16px; margin-top:32px; } }
-  #cyber-isbn-app .isbn-log-header { font-size:9px; color:#6b7280; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.15em; display:flex; justify-content:space-between; }
+  #cyber-isbn-app .isbn-log-header { font-size:9px; color:#8e8e93; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.15em; display:flex; justify-content:space-between; }
   @media(min-width:768px) { #cyber-isbn-app .isbn-log-header { font-size:10px; } }
-  #cyber-isbn-app .isbn-log-path { color:#374151; display:none; }
+  #cyber-isbn-app .isbn-log-path { color:rgba(255,255,255,0.15); display:none; }
   @media(min-width:640px) { #cyber-isbn-app .isbn-log-path { display:inline; } }
-  #cyber-isbn-app .isbn-terminal { font-family:'JetBrains Mono',monospace; overflow-y:auto; height:80px; padding:8px; background:rgba(0,0,0,0.5); border:1px solid rgba(17,24,39,1); font-size:10px; white-space:pre-wrap; word-break:break-all; }
+  #cyber-isbn-app .isbn-terminal { font-family:'JetBrains Mono',monospace; overflow-y:auto; height:80px; padding:8px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.05); font-size:10px; white-space:pre-wrap; word-break:break-all; border-radius:6px; backdrop-filter:blur(5px); }
   @media(min-width:768px) { #cyber-isbn-app .isbn-terminal { height:96px; font-size:12px; } }
-  #cyber-isbn-app .isbn-terminal::-webkit-scrollbar { width:6px; }
-  #cyber-isbn-app .isbn-terminal::-webkit-scrollbar-track { background:rgba(0,0,0,0.5); }
-  #cyber-isbn-app .isbn-terminal::-webkit-scrollbar-thumb { background:var(--neon-cyan); border-radius:3px; }
+  #cyber-isbn-app .isbn-terminal::-webkit-scrollbar { width:4px; }
+  #cyber-isbn-app .isbn-terminal::-webkit-scrollbar-track { background:rgba(0,0,0,0.1); }
+  #cyber-isbn-app .isbn-terminal::-webkit-scrollbar-thumb { background:var(--neon-cyan); border-radius:2px; }
 
    
-  #cyber-isbn-app .log-info { color:#9ca3af; }
+  #cyber-isbn-app .log-info { color:#8e8e93; }
   #cyber-isbn-app .log-success { color:#4ade80; }
   #cyber-isbn-app .log-error { color:var(--neon-pink); }
   #cyber-isbn-app .log-warn { color:#facc15; }
@@ -1278,6 +1294,14 @@
         };
     })();
 </script>
+
+
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <filter id="liquid-refract">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
 
 
     </section>

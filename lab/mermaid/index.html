@@ -801,7 +801,7 @@
   #cyber-mermaid-app {
     --neon-pink: #ff0055; --neon-cyan: #00f3ff; --neon-green: #00ff41;
     --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #050505;
-    --panel-bg: rgba(10,14,18,0.90);
+    --panel-bg: rgba(10,14,18,0.65);
     font-family: 'JetBrains Mono', monospace; color: #e0e0e0;
     background-color: var(--bg-dark);
     background-image: linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px);
@@ -809,13 +809,19 @@
     min-height: calc(100vh - 100px); width: 100%; position: relative; z-index: 10; margin: 0; padding: 0;
   }
   #cyber-mermaid-app * { box-sizing: border-box; }
-  #cyber-mermaid-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:#050505; z-index:-2; }
-  #cyber-mermaid-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vh; background-image:linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px); background-size:40px 40px; animation:mm-bg 20s linear infinite; z-index:-1; }
+  #cyber-mermaid-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vw; background-color:#050505; z-index:-2; }
+  #cyber-mermaid-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vw; background-image:linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px); background-size:40px 40px; animation:mm-bg 20s linear infinite; z-index:-1; }
   #cyber-mermaid-app .mm-scan { position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1)); background-size:100% 4px; pointer-events:none; z-index:50; opacity:0.5; }
   @keyframes mm-bg { 0%{background-position:0 0}100%{background-position:40px 40px} }
 
    
-  #cyber-mermaid-app .mm-ref { margin-top:24px; padding:20px; background:rgba(0,0,0,0.6); border:1px solid #1f2937; border-left:2px solid var(--neon-cyan); }
+  #cyber-mermaid-app .mm-ref {
+    margin-top:24px; padding:20px;
+    background:rgba(0, 0, 0, 0.4);
+    border:1px solid rgba(255,255,255,0.08);
+    border-left:3px solid var(--neon-cyan);
+    border-radius: 4px;
+  }
   #cyber-mermaid-app .mm-ref h3 { color:var(--neon-cyan); font-family:'Orbitron',sans-serif; font-size:14px; margin-bottom:16px; letter-spacing:1px; }
   #cyber-mermaid-app .mm-ref h4 { color:#94a3b8; font-size:12px; margin:16px 0 8px; text-transform:uppercase; letter-spacing:0.5px; }
   #cyber-mermaid-app .mm-ref h4:first-of-type { margin-top:0; }
@@ -829,7 +835,14 @@
   @keyframes mm-g1 { 0%{clip:rect(14px,9999px,122px,0)} 5%{clip:rect(82px,9999px,92px,0)} 100%{clip:rect(5px,9999px,133px,0)} }
   @keyframes mm-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
 
-  #cyber-mermaid-app .mm-panel { background:var(--panel-bg); border:1px solid rgba(0,243,255,0.3); box-shadow:0 0 20px rgba(0,0,0,0.8),inset 0 0 30px rgba(0,243,255,0.05); backdrop-filter:blur(5px); }
+  #cyber-mermaid-app .mm-panel {
+    background: linear-gradient(135deg, rgba(15, 20, 25, 0.7), rgba(5, 8, 12, 0.8));
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4);
+    backdrop-filter: blur(16px) url(#liquid-refract) saturate(125%);
+    -webkit-backdrop-filter: blur(16px) saturate(125%);
+    border-radius: 8px;
+  }
   #cyber-mermaid-app .mm-clip { clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
 
   #cyber-mermaid-app .mm-main { width:100%; max-width:1100px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
@@ -858,17 +871,42 @@
 
   #cyber-mermaid-app .mm-pane { flex:1; display:flex; flex-direction:column; min-width:0; }
 
-  #cyber-mermaid-app .mm-pane-header { background:rgba(0,0,0,0.8); border:1px solid #1f2937; border-bottom:none; padding:8px 12px; font-size:9px; color:var(--neon-cyan); letter-spacing:2px; font-family:'Orbitron',sans-serif; display:flex; justify-content:space-between; align-items:center; }
+  #cyber-mermaid-app .mm-pane-header {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-bottom:none; padding:8px 12px; font-size:9px;
+    color:var(--neon-cyan); letter-spacing:2px;
+    font-family:'Orbitron',sans-serif; display:flex;
+    justify-content:space-between; align-items:center;
+    border-radius: 4px 4px 0 0;
+  }
   @media(min-width:768px) { #cyber-mermaid-app .mm-pane-header { font-size:11px; } }
 
-  #cyber-mermaid-app .mm-textarea { width:100%; min-height:300px; background:rgba(0,0,0,0.8); border:1px solid #333; color:#e0e0e0; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.6; padding:16px; resize:vertical; outline:none; transition:all 0.3s; }
+  #cyber-mermaid-app .mm-textarea {
+    width:100%; min-height:300px;
+    background:rgba(0,0,0,0.6);
+    border:1px solid rgba(255,255,255,0.1);
+    color:#e0e0e0; font-family:'JetBrains Mono',monospace;
+    font-size:13px; line-height:1.6; padding:16px; resize:vertical;
+    outline:none; transition:all 0.3s;
+    border-radius: 0 0 4px 4px;
+  }
   @media(min-width:768px) { #cyber-mermaid-app .mm-textarea { min-height:400px; font-size:14px; } }
   #cyber-mermaid-app .mm-textarea:focus { border-color:var(--neon-cyan); box-shadow:inset 0 0 10px rgba(0,243,255,0.1); }
   #cyber-mermaid-app .mm-textarea::-webkit-scrollbar { width:6px; }
   #cyber-mermaid-app .mm-textarea::-webkit-scrollbar-track { background:rgba(0,0,0,0.5); }
   #cyber-mermaid-app .mm-textarea::-webkit-scrollbar-thumb { background:var(--neon-cyan); }
 
-  #cyber-mermaid-app .mm-preview-box { width:100%; min-height:300px; background:rgba(14,14,17,0.95); border:1px solid #333; padding:20px; display:flex; justify-content:center; align-items:center; overflow:auto; position:relative; }
+  #cyber-mermaid-app .mm-preview-box {
+    width:100%; min-height:300px;
+    background:rgba(14,14,17,0.85);
+    border:1px solid rgba(255,255,255,0.1);
+    padding:20px; display:flex; justify-content:center;
+    align-items:center; overflow:auto; position:relative;
+    border-radius: 0 0 4px 4px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
   @media(min-width:768px) { #cyber-mermaid-app .mm-preview-box { min-height:400px; } }
   #cyber-mermaid-app .mm-preview-box svg { max-width:100%; height:auto; }
 
@@ -895,6 +933,13 @@
 </style>
 
 <div id="cyber-mermaid-app">
+  
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="liquid-refract">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015 0.02" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
   <div class="mm-scan"></div>
   <div class="mm-main">
     <div class="mm-hbar" style="align-items: center;">

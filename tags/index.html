@@ -719,389 +719,553 @@
         
   
   
-  <header class="mt-5">
-    
-    <h1 class="mt-5 text-4xl font-extrabold text-neutral-900 dark:text-neutral">Tags</h1>
-    <div class="mt-1 mb-2 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
-      
+  
+  <style>
+     
+    .cyber-bg { 
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100vw; height: 100vh; 
+      z-index: -10; 
+      overflow: hidden; 
+      background: #0a0518; 
+    }
+    .cyber-bg-image { 
+      position: absolute; 
+      inset: -5%; 
+      width: 110%; height: 110%; 
+      background-image: url('/img/cyber_terms_bg.png'); 
+      background-size: cover; 
+      background-position: center; 
+      filter: brightness(0.38) contrast(1.15) saturate(1.6);  
+    }
+    .cyber-bg-vignette { 
+      position: absolute; 
+      inset: 0; 
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.85) 100%); 
+    }
+    .cyber-grid { 
+      position: fixed; 
+      top: -50%; left: -50%; 
+      width: 200vw; height: 200vh; 
+      background: 
+        linear-gradient(transparent 0%, rgba(0,255,102,0.06) 1%, transparent 2%), 
+        linear-gradient(90deg, transparent 0%, rgba(188,19,254,0.06) 1%, transparent 2%); 
+      background-size: 40px 40px; 
+      transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px); 
+      animation: grid-move 8s linear infinite; 
+      z-index: -9; 
+      pointer-events: none; 
+    }
+    @keyframes grid-move { 
+      0% { transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px); } 
+      100% { transform: perspective(300px) rotateX(60deg) translateY(40px) translateZ(-100px); } 
+    }
+    .scanline { 
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100%; height: 100%; 
+      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2)); 
+      background-size: 100% 3px; 
+      pointer-events: none; 
+      z-index: 100; 
+      opacity: 0.12; 
+      mix-blend-mode: overlay; 
+    }
 
+     
+    .cyber-terms-card {
+      background: rgba(14, 14, 17, 0.55);
+      border-radius: 6px;
+      padding: 2.5rem 2rem;
+      margin-bottom: 2.5rem;
+      border: 1px solid rgba(0, 243, 255, 0.25);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 20px rgba(0, 243, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(14px) url(#liquid-refract);  
+      -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+      z-index: 1;
+    }
 
+     
+    .cyber-corner {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--accent-primary, #00f3ff);
+      pointer-events: none;
+      z-index: 5;
+      box-shadow: 0 0 8px var(--accent-primary, #00f3ff);
+    }
+    .cc-tl { top: 6px; left: 6px; border-right: none; border-bottom: none; }
+    .cc-tr { top: 6px; right: 6px; border-left: none; border-bottom: none; }
+    .cc-bl { bottom: 6px; left: 6px; border-right: none; border-top: none; }
+    .cc-br { bottom: 6px; right: 6px; border-left: none; border-top: none; }
 
+     
+    .cyber-terms-header {
+      border-bottom: 1px dashed rgba(0, 243, 255, 0.2);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .cyber-terms-title {
+      font-family: 'Orbitron', sans-serif !important;
+      font-size: 2rem !important;
+      font-weight: 700;
+      color: var(--accent-primary, #00f3ff);
+      text-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
+      letter-spacing: 0.1em;
+      margin: 0 !important;
+    }
+    .cyber-terms-subtitle {
+      font-family: 'M PLUS 1 Code', 'JetBrains Mono', monospace !important;
+      font-size: 0.75rem !important;
+      color: #ff0055;
+      text-shadow: 0 0 5px rgba(255, 0, 85, 0.4);
+      margin-top: 0.3rem;
+      letter-spacing: 0.15em;
+    }
 
+     
+    .cyber-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cyber-search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+    }
+    .cyber-search-prompt {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #ff0055;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      animation: blink 1.5s infinite;
+      pointer-events: none;
+    }
+    .cyber-search-input {
+      width: 100%;
+      background: rgba(5, 5, 5, 0.75) !important;
+      border: 1px solid rgba(0, 243, 255, 0.2) !important;
+      border-radius: 4px;
+      padding: 0.6rem 1rem 0.6rem 2rem !important;
+      color: #e0f8ff !important;
+      font-family: 'M PLUS 1 Code', monospace !important;
+      font-size: 0.85rem !important;
+      transition: all 0.3s ease;
+      outline: none;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    .cyber-search-input:focus {
+      border-color: var(--accent-primary, #00f3ff) !important;
+      box-shadow: 0 0 12px rgba(0, 243, 255, 0.35), inset 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .cyber-sort-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .cyber-sort-btn {
+      background: rgba(14, 14, 17, 0.45);
+      border: 1px solid rgba(0, 243, 255, 0.25);
+      border-radius: 3px;
+      padding: 0.5rem 1rem;
+      color: #00f3ff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.05em;
+    }
+    .cyber-sort-btn:hover {
+      border-color: #ff0055;
+      color: #ff0055;
+      box-shadow: 0 0 8px rgba(255, 0, 85, 0.2);
+    }
+    .cyber-sort-btn.active {
+      background: rgba(0, 243, 255, 0.1);
+      border-color: #00f3ff;
+      color: #fff;
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+    }
+
+     
+    .cyber-terms-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      transition: all 0.5s ease;
+    }
+
+     
+    .cyber-term-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(14, 14, 17, 0.45);
+      border: 1px solid rgba(0, 243, 255, 0.15);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      color: #e0f8ff !important;
+      text-decoration: none !important;
+      font-family: 'M PLUS 1 Code', monospace !important;
+      font-size: 0.85rem !important;
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.3s ease, transform 0.3s ease;
+      position: relative;
+    }
+
+     
+    .cyber-term-badge.hot-term {
+      border-color: rgba(255, 0, 85, 0.3);
+      background: rgba(255, 0, 85, 0.02);
+    }
+    .cyber-term-badge.hot-term .cyber-term-count {
+      color: #ff0055;
+      text-shadow: 0 0 4px rgba(255, 0, 85, 0.3);
+    }
+
+    .cyber-term-badge:hover {
+      border-color: #ff0055;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.25);
+      transform: translateY(-3px) scale(1.03);
+      background: rgba(255, 0, 85, 0.06);
+    }
+    .cyber-term-badge:hover .cyber-term-count {
+      color: #ff0055;
+      text-shadow: 0 0 6px rgba(255, 0, 85, 0.5);
+    }
+
+    .cyber-term-count {
+      font-size: 0.75rem !important;
+      color: #00f3ff;
+      opacity: 0.85;
+      letter-spacing: 0.5px;
+      transition: color 0.3s ease;
+    }
+
+     
+    .cyber-term-badge.filtered-out {
+      opacity: 0;
+      transform: scale(0.85);
+      pointer-events: none;
+      position: absolute;
+      visibility: hidden;
+      width: 0; height: 0; padding: 0; margin: 0; border: none; overflow: hidden;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+  </style>
 
   
-  
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  <div class="flex flex-row flex-wrap items-center">
-    
-    
+  <div class="cyber-bg">
+    <div class="cyber-bg-image"></div>
+    <div class="cyber-bg-vignette"></div>
   </div>
+  <div class="cyber-grid"></div>
+  <div class="scanline"></div>
 
+  
+  <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
+    <defs>
+      <filter id="liquid-refract" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </defs>
+  </svg>
 
+  <div class="cyber-terms-card">
+    
+    <div class="cyber-corner cc-tl"></div>
+    <div class="cyber-corner cc-tr"></div>
+    <div class="cyber-corner cc-bl"></div>
+    <div class="cyber-corner cc-br"></div>
+
+    <header class="cyber-terms-header">
+      
+      <h1 class="cyber-terms-title">Tags</h1>
+      <p class="cyber-terms-subtitle">DATABASE_INDEX // TAGS</p>
+    </header>
+
+    
+
+    
+    <div class="cyber-controls">
+      <div class="cyber-search-wrapper">
+        <span class="cyber-search-prompt">&gt;</span>
+        <input type="text" id="cyberSearch" class="cyber-search-input" placeholder="FILTER_KEYWORDS..." autocomplete="off">
+      </div>
+      <div class="cyber-sort-group">
+        <button id="sortCount" class="cyber-sort-btn active" data-sort="count">COUNT_DESC</button>
+        <button id="sortName" class="cyber-sort-btn" data-sort="name">NAME_ASC</button>
+      </div>
     </div>
-  </header>
-  
 
-  
-
-    <section class="flex flex-wrap max-w-prose -mx-2 overflow-hidden">
+    
+    <section class="cyber-terms-grid" id="cyberTermsGrid">
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/2i/"
-      >2I</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        4
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/2i/" 
+           class="cyber-term-badge" 
+           data-name="2i" 
+           data-count="4">
+          <span class="cyber-term-name">2I</span>
+          <span class="cyber-term-count">[04]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/algebra/"
-      >Algebra</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        1
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/algebra/" 
+           class="cyber-term-badge" 
+           data-name="algebra" 
+           data-count="1">
+          <span class="cyber-term-name">Algebra</span>
+          <span class="cyber-term-count">[01]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/archive/"
-      >Archive</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        1
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/archive/" 
+           class="cyber-term-badge" 
+           data-name="archive" 
+           data-count="1">
+          <span class="cyber-term-name">Archive</span>
+          <span class="cyber-term-count">[01]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/books/"
-      >Books</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        2
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/books/" 
+           class="cyber-term-badge" 
+           data-name="books" 
+           data-count="2">
+          <span class="cyber-term-name">Books</span>
+          <span class="cyber-term-count">[02]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/class/"
-      >Class</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        1
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/class/" 
+           class="cyber-term-badge" 
+           data-name="class" 
+           data-count="1">
+          <span class="cyber-term-name">Class</span>
+          <span class="cyber-term-count">[01]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/information/"
-      >Information</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        3
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/information/" 
+           class="cyber-term-badge" 
+           data-name="information" 
+           data-count="3">
+          <span class="cyber-term-name">Information</span>
+          <span class="cyber-term-count">[03]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/integral/"
-      >Integral</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        10
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/integral/" 
+           class="cyber-term-badge hot-term" 
+           data-name="integral" 
+           data-count="10">
+          <span class="cyber-term-name">Integral</span>
+          <span class="cyber-term-count">[10]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/literature/"
-      >Literature</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        1
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/literature/" 
+           class="cyber-term-badge" 
+           data-name="literature" 
+           data-count="1">
+          <span class="cyber-term-name">Literature</span>
+          <span class="cyber-term-count">[01]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/markdown/"
-      >Markdown</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        2
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/markdown/" 
+           class="cyber-term-badge" 
+           data-name="markdown" 
+           data-count="2">
+          <span class="cyber-term-name">Markdown</span>
+          <span class="cyber-term-count">[02]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/math/"
-      >Math</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        21
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/math/" 
+           class="cyber-term-badge hot-term" 
+           data-name="math" 
+           data-count="21">
+          <span class="cyber-term-name">Math</span>
+          <span class="cyber-term-count">[21]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/pets/"
-      >Pets</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        1
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/pets/" 
+           class="cyber-term-badge" 
+           data-name="pets" 
+           data-count="1">
+          <span class="cyber-term-name">Pets</span>
+          <span class="cyber-term-count">[01]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/physics/"
-      >Physics</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        7
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/physics/" 
+           class="cyber-term-badge hot-term" 
+           data-name="physics" 
+           data-count="7">
+          <span class="cyber-term-name">Physics</span>
+          <span class="cyber-term-count">[07]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/plants/"
-      >Plants</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        1
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/plants/" 
+           class="cyber-term-badge" 
+           data-name="plants" 
+           data-count="1">
+          <span class="cyber-term-name">Plants</span>
+          <span class="cyber-term-count">[01]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/proof/"
-      >Proof</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        11
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/proof/" 
+           class="cyber-term-badge hot-term" 
+           data-name="proof" 
+           data-count="11">
+          <span class="cyber-term-name">Proof</span>
+          <span class="cyber-term-count">[11]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/school/"
-      >School</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        5
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/school/" 
+           class="cyber-term-badge hot-term" 
+           data-name="school" 
+           data-count="5">
+          <span class="cyber-term-name">School</span>
+          <span class="cyber-term-count">[05]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/series/"
-      >Series</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        8
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/series/" 
+           class="cyber-term-badge hot-term" 
+           data-name="series" 
+           data-count="8">
+          <span class="cyber-term-name">Series</span>
+          <span class="cyber-term-count">[08]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/site/"
-      >Site</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        1
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/site/" 
+           class="cyber-term-badge" 
+           data-name="site" 
+           data-count="1">
+          <span class="cyber-term-name">Site</span>
+          <span class="cyber-term-count">[01]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/specialized/"
-      >Specialized</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        3
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/specialized/" 
+           class="cyber-term-badge" 
+           data-name="specialized" 
+           data-count="3">
+          <span class="cyber-term-name">Specialized</span>
+          <span class="cyber-term-count">[03]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/surrealism/"
-      >Surrealism</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        1
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/surrealism/" 
+           class="cyber-term-badge" 
+           data-name="surrealism" 
+           data-count="1">
+          <span class="cyber-term-name">Surrealism</span>
+          <span class="cyber-term-count">[01]</span>
+        </a>
       
-        <article class="w-full px-2 my-3 overflow-hidden sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
-  <h2 class="flex items-center">
-    <a
-      class="text-xl font-medium decoration-primary-500 hover:underline hover:underline-offset-2"
-      href="/tags/task/"
-      >Task</a
-    >
-    
-      <span class="px-2 text-base text-primary-500">&middot;</span>
-      <span class="text-base text-neutral-400">
-        1
-      </span>
-    
-  </h2>
-</article>
-
+        
+        <a href="/tags/task/" 
+           class="cyber-term-badge" 
+           data-name="task" 
+           data-count="1">
+          <span class="cyber-term-name">Task</span>
+          <span class="cyber-term-count">[01]</span>
+        </a>
       
     </section>
-  
+  </div>
 
+  
+  <script>
+    (function() {
+      const searchInput = document.getElementById('cyberSearch');
+      const sortCountBtn = document.getElementById('sortCount');
+      const sortNameBtn = document.getElementById('sortName');
+      const termsGrid = document.getElementById('cyberTermsGrid');
+      
+      if (!termsGrid) return;
+      
+      const getBadges = () => Array.from(termsGrid.querySelectorAll('.cyber-term-badge'));
+
+      
+      searchInput.addEventListener('input', function(e) {
+        const query = e.target.value.toLowerCase().trim();
+        const badges = getBadges();
+        
+        badges.forEach(badge => {
+          const name = badge.getAttribute('data-name') || '';
+          if (name.includes(query)) {
+            badge.classList.remove('filtered-out');
+          } else {
+            badge.classList.add('filtered-out');
+          }
+        });
+      });
+
+      
+      const sortTerms = (type) => {
+        const badges = getBadges();
+        
+        if (type === 'count') {
+          
+          badges.sort((a, b) => {
+            const countA = parseInt(a.getAttribute('data-count') || 0, 10);
+            const countB = parseInt(b.getAttribute('data-count') || 0, 10);
+            if (countB !== countA) return countB - countA;
+            return (a.getAttribute('data-name') || '').localeCompare(b.getAttribute('data-name') || '');
+          });
+          sortCountBtn.classList.add('active');
+          sortNameBtn.classList.remove('active');
+        } else if (type === 'name') {
+          
+          badges.sort((a, b) => {
+            return (a.getAttribute('data-name') || '').localeCompare(b.getAttribute('data-name') || '');
+          });
+          sortNameBtn.classList.add('active');
+          sortCountBtn.classList.remove('active');
+        }
+
+        
+        badges.forEach(badge => {
+          termsGrid.appendChild(badge);
+        });
+      };
+
+      sortCountBtn.addEventListener('click', () => sortTerms('count'));
+      sortNameBtn.addEventListener('click', () => sortTerms('name'));
+
+      
+      sortTerms('count');
+    })();
+  </script>
 
         
 

@@ -1153,6 +1153,7 @@
       linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
     background-size: 36px 36px;
     animation: vrGridPulse 8s ease infinite;
+    filter: url(#liquid-refract);
   }
 
   @keyframes vrGridPulse {
@@ -1253,9 +1254,11 @@
     justify-content: space-between;
     padding: 1rem 1.5rem;
     gap: 0.8rem;
-    background: linear-gradient(180deg, rgba(12, 11, 15, 0.98), rgba(8, 7, 10, 0.92));
-    border-bottom: 1px solid rgba(180, 140, 60, 0.12);
-    backdrop-filter: blur(12px);
+    background: rgba(12, 11, 15, 0.65);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    backdrop-filter: blur(16px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(16px) url(#liquid-refract);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -4px 12px rgba(0, 0, 0, 0.35);
   }
 
   .vr-brand {
@@ -1376,11 +1379,13 @@
     flex-shrink: 0;
     position: relative;
     z-index: 10;
-    background: rgba(12, 11, 15, 0.65);
-    border-bottom: 1px solid rgba(180, 140, 60, 0.06);
-    backdrop-filter: blur(6px);
+    background: rgba(12, 11, 15, 0.45);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(12px) url(#liquid-refract);
     overflow-x: auto;
-    scrollbar-width: none
+    scrollbar-width: none;
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -4px 8px rgba(0, 0, 0, 0.3);
   }
 
   .vr-stats::-webkit-scrollbar {
@@ -1452,13 +1457,15 @@
     flex-shrink: 0;
     position: relative;
     z-index: 10;
-    background: rgba(12, 11, 15, 0.55);
-    border-bottom: 1px solid rgba(180, 140, 60, 0.06);
+    background: rgba(12, 11, 15, 0.4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding: 0.55rem 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.45rem;
-    backdrop-filter: blur(6px)
+    backdrop-filter: blur(12px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(12px) url(#liquid-refract);
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -4px 8px rgba(0, 0, 0, 0.3);
   }
 
   .vr-ctrl-row {
@@ -1474,12 +1481,15 @@
     max-width: 400px;
     font-family: 'Noto Sans JP', 'Inter', sans-serif;
     font-size: 0.85rem;
-    background: rgba(255, 255, 255, 0.025);
-    border: 1px solid rgba(180, 140, 60, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 5px;
     color: #e8e0d4;
     padding: 0.42rem 0.8rem;
     outline: none;
+    backdrop-filter: blur(8px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 6px rgba(0, 0, 0, 0.3);
     transition: border-color 0.2s, box-shadow 0.2s
   }
 
@@ -1624,11 +1634,17 @@
     margin-bottom: 0.5rem;
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid rgba(0, 240, 255, 0.06);
-    background: linear-gradient(145deg, rgba(16, 15, 20, 0.92), rgba(12, 11, 16, 0.97));
-    transition: border-color 0.25s, box-shadow 0.25s;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(16, 15, 20, 0.5);
+    transition: all 0.25s;
     animation: vrCardIn 0.25s ease both;
-    position: relative
+    position: relative;
+    backdrop-filter: blur(8px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
+    box-shadow: 
+      0 10px 25px rgba(0, 0, 0, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      inset 0 -2px 8px rgba(0, 0, 0, 0.3);
   }
 
   .vr-card::before {
@@ -2113,8 +2129,8 @@
   }
 
   .vr-modal {
-    background: linear-gradient(180deg, #14131a, #0e0d14);
-    border: 1px solid rgba(180, 140, 60, 0.12);
+    background: rgba(10, 14, 18, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 10px;
     width: 100%;
     max-width: 460px;
@@ -2122,7 +2138,9 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(180, 140, 60, 0.03);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -4px 16px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(16px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(16px) url(#liquid-refract);
     animation: vrModalIn 0.25s ease
   }
 
@@ -2212,12 +2230,15 @@
   .vr-sel {
     font-family: 'Noto Sans JP', 'Inter', sans-serif;
     font-size: 0.86rem;
-    background: rgba(255, 255, 255, 0.025);
-    border: 1px solid rgba(180, 140, 60, 0.08);
+    background: rgba(14, 12, 20, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 5px;
     color: #e8e0d4;
     padding: 0.48rem 0.7rem;
     outline: none;
+    backdrop-filter: blur(8px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 8px rgba(0, 0, 0, 0.3);
     transition: border-color 0.2s, box-shadow 0.2s;
     width: 100%
   }
@@ -3181,6 +3202,13 @@
     .vr-smenu-opt{font-size:0.55rem;padding:0.28rem 0.4rem}
   }
 </style>
+
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <filter id="liquid-refract">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
 
 <div class="vr-app">
   <div class="vr-grid"></div>

@@ -908,17 +908,21 @@ graph TD
     --neon-pink: #ff0055;
     --neon-green: #00ff41;
     --neon-purple: #b026ff;
-    --bg-dark: #050505;
-    --panel-bg: rgba(10,14,18,0.95);
+    --bg-dark: #070510;
+    --panel-bg: rgba(26, 22, 44, 0.35);
     
     font-family: 'JetBrains Mono', monospace;
-    color: #e2e8f0;
+    color: #f5f5f7;
     
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
     z-index: 99999;
     background: var(--bg-dark);
+    background-image: 
+      radial-gradient(circle 500px at 15% 15%, rgba(88, 86, 214, 0.16), transparent),
+      radial-gradient(circle 600px at 85% 20%, rgba(10, 132, 255, 0.14), transparent),
+      radial-gradient(circle 700px at 50% 85%, rgba(255, 138, 154, 0.08), transparent);
     margin: 0; padding: 0;
     box-sizing: border-box;
     display: flex;
@@ -929,11 +933,20 @@ graph TD
 
    
   .ne-header {
-    background: rgba(0, 5, 10, 0.95);
-    border-bottom: 2px solid rgba(0, 243, 255, 0.3);
-    padding: 10px 15px;
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.08) 0%, 
+      rgba(255, 255, 255, 0.01) 40%, 
+      rgba(8, 5, 20, 0.35) 100%
+    );
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px 20px;
     display: flex; justify-content: space-between; align-items: center;
     flex-shrink: 0;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 
+      inset 0 -0.8px 0px rgba(255, 255, 255, 0.15),
+      0 4px 15px rgba(0, 0, 0, 0.2);
   }
   
   .ne-brand {
@@ -941,7 +954,7 @@ graph TD
     font-size: 1.2rem;
     font-weight: 900;
     color: #fff;
-    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.35);
     letter-spacing: 2px;
     display: flex; align-items: center; gap: 15px;
   }
@@ -949,28 +962,37 @@ graph TD
   @media(max-width: 768px) { .ne-brand { font-size: 1rem; } }
 
    
-  .ne-toolbar { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .ne-toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  
   .ne-btn {
-    background: rgba(0, 243, 255, 0.05);
-    border: 1px solid rgba(0, 243, 255, 0.2);
-    color: var(--neon-cyan);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #8e8e93;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.7rem; font-weight: bold;
-    padding: 6px 12px; cursor: pointer; transition: all 0.2s;
-    border-radius: 2px; letter-spacing: 1px;
+    font-size: 0.75rem; font-weight: bold;
+    padding: 7px 14px; cursor: pointer; transition: all 0.2s;
+    border-radius: 6px; letter-spacing: 1px;
+    backdrop-filter: blur(8px);
   }
-  .ne-btn:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
-  .ne-btn.danger { border-color: rgba(255, 0, 85, 0.3); color: var(--neon-pink); background: rgba(255, 0, 85, 0.05); }
-  .ne-btn.danger:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 10px rgba(255, 0, 85, 0.5); }
-  .ne-btn.active { background: var(--neon-purple); border-color: var(--neon-purple); color: #000; box-shadow: 0 0 10px rgba(176,38,255,0.8); }
+  .ne-btn:hover { 
+    background: rgba(255, 255, 255, 0.08); 
+    color: #f5f5f7; 
+    border-color: rgba(255, 255, 255, 0.20);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05); 
+  }
+  .ne-btn.danger { border-color: rgba(255, 138, 154, 0.2); color: #FF8A9A; background: rgba(255, 138, 154, 0.03); }
+  .ne-btn.danger:hover { background: rgba(255, 138, 154, 0.15); color: #ffffff; border-color: #FF8A9A; box-shadow: 0 0 15px rgba(255, 138, 154, 0.25); }
+  .ne-btn.active { background: var(--neon-purple); border-color: var(--neon-purple); color: #000; box-shadow: 0 0 12px rgba(176,38,255,0.6); }
 
-  .ne-separator { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.2); margin: 0 4px; }
+  .ne-separator { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.08); margin: 0 4px; }
+  
   .ne-select {
-    background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 243, 255, 0.2);
-    color: var(--neon-cyan); font-family: 'Orbitron', sans-serif;
-    font-size: 0.7rem; font-weight: bold; padding: 5px 10px; outline: none; cursor: pointer;
+    background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #f5f5f7; font-family: 'Orbitron', sans-serif;
+    font-size: 0.72rem; font-weight: bold; padding: 6px 12px; outline: none; cursor: pointer;
+    border-radius: 6px; backdrop-filter: blur(8px);
   }
-  .ne-select:hover, .ne-select:focus { border-color: var(--neon-cyan); }
+  .ne-select:hover, .ne-select:focus { border-color: rgba(255, 255, 255, 0.2); }
 
    
   .ne-workspace {
@@ -978,95 +1000,122 @@ graph TD
     display: flex;
     overflow: hidden;
     position: relative;
-    background: var(--bg-dark);
+    background: transparent;
   }
   @media (max-width: 900px) { .ne-workspace { flex-direction: column; } }
 
    
   .ne-editor-wrap {
     width: 50%;
-    background: rgba(0, 0, 0, 0.7);
-    border-right: 1px solid rgba(0, 243, 255, 0.2);
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.08) 0%, 
+      rgba(255, 255, 255, 0.02) 40%, 
+      rgba(15, 12, 28, 0.30) 100%
+    );
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
     display: flex; flex-direction: column;
     position: relative;
     overflow: hidden;  
+    backdrop-filter: blur(22px) url(#liquid-refract) saturate(140%);
+    -webkit-backdrop-filter: blur(22px) url(#liquid-refract) saturate(140%);
+    box-shadow: 
+      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.18),
+      inset 2px 2px 5px rgba(255, 255, 255, 0.05),
+      inset -2px -2px 8px rgba(0, 0, 0, 0.40);
   }
-  @media (max-width: 900px) { .ne-editor-wrap { width: 100%; height: 50%; border-right: none; border-bottom: 2px solid rgba(0, 243, 255, 0.3); } }
+  @media (max-width: 900px) { .ne-editor-wrap { width: 100%; height: 50%; border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.08); } }
 
    
   .ne-editor-wrap .ne-bg {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-image: 
-      radial-gradient(circle at 20% 0%, rgba(0, 243, 255, 0.04) 0%, transparent 70%),
-      radial-gradient(circle at 80% 100%, rgba(255, 0, 85, 0.04) 0%, transparent 70%);
+      radial-gradient(circle at 20% 0%, rgba(88, 86, 214, 0.08) 0%, transparent 70%),
+      radial-gradient(circle at 80% 100%, rgba(10, 132, 255, 0.08) 0%, transparent 70%);
     z-index: 1; pointer-events: none;
   }
   .ne-editor-wrap .ne-grid {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-image: 
-      linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
-    background-size: 30px 30px; z-index: 2; pointer-events: none;
+      linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+    background-size: 35px 35px; z-index: 2; pointer-events: none;
   }
   .ne-editor-wrap .ne-scanline {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1)); 
-    background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.7;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.06)); 
+    background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.4;
   }
 
   .ne-pane-header {
-    background: rgba(0, 0, 0, 0.8);
-    border-bottom: 1px solid rgba(0, 243, 255, 0.1);
-    padding: 6px 15px; font-size: 0.65rem; color: rgba(0, 243, 255, 0.6);
+    background: rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 8px 20px; font-size: 0.68rem; color: rgba(255, 255, 255, 0.5);
     letter-spacing: 2px; font-family: 'Orbitron', sans-serif;
     display: flex; justify-content: space-between; align-items: center;
     position: relative; z-index: 60;  
+    backdrop-filter: blur(8px);
   }
   
    
-  .ne-editor-wrap.focus-mode textarea { color: rgba(226, 232, 240, 0.2); }
+  .ne-editor-wrap.focus-mode textarea { color: rgba(245, 245, 247, 0.25); }
 
   textarea.ne-textarea {
     flex-grow: 1; width: 100%;
     background: transparent; border: none; outline: none;
-    color: #e2e8f0; font-family: 'JetBrains Mono', monospace;
-    font-size: 15px; line-height: 1.8; padding: 20px;
+    color: #ffffff; font-family: 'JetBrains Mono', monospace;
+    font-size: 15px; line-height: 1.8; padding: 24px;
     resize: none; overflow-y: auto; position: relative; z-index: 60;
     transition: color 0.3s;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.25);
   }
-  textarea.ne-textarea::-webkit-scrollbar { width: 6px; }
-  textarea.ne-textarea::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.3); }
+  textarea.ne-textarea::-webkit-scrollbar { width: 4px; }
+  textarea.ne-textarea::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 2px; }
 
    
   .ne-preview-wrap {
     width: 50%;
-    background: #111;  
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.06) 0%, 
+      rgba(255, 255, 255, 0.01) 40%, 
+      rgba(5, 3, 12, 0.25) 100%
+    );
     display: flex; flex-direction: column;
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(20px) url(#liquid-refract) saturate(135%);
+    -webkit-backdrop-filter: blur(20px) url(#liquid-refract) saturate(135%);
+    box-shadow: 
+      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.15),
+      inset -1px -1px 3px rgba(0, 0, 0, 0.3);
   }
   @media (max-width: 900px) { .ne-preview-wrap { width: 100%; height: 50%; } }
 
   .ne-preview-scroll {
     flex-grow: 1;
     overflow-y: auto;
-    padding: 20px;
+    padding: 24px;
     scroll-behavior: auto;  
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
   }
+  .ne-preview-scroll::-webkit-scrollbar { width: 4px; }
+  .ne-preview-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); }
   
    
   .ne-a4-paper {
     box-sizing: border-box !important; 
     background-color: #ffffff !important;
     background-image: none !important;
-    color: #000000 !important; 
+    color: #111111 !important; 
     margin: 0 auto 40px auto !important; 
     padding: 20mm !important; 
     width: 100% !important; 
     max-width: 210mm !important;  
     min-height: 297mm !important; 
     height: auto !important;      
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     font-family: 'Zen Kaku Gothic New', "Helvetica Neue", Arial, sans-serif;
     line-height: 1.8;
   }
@@ -1074,47 +1123,49 @@ graph TD
    
   .ne-a4-paper h1, .ne-a4-paper h2, .ne-a4-paper h3, .ne-a4-paper h4, .ne-a4-paper h5, .ne-a4-paper h6,
   .ne-a4-paper p, .ne-a4-paper li, .ne-a4-paper td, .ne-a4-paper th, .ne-a4-paper strong, .ne-a4-paper em {
-    color: #000000 !important; background: transparent !important;
+    color: #111111 !important; background: transparent !important;
     text-shadow: none !important; box-shadow: none !important; border: none;
   }
 
   .ne-a4-paper li::marker,
   .ne-a4-paper ol,
   .ne-a4-paper ul {
-    color: #000000 !important;
+    color: #111111 !important;
   }
   
    
-  .ne-a4-paper h1 { font-size: 1.8rem !important; border-bottom: 2px solid #000 !important; padding-bottom: 0.5rem; margin-top: 0 !important; margin-bottom: 1.5rem; }
-  .ne-a4-paper h2 { font-size: 1.4rem !important; border-left: 5px solid #000 !important; padding-left: 12px; margin-top: 2rem; margin-bottom: 1rem; }
+  .ne-a4-paper h1 { font-size: 1.8rem !important; border-bottom: 2px solid #222 !important; padding-bottom: 0.5rem; margin-top: 0 !important; margin-bottom: 1.5rem; }
+  .ne-a4-paper h2 { font-size: 1.4rem !important; border-left: 5px solid #222 !important; padding-left: 12px; margin-top: 2rem; margin-bottom: 1rem; }
   .ne-a4-paper h3 { font-size: 1.2rem !important; margin-top: 1.5rem; margin-bottom: 0.5rem; }
   .ne-a4-paper p { margin-bottom: 1rem; text-align: justify; }
   .ne-a4-paper ul, .ne-a4-paper ol { margin-bottom: 1rem; padding-left: 1.5rem; }
   
   .ne-a4-paper table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; font-size: 0.95rem; }
-  .ne-a4-paper th, .ne-a4-paper td { border: 1px solid #333 !important; padding: 8px 12px !important; }
-  .ne-a4-paper th { background-color: #f0f0f0 !important; font-weight: bold !important; text-align: center !important; }
+  .ne-a4-paper th, .ne-a4-paper td { border: 1px solid #ddd !important; padding: 8px 12px !important; }
+  .ne-a4-paper th { background-color: #f7f7f9 !important; font-weight: bold !important; text-align: center !important; }
   
-  .ne-a4-paper pre { background-color: #f5f5f5 !important; padding: 1.2rem !important; border: 1px solid #ccc !important; overflow-x: auto; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;}
-  .ne-a4-paper code { background-color: #f5f5f5 !important; padding: 0.1rem 0.3rem; border-radius: 3px; font-family: 'JetBrains Mono', monospace; color: #d63384 !important; font-size: 0.9em;}
-  .ne-a4-paper pre code { color: #333 !important; } 
-  .ne-a4-paper blockquote { border-left: 4px solid #aaa !important; padding-left: 1rem; color: #555 !important; margin: 1rem 0; background: transparent !important; }
-  .ne-a4-paper img { max-width: 100%; height: auto; display: block; margin: 1.5rem auto; border: 1px solid #ccc !important; }
+  .ne-a4-paper pre { background-color: #f6f8fa !important; padding: 1.2rem !important; border: 1px solid #e1e4e6 !important; overflow-x: auto; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; border-radius: 6px; }
+  .ne-a4-paper code { background-color: #f6f8fa !important; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace; color: #d63384 !important; font-size: 0.88em;}
+  .ne-a4-paper pre code { color: #24292e !important; } 
+  .ne-a4-paper blockquote { border-left: 4px solid #dfe2e5 !important; padding-left: 1rem; color: #6a737d !important; margin: 1rem 0; background: transparent !important; }
+  .ne-a4-paper img { max-width: 100%; height: auto; display: block; margin: 1.5rem auto; border: 1px solid #e1e4e6 !important; border-radius: 4px; }
   
    
   .math-display { display: flex !important; justify-content: center !important; align-items: center !important; width: 100% !important; margin: 1.5rem 0 !important; }
-  .ne-a4-paper mjx-container { color: #000 !important; margin: 0 !important; padding: 0 !important;}
+  .ne-a4-paper mjx-container { color: #111 !important; margin: 0 !important; padding: 0 !important;}
   .ne-a4-paper mjx-container:not([display="true"]) { display: inline-block !important; }
   mjx-assistive-mml { display: none !important; clip: rect(1px, 1px, 1px, 1px) !important; clip-path: inset(50%) !important; height: 1px !important; width: 1px !important; position: absolute !important; overflow: hidden !important; }
 
    
   .ne-footer {
-    height: 30px; background: rgba(0, 0, 0, 0.9);
-    border-top: 1px solid rgba(0, 243, 255, 0.3);
+    height: 32px; background: rgba(8, 5, 20, 0.45);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     display: flex; justify-content: space-between; align-items: center;
-    padding: 0 15px; font-size: 0.65rem; color: var(--neon-cyan);
+    padding: 0 20px; font-size: 0.68rem; color: rgba(255, 255, 255, 0.5);
     font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
     flex-shrink: 0;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
   
   .ne-footer-tools { display: flex; gap: 15px; align-items: center; }
@@ -1138,26 +1189,32 @@ graph TD
    
   .ne-history-panel {
     position: absolute; top: 0; right: -320px; width: 320px; height: 100%;
-    background: rgba(10, 14, 18, 0.98); border-left: 1px solid var(--neon-cyan);
+    background: rgba(15, 12, 28, 0.95); border-left: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 200; transition: right 0.3s cubic-bezier(0.19, 1, 0.22, 1);
     display: flex; flex-direction: column; padding: 15px; font-family: 'JetBrains Mono', monospace;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow: -10px 0 35px rgba(0,0,0,0.5);
   }
   .ne-history-panel.show { right: 0; }
   .ne-hist-item {
-    background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 243, 255, 0.2);
-    padding: 10px; margin-bottom: 10px; cursor: pointer; font-size: 0.75rem;
-    color: var(--neon-cyan); transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px; margin-bottom: 10px; cursor: pointer; font-size: 0.75rem;
+    color: #ffffff; transition: all 0.2s;
+    border-radius: 8px;
+    box-shadow: inset 0.8px 0.8px 0px rgba(255,255,255,0.1);
   }
-  .ne-hist-item:hover { background: rgba(0, 243, 255, 0.1); border-color: var(--neon-cyan); }
-  .ne-hist-time { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: #888; margin-bottom: 4px; }
+  .ne-hist-item:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.2); }
+  .ne-hist-time { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: #8e8e93; margin-bottom: 4px; }
 
    
   .ne-toast {
-    position: absolute; bottom: 40px; right: 20px;
-    background: rgba(0, 243, 255, 0.1); border: 1px solid var(--neon-cyan);
-    color: var(--neon-cyan); padding: 10px 24px; font-family: 'Orbitron', sans-serif;
-    font-size: 0.85rem; font-weight: bold; box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+    position: absolute; bottom: 45px; right: 20px;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff; padding: 12px 24px; font-family: 'Orbitron', sans-serif;
+    font-size: 0.82rem; font-weight: bold; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
     opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 500;
+    border-radius: 8px; backdrop-filter: blur(8px);
   }
   .ne-toast.show { opacity: 1; }
 
@@ -1629,6 +1686,14 @@ var neApp = (function() {
   return { insert, downloadMd, printPDF };
 })();
 </script>
+
+
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <filter id="liquid-refract">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
 
     </section>
     <footer class="pt-8">

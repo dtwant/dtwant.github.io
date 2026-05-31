@@ -1136,8 +1136,26 @@
    
   .cg-wrap {
     max-width: 940px; width: 100%;
-    margin: 0 auto; padding: 2rem;
-    min-height: 100vh; position: relative; z-index: 2;
+    margin: 2rem auto; padding: 2rem;
+    min-height: calc(100vh - 4rem); 
+    position: relative; z-index: 2;
+    background: transparent;
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    border-radius: 12px;
+    box-shadow: 
+      0 30px 70px rgba(0, 0, 0, 0.8), 
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 -3px 18px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+  }
+  .cg-wrap::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(5, 5, 8, 0.85) 60%, rgba(0, 0, 0, 0.95) 100%);
+    backdrop-filter: blur(18px);
+    filter: url(#liquid-refract);
+    z-index: -1;
+    pointer-events: none;
   }
 
    
@@ -1193,11 +1211,14 @@
     margin-bottom: 1.5rem;
   }
   .cg-stat-card {
-    background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 6px; padding: 1rem 0.5rem; text-align: center;
-    transition: border-color 0.3s, background 0.3s;
+    transition: all 0.3s;
+    backdrop-filter: blur(6px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(6px) url(#liquid-refract);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -2px 6px rgba(0, 0, 0, 0.3);
   }
-  .cg-stat-card:hover { background: rgba(0,243,255,0.03); border-color: rgba(0,243,255,0.25); }
+  .cg-stat-card:hover { background: rgba(0, 243, 255, 0.03); border-color: rgba(0, 243, 255, 0.35); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); }
   .cg-stat-val {
     font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 700;
     letter-spacing: 0.02em;
@@ -1297,14 +1318,17 @@
 
   .cg-cell {
     min-height: 95px; padding: 0.4rem;
-    background: rgba(255,255,255,0.015);
-    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 4px;
     cursor: pointer; transition: all 0.2s;
     position: relative; overflow: hidden;
     display: flex; flex-direction: column;
+    backdrop-filter: blur(4px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(4px) url(#liquid-refract);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
   }
-  .cg-cell:hover { background: rgba(0,243,255,0.04); border-color: rgba(0,243,255,0.2); }
+  .cg-cell:hover { background: rgba(0, 243, 255, 0.04); border-color: rgba(0, 243, 255, 0.25); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); }
   .cg-cell.cg-other { opacity: 0.25; pointer-events: none; }
   .cg-cell.cg-today {
     border-color: rgba(188,19,254,0.5);
@@ -1375,8 +1399,11 @@
 
    
   .cg-upcoming {
-    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 6px; padding: 1.25rem; margin-bottom: 2rem;
+    backdrop-filter: blur(6px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(6px) url(#liquid-refract);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -2px 8px rgba(0, 0, 0, 0.3);
   }
   .cg-upcoming-title {
     font-family: 'Orbitron', sans-serif; font-size: 0.85rem; color: #00f3ff;
@@ -1429,14 +1456,19 @@
   .cg-overlay.open { opacity: 1; pointer-events: auto; }
 
   .cg-modal {
-    background: #0c0c10;
-    border: 1px solid rgba(0,243,255,0.25);
+    background: rgba(12, 12, 16, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 8px;
     padding: 2rem;
     width: 92%; max-width: 520px;
-    box-shadow: 0 8px 60px rgba(0,0,0,0.8), 0 0 40px rgba(0,243,255,0.08);
+    box-shadow: 
+      0 20px 60px rgba(0, 0, 0, 0.8), 
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 -4px 16px rgba(0, 0, 0, 0.65);
     max-height: 88vh; overflow-y: auto;
     animation: cg-modal-in 0.3s ease;
+    backdrop-filter: blur(10px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(10px) url(#liquid-refract);
   }
   @keyframes cg-modal-in { from { transform: translateY(20px) scale(0.97); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
 
@@ -1478,12 +1510,15 @@
    
   .cg-ev-form { display: flex; gap: 0.5rem; }
   .cg-input {
-    flex: 1; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
+    flex: 1; background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 4px; color: #e2e8f0; padding: 0.55rem 0.7rem;
     font-family: inherit; font-size: 0.85rem; outline: none;
+    backdrop-filter: blur(8px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 8px rgba(0, 0, 0, 0.3);
     transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .cg-input:focus { border-color: rgba(0,243,255,0.5); box-shadow: 0 0 12px rgba(0,243,255,0.1); }
+  .cg-input:focus { border-color: rgba(0,243,255,0.5); box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), 0 0 12px rgba(0,243,255,0.1); }
   .cg-input::placeholder { color: #444; }
 
   .cg-btn-add {
@@ -1810,6 +1845,13 @@
   .cg-legend-list { display: flex; flex-direction: column; gap: 12px; padding: 10px 0; }
   .cg-legend-item { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 0.95rem; }
 </style>
+
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <filter id="liquid-refract">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
 
 <div class="cg-root">
 <div class="cg-wrap">

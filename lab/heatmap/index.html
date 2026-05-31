@@ -1106,9 +1106,10 @@
     position: fixed; inset: 0; width: 100vw; height: 100vh;
     background-color: #050508;
     background-image:
+      radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.03) 0%, transparent 80%),
       linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 30px 30px;
+    background-size: 100% 100%, 30px 30px, 30px 30px;
     z-index: 99990; overflow-y: auto; overflow-x: hidden; color: #e2e8f0;
   }
   .cy-root::after {
@@ -1144,7 +1145,12 @@
    
   .habit-tabs { display: flex; gap: 0.3rem; flex-wrap: wrap; width: 100%; justify-content: center; margin-bottom: 1rem; }
   .habit-tab {
-    background: rgba(9, 9, 11, 0.9); border: 1px solid #333; color: #94a3b8; padding: 0.4rem 0.8rem;
+    background: rgba(5, 5, 5, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    color: #94a3b8; padding: 0.4rem 0.8rem;
     font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; cursor: pointer; transition: 0.2s;
     text-transform: uppercase; letter-spacing: 0.05em;
   }
@@ -1165,8 +1171,11 @@
 
    
   .heatmap-wrapper {
-    background: rgba(9, 9, 11, 0.85); border: 1px solid var(--heat-base);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(255, 255, 255, 0.05);
+    background: rgba(5, 5, 5, 0.45);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
     padding: 2rem 1rem 1rem 1rem; border-radius: 4px; position: relative; max-width: 1000px;
     width: 100%; overflow-x: auto; overflow-y: hidden; transition: 0.3s;
   }
@@ -1203,7 +1212,14 @@
 
    
   .stats-panel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; width: 100%; max-width: 1000px; margin-top: 1.5rem; }
-  .stat-box { background: rgba(9, 9, 11, 0.9); border: 1px dashed #333; padding: 1rem; text-align: center; }
+  .stat-box {
+    background: rgba(5, 5, 5, 0.4);
+    backdrop-filter: blur(10px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(10px) url(#liquid-refract);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+    padding: 1rem; text-align: center;
+  }
   .stat-label { font-size: 0.65rem; color: #94a3b8; font-weight: bold; }
   .stat-val { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; color: var(--heat-base); text-shadow: 0 0 10px var(--heat-base); transition: 0.3s;}
 
@@ -1214,7 +1230,14 @@
   .week-bar-label { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: #64748b; white-space: nowrap; }
 
    
-  .action-panel { background: rgba(9, 9, 11, 0.85); border: 1px solid #333; padding: 1.2rem; width: 100%; max-width: 1000px; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; }
+  .action-panel {
+    background: rgba(5, 5, 5, 0.45);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+    padding: 1.2rem; width: 100%; max-width: 1000px; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem;
+  }
   .action-title { font-size: 0.75rem; color: #a1a1aa; text-transform: uppercase; border-bottom: 1px dashed #333; padding-bottom: 0.4rem; }
   .controls-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
 
@@ -1232,7 +1255,14 @@
 
    
   .cy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-  .cy-modal-content { background: rgba(9, 9, 11, 0.95); border: 1px solid var(--heat-base); padding: 1.5rem; width: 90%; max-width: 600px; position: relative; font-family: "Zen Kaku Gothic New", sans-serif; box-shadow: 0 0 30px rgba(0,0,0,0.8); overflow-y: auto; max-height: 90vh; }
+  .cy-modal-content {
+    background: rgba(5, 5, 5, 0.75);
+    backdrop-filter: blur(16px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(16px) url(#liquid-refract);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+    padding: 1.5rem; width: 90%; max-width: 600px; position: relative; font-family: "Zen Kaku Gothic New", sans-serif; overflow-y: auto; max-height: 90vh;
+  }
   .cy-modal-title { font-family: 'Orbitron', sans-serif; color: var(--heat-base); font-size: 1.3rem; margin-top: 0; margin-bottom: 1rem; border-bottom: 1px solid #333; padding-bottom: 0.5rem; }
   .cy-modal-body { font-size: 0.85rem; line-height: 1.6; color: #e2e8f0; }
   .cy-modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: #ef4444; font-size: 1.5rem; cursor: pointer; }
@@ -1267,6 +1297,13 @@
 </style>
 
 <div class="cy-root" id="app-root">
+  
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="liquid-refract">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
   <div class="main-content">
     
     <div class="hud-header">

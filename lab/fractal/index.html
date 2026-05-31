@@ -1114,9 +1114,12 @@
    
   .hud-panel {
     position: absolute; top: 1rem; left: 1rem;
-    background: rgba(9, 9, 11, 0.85); border: 1px solid rgba(59, 130, 246, 0.4);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(59, 130, 246, 0.1);
-    backdrop-filter: blur(8px); border-radius: 4px; padding: 1rem; z-index: 20;
+    background: rgba(5, 5, 5, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+    border-radius: 4px; padding: 1rem; z-index: 20;
     min-width: 220px; pointer-events: auto; transition: transform 0.3s;
   }
   .hud-panel.collapsed { transform: translateX(calc(-100% - 2rem)); }
@@ -1142,8 +1145,12 @@
    
   .controls-panel {
     position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%);
-    background: rgba(9, 9, 11, 0.9); border: 1px solid rgba(59, 130, 246, 0.4);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.9); padding: 0.8rem 1.5rem; border-radius: 4px; z-index: 20;
+    background: rgba(5, 5, 5, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+    padding: 0.8rem 1.5rem; border-radius: 4px; z-index: 20;
     display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; justify-content: center;
     transition: transform 0.3s; max-width: calc(100vw - 2rem);
   }
@@ -1152,8 +1159,8 @@
   .control-group { display: flex; flex-direction: column; gap: 0.2rem; min-width: 120px; }
   .cy-select { background: #000; border: 1px dashed #3b82f6; color: #3b82f6; padding: 0.3rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; cursor: pointer; outline: none; }
   
-  input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
-  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 14px; width: 8px; background: #3b82f6; cursor: pointer; box-shadow: 0 0 8px #3b82f6; margin-top: -5px; }
+  input[type=range] { appearance: none; -webkit-appearance: none; width: 100%; background: transparent; }
+  input[type=range]::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; height: 14px; width: 8px; background: #3b82f6; cursor: pointer; box-shadow: 0 0 8px #3b82f6; margin-top: -5px; }
   input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #333; border: 1px solid #111; }
   
   .cy-btn { background: transparent; border: 1px solid #3b82f6; color: #3b82f6; padding: 0.35rem 0.8rem; font-family: 'Orbitron', sans-serif; cursor: pointer; font-size: 0.65rem; font-weight: bold; transition: 0.2s; white-space: nowrap; }
@@ -1179,7 +1186,14 @@
 
    
   .cy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-  .cy-modal-content { background: rgba(9, 9, 11, 0.95); border: 1px solid #3b82f6; padding: 1.5rem; width: 90%; max-width: 600px; position: relative; font-family: "Zen Kaku Gothic New", sans-serif; box-shadow: 0 0 30px rgba(59, 130, 246, 0.2); max-height: 90vh; overflow-y: auto; }
+  .cy-modal-content {
+    background: rgba(5, 5, 5, 0.75);
+    backdrop-filter: blur(16px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(16px) url(#liquid-refract);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+    padding: 1.5rem; width: 90%; max-width: 600px; position: relative; font-family: "Zen Kaku Gothic New", sans-serif; max-height: 90vh; overflow-y: auto;
+  }
   .cy-modal-title { font-family: 'Orbitron', sans-serif; color: #3b82f6; font-size: 1.3rem; margin-top: 0; margin-bottom: 0.8rem; border-bottom: 1px solid #333; padding-bottom: 0.4rem; }
   .cy-modal-body { font-size: 0.85rem; line-height: 1.5; color: #e2e8f0; }
   .cy-modal-body strong { color: #f59e0b; }
@@ -1201,6 +1215,13 @@
 </style>
 
 <div class="cy-root">
+  
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="liquid-refract">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
   <div id="progress-bar-container"><div id="progress-bar"></div></div>
   <canvas id="fractal-canvas"></canvas>
 

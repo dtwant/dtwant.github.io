@@ -1120,20 +1120,23 @@
    
   .cy-panel {
     position: absolute; top: 1.5rem; left: 1.5rem; width: 310px;
-    background: rgba(9, 9, 11, 0.88); border: 1px solid rgba(59, 130, 246, 0.4);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(59, 130, 246, 0.1);
-    backdrop-filter: blur(8px); border-radius: 4px; padding: 1.2rem; z-index: 20;
+    background: linear-gradient(135deg, rgba(15, 20, 25, 0.7), rgba(5, 8, 12, 0.8));
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(16px) url(#liquid-refract) saturate(125%);
+    -webkit-backdrop-filter: blur(16px) saturate(125%);
+    border-radius: 6px; padding: 1.2rem; z-index: 20;
     display: flex; flex-direction: column; gap: 0.7rem;
     max-height: calc(100vh - 3rem); overflow-y: auto;
   }
   .cy-panel::-webkit-scrollbar { width: 4px; }
   .cy-panel::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 2px; }
 
-  .cy-panel::before, .cy-panel::after { content: ''; position: absolute; width: 12px; height: 12px; border: 2px solid #3b82f6; pointer-events: none; }
+  .cy-panel::before, .cy-panel::after { content: ''; position: absolute; width: 12px; height: 12px; border: 2px solid rgba(59, 130, 246, 0.6); pointer-events: none; }
   .cy-panel::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
   .cy-panel::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-  .cy-header-row { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed #333; padding-bottom: 0.4rem;}
+  .cy-header-row { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 0.4rem;}
   .cy-title { font-family: 'Orbitron', sans-serif; color: #3b82f6; font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); margin:0;}
   .cy-desc { font-size: 0.65rem; color: #94a3b8; }
 
@@ -1145,22 +1148,23 @@
   .input-val { color: #10b981; font-weight: bold; }
   
   input[type=text], textarea {
-    background: rgba(0,0,0,0.5); border: 1px solid #333; border-bottom: 2px solid #3b82f6;
-    color: #3b82f6; padding: 0.5rem; font-family: inherit; font-size: 0.75rem;
+    background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15); border-bottom: 2px solid #3b82f6;
+    color: #3b82f6; padding: 0.5rem; font-family: inherit; font-size: 0.75rem; border-radius: 4px;
   }
   input[type=text]:focus, textarea:focus { outline: none; border-color: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
 
   .checkbox-group { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: #a1a1aa; cursor: pointer; }
   .checkbox-group input { cursor: pointer; accent-color: #10b981;}
 
-  input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
-  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 14px; width: 8px; background: #3b82f6; cursor: pointer; box-shadow: 0 0 8px #3b82f6; margin-top: -5px; }
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; height: 14px; width: 8px; background: #3b82f6; cursor: pointer; box-shadow: 0 0 8px #3b82f6; margin-top: -5px; }
   input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #333; border: 1px solid #111; }
   input[type=range]:focus { outline: none; }
   
   .cy-btn {
     background: transparent; border: 1px solid #3b82f6; color: #3b82f6; padding: 0.55rem;
     font-family: inherit; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: all 0.2s; font-size: 0.65rem;
+    border-radius: 4px;
   }
   .cy-btn:hover { background: rgba(59, 130, 246, 0.2); box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); color: #fff; }
   .btn-green { border-color: #10b981; color: #10b981; }
@@ -1168,17 +1172,26 @@
   .btn-pink { border-color: #ec4899; color: #ec4899; }
 
   .preset-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.4rem; }
-  .preset-btn { background: #000; border: 1px solid #333; color: #94a3b8; font-size: 0.6rem; padding: 0.4rem; cursor: pointer; transition: 0.2s; text-align: center; }
+  .preset-btn { background: #000; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-size: 0.6rem; padding: 0.4rem; cursor: pointer; transition: 0.2s; text-align: center; border-radius: 4px; }
   .preset-btn:hover { border-color: #10b981; color: #10b981; }
 
   .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
 
    
-  .cy-select { background: #000; border: 1px dashed #3b82f6; color: #3b82f6; padding: 0.35rem; font-family: inherit; font-size: 0.7rem; cursor: pointer; outline: none; width: 100%; }
+  .cy-select { background: #000; border: 1px dashed rgba(59, 130, 246, 0.5); color: #3b82f6; padding: 0.35rem; font-family: inherit; font-size: 0.7rem; cursor: pointer; outline: none; width: 100%; border-radius: 4px; }
 
    
   .cy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-  .cy-modal-content { background: rgba(9, 9, 11, 0.95); border: 1px solid #3b82f6; padding: 1.5rem; width: 90%; max-width: 600px; position: relative; font-family: "Zen Kaku Gothic New", sans-serif; box-shadow: 0 0 30px rgba(59, 130, 246, 0.2); max-height: 90vh; overflow-y: auto; }
+  .cy-modal-content {
+    background: linear-gradient(135deg, rgba(15, 15, 20, 0.9), rgba(5, 5, 10, 0.95));
+    backdrop-filter: blur(20px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    padding: 1.5rem; width: 90%; max-width: 600px; position: relative;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    max-height: 90vh; overflow-y: auto; border-radius: 8px;
+  }
   .cy-modal-title { font-family: 'Orbitron', sans-serif; color: #3b82f6; font-size: 1.3rem; margin-top: 0; margin-bottom: 0.8rem; border-bottom: 1px solid #333; padding-bottom: 0.4rem; }
   .cy-modal-body { font-size: 0.85rem; line-height: 1.5; color: #e2e8f0; }
   .cy-modal-body ul { padding-left: 1.5rem; }
@@ -1189,14 +1202,24 @@
   .status-text { font-size: 0.65rem; color: #10b981; text-align: center; height: 1.2rem; }
 
   .close-btn { position: absolute; top: 0.4rem; right: 0.4rem; background: none; border: none; color: #64748b; font-size: 1.3rem; cursor: pointer; display: none; }
-  .open-panel-btn { position: absolute; bottom: 1.5rem; left: 1rem; background: rgba(9, 9, 11, 0.9); border: 1px solid #3b82f6; color: #3b82f6; padding: 0.6rem 1rem; font-family: 'Orbitron', sans-serif; font-weight: bold; cursor: pointer; z-index: 15; display: none; box-shadow: 0 0 20px rgba(0,0,0,0.8); font-size: 0.65rem; }
+  .open-panel-btn { position: absolute; bottom: 1.5rem; left: 1rem; background: rgba(9, 9, 11, 0.9); border: 1px solid #3b82f6; color: #3b82f6; padding: 0.6rem 1rem; font-family: 'Orbitron', sans-serif; font-weight: bold; cursor: pointer; z-index: 15; display: none; box-shadow: 0 0 20px rgba(0,0,0,0.8); font-size: 0.65rem; border-radius: 4px; }
 
    
   .zoom-controls {
     position: absolute; bottom: 1.5rem; right: 1.5rem; z-index: 20;
     display: flex; flex-direction: column; gap: 0.3rem;
   }
-  .zoom-btn { background: rgba(9,9,11,0.9); border: 1px solid #3b82f6; color: #3b82f6; width: 36px; height: 36px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; font-family: 'Orbitron', sans-serif; }
+  .zoom-btn {
+    background: rgba(9, 9, 11, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #3b82f6; width: 36px; height: 36px; font-size: 1.2rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: 0.2s; font-family: 'Orbitron', sans-serif; border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  .zoom-btn:hover { background: rgba(59,130,246,0.2); box-shadow: 0 0 10px #3b82f6; }
   .zoom-btn:hover { background: rgba(59,130,246,0.2); box-shadow: 0 0 10px #3b82f6; }
 
   @media (max-width: 768px) {
@@ -1211,6 +1234,13 @@
 </style>
 
 <div class="cy-root">
+  
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="liquid-refract">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015 0.02" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
   <canvas id="lsystem-canvas"></canvas>
   <button class="open-panel-btn" onclick="togglePanel()">[ SYSTEM_MENU ]</button>
 
