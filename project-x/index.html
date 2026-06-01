@@ -1557,8 +1557,9 @@ body {
 </div>
 <script>
 function initializeSystem() {
-  // iOS PWA standalone mode link navigation patch
-  if (("standalone" in window.navigator) && window.navigator.standalone) {
+  // iOS PWA standalone mode link navigation patch (Universal Standalone Check)
+  const isPWA = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+  if (isPWA) {
     document.addEventListener("click", function(e) {
       let element = e.target;
       while (element && element.tagName !== "A") {
