@@ -372,7 +372,7 @@ window.DtSync = (() => {
     
     container.innerHTML = `
       <div class="monitor-header" style="border-bottom-color: rgba(188, 19, 254, 0.3); background: rgba(188, 19, 254, 0.05); color: var(--cmd-purple); text-shadow: 0 0 8px var(--cmd-purple);">
-        <div>[ SYSTEM: CLOUD SYNC SYSTEM ]</div>
+        <div>[ CLOUD SYNC SYSTEM ]</div>
       </div>
       <div style="padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem;">
         <!-- ステータス表示 -->
