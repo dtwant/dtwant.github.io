@@ -1693,25 +1693,24 @@ body { padding: 0 !important; background-color: var(--bg-dark) !important; color
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // iOS PWA standalone mode link navigation patch (Universal Standalone Check)
-  const isPWA = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
-  if (isPWA) {
-    document.addEventListener("click", function(e) {
-      let element = e.target;
-      while (element && element.tagName !== "A") {
-        element = element.parentNode;
-      }
-      if (element && element.tagName === "A" && element.hasAttribute("href")) {
-        const href = element.getAttribute("href");
-        if (!element.hasAttribute("target") || element.getAttribute("target") === "_self") {
-          if (href.indexOf("http") !== 0 || href.indexOf(window.location.host) !== -1) {
-            e.preventDefault();
-            window.location.href = href;
-          }
+  // iOS PWA standalone mode link navigation patch (Force Keep in Window)
+  document.addEventListener("click", function(e) {
+    let element = e.target;
+    while (element && element.tagName !== "A") {
+      element = element.parentNode;
+    }
+    if (element && element.tagName === "A" && element.hasAttribute("href")) {
+      const href = element.getAttribute("href");
+      const target = element.getAttribute("target");
+      if (!target || target === "_self") {
+        // 相対パス、または同一ホスト名を含むリンクは JavaScript で同一ウインドウ遷移を強制
+        if (href.startsWith('/') || href.startsWith('.') || href.indexOf(window.location.host) !== -1) {
+          e.preventDefault();
+          window.location.href = href;
         }
       }
-    }, false);
-  }
+    }
+  }, false);
 
   // テーマのwrapperを非表示にし、背景・ロック・コンテンツをbody直下に移動
   var bg = document.querySelector('.cyber-bg');
