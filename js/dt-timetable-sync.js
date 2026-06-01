@@ -1,12 +1,20 @@
-// DtSync グローバルオブジェクト (軍用暗号化 & 企業グレードKVSスマートマージ同期)
+// DtSync グローバルオブジェクト (jsonbin.io スマートマージ同期)
 window.DtSync = (() => {
   const BACKUP_KEY = 'dt_subject_progress_data_backup';
+  const BLOB_KEY = 'dt_timetable_sync_blob'; // localStorage に保存するBlob IDキー
+  
+  // Chrono Grid と共通の jsonbin.io マスターキーを取得、無ければデフォルト
+  const JB_KEY_DEFAULT = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const jbKey = localStorage.getItem('cg_jb_key') || JB_KEY_DEFAULT;
+  
   let config = {
     storageKey: 'dt_subject_progress_data',
     onSyncComplete: null
   };
   
-  // ログ出力用関数
+  let blobId = localStorage.getItem(BLOB_KEY) || null;
+  
+  // ログ出力
   function log(msg) {
     const logEl = document.getElementById('sync-log');
     if (logEl) {
@@ -17,7 +25,7 @@ window.DtSync = (() => {
     console.log(`[DtSync] ${msg}`);
   }
   
-  // 安全退避バックアップ (シャドウバックアップ)
+  // 安全退避バックアップ
   function makeShadowBackup(data) {
     try {
       if (data) {
@@ -44,86 +52,6 @@ window.DtSync = (() => {
     if (!data) return false;
     if (typeof data !== 'object') return false;
     return true;
-  }
-  
-  // Web Crypto API でキー生成
-  async function deriveKey(password, salt) {
-    const enc = new TextEncoder();
-    const keyMaterial = await crypto.subtle.importKey(
-      "raw",
-      enc.encode(password),
-      { name: "PBKDF2" },
-      false,
-      ["deriveBits", "deriveKey"]
-    );
-    return crypto.subtle.deriveKey(
-      {
-        name: "PBKDF2",
-        salt: salt,
-        iterations: 100000,
-        hash: "SHA-256"
-      },
-      keyMaterial,
-      { name: "AES-GCM", length: 256 },
-      false,
-      ["encrypt", "decrypt"]
-    );
-  }
-
-  // 暗号化 (AES-GCM 256)
-  async function encryptData(text, password) {
-    const enc = new TextEncoder();
-    const salt = crypto.getRandomValues(new Uint8Array(16));
-    const iv = crypto.getRandomValues(new Uint8Array(12));
-    const key = await deriveKey(password, salt);
-    
-    const encrypted = await crypto.subtle.encrypt(
-      { name: "AES-GCM", iv: iv },
-      key,
-      enc.encode(text)
-    );
-    
-    const result = new Uint8Array(salt.byteLength + iv.byteLength + encrypted.byteLength);
-    result.set(salt, 0);
-    result.set(iv, salt.byteLength);
-    result.set(new Uint8Array(encrypted), salt.byteLength + iv.byteLength);
-    
-    return btoa(String.fromCharCode.apply(null, result));
-  }
-
-  // 復号 (AES-GCM 256)
-  async function decryptData(base64Str, password) {
-    const binaryDer = atob(base64Str);
-    const len = binaryDer.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      bytes[i] = binaryDer.charCodeAt(i);
-    }
-    
-    const salt = bytes.slice(0, 16);
-    const iv = bytes.slice(16, 28);
-    const encrypted = bytes.slice(28);
-    
-    const key = await deriveKey(password, salt);
-    const decrypted = await crypto.subtle.decrypt(
-      { name: "AES-GCM", iv: iv },
-      key,
-      encrypted
-    );
-    
-    const dec = new TextDecoder();
-    return dec.decode(decrypted);
-  }
-
-  // 同期キーからバケットIDと暗号化パスワードを抽出
-  // 同期キー形式: DTSYNC-<npoint_id>
-  function parseSyncKey(syncKey) {
-    const clean = syncKey.trim().toUpperCase();
-    if (clean.startsWith('DTSYNC-')) {
-      const bucketId = clean.replace('DTSYNC-', '').toLowerCase();
-      return { bucketId: bucketId, password: clean };
-    }
-    return { bucketId: clean.toLowerCase(), password: clean };
   }
 
   // クラウドとのデータ競合解決 (スマートマージ)
@@ -160,21 +88,20 @@ window.DtSync = (() => {
     return merged;
   }
 
-  // クラウドに保存する (npoint.io 仕様: JSONラップして PUT)
-  async function uploadToCloud(data, syncKey) {
-    if (!syncKey) return;
+  // jsonbin.io のエンドポイント取得
+  const JB_CREATE = 'https://api.jsonbin.io/v3/b';
+  const binUrl = () => `https://api.jsonbin.io/v3/b/${blobId}/latest`;
+  const binPut = () => `https://api.jsonbin.io/v3/b/${blobId}`;
+  const JB_HDR = () => ({ 'X-Master-Key': jbKey, 'Content-Type': 'application/json' });
+
+  // クラウドに保存する
+  async function uploadToCloud(data) {
+    if (!blobId) return;
     try {
-      const { bucketId, password } = parseSyncKey(syncKey);
-      const url = `https://api.npoint.io/${bucketId}`;
-      const text = JSON.stringify(data);
-      const encrypted = await encryptData(text, password);
-      
-      const payload = { value: encrypted };
-      
-      const response = await fetch(url, {
+      const response = await fetch(binPut(), {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        headers: JB_HDR(),
+        body: JSON.stringify(data)
       });
       if (!response.ok) {
         throw new Error(`HTTP error ${response.status}`);
@@ -186,70 +113,53 @@ window.DtSync = (() => {
     }
   }
 
-  // クラウドから読み込む (npoint.io 仕様: JSON取得し value 復号)
-  async function downloadFromCloud(syncKey) {
-    if (!syncKey) return null;
+  // クラウドから読み込む
+  async function downloadFromCloud() {
+    if (!blobId) return null;
     try {
-      const { bucketId, password } = parseSyncKey(syncKey);
-      const url = `https://api.npoint.io/${bucketId}`;
-      const response = await fetch(url);
+      const response = await fetch(binUrl(), {
+        headers: { 'X-Master-Key': jbKey },
+        cache: 'no-store'
+      });
       if (response.status === 404) {
-        log("NO CLOUD ARCHIVE FOUND. INITIAL UPLOAD PENDING.");
+        log("NO CLOUD ARCHIVE FOUND.");
         return null;
       }
       if (!response.ok) {
         throw new Error(`HTTP error ${response.status}`);
       }
       const json = await response.json();
-      if (!json || !json.value) return null;
-      
-      const decrypted = await decryptData(json.value, password);
-      return JSON.parse(decrypted);
+      return json.record || json;
     } catch(e) {
       log(`DOWNLOAD FAILED: ${e.message}`);
       throw e;
     }
   }
 
-  // 初期保管庫の新規生成 (POST)
-  async function createRemoteVault(data, password) {
+  // 新規 Blob 作成 (POST)
+  async function createRemoteVault(initialData) {
     try {
-      const text = JSON.stringify(data);
-      const encrypted = await encryptData(text, password);
-      const payload = { value: encrypted };
-      
-      const response = await fetch('https://api.npoint.io/', {
+      const response = await fetch(JB_CREATE, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        headers: { ...JB_HDR(), 'X-Bin-Name': 'dt_subject_progress' },
+        body: JSON.stringify(initialData)
       });
       if (!response.ok) {
         throw new Error(`Server returned status ${response.status}`);
       }
       const resJson = await response.json();
-      return resJson.id; // 生成された一意の保管庫ID
+      return resJson.metadata.id; // 生成された一意の ID
     } catch(e) {
-      log(`VAULT CREATION FAILED: ${e.message}`);
+      log(`BLOB CREATION FAILED: ${e.message}`);
       throw e;
     }
   }
 
-  // 同期キーの保存
-  function saveSyncKey(key) {
-    localStorage.setItem('dt_sync_key', key);
-  }
-
-  // 同期キーの取得
-  function getSyncKey() {
-    return localStorage.getItem('dt_sync_key');
-  }
-
   // 同期処理の中核
   async function syncProcess() {
-    const syncKey = getSyncKey();
-    if (!syncKey) return;
+    if (!blobId) return;
     
-    log("ESTABLISHING ENCRYPTED CONNECTION...");
+    log("CONNECTING TO CLOUD ARCHIVE...");
     try {
       let localData = {};
       try {
@@ -258,12 +168,12 @@ window.DtSync = (() => {
         localData = {};
       }
       
-      const remoteData = await downloadFromCloud(syncKey);
+      const remoteData = await downloadFromCloud();
       
       let mergedData = localData;
       if (remoteData) {
         mergedData = mergeData(localData, remoteData);
-        log("DATA DECRYPTED AND MERGED SUCCESSFULLY.");
+        log("DATA MERGED SUCCESSFULLY.");
       } else {
         log("NO REMOTE DATA. INITIALIZING CLOUD VAULT...");
       }
@@ -284,7 +194,7 @@ window.DtSync = (() => {
       
       localStorage.setItem(config.storageKey, JSON.stringify(mergedData));
       
-      await uploadToCloud(mergedData, syncKey);
+      await uploadToCloud(mergedData);
       
       if (config.onSyncComplete) {
         config.onSyncComplete(mergedData);
@@ -321,7 +231,6 @@ window.DtSync = (() => {
 
   // UI状態の更新
   function updateUI() {
-    const syncKey = getSyncKey();
     const statusEl = document.getElementById('sync-status');
     const cryptoEl = document.getElementById('sync-crypto');
     const initView = document.getElementById('sync-init-view');
@@ -330,20 +239,20 @@ window.DtSync = (() => {
     const keyDisplay = document.getElementById('sync-key-display');
     const logEl = document.getElementById('sync-log');
 
-    if (syncKey) {
+    if (blobId) {
       if (statusEl) {
         statusEl.textContent = 'ONLINE';
         statusEl.style.color = 'var(--cmd-green)';
         statusEl.style.textShadow = '0 0 8px var(--cmd-green)';
       }
       if (cryptoEl) {
-        cryptoEl.textContent = 'SHIELDED (AES)';
+        cryptoEl.textContent = 'SHIELDED (JSONBIN)';
         cryptoEl.style.color = 'var(--cmd-purple)';
       }
       if (initView) initView.style.display = 'none';
       if (inputView) inputView.style.display = 'none';
       if (activeView) activeView.style.display = 'block';
-      if (keyDisplay) keyDisplay.value = syncKey;
+      if (keyDisplay) keyDisplay.value = blobId;
       if (logEl) logEl.style.display = 'block';
     } else {
       if (statusEl) {
@@ -389,19 +298,19 @@ window.DtSync = (() => {
           </p>
           <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
             <button class="att-btn delayed-status" id="btn-sync-generate" style="flex: 1; min-width: 150px; font-size: 0.72rem; padding: 0.6rem 1rem; border-color: var(--cmd-amber); color: var(--cmd-amber);">
-              GENERATE NEW SYNC KEY
+              CREATE NEW BLOB
             </button>
             <button class="att-btn exempt-status" id="btn-sync-link" style="flex: 1; min-width: 150px; font-size: 0.72rem; padding: 0.6rem 1rem; border-color: var(--cmd-purple); color: var(--cmd-purple);">
-              LINK EXISTING TERMINAL
+              LINK EXISTING BLOB
             </button>
           </div>
         </div>
 
         <!-- キー入力エリア -->
         <div id="sync-input-view" style="display: none;">
-          <label style="font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: var(--cmd-purple); margin-bottom: 0.4rem; display: block;">ENTER EXISTING SYNC KEY:</label>
+          <label style="font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: var(--cmd-purple); margin-bottom: 0.4rem; display: block;">ENTER EXISTING BLOB ID:</label>
           <div style="display: flex; gap: 0.6rem;">
-            <input type="text" id="sync-key-input" class="cyber-memo-input" placeholder="DTSYNC-XXXX-XXXX-XXXX-XXXX" style="border-color: var(--cmd-purple); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">
+            <input type="text" id="sync-key-input" class="cyber-memo-input" placeholder="Enter Bin ID" style="border-color: var(--cmd-purple); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">
             <button class="att-btn active-status" id="btn-sync-connect" style="flex: 0; min-width: 80px; font-size: 0.72rem; padding: 0.4rem 0.8rem; border-color: var(--cmd-green); color: var(--cmd-green);">
               CONNECT
             </button>
@@ -414,7 +323,7 @@ window.DtSync = (() => {
         <!-- 同期有効化時の表示 -->
         <div id="sync-active-view" style="display: none;">
           <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(188, 19, 254, 0.2); padding: 0.8rem; margin-bottom: 1rem; position: relative;">
-            <div style="font-family: 'Orbitron', sans-serif; font-size: 0.62rem; color: var(--cmd-purple); margin-bottom: 0.4rem;">TERMINAL SYNC KEY:</div>
+            <div style="font-family: 'Orbitron', sans-serif; font-size: 0.62rem; color: var(--cmd-purple); margin-bottom: 0.4rem;">TERMINAL BLOB ID:</div>
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.8rem;">
               <input type="password" id="sync-key-display" readonly style="background: none; border: none; color: var(--cmd-amber); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: bold; width: 65%; outline: none;" value="">
               <div style="display: flex; gap: 0.4rem;">
@@ -445,9 +354,9 @@ window.DtSync = (() => {
           <div style="font-family: 'Orbitron', sans-serif; font-size: 0.62rem; color: var(--cmd-amber); margin-bottom: 0.4rem;">RAW DATA EXPORT:</div>
           <textarea id="sync-backup-text" readonly style="width: 100%; height: 80px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: var(--cmd-green); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.4rem; resize: none; margin-bottom: 0.5rem;"></textarea>
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <button id="btn-sync-backup-copy" style="background: none; border: 1px solid var(--cmd-amber); color: var(--cmd-amber); font-family: 'Orbitron', sans-serif; font-size: 0.6rem; padding: 0.2rem 0.5rem; cursor: pointer;">COPY DATA</button>
-            <button id="btn-sync-backup-import-toggle" style="background: none; border: none; color: var(--cmd-purple); font-family: 'Orbitron', sans-serif; font-size: 0.6rem; cursor: pointer;">IMPORT MODE</button>
-            <button id="btn-sync-backup-close" style="background: none; border: none; color: #888; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; cursor: pointer;">CLOSE</button>
+            <button id="btn-sync-backup-copy" style="background: none; border: 1px solid var(--cmd-amber); color: var(--cmd-amber); font-family: 'Orbitron', sans-serif; font-size: 0.65rem; cursor: pointer;">COPY DATA</button>
+            <button id="btn-sync-backup-import-toggle" style="background: none; border: none; color: var(--cmd-purple); font-family: 'Orbitron', sans-serif; font-size: 0.65rem; cursor: pointer;">IMPORT MODE</button>
+            <button id="btn-sync-backup-close" style="background: none; border: none; color: #888; font-family: 'Orbitron', sans-serif; font-size: 0.65rem; cursor: pointer;">CLOSE</button>
           </div>
         </div>
 
@@ -455,8 +364,8 @@ window.DtSync = (() => {
           <div style="font-family: 'Orbitron', sans-serif; font-size: 0.62rem; color: var(--cmd-purple); margin-bottom: 0.4rem;">PASTE BACKUP DATA TO IMPORT:</div>
           <textarea id="sync-import-text" style="width: 100%; height: 80px; background: rgba(0,0,0,0.5); border: 1px solid rgba(188,19,254,0.3); color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.4rem; resize: none; margin-bottom: 0.5rem;"></textarea>
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <button id="btn-sync-import-run" style="background: none; border: 1px solid var(--cmd-purple); color: var(--cmd-purple); font-family: 'Orbitron', sans-serif; font-size: 0.6rem; padding: 0.2rem 0.5rem; cursor: pointer; font-weight: bold;">APPLY IMPORT</button>
-            <button id="btn-sync-import-close" style="background: none; border: none; color: #888; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; cursor: pointer;">CANCEL</button>
+            <button id="btn-sync-import-run" style="background: none; border: solid 1px var(--cmd-purple); color: var(--cmd-purple); font-family: 'Orbitron', sans-serif; font-size: 0.65rem; padding: 0.2rem 0.5rem; cursor: pointer; font-weight: bold;">APPLY IMPORT</button>
+            <button id="btn-sync-import-close" style="background: none; border: none; color: #888; font-family: 'Orbitron', sans-serif; font-size: 0.65rem; cursor: pointer;">CANCEL</button>
           </div>
         </div>
 
@@ -467,9 +376,9 @@ window.DtSync = (() => {
 
     // イベントバインディング
     document.getElementById('btn-sync-generate').addEventListener('click', async () => {
-      if (confirm("同期キーを生成し、クラウド同期を開始しますか？\n(既存のデータは安全に保護されます)")) {
+      if (confirm("同期用保管庫（Blob）を作成し、クラウド同期を開始しますか？")) {
         try {
-          log("CREATING SERVER VAULT...");
+          log("CREATING CLOUD BLOB...");
           
           let localData = {};
           try {
@@ -478,20 +387,12 @@ window.DtSync = (() => {
             localData = {};
           }
           
-          // 暫定パスワード
-          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-          let tempPassword = 'DTSYNC-';
-          for (let i = 0; i < 12; i++) {
-            tempPassword += chars.charAt(Math.floor(Math.random() * chars.length));
-          }
+          const newId = await createRemoteVault(localData);
+          blobId = newId;
+          localStorage.setItem(BLOB_KEY, blobId);
           
-          // api.npoint.io で保管庫を新規登録し、IDを取得 (CORS全開放、Netlifyによる企業グレードの超安定SaaS)
-          const vaultId = await createRemoteVault(localData, tempPassword);
-          const finalKey = `DTSYNC-${vaultId.toUpperCase()}`;
-          
-          saveSyncKey(finalKey);
           updateUI();
-          log(`NEW SYNC KEY GENERATED: ${finalKey}`);
+          log(`NEW BLOB CREATED: ${blobId}`);
           await syncProcess();
           startAutoSync();
         } catch(e) {
@@ -511,13 +412,14 @@ window.DtSync = (() => {
     });
 
     document.getElementById('btn-sync-connect').addEventListener('click', async () => {
-      const inputVal = document.getElementById('sync-key-input').value.trim().toUpperCase();
-      if (!inputVal.startsWith('DTSYNC-') || inputVal.split('-').length !== 2) {
-        alert("無効な同期キー形式です。");
+      const inputVal = document.getElementById('sync-key-input').value.trim();
+      if (!inputVal) {
+        alert("Blob IDを入力してください。");
         return;
       }
-      if (confirm("この同期キーでクラウドに接続し、同期しますか？")) {
-        saveSyncKey(inputVal);
+      if (confirm("このBlob IDでクラウドに接続し、同期しますか？")) {
+        blobId = inputVal;
+        localStorage.setItem(BLOB_KEY, blobId);
         updateUI();
         log(`CONNECTED.`);
         await syncProcess();
@@ -552,7 +454,8 @@ window.DtSync = (() => {
     document.getElementById('btn-sync-disconnect').addEventListener('click', () => {
       if (confirm("同期を解除しますか？")) {
         stopAutoSync();
-        localStorage.removeItem('dt_sync_key');
+        localStorage.removeItem(BLOB_KEY);
+        blobId = null;
         updateUI();
         log("SYNC TERMINATED.");
       }
@@ -613,6 +516,25 @@ window.DtSync = (() => {
     });
   }
 
+  // 同期処理へのデバウンス (Chrono Grid に合わせ、タイピング時は 1秒間静止後に集約アップロード)
+  let uploadDebounceTimer = null;
+  function triggerUpload(data) {
+    if (!blobId) return;
+    
+    log("PENDING UPLOAD (DEBOUNCING)...");
+    
+    if (uploadDebounceTimer) clearTimeout(uploadDebounceTimer);
+    
+    uploadDebounceTimer = setTimeout(async () => {
+      try {
+        log("EXECUTING DEBOUNCED UPLOAD...");
+        await uploadToCloud(data);
+      } catch(e) {
+        log(`DEBOUNCED UPLOAD FAILED: ${e.message}`);
+      }
+    }, 1000);
+  }
+
   // 初期化関数
   function init(options) {
     if (options) {
@@ -623,9 +545,8 @@ window.DtSync = (() => {
     injectSyncPanelHTML();
     updateUI();
     
-    const syncKey = getSyncKey();
-    if (syncKey) {
-      log(`ESTABLISHED CONNECTION WITH NODE ID: ${syncKey.substring(0, 15)}...`);
+    if (blobId) {
+      log(`ESTABLISHED CONNECTION WITH BLOB ID: ${blobId.substring(0, 15)}...`);
       syncProcess();
       startAutoSync();
     }
@@ -633,11 +554,6 @@ window.DtSync = (() => {
 
   return {
     init: init,
-    triggerUpload: (data) => {
-      const syncKey = getSyncKey();
-      if (syncKey) {
-        uploadToCloud(data, syncKey);
-      }
-    }
+    triggerUpload: triggerUpload
   };
 })();
