@@ -1093,13 +1093,8 @@
     position: fixed; top: 0; left: 0;
     width: 100vw; height: 100vh;
     margin: 0; padding: 0;
-    background-color: #050508;
-    background-image:
-      linear-gradient(rgba(0,243,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,243,255,0.04) 1px, transparent 1px),
-      radial-gradient(ellipse at 20% 20%, rgba(188,19,254,0.08), transparent 55%),
-      radial-gradient(ellipse at 80% 80%, rgba(0,243,255,0.08), transparent 55%);
-    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
+     
+    background: transparent;
     color: #e2e8f0;
     z-index: 999990;
     overflow-y: auto; overflow-x: hidden;
@@ -1108,11 +1103,55 @@
   .cg-root *, .cg-root *::before, .cg-root *::after { box-sizing: border-box; }
 
    
-  .cg-root::after {
-    content: "";
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle at center, transparent 55%, rgba(0,0,0,0.55) 100%);
-    pointer-events: none; z-index: 10;
+  .cg-cyber-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 0;
+    overflow: hidden;
+    background: #050508;
+  }
+  .cg-cyber-bg-image {
+    position: absolute;
+    inset: -5%;
+    width: 110%; height: 110%;
+    background-image: url('/img/cyber_terms_bg.png');  
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.65) contrast(1.1) saturate(1.3);  
+  }
+  .cg-cyber-bg-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.7) 100%);
+  }
+  .cg-cyber-grid {
+    position: fixed;
+    top: -50%; left: -50%;
+    width: 200vw; height: 200vh;
+    background:
+      linear-gradient(transparent 0%, rgba(0, 243, 255, 0.05) 1%, transparent 2%),
+      linear-gradient(90deg, transparent 0%, rgba(188, 19, 254, 0.05) 1%, transparent 2%);
+    background-size: 40px 40px;
+    transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px);
+    animation: cg-grid-move 12s linear infinite;
+    z-index: 1;
+    pointer-events: none;
+  }
+  @keyframes cg-grid-move {
+    0% { transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px); }
+    100% { transform: perspective(300px) rotateX(60deg) translateY(40px) translateZ(-100px); }
+  }
+  .cg-scanline {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+    background-size: 100% 3px;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.08;
+    mix-blend-mode: overlay;
   }
 
    
@@ -1139,23 +1178,19 @@
     margin: 2rem auto; padding: 2rem;
     min-height: calc(100vh - 4rem); 
     position: relative; z-index: 2;
-    background: transparent;
-    border: 1px solid rgba(0, 243, 255, 0.2);
+     
+    background: rgba(8, 8, 12, 0.88);
+    border: 1px solid rgba(0, 243, 255, 0.25);
     border-radius: 12px;
     box-shadow: 
-      0 30px 70px rgba(0, 0, 0, 0.8), 
-      inset 0 1px 0 rgba(255, 255, 255, 0.15),
-      inset 0 -3px 18px rgba(0, 0, 0, 0.7);
+      0 30px 70px rgba(0, 0, 0, 0.85), 
+      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.15),
+      inset 0 -3px 18px rgba(0, 0, 0, 0.75);
     overflow: hidden;
   }
   .cg-wrap::before {
-    content: "";
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(5, 5, 8, 0.85) 60%, rgba(0, 0, 0, 0.95) 100%);
-    backdrop-filter: blur(18px);
-    filter: url(#liquid-refract);
-    z-index: -1;
-    pointer-events: none;
+     
+    display: none;
   }
 
    
@@ -1211,12 +1246,11 @@
     margin-bottom: 1.5rem;
   }
   .cg-stat-card {
-    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 6px; padding: 1rem 0.5rem; text-align: center;
     transition: all 0.3s;
-    backdrop-filter: blur(6px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(6px) url(#liquid-refract);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -2px 6px rgba(0, 0, 0, 0.3);
+     
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), inset 0 -2px 6px rgba(0, 0, 0, 0.4);
   }
   .cg-stat-card:hover { background: rgba(0, 243, 255, 0.03); border-color: rgba(0, 243, 255, 0.35); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); }
   .cg-stat-val {
@@ -1318,15 +1352,14 @@
 
   .cg-cell {
     min-height: 95px; padding: 0.4rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 4px;
     cursor: pointer; transition: all 0.2s;
     position: relative; overflow: hidden;
     display: flex; flex-direction: column;
-    backdrop-filter: blur(4px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(4px) url(#liquid-refract);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+     
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
   }
   .cg-cell:hover { background: rgba(0, 243, 255, 0.04); border-color: rgba(0, 243, 255, 0.25); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); }
   .cg-cell.cg-other { opacity: 0.25; pointer-events: none; }
@@ -1399,11 +1432,9 @@
 
    
   .cg-upcoming {
-    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 6px; padding: 1.25rem; margin-bottom: 2rem;
-    backdrop-filter: blur(6px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(6px) url(#liquid-refract);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -2px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), inset 0 -2px 8px rgba(0, 0, 0, 0.4);
   }
   .cg-upcoming-title {
     font-family: 'Orbitron', sans-serif; font-size: 0.85rem; color: #00f3ff;
@@ -1448,7 +1479,7 @@
    
   .cg-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(3,3,8,0.85); backdrop-filter: blur(8px);
+    background: rgba(3,3,8,0.96);  
     z-index: 1000001;
     display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none; transition: opacity 0.3s;
@@ -1456,19 +1487,17 @@
   .cg-overlay.open { opacity: 1; pointer-events: auto; }
 
   .cg-modal {
-    background: rgba(12, 12, 16, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(12, 12, 16, 0.98);  
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 8px;
     padding: 2rem;
     width: 92%; max-width: 520px;
     box-shadow: 
-      0 20px 60px rgba(0, 0, 0, 0.8), 
+      0 20px 60px rgba(0, 0, 0, 0.85), 
       inset 0 1px 0 rgba(255, 255, 255, 0.15),
       inset 0 -4px 16px rgba(0, 0, 0, 0.65);
     max-height: 88vh; overflow-y: auto;
     animation: cg-modal-in 0.3s ease;
-    backdrop-filter: blur(10px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(10px) url(#liquid-refract);
   }
   @keyframes cg-modal-in { from { transform: translateY(20px) scale(0.97); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
 
@@ -1510,12 +1539,10 @@
    
   .cg-ev-form { display: flex; gap: 0.5rem; }
   .cg-input {
-    flex: 1; background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.08);
+    flex: 1; background: rgba(0, 0, 0, 0.65); border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 4px; color: #e2e8f0; padding: 0.55rem 0.7rem;
     font-family: inherit; font-size: 0.85rem; outline: none;
-    backdrop-filter: blur(8px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
-    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 8px rgba(0, 0, 0, 0.4);
     transition: border-color 0.2s, box-shadow 0.2s;
   }
   .cg-input:focus { border-color: rgba(0,243,255,0.5); box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), 0 0 12px rgba(0,243,255,0.1); }
@@ -1854,7 +1881,15 @@
 </svg>
 
 <div class="cg-root">
-<div class="cg-wrap">
+  
+  <div class="cg-cyber-bg">
+    <div class="cg-cyber-bg-image"></div>
+    <div class="cg-cyber-bg-vignette"></div>
+  </div>
+  <div class="cg-cyber-grid"></div>
+  <div class="cg-scanline"></div>
+
+  <div class="cg-wrap">
 
   <div class="cg-header">
     <div style="display: flex; align-items: center; gap: 0.75rem;">
