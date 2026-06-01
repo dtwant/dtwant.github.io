@@ -91,7 +91,7 @@ window.DtSync = (() => {
     return btoa(String.fromCharCode.apply(null, result));
   }
 
-  // 復号 (AES-GCM 256)
+  // 復言 (AES-GCM 256)
   async function decryptData(base64Str, password) {
     const binaryDer = atob(base64Str);
     const len = binaryDer.length;
@@ -116,7 +116,6 @@ window.DtSync = (() => {
   }
 
   // 同期キーからバケットIDと暗号化パスワードを抽出
-  // 同期キーの形式: DTSYNC-<ランダム文字列>
   function parseSyncKey(syncKey) {
     const clean = syncKey.trim().toUpperCase();
     if (clean.startsWith('DTSYNC-')) {
@@ -160,7 +159,7 @@ window.DtSync = (() => {
     return merged;
   }
 
-  // keyvalue.xyz のエンドポイント取得 (事前バケット生成不要、CORS全開放)
+  // keyvalue.xyz のエンドポイント取得
   function getEndpoint(bucketId) {
     return `https://keyvalue.xyz/v1/dt_sync_${bucketId}`;
   }
@@ -182,7 +181,7 @@ window.DtSync = (() => {
       if (!response.ok) {
         throw new Error(`HTTP error ${response.status}`);
       }
-      log("UPLOAD COMPLETED IN SHIELDED STATE.");
+      log("UPLOAD COMPLETED.");
     } catch(e) {
       log(`UPLOAD FAILED: ${e.message}`);
       throw e;
@@ -231,7 +230,6 @@ window.DtSync = (() => {
     
     log("ESTABLISHING ENCRYPTED CONNECTION...");
     try {
-      // 1. ローカルデータ読み込み
       let localData = {};
       try {
         localData = JSON.parse(localStorage.getItem(config.storageKey)) || {};
@@ -239,10 +237,8 @@ window.DtSync = (() => {
         localData = {};
       }
       
-      // 2. クラウドデータ取得
       const remoteData = await downloadFromCloud(syncKey);
       
-      // 3. マージ処理
       let mergedData = localData;
       if (remoteData) {
         mergedData = mergeData(localData, remoteData);
@@ -251,7 +247,6 @@ window.DtSync = (() => {
         log("NO REMOTE DATA. INITIALIZING CLOUD VAULT...");
       }
       
-      // コマごとの更新日付が無い既存データにタイムスタンプを付与（同期保護）
       Object.keys(mergedData).forEach(subject => {
         Object.keys(mergedData[subject]).forEach(idx => {
           if (!mergedData[subject][idx].updated_at) {
@@ -260,36 +255,30 @@ window.DtSync = (() => {
         });
       });
       
-      // 4. 三重保護：マージデータの正当性チェック
       if (!validateData(mergedData)) {
-        throw new Error("Merged data validation failed. Aborting write to storage.");
+        throw new Error("Merged data validation failed.");
       }
       
-      // 安全退避（シャドウバックアップ）
       makeShadowBackup(localData);
       
-      // 5. ローカルストレージに書き込み
       localStorage.setItem(config.storageKey, JSON.stringify(mergedData));
       
-      // 6. クラウドに最新マージデータを再アップロード
       await uploadToCloud(mergedData, syncKey);
       
-      // UI更新通知
       if (config.onSyncComplete) {
         config.onSyncComplete(mergedData);
       }
       
       updateUI();
-      log("SYNC SUCCESSFUL. ALL TERMINALS CONVERGED.");
+      log("SYNC SUCCESSFUL.");
       
-      // 最終同期時刻を記録
       const now = new Date();
       const timeStr = now.getFullYear() + '.' + String(now.getMonth()+1).padStart(2,'0') + '.' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
       const timeEl = document.getElementById('sync-time');
       if (timeEl) timeEl.textContent = timeStr;
     } catch(e) {
       log(`SYNC FAILED: ${e.message}`);
-      alert(`同期に失敗しました: ${e.message}\n既存データはローカルに安全に保護されています。`);
+      alert(`同期失敗: ${e.message}`);
     }
   }
 
@@ -374,9 +363,8 @@ window.DtSync = (() => {
         
         <!-- 未同期時の表示 -->
         <div id="sync-init-view" style="display: block;">
-          <p style="font-size: 0.72rem; color: rgba(200, 220, 200, 0.6); line-height: 1.5; margin: 0 0 1rem 0;">
-            複数端末・ブラウザ間でのデータ同期のための暗号化通信プロトコルを確立します。<br>
-            既存の出欠データは安全に保持され、生成される同期キーで保護されます。
+          <p style="font-size: 0.72rem; color: rgba(200, 220, 200, 0.4); font-family: 'JetBrains Mono', monospace; margin: 0 0 1rem 0;">
+            > CLOUD SYNC MODULE: INACTIVE_
           </p>
           <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
             <button class="att-btn delayed-status" id="btn-sync-generate" style="flex: 1; min-width: 150px; font-size: 0.72rem; padding: 0.6rem 1rem; border-color: var(--cmd-amber); color: var(--cmd-amber);">
@@ -405,7 +393,7 @@ window.DtSync = (() => {
         <!-- 同期有効化時の表示 -->
         <div id="sync-active-view" style="display: none;">
           <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(188, 19, 254, 0.2); padding: 0.8rem; margin-bottom: 1rem; position: relative;">
-            <div style="font-family: 'Orbitron', sans-serif; font-size: 0.62rem; color: var(--cmd-purple); margin-bottom: 0.4rem;">TERMINAL SYNC KEY (KEEP SECRET):</div>
+            <div style="font-family: 'Orbitron', sans-serif; font-size: 0.62rem; color: var(--cmd-purple); margin-bottom: 0.4rem;">TERMINAL SYNC KEY:</div>
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.8rem;">
               <input type="password" id="sync-key-display" readonly style="background: none; border: none; color: var(--cmd-amber); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: bold; width: 65%; outline: none;" value="">
               <div style="display: flex; gap: 0.4rem;">
@@ -433,7 +421,7 @@ window.DtSync = (() => {
         </div>
 
         <div id="sync-backup-view" style="display: none; background: rgba(0, 0, 0, 0.7); border: 1px solid rgba(255,255,255,0.15); padding: 0.8rem;">
-          <div style="font-family: 'Orbitron', sans-serif; font-size: 0.62rem; color: var(--cmd-amber); margin-bottom: 0.4rem;">RAW DATA EXPORT (COPY TO SAFE PLACE):</div>
+          <div style="font-family: 'Orbitron', sans-serif; font-size: 0.62rem; color: var(--cmd-amber); margin-bottom: 0.4rem;">RAW DATA EXPORT:</div>
           <textarea id="sync-backup-text" readonly style="width: 100%; height: 80px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: var(--cmd-green); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.4rem; resize: none; margin-bottom: 0.5rem;"></textarea>
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <button id="btn-sync-backup-copy" style="background: none; border: 1px solid var(--cmd-amber); color: var(--cmd-amber); font-family: 'Orbitron', sans-serif; font-size: 0.6rem; padding: 0.2rem 0.5rem; cursor: pointer;">COPY DATA</button>
@@ -458,10 +446,8 @@ window.DtSync = (() => {
 
     // イベントバインディング
     document.getElementById('btn-sync-generate').addEventListener('click', async () => {
-      if (confirm("サーバー上に新規に同期用保管庫を作成し、この端末のデータでクラウド同期を開始しますか？")) {
+      if (confirm("同期キーを生成し、クラウド同期を開始しますか？\n(既存のデータは安全に保護されます)")) {
         try {
-          log("CREATING SERVER VAULT VIA LOCAL KEYGEN...");
-          // ローカルで即座にランダムな16文字のキーを生成 (外部通信なしで0秒で完了！)
           const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
           let rawBucketId = '';
           for (let i = 0; i < 16; i++) {
@@ -474,7 +460,7 @@ window.DtSync = (() => {
           await syncProcess();
           startAutoSync();
         } catch(e) {
-          alert("同期用保管庫の作成に失敗しました。\n" + e.message);
+          alert(`同期失敗: ${e.message}`);
         }
       }
     });
@@ -492,13 +478,13 @@ window.DtSync = (() => {
     document.getElementById('btn-sync-connect').addEventListener('click', async () => {
       const inputVal = document.getElementById('sync-key-input').value.trim().toUpperCase();
       if (!inputVal.startsWith('DTSYNC-') || inputVal.split('-').length !== 2) {
-        alert("無効な同期キー形式です。「DTSYNC-バケットID」の形式で入力してください。");
+        alert("無効な同期キー形式です。");
         return;
       }
-      if (confirm("この同期キーでクラウドと接続し、データをマージして同期しますか？\n(既存データは安全に保護・統合されます)")) {
+      if (confirm("この同期キーでクラウドに接続し、同期しますか？")) {
         saveSyncKey(inputVal);
         updateUI();
-        log(`CONNECTED TO CLOUD SYNC CHANNEL.`);
+        log(`CONNECTED.`);
         await syncProcess();
         startAutoSync();
       }
@@ -518,7 +504,7 @@ window.DtSync = (() => {
     document.getElementById('btn-sync-copy').addEventListener('click', () => {
       const display = document.getElementById('sync-key-display');
       navigator.clipboard.writeText(display.value).then(() => {
-        alert("同期キーをクリップボードにコピーしました。他の端末に入力してください。");
+        alert("コピーしました。");
       }).catch(err => {
         log(`COPY FAILED: ${err.message}`);
       });
@@ -529,11 +515,11 @@ window.DtSync = (() => {
     });
 
     document.getElementById('btn-sync-disconnect').addEventListener('click', () => {
-      if (confirm("同期接続を解除しますか？\n(データは削除されませんが、他端末との同期は停止します)")) {
+      if (confirm("同期を解除しますか？")) {
         stopAutoSync();
         localStorage.removeItem('dt_sync_key');
         updateUI();
-        log("SYNC PROTOCOL TERMINATED.");
+        log("SYNC TERMINATED.");
       }
     });
 
@@ -551,9 +537,9 @@ window.DtSync = (() => {
     document.getElementById('btn-sync-backup-copy').addEventListener('click', () => {
       const txt = document.getElementById('sync-backup-text');
       navigator.clipboard.writeText(txt.value).then(() => {
-        alert("生データをクリップボードにコピーしました。安全な場所に保存してください。");
+        alert("コピーしました。");
       }).catch(err => {
-        alert("コピーに失敗しました: " + err.message);
+        alert("コピー失敗: " + err.message);
       });
     });
 
@@ -569,7 +555,7 @@ window.DtSync = (() => {
     document.getElementById('btn-sync-import-run').addEventListener('click', () => {
       const val = document.getElementById('sync-import-text').value.trim();
       if (!val) {
-        alert("インポートデータが空です。");
+        alert("空です。");
         return;
       }
       try {
@@ -577,17 +563,17 @@ window.DtSync = (() => {
         if (!validateData(parsed)) {
           throw new Error("Invalid structure.");
         }
-        if (confirm("データをインポートしますか？\n(現在のローカルデータは上書きされますが、直前のデータは自動的にバックアップされます)")) {
+        if (confirm("インポートを実行しますか？(既存データは上書きされます)")) {
           const currentLocal = localStorage.getItem(config.storageKey);
           if (currentLocal) {
-            localStorage.setItem(BACKUP_KEY, currentLocal); // 退避バックアップ
+            localStorage.setItem(BACKUP_KEY, currentLocal);
           }
           localStorage.setItem(config.storageKey, JSON.stringify(parsed));
-          alert("データのインポートに成功しました。ページをリロードします。");
+          alert("成功しました。リロードします。");
           window.location.reload();
         }
       } catch(e) {
-        alert("インポート失敗: JSON形式が正しくありません。\n" + e.message);
+        alert("失敗: " + e.message);
       }
     });
   }
