@@ -1316,6 +1316,7 @@ body { padding: 0 !important; background-color: var(--bg-dark) !important; color
 </tbody>
 </table>
 </div>
+<div id="cyber-sync-panel"></div>
 <!-- Subject Progress Monitor Container -->
 <div class="monitor-section" id="subject-progress-monitor">
   <div class="monitor-header">
@@ -1355,6 +1356,7 @@ body { padding: 0 !important; background-color: var(--bg-dark) !important; color
 <a href="/project-x/" class="tt-footer-link">RETURN TO SURFACE HUB</a>
 </div>
 </div>
+<script src="/js/dt-timetable-sync.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   // Move elements to body root
@@ -1461,6 +1463,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const saveProgressData = (data) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if (window.DtSync) {
+      window.DtSync.triggerUpload(data);
+    }
   };
 
   const updateSingleData = (subjectName, lessonIdx, field, value) => {
@@ -1469,6 +1474,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!allData[subjectName][lessonIdx]) allData[subjectName][lessonIdx] = { date: '', status: '', memo: '' };
     
     allData[subjectName][lessonIdx][field] = value;
+    allData[subjectName][lessonIdx].updated_at = Date.now();
     saveProgressData(allData);
   };
 
@@ -1788,6 +1794,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
   initClickableSubjects();
+
+  if (window.DtSync) {
+    window.DtSync.init({
+      storageKey: STORAGE_KEY,
+      onSyncComplete: (mergedData) => {
+        if (currentActiveSubject) {
+          openSubjectProgress(currentActiveSubject);
+        }
+      }
+    });
+  }
 
   console.log("%c TIMETABLE LOGGER READY ", "background: #00ff66; color: #000; padding: 5px; font-weight: bold;");
 });
