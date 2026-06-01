@@ -1557,6 +1557,25 @@ body {
 </div>
 <script>
 function initializeSystem() {
+  // iOS PWA standalone mode link navigation patch
+  if (("standalone" in window.navigator) && window.navigator.standalone) {
+    document.addEventListener("click", function(e) {
+      let element = e.target;
+      while (element && element.tagName !== "A") {
+        element = element.parentNode;
+      }
+      if (element && element.tagName === "A" && element.hasAttribute("href")) {
+        const href = element.getAttribute("href");
+        if (!element.hasAttribute("target") || element.getAttribute("target") === "_self") {
+          if (href.indexOf("http") !== 0 || href.indexOf(window.location.host) !== -1) {
+            e.preventDefault();
+            window.location.href = href;
+          }
+        }
+      }
+    }, false);
+  }
+
   const bg = document.querySelector('.cyber-bg');
   const grid = document.querySelector('.cyber-grid');
   const scanline = document.querySelector('.scanline');
