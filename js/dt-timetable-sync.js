@@ -1,4 +1,4 @@
-// DtSync グローバルオブジェクト (軍用暗号化 & 匿名KVSスマートマージ同期)
+// DtSync グローバルオブジェクト (軍用暗号化 & 正規KVSスマートマージ同期)
 window.DtSync = (() => {
   const BACKUP_KEY = 'dt_subject_progress_data_backup';
   let config = {
@@ -115,12 +115,32 @@ window.DtSync = (() => {
     return dec.decode(decrypted);
   }
 
-  // SHA-256 ハッシュ (バケットID生成用)
-  async function hashSyncKey(syncKey) {
-    const msgBuffer = new TextEncoder().encode(syncKey);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 20);
+  // 同期キーから kvdb.io のバケットIDと暗号化パスワードを抽出
+  // 同期キーの形式: DTSYNC-<バケットID>
+  function parseSyncKey(syncKey) {
+    const clean = syncKey.trim().toUpperCase();
+    if (clean.startsWith('DTSYNC-')) {
+      const bucketId = clean.replace('DTSYNC-', '').toLowerCase();
+      return { bucketId: bucketId, password: clean };
+    }
+    return { bucketId: clean.toLowerCase(), password: clean };
+  }
+
+  // kvdb.io のバケット新規生成 (公式仕様: POST https://kvdb.io/ でバケットIDを取得)
+  async function createBucket() {
+    try {
+      const response = await fetch('https://kvdb.io/', {
+        method: 'POST'
+      });
+      if (!response.ok) {
+        throw new Error(`KVS Server returned status ${response.status}`);
+      }
+      const bucketId = await response.text();
+      return bucketId.trim();
+    } catch(e) {
+      log(`SERVER VAULT CREATION FAILED: ${e.message}`);
+      throw e;
+    }
   }
 
   // クラウドとのデータ競合解決 (スマートマージ)
@@ -130,14 +150,12 @@ window.DtSync = (() => {
     
     const merged = JSON.parse(JSON.stringify(local)); // ディープコピー
     
-    // リモートの科目を走査
     Object.keys(remote).forEach(subject => {
       if (!merged[subject]) {
         merged[subject] = remote[subject];
         return;
       }
       
-      // コマを走査
       Object.keys(remote[subject]).forEach(lessonIdx => {
         const localLesson = merged[subject][lessonIdx];
         const remoteLesson = remote[subject][lessonIdx];
@@ -147,7 +165,6 @@ window.DtSync = (() => {
           return;
         }
         
-        // タイムスタンプの比較
         const localTime = localLesson.updated_at || 0;
         const remoteTime = remoteLesson.updated_at || 0;
         
@@ -161,18 +178,18 @@ window.DtSync = (() => {
   }
 
   // kvdb.io のエンドポイント取得
-  async function getEndpoint(syncKey) {
-    const bucketId = await hashSyncKey(syncKey);
-    return `https://kvdb.io/dt_${bucketId}/subject_data`;
+  function getEndpoint(bucketId) {
+    return `https://kvdb.io/${bucketId}/subject_data`;
   }
 
   // クラウドに保存する
   async function uploadToCloud(data, syncKey) {
     if (!syncKey) return;
     try {
-      const url = await getEndpoint(syncKey);
+      const { bucketId, password } = parseSyncKey(syncKey);
+      const url = getEndpoint(bucketId);
       const text = JSON.stringify(data);
-      const encrypted = await encryptData(text, syncKey);
+      const encrypted = await encryptData(text, password);
       
       const response = await fetch(url, {
         method: 'POST',
@@ -193,7 +210,8 @@ window.DtSync = (() => {
   async function downloadFromCloud(syncKey) {
     if (!syncKey) return null;
     try {
-      const url = await getEndpoint(syncKey);
+      const { bucketId, password } = parseSyncKey(syncKey);
+      const url = getEndpoint(bucketId);
       const response = await fetch(url);
       if (response.status === 404) {
         log("NO CLOUD ARCHIVE FOUND. INITIAL UPLOAD PENDING.");
@@ -205,7 +223,7 @@ window.DtSync = (() => {
       const encrypted = await response.text();
       if (!encrypted) return null;
       
-      const decrypted = await decryptData(encrypted, syncKey);
+      const decrypted = await decryptData(encrypted, password);
       return JSON.parse(decrypted);
     } catch(e) {
       log(`DOWNLOAD FAILED: ${e.message}`);
@@ -306,19 +324,6 @@ window.DtSync = (() => {
       clearInterval(autoSyncInterval);
       autoSyncInterval = null;
     }
-  }
-
-  // ランダムな同期キー生成
-  function generateRandomKey() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let key = 'DTSYNC-';
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 4; j++) {
-        key += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      if (i < 3) key += '-';
-    }
-    return key;
   }
 
   // UI状態の更新
@@ -470,13 +475,19 @@ window.DtSync = (() => {
 
     // イベントバインディング
     document.getElementById('btn-sync-generate').addEventListener('click', async () => {
-      if (confirm("新しい同期キーを発行し、この端末のデータでクラウド同期を開始しますか？")) {
-        const key = generateRandomKey();
-        saveSyncKey(key);
-        updateUI();
-        log(`NEW SYNC KEY GENERATED: ${key}`);
-        await syncProcess();
-        startAutoSync();
+      if (confirm("サーバー上に新規に同期用保管庫を作成し、この端末のデータでクラウド同期を開始しますか？")) {
+        try {
+          log("CREATING SERVER VAULT...");
+          const rawBucketId = await createBucket();
+          const key = `DTSYNC-${rawBucketId.toUpperCase()}`;
+          saveSyncKey(key);
+          updateUI();
+          log(`NEW SYNC KEY GENERATED: ${key}`);
+          await syncProcess();
+          startAutoSync();
+        } catch(e) {
+          alert("同期用保管庫の作成に失敗しました。サーバーが一時的に混雑している可能性があります。\n" + e.message);
+        }
       }
     });
 
@@ -492,8 +503,8 @@ window.DtSync = (() => {
 
     document.getElementById('btn-sync-connect').addEventListener('click', async () => {
       const inputVal = document.getElementById('sync-key-input').value.trim().toUpperCase();
-      if (!inputVal.startsWith('DTSYNC-') || inputVal.split('-').length !== 5) {
-        alert("無効な同期キー形式です。正しく入力してください。");
+      if (!inputVal.startsWith('DTSYNC-') || inputVal.split('-').length !== 2) {
+        alert("無効な同期キー形式です。「DTSYNC-バケットID」の形式で入力してください。");
         return;
       }
       if (confirm("この同期キーでクラウドと接続し、データをマージして同期しますか？\n(既存データは安全に保護・統合されます)")) {
@@ -605,7 +616,7 @@ window.DtSync = (() => {
     
     const syncKey = getSyncKey();
     if (syncKey) {
-      log(`ESTABLISHED CONNECTION WITH NODE ID: ${syncKey.substring(0, 12)}...`);
+      log(`ESTABLISHED CONNECTION WITH NODE ID: ${syncKey.substring(0, 15)}...`);
       syncProcess();
       startAutoSync();
     }
