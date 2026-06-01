@@ -1,4 +1,4 @@
-// DtSync グローバルオブジェクト (軍用暗号化 & 高速KVSスマートマージ同期)
+// DtSync グローバルオブジェクト (軍用暗号化 & 企業グレードKVSスマートマージ同期)
 window.DtSync = (() => {
   const BACKUP_KEY = 'dt_subject_progress_data_backup';
   let config = {
@@ -91,7 +91,7 @@ window.DtSync = (() => {
     return btoa(String.fromCharCode.apply(null, result));
   }
 
-  // 復言 (AES-GCM 256)
+  // 復号 (AES-GCM 256)
   async function decryptData(base64Str, password) {
     const binaryDer = atob(base64Str);
     const len = binaryDer.length;
@@ -116,6 +116,7 @@ window.DtSync = (() => {
   }
 
   // 同期キーからバケットIDと暗号化パスワードを抽出
+  // 同期キー形式: DTSYNC-<npoint_id>
   function parseSyncKey(syncKey) {
     const clean = syncKey.trim().toUpperCase();
     if (clean.startsWith('DTSYNC-')) {
@@ -159,24 +160,21 @@ window.DtSync = (() => {
     return merged;
   }
 
-  // keyvalue.xyz のエンドポイント取得
-  function getEndpoint(bucketId) {
-    return `https://keyvalue.xyz/v1/dt_sync_${bucketId}`;
-  }
-
-  // クラウドに保存する
+  // クラウドに保存する (npoint.io 仕様: JSONラップして PUT)
   async function uploadToCloud(data, syncKey) {
     if (!syncKey) return;
     try {
       const { bucketId, password } = parseSyncKey(syncKey);
-      const url = getEndpoint(bucketId);
+      const url = `https://api.npoint.io/${bucketId}`;
       const text = JSON.stringify(data);
       const encrypted = await encryptData(text, password);
       
+      const payload = { value: encrypted };
+      
       const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: encrypted
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
       if (!response.ok) {
         throw new Error(`HTTP error ${response.status}`);
@@ -188,12 +186,12 @@ window.DtSync = (() => {
     }
   }
 
-  // クラウドから読み込む
+  // クラウドから読み込む (npoint.io 仕様: JSON取得し value 復号)
   async function downloadFromCloud(syncKey) {
     if (!syncKey) return null;
     try {
       const { bucketId, password } = parseSyncKey(syncKey);
-      const url = getEndpoint(bucketId);
+      const url = `https://api.npoint.io/${bucketId}`;
       const response = await fetch(url);
       if (response.status === 404) {
         log("NO CLOUD ARCHIVE FOUND. INITIAL UPLOAD PENDING.");
@@ -202,13 +200,36 @@ window.DtSync = (() => {
       if (!response.ok) {
         throw new Error(`HTTP error ${response.status}`);
       }
-      const encrypted = await response.text();
-      if (!encrypted || encrypted.trim() === "") return null;
+      const json = await response.json();
+      if (!json || !json.value) return null;
       
-      const decrypted = await decryptData(encrypted, password);
+      const decrypted = await decryptData(json.value, password);
       return JSON.parse(decrypted);
     } catch(e) {
       log(`DOWNLOAD FAILED: ${e.message}`);
+      throw e;
+    }
+  }
+
+  // 初期保管庫の新規生成 (POST)
+  async function createRemoteVault(data, password) {
+    try {
+      const text = JSON.stringify(data);
+      const encrypted = await encryptData(text, password);
+      const payload = { value: encrypted };
+      
+      const response = await fetch('https://api.npoint.io/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) {
+        throw new Error(`Server returned status ${response.status}`);
+      }
+      const resJson = await response.json();
+      return resJson.id; // 生成された一意の保管庫ID
+    } catch(e) {
+      log(`VAULT CREATION FAILED: ${e.message}`);
       throw e;
     }
   }
@@ -351,7 +372,7 @@ window.DtSync = (() => {
     
     container.innerHTML = `
       <div class="monitor-header" style="border-bottom-color: rgba(188, 19, 254, 0.3); background: rgba(188, 19, 254, 0.05); color: var(--cmd-purple); text-shadow: 0 0 8px var(--cmd-purple);">
-        <div>[ SYSTEM: CLOUD SYNC PROTOCOL ]</div>
+        <div>[ SYSTEM: CLOUD SYNC SYSTEM ]</div>
       </div>
       <div style="padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem;">
         <!-- ステータス表示 -->
@@ -448,15 +469,29 @@ window.DtSync = (() => {
     document.getElementById('btn-sync-generate').addEventListener('click', async () => {
       if (confirm("同期キーを生成し、クラウド同期を開始しますか？\n(既存のデータは安全に保護されます)")) {
         try {
-          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-          let rawBucketId = '';
-          for (let i = 0; i < 16; i++) {
-            rawBucketId += chars.charAt(Math.floor(Math.random() * chars.length));
+          log("CREATING SERVER VAULT...");
+          
+          let localData = {};
+          try {
+            localData = JSON.parse(localStorage.getItem(config.storageKey)) || {};
+          } catch(e) {
+            localData = {};
           }
-          const key = `DTSYNC-${rawBucketId}`;
-          saveSyncKey(key);
+          
+          // 暫定パスワード
+          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+          let tempPassword = 'DTSYNC-';
+          for (let i = 0; i < 12; i++) {
+            tempPassword += chars.charAt(Math.floor(Math.random() * chars.length));
+          }
+          
+          // api.npoint.io で保管庫を新規登録し、IDを取得 (CORS全開放、Netlifyによる企業グレードの超安定SaaS)
+          const vaultId = await createRemoteVault(localData, tempPassword);
+          const finalKey = `DTSYNC-${vaultId.toUpperCase()}`;
+          
+          saveSyncKey(finalKey);
           updateUI();
-          log(`NEW SYNC KEY GENERATED: ${key}`);
+          log(`NEW SYNC KEY GENERATED: ${finalKey}`);
           await syncProcess();
           startAutoSync();
         } catch(e) {
