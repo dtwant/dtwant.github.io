@@ -814,7 +814,7 @@
     max-width: none;
     margin: 0;
     padding: 2.5rem 1.5rem;
-    background-color: #050508;
+    background: transparent;  
     color: #e2e8f0;
     border: none;
     border-radius: 0;
@@ -824,17 +824,60 @@
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
   }
-  .fl-bg-grid {
-    position: absolute; inset: 0; z-index: 0;
-    background-image:
-      linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
-      radial-gradient(ellipse at 15% 15%, rgba(6, 182, 212, 0.1), transparent 50%),
-      radial-gradient(ellipse at 85% 85%, rgba(16, 185, 129, 0.1), transparent 50%),
-      radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.75) 120%);
-    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% 100%;
-    filter: url(#liquid-refract);
-    pointer-events: none;
+
+   
+  .fl-cyber-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 0;
+    overflow: hidden;
+    background: #050508;
+    pointer-events: none !important;
+  }
+  .fl-cyber-bg-image {
+    position: absolute;
+    inset: -5%;
+    width: 110%; height: 110%;
+    background-image: url('/img/feeding_cyber_bg.png');  
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.38) contrast(1.1) saturate(1.1);  
+    pointer-events: none !important;
+  }
+  .fl-cyber-bg-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 25%, rgba(5, 5, 8, 0.78) 100%);  
+    pointer-events: none !important;
+  }
+  .fl-cyber-grid {
+    position: fixed;
+    top: -50%; left: -50%;
+    width: 200vw; height: 200vh;
+    background:
+      linear-gradient(transparent 0%, rgba(6, 182, 212, 0.05) 1%, transparent 2%),
+      linear-gradient(90deg, transparent 0%, rgba(16, 185, 129, 0.05) 1%, transparent 2%);
+    background-size: 40px 40px;
+    transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px);
+    animation: fl-grid-move 12s linear infinite;
+    z-index: 1;
+    pointer-events: none !important;
+  }
+  @keyframes fl-grid-move {
+    0% { transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px); }
+    100% { transform: perspective(300px) rotateX(60deg) translateY(40px) translateZ(-100px); }
+  }
+  .fl-scanline {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+    background-size: 100% 3px;
+    pointer-events: none !important;
+    z-index: 10;
+    opacity: 0.08;
+    mix-blend-mode: overlay;
   }
    
   .fl-root::after {
@@ -848,10 +891,10 @@
       transparent 1px,
       transparent 2px
     );
-    pointer-events: none;
+    pointer-events: none !important;
     z-index: 10;
   }
-  .fl-root > * {
+  .fl-root > *:not(.fl-cyber-bg):not(.fl-cyber-grid):not(.fl-scanline) {
     position: relative;
     z-index: 2;
     max-width: 1300px;
@@ -895,26 +938,19 @@
     text-align: center;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);  
+    border: 1px solid rgba(16, 185, 129, 0.25);  
     
      
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.12) 0%, 
-      rgba(255, 255, 255, 0.02) 30%, 
-      rgba(10, 8, 28, 0.25) 70%, 
-      rgba(2, 2, 6, 0.50) 100%
-    );
+    background: rgba(6, 6, 10, 0.76);
     border-radius: 8px;
-    backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%);  
-    -webkit-backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%);
+     
+     
     
      
     box-shadow: 
-      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.22),
-      inset 2px 2px 5px rgba(255, 255, 255, 0.08),
-      inset -1px -1px 3px rgba(0, 0, 0, 0.55),
-      inset -3px -3px 10px rgba(0, 0, 0, 0.65),
-      0 12px 36px rgba(2, 2, 8, 0.55);
+      0 15px 40px rgba(0, 0, 0, 0.65), 
+      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.15),
+      inset 0 -3px 10px rgba(0, 0, 0, 0.55);
   }
   .fl-title {
     font-family: "Orbitron", sans-serif;
@@ -964,15 +1000,15 @@
     margin-bottom: 1.5rem;
   }
   .fl-stat {
-    background: rgba(6, 182, 212, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(6, 6, 10, 0.76);  
+    border: 1px solid rgba(6, 182, 212, 0.25);  
     padding: 1rem 0.5rem;
     text-align: center;
     border-radius: 6px;
     position: relative;
     overflow: hidden;
-    backdrop-filter: blur(8px);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), inset 0 -2px 6px rgba(0, 0, 0, 0.3);
+     
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0, 0, 0, 0.3);
   }
   .fl-stat::before {
     content: "";
@@ -1057,15 +1093,15 @@
   .fl-table-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    border: 1px solid rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.25);
     border-radius: 8px;
     margin-bottom: 1.5rem;
     position: relative;
-    background: rgba(15, 23, 42, 0.3);
-    backdrop-filter: blur(10px);
+    background: rgba(6, 6, 10, 0.62);  
+     
     box-shadow: 
       0 20px 50px rgba(0, 0, 0, 0.65),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
       inset 0 -3px 12px rgba(0, 0, 0, 0.5);
   }
   .fl-table {
@@ -1089,7 +1125,7 @@
   }
   .fl-table th {
     border-top: 1px solid #1a1a2e;
-    background: #0f172a;
+    background: rgba(15, 23, 42, 0.72);  
     color: #94a3b8;
     font-family: "JetBrains Mono", monospace;
     font-size: 0.65rem;
@@ -1115,7 +1151,7 @@
     position: sticky;
     left: 0;
     z-index: 4;
-    background: #0c0c14;
+    background: rgba(12, 12, 20, 0.85);  
     color: #64748b;
     font-family: "JetBrains Mono", monospace;
     font-weight: 700;
@@ -1600,19 +1636,19 @@
     pointer-events: all;
   }
   .fl-modal {
-    background: rgba(14, 14, 20, 0.75);
-    border: 1px solid rgba(6, 182, 212, 0.25);
+    background: rgba(14, 14, 20, 0.96);  
+    border: 1px solid rgba(6, 182, 212, 0.35);
     border-radius: 8px;
     max-width: 400px;
     width: 100%;
     padding: 1.5rem;
     box-shadow: 
       0 0 50px rgba(6, 182, 212, 0.12), 
-      0 20px 60px rgba(0, 0, 0, 0.8),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 20px 60px rgba(0, 0, 0, 0.85),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
       inset 0 -3px 15px rgba(0, 0, 0, 0.6);
     position: relative;
-    backdrop-filter: blur(14px);
+     
   }
   .fl-modal::before {
     content: "";
@@ -1753,7 +1789,13 @@
 </svg>
 
 <div class="fl-root" id="fl-root">
-  <div class="fl-bg-grid"></div>
+  
+  <div class="fl-cyber-bg">
+    <div class="fl-cyber-bg-image"></div>
+    <div class="fl-cyber-bg-vignette"></div>
+  </div>
+  <div class="fl-cyber-grid"></div>
+  <div class="fl-scanline"></div>
   <header class="fl-header">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
       <button onclick="window.history.back()" style="background: transparent; border: 1px solid #10b981; color: #10b981; padding: 0.2rem 0.5rem; font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: bold; cursor: pointer; border-radius: 3px; white-space: nowrap; margin-top: 0.3rem;">◀ EXIT</button>
