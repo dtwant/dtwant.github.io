@@ -2044,6 +2044,76 @@ body {
   background: rgba(0,0,0,0.3);
   clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
 }
+
+ 
+.bs-detail-cover-row {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+.bs-detail-meta {
+  flex: 1;
+  min-width: 0;
+}
+.bs-detail-title {
+  font-family: var(--font-jp);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  text-shadow: 0 0 6px rgba(255,255,255,0.1);
+}
+.bs-detail-author {
+  font-size: 0.8rem;
+  color: var(--neon-cyan);
+  margin-bottom: 0.3rem;
+  text-shadow: 0 0 4px rgba(0,243,255,0.2);
+}
+.bs-detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+}
+.bs-detail-tag {
+  font-family: var(--font-ui);
+  font-size: 0.5rem;
+  letter-spacing: 0.06em;
+  color: var(--neon-purple);
+  border: 1px solid rgba(139,92,246,0.3);
+  padding: 0.15rem 0.4rem;
+  background: rgba(139,92,246,0.06);
+}
+
+ 
+.bs-form-tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-ui);
+  font-size: 0.52rem;
+  letter-spacing: 0.06em;
+  color: var(--neon-purple);
+  border: 1px solid rgba(139,92,246,0.4);
+  padding: 0.2rem 0.5rem;
+  background: rgba(139,92,246,0.1);
+  clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
+}
+.bs-form-tag span:last-child:hover {
+  color: var(--neon-pink);
+}
+
+ 
+@keyframes bs-scroll-glow {
+  0% { box-shadow: 0 0 0 0 rgba(0,243,255,0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(0,243,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,243,255,0); }
+}
+
+ 
+.book-status-badge.s-reading {
+  animation: bs-pulse 2s ease infinite;
+}
 .bs-detail-cover {
   width: 130px;
   height: 180px;
@@ -2064,6 +2134,8 @@ body {
   .bs-modal { max-width: 100%; border-radius: 12px 12px 0 0; border-bottom: none; animation: bs-sheet-in 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
   @keyframes bs-sheet-in { from{transform:translateY(100%);opacity:.5} to{transform:translateY(0);opacity:1} }
   .bs-cover-preview-row { flex-direction: column; }
+  .bs-detail-cover-row { flex-direction: column; align-items: center; }
+  .bs-detail-cover { width: 180px !important; height: 250px !important; }
   
    
   .bs-glitch-title {
@@ -2316,6 +2388,7 @@ body {
       <button class="bs-modal-close" onclick="bsCloseForm()">✕</button>
     </div>
     <div class="bs-modal-body">
+      <input type="hidden" id="bs-edit-id" value="">
       
       
       <div class="bs-scanner-panel">
