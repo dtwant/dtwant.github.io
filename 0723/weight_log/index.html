@@ -227,7 +227,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "71"
+    "wordCount": "0"
   }]
   </script>
 
@@ -902,11 +902,7 @@
   
 
   
-    
-  
 
-  
-    
   
 
   
@@ -925,7 +921,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>71 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1082,1149 +1078,1111 @@
         <div class="article-content max-w-prose mb-20">
           
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/htm@3/dist/htm.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 
 <style>
-  @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap');
 
-   
-  .wl-root {
-    --theme-hex: #06b6d4;
-    --theme-rgb: 6, 182, 212;
-    font-family: "Zen Kaku Gothic New", "JetBrains Mono", sans-serif;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
-    margin: 0;
-    padding: 2rem 1.5rem;
-    background-color: #050508;
-    color: #e2e8f0;
-    border: none;
-    border-radius: 0;
-    z-index: 999990;
-    overflow-y: auto;
-    overflow-x: hidden;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .wl-bg-grid {
-    position: absolute; inset: 0; z-index: 0;
-    background-image:
-      linear-gradient(rgba(var(--theme-rgb), 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(var(--theme-rgb), 0.04) 1px, transparent 1px),
-      radial-gradient(ellipse at 20% 20%, rgba(var(--theme-rgb), 0.08), transparent 55%),
-      radial-gradient(ellipse at 80% 80%, rgba(var(--theme-rgb), 0.06), transparent 55%);
-    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
-    filter: url(#liquid-refract);
-    pointer-events: none;
-    transition: background-image 0.5s ease;
-  }
-  .wl-root::after {
-    content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
-    pointer-events: none; z-index: 10;
-  }
-  .wl-root > * { position: relative; z-index: 2; max-width: 1000px; margin-left: auto; margin-right: auto; }
-  .wl-root *, .wl-root *::before, .wl-root *::after { box-sizing: border-box; }
-  .wl-root, .wl-root * { text-decoration: none !important; }
+:root {
+  --wl-bg: 240 10% 3.9%;
+  --wl-fg: 0 0% 98%;
+  --wl-card: 240 10% 3.9%;
+  --wl-card-fg: 0 0% 98%;
+  --wl-muted: 240 3.7% 15.9%;
+  --wl-muted-fg: 240 5% 64.9%;
+  --wl-border: 240 3.7% 15.9%;
+  --wl-input: 240 3.7% 15.9%;
+  --wl-primary: 187 72% 47%;
+  --wl-primary-fg: 0 0% 4%;
+  --wl-accent: 240 3.7% 15.9%;
+  --wl-accent-fg: 0 0% 98%;
+  --wl-destructive: 0 62.8% 30.6%;
+  --wl-destructive-fg: 0 0% 98%;
+  --wl-ring: 187 72% 47%;
+  --wl-radius: 0.5rem;
+  --wl-emerald: 160 84% 39%;
+  --wl-amber: 47 96% 53%;
+  --wl-rose: 349 89% 60%;
+  --wl-theme: 187 72% 47%;
+  --wl-theme-rgb: 6, 182, 212;
+}
 
-   
-  .wl-root::before {
-    content: ""; position: fixed; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, #06b6d4, #10b981, transparent);
-    background-size: 200% 100%;
-    animation: wl-scanline 3s linear infinite;
-    z-index: 999999;
-    box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
-  }
-  @keyframes wl-scanline { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+.wl-root {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: fixed; inset: 0; margin: 0; padding: 0;
+  background: hsl(var(--wl-bg)); color: hsl(var(--wl-fg));
+  z-index: 999990; overflow-y: auto; overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.wl-root * { box-sizing: border-box; margin: 0; padding: 0; }
+.wl-root *:focus-visible { outline: 2px solid hsl(var(--wl-ring)); outline-offset: 2px; border-radius: var(--wl-radius); }
 
-   
-  .wl-header {
-    text-align: center;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);  
-    
-     
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.12) 0%, 
-      rgba(255, 255, 255, 0.02) 30%, 
-      rgba(10, 8, 28, 0.25) 70%, 
-      rgba(2, 2, 6, 0.50) 100%
-    );
-    border-radius: 8px;
-    backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%);  
-    -webkit-backdrop-filter: blur(20px) url(#liquid-refract) saturate(155%);
-    
-     
-    box-shadow: 
-      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.22),
-      inset 2px 2px 5px rgba(255, 255, 255, 0.08),
-      inset -1px -1px 3px rgba(0, 0, 0, 0.55),
-      inset -3px -3px 10px rgba(0, 0, 0, 0.65),
-      0 12px 36px rgba(2, 2, 8, 0.55);
-    position: relative;
-  }
-  .wl-header-top {
-    display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;
-  }
-  .wl-btn-exit {
-    background: transparent; border: 1px solid #06b6d4; color: #06b6d4;
-    padding: 0.3rem 0.6rem; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: bold;
-    cursor: pointer; border-radius: 4px; white-space: nowrap; margin-top: 0.3rem; transition: all 0.2s;
-  }
-  .wl-btn-exit:hover, .wl-btn-exit:active {
-    background: #06b6d4; color: #000; box-shadow: 0 0 10px rgba(6,182,212,0.4);
-  }
-  .wl-title {
-    font-family: "Orbitron", sans-serif; font-size: 1.6rem; font-weight: 700;
-    color: #06b6d4; text-transform: uppercase; letter-spacing: 0.1em;
-    text-shadow: 0 0 20px rgba(6, 182, 212, 0.6); margin: 0 0 0.2rem 0;
-  }
-  .wl-desc { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #64748b; letter-spacing: 0.05em; }
-  
-  .wl-sync-status {
-    display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 0.7rem;
-    padding: 2px 10px; border-radius: 3px; margin-top: 0.5rem; transition: all 0.3s;
-    cursor: pointer;
-  }
-  .wl-sync-online { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; }
-  .wl-sync-offline { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #facc15; }
+.wl-bg {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, hsla(var(--wl-theme), 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 100%, hsla(var(--wl-emerald), 0.04), transparent);
+}
+.wl-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(hsla(var(--wl-border), 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, hsla(var(--wl-border), 0.3) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+}
 
-   
-  .wl-view { display: none; animation: wl-fade-in 0.3s ease; }
-  .wl-view.active { display: block; }
-  @keyframes wl-fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.wl-scanline {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 999999; pointer-events: none;
+  background: linear-gradient(90deg, transparent, hsl(var(--wl-theme)), hsl(var(--wl-emerald)), transparent);
+  background-size: 200% 100%;
+  animation: wl-scan 3s linear infinite;
+}
+@keyframes wl-scan { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
 
-   
-  .wl-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  .wl-card {
-    background: rgba(15, 23, 42, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 8px;
-    padding: 1.2rem 0.5rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.25s;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-    user-select: none; -webkit-user-select: none; touch-action: pan-y;
-    backdrop-filter: blur(8px);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), inset 0 -2px 6px rgba(0, 0, 0, 0.3);
-  }
-  .wl-card.dragging { opacity: 0.5; transform: scale(0.95); border-color: #06b6d4; }
-  .wl-card.drag-over { border-top: 2px solid #06b6d4; background: rgba(6, 182, 212, 0.1); }
-  .wl-card::before {
-    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-    background: linear-gradient(90deg, transparent, #06b6d4, transparent);
-    opacity: 0; transition: opacity 0.3s;
-  }
-  .wl-card:hover, .wl-card:active {
-    background: rgba(6, 182, 212, 0.05); border-color: rgba(6, 182, 212, 0.4);
-    transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  }
-  .wl-card:hover::before, .wl-card:active::before { opacity: 1; }
-  
-  .wl-card-emoji { font-size: 2.5rem; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); }
-  .wl-card-name { font-weight: 700; font-size: 0.95rem; color: #f1f5f9; margin-bottom: 0.2rem; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .wl-card-weight { font-family: "Orbitron", sans-serif; font-size: 1.2rem; color: #10b981; font-weight: 700; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
-  .wl-card-date { font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: #64748b; margin-top: 0.3rem; }
+.wl-container { max-width: 900px; width: 100%; margin: 0 auto; padding: 2rem 1.5rem 6rem; position: relative; }
+.wl-mono { font-family: 'JetBrains Mono', monospace; }
 
-   
-  .wl-fab {
-    display: flex; justify-content: center; margin-top: 1rem; margin-bottom: 2rem;
-  }
-  .wl-btn-add {
-    background: rgba(6, 182, 212, 0.1); border: 1px dashed #06b6d4; color: #06b6d4;
-    padding: 0.8rem 2rem; font-family: "Orbitron", sans-serif; font-weight: 700; font-size: 0.9rem;
-    border-radius: 30px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
-  }
-  .wl-btn-add:hover, .wl-btn-add:active {
-    background: #06b6d4; color: #000; box-shadow: 0 0 15px rgba(6, 182, 212, 0.5); border-style: solid;
-  }
+ 
+.wl-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  white-space: nowrap; border-radius: var(--wl-radius); font-size: 0.875rem; font-weight: 500;
+  border: none; cursor: pointer; transition: all 0.15s; font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.wl-btn:disabled { pointer-events: none; opacity: 0.5; }
+.wl-btn-primary { background: hsl(var(--wl-theme)); color: hsl(var(--wl-primary-fg)); padding: 0.5rem 1rem; height: 2.25rem; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+.wl-btn-primary:hover { opacity: 0.9; }
+.wl-btn-danger { background: hsl(var(--wl-destructive)); color: hsl(var(--wl-destructive-fg)); padding: 0.5rem 1rem; height: 2.25rem; }
+.wl-btn-danger:hover { opacity: 0.9; }
+.wl-btn-outline { border: 1px solid hsl(var(--wl-border)); background: transparent; color: hsl(var(--wl-fg)); padding: 0.5rem 1rem; height: 2.25rem; }
+.wl-btn-outline:hover { background: hsl(var(--wl-accent)); }
+.wl-btn-ghost { background: transparent; color: hsl(var(--wl-fg)); padding: 0.5rem 1rem; height: 2.25rem; }
+.wl-btn-ghost:hover { background: hsl(var(--wl-accent)); }
+.wl-btn-sm { height: 2rem; padding: 0.25rem 0.75rem; font-size: 0.8rem; }
+.wl-btn-icon { width: 2.25rem; height: 2.25rem; padding: 0; }
+.wl-btn-icon.sm { width: 2rem; height: 2rem; }
 
-   
-  .wl-detail-header {
-    display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
-    padding-bottom: 1rem; border-bottom: 1px solid #1e293b;
-  }
-  .wl-detail-emoji { font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
-  .wl-detail-info { flex: 1; }
-  .wl-detail-name { font-size: 1.4rem; font-weight: 700; color: #fff; margin: 0; }
-  .wl-detail-species { font-family: "JetBrains Mono", monospace; font-size: 0.8rem; color: #64748b; }
-  
-   
-  .wl-input-row {
-    display: flex; gap: 0.5rem; margin-bottom: 1.5rem; align-items: stretch;
-  }
-  .wl-input-date {
-    flex: 1.2; background: #0b0f19; border: 1px solid #1e293b; color: #06b6d4;
-    font-family: 'JetBrains Mono', monospace; padding: 0.8rem; border-radius: 6px;
-    font-size: 0.95rem; outline: none; transition: all 0.2s;
-  }
-  .wl-input-weight {
-    flex: 2; background: #0b0f19; border: 1px solid #1e293b; color: #fff;
-    font-family: 'Orbitron', sans-serif; font-size: 1.2rem; padding: 0.8rem; border-radius: 6px;
-    outline: none; font-weight: bold; transition: all 0.2s;
-  }
-  .wl-input-weight::placeholder { color: #475569; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: normal; font-size: 0.9rem; }
-  .wl-input-weight:focus, .wl-input-date:focus {
-    border-color: #10b981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.2); background: #131c2c;
-  }
-  .wl-btn-save {
-    background: transparent; border: 1px solid #10b981; color: #10b981;
-    font-family: 'Orbitron', sans-serif; font-weight: bold; font-size: 0.95rem;
-    padding: 0 1.2rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
-  }
-  .wl-btn-save:hover, .wl-btn-save:active {
-    background: #10b981; color: #000; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
-  }
+ 
+.wl-card {
+  border-radius: var(--wl-radius); border: 1px solid hsl(var(--wl-border));
+  background: hsl(var(--wl-card));
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  transition: all 0.2s; overflow: hidden;
+}
+.wl-card-interactive { cursor: pointer; user-select: none; -webkit-user-select: none; }
+.wl-card-interactive:hover {
+  border-color: hsla(var(--wl-theme), 0.4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  transform: translateY(-2px);
+}
+.wl-card-interactive:active { transform: translateY(0); }
+.wl-card.dragging { opacity: 0.5; transform: scale(0.95); border-color: hsl(var(--wl-theme)); }
+.wl-card.drag-over { border-top: 2px solid hsl(var(--wl-theme)); background: hsla(var(--wl-theme), 0.1); }
 
-   
-  .wl-ranges {
-    display: flex; gap: 0; border: 1px solid #1e293b; border-radius: 6px; overflow: hidden; margin-bottom: 1rem;
-  }
-  .wl-range-btn {
-    flex: 1; background: transparent; border: none; border-right: 1px solid #1e293b;
-    color: #64748b; padding: 0.6rem 0; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 700;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .wl-range-btn:last-child { border-right: none; }
-  .wl-range-btn:hover { background: rgba(255,255,255,0.05); color: #94a3b8; }
-  .wl-range-btn.active { background: rgba(6, 182, 212, 0.15); color: #06b6d4; }
+ 
+.wl-input {
+  display: flex; width: 100%; border-radius: var(--wl-radius);
+  border: 1px solid hsl(var(--wl-input)); background: transparent;
+  padding: 0.5rem 0.75rem; font-size: 0.875rem; font-family: inherit;
+  color: hsl(var(--wl-fg)); transition: all 0.15s; height: 2.25rem;
+}
+.wl-input::placeholder { color: hsl(var(--wl-muted-fg)); }
+.wl-input:focus { outline: none; border-color: hsl(var(--wl-ring)); box-shadow: 0 0 0 2px hsla(var(--wl-ring), 0.15); }
+.wl-label { font-size: 0.875rem; font-weight: 500; line-height: 1; display: block; margin-bottom: 0.5rem; }
+.wl-field { margin-bottom: 1rem; }
 
-   
-  .wl-chart-wrapper {
-    position: relative; height: 320px; width: 100%; margin-bottom: 1.5rem;
-    border: 1px solid #1e293b; border-radius: 8px; padding: 1rem 0.5rem;
-    background: rgba(0, 0, 0, 0.4); box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-  }
+ 
+.wl-badge {
+  display: inline-flex; align-items: center; border-radius: 9999px;
+  padding: 0.125rem 0.625rem; font-size: 0.75rem; font-weight: 500;
+  white-space: nowrap;
+}
+.wl-badge-theme { background: hsla(var(--wl-theme), 0.15); color: hsl(var(--wl-theme)); border: 1px solid hsla(var(--wl-theme), 0.3); }
+.wl-badge-emerald { background: hsla(var(--wl-emerald), 0.15); color: hsl(var(--wl-emerald)); border: 1px solid hsla(var(--wl-emerald), 0.3); }
+.wl-badge-amber { background: hsla(var(--wl-amber), 0.15); color: hsl(var(--wl-amber)); border: 1px solid hsla(var(--wl-amber), 0.3); }
+.wl-badge-muted { background: hsl(var(--wl-muted)); color: hsl(var(--wl-muted-fg)); border: 1px solid transparent; }
 
-   
-  .wl-history-title { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; color: #06b6d4; margin-bottom: 0.8rem; letter-spacing: 1px; }
-  .wl-history-list { max-height: 250px; overflow-y: auto; border: 1px solid #1e293b; border-radius: 6px; background: rgba(15, 23, 42, 0.3); }
-  .wl-history-item {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 0.8rem 1rem; border-bottom: 1px solid #1e293b; transition: background 0.2s;
-  }
-  .wl-history-item:last-child { border-bottom: none; }
-  .wl-history-item:hover { background: rgba(255,255,255,0.03); }
-  .wl-hist-date { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #94a3b8; }
-  .wl-hist-weight { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: #e2e8f0; font-weight: bold; }
-  .wl-btn-del {
-    background: transparent; border: 1px solid #ef4444; color: #ef4444; width: 28px; height: 28px;
-    border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; font-size: 0.9rem;
-  }
-  .wl-btn-del:hover, .wl-btn-del:active { background: #ef4444; color: #000; box-shadow: 0 0 8px rgba(239, 68, 68, 0.5); }
+ 
+.wl-tabs {
+  display: inline-flex; align-items: center; border-radius: var(--wl-radius);
+  background: hsl(var(--wl-muted)); padding: 0.25rem; gap: 0.125rem;
+}
+.wl-tab {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: calc(var(--wl-radius) - 2px); padding: 0.375rem 0.75rem;
+  font-size: 0.8rem; font-weight: 500; background: transparent; border: none;
+  color: hsl(var(--wl-muted-fg)); cursor: pointer; transition: all 0.15s; font-family: inherit;
+}
+.wl-tab:hover { color: hsl(var(--wl-fg)); }
+.wl-tab.active { background: hsl(var(--wl-bg)); color: hsl(var(--wl-fg)); box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
 
-   
-  .wl-modal-overlay {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
-    z-index: 9999999; display: flex; align-items: center; justify-content: center;
-    padding: 1rem; opacity: 0; pointer-events: none; transition: opacity 0.3s;
-  }
-  .wl-modal-overlay.show { opacity: 1; pointer-events: all; }
-  .wl-modal {
-    background: rgba(11, 15, 25, 0.75); border: 1px solid rgba(var(--theme-rgb), 0.25); border-radius: 8px;
-    max-width: 400px; width: 100%; padding: 1.5rem;
-    box-shadow: 
-      0 0 40px rgba(var(--theme-rgb), 0.15), 
-      0 20px 60px rgba(0, 0, 0, 0.8),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12),
-      inset 0 -3px 15px rgba(0, 0, 0, 0.6);
-    position: relative;
-    backdrop-filter: blur(14px);
-  }
-  .wl-modal::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, #06b6d4, transparent); box-shadow: 0 0 8px #06b6d4;
-  }
-  .wl-modal-title {
-    font-family: "Orbitron", sans-serif; font-size: 1rem; color: #06b6d4;
-    letter-spacing: 1px; margin-bottom: 1.5rem; text-align: center;
-  }
-  .wl-form-group { margin-bottom: 1rem; }
-  .wl-label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #64748b; margin-bottom: 0.4rem; }
-  .wl-input {
-    width: 100%; background: #000; border: 1px solid #333; color: #06b6d4;
-    padding: 0.8rem; font-family: "Zen Kaku Gothic New", sans-serif; font-size: 0.95rem;
-    border-radius: 4px; outline: none; transition: border-color 0.2s;
-  }
-  .wl-input:focus { border-color: #06b6d4; box-shadow: 0 0 8px rgba(6,182,212,0.2); }
-  
-  .wl-emoji-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.3rem; }
-  .wl-emoji-opt {
-    width: 42px; height: 42px; background: #111; border: 1px solid #333; border-radius: 6px;
-    font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-  }
-  .wl-emoji-opt:hover { border-color: #06b6d4; transform: scale(1.1); }
-  .wl-emoji-opt.selected { border-color: #06b6d4; background: rgba(6, 182, 212, 0.15); box-shadow: 0 0 10px rgba(6, 182, 212, 0.3); }
+ 
+.wl-overlay {
+  position: fixed; inset: 0; z-index: 1000010;
+  background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center; padding: 1rem;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
+}
+.wl-overlay.open { opacity: 1; pointer-events: auto; }
+.wl-dialog {
+  background: hsl(var(--wl-card)); border: 1px solid hsl(var(--wl-border));
+  border-radius: var(--wl-radius); width: 100%; max-width: 440px;
+  box-shadow: 0 16px 70px rgba(0,0,0,0.6);
+  transform: scale(0.95) translateY(10px); transition: transform 0.2s ease;
+  max-height: 90vh; display: flex; flex-direction: column; position: relative;
+}
+.wl-overlay.open .wl-dialog { transform: scale(1) translateY(0); }
+.wl-dialog-header { padding: 1.5rem 1.5rem 0; }
+.wl-dialog-title { font-size: 1.125rem; font-weight: 600; letter-spacing: -0.025em; margin-bottom: 0.25rem; }
+.wl-dialog-desc { font-size: 0.875rem; color: hsl(var(--wl-muted-fg)); }
+.wl-dialog-body { padding: 1.5rem; overflow-y: auto; flex: 1; }
+.wl-dialog-footer { display: flex; justify-content: flex-end; gap: 0.5rem; padding: 0 1.5rem 1.5rem; flex-wrap: wrap; }
+.wl-dialog-close {
+  position: absolute; top: 1rem; right: 1rem;
+  background: transparent; border: none; color: hsl(var(--wl-muted-fg));
+  cursor: pointer; width: 1.5rem; height: 1.5rem;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--wl-radius); transition: all 0.15s;
+}
+.wl-dialog-close:hover { background: hsl(var(--wl-accent)); color: hsl(var(--wl-fg)); }
 
-  .wl-color-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.3rem; }
-  .wl-color-opt {
-    width: 36px; height: 36px; cursor: pointer; border: 2px solid transparent; border-radius: 4px;
-    transition: all 0.2s; opacity: 0.5;
-  }
-  .wl-color-opt:hover { opacity: 0.8; transform: scale(1.1); }
-  .wl-color-opt.selected { opacity: 1; border-color: #fff; box-shadow: 0 0 12px currentColor; transform: scale(1.15); }
+ 
+.wl-toast-wrap {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  z-index: 1000020; pointer-events: none;
+}
+.wl-toast {
+  background: hsl(var(--wl-card)); border: 1px solid hsl(var(--wl-border));
+  border-radius: 9999px; padding: 0.6rem 1.5rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  transform: translateY(60px); opacity: 0;
+  transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+  font-size: 0.85rem; font-weight: 500; white-space: nowrap;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.wl-toast.show { transform: translateY(0); opacity: 1; }
 
-  .wl-modal-btns { display: flex; gap: 0.8rem; margin-top: 1.5rem; }
-  .wl-modal-btn {
-    flex: 1; padding: 0.8rem; font-family: "Orbitron", sans-serif; font-size: 0.85rem; font-weight: 700;
-    border-radius: 4px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
-  }
-  .wl-btn-submit { background: transparent; border: 1px solid #06b6d4; color: #06b6d4; }
-  .wl-btn-submit:hover { background: #06b6d4; color: #000; box-shadow: 0 0 15px rgba(6,182,212,0.4); }
-  .wl-btn-cancel { background: transparent; border: 1px solid #475569; color: #94a3b8; }
-  .wl-btn-cancel:hover { border-color: #94a3b8; color: #fff; }
+ 
+.wl-sep { height: 1px; width: 100%; background: hsl(var(--wl-border)); margin: 1rem 0; }
 
-   
-  .wl-toast {
-    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
-    background: #06b6d4; color: #000; padding: 0.8rem 2rem; border-radius: 30px;
-    font-family: "JetBrains Mono", monospace; font-size: 0.85rem; font-weight: 700;
-    z-index: 9999999; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    pointer-events: none; box-shadow: 0 0 20px rgba(6, 182, 212, 0.5); letter-spacing: 0.05em;
-  }
-  .wl-toast.show { transform: translateX(-50%) translateY(0); }
+ 
+.wl-header {
+  text-align: center; padding: 1.5rem; margin-bottom: 1.5rem;
+  border: 1px solid hsl(var(--wl-border)); border-radius: var(--wl-radius);
+  background: hsla(var(--wl-card), 0.6); backdrop-filter: blur(12px);
+}
+.wl-header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+.wl-app-title {
+  font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: 700;
+  color: hsl(var(--wl-theme)); letter-spacing: 0.05em;
+}
+.wl-app-desc { font-size: 0.7rem; color: hsl(var(--wl-muted-fg)); letter-spacing: 0.05em; }
 
-   
-  @media (max-width: 640px) {
-    .wl-root { padding: 1rem 0.6rem; }
-    .wl-grid { grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
-    .wl-card { padding: 1rem 0.2rem; border-radius: 6px; }
-    .wl-card-emoji { font-size: 1.8rem; }
-    .wl-card-name { font-size: 0.75rem; }
-    .wl-card-weight { font-size: 1rem; }
-    .wl-card-date { font-size: 0.55rem; }
-    .wl-title { font-size: 1.3rem; }
-    .wl-chart-wrapper { height: 260px; padding: 0.5rem 0.2rem; margin-bottom: 1rem; }
-    .wl-input-row { flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
-    .wl-input-date { flex: 1; min-width: 120px; font-size: 0.85rem; padding: 0.7rem; }
-    .wl-input-weight { flex: 1.5; min-width: 100px; font-size: 1rem; padding: 0.7rem; }
-    .wl-btn-save { padding: 0 1rem; font-size: 0.85rem; }
-    .wl-detail-emoji { font-size: 2rem; }
-    .wl-detail-name { font-size: 1.1rem; }
-  }
-  @media (max-width: 360px) {
-    .wl-grid { grid-template-columns: repeat(2, 1fr); }
-  }
+ 
+.wl-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem; margin-bottom: 1.5rem;
+}
+.wl-animal-card {
+  padding: 1.2rem 0.5rem; text-align: center; position: relative;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.25rem;
+}
+.wl-animal-card::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, hsl(var(--wl-theme)), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.wl-animal-card:hover::before { opacity: 1; }
+.wl-animal-emoji { font-size: 2.5rem; filter: drop-shadow(0 0 8px rgba(255,255,255,0.1)); margin-bottom: 0.25rem; }
+.wl-animal-name { font-weight: 600; font-size: 0.9rem; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wl-animal-weight { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: hsl(var(--wl-emerald)); }
+.wl-animal-date { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: hsl(var(--wl-muted-fg)); }
+
+ 
+.wl-detail-header {
+  display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+  padding-bottom: 1rem; border-bottom: 1px solid hsl(var(--wl-border));
+}
+.wl-detail-emoji { font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+.wl-detail-info { flex: 1; }
+.wl-detail-name { font-size: 1.3rem; font-weight: 700; }
+.wl-detail-species { font-size: 0.8rem; color: hsl(var(--wl-muted-fg)); }
+
+.wl-input-row { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; align-items: stretch; }
+.wl-input-date {
+  flex: 1.2; background: transparent; border: 1px solid hsl(var(--wl-border));
+  color: hsl(var(--wl-theme)); font-family: 'JetBrains Mono', monospace;
+  padding: 0.6rem; border-radius: var(--wl-radius); font-size: 0.9rem;
+  transition: all 0.15s;
+}
+.wl-input-weight {
+  flex: 2; background: transparent; border: 1px solid hsl(var(--wl-border));
+  color: hsl(var(--wl-fg)); font-family: 'JetBrains Mono', monospace;
+  font-size: 1.1rem; padding: 0.6rem; border-radius: var(--wl-radius);
+  font-weight: 600; transition: all 0.15s;
+}
+.wl-input-weight::placeholder { color: hsl(var(--wl-muted-fg)); font-weight: 400; font-size: 0.85rem; }
+.wl-input-date:focus, .wl-input-weight:focus { outline: none; border-color: hsl(var(--wl-ring)); box-shadow: 0 0 0 2px hsla(var(--wl-ring), 0.15); }
+
+.wl-chart-wrap {
+  position: relative; height: 300px; width: 100%; margin-bottom: 1.5rem;
+  border: 1px solid hsl(var(--wl-border)); border-radius: var(--wl-radius);
+  padding: 1rem 0.5rem; background: hsla(0,0%,0%,0.3);
+}
+
+.wl-history-title {
+  font-size: 0.8rem; font-weight: 600; color: hsl(var(--wl-muted-fg));
+  letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem;
+  display: flex; align-items: center; gap: 0.375rem;
+}
+.wl-history-list {
+  max-height: 260px; overflow-y: auto;
+  border: 1px solid hsl(var(--wl-border)); border-radius: var(--wl-radius);
+  background: hsla(var(--wl-card), 0.5);
+}
+.wl-history-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.6rem 1rem; border-bottom: 1px solid hsl(var(--wl-border)); transition: background 0.15s;
+}
+.wl-history-item:last-child { border-bottom: none; }
+.wl-history-item:hover { background: hsla(var(--wl-accent), 0.5); }
+
+ 
+.wl-emoji-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.wl-emoji-opt {
+  width: 40px; height: 40px; background: hsl(var(--wl-muted)); border: 1px solid transparent;
+  border-radius: var(--wl-radius); font-size: 1.3rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+}
+.wl-emoji-opt:hover { border-color: hsl(var(--wl-theme)); transform: scale(1.1); }
+.wl-emoji-opt.sel { border-color: hsl(var(--wl-theme)); background: hsla(var(--wl-theme), 0.15); box-shadow: 0 0 8px hsla(var(--wl-theme), 0.3); }
+
+.wl-color-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.wl-color-opt {
+  width: 34px; height: 34px; cursor: pointer; border: 2px solid transparent;
+  border-radius: var(--wl-radius); transition: all 0.15s; opacity: 0.5;
+}
+.wl-color-opt:hover { opacity: 0.8; transform: scale(1.1); }
+.wl-color-opt.sel { opacity: 1; border-color: hsl(var(--wl-fg)); box-shadow: 0 0 10px currentColor; transform: scale(1.15); }
+
+ 
+@keyframes wl-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.wl-anim { animation: wl-fade 0.3s ease both; }
+.wl-d1 { animation-delay: 0.03s; } .wl-d2 { animation-delay: 0.06s; } .wl-d3 { animation-delay: 0.09s; }
+
+ 
+@media (max-width: 640px) {
+  .wl-container { padding: 1rem 0.6rem 5rem; }
+  .wl-grid { grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
+  .wl-animal-card { padding: 0.8rem 0.2rem; }
+  .wl-animal-emoji { font-size: 1.8rem; }
+  .wl-animal-name { font-size: 0.75rem; }
+  .wl-animal-weight { font-size: 0.95rem; }
+  .wl-animal-date { font-size: 0.55rem; }
+  .wl-app-title { font-size: 1.2rem; }
+  .wl-chart-wrap { height: 240px; padding: 0.5rem 0.2rem; }
+  .wl-input-row { flex-wrap: wrap; gap: 0.4rem; }
+  .wl-input-date { flex: 1; min-width: 110px; font-size: 0.85rem; }
+  .wl-input-weight { flex: 1.5; min-width: 100px; font-size: 1rem; }
+  .wl-detail-emoji { font-size: 2rem; }
+  .wl-detail-name { font-size: 1.1rem; }
+  .wl-dialog { max-width: 95vw; }
+}
+@media (max-width: 360px) { .wl-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.wl-root::-webkit-scrollbar { width: 6px; }
+.wl-root::-webkit-scrollbar-track { background: transparent; }
+.wl-root::-webkit-scrollbar-thumb { background: hsl(var(--wl-border)); border-radius: 3px; }
 </style>
 
-<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
-  <filter id="liquid-refract">
-    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
-    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
-  </filter>
-</svg>
-
-<div class="wl-root" id="wl-root">
-  <div class="wl-bg-grid"></div>
-  <header class="wl-header">
-    <div class="wl-header-top">
-      <button class="wl-btn-exit" onclick="window.history.back()">◀ EXIT</button>
-      <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
-        <div class="wl-title">WEIGHT_LOG</div>
-        <div class="wl-desc">> BIO-MONITOR: ACTIVE</div>
-      </div>
-      <div style="display: flex; gap: 0.5rem;">
-        <button class="wl-btn-exit" id="wl-btn-config" style="border-color:#64748b; color:#94a3b8;">⚙ CONFIG</button>
-      </div>
-    </div>
-    <div class="wl-sync-status wl-sync-offline" id="wl-sync-badge" title="タップして同期">LOCAL ONLY</div>
-  </header>
-
-  
-  <div id="wl-view-dash" class="wl-view active">
-    <div class="wl-grid" id="wl-grid"></div>
-    <div class="wl-fab">
-      <button class="wl-btn-add" id="wl-btn-add-animal">+ NEW ANIMAL</button>
-    </div>
-  </div>
-
-  
-  <div id="wl-view-detail" class="wl-view">
-    <div class="wl-detail-header">
-      <button class="wl-btn-exit" id="wl-btn-back" style="margin-top:0;">◀ BACK</button>
-      <div class="wl-detail-emoji" id="wl-det-emoji">🦎</div>
-      <div class="wl-detail-info">
-        <div class="wl-detail-name" id="wl-det-name">Name</div>
-        <div class="wl-detail-species" id="wl-det-species">Species</div>
-      </div>
-      <button class="wl-btn-exit" id="wl-btn-edit-anim" style="margin-top:0; border-color:#64748b; color:#94a3b8;">✎ EDIT</button>
-    </div>
-
-    <div class="wl-ranges" id="wl-ranges">
-      <button class="wl-range-btn" data-r="1">1ヶ月</button>
-      <button class="wl-range-btn active" data-r="3">3ヶ月</button>
-      <button class="wl-range-btn" data-r="6">半年</button>
-      <button class="wl-range-btn" data-r="12">1年</button>
-      <button class="wl-range-btn" data-r="0">全期間</button>
-    </div>
-
-    <div class="wl-chart-wrapper">
-      <canvas id="wlChart"></canvas>
-    </div>
-
-    <div class="wl-input-row">
-      <input type="date" id="wl-inp-date" class="wl-input-date">
-      <input type="number" id="wl-inp-weight" class="wl-input-weight" step="0.1" placeholder="0.0 g">
-      <button class="wl-btn-save" id="wl-btn-save">RECORD</button>
-    </div>
-
-    <div class="wl-history-title">>> RECORD_HISTORY</div>
-    <div class="wl-history-list" id="wl-history-list"></div>
-  </div>
-
-</div>
-
-
-<div class="wl-modal-overlay" id="wl-modal-add">
-  <div class="wl-modal">
-    <div class="wl-modal-title">>> REGISTER_NEW_ANIMAL</div>
-    <div class="wl-form-group">
-      <span class="wl-label">名前 (Name)</span>
-      <input type="text" id="wl-new-name" class="wl-input" placeholder="やまと">
-    </div>
-    <div class="wl-form-group">
-      <span class="wl-label">種類 (Species)</span>
-      <input type="text" id="wl-new-species" class="wl-input" placeholder="レオパ">
-    </div>
-    <div class="wl-form-group">
-      <span class="wl-label">アイコン (Icon)</span>
-      <div class="wl-emoji-grid" id="wl-emoji-grid"></div>
-    </div>
-    <div class="wl-form-group">
-      <span class="wl-label">テーマカラー (Theme Color)</span>
-      <div class="wl-color-grid" id="wl-color-grid"></div>
-    </div>
-    <div class="wl-modal-btns">
-      <button class="wl-modal-btn wl-btn-cancel" id="wl-btn-modal-cancel">CANCEL</button>
-      <button class="wl-modal-btn wl-btn-submit" id="wl-btn-modal-submit">REGISTER</button>
-    </div>
-  </div>
-</div>
-
-
-<div class="wl-modal-overlay" id="wl-modal-edit">
-  <div class="wl-modal">
-    <div class="wl-modal-title">>> EDIT_ANIMAL</div>
-    <div class="wl-form-group">
-      <span class="wl-label">名前 (Name)</span>
-      <input type="text" id="wl-edit-name" class="wl-input">
-    </div>
-    <div class="wl-form-group">
-      <span class="wl-label">種類 (Species)</span>
-      <input type="text" id="wl-edit-species" class="wl-input">
-    </div>
-    <div class="wl-form-group">
-      <span class="wl-label">アイコン (Icon)</span>
-      <div class="wl-emoji-grid" id="wl-edit-emoji-grid"></div>
-    </div>
-    <div class="wl-form-group">
-      <span class="wl-label">テーマカラー (Theme Color)</span>
-      <div class="wl-color-grid" id="wl-edit-color-grid"></div>
-    </div>
-    <div class="wl-modal-btns" style="margin-bottom: 0.8rem;">
-      <button class="wl-modal-btn wl-btn-cancel" id="wl-btn-edit-cancel">CANCEL</button>
-      <button class="wl-modal-btn wl-btn-submit" id="wl-btn-edit-save">SAVE</button>
-    </div>
-    <button class="wl-modal-btn" id="wl-btn-edit-del" style="width:100%; border:1px solid #ef4444; color:#ef4444; background:transparent;">DELETE ANIMAL</button>
-  </div>
-</div>
-
-
-<div class="wl-modal-overlay" id="wl-modal-cfg">
-  <div class="wl-modal">
-    <div class="wl-modal-title">>> SYSTEM_CONFIG</div>
-    <div class="wl-form-group">
-      <span class="wl-label">JSONBIN BIN_ID</span>
-      <input type="text" id="wl-cfg-binid" class="wl-input" placeholder="Bin ID (空欄で新規作成)" style="font-family:'JetBrains Mono',monospace;">
-      <div style="font-size:0.6rem; color:#64748b; margin-top:0.4rem;">他の端末と同期する場合は、このBin IDを共有してください。</div>
-    </div>
-    <div class="wl-form-group" style="margin-top:1.5rem;">
-      <span class="wl-label">DATA_MANAGEMENT</span>
-      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-        <button class="wl-modal-btn wl-btn-submit" id="wl-cfg-export" style="flex:1;">📤 EXPORT</button>
-        <label class="wl-modal-btn wl-btn-submit" style="flex:1; text-align:center; cursor:pointer;">
-          📥 IMPORT<input type="file" accept=".json" id="wl-cfg-import" style="display:none;">
-        </label>
-        <button class="wl-modal-btn wl-btn-cancel" id="wl-cfg-clear" style="flex:1; border-color:#ef4444; color:#ef4444;">🗑 PURGE</button>
-      </div>
-    </div>
-    <div class="wl-modal-btns">
-      <button class="wl-modal-btn wl-btn-cancel" id="wl-btn-cfg-cancel">CANCEL</button>
-      <button class="wl-modal-btn wl-btn-submit" id="wl-btn-cfg-save">APPLY</button>
-    </div>
-  </div>
-</div>
-
-<div class="wl-toast" id="wl-toast"></div>
+<div id="wl-app-root"></div>
 
 <script>
-(function() {
-  "use strict";
+(function(){
+'use strict';
+const {useState,useEffect,useRef,useCallback,useMemo,Fragment}=React;
+const html=htm.bind(React.createElement);
+
+ 
+const SB={xmlns:'http://www.w3.org/2000/svg',fill:'none',stroke:'currentColor',strokeWidth:2,strokeLinecap:'round',strokeLinejoin:'round',viewBox:'0 0 24 24'};
+const IC=(p,s=16)=>(pr={})=>html`<svg ...${SB} width=${pr.size||s} height=${pr.size||s} style=${ {flexShrink:0,...(pr.style||{})}} class=${pr.className||''}>${p}</svg>`;
+const IcoPlus=IC(html`<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>`);
+const IcoX=IC(html`<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>`);
+const IcoCheck=IC(html`<polyline points="20 6 9 17 4 12"/>`);
+const IcoEdit=IC(html`<path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/>`);
+const IcoTrash=IC(html`<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>`);
+const IcoBack=IC(html`<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>`);
+const IcoSettings=IC(html`<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>`);
+const IcoRefresh=IC(html`<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>`);
+const IcoDownload=IC(html`<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>`);
+const IcoUpload=IC(html`<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>`);
+const IcoWarn=IC(html`<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>`);
+const IcoCalendar=IC(html`<rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>`);
+const IcoScale=IC(html`<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>`);
+
+ 
+const JSONBIN_KEY='$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+const LS_BIN_KEY='dt_weight_log_bin_id', LS_KEY='dt_weight_log_v1';
+const BIN_CREATE_URL='https://api.jsonbin.io/v3/b';
+const EMOJIS=['🦎','🐍','🐸','🕷️','🐢','🐟','🐁','🦔','🐕','🐈','🐇','🦮','🐉'];
+const COLORS=['#06b6d4','#10b981','#d946ef','#f97316','#3b82f6','#ef4444','#eab308'];
+const genId=()=>'anim_'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const hexToRgb=h=>{const b=parseInt(h.replace('#',''),16);return`${(b>>16)&255},${(b>>8)&255},${b&255}`;};
+const today=()=>{const o=(new Date()).getTimezoneOffset()*60000;return(new Date(Date.now()-o)).toISOString().slice(0,10);};
+
+ 
+function loadAll(){
+  let data={animals:{},weights:{},lastModified:0};
+  try{const r=localStorage.getItem(LS_KEY);if(r) data=JSON.parse(r);}catch(e){}
+  if(!data.animals) data.animals={};
+  if(!data.weights) data.weights={};
+  const binId=localStorage.getItem(LS_BIN_KEY)||'6a05f3eeadc21f119a9d9de2';
+  return {data,binId};
+}
+
+ 
+function App(){
+  const init=useMemo(()=>loadAll(),[]);
+  const [data,setData]=useState(init.data);
+  const [binId,setBinId]=useState(init.binId);
+  const [view,setView]=useState('dash'); 
+  const [currentId,setCurrentId]=useState(null);
+  const [range,setRange]=useState(3);
+  const [syncOk,setSyncOk]=useState(false);
+  const [syncing,setSyncing]=useState(false);
+  const [toastMsg,setToastMsg]=useState(null);
+  const [addModal,setAddModal]=useState(false);
+  const [editModal,setEditModal]=useState(false);
+  const [cfgModal,setCfgModal]=useState(false);
+  const [delConfirm,setDelConfirm]=useState(null);
+  const pushTimer=useRef(null);
+  const toastTimer=useRef(null);
+
+  const saveLocal=useCallback((d)=>{try{localStorage.setItem(LS_KEY,JSON.stringify(d));}catch(e){}},[]);
+
+  const toast=useCallback((msg)=>{
+    setToastMsg(msg);
+    clearTimeout(toastTimer.current);
+    toastTimer.current=setTimeout(()=>setToastMsg(null),2500);
+  },[]);
 
   
-  const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q'; 
-  const LS_BIN_KEY = 'dt_weight_log_bin_id';
-  let BIN_ID = localStorage.getItem(LS_BIN_KEY) || '6a05f3eeadc21f119a9d9de2';
-  const JSONBIN_HEADERS = () => ({
-    'X-Master-Key': JSONBIN_KEY,
-    'Content-Type': 'application/json',
-  });
-  const getBinUrl = () => `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
-  const getBinPutUrl = () => `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-  const BIN_CREATE_URL = 'https://api.jsonbin.io/v3/b';
+  const getBinUrl=useCallback(()=>`https://api.jsonbin.io/v3/b/${binId}/latest`,[binId]);
+  const getBinPut=useCallback(()=>`https://api.jsonbin.io/v3/b/${binId}`,[binId]);
+  const jbH=useCallback(()=>({'X-Master-Key':JSONBIN_KEY,'Content-Type':'application/json'}),[]);
 
-  const LS_KEY = 'dt_weight_log_v1';
-  const EMOJIS = ['🦎','🐍','🐸','🕷️','🐢','🐟','🐁','🦔','🐕','🐈','🐇','🦮','🐉'];
-  const COLORS = ['#06b6d4', '#10b981', '#d946ef', '#f97316', '#3b82f6', '#ef4444', '#eab308'];
+  const pushData=useCallback((d)=>{
+    const nd={...d,lastModified:Date.now()};
+    setData(nd); saveLocal(nd);
+    clearTimeout(pushTimer.current);
+    pushTimer.current=setTimeout(async()=>{
+      if(!binId) return;
+      setSyncing(true);
+      try{
+        const r=await fetch(getBinPut(),{method:'PUT',headers:jbH(),body:JSON.stringify(nd)});
+        setSyncOk(r.ok);
+      }catch(e){setSyncOk(false);}
+      setSyncing(false);
+    },800);
+  },[binId,saveLocal,getBinPut,jbH]);
 
-  
-  function hexToRgbStr(hex) {
-    const bigint = parseInt(hex.replace('#',''), 16);
-    return `${(bigint >> 16) & 255}, ${(bigint >> 8) & 255}, ${bigint & 255}`;
-  }
-
-  
-  let data = { animals: {}, weights: {} };
-  let isSyncing = false;
-  let syncOk = false;
-  
-  let currentAnimalId = null;
-  let currentRange = 3; 
-  let myChart = null;
-
-  
-  const viewDash = document.getElementById('wl-view-dash');
-  const viewDetail = document.getElementById('wl-view-detail');
-  const gridEl = document.getElementById('wl-grid');
-  const syncBadge = document.getElementById('wl-sync-badge');
-  const toastEl = document.getElementById('wl-toast');
-  const modalAdd = document.getElementById('wl-modal-add');
-  const modalEdit = document.getElementById('wl-modal-edit');
-  const modalCfg = document.getElementById('wl-modal-cfg');
-  const historyListEl = document.getElementById('wl-history-list');
-
-  
-  async function fetchFromBlob() {
-    try {
-      isSyncing = true; updateSyncBadge();
-      if (!BIN_ID) { await createNewBin(); return; }
-      
-      const res = await fetch(getBinUrl(), { headers: { 'X-Master-Key': JSONBIN_KEY }, cache: 'no-store' });
-      if (res.status === 404) { await createNewBin(); return; }
-      if (!res.ok) throw new Error('fetch failed: ' + res.status);
-      
-      const json = await res.json();
-      const val = json.record || {};
-      
-      
-      if (data.lastModified && val.lastModified && data.lastModified > val.lastModified) {
-        console.log('[WEIGHT_LOG] Local data is newer, skipping fetch overwrite and pushing local instead.');
-        pushData();
-        return;
-      }
-      
-      data = { animals: val.animals || {}, weights: val.weights || {}, lastModified: val.lastModified || Date.now() };
-      saveToLocal();
-      syncOk = true;
-    } catch(e) {
-      console.error('[WEIGHT_LOG] Fetch failed:', e);
-      loadFromLocal();
-      syncOk = false;
-    }
-    isSyncing = false; updateSyncBadge(); renderDash();
-  }
-
-  async function createNewBin() {
-    try {
-      const res = await fetch(BIN_CREATE_URL, {
-        method: 'POST',
-        headers: { ...JSONBIN_HEADERS(), 'X-Bin-Name': 'weight_log' },
-        body: JSON.stringify(data)
-      });
-      if (!res.ok) throw new Error('create failed: ' + res.status);
-      const json = await res.json();
-      BIN_ID = json.metadata.id;
-      localStorage.setItem(LS_BIN_KEY, BIN_ID);
-      toast('✓ DB Created');
-      syncOk = true;
-    } catch(e) {
-      console.error('[WEIGHT_LOG] createBin failed:', e);
-      syncOk = false;
-    }
-    isSyncing = false; updateSyncBadge(); renderDash();
-  }
-
-  let pushTimer = null;
-  function pushData() {
-    data.lastModified = Date.now();
-    saveToLocal();
-    clearTimeout(pushTimer);
-    pushTimer = setTimeout(async () => {
-      try {
-        isSyncing = true; updateSyncBadge();
-        if (!BIN_ID) { await createNewBin(); return; }
-        const res = await fetch(getBinPutUrl(), {
-          method: 'PUT', headers: JSONBIN_HEADERS(), body: JSON.stringify(data)
-        });
-        if (res.status === 404) { await createNewBin(); return; }
-        syncOk = res.ok;
-      } catch(e) {
-        console.error('[WEIGHT_LOG] Push error:', e);
-        syncOk = false;
-      }
-      isSyncing = false; updateSyncBadge();
-    }, 800);
-  }
-
-  syncBadge.addEventListener('click', () => { toast('\u21bb Fetching...'); fetchFromBlob(); });
-
-  function updateSyncBadge() {
-    if (isSyncing) {
-      syncBadge.textContent = '\u21bb SYNCING...'; syncBadge.className = 'wl-sync-status wl-sync-offline';
-    } else if (syncOk) {
-      syncBadge.textContent = '\u25cf SYNCED'; syncBadge.className = 'wl-sync-status wl-sync-online';
-    } else {
-      syncBadge.textContent = '\u25cb OFFLINE'; syncBadge.className = 'wl-sync-status wl-sync-offline';
-    }
-  }
-
-  function saveToLocal() { try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch (e) {} }
-  function loadFromLocal() {
-    try { const raw = localStorage.getItem(LS_KEY); if (raw) data = JSON.parse(raw); } catch (e) {}
-    if (!data.animals) data.animals = {};
-    if (!data.weights) data.weights = {};
-    if (!data.lastModified) data.lastModified = 0;
-  }
-
-  function toast(msg) {
-    toastEl.textContent = msg; toastEl.classList.add("show");
-    setTimeout(() => toastEl.classList.remove("show"), 2000);
-  }
-
-  function getTodayString() {
-    const tzOffset = (new Date()).getTimezoneOffset() * 60000;
-    const localISOTime = (new Date(Date.now() - tzOffset)).toISOString().slice(0, 10);
-    return localISOTime;
-  }
-
-  
-  function renderDash() {
-    const animals = Object.values(data.animals).sort((a,b) => (a.order || 0) - (b.order || 0) || a.createdAt - b.createdAt);
-    if (animals.length === 0) {
-      gridEl.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 2rem; font-family: 'JetBrains Mono'; border: 1px dashed #333; border-radius: 8px;">No animals registered.</div>`;
+  const fetchBlob=useCallback(async(silent)=>{
+    if(!binId){
+      try{
+        setSyncing(true);
+        const r=await fetch(BIN_CREATE_URL,{method:'POST',headers:{...jbH(),'X-Bin-Name':'weight_log'},body:JSON.stringify(data)});
+        if(!r.ok) throw new Error();
+        const j=await r.json();
+        const nid=j.metadata.id;
+        setBinId(nid); localStorage.setItem(LS_BIN_KEY,nid);
+        setSyncOk(true);
+        if(!silent) toast('✓ DB Created');
+      }catch(e){setSyncOk(false);}
+      setSyncing(false);
       return;
     }
-    
-    let html = '';
-    animals.forEach(a => {
-      const wData = data.weights[a.id] || {};
-      const dates = Object.keys(wData).sort();
-      const lastDate = dates.length > 0 ? dates[dates.length - 1] : null;
-      const lastWeight = lastDate ? wData[lastDate].toFixed(1) : '--';
-      
-      html += `
-        <div class="wl-card" data-id="${a.id}">
-          <div class="wl-card-emoji">${a.emoji}</div>
-          <div class="wl-card-name">${a.name}</div>
-          <div class="wl-card-weight">${lastWeight} <span style="font-size:0.7rem;color:#64748b">g</span></div>
-          <div class="wl-card-date">${lastDate ? lastDate.replace(/-/g,'/') : 'No record'}</div>
-        </div>
-      `;
-    });
-    gridEl.innerHTML = html;
-    
-    
-    gridEl.querySelectorAll('.wl-card').forEach(card => {
-      const id = card.getAttribute('data-id');
-      let pressTimer = null;
-      let isDragging = false;
-      let startX = 0, startY = 0;
-      
-      const onS = e => {
-        if (e.touches && e.touches.length > 1) { onC(); return; }
-        const t = e.touches ? e.touches[0] : e;
-        startX = t.clientX; startY = t.clientY;
-        pressTimer = setTimeout(() => {
-          isDragging = true;
-          card.classList.add('dragging');
-          card.setAttribute('draggable', 'true');
-        }, 500);
-      };
-      const onM = e => {
-        if (!pressTimer && !isDragging) return;
-        const t = e.touches ? e.touches[0] : e;
-        if (!isDragging && Math.hypot(t.clientX - startX, t.clientY - startY) > 10) onC();
-        if (isDragging && e.touches) {
-          e.preventDefault(); 
-          const overEl = document.elementFromPoint(t.clientX, t.clientY);
-          const dropTarget = overEl ? overEl.closest('.wl-card') : null;
-          gridEl.querySelectorAll('.wl-card').forEach(c => c.classList.remove('drag-over'));
-          if (dropTarget && dropTarget !== card) dropTarget.classList.add('drag-over');
-        }
-      };
-      const onE = e => {
-        onC();
-        if (isDragging) {
-          isDragging = false;
-          card.classList.remove('dragging');
-          card.removeAttribute('draggable');
-          let dropTarget = null;
-          if (e.changedTouches) {
-            const t = e.changedTouches[0];
-            const overEl = document.elementFromPoint(t.clientX, t.clientY);
-            dropTarget = overEl ? overEl.closest('.wl-card') : null;
-          }
-          gridEl.querySelectorAll('.wl-card').forEach(c => c.classList.remove('drag-over'));
-          if (dropTarget && dropTarget !== card) swapOrder(id, dropTarget.getAttribute('data-id'));
-        } else {
-          window.openDetail(id);
-        }
-      };
-      const onC = () => { clearTimeout(pressTimer); pressTimer = null; };
-      
-      card.addEventListener('touchstart', onS, {passive: false});
-      card.addEventListener('touchmove', onM, {passive: false});
-      card.addEventListener('touchend', onE);
-      card.addEventListener('touchcancel', onE);
-      
-      card.addEventListener('mousedown', onS);
-      card.addEventListener('mousemove', onM);
-      card.addEventListener('mouseup', onE);
-      card.addEventListener('mouseleave', onE);
-      card.addEventListener('contextmenu', e => { e.preventDefault(); });
-      
-      card.addEventListener('dragstart', e => {
-        card.classList.add('dragging');
-        e.dataTransfer.setData('text/plain', id);
-        e.dataTransfer.effectAllowed = 'move';
-      });
-      card.addEventListener('dragend', e => {
-        card.classList.remove('dragging');
-        gridEl.querySelectorAll('.wl-card').forEach(c => c.classList.remove('drag-over'));
-      });
-      card.addEventListener('dragover', e => {
-        e.preventDefault(); e.dataTransfer.dropEffect = 'move';
-        if (!card.classList.contains('dragging')) card.classList.add('drag-over');
-      });
-      card.addEventListener('dragleave', e => { card.classList.remove('drag-over'); });
-      card.addEventListener('drop', e => {
-        e.preventDefault(); card.classList.remove('drag-over');
-        const dragId = e.dataTransfer.getData('text/plain');
-        if (dragId && dragId !== id) swapOrder(dragId, id);
-      });
-    });
-  }
-
-  function swapOrder(idA, idB) {
-    const animals = Object.values(data.animals).sort((a,b) => (a.order || 0) - (b.order || 0) || a.createdAt - b.createdAt);
-    animals.forEach((a, i) => { a.order = i; });
-    const a = animals.find(x => x.id === idA);
-    const b = animals.find(x => x.id === idB);
-    if (!a || !b) return;
-    const temp = a.order; a.order = b.order; b.order = temp;
-    pushData();
-    renderDash();
-  }
-
-  
-  window.openDetail = function(id) {
-    currentAnimalId = id;
-    const a = data.animals[id];
-    if (!a) return;
-    
-    document.getElementById('wl-det-emoji').textContent = a.emoji;
-    document.getElementById('wl-det-name').textContent = a.name;
-    document.getElementById('wl-det-species').textContent = a.species || 'Unknown';
-    document.getElementById('wl-inp-date').value = getTodayString();
-    document.getElementById('wl-inp-weight').value = '';
-    
-    
-    const tColor = a.themeColor || '#06b6d4';
-    document.getElementById('wl-root').style.setProperty('--theme-hex', tColor);
-    document.getElementById('wl-root').style.setProperty('--theme-rgb', hexToRgbStr(tColor));
-    
-    viewDash.classList.remove('active');
-    viewDetail.classList.add('active');
-    renderDetail();
-  };
-
-  document.getElementById('wl-btn-back').addEventListener('click', () => {
-    currentAnimalId = null;
-    document.getElementById('wl-root').style.setProperty('--theme-hex', '#06b6d4');
-    document.getElementById('wl-root').style.setProperty('--theme-rgb', hexToRgbStr('#06b6d4'));
-    viewDetail.classList.remove('active');
-    viewDash.classList.add('active');
-    renderDash(); 
-  });
-
-  function renderDetail() {
-    if(!currentAnimalId) return;
-    renderChart();
-    renderHistory();
-  }
-
-  function renderChart() {
-    const ctx = document.getElementById('wlChart').getContext('2d');
-    const animalData = data.weights[currentAnimalId] || {};
-    const a = data.animals[currentAnimalId] || {};
-    const tColor = a.themeColor || '#06b6d4';
-    const rgbStr = hexToRgbStr(tColor);
-    const dates = Object.keys(animalData).sort();
-    
-    let filteredDates = dates;
-    if (currentRange > 0) {
-      const cutoff = new Date();
-      cutoff.setMonth(cutoff.getMonth() - currentRange);
-      filteredDates = dates.filter(d => new Date(d) >= cutoff);
-    }
-
-    const labels = filteredDates.map(d => d.slice(5).replace('-','/')); 
-    const dataPoints = filteredDates.map(d => animalData[d]);
-
-    if (myChart) myChart.destroy();
-    
-    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-    gradient.addColorStop(0, `rgba(${rgbStr}, 0.4)`);
-    gradient.addColorStop(1, `rgba(${rgbStr}, 0.0)`);
-
-    
-    if (typeof Chart === 'undefined') return;
-
-    myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          data: dataPoints,
-          borderColor: tColor,
-          backgroundColor: gradient,
-          borderWidth: 3,
-          pointBackgroundColor: '#020204',
-          pointBorderColor: tColor,
-          pointBorderWidth: 2,
-          pointRadius: 4,
-          pointHoverRadius: 6,
-          fill: true,
-          tension: 0.4 
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: 'rgba(2,2,4,0.9)',
-            titleFont: { family: 'JetBrains Mono', size: 11 },
-            bodyFont: { family: 'Orbitron', size: 14, weight: 'bold' },
-            bodyColor: '#10b981',
-            borderColor: '#06b6d4',
-            borderWidth: 1,
-            displayColors: false,
-            callbacks: {
-              title: function(context) { return filteredDates[context[0].dataIndex].replace(/-/g, '/'); },
-              label: function(context) { return context.parsed.y + ' g'; }
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: { color: 'rgba(255,255,255,0.05)' },
-            ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 10 }, maxTicksLimit: 7 }
-          },
-          y: {
-            grid: { color: 'rgba(255,255,255,0.05)' },
-            ticks: { color: '#64748b', font: { family: 'Orbitron', size: 11 } }
-          }
-        },
-        interaction: { intersect: false, mode: 'index' }
+    setSyncing(true);
+    try{
+      const r=await fetch(getBinUrl(),{headers:{'X-Master-Key':JSONBIN_KEY},cache:'no-store'});
+      if(!r.ok) throw new Error();
+      const j=await r.json();
+      const val=j.record||{};
+      if(data.lastModified && val.lastModified && data.lastModified > val.lastModified){
+        pushData(data); return;
       }
-    });
-  }
+      const nd={animals:val.animals||{},weights:val.weights||{},lastModified:val.lastModified||Date.now()};
+      setData(nd); saveLocal(nd); setSyncOk(true);
+    }catch(e){setSyncOk(false);}
+    setSyncing(false);
+  },[binId,data,getBinUrl,jbH,saveLocal,pushData,toast]);
 
-  function renderHistory() {
-    const animalData = data.weights[currentAnimalId] || {};
-    const dates = Object.keys(animalData).sort((a,b) => b.localeCompare(a)); 
-    
-    if (dates.length === 0) {
-      historyListEl.innerHTML = '<div style="padding: 1rem; text-align: center; color: #475569; font-family: JetBrains Mono; font-size: 0.8rem;">No records found.</div>';
-      return;
+  useEffect(()=>{setTimeout(()=>fetchBlob(true),100);},[]);
+  useEffect(()=>{
+    const h=()=>{if(document.visibilityState==='visible') fetchBlob(true);};
+    document.addEventListener('visibilitychange',h);
+    return ()=>document.removeEventListener('visibilitychange',h);
+  },[fetchBlob]);
+
+  
+  const animals=useMemo(()=>Object.values(data.animals).sort((a,b)=>(a.order||0)-(b.order||0)||a.createdAt-b.createdAt),[data.animals]);
+  const currentAnimal=currentId?data.animals[currentId]:null;
+
+  
+  const openDetail=useCallback((id)=>{
+    setCurrentId(id); setView('detail'); setRange(3);
+    const a=data.animals[id];
+    if(a){
+      const c=a.themeColor||'#06b6d4';
+      document.documentElement.style.setProperty('--wl-theme',hexToCssHsl(c));
+      document.documentElement.style.setProperty('--wl-theme-rgb',hexToRgb(c));
+      document.documentElement.style.setProperty('--wl-ring',hexToCssHsl(c));
     }
+  },[data.animals]);
 
-    let html = '';
-    dates.forEach(d => {
-      html += `
-        <div class="wl-history-item">
-          <div class="wl-hist-date">${d.replace(/-/g, '/')}</div>
-          <div class="wl-hist-weight">${animalData[d].toFixed(1)} <span style="font-size:0.7rem;color:#64748b;font-family:'Zen Kaku Gothic New'">g</span></div>
-          <button class="wl-btn-del" onclick="window.delWeight('${d}')">✕</button>
-        </div>
-      `;
-    });
-    historyListEl.innerHTML = html;
-  }
-
-  document.getElementById('wl-btn-save').addEventListener('click', () => {
-    if (!currentAnimalId) return;
-    const dateVal = document.getElementById('wl-inp-date').value;
-    const weightVal = parseFloat(document.getElementById('wl-inp-weight').value);
-    
-    if (!dateVal || isNaN(weightVal)) {
-      toast('✗ 正しい日付と体重を入力してください');
-      return;
-    }
-
-    if (!data.weights[currentAnimalId]) data.weights[currentAnimalId] = {};
-    data.weights[currentAnimalId][dateVal] = weightVal;
-    
-    pushData();
-    renderDetail();
-    toast('✓ 記録しました');
-    document.getElementById('wl-inp-weight').value = '';
-  });
-
-  window.delWeight = function(dateStr) {
-    if (!currentAnimalId || !data.weights[currentAnimalId]) return;
-    if (confirm(`${dateStr} の記録を削除しますか？`)) {
-      delete data.weights[currentAnimalId][dateStr];
-      pushData();
-      renderDetail();
-      toast('✓ 削除しました');
-    }
-  };
+  const goBack=useCallback(()=>{
+    setView('dash'); setCurrentId(null);
+    document.documentElement.style.setProperty('--wl-theme','187 72% 47%');
+    document.documentElement.style.setProperty('--wl-theme-rgb','6, 182, 212');
+    document.documentElement.style.setProperty('--wl-ring','187 72% 47%');
+  },[]);
 
   
-  document.querySelectorAll('.wl-range-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      document.querySelectorAll('.wl-range-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      currentRange = parseInt(e.target.getAttribute('data-r'));
-      renderChart();
-    });
-  });
+  const addAnimal=useCallback(({name,species,emoji,color})=>{
+    const id=genId();
+    const order=Object.keys(data.animals).length;
+    const nd={...data,animals:{...data.animals,[id]:{id,name,species,emoji,themeColor:color,createdAt:Date.now(),order}}};
+    pushData(nd); toast('✓ 登録完了');
+  },[data,pushData,toast]);
+
+  const editAnimal=useCallback(({name,species,emoji,color})=>{
+    if(!currentId) return;
+    const nd={...data,animals:{...data.animals,[currentId]:{...data.animals[currentId],name,species,emoji,themeColor:color}}};
+    pushData(nd); toast('✓ 更新しました');
+    const c=color||'#06b6d4';
+    document.documentElement.style.setProperty('--wl-theme',hexToCssHsl(c));
+    document.documentElement.style.setProperty('--wl-theme-rgb',hexToRgb(c));
+  },[currentId,data,pushData,toast]);
+
+  const deleteAnimal=useCallback(()=>{
+    if(!currentId) return;
+    const na={...data.animals}; delete na[currentId];
+    const nw={...data.weights}; delete nw[currentId];
+    pushData({...data,animals:na,weights:nw});
+    goBack(); toast('🗑 削除しました'); setDelConfirm(null);
+  },[currentId,data,pushData,goBack,toast]);
+
+  const addWeight=useCallback((dateVal,weightVal)=>{
+    if(!currentId) return;
+    const nw={...data.weights,[currentId]:{...(data.weights[currentId]||{}),[dateVal]:weightVal}};
+    pushData({...data,weights:nw}); toast('✓ 記録しました');
+  },[currentId,data,pushData,toast]);
+
+  const delWeight=useCallback((dateStr)=>{
+    if(!currentId) return;
+    const cur={...(data.weights[currentId]||{})}; delete cur[dateStr];
+    pushData({...data,weights:{...data.weights,[currentId]:cur}});
+    toast('✓ 削除しました'); setDelConfirm(null);
+  },[currentId,data,pushData,toast]);
 
   
-  let selectedEmoji = EMOJIS[0];
-  let selectedColor = COLORS[0];
-  const gridEmoji = document.getElementById('wl-emoji-grid');
-  EMOJIS.forEach(e => {
-    const d = document.createElement('div');
-    d.className = 'wl-emoji-opt' + (e === selectedEmoji ? ' selected' : '');
-    d.textContent = e;
-    d.addEventListener('click', () => {
-      document.querySelectorAll('.wl-emoji-opt').forEach(el => el.classList.remove('selected'));
-      d.classList.add('selected');
-      selectedEmoji = e;
-    });
-    gridEmoji.appendChild(d);
-  });
-
-  const gridColor = document.getElementById('wl-color-grid');
-  COLORS.forEach(c => {
-    const d = document.createElement('div');
-    d.className = 'wl-color-opt' + (c === selectedColor ? ' selected' : '');
-    d.style.backgroundColor = c;
-    d.style.color = c;
-    d.addEventListener('click', () => {
-      document.querySelectorAll('.wl-color-opt').forEach(el => el.classList.remove('selected'));
-      d.classList.add('selected');
-      selectedColor = c;
-    });
-    gridColor.appendChild(d);
-  });
-
-  
-  let editSelectedEmoji = EMOJIS[0];
-  let editSelectedColor = COLORS[0];
-  const gridEditEmoji = document.getElementById('wl-edit-emoji-grid');
-  const gridEditColor = document.getElementById('wl-edit-color-grid');
-  
-  EMOJIS.forEach(e => {
-    const d = document.createElement('div');
-    d.className = 'wl-emoji-opt'; d.textContent = e;
-    d.addEventListener('click', () => {
-      gridEditEmoji.querySelectorAll('.wl-emoji-opt').forEach(el => el.classList.remove('selected'));
-      d.classList.add('selected'); editSelectedEmoji = e;
-    });
-    gridEditEmoji.appendChild(d);
-  });
-  
-  COLORS.forEach(c => {
-    const d = document.createElement('div');
-    d.className = 'wl-color-opt'; d.style.backgroundColor = c; d.style.color = c;
-    d.addEventListener('click', () => {
-      gridEditColor.querySelectorAll('.wl-color-opt').forEach(el => el.classList.remove('selected'));
-      d.classList.add('selected'); editSelectedColor = c;
-    });
-    gridEditColor.appendChild(d);
-  });
-  
-  document.getElementById('wl-btn-edit-anim').addEventListener('click', () => {
-    if(!currentAnimalId) return;
-    const a = data.animals[currentAnimalId];
-    if(!a) return;
-    document.getElementById('wl-edit-name').value = a.name;
-    document.getElementById('wl-edit-species').value = a.species || '';
-    editSelectedEmoji = a.emoji;
-    editSelectedColor = a.themeColor || '#06b6d4';
-    
-    gridEditEmoji.querySelectorAll('.wl-emoji-opt').forEach(el => el.classList.toggle('selected', el.textContent === editSelectedEmoji));
-    Array.from(gridEditColor.children).forEach((el, i) => el.classList.toggle('selected', COLORS[i] === editSelectedColor));
-    
-    modalEdit.classList.add('show');
-  });
-  
-  document.getElementById('wl-btn-edit-cancel').addEventListener('click', () => {
-    modalEdit.classList.remove('show');
-  });
-  
-  document.getElementById('wl-btn-edit-save').addEventListener('click', () => {
-    if(!currentAnimalId) return;
-    const name = document.getElementById('wl-edit-name').value.trim();
-    const species = document.getElementById('wl-edit-species').value.trim();
-    if(!name) { toast('✗ 名前を入力してください'); return; }
-    
-    data.animals[currentAnimalId].name = name;
-    data.animals[currentAnimalId].species = species;
-    data.animals[currentAnimalId].emoji = editSelectedEmoji;
-    data.animals[currentAnimalId].themeColor = editSelectedColor;
-    
-    pushData();
-    modalEdit.classList.remove('show');
-    toast('✓ 更新しました');
-    
-    
-    const a = data.animals[currentAnimalId];
-    document.getElementById('wl-det-emoji').textContent = a.emoji;
-    document.getElementById('wl-det-name').textContent = a.name;
-    document.getElementById('wl-det-species').textContent = a.species || 'Unknown';
-    document.getElementById('wl-root').style.setProperty('--theme-hex', a.themeColor || '#06b6d4');
-    document.getElementById('wl-root').style.setProperty('--theme-rgb', hexToRgbStr(a.themeColor || '#06b6d4'));
-    renderChart();
-  });
-  
-  document.getElementById('wl-btn-edit-del').addEventListener('click', () => {
-    if(!currentAnimalId) return;
-    if(confirm('本当にこの生体と全ての記録を削除しますか？\n（この操作は元に戻せません）')) {
-      delete data.animals[currentAnimalId];
-      delete data.weights[currentAnimalId];
-      pushData();
-      modalEdit.classList.remove('show');
-      document.getElementById('wl-btn-back').click();
-      toast('🗑 削除しました');
-    }
-  });
-
-  
-  document.getElementById('wl-btn-config').addEventListener('click', () => {
-    document.getElementById('wl-cfg-binid').value = BIN_ID;
-    modalCfg.classList.add('show');
-  });
-
-  document.getElementById('wl-btn-cfg-cancel').addEventListener('click', () => {
-    modalCfg.classList.remove('show');
-  });
-
-  document.getElementById('wl-btn-cfg-save').addEventListener('click', () => {
-    const newBin = document.getElementById('wl-cfg-binid').value.trim();
-    BIN_ID = newBin;
-    if (BIN_ID) {
-      localStorage.setItem(LS_BIN_KEY, BIN_ID);
-    } else {
-      localStorage.removeItem(LS_BIN_KEY);
-      data = { animals: {}, weights: {}, lastModified: Date.now() };
-      saveToLocal();
-    }
-    modalCfg.classList.remove('show');
-    toast('✓ 設定を保存しました');
-    fetchFromBlob();
-  });
-
-  document.getElementById('wl-cfg-export').addEventListener('click', () => {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'weight_log_backup.json';
-    a.click(); URL.revokeObjectURL(url);
+  const doExport=useCallback(()=>{
+    const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(b);a.download='weight_log_backup.json';a.click();URL.revokeObjectURL(a.href);
     toast('✓ エクスポート完了');
-  });
+  },[data,toast]);
 
-  document.getElementById('wl-cfg-import').addEventListener('change', e => {
-    const file = e.target.files[0]; if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      try {
-        const json = JSON.parse(ev.target.result);
-        if (json.animals) {
-          data = json;
-          data.lastModified = Date.now();
-          pushData();
-          renderDash();
-          toast('✓ インポート完了');
-          modalCfg.classList.remove('show');
-        }
-      } catch (err) { toast('✗ 読み込みエラー'); }
+  const doImport=useCallback((file)=>{
+    if(!file) return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        const j=JSON.parse(ev.target.result);
+        if(j.animals){const nd={...j,lastModified:Date.now()};pushData(nd);toast('✓ インポート完了');}
+      }catch(e){toast('✗ 読み込みエラー');}
     };
     reader.readAsText(file);
-    e.target.value = '';
-  });
+  },[pushData,toast]);
 
-  document.getElementById('wl-cfg-clear').addEventListener('click', () => {
-    if (confirm('ローカルデータを全て消去しますか？')) {
-      data = { animals: {}, weights: {}, lastModified: Date.now() };
-      pushData();
-      renderDash();
-      toast('🗑 データを初期化しました');
-      modalCfg.classList.remove('show');
+  const doClear=useCallback(()=>{
+    const nd={animals:{},weights:{},lastModified:Date.now()};
+    pushData(nd); toast('🗑 データを初期化しました');
+    setDelConfirm(null); setCfgModal(false);
+  },[pushData,toast]);
+
+  const swapOrder = useCallback((idA, idB) => {
+    setData(prev => {
+      const list = Object.values(prev.animals).sort((a,b) => (a.order||0)-(b.order||0) || a.createdAt-b.createdAt);
+      list.forEach((a, i) => { a.order = i; });
+      const a = list.find(x => x.id === idA);
+      const b = list.find(x => x.id === idB);
+      if (!a || !b) return prev;
+      const temp = a.order; a.order = b.order; b.order = temp;
+      
+      const newAnimals = {};
+      list.forEach(item => {
+        newAnimals[item.id] = item;
+      });
+      const nd = { ...prev, animals: newAnimals };
+      pushData(nd);
+      return nd;
+    });
+  }, [pushData]);
+
+  return html`
+    <div class="wl-root">
+      <div class="wl-bg"></div>
+      <div class="wl-scanline"></div>
+      <div class="wl-container">
+        \x3C!-- Header -->
+        <header class="wl-header wl-anim">
+          <div class="wl-header-top">
+            <button class="wl-btn wl-btn-outline wl-btn-sm" onClick=${()=>window.history.back()}>
+              <${IcoBack} size=${14}/> EXIT
+            </button>
+            <div style=${ {display:'flex',flexDirection:'column',alignItems:'center',flex:1}}>
+              <div class="wl-app-title">WEIGHT_LOG</div>
+              <div class="wl-app-desc wl-mono">> BIO-MONITOR: ACTIVE</div>
+            </div>
+            <button class="wl-btn wl-btn-outline wl-btn-sm" onClick=${()=>setCfgModal(true)}>
+              <${IcoSettings} size=${14}/> CONFIG
+            </button>
+          </div>
+          <${SyncBadge} ok=${syncOk} syncing=${syncing} onClick=${()=>{toast('↻ Fetching...');fetchBlob();}} />
+        </header>
+
+        ${view==='dash' && html`<${DashView} animals=${animals} data=${data} onOpen=${openDetail} onAdd=${()=>setAddModal(true)} onSwapOrder=${swapOrder} />`}
+        ${view==='detail' && currentAnimal && html`
+          <${DetailView}
+            animal=${currentAnimal}
+            weights=${data.weights[currentId]||{}}
+            range=${range} setRange=${setRange}
+            onBack=${goBack}
+            onEdit=${()=>setEditModal(true)}
+            onAddWeight=${addWeight}
+            onDelWeight=${(d)=>setDelConfirm({type:'weight',date:d})}
+          />
+        `}
+      </div>
+
+      \x3C!-- Modals -->
+      <${AnimalDialog} open=${addModal} mode="add" onClose=${()=>setAddModal(false)} onSave=${addAnimal} />
+      <${AnimalDialog} open=${editModal} mode="edit" animal=${currentAnimal} onClose=${()=>setEditModal(false)} onSave=${editAnimal}
+        onDelete=${()=>setDelConfirm({type:'animal'})} />
+      <${ConfigDialog} open=${cfgModal} binId=${binId} onClose=${()=>setCfgModal(false)}
+        onBinSave=${(nid)=>{setBinId(nid);if(nid)localStorage.setItem(LS_BIN_KEY,nid);else localStorage.removeItem(LS_BIN_KEY);setCfgModal(false);toast('✓ 設定保存');fetchBlob();}}
+        onExport=${doExport} onImport=${doImport} onClear=${()=>setDelConfirm({type:'all'})} />
+      <${DeleteDialog} data=${delConfirm} onClose=${()=>setDelConfirm(null)}
+        onConfirm=${()=>{
+          if(!delConfirm) return;
+          if(delConfirm.type==='animal') deleteAnimal();
+          else if(delConfirm.type==='weight') delWeight(delConfirm.date);
+          else if(delConfirm.type==='all') doClear();
+        }} />
+      <${Toast} msg=${toastMsg} />
+    </div>
+  `;
+}
+
+ 
+function SyncBadge({ok,syncing,onClick}){
+  const cls=syncing?'wl-badge-amber':ok?'wl-badge-emerald':'wl-badge-amber';
+  const txt=syncing?'↻ SYNCING...':ok?'● SYNCED':'○ OFFLINE';
+  return html`<span class=${"wl-badge wl-mono "+cls} style=${ {cursor:'pointer',marginTop:'0.5rem'}} onClick=${onClick}>${txt}</span>`;
+}
+
+function Toast({msg}){
+  return html`<div class="wl-toast-wrap"><div class=${"wl-toast"+(msg?' show':'')}>${msg||''}</div></div>`;
+}
+
+ 
+function DashView({animals,data,onOpen,onAdd,onSwapOrder}){
+  const [draggingId, setDraggingId] = useState(null);
+  const [dragOverId, setDragOverId] = useState(null);
+  const pressTimer = useRef(null);
+  const isDragging = useRef(false);
+  const touchStart = useRef({x: 0, y: 0});
+
+  const handleTouchStart = (e, id) => {
+    if (e.touches && e.touches.length > 1) {
+      handleTouchCancel();
+      return;
     }
-  });
+    const t = e.touches ? e.touches[0] : e;
+    touchStart.current = {x: t.clientX, y: t.clientY};
+    isDragging.current = false;
 
-  document.getElementById('wl-btn-add-animal').addEventListener('click', () => {
-    document.getElementById('wl-new-name').value = '';
-    document.getElementById('wl-new-species').value = '';
-    modalAdd.classList.add('show');
-  });
+    pressTimer.current = setTimeout(() => {
+      isDragging.current = true;
+      setDraggingId(id);
+    }, 500);
+  };
 
-  document.getElementById('wl-btn-modal-cancel').addEventListener('click', () => {
-    modalAdd.classList.remove('show');
-  });
+  const handleTouchMove = (e, id) => {
+    if (!pressTimer.current && !isDragging.current) return;
+    const t = e.touches ? e.touches[0] : e;
+    const dist = Math.hypot(t.clientX - touchStart.current.x, t.clientY - touchStart.current.y);
 
-  document.getElementById('wl-btn-modal-submit').addEventListener('click', () => {
-    const name = document.getElementById('wl-new-name').value.trim();
-    const species = document.getElementById('wl-new-species').value.trim();
-    if (!name) { toast('✗ 名前を入力してください'); return; }
-    
-    const id = 'anim_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-    const order = Object.keys(data.animals).length;
-    data.animals[id] = { id, name, species, emoji: selectedEmoji, themeColor: selectedColor, createdAt: Date.now(), order };
-    
-    pushData();
-    renderDash();
-    modalAdd.classList.remove('show');
-    toast('✓ 登録完了');
-  });
+    if (!isDragging.current && dist > 10) {
+      handleTouchCancel();
+    }
+
+    if (isDragging.current) {
+      if (e.cancelable) e.preventDefault();
+      const overEl = document.elementFromPoint(t.clientX, t.clientY);
+      const card = overEl ? overEl.closest('.wl-animal-card') : null;
+      if (card) {
+        const overId = card.getAttribute('data-id');
+        if (overId !== id) {
+          setDragOverId(overId);
+        } else {
+          setDragOverId(null);
+        }
+      } else {
+        setDragOverId(null);
+      }
+    }
+  };
+
+  const handleTouchEnd = (e, id) => {
+    clearTimeout(pressTimer.current);
+    pressTimer.current = null;
+
+    if (isDragging.current) {
+      isDragging.current = false;
+      let dropTargetId = null;
+      if (e.changedTouches) {
+        const t = e.changedTouches[0];
+        const overEl = document.elementFromPoint(t.clientX, t.clientY);
+        const card = overEl ? overEl.closest('.wl-animal-card') : null;
+        if (card) {
+          dropTargetId = card.getAttribute('data-id');
+        }
+      }
+      if (dropTargetId && dropTargetId !== id) {
+        onSwapOrder(id, dropTargetId);
+      }
+    } else {
+      onOpen(id);
+    }
+    setDraggingId(null);
+    setDragOverId(null);
+  };
+
+  const handleTouchCancel = () => {
+    clearTimeout(pressTimer.current);
+    pressTimer.current = null;
+    isDragging.current = false;
+    setDraggingId(null);
+    setDragOverId(null);
+  };
+
+  const handleDragStart = (e, id) => {
+    e.dataTransfer.setData('text/plain', id);
+    e.dataTransfer.effectAllowed = 'move';
+    setDraggingId(id);
+  };
+
+  const handleDragEnd = () => {
+    setDraggingId(null);
+    setDragOverId(null);
+  };
+
+  const handleDragOver = (e, id) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (draggingId !== id) {
+      setDragOverId(id);
+    }
+  };
+
+  const handleDragLeave = () => {
+    setDragOverId(null);
+  };
+
+  const handleDrop = (e, id) => {
+    e.preventDefault();
+    const dragId = e.dataTransfer.getData('text/plain');
+    if (dragId && dragId !== id) {
+      onSwapOrder(dragId, id);
+    }
+    setDraggingId(null);
+    setDragOverId(null);
+  };
+
+  return html`
+    <div class="wl-anim">
+      ${animals.length===0
+        ? html`<div style=${ {textAlign:'center',padding:'2rem',color:'hsl(var(--wl-muted-fg))',border:'1px dashed hsl(var(--wl-border))',borderRadius:'var(--wl-radius)'}}>
+            <div style=${ {fontSize:'2.5rem',marginBottom:'0.5rem',opacity:0.3}}>🦎</div>
+            <div style=${ {fontSize:'0.875rem'}}>まだ動物が登録されていません</div>
+          </div>`
+        : html`<div class="wl-grid">
+            ${animals.map((a,i)=>{
+              const w=data.weights[a.id]||{};
+              const dates=Object.keys(w).sort();
+              const last=dates.length>0?dates[dates.length-1]:null;
+              const lastW=last?w[last].toFixed(1):'--';
+              
+              const isDraggingCard = draggingId === a.id;
+              const isDragOverCard = dragOverId === a.id;
+
+              return html`
+                <div key=${a.id} 
+                  data-id=${a.id}
+                  class=${"wl-card wl-card-interactive wl-animal-card wl-anim" + (isDraggingCard ? " dragging" : "") + (isDragOverCard ? " drag-over" : "")} 
+                  style=${ {animationDelay:i*0.03+'s'}} 
+                  draggable=${draggingId === a.id}
+                  onDragStart=${e=>handleDragStart(e, a.id)}
+                  onDragEnd=${handleDragEnd}
+                  onDragOver=${e=>handleDragOver(e, a.id)}
+                  onDragLeave=${handleDragLeave}
+                  onDrop=${e=>handleDrop(e, a.id)}
+                  onTouchStart=${e=>handleTouchStart(e, a.id)}
+                  onTouchMove=${e=>handleTouchMove(e, a.id)}
+                  onTouchEnd=${e=>handleTouchEnd(e, a.id)}
+                  onTouchCancel=${handleTouchCancel}
+                  onMouseDown=${e=>handleTouchStart(e, a.id)}
+                  onMouseMove=${e=>handleTouchMove(e, a.id)}
+                  onMouseUp=${e=>handleTouchEnd(e, a.id)}
+                  onMouseLeave=${handleTouchCancel}
+                  onContextMenu=${e=>e.preventDefault()}
+                >
+                  <div class="wl-animal-emoji">${a.emoji}</div>
+                  <div class="wl-animal-name">${a.name}</div>
+                  <div class="wl-animal-weight">${lastW} <span style=${ {fontSize:'0.7rem',color:'hsl(var(--wl-muted-fg))'}}>g</span></div>
+                  <div class="wl-animal-date">${last?last.replace(/-/g,'/'):'No record'}</div>
+                </div>
+              `;
+            })}
+          </div>`
+      }
+      <div style=${ {display:'flex',justifyContent:'center',margin:'1rem 0 2rem'}}>
+        <button class="wl-btn wl-btn-outline" style=${ {borderStyle:'dashed',borderColor:'hsl(var(--wl-theme))',color:'hsl(var(--wl-theme))',borderRadius:'9999px',padding:'0.6rem 2rem'}} onClick=${onAdd}>
+          <${IcoPlus} size=${16}/> NEW ANIMAL
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+ 
+function DetailView({animal,weights,range,setRange,onBack,onEdit,onAddWeight,onDelWeight}){
+  const dateRef=useRef(null);
+  const weightRef=useRef(null);
+  const chartRef=useRef(null);
+  const chartInst=useRef(null);
+  const ranges=[{v:1,l:'1ヶ月'},{v:3,l:'3ヶ月'},{v:6,l:'半年'},{v:12,l:'1年'},{v:0,l:'全期間'}];
+
+  const dates=useMemo(()=>Object.keys(weights).sort(),[weights]);
+  const filtered=useMemo(()=>{
+    if(range<=0) return dates;
+    const cutoff=new Date(); cutoff.setMonth(cutoff.getMonth()-range);
+    return dates.filter(d=>new Date(d)>=cutoff);
+  },[dates,range]);
 
   
-  loadFromLocal();
-  renderDash();
-  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') fetchFromBlob(); });
-  
-  setTimeout(fetchFromBlob, 100);
+  useEffect(()=>{
+    if(!chartRef.current||typeof Chart==='undefined') return;
+    if(chartInst.current) chartInst.current.destroy();
+    const ctx=chartRef.current.getContext('2d');
+    const tc=animal.themeColor||'#06b6d4';
+    const rgb=hexToRgb(tc);
+    const grad=ctx.createLinearGradient(0,0,0,280);
+    grad.addColorStop(0,`rgba(${rgb},0.4)`);
+    grad.addColorStop(1,`rgba(${rgb},0.0)`);
+    chartInst.current=new Chart(ctx,{
+      type:'line',
+      data:{labels:filtered.map(d=>d.slice(5).replace('-','/')),datasets:[{
+        data:filtered.map(d=>weights[d]),
+        borderColor:tc,backgroundColor:grad,borderWidth:2.5,
+        pointBackgroundColor:'hsl(var(--wl-bg))',pointBorderColor:tc,pointBorderWidth:2,pointRadius:4,pointHoverRadius:6,
+        fill:true,tension:0.4
+      }]},
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{
+          backgroundColor:'hsl(240,10%,6%)',bodyFont:{family:'JetBrains Mono',size:13,weight:'bold'},
+          bodyColor:tc,borderColor:tc,borderWidth:1,displayColors:false,
+          callbacks:{title:c=>filtered[c[0].dataIndex]?.replace(/-/g,'/'),label:c=>c.parsed.y+' g'}
+        }},
+        scales:{
+          x:{grid:{color:'hsla(0,0%,100%,0.05)'},ticks:{color:'hsl(0,0%,40%)',font:{family:'JetBrains Mono',size:10},maxTicksLimit:7}},
+          y:{grid:{color:'hsla(0,0%,100%,0.05)'},ticks:{color:'hsl(0,0%,40%)',font:{family:'JetBrains Mono',size:11}}}
+        },
+        interaction:{intersect:false,mode:'index'}
+      }
+    });
+    return ()=>{if(chartInst.current)chartInst.current.destroy();};
+  },[filtered,weights,animal]);
 
+  const handleSave=()=>{
+    const dv=dateRef.current?.value;
+    const wv=parseFloat(weightRef.current?.value);
+    if(!dv||isNaN(wv)){return;}
+    onAddWeight(dv,wv);
+    if(weightRef.current) weightRef.current.value='';
+  };
+
+  
+  const stats=useMemo(()=>{
+    if(dates.length===0) return null;
+    const vals=dates.map(d=>weights[d]);
+    const last=vals[vals.length-1];
+    const prev=vals.length>=2?vals[vals.length-2]:null;
+    const diff=prev!==null?last-prev:0;
+    const max=Math.max(...vals), min=Math.min(...vals);
+    return {last,diff,max,min,count:dates.length};
+  },[dates,weights]);
+
+  return html`
+    <div class="wl-anim">
+      <div class="wl-detail-header">
+        <button class="wl-btn wl-btn-outline wl-btn-sm" onClick=${onBack}><${IcoBack} size=${14}/> BACK</button>
+        <div class="wl-detail-emoji">${animal.emoji}</div>
+        <div class="wl-detail-info">
+          <div class="wl-detail-name">${animal.name}</div>
+          <div class="wl-detail-species wl-mono">${animal.species||'Unknown'}</div>
+        </div>
+        <button class="wl-btn wl-btn-outline wl-btn-sm" onClick=${onEdit}><${IcoEdit} size=${14}/> EDIT</button>
+      </div>
+
+      \x3C!-- Stats Cards -->
+      ${stats && html`
+        <div style=${ {display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'0.5rem',marginBottom:'1.5rem'}}>
+          <div class="wl-card" style=${ {padding:'0.75rem',textAlign:'center'}}>
+            <div style=${ {fontSize:'0.7rem',color:'hsl(var(--wl-muted-fg))',marginBottom:'0.25rem'}}>最新</div>
+            <div class="wl-mono" style=${ {fontSize:'1.1rem',fontWeight:700,color:'hsl(var(--wl-emerald))'}}>${stats.last.toFixed(1)}g</div>
+          </div>
+          <div class="wl-card" style=${ {padding:'0.75rem',textAlign:'center'}}>
+            <div style=${ {fontSize:'0.7rem',color:'hsl(var(--wl-muted-fg))',marginBottom:'0.25rem'}}>前回比</div>
+            <div class="wl-mono" style=${ {fontSize:'1.1rem',fontWeight:700,color:stats.diff>0?'hsl(var(--wl-emerald))':stats.diff<0?'hsl(var(--wl-rose))':'hsl(var(--wl-muted-fg))'}}>
+              ${stats.diff>0?'+':''}${stats.diff.toFixed(1)}g
+            </div>
+          </div>
+          <div class="wl-card" style=${ {padding:'0.75rem',textAlign:'center'}}>
+            <div style=${ {fontSize:'0.7rem',color:'hsl(var(--wl-muted-fg))',marginBottom:'0.25rem'}}>最大</div>
+            <div class="wl-mono" style=${ {fontSize:'1.1rem',fontWeight:700}}>${stats.max.toFixed(1)}g</div>
+          </div>
+          <div class="wl-card" style=${ {padding:'0.75rem',textAlign:'center'}}>
+            <div style=${ {fontSize:'0.7rem',color:'hsl(var(--wl-muted-fg))',marginBottom:'0.25rem'}}>記録数</div>
+            <div class="wl-mono" style=${ {fontSize:'1.1rem',fontWeight:700}}>${stats.count}</div>
+          </div>
+        </div>
+      `}
+
+      \x3C!-- Range Tabs -->
+      <div class="wl-tabs" style=${ {marginBottom:'0.75rem'}}>
+        ${ranges.map(r=>html`<button key=${r.v} class=${"wl-tab"+(range===r.v?' active':'')} onClick=${()=>setRange(r.v)}>${r.l}</button>`)}
+      </div>
+
+      \x3C!-- Chart -->
+      <div class="wl-chart-wrap">
+        <canvas ref=${chartRef}></canvas>
+      </div>
+
+      \x3C!-- Input -->
+      <div class="wl-input-row">
+        <input ref=${dateRef} type="date" class="wl-input-date" defaultValue=${today()} />
+        <input ref=${weightRef} type="number" class="wl-input-weight" step="0.1" placeholder="0.0 g" onKeyDown=${e=>{if(e.key==='Enter')handleSave();}} />
+        <button class="wl-btn wl-btn-primary wl-btn-sm" onClick=${handleSave}>
+          <${IcoScale} size=${14}/> RECORD
+        </button>
+      </div>
+
+      \x3C!-- History -->
+      <div class="wl-history-title"><${IcoCalendar} size=${14}/> RECORD HISTORY</div>
+      <div class="wl-history-list">
+        ${dates.length===0
+          ? html`<div style=${ {padding:'1rem',textAlign:'center',color:'hsl(var(--wl-muted-fg))',fontSize:'0.8rem'}}>No records found.</div>`
+          : [...dates].reverse().map(d=>html`
+            <div class="wl-history-item" key=${d}>
+              <span class="wl-mono" style=${ {fontSize:'0.85rem',color:'hsl(var(--wl-muted-fg))'}}>${d.replace(/-/g,'/')}</span>
+              <span class="wl-mono" style=${ {fontSize:'1rem',fontWeight:700}}>${weights[d].toFixed(1)} <span style=${ {fontSize:'0.7rem',color:'hsl(var(--wl-muted-fg))',fontWeight:400}}>g</span></span>
+              <button class="wl-btn wl-btn-ghost wl-btn-icon sm" style=${ {color:'hsl(var(--wl-destructive))'}} onClick=${()=>onDelWeight(d)}>
+                <${IcoTrash} size=${14}/>
+              </button>
+            </div>
+          `)
+        }
+      </div>
+    </div>
+  `;
+}
+
+ 
+function AnimalDialog({open,mode,animal,onClose,onSave,onDelete}){
+  const [name,setName]=useState('');
+  const [species,setSpecies]=useState('');
+  const [emoji,setEmoji]=useState(EMOJIS[0]);
+  const [color,setColor]=useState(COLORS[0]);
+
+  useEffect(()=>{
+    if(!open) return;
+    if(mode==='edit'&&animal){
+      setName(animal.name||'');setSpecies(animal.species||'');
+      setEmoji(animal.emoji||EMOJIS[0]);setColor(animal.themeColor||COLORS[0]);
+    } else {
+      setName('');setSpecies('');setEmoji(EMOJIS[0]);setColor(COLORS[0]);
+    }
+  },[open,mode,animal]);
+
+  const handleSave=()=>{
+    if(!name.trim()) return;
+    onSave({name:name.trim(),species:species.trim(),emoji,color});
+    onClose();
+  };
+
+  return html`
+    <div class=${"wl-overlay"+(open?' open':'')} onClick=${e=>{if(e.target===e.currentTarget)onClose();}}>
+      <div class="wl-dialog" onClick=${e=>e.stopPropagation()}>
+        <div class="wl-dialog-header">
+          <div class="wl-dialog-title">${mode==='edit'?'動物を編集':'新しい動物を登録'}</div>
+          <div class="wl-dialog-desc">${mode==='edit'?'情報を更新します':'名前、種類、アイコンを設定してください'}</div>
+        </div>
+        <button class="wl-dialog-close" onClick=${onClose}><${IcoX} size=${16}/></button>
+        <div class="wl-dialog-body">
+          <div class="wl-field">
+            <label class="wl-label">名前</label>
+            <input class="wl-input" value=${name} onInput=${e=>setName(e.target.value)} placeholder="やまと" />
+          </div>
+          <div class="wl-field">
+            <label class="wl-label">種類</label>
+            <input class="wl-input" value=${species} onInput=${e=>setSpecies(e.target.value)} placeholder="レオパ" />
+          </div>
+          <div class="wl-field">
+            <label class="wl-label">アイコン</label>
+            <div class="wl-emoji-grid">
+              ${EMOJIS.map(e=>html`
+                <div key=${e} class=${"wl-emoji-opt"+(emoji===e?' sel':'')} onClick=${()=>setEmoji(e)}>${e}</div>
+              `)}
+            </div>
+          </div>
+          <div class="wl-field">
+            <label class="wl-label">テーマカラー</label>
+            <div class="wl-color-grid">
+              ${COLORS.map(c=>html`
+                <div key=${c} class=${"wl-color-opt"+(color===c?' sel':'')} style=${ {backgroundColor:c,color:c}} onClick=${()=>setColor(c)}></div>
+              `)}
+            </div>
+          </div>
+        </div>
+        <div class="wl-dialog-footer" style=${ {flexDirection:'column',gap:'0.5rem'}}>
+          <div style=${ {display:'flex',gap:'0.5rem',width:'100%',justifyContent:'flex-end'}}>
+            <button class="wl-btn wl-btn-outline" onClick=${onClose}>キャンセル</button>
+            <button class="wl-btn wl-btn-primary" onClick=${handleSave}>${mode==='edit'?'保存':'登録'}</button>
+          </div>
+          ${mode==='edit'&&onDelete && html`
+            <button class="wl-btn wl-btn-danger" style=${ {width:'100%'}} onClick=${()=>{onClose();onDelete();}}>
+              <${IcoTrash} size=${14}/> この動物を削除
+            </button>
+          `}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function ConfigDialog({open,binId,onClose,onBinSave,onExport,onImport,onClear}){
+  const [bid,setBid]=useState('');
+  const importRef=useRef(null);
+  useEffect(()=>{if(open) setBid(binId||'');},[open,binId]);
+
+  return html`
+    <div class=${"wl-overlay"+(open?' open':'')} onClick=${e=>{if(e.target===e.currentTarget)onClose();}}>
+      <div class="wl-dialog" onClick=${e=>e.stopPropagation()}>
+        <div class="wl-dialog-header">
+          <div class="wl-dialog-title">設定</div>
+          <div class="wl-dialog-desc">同期・データ管理</div>
+        </div>
+        <button class="wl-dialog-close" onClick=${onClose}><${IcoX} size=${16}/></button>
+        <div class="wl-dialog-body">
+          <div class="wl-field">
+            <label class="wl-label">JSONBin BIN_ID</label>
+            <input class="wl-input wl-mono" value=${bid} onInput=${e=>setBid(e.target.value)} placeholder="Bin ID (空欄で新規作成)" />
+            <div style=${ {fontSize:'0.65rem',color:'hsl(var(--wl-muted-fg))',marginTop:'0.4rem',lineHeight:1.5}}>
+              他の端末と同期する場合は、このBin IDを共有してください。
+            </div>
+          </div>
+          <div class="wl-sep"></div>
+          <div class="wl-field">
+            <label class="wl-label">データ管理</label>
+            <div style=${ {display:'flex',gap:'0.5rem',flexWrap:'wrap'}}>
+              <button class="wl-btn wl-btn-outline wl-btn-sm" onClick=${onExport}><${IcoDownload} size=${14}/> エクスポート</button>
+              <button class="wl-btn wl-btn-outline wl-btn-sm" onClick=${()=>importRef.current?.click()}>
+                <${IcoUpload} size=${14}/> インポート
+              </button>
+              <input ref=${importRef} type="file" accept=".json" style=${ {display:'none'}} onChange=${e=>{onImport(e.target.files[0]);e.target.value='';}} />
+            </div>
+          </div>
+          <div class="wl-sep"></div>
+          <div class="wl-field">
+            <label class="wl-label" style=${ {color:'hsl(var(--wl-rose))'}}>
+              <${IcoWarn} size=${14} style=${ {verticalAlign:'middle',marginRight:'0.25rem'}}/> 危険な操作
+            </label>
+            <button class="wl-btn wl-btn-danger wl-btn-sm" onClick=${onClear}><${IcoTrash} size=${14}/> 全データ削除</button>
+          </div>
+        </div>
+        <div class="wl-dialog-footer">
+          <button class="wl-btn wl-btn-outline" onClick=${onClose}>キャンセル</button>
+          <button class="wl-btn wl-btn-primary" onClick=${()=>onBinSave(bid.trim())}>適用</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function DeleteDialog({data:d,onClose,onConfirm}){
+  if(!d) return null;
+  const msgs={animal:'この動物と全ての記録を削除します。',weight:'この記録を削除します。',all:'全てのデータを完全に削除します。'};
+  return html`
+    <div class=${"wl-overlay"+(d?' open':'')} onClick=${e=>{if(e.target===e.currentTarget)onClose();}}>
+      <div class="wl-dialog" style=${ {maxWidth:'380px'}} onClick=${e=>e.stopPropagation()}>
+        <div class="wl-dialog-header">
+          <div class="wl-dialog-title" style=${ {display:'flex',alignItems:'center',gap:'0.5rem'}}>
+            <${IcoWarn} size=${18} style=${ {color:'hsl(var(--wl-rose))'}}/> 削除確認
+          </div>
+          <div class="wl-dialog-desc">${msgs[d.type]||'削除しますか？'} この操作は取り消せません。</div>
+        </div>
+        <div class="wl-dialog-footer" style=${ {paddingTop:'1.5rem'}}>
+          <button class="wl-btn wl-btn-outline" onClick=${onClose}>キャンセル</button>
+          <button class="wl-btn wl-btn-danger" onClick=${onConfirm}><${IcoTrash} size=${14}/> 削除</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+ 
+function hexToCssHsl(hex){
+  let r=0,g=0,b=0;
+  const h=hex.replace('#','');
+  r=parseInt(h.substring(0,2),16)/255;
+  g=parseInt(h.substring(2,4),16)/255;
+  b=parseInt(h.substring(4,6),16)/255;
+  const max=Math.max(r,g,b),min=Math.min(r,g,b);
+  let hue=0,sat=0,lgt=(max+min)/2;
+  if(max!==min){
+    const d=max-min;
+    sat=lgt>0.5?d/(2-max-min):d/(max+min);
+    switch(max){
+      case r:hue=((g-b)/d+(g<b?6:0))/6;break;
+      case g:hue=((b-r)/d+2)/6;break;
+      case b:hue=((r-g)/d+4)/6;break;
+    }
+  }
+  return `${Math.round(hue*360)} ${Math.round(sat*100)}% ${Math.round(lgt*100)}%`;
+}
+
+ 
+ReactDOM.createRoot(document.getElementById('wl-app-root')).render(html`<${App}/>`);
 })();
 </script>
 
