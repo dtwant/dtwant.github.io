@@ -1262,6 +1262,34 @@
 .tl-empty-icon { font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.4; }
 
  
+.tl-text-foreground { color: hsl(var(--foreground)); }
+.tl-text-primary { color: hsl(var(--primary)); }
+.tl-text-warning { color: hsl(47.9, 95.8%, 53.1%); }
+.tl-text-success { color: hsl(142.1, 76.2%, 36.3%); }
+.tl-w-100 { width: 100px; }
+.tl-w-110 { width: 110px; }
+.tl-mt-4 { margin-top: 1rem; }
+.tl-mt-1 { margin-top: 0.25rem; }
+.tl-mb-2 { margin-bottom: 0.5rem; }
+.tl-mb-4 { margin-bottom: 1rem; }
+.tl-mb-6 { margin-bottom: 1.5rem; }
+.tl-mb-1 { margin-bottom: 0.25rem; }
+.tl-mb-3 { margin-bottom: 0.75rem; }
+.tl-fs-sm { font-size: 0.75rem; }
+.tl-display-none { display: none; }
+.tl-flex-wrap-gap { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.tl-danger-title { color: hsl(346.8, 77.2%, 49.8%); margin-bottom: 0.25rem; }
+.tl-btn-danger { background: hsl(var(--destructive)); color: hsl(var(--destructive-foreground)); }
+
+ 
+.tl-config-blob {
+  padding: 0.5rem 0.75rem; background: hsl(var(--muted)); 
+  border-radius: var(--radius); word-break: break-all; 
+  margin-bottom: 1rem; border: 1px solid hsl(var(--border)); 
+  color: hsl(var(--primary)); font-weight: 500; user-select: all;
+}
+
+ 
 @media (max-width: 768px) {
   .tl-container { padding: 1rem 0.5rem 5rem; }
   .tl-header { flex-direction: column; align-items: stretch; gap: 0.75rem; margin-bottom: 1.5rem; }
@@ -1422,15 +1450,25 @@
       } catch(e) {}
 
       if (localTasks && Array.isArray(localTasks)) {
-        setTasks(localTasks);
+        
+        const sanitized = localTasks.map((t, i) => ({
+          id: t.id || (Date.now() + i),
+          task: String(t.task || ''),
+          priority: t.priority || 'B',
+          due: String(t.due || ''),
+          done: !!t.done,
+          note: String(t.note || ''),
+          createdAt: t.createdAt || (Date.now() - i * 1000)
+        }));
+        setTasks(sanitized);
       } else if (INITIAL_YAML && Array.isArray(INITIAL_YAML) && INITIAL_YAML.length > 0) {
         const mapped = INITIAL_YAML.map((t, i) => ({
           id: Date.now() + i,
           task: String(t.task || ''),
           priority: t.priority || 'B',
-          due: t.due || '',
+          due: String(t.due || ''),
           done: !!t.done,
-          note: t.note || '',
+          note: String(t.note || ''),
           createdAt: Date.now() - (INITIAL_YAML.length - i) * 1000
         }));
         setTasks(mapped);
@@ -1562,7 +1600,7 @@
           });
           if (!p.ok) throw new Error(`put: ${p.status}`);
           setSyncStatus('ok');
-          if (!silent) addToast('SYNCHRONIZATION COMPLETE', 'success');
+          if (!silent) addToast('SYNC COMPLETE', 'success');
         }
       } catch(e) {
         setSyncStatus('err');
@@ -1588,8 +1626,19 @@
 
     const mergeTasks = (local, remote) => {
       const byId = {};
-      [...remote, ...local].forEach(t => {
-        byId[t.id] = t;
+      const allTasks = [...(Array.isArray(remote) ? remote : []), ...(Array.isArray(local) ? local : [])];
+      allTasks.forEach((t, idx) => {
+        const id = t.id || (Date.now() + idx);
+        byId[id] = {
+          ...t,
+          id: id,
+          task: String(t.task || ''),
+          priority: t.priority || 'B',
+          due: String(t.due || ''),
+          done: !!t.done,
+          note: String(t.note || ''),
+          createdAt: t.createdAt || (Date.now() - idx * 1000)
+        };
       });
       return Object.values(byId);
     };
@@ -1604,6 +1653,7 @@
 
     
     const deleteTask = (id) => {
+      if (!confirm('CONFIRM DELETION?')) return;
       const updated = tasks.filter(t => t.id !== id);
       saveLocal(updated);
       pushToCloud(updated);
@@ -1717,9 +1767,9 @@
             id: t.id || (Date.now() + idx),
             task: String(t.task || 'Unnamed Objective'),
             priority: t.priority || 'B',
-            due: t.due || '',
+            due: String(t.due || ''),
             done: !!t.done,
-            note: t.note || '',
+            note: String(t.note || ''),
             createdAt: t.createdAt || Date.now()
           }));
           
@@ -1740,7 +1790,7 @@
       const total = tasks.length;
       const completed = tasks.filter(t => t.done).length;
       const pending = total - completed;
-      const prioritySCount = tasks.filter(t => !t.done && (t.priority === 'S' || t.priority === 'SS')).length;
+      const prioritySCount = tasks.filter(t => !t.done && ((t.priority || 'B') === 'S' || (t.priority || 'B') === 'SS')).length;
       
       
       const soonCount = tasks.filter(t => {
@@ -1759,11 +1809,12 @@
       
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
-        result = result.filter(t => 
-          t.task.toLowerCase().includes(q) || 
-          t.note.toLowerCase().includes(q) ||
-          t.due.toLowerCase().includes(q)
-        );
+        result = result.filter(t => {
+          const taskStr = String(t.task || '').toLowerCase();
+          const noteStr = String(t.note || '').toLowerCase();
+          const dueStr = String(t.due || '').toLowerCase();
+          return taskStr.includes(q) || noteStr.includes(q) || dueStr.includes(q);
+        });
       }
 
       
@@ -1785,15 +1836,14 @@
         if (a.done !== b.done) return a.done ? 1 : -1;
 
         if (sortKey === 'priority') {
-          const pa = priorityMap[a.priority] ?? 4;
-          const pb = priorityMap[b.priority] ?? 4;
+          const pa = priorityMap[a.priority || 'B'] ?? 4;
+          const pb = priorityMap[b.priority || 'B'] ?? 4;
           if (pa !== pb) return pa - pb;
         } else if (sortKey === 'due') {
           
           if (!a.due && b.due) return 1;
           if (a.due && !b.due) return -1;
           if (a.due && b.due) {
-            
             return a.due.localeCompare(b.due);
           }
         }
@@ -1874,19 +1924,19 @@
         <div class="tl-stats-grid">
           <div class="tl-stat-card">
             <span class="tl-stat-label">Pending</span>
-            <span class="tl-stat-value" style="color: hsl(var(--foreground));">${stats.pending}</span>
+            <span class="tl-stat-value tl-text-foreground">${stats.pending}</span>
           </div>
           <div class="tl-stat-card">
             <span class="tl-stat-label">Rank S/A</span>
-            <span class="tl-stat-value" style="color: hsl(var(--primary));">${stats.priority}</span>
+            <span class="tl-stat-value tl-text-primary">${stats.priority}</span>
           </div>
           <div class="tl-stat-card">
             <span class="tl-stat-label">Soon / Overdue</span>
-            <span class="tl-stat-value" style="color: hsl(47.9, 95.8%, 53.1%);">${stats.soon}</span>
+            <span class="tl-stat-value tl-text-warning">${stats.soon}</span>
           </div>
           <div class="tl-stat-card">
             <span class="tl-stat-label">Completed</span>
-            <span class="tl-stat-value" style="color: hsl(142.1, 76.2%, 36.3%);">${stats.completed}</span>
+            <span class="tl-stat-value tl-text-success">${stats.completed}</span>
           </div>
         </div>
 
@@ -1913,7 +1963,7 @@
             </div>
 
             \x3C!-- Priority filter -->
-            <select class="tl-select" style="width: 100px; height: 2.25rem;" value=${priorityFilter} onChange=${e => setPriorityFilter(e.target.value)}>
+            <select class="tl-select tl-w-100" value=${priorityFilter} onChange=${e => setPriorityFilter(e.target.value)}>
               <option value="all">All Ranks</option>
               <option value="S">Rank S</option>
               <option value="A">Rank A</option>
@@ -1922,7 +1972,7 @@
             </select>
 
             \x3C!-- Sorting -->
-            <select class="tl-select" style="width: 110px; height: 2.25rem;" value=${sortKey} onChange=${e => setSortKey(e.target.value)}>
+            <select class="tl-select tl-w-110" value=${sortKey} onChange=${e => setSortKey(e.target.value)}>
               <option value="priority">Priority Rank</option>
               <option value="due">Due Date</option>
               <option value="created">Created Date</option>
@@ -1931,17 +1981,17 @@
         </div>
 
         \x3C!-- Task List Items -->
-        <div class="tl-list-container" style="margin-top: 1rem;">
+        <div class="tl-list-container tl-mt-4">
           ${processedTasks.length === 0 ? html`
             <div class="tl-empty">
               <div class="tl-empty-icon">📂</div>
               <div class="tl-text-sm">NO DATA DETECTED IN MONITOR</div>
-              <div class="tl-text-xs tl-text-muted" style="margin-top:0.25rem;">Adjust search filters or click + DEPLOY to create an objective.</div>
+              <div class="tl-text-xs tl-text-muted tl-mt-1">Adjust search filters or click + DEPLOY to create an objective.</div>
             </div>
           ` : processedTasks.map(t => {
             const dueStatus = getDueStatus(t.due);
             return html`
-              <div key=${t.id} class="tl-item tl-item-${t.priority.toLowerCase()} ${t.done ? 'completed' : ''}" style="margin-bottom: 0.5rem;">
+              <div key=${t.id} class="tl-item tl-item-${(t.priority || 'B').toLowerCase()} ${t.done ? 'completed' : ''} tl-mb-2">
                 \x3C!-- Checked toggle -->
                 <div class="tl-check ${t.done ? 'checked' : ''}" onClick=${() => toggleTask(t.id)}>
                   ✓
@@ -1950,7 +2000,7 @@
                 <div class="tl-item-info">
                   <div class="tl-item-header">
                     <span class="tl-item-name">${t.task}</span>
-                    <span class="tl-badge tl-badge-${t.priority.toLowerCase()}">RANK ${t.priority}</span>
+                    <span class="tl-badge tl-badge-${(t.priority || 'B').toLowerCase()}">RANK ${t.priority || 'B'}</span>
                   </div>
 
                   ${t.due && html`
@@ -1966,7 +2016,7 @@
 
                 <div class="tl-item-actions">
                   <button class="tl-btn tl-btn-ghost tl-btn-icon sm" onClick=${() => setEditTask({ ...t })} title="Edit Task">✏️</button>
-                  <button class="tl-btn tl-btn-ghost tl-btn-icon sm" style="color: hsl(346.8, 77.2%, 49.8%);" onClick=${() => deleteTask(t.id)} title="Delete Task">✕</button>
+                  <button class="tl-btn tl-btn-ghost tl-btn-icon sm" style=${ { color: 'hsl(346.8, 77.2%, 49.8%)' } } onClick=${() => deleteTask(t.id)} title="Delete Task">✕</button>
                 </div>
               </div>
             `;
@@ -1984,7 +2034,7 @@
             
             <form onSubmit=${handleCreateTask}>
               <div class="tl-dialog-body">
-                <div class="cn-field" style="margin-bottom: 1rem;">
+                <div class="cn-field tl-mb-4">
                   <label class="tl-label">Objective Description</label>
                   <input 
                     type="text" 
@@ -1996,7 +2046,7 @@
                   />
                 </div>
 
-                <div class="tl-field-row" style="margin-bottom: 1rem;">
+                <div class="tl-field-row tl-mb-4">
                   <div>
                     <label class="tl-label">Deadline / Due Info</label>
                     <input 
@@ -2049,7 +2099,7 @@
               
               <form onSubmit=${handleSaveEdit}>
                 <div class="tl-dialog-body">
-                  <div class="cn-field" style="margin-bottom: 1rem;">
+                  <div class="cn-field tl-mb-4">
                     <label class="tl-label">Objective Description</label>
                     <input 
                       type="text" 
@@ -2060,7 +2110,7 @@
                     />
                   </div>
 
-                  <div class="tl-field-row" style="margin-bottom: 1rem;">
+                  <div class="tl-field-row tl-mb-4">
                     <div>
                       <label class="tl-label">Deadline / Due Info</label>
                       <input 
@@ -2111,17 +2161,17 @@
 
             <div class="tl-dialog-body">
               \x3C!-- Sync Segment -->
-              <h3 class="tl-font-semibold tl-text-sm" style="margin-bottom:0.25rem;">Cloud Sync Synchronization</h3>
-              <p class="tl-text-xs tl-text-muted" style="margin-bottom:0.75rem;">
+              <h3 class="tl-font-semibold tl-text-sm tl-mb-1">Cloud Sync Synchronization</h3>
+              <p class="tl-text-xs tl-text-muted tl-mb-3">
                 Share tasks with multiple devices. Your Blob ID is automatically created on first sync. Apply it on another device to restore.
               </p>
               
-              <div class="tl-label" style="font-size:0.75rem;">Active Sync Blob ID</div>
-              <div class="tl-mono tl-text-xs" style="padding: 0.5rem 0.75rem; background: hsl(var(--muted)); border-radius: var(--radius); word-break: break-all; margin-bottom: 1rem; border: 1px solid hsl(var(--border)); color: hsl(var(--primary)); font-weight: 500; user-select: all;">
+              <div class="tl-label tl-fs-sm">Active Sync Blob ID</div>
+              <div class="tl-mono tl-text-xs tl-config-blob">
                 ${blobId || 'Local Storage Only (No Active Blob)'}
               </div>
 
-              <div class="cn-field" style="margin-bottom: 1.5rem;">
+              <div class="cn-field tl-mb-6">
                 <label class="tl-label">Apply Existing Blob ID</label>
                 <input 
                   type="text" 
@@ -2135,23 +2185,23 @@
               <div class="tl-separator"></div>
 
               \x3C!-- Data Management -->
-              <h3 class="tl-font-semibold tl-text-sm" style="margin-bottom:0.75rem;">Backup & Recovery</h3>
-              <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom: 1rem;">
+              <h3 class="tl-font-semibold tl-text-sm tl-mb-3">Backup & Recovery</h3>
+              <div class="tl-flex-wrap-gap">
                 <button class="tl-btn tl-btn-outline" onClick=${handleExport}>📤 EXPORT DATA</button>
-                <label class="tl-btn tl-btn-outline" style="cursor:pointer;">
+                <label class="tl-btn tl-btn-outline" style=${ { cursor: 'pointer' } }>
                   📥 IMPORT DATA
-                  <input type="file" accept=".json" style="display:none" onChange=${handleImport} />
+                  <input type="file" accept=".json" style=${ { display: 'none' } } onChange=${handleImport} />
                 </label>
               </div>
 
               <div class="tl-separator"></div>
 
               \x3C!-- Destructive wipe -->
-              <h3 class="tl-font-semibold tl-text-sm" style="color: hsl(346.8, 77.2%, 49.8%); margin-bottom:0.25rem;">Danger Zone</h3>
-              <p class="tl-text-xs tl-text-muted" style="margin-bottom:0.75rem;">
+              <h3 class="tl-font-semibold tl-text-sm tl-danger-title">Danger Zone</h3>
+              <p class="tl-text-xs tl-text-muted tl-mb-3">
                 Completely erase all objectives database on this browser session.
               </p>
-              <button class="tl-btn" style="background: hsl(var(--destructive)); color: hsl(var(--destructive-foreground));" onClick=${handleWipeAll}>WIPE DATABASE</button>
+              <button class="tl-btn tl-btn-danger" onClick=${handleWipeAll}>WIPE DATABASE</button>
             </div>
 
             <div class="tl-dialog-footer">
