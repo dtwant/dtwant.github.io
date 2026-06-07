@@ -3943,12 +3943,6 @@ async function pushBlob(silent = true) {
     });
     
     if(!res.ok) {
-      if ((res.status === 404 || res.status === 400) && syncRetries < MAX_SYNC_RETRIES) {
-        syncRetries++;
-        blobId = null;
-        try { localStorage.removeItem(LS_BLOB); } catch(e){}
-        return bsSync(silent);
-      }
       throw new Error(`Sync put error: ${res.status}`);
     }
     
@@ -3997,12 +3991,6 @@ window.bsSync = async function(silent = false) {
       });
       
       if(!res.ok) {
-        if((res.status === 404 || res.status === 400 || res.status === 422) && syncRetries < MAX_SYNC_RETRIES) {
-          syncRetries++;
-          blobId = null;
-          try { localStorage.removeItem(LS_BLOB); } catch(e){}
-          return bsSync(silent);
-        }
         throw new Error(`Cloud retrieval error: ${res.status}`);
       }
       

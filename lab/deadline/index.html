@@ -2326,12 +2326,6 @@
       } else {
         const r = await fetch(getBinUrl(), { headers: { 'X-Master-Key': JSONBIN_KEY }, cache: 'no-store' });
         if (!r.ok) {
-          if ([400, 401, 403, 404, 422].includes(r.status)) {
-            blobId = null;
-            try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
-            if (!silent) toast('無効なBin。新規作成します', 'info');
-            return dmSync(silent);
-          }
           throw new Error(`get failed: ${r.status}`);
         }
         const json = await r.json();
@@ -2347,11 +2341,6 @@
           body: JSON.stringify({ tasks: tasks, done: doneTasks })
         });
         if (!p.ok) {
-          if ([400, 401, 403, 404, 422].includes(p.status)) {
-            blobId = null;
-            try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
-            return dmSync(silent);
-          }
           throw new Error(`put failed: ${p.status}`);
         }
         setSyncStatus('ok', '◉ SYNCED');
@@ -2374,11 +2363,7 @@
         body: JSON.stringify({ tasks: tasks, done: doneTasks })
       });
       if (!p.ok) {
-        if ([400, 401, 403, 404, 422].includes(p.status)) {
-          blobId = null;
-          try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
-          return;
-        }
+        throw new Error(`put failed: ${p.status}`);
       }
       setSyncStatus('ok', '◉ SYNCED');
     } catch(e) { setSyncStatus('err', '✕ ERR'); }

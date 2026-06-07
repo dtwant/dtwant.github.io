@@ -1638,12 +1638,6 @@
         
         const r = await fetch(binUrl(), { headers: { 'X-Master-Key': JB_KEY }, cache: 'no-store' });
         if (!r.ok) {
-          if ([400,401,403,404,422].includes(r.status)) {
-            blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
-            updateBlobDisplay();
-            if (!silent) toast('無効なBin。新規作成します…', 'info');
-            return agSyncCloud(silent);
-          }
           throw new Error(`get: ${r.status}`);
         }
         const json = await r.json();
@@ -1657,11 +1651,6 @@
         
         const p = await fetch(binPut(), { method: 'PUT', headers: JB_HDR(), body: JSON.stringify({ courses: courses }) });
         if (!p.ok) {
-          if ([400,401,403,404,422].includes(p.status)) {
-            blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
-            updateBlobDisplay();
-            return agSyncCloud(silent);
-          }
           throw new Error(`put: ${p.status}`);
         }
         setSS('ok', '◉ SYNCED');
@@ -1679,11 +1668,7 @@
       const p = await fetch(binPut(), { method: 'PUT', headers: JB_HDR(), body: JSON.stringify({ courses: courses }) });
       if (p.ok) setSS('ok', '◉ SYNCED');
       else {
-        if ([400,401,403,404,422].includes(p.status)) {
-          blobId = null; try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
-          updateBlobDisplay();
-        }
-        setSS('err', '✕ ERR');
+        throw new Error(`put: ${p.status}`);
       }
     } catch(e) { setSS('err', '✕ ERR'); }
   }
