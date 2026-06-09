@@ -1678,6 +1678,13 @@
     var d = new Date(ts);
     return d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() + '日';
   }
+
+  function formatTime(ts) {
+    var d = new Date(ts);
+    var hours = String(d.getHours()).padStart(2, '0');
+    var minutes = String(d.getMinutes()).padStart(2, '0');
+    return hours + ':' + minutes;
+  }
   
   
   
@@ -2393,7 +2400,7 @@
 
     cell.textContent = dayNum;
 
-    var key = year + '-' + month + '-' + dayNum;
+    var key = cellDate.getFullYear() + '-' + cellDate.getMonth() + '-' + cellDate.getDate();
     if (dateMap[key]) {
       var dot = document.createElement('span');
       dot.className = 'sd-cal-dot';
