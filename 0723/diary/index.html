@@ -2005,16 +2005,23 @@
     };
   };
 
+  function isJsonBinId(key) {
+    if (!key) return false;
+    return /^[0-9a-f]{24}$/.test(key);
+  }
+
   function initSyncKey() {
     dbGetSetting('sd_gaman_sync_key', function(dbKey) {
       var localKey = localStorage.getItem('sd_gaman_sync_key') || dbKey;
       
-      if (localKey) {
+      
+      if (localKey && (isJsonBinId(localKey) || localKey.indexOf('lk_') === 0)) {
         localStorage.setItem('sd_gaman_sync_key', localKey);
         dbPutSetting('sd_gaman_sync_key', localKey);
         updateSyncStatusUI(localKey, true);
         pullFromCloud();
       } else {
+        
         fetch(BIN_CREATE_URL, {
           method: 'POST',
           headers: {
@@ -2038,7 +2045,12 @@
         })
         .catch(function(e) {
           console.error('Key generation failed:', e);
-          fallbackLocalSyncKey();
+          if (localKey) {
+            
+            updateSyncStatusUI(localKey, true);
+          } else {
+            fallbackLocalSyncKey();
+          }
         });
       }
     });
