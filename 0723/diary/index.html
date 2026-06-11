@@ -184,13 +184,25 @@
           </div>
 
           <div class="sd-settings-section">
-            <h4 class="sd-settings-sec-title">我慢データの他ブラウザ同期</h4>
+            <h4 class="sd-settings-sec-title">日記と我慢データの他ブラウザ同期</h4>
             <div style="display: flex; flex-direction: column; gap: 8px; padding: 8px 0 12px;">
-              <span class="sd-setting-desc" style="color:var(--apple-text-secondary); font-size:12px;">別ブラウザで同じ数値を同期するための共有用キーです。</span>
-              <div style="display: flex; gap: 8px; margin-top: 6px;">
-                <input type="text" id="sd-gaman-sync-key-input" class="sd-simple-input" style="background:rgba(255,255,255,0.05); border:1px solid var(--apple-border); padding:8px 12px; border-radius:8px;" placeholder="同期キーを入力" />
-                <button class="sd-apple-btn sd-primary-btn" id="sd-gaman-sync-save-btn" style="padding:0 16px; font-size:13px; flex-shrink:0;">接続</button>
+              <span class="sd-setting-desc" style="color:var(--apple-text-secondary); font-size:12px;">このダイアリーを他の端末やブラウザと同期するための設定です。</span>
+              
+              <div style="display: flex; gap: 8px; margin-top: 4px;">
+                <button class="sd-apple-btn sd-primary-btn" id="sd-gaman-sync-copy-key-btn" style="flex: 1; justify-content: center;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 6px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  同期キーをコピー
+                </button>
               </div>
+
+              <div style="margin-top: 10px; border-top: 1px solid var(--apple-border); padding-top: 10px;">
+                <span class="sd-setting-desc" style="color:var(--apple-text-secondary); font-size:11px; display:block; margin-bottom: 6px;">別のブラウザから同期キーを入力して接続する：</span>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="sd-gaman-sync-key-input" class="sd-simple-input" style="background:rgba(255,255,255,0.05); border:1px solid var(--apple-border); padding:8px 12px; border-radius:8px;" placeholder="同期キーを入力" />
+                  <button class="sd-apple-btn sd-secondary-btn" id="sd-gaman-sync-save-btn" style="padding:0 16px; font-size:13px; flex-shrink:0;">接続</button>
+                </div>
+              </div>
+
               <div id="sd-gaman-sync-status" style="font-size:12px; color:var(--apple-text-secondary); margin-top:4px;">同期キー: 未接続</div>
             </div>
           </div>
@@ -1517,6 +1529,7 @@
   var gamanHistoryList = document.getElementById('sd-gaman-history-list');
   var gamanSyncKeyInput = document.getElementById('sd-gaman-sync-key-input');
   var gamanSyncSaveBtn = document.getElementById('sd-gaman-sync-save-btn');
+  var gamanSyncCopyKeyBtn = document.getElementById('sd-gaman-sync-copy-key-btn');
   var gamanSyncStatus = document.getElementById('sd-gaman-sync-status');
   var gamanResetBtn = document.getElementById('sd-gaman-reset');
   var gamanContainer = document.getElementById('sd-gaman-container');
@@ -1697,6 +1710,33 @@
     var minutes = String(d.getMinutes()).padStart(2, '0');
     return hours + ':' + minutes;
   }
+
+  function encryptText(text, key) {
+    if (!text || !key) return text;
+    var result = "";
+    for (var i = 0; i < text.length; i++) {
+      result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+    }
+    try {
+      return btoa(unescape(encodeURIComponent(result)));
+    } catch (e) {
+      return text;
+    }
+  }
+
+  function decryptText(encoded, key) {
+    if (!encoded || !key) return encoded;
+    try {
+      var text = decodeURIComponent(escape(atob(encoded)));
+      var result = "";
+      for (var i = 0; i < text.length; i++) {
+        result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+      }
+      return result;
+    } catch(e) {
+      return encoded;
+    }
+  }
   
   
   
@@ -1712,7 +1752,7 @@
   function saveGamanData(data) {
     localStorage.setItem('sd_gaman_data', JSON.stringify(data));
     gamanCountVal.textContent = data.total;
-    syncWithCloud(data);
+    pushToCloud();
     dbPutSetting('sd_gaman_data', data);
   }
 
@@ -1957,57 +1997,45 @@
   
   function initSyncKey() {
     dbGetSetting('sd_gaman_sync_key', function(dbKey) {
-      dbGetSetting('sd_gaman_data', function(dbData) {
-        var localKey = localStorage.getItem('sd_gaman_sync_key');
-        var localDataStr = localStorage.getItem('sd_gaman_data');
-        var localData = null;
-        try {
-          localData = localDataStr ? JSON.parse(localDataStr) : null;
-        } catch(e) {}
-
-        
-        if (!localKey && dbKey) {
-          localStorage.setItem('sd_gaman_sync_key', dbKey);
-          localKey = dbKey;
-        } else if (localKey && !dbKey) {
-          dbPutSetting('sd_gaman_sync_key', localKey);
-        }
-
-        
-        if (dbData) {
-          if (!localData || (dbData.total > localData.total)) {
-            localStorage.setItem('sd_gaman_data', JSON.stringify(dbData));
-            localData = dbData;
+      var localKey = localStorage.getItem('sd_gaman_sync_key') || dbKey;
+      
+      if (localKey) {
+        localStorage.setItem('sd_gaman_sync_key', localKey);
+        dbPutSetting('sd_gaman_sync_key', localKey);
+        updateSyncStatusUI(localKey, true);
+        pullFromCloud();
+      } else {
+        fetch('https://api.keyvalue.xyz/new/gaman_data', {
+          method: 'POST'
+        })
+        .then(function(res) { return res.text(); })
+        .then(function(url) {
+          var parts = url.trim().split('/');
+          var userKey = parts[3];
+          if (userKey) {
+            registerNewSyncKey(userKey);
+          } else {
+            fallbackLocalSyncKey();
           }
-        }
-        if (localData && !dbData) {
-          dbPutSetting('sd_gaman_data', localData);
-        }
-
-        
-        if (!localKey) {
-          fetch('https://api.keyvalue.xyz/new/gaman_data', {
-            method: 'POST'
-          })
-          .then(function(res) { return res.text(); })
-          .then(function(url) {
-            var parts = url.trim().split('/');
-            var userKey = parts[3];
-            if (userKey) {
-              localStorage.setItem('sd_gaman_sync_key', userKey);
-              dbPutSetting('sd_gaman_sync_key', userKey);
-              updateSyncStatusUI(userKey, true);
-              var currentData = getGamanData();
-              syncWithCloud(currentData);
-            }
-          })
-          .catch(function(e) { console.error('Key generation failed:', e); });
-        } else {
-          updateSyncStatusUI(localKey, true);
-          pullFromCloud();
-        }
-      });
+        })
+        .catch(function(e) {
+          console.error('Key generation failed:', e);
+          fallbackLocalSyncKey();
+        });
+      }
     });
+  }
+
+  function registerNewSyncKey(key) {
+    localStorage.setItem('sd_gaman_sync_key', key);
+    dbPutSetting('sd_gaman_sync_key', key);
+    updateSyncStatusUI(key, true);
+    pushToCloud();
+  }
+
+  function fallbackLocalSyncKey() {
+    var tempKey = 'lk_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    registerNewSyncKey(tempKey);
   }
 
   function updateSyncStatusUI(key, isConnected) {
@@ -2018,7 +2046,13 @@
       gamanSyncKeyInput.style.color = 'var(--apple-text-secondary)';
       gamanSyncSaveBtn.textContent = '同期解除';
       gamanSyncSaveBtn.className = 'sd-apple-btn sd-danger-btn';
-      gamanSyncStatus.textContent = '同期キー: ' + key + ' (同期中 - 編集不可ロック)';
+      
+      var isLocal = key.indexOf('lk_') === 0;
+      if (isLocal) {
+        gamanSyncStatus.textContent = '同期キー: ' + key + ' (ローカル保存のみ - オフライン)';
+      } else {
+        gamanSyncStatus.textContent = '同期キー: ' + key + ' (同期中 - 編集不可ロック)';
+      }
     } else {
       gamanSyncKeyInput.readOnly = false;
       gamanSyncKeyInput.style.background = 'rgba(255,255,255,0.05)';
@@ -2029,22 +2063,59 @@
     }
   }
 
-  function syncWithCloud(data) {
+  function pushToCloud(callback) {
     var key = localStorage.getItem('sd_gaman_sync_key');
-    if (!key) return;
-    
-    var url = 'https://api.keyvalue.xyz/' + key + '/gaman_data';
-    fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    }).catch(function(e) { console.error('Sync failed:', e); });
+    if (!key || key.indexOf('lk_') === 0) {
+      if (callback) callback();
+      return;
+    }
+
+    dbGetAll(function(entries) {
+      var gamanData = getGamanData();
+      
+      var encryptedEntries = entries.map(function(e) {
+        return {
+          id: e.id,
+          text: encryptText(e.text, key),
+          mood: e.mood,
+          ts: e.ts,
+          favorite: e.favorite,
+          tags: e.tags
+        };
+      });
+
+      var now = Date.now();
+      localStorage.setItem('sd_last_sync_updated', now);
+
+      var payload = {
+        gaman: gamanData,
+        entries: encryptedEntries,
+        updatedAt: now
+      };
+
+      var url = 'https://api.keyvalue.xyz/' + key + '/gaman_data';
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(function() {
+        if (callback) callback(true);
+      })
+      .catch(function(e) {
+        console.error('Push to cloud failed:', e);
+        if (callback) callback(false);
+      });
+    });
   }
 
-  function pullFromCloud() {
+  function pullFromCloud(callback) {
     var key = localStorage.getItem('sd_gaman_sync_key');
-    if (!key) return;
-    
+    if (!key || key.indexOf('lk_') === 0) {
+      if (callback) callback();
+      return;
+    }
+
     var url = 'https://api.keyvalue.xyz/' + key + '/gaman_data';
     fetch(url)
     .then(function(res) {
@@ -2052,16 +2123,81 @@
       return null;
     })
     .then(function(cloudData) {
-      if (cloudData && typeof cloudData.total === 'number') {
-        var localData = getGamanData();
-        if (cloudData.total > localData.total) {
-          localStorage.setItem('sd_gaman_data', JSON.stringify(cloudData));
-          dbPutSetting('sd_gaman_data', cloudData);
-          if (currentTab === 'gaman') renderGaman();
+      if (cloudData && typeof cloudData.updatedAt === 'number') {
+        var localLastUpdated = parseInt(localStorage.getItem('sd_last_sync_updated') || '0', 10);
+        
+        if (cloudData.updatedAt > localLastUpdated) {
+          if (cloudData.gaman) {
+            localStorage.setItem('sd_gaman_data', JSON.stringify(cloudData.gaman));
+            dbPutSetting('sd_gaman_data', cloudData.gaman);
+            if (currentTab === 'gaman') renderGaman();
+          }
+
+          if (Array.isArray(cloudData.entries)) {
+            dbGetAll(function(localEntries) {
+              var localMap = {};
+              localEntries.forEach(function(e) { localMap[e.id] = e; });
+
+              var transaction = db.transaction([STORE_NAME], 'readwrite');
+              var store = transaction.objectStore(STORE_NAME);
+
+              cloudData.entries.forEach(function(cloudEntry) {
+                var localEntry = localMap[cloudEntry.id];
+                var decryptedText = decryptText(cloudEntry.text, key);
+
+                var mergedEntry = {
+                  id: cloudEntry.id,
+                  text: decryptedText,
+                  mood: cloudEntry.mood || '📝',
+                  ts: cloudEntry.ts || Date.now(),
+                  favorite: cloudEntry.favorite || false,
+                  tags: cloudEntry.tags || [],
+                  images: localEntry ? (localEntry.images || []) : []
+                };
+                
+                store.put(mergedEntry);
+              });
+              
+              var cloudIdSet = new Set(cloudData.entries.map(function(e) { return e.id; }));
+              localEntries.forEach(function(localEntry) {
+                if (!cloudIdSet.has(localEntry.id)) {
+                  if (localEntry.ts > localLastUpdated) {
+                    
+                  } else {
+                    store.delete(localEntry.id);
+                  }
+                }
+              });
+
+              transaction.oncomplete = function() {
+                localStorage.setItem('sd_last_sync_updated', cloudData.updatedAt);
+                renderTimeline();
+                if (currentTab === 'stats') renderStats();
+                if (currentTab === 'calendar') {
+                  renderCalendarDays();
+                  renderCalendarFocusedList();
+                }
+                if (callback) callback(true);
+              };
+            });
+          } else {
+            if (callback) callback(true);
+          }
+        } else {
+          if (cloudData.updatedAt < localLastUpdated) {
+            pushToCloud();
+          }
+          if (callback) callback(true);
         }
+      } else {
+        pushToCloud();
+        if (callback) callback(true);
       }
     })
-    .catch(function(e) { console.error('Sync pull failed:', e); });
+    .catch(function(e) {
+      console.error('Sync pull failed:', e);
+      if (callback) callback(false);
+    });
   }
 
   function connectToSyncKey() {
@@ -2078,14 +2214,17 @@
       throw new Error('Key not found');
     })
     .then(function(cloudData) {
-      if (cloudData && typeof cloudData.total === 'number') {
+      if (cloudData && typeof cloudData.updatedAt === 'number') {
         localStorage.setItem('sd_gaman_sync_key', key);
-        localStorage.setItem('sd_gaman_data', JSON.stringify(cloudData));
         dbPutSetting('sd_gaman_sync_key', key);
-        dbPutSetting('sd_gaman_data', cloudData);
         updateSyncStatusUI(key, true);
-        renderGaman();
-        alert('同期が完了しました！');
+        
+        localStorage.setItem('sd_last_sync_updated', '0');
+        pullFromCloud(function() {
+          alert('同期が完了しました！');
+        });
+      } else {
+        alert('同期データが見つかりません。');
       }
     })
     .catch(function(e) {
@@ -2096,8 +2235,9 @@
   function handleSyncButtonClick() {
     var currentKey = localStorage.getItem('sd_gaman_sync_key');
     if (currentKey) {
-      if (confirm('同期を解除しますか？\n(他ブラウザとのリアルタイム同期が停止します。ローカルの我慢データは保持されます)')) {
+      if (confirm('同期を解除しますか？\n(他ブラウザとのリアルタイム同期が停止します。ローカルデータは保持されます)')) {
         localStorage.removeItem('sd_gaman_sync_key');
+        localStorage.removeItem('sd_last_sync_updated');
         if (db) {
           try {
             var transaction = db.transaction(['settings'], 'readwrite');
@@ -2331,6 +2471,7 @@
         dbPut(entry, function() {
           renderTimeline();
           if (currentTab === 'calendar') renderCalendarFocusedList();
+          pushToCloud();
         });
       }
     });
@@ -2344,6 +2485,7 @@
           renderCalendarDays();
           renderCalendarFocusedList();
         }
+        pushToCloud();
       });
     }
   }
@@ -2835,6 +2977,7 @@
             renderCalendarDays();
             renderCalendarFocusedList();
           }
+          pushToCloud();
         });
       });
     } else {
@@ -2845,6 +2988,7 @@
           renderCalendarDays();
           renderCalendarFocusedList();
         }
+        pushToCloud();
       });
     }
   }
@@ -3083,6 +3227,7 @@
         document.getElementById('sd-tab-' + targetTab).classList.add('sd-active');
         
         currentTab = targetTab;
+        pullFromCloud();
         
         if (currentTab === 'timeline') {
           headerTitleText.textContent = '日記';
@@ -3145,6 +3290,22 @@
 
     
     gamanSyncSaveBtn.addEventListener('click', handleSyncButtonClick);
+    gamanSyncCopyKeyBtn.addEventListener('click', function() {
+      var key = localStorage.getItem('sd_gaman_sync_key');
+      if (!key) return;
+      
+      navigator.clipboard.writeText(key)
+      .then(function() {
+        var origHtml = gamanSyncCopyKeyBtn.innerHTML;
+        gamanSyncCopyKeyBtn.textContent = 'コピーしました！';
+        setTimeout(function() {
+          gamanSyncCopyKeyBtn.innerHTML = origHtml;
+        }, 1500);
+      })
+      .catch(function(err) {
+        alert('コピーに失敗しました。このキーを手動でコピーしてください:\n' + key);
+      });
+    });
 
     searchToggle.addEventListener('click', function() {
       searchBar.classList.toggle('sd-hidden');
