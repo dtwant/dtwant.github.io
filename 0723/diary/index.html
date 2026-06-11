@@ -1994,7 +1994,17 @@
   }
 
   
-  
+  const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const BIN_CREATE_URL = 'https://api.jsonbin.io/v3/b';
+  const getBinUrl = function(binId) { return 'https://api.jsonbin.io/v3/b/' + binId + '/latest'; };
+  const getBinPutUrl = function(binId) { return 'https://api.jsonbin.io/v3/b/' + binId; };
+  const JSONBIN_HEADERS = function() {
+    return {
+      'X-Master-Key': JSONBIN_KEY,
+      'Content-Type': 'application/json'
+    };
+  };
+
   function initSyncKey() {
     dbGetSetting('sd_gaman_sync_key', function(dbKey) {
       var localKey = localStorage.getItem('sd_gaman_sync_key') || dbKey;
@@ -2005,13 +2015,21 @@
         updateSyncStatusUI(localKey, true);
         pullFromCloud();
       } else {
-        fetch('https://api.keyvalue.xyz/new/gaman_data', {
-          method: 'POST'
+        fetch(BIN_CREATE_URL, {
+          method: 'POST',
+          headers: {
+            'X-Master-Key': JSONBIN_KEY,
+            'Content-Type': 'application/json',
+            'X-Bin-Name': 'secret_diary_sync'
+          },
+          body: JSON.stringify({ isInitial: true })
         })
-        .then(function(res) { return res.text(); })
-        .then(function(url) {
-          var parts = url.trim().split('/');
-          var userKey = parts[3];
+        .then(function(res) {
+          if (!res.ok) throw new Error('status: ' + res.status);
+          return res.json();
+        })
+        .then(function(json) {
+          var userKey = json.metadata.id;
           if (userKey) {
             registerNewSyncKey(userKey);
           } else {
@@ -2093,13 +2111,13 @@
         updatedAt: now
       };
 
-      var url = 'https://api.keyvalue.xyz/' + key + '/gaman_data';
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      fetch(getBinPutUrl(key), {
+        method: 'PUT',
+        headers: JSONBIN_HEADERS(),
         body: JSON.stringify(payload)
       })
-      .then(function() {
+      .then(function(res) {
+        if (!res.ok) throw new Error('status: ' + res.status);
         if (callback) callback(true);
       })
       .catch(function(e) {
@@ -2116,13 +2134,16 @@
       return;
     }
 
-    var url = 'https://api.keyvalue.xyz/' + key + '/gaman_data';
-    fetch(url)
+    fetch(getBinUrl(key), {
+      headers: { 'X-Master-Key': JSONBIN_KEY },
+      cache: 'no-store'
+    })
     .then(function(res) {
       if (res.status === 200) return res.json();
       return null;
     })
-    .then(function(cloudData) {
+    .then(function(json) {
+      var cloudData = json ? json.record : null;
       if (cloudData && typeof cloudData.updatedAt === 'number') {
         var localLastUpdated = parseInt(localStorage.getItem('sd_last_sync_updated') || '0', 10);
         
@@ -2207,14 +2228,16 @@
       return;
     }
     
-    var url = 'https://api.keyvalue.xyz/' + key + '/gaman_data';
-    fetch(url)
+    fetch(getBinUrl(key), {
+      headers: { 'X-Master-Key': JSONBIN_KEY }
+    })
     .then(function(res) {
       if (res.status === 200) return res.json();
       throw new Error('Key not found');
     })
-    .then(function(cloudData) {
-      if (cloudData && typeof cloudData.updatedAt === 'number') {
+    .then(function(json) {
+      var cloudData = json ? json.record : null;
+      if (cloudData && (typeof cloudData.updatedAt === 'number' || cloudData.isInitial)) {
         localStorage.setItem('sd_gaman_sync_key', key);
         dbPutSetting('sd_gaman_sync_key', key);
         updateSyncStatusUI(key, true);
