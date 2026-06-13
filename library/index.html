@@ -228,7 +228,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "143"
+    "wordCount": "145"
   }]
   </script>
 
@@ -1149,6 +1149,22 @@ body {
 .bs-select-cyber option {
   background: #0d0b17;
   color: #e0e0f0;
+}
+.bs-btn-cyber {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(0,243,255,0.25);
+  color: #a0a0b0;
+  padding: 0.45rem 1rem;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.bs-btn-cyber:hover {
+  border-color: var(--neon-cyan);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0,243,255,0.2);
 }
 
 .bs-view-toggle {
@@ -2526,13 +2542,16 @@ body {
 
   
   <div class="bs-controls">
-    <select class="bs-select-cyber" id="bs-sort" onchange="bsRender()">
-      <option value="title">タイトル順</option>
-      <option value="author">著者順</option>
-      <option value="rating">評価（★）順</option>
-      <option value="added">登録順</option>
-      <option value="updated" selected>更新順</option>
-    </select>
+    <div style="display: flex; gap: 0.5rem; align-items: center;">
+      <select class="bs-select-cyber" id="bs-sort" onchange="bsRender()">
+        <option value="title">タイトル順</option>
+        <option value="author">著者順</option>
+        <option value="rating">評価（★）順</option>
+        <option value="added">登録順</option>
+        <option value="updated" selected>更新順</option>
+      </select>
+      <button class="bs-btn-cyber" id="bs-sort-dir-btn" onclick="bsToggleSortDir()">▼ 降順</button>
+    </div>
     
     <div class="bs-view-toggle">
       <button class="bs-vt-btn" id="bs-vt-3d" onclick="bsSetView('3d')">3D SHELF</button>
@@ -2760,6 +2779,7 @@ let formTags = [];
 let formRating = 0;
 let viewMode = localStorage.getItem('dt_library_view_mode') || 'grid';
 let activeTagFilter = null;
+let sortDir = 'desc';
 
 let toastTimer = null;
 let searchTimer = null;
@@ -2954,7 +2974,12 @@ function calcBookId(title, author, isbn) {
  
 function mergeAndDeduplicate(arr1, arr2) {
   const map = new Map();
-  [...arr1, ...arr2].forEach(b => {
+  
+  
+  const cleanArr1 = (arr1 || []).filter(b => b && b.title && !b.title.includes('\uFFFD') && !(b.author || '').includes('\uFFFD'));
+  const cleanArr2 = (arr2 || []).filter(b => b && b.title && !b.title.includes('\uFFFD') && !(b.author || '').includes('\uFFFD'));
+
+  [...cleanArr1, ...cleanArr2].forEach(b => {
     if(!b || !b.title) return;
     
     
@@ -2974,12 +2999,29 @@ function mergeAndDeduplicate(arr1, arr2) {
     }
     
     if (!map.has(mergeKey)) {
-      map.set(mergeKey, b);
+      map.set(mergeKey, Object.assign({}, b));
     } else {
       const existing = map.get(mergeKey);
-      if ((b.updatedAt || 0) > (existing.updatedAt || 0)) {
-        map.set(mergeKey, b);
-      }
+      
+      
+      const mergedCreatedAt = (existing.createdAt && b.createdAt)
+        ? Math.min(existing.createdAt, b.createdAt)
+        : (existing.createdAt || b.createdAt);
+
+      const mergedUpdatedAt = Math.max(existing.updatedAt || 0, b.updatedAt || 0);
+
+      const mergedBook = {
+        ...b,
+        ...existing,
+        createdAt: mergedCreatedAt,
+        updatedAt: mergedUpdatedAt,
+        comment: existing.comment || b.comment || '',
+        link: existing.link || b.link || '',
+        rating: existing.rating || b.rating || 0,
+        tags: (existing.tags && existing.tags.length) ? existing.tags : (b.tags || []),
+        status: existing.status || b.status || 'done'
+      };
+      map.set(mergeKey, mergedBook);
     }
   });
   
@@ -3220,14 +3262,40 @@ function renderTagFilterChips() {
   ).join('');
 }
 
+window.bsToggleSortDir = function() {
+  sortDir = (sortDir === 'desc') ? 'asc' : 'desc';
+  const btn = document.getElementById('bs-sort-dir-btn');
+  if (btn) {
+    btn.textContent = (sortDir === 'desc') ? '▼ 降順' : '▲ 昇順';
+  }
+  bsRender();
+};
+
 function getSortedBooks(arr) {
   const sort = document.getElementById('bs-sort').value;
+  const isAsc = (sortDir === 'asc');
+  
   return arr.slice().sort((a,b) => {
-    if(sort === 'title') return (a.title || '').localeCompare(b.title || '', 'ja');
-    if(sort === 'author') return (a.author || '').localeCompare(b.author || '', 'ja');
-    if(sort === 'rating') return (b.rating || 0) - (a.rating || 0);
-    if(sort === 'added') return (b.createdAt || 0) - (a.createdAt || 0);
-    return (b.updatedAt || 0) - (a.updatedAt || 0); 
+    let cmp = 0;
+    if(sort === 'title') {
+      cmp = (a.title || '').localeCompare(b.title || '', 'ja');
+      return isAsc ? cmp : -cmp;
+    }
+    if(sort === 'author') {
+      cmp = (a.author || '').localeCompare(b.author || '', 'ja');
+      return isAsc ? cmp : -cmp;
+    }
+    if(sort === 'rating') {
+      cmp = (a.rating || 0) - (b.rating || 0);
+      return isAsc ? cmp : -cmp;
+    }
+    if(sort === 'added') {
+      cmp = (a.createdAt || 0) - (b.createdAt || 0);
+      return isAsc ? cmp : -cmp;
+    }
+    
+    cmp = (a.updatedAt || 0) - (b.updatedAt || 0);
+    return isAsc ? cmp : -cmp;
   });
 }
 

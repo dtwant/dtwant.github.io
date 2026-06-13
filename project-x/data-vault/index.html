@@ -229,7 +229,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "78"
+    "wordCount": "82"
   }]
   </script>
 
@@ -802,6 +802,15 @@
 <style>
  
 :root {
+  --v-sidebar-w: 240px;
+  --v-toolbar-h: 40px;
+  --v-navbar-h: 38px;
+  --v-titlebar-h: 32px;
+  --v-statusbar-h: 26px;
+}
+
+ 
+.theme-cyber {
   --v-cyan: #00f3ff;
   --v-pink: #ff0055;
   --v-green: #00ff66;
@@ -810,33 +819,67 @@
   --v-dark: #0d0d1a;
   --v-darker: #08080f;
   --v-card: rgba(13,13,26,0.95);
-  --v-panel: rgba(10,10,22,0.9);
-  --v-border: rgba(0,243,255,0.12);
-  --v-border-hi: rgba(0,243,255,0.3);
+  --v-panel: rgba(8,12,22,0.98);
+  --v-border: rgba(0,243,255,0.14);
+  --v-border-hi: rgba(0,243,255,0.35);
   --v-text: #d0dce6;
-  --v-text-dim: rgba(160,185,210,0.5);
+  --v-text-dim: rgba(160,185,210,0.6);
   --v-text-muted: rgba(140,160,180,0.35);
-  --v-hover: rgba(0,243,255,0.05);
-  --v-select: rgba(0,243,255,0.1);
-  --v-select-hi: rgba(0,243,255,0.18);
-  --v-sidebar-w: 240px;
-  --v-toolbar-h: 40px;
-  --v-navbar-h: 38px;
-  --v-titlebar-h: 32px;
-  --v-statusbar-h: 26px;
+  --v-hover: rgba(0,243,255,0.06);
+  --v-select: rgba(0,243,255,0.12);
+  --v-select-hi: rgba(0,243,255,0.2);
   --v-radius: 0px;
+  --v-font: 'JetBrains Mono', 'Segoe UI', monospace;
+  --v-shadow: 0 8px 60px rgba(0,0,0,0.8), 0 0 60px rgba(0,243,255,0.05);
 }
+
+ 
+.theme-apple {
+  --v-cyan: #ffffff;
+  --v-pink: #ef4444;
+  --v-green: #22c55e;
+  --v-purple: #a855f7;
+  --v-amber: #f97316;
+  --v-dark: #09090b;
+  --v-darker: #030712;
+  --v-card: #09090b;
+  --v-panel: #09090b;
+  --v-border: #27272a;
+  --v-border-hi: #3f3f46;
+  --v-text: #fafafa;
+  --v-text-dim: #a1a1aa;
+  --v-text-muted: #52525b;
+  --v-hover: #18181b;
+  --v-select: #27272a;
+  --v-select-hi: #3f3f46;
+  --v-radius: 8px;
+  --v-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --v-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);
+}
+
 h1 { display: none !important; }
 body {
   margin: 0; padding: 0;
   background: var(--v-darker) !important;
   color: var(--v-text);
-  font-family: 'JetBrains Mono', 'Segoe UI', monospace;
+  font-family: var(--v-font);
   overflow: hidden;
   height: 100vh;
 }
 *, *::before, *::after { box-sizing: border-box; }
+button, a, input, select, textarea { outline: none !important; }
+button:focus, button:focus-visible, a:focus, a:focus-visible { outline: none !important; box-shadow: none !important; }
 button { font-family: inherit; cursor: pointer; }
+
+ 
+#vault-explorer a, #vault-explorer button, #vault-explorer span, #vault-explorer div,
+#vault-lock a, #vault-lock button, #vault-lock span, #vault-lock div {
+  text-decoration: none !important;
+  background-image: none !important;
+}
+#vault-explorer a, #vault-explorer button {
+  border-bottom: none !important;
+}
 
  
 .vault-bg {
@@ -845,6 +888,9 @@ button { font-family: inherit; cursor: pointer; }
     radial-gradient(ellipse at 20% 30%, rgba(0,243,255,0.03) 0%, transparent 60%),
     radial-gradient(ellipse at 80% 70%, rgba(188,19,254,0.02) 0%, transparent 60%),
     var(--v-darker);
+}
+.theme-cyber {
+  animation: cyber-flicker 0.15s infinite alternate;
 }
 .vault-grid {
   position: fixed; inset: 0; z-index: 1; pointer-events: none;
@@ -855,7 +901,24 @@ button { font-family: inherit; cursor: pointer; }
 }
 .vault-scanline {
   position: fixed; inset: 0; z-index: 2; pointer-events: none;
-  background: repeating-linear-gradient(0deg, transparent 0px, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 6px);
+  background: repeating-linear-gradient(0deg, transparent 0px, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 6px);
+}
+.vault-scanline::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 100px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 243, 255, 0.08), transparent);
+  animation: scanline-move 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scanline-move {
+  0% { transform: translateY(-100px); }
+  100% { transform: translateY(100vh); }
+}
+@keyframes cyber-flicker {
+  0% { opacity: 0.992; }
+  100% { opacity: 1.0; }
 }
 
  
@@ -1010,8 +1073,11 @@ button { font-family: inherit; cursor: pointer; }
   background: var(--v-card);
   border: 1px solid var(--v-border);
   border-radius: var(--v-radius);
-  box-shadow: 0 8px 60px rgba(0,0,0,0.8), 0 0 60px rgba(0,243,255,0.05);
+  box-shadow: var(--v-shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   overflow: hidden;
+  font-family: var(--v-font);
 }
 #vault-explorer.visible { display: flex; animation: vault-open 0.4s ease-out; }
 @keyframes vault-open {
@@ -1022,12 +1088,13 @@ button { font-family: inherit; cursor: pointer; }
  
 .ve-titlebar {
   height: var(--v-titlebar-h);
-  background: rgba(8,8,18,0.95);
+  background: rgba(8,8,18,0.45);
   border-bottom: 1px solid var(--v-border);
   display: flex; align-items: center;
   padding: 0 0 0 12px;
   flex-shrink: 0;
   user-select: none;
+  font-family: var(--v-font);
 }
 .ve-titlebar-icon {
   font-size: 0.8rem;
@@ -1035,7 +1102,7 @@ button { font-family: inherit; cursor: pointer; }
   opacity: 0.9;
 }
 .ve-titlebar-text {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: var(--v-font);
   font-size: 0.7rem; color: var(--v-text);
   letter-spacing: 1px;
   flex: 1;
@@ -1824,8 +1891,19 @@ button { font-family: inherit; cursor: pointer; }
   flex-shrink: 0;
 }
 .ve-preview.visible { display: flex; }
-.ve-preview-title {
-  font-family: 'Orbitron', sans-serif;
+
+.ve-preview-drag-handle {
+  display: none;
+}
+.ve-preview-header-mobile {
+  display: none;
+}
+.ve-file-subtext {
+  display: none;
+}
+
+.ve-preview-title-desktop {
+  font-family: 'Orbitron', var(--v-font);
   font-size: 0.52rem; color: var(--v-text-muted);
   letter-spacing: 2px;
   padding-bottom: 8px;
@@ -1925,68 +2003,819 @@ button { font-family: inherit; cursor: pointer; }
 }
 
  
+.theme-cyber #vault-lock {
+  box-shadow: inset 0 0 100px rgba(0,243,255,0.15) !important;
+}
+.theme-cyber .code-box {
+  border: 1px solid var(--v-cyan) !important;
+  box-shadow: 
+    0 0 20px rgba(0,243,255,0.15),
+    inset 0 0 15px rgba(0,243,255,0.1) !important;
+}
+.theme-cyber .code-digit {
+  box-shadow: 0 0 8px rgba(0,243,255,0.2) !important;
+}
+.theme-cyber .code-digit.filled {
+  border-color: var(--v-cyan) !important;
+  box-shadow: 0 0 12px rgba(0,243,255,0.5) !important;
+}
+.theme-cyber .code-digit.error {
+  border-color: var(--v-pink) !important;
+  box-shadow: 0 0 12px rgba(255,0,85,0.5) !important;
+}
+.theme-cyber .code-digit.success {
+  border-color: var(--v-green) !important;
+  box-shadow: 0 0 12px rgba(0,255,102,0.5) !important;
+}
+.theme-cyber .code-key:hover {
+  box-shadow: 0 0 15px rgba(0,243,255,0.3) !important;
+  text-shadow: 0 0 5px #fff !important;
+}
+.theme-cyber .code-key:active {
+  box-shadow: 0 0 20px rgba(0,243,255,0.5) !important;
+}
+.theme-cyber .code-label {
+  animation: cyber-pulse 2s infinite alternate;
+}
+.theme-cyber .code-badge {
+  box-shadow: 0 0 10px rgba(255,170,0,0.3) !important;
+}
+
+@keyframes cyber-pulse {
+  0% { text-shadow: 0 0 4px rgba(0,243,255,0.4); opacity: 0.8; }
+  100% { text-shadow: 0 0 12px rgba(0,243,255,0.9); opacity: 1; }
+}
+
+ 
+.theme-cyber #vault-explorer {
+  border: 1px solid var(--v-cyan) !important;
+  box-shadow: 
+    0 8px 60px rgba(0,0,0,0.8),
+    0 0 40px rgba(0,243,255,0.06),
+    inset 0 0 10px rgba(0,243,255,0.03) !important;
+}
+.theme-cyber .ve-titlebar {
+  border-bottom: 1px solid var(--v-border-hi) !important;
+}
+.theme-cyber .ve-titlebar-text {
+  text-shadow: 0 0 6px rgba(0,243,255,0.5);
+}
+.theme-cyber .ve-win-btn:hover {
+  text-shadow: 0 0 8px rgba(0,243,255,0.6);
+}
+.theme-cyber .ve-win-btn.close:hover {
+  box-shadow: inset 0 0 10px rgba(255,0,85,0.5);
+  text-shadow: 0 0 8px #fff;
+}
+.theme-cyber .ve-addressbar {
+  box-shadow: inset 0 0 6px rgba(0,243,255,0.05) !important;
+}
+.theme-cyber .ve-nav-btn:hover:not(:disabled) {
+  box-shadow: 0 0 8px rgba(0,243,255,0.2) !important;
+  text-shadow: 0 0 4px rgba(0,243,255,0.5);
+}
+.theme-cyber .ve-toolbar-btn:hover:not(:disabled) {
+  text-shadow: 0 0 5px rgba(0,243,255,0.5);
+}
+.theme-cyber .ve-toolbar-btn.danger:hover:not(:disabled) {
+  box-shadow: inset 0 0 8px rgba(255, 0, 85, 0.2);
+}
+.theme-cyber .ve-tree-item.active {
+  box-shadow: inset 5px 0 10px -5px var(--v-cyan), inset 0 0 5px rgba(0,243,255,0.05);
+}
+.theme-cyber .ve-tree-item.active .ve-tree-label {
+  text-shadow: 0 0 8px rgba(0,243,255,0.5) !important;
+}
+.theme-cyber .ve-new-folder-btn:hover {
+  box-shadow: 0 0 10px rgba(0,243,255,0.2) !important;
+}
+.theme-cyber .ve-file-row:hover {
+  box-shadow: inset 0 0 8px rgba(0,243,255,0.03);
+}
+.theme-cyber .ve-file-row.selected {
+  border-color: rgba(0,243,255,0.3) !important;
+  box-shadow: inset 0 0 12px rgba(0,243,255,0.08) !important;
+}
+.theme-cyber .ve-file-row.selected .ve-file-name-text {
+  color: #fff;
+  text-shadow: 0 0 8px rgba(0,243,255,0.6);
+}
+.theme-cyber .ve-file-card.selected {
+  box-shadow: 0 0 15px rgba(0,243,255,0.15) !important;
+}
+.theme-cyber .ve-file-card.selected .ve-file-name-cell {
+  text-shadow: 0 0 6px rgba(0,243,255,0.5);
+}
+.theme-cyber .ve-preview-val {
+  text-shadow: 0 0 4px rgba(0,243,255,0.3);
+}
+.theme-cyber .ve-btn.primary {
+  border-color: var(--v-cyan) !important;
+  box-shadow: 0 0 10px rgba(0,243,255,0.2) !important;
+  text-shadow: 0 0 4px rgba(0,243,255,0.5);
+}
+.theme-cyber .ve-btn.primary:hover {
+  box-shadow: 0 0 15px rgba(0,243,255,0.45) !important;
+  text-shadow: 0 0 8px rgba(0,243,255,0.8);
+}
+.theme-cyber .ve-btn.danger:hover {
+  box-shadow: 0 0 10px rgba(255,0,85,0.3) !important;
+  text-shadow: 0 0 4px rgba(255,0,85,0.5);
+}
+
+ 
+.theme-apple #vault-lock {
+  background: #030712 !important;
+}
+.theme-apple .code-box {
+  background: #09090b !important;
+  border: 1px solid #27272a !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+  border-radius: 8px !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.theme-apple .code-box::before {
+  display: none !important;
+}
+.theme-apple .code-badge {
+  background: #09090b !important;
+  color: #a1a1aa !important;
+  border: 1px solid #27272a !important;
+  border-radius: 4px;
+}
+.theme-apple .code-label {
+  color: #fafafa !important;
+  font-family: var(--v-font) !important;
+  text-shadow: none !important;
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+.theme-apple .code-digit {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  border-radius: 6px !important;
+  color: #fafafa !important;
+  text-shadow: none !important;
+  font-family: var(--v-font) !important;
+}
+.theme-apple .code-digit.filled {
+  background: #27272a !important;
+  border-color: #71717a !important;
+  box-shadow: none !important;
+}
+.theme-apple .code-digit.error {
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+  text-shadow: none !important;
+}
+.theme-apple .code-digit.success {
+  border-color: #22c55e !important;
+  color: #22c55e !important;
+  text-shadow: none !important;
+}
+.theme-apple .code-key {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  border-radius: 6px !important;
+  color: #fafafa !important;
+  font-family: var(--v-font) !important;
+  font-size: 1.1rem !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+.theme-apple .code-key:hover {
+  background: #27272a !important;
+  border-color: #3f3f46 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+.theme-apple .code-key:active {
+  transform: scale(0.95);
+  background: #3f3f46 !important;
+}
+.theme-apple .code-key.fn {
+  color: #a1a1aa !important;
+}
+.theme-apple .code-key.fn:hover {
+  color: #ef4444 !important;
+  border-color: #ef4444 !important;
+}
+.theme-apple .code-msg {
+  font-family: var(--v-font) !important;
+  font-size: 0.75rem;
+  text-shadow: none !important;
+}
+.theme-apple .code-lockout {
+  font-family: var(--v-font) !important;
+  text-shadow: none !important;
+}
+
+ 
+.theme-apple .ve-titlebar {
+  background: #09090b !important;
+  border-bottom: 1px solid #27272a !important;
+}
+.theme-apple .ve-titlebar-text {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.theme-apple .ve-win-btn {
+  font-family: var(--v-font) !important;
+  color: #a1a1aa;
+}
+.theme-apple .ve-win-btn:hover {
+  background: #18181b !important;
+  color: #fafafa;
+}
+.theme-apple .ve-win-btn.close:hover {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+.theme-apple .ve-navbar {
+  background: #09090b !important;
+  border-bottom: 1px solid #27272a !important;
+}
+.theme-apple .ve-nav-btn {
+  color: #a1a1aa;
+}
+.theme-apple .ve-nav-btn:hover:not(:disabled) {
+  background: #18181b !important;
+  border-color: #27272a !important;
+  color: #fafafa !important;
+}
+.theme-apple .ve-nav-sep {
+  background: #27272a !important;
+}
+.theme-apple .ve-addressbar {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  border-radius: 6px;
+}
+.theme-apple .ve-path-part {
+  font-family: var(--v-font) !important;
+  font-size: 0.75rem;
+}
+.theme-apple .ve-path-part:hover {
+  color: #ffffff;
+}
+.theme-apple .ve-search-box {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  border-radius: 6px;
+}
+.theme-apple .ve-search-box:focus-within {
+  border-color: #3f3f46 !important;
+  box-shadow: none !important;
+}
+.theme-apple .ve-search {
+  font-family: var(--v-font) !important;
+  font-size: 0.75rem;
+}
+
+.theme-apple .ve-toolbar {
+  background: #09090b !important;
+  border-bottom: 1px solid #27272a !important;
+}
+.theme-apple .ve-toolbar-btn {
+  font-family: var(--v-font) !important;
+  color: #a1a1aa;
+}
+.theme-apple .ve-toolbar-btn:hover:not(:disabled) {
+  background: #18181b !important;
+  border-color: #27272a !important;
+  color: #fafafa !important;
+}
+.theme-apple .ve-toolbar-btn.danger {
+  color: #ef4444;
+}
+.theme-apple .ve-toolbar-btn.danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.08) !important;
+  border-color: rgba(239, 68, 68, 0.2) !important;
+  color: #ef4444 !important;
+  text-shadow: none !important;
+}
+.theme-apple .ve-toolbar-sep {
+  background: #27272a !important;
+}
+.theme-apple .ve-view-btn {
+  border: 1px solid #27272a !important;
+  color: #a1a1aa;
+}
+.theme-apple .ve-view-btn.active {
+  background: #18181b !important;
+  border-color: #3f3f46 !important;
+  color: #ffffff !important;
+}
+
+.theme-apple .ve-sidebar {
+  border-right: 1px solid #27272a !important;
+}
+.theme-apple .ve-tree-header {
+  font-family: var(--v-font) !important;
+  font-weight: 600;
+  color: #71717a;
+  letter-spacing: 0.5px;
+}
+.theme-apple .ve-tree-divider {
+  background: #27272a !important;
+}
+.theme-apple .ve-tree-item.active {
+  background: #18181b !important;
+  border-left-color: #ffffff !important;
+}
+.theme-apple .ve-tree-item.active .ve-tree-label {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+.theme-apple .ve-tree-label {
+  font-family: var(--v-font) !important;
+}
+.theme-apple .ve-tree-count {
+  font-family: var(--v-font) !important;
+  background: #27272a !important;
+  color: #a1a1aa !important;
+  border-radius: 4px;
+}
+.theme-apple .ve-sidebar-footer {
+  border-top: 1px solid #27272a !important;
+}
+.theme-apple .ve-new-folder-btn {
+  border: 1px dashed #27272a !important;
+  border-radius: 6px;
+  font-family: var(--v-font) !important;
+}
+.theme-apple .ve-new-folder-btn:hover {
+  background: #18181b !important;
+  border-color: #3f3f46 !important;
+  color: #ffffff !important;
+}
+
+.theme-apple .ve-file-header {
+  background: #09090b !important;
+  border-bottom: 1px solid #27272a !important;
+  font-family: var(--v-font) !important;
+}
+.theme-apple .ve-col-header {
+  border-right: 1px solid #27272a !important;
+}
+.theme-apple .ve-col-icon {
+  border-right: 1px solid #27272a !important;
+}
+.theme-apple .ve-file-row {
+  border-bottom: 1px solid #27272a !important;
+}
+.theme-apple .ve-file-row.selected {
+  background: #18181b !important;
+}
+.theme-apple .ve-file-row.selected:hover {
+  background: #27272a !important;
+}
+.theme-apple .ve-file-type-cell {
+  font-family: var(--v-font) !important;
+  color: #a1a1aa !important;
+  font-weight: 500;
+}
+.theme-apple .ve-row-action-btn:hover {
+  background: #27272a !important;
+  border-color: #3f3f46 !important;
+  color: #ffffff !important;
+}
+.theme-apple .ve-row-action-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+.theme-apple .ve-file-card {
+  border: 1px solid #27272a !important;
+  background: #09090b !important;
+  border-radius: 8px;
+}
+.theme-apple .ve-file-card:hover {
+  border-color: #3f3f46 !important;
+  background: #18181b !important;
+}
+.theme-apple .ve-file-card.selected {
+  border-color: #ffffff !important;
+  background: #18181b !important;
+  box-shadow: none !important;
+}
+.theme-apple .ve-file-card .ve-file-type-cell {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  border-radius: 4px;
+}
+.theme-apple .ve-card-action-btn {
+  background: #09090b !important;
+  border: 1px solid #27272a !important;
+}
+.theme-apple .ve-card-action-btn:hover {
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+}
+.theme-apple .ve-card-action-btn.danger:hover {
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+.theme-apple .ve-statusbar {
+  background: #09090b !important;
+  border-top: 1px solid #27272a !important;
+  font-family: var(--v-font) !important;
+}
+.theme-apple .ve-status-sep {
+  background: #27272a !important;
+}
+.theme-apple .ve-status-sync {
+  color: #22c55e !important;
+}
+.theme-apple .ve-status-sync.syncing {
+  color: #f97316 !important;
+}
+.theme-apple .ve-status-sync.offline, .theme-apple .ve-status-sync.error {
+  color: #ef4444 !important;
+}
+
+.theme-apple .ve-context {
+  background: #09090b !important;
+  border: 1px solid #27272a !important;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+}
+.theme-apple .ve-context-item {
+  font-family: var(--v-font) !important;
+}
+.theme-apple .ve-context-item:hover {
+  background: #18181b !important;
+  color: #ffffff !important;
+}
+.theme-apple .ve-context-item.danger:hover {
+  background: rgba(239, 68, 68, 0.08) !important;
+  color: #ef4444 !important;
+}
+.theme-apple .ve-context-sep {
+  background: #27272a !important;
+}
+
+ 
+.theme-apple .ve-dialog {
+  background: #09090b !important;
+  border: 1px solid #27272a !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+}
+.theme-apple .ve-dialog-header {
+  background: #09090b !important;
+  border-bottom: 1px solid #27272a !important;
+  color: #fafafa !important;
+  font-family: var(--v-font) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0px !important;
+}
+.theme-apple .ve-dialog-footer {
+  border-top: 1px solid #27272a !important;
+}
+.theme-apple .ve-input-label {
+  font-family: var(--v-font) !important;
+  color: #a1a1aa !important;
+  letter-spacing: 0.5px;
+}
+.theme-apple .ve-input, .theme-apple .ve-select, .theme-apple .ve-textarea {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  color: #fafafa !important;
+  border-radius: 6px;
+}
+.theme-apple .ve-input:focus, .theme-apple .ve-select:focus, .theme-apple .ve-textarea:focus {
+  border-color: #3f3f46 !important;
+}
+.theme-apple .ve-upload-zone {
+  border: 2px dashed #27272a !important;
+  background: #18181b !important;
+  border-radius: 8px;
+  font-family: var(--v-font) !important;
+}
+.theme-apple .ve-upload-zone:hover {
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+}
+.theme-apple .ve-upload-selected {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  border-radius: 6px;
+}
+.theme-apple .ve-upload-remove {
+  border: 1px solid #27272a !important;
+  border-radius: 4px;
+}
+.theme-apple .ve-upload-remove:hover {
+  color: #ef4444 !important;
+  border-color: #ef4444 !important;
+}
+.theme-apple .ve-type-tab {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  font-family: var(--v-font) !important;
+}
+.theme-apple .ve-type-tab.active {
+  background: #ffffff !important;
+  color: #09090b !important;
+  border-color: #ffffff !important;
+}
+.theme-apple .ve-type-tab:hover:not(.active) {
+  background: #27272a !important;
+  color: #ffffff !important;
+}
+
+.theme-apple .ve-preview {
+  background: #09090b !important;
+  border-left: 1px solid #27272a !important;
+}
+.theme-apple .ve-preview-title {
+  font-family: var(--v-font) !important;
+  color: #71717a !important;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #27272a !important;
+}
+.theme-apple .ve-preview-name {
+  font-family: var(--v-font) !important;
+}
+.theme-apple .ve-preview-row {
+  border-bottom: 1px solid #27272a !important;
+}
+.theme-apple .ve-preview-key {
+  font-family: var(--v-font) !important;
+}
+.theme-apple .ve-preview-val {
+  font-family: var(--v-font) !important;
+  color: #fafafa !important;
+}
+.theme-apple .ve-preview-memo {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  border-radius: 6px;
+}
+
+.theme-apple .ve-link-card {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  border-radius: 6px;
+}
+.theme-apple .ve-link-card:hover {
+  border-color: #ffffff !important;
+}
+.theme-apple .ve-link-domain {
+  font-family: var(--v-font) !important;
+  color: #ffffff !important;
+}
+
+.theme-apple .ve-toast {
+  border: 1px solid #27272a !important;
+  background: #09090b !important;
+  border-radius: 6px;
+  font-family: var(--v-font) !important;
+}
+.theme-apple .ve-toast.success { border-color: #22c55e !important; color: #22c55e !important; }
+.theme-apple .ve-toast.error { border-color: #ef4444 !important; color: #ef4444 !important; }
+.theme-apple .ve-toast.info { border-color: #ffffff !important; color: #ffffff !important; }
+
+ 
+.theme-apple .ve-btn.primary {
+  background: #ffffff !important;
+  color: #09090b !important;
+  border-color: #ffffff !important;
+  font-weight: 500 !important;
+  font-family: var(--v-font) !important;
+}
+.theme-apple .ve-btn.primary:hover {
+  background: rgba(255, 255, 255, 0.9) !important;
+}
+.theme-apple .ve-btn:not(.primary) {
+  background: transparent !important;
+  border: 1px solid #27272a !important;
+  color: #fafafa !important;
+  font-family: var(--v-font) !important;
+}
+.theme-apple .ve-btn:not(.primary):hover {
+  background: #18181b !important;
+  border-color: #3f3f46 !important;
+}
+.theme-apple .ve-btn.danger {
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+.theme-apple .ve-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+
+ 
 @media (max-width: 768px) {
-  #vault-explorer { width: 100vw; height: 100vh; max-width: none; max-height: none; top: 0; left: 0; transform: none; border: none; border-radius: 0; }
+  #vault-explorer {
+    width: 100vw; height: 100vh;
+    max-width: none; max-height: none;
+    top: 0; left: 0;
+    transform: none;
+    border: none;
+    border-radius: 0px;
+  }
   @keyframes vault-open { from { opacity: 0; } to { opacity: 1; } }
-  .ve-sidebar { width: 180px; }
-  .ve-preview { display: none !important; }
-  .ve-file-header, .ve-file-row {
-    grid-template-columns: 28px 1fr 48px 70px 42px 30px !important;
+
+   
+  .ve-sidebar {
+    position: absolute;
+    top: calc(var(--v-titlebar-h) + var(--v-navbar-h) + var(--v-toolbar-h));
+    left: 0;
+    bottom: var(--v-statusbar-h);
+    z-index: 1000;
+    width: 240px !important;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    background: var(--v-panel) !important;
+    border-right: 1px solid var(--v-border) !important;
+    box-shadow: 10px 0 30px rgba(0,0,0,0.5);
   }
-  .ve-file-date-cell, .ve-file-type-cell {
+  #vault-explorer.sidebar-open .ve-sidebar {
+    transform: translateX(0);
+  }
+  
+  .ve-sidebar-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  #vault-explorer.sidebar-open .ve-sidebar-backdrop {
+    display: block;
+    opacity: 1;
+  }
+
+   
+  .ve-file-header {
+    display: none !important;
+  }
+  .ve-file-row {
+    grid-template-columns: 40px 1fr 40px !important;
+    padding: 10px 8px !important;
+    border-bottom: 1px solid var(--v-border);
+    min-height: 54px;
+    align-items: center;
+  }
+  .ve-file-size-cell, .ve-file-date-cell, .ve-file-type-cell {
+    display: none !important;
+  }
+  .ve-file-name-cell {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    overflow: hidden;
+    padding: 0 4px !important;
+  }
+  .ve-file-name-text {
+    font-size: 0.82rem !important;
+    font-weight: 500;
+    max-width: 100%;
+  }
+  
+   
+  .ve-file-subtext {
     display: block !important;
-  }
-  .ve-file-cell, .ve-col-header, .ve-file-name-cell, .ve-file-size-cell, .ve-file-date-cell, .ve-file-type-cell {
-    padding: 6px 4px !important;
     font-size: 0.62rem !important;
+    color: var(--v-text-dim);
+    opacity: 0.8;
   }
+
   .ve-file-row-actions {
     opacity: 1 !important;
     padding-right: 0px !important;
     justify-content: center !important;
   }
   .ve-row-action-btn {
-    padding: 2px 4px !important;
-    font-size: 0.65rem !important;
+    padding: 4px 8px !important;
+    font-size: 0.75rem !important;
   }
-  .ve-search-box { width: 140px; }
-  .ve-file-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 6px; padding: 8px; }
-  .ve-titlebar-text { font-size: 0.6rem; }
+
+   
+  .ve-preview {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100% !important;
+    height: 60% !important;
+    background: var(--v-card) !important;
+    border-left: none !important;
+    border-top: 1px solid var(--v-border-hi) !important;
+    border-radius: 16px 16px 0 0 !important;
+    z-index: 2000;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 16px !important;
+    flex-direction: column;
+  }
+  .ve-preview.visible {
+    display: flex !important;
+    transform: translateY(0);
+  }
+  .ve-preview-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+    z-index: 1999;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  #vault-explorer.preview-open .ve-preview-backdrop {
+    display: block;
+    opacity: 1;
+  }
+  
+   
+  .ve-preview-drag-handle {
+    width: 36px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    margin: 0 auto 12px;
+    flex-shrink: 0;
+    display: block !important;
+  }
+  .ve-preview-header-mobile {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+  .ve-preview-title {
+    font-family: var(--v-font);
+    font-size: 0.75rem;
+    color: var(--v-text-dim);
+    letter-spacing: 1px;
+  }
+  .ve-preview-close-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: var(--v-text);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    cursor: pointer;
+  }
+  .ve-preview-title-desktop {
+    display: none !important;
+  }
+  .ve-preview-actions {
+    margin-top: auto;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+    padding-top: 10px;
+  }
+  .ve-preview-actions .ve-btn {
+    padding: 10px 0 !important;
+    font-size: 0.75rem !important;
+    text-align: center;
+    justify-content: center;
+  }
+
+   
+  .ve-search-box { width: 120px; }
+  .ve-file-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; padding: 8px; }
   .code-box { max-width: 320px; padding: 2rem 1.2rem 1.5rem; }
-  .code-key { padding: 10px 0; }
-  .ve-dialog { max-width: 90vw; }
+  .ve-dialog { max-width: 92vw; }
   .ve-toast-container { top: 8px; right: 8px; left: 8px; }
-  .ve-toast { max-width: 100%; }
 }
+
 @media (max-width: 500px) {
-  .ve-sidebar { width: 44px; overflow: hidden; }
-  .ve-tree-label, .ve-tree-count, .ve-tree-header, .ve-tree-divider { display: none; }
-  .ve-tree-item { padding: 8px; justify-content: center; }
-  .ve-sidebar-footer { padding: 4px; }
-  .ve-new-folder-btn span { display: none; }
-  .ve-new-folder-btn { padding: 6px; }
-  .ve-search-box { width: 100px; }
+  .ve-search-box { width: 90px; }
   .ve-nav-btn { width: 26px; height: 24px; font-size: 0.75rem; }
   .ve-toolbar-btn span { display: none; }
-  .ve-toolbar { gap: 2px; padding: 0 4px; }
   .ve-addressbar { font-size: 0.6rem; padding: 0 6px; }
   .ve-statusbar { padding: 0 6px; font-size: 0.55rem; gap: 6px; }
-  .ve-file-header, .ve-file-row {
-    grid-template-columns: 24px 1fr 42px 64px 38px 26px !important;
-  }
-  .ve-file-cell, .ve-col-header, .ve-file-name-cell, .ve-file-size-cell, .ve-file-date-cell, .ve-file-type-cell {
-    padding: 5px 3px !important;
-    font-size: 0.58rem !important;
-  }
-  .ve-file-row { font-size: 0.58rem; }
+  
   .code-display { gap: 5px; }
-  .code-digit { width: 30px; height: 38px; font-size: 1.2rem; }
+  .code-digit { width: 32px; height: 40px; font-size: 1.2rem; }
   .code-keypad { max-width: 200px; gap: 6px; }
   .code-key { font-size: 0.95rem; padding: 10px 0; }
   .code-box { max-width: 300px; padding: 1.8rem 1rem 1.2rem; }
-  .code-label { font-size: 0.65rem; }
-  .code-badge { font-size: 0.6rem; }
 }
+
 @media (max-width: 380px) {
   .ve-navbar { flex-wrap: wrap; height: auto; padding: 4px; }
   .ve-addressbar { order: 1; flex: 1 0 100%; }
@@ -1994,9 +2823,6 @@ button { font-family: inherit; cursor: pointer; }
   .ve-nav-btn { order: 0; }
   .ve-nav-sep { display: none; }
   .ve-file-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 4px; padding: 6px; }
-  .ve-file-card { padding: 8px 4px 6px; }
-  .ve-file-card .ve-file-icon-cell { font-size: 1.5rem; }
-  .ve-file-card .ve-file-name-cell { font-size: 0.6rem; }
 }
 </style>
 
@@ -2045,12 +2871,14 @@ button { font-family: inherit; cursor: pointer; }
     <span class="ve-titlebar-icon">📦</span>
     <span class="ve-titlebar-text">DATA_VAULT v2.0 ─ CLOUD SYNCED</span>
     <div class="ve-win-controls">
+      <button class="ve-win-btn" id="ve-theme-toggle" style="width: auto; padding: 0 12px;" title="Switch Theme">THEME</button>
       <a href="/project-x/" class="ve-win-btn close" title="Close">✕</a>
     </div>
   </div>
 
   
   <div class="ve-navbar">
+    <button class="ve-nav-btn" id="ve-sidebar-toggle" title="Toggle Sidebar">☰</button>
     <button class="ve-nav-btn" id="ve-nav-back" title="Back" disabled>←</button>
     <button class="ve-nav-btn" id="ve-nav-forward" title="Forward" disabled>→</button>
     <button class="ve-nav-btn" id="ve-nav-up" title="Up to All Files">↑</button>
@@ -2076,6 +2904,9 @@ button { font-family: inherit; cursor: pointer; }
   
   <div class="ve-body">
     
+    <div class="ve-sidebar-backdrop" id="ve-sidebar-backdrop"></div>
+
+    
     <div class="ve-sidebar" id="ve-sidebar">
       <div class="ve-sidebar-scroll" id="ve-sidebar-scroll"></div>
       <div class="ve-sidebar-footer">
@@ -2086,11 +2917,19 @@ button { font-family: inherit; cursor: pointer; }
     </div>
 
     
+    <div class="ve-preview-backdrop" id="ve-preview-backdrop"></div>
+
+    
     <div class="ve-files" id="ve-files"></div>
 
     
     <div class="ve-preview" id="ve-preview">
-      <div class="ve-preview-title">DETAILS</div>
+      <div class="ve-preview-drag-handle"></div>
+      <div class="ve-preview-header-mobile">
+        <span class="ve-preview-title">DETAILS</span>
+        <button class="ve-preview-close-btn" id="ve-preview-close-btn">✕</button>
+      </div>
+      <div class="ve-preview-title-desktop">DETAILS</div>
       <div id="ve-preview-content"></div>
     </div>
   </div>
@@ -2243,6 +3082,7 @@ button { font-family: inherit; cursor: pointer; }
   };
 
   
+  var currentTheme = 'cyber';
   var vaultCode = '';
   var vaultHash = '';
   var vaultData = { files: [] };
@@ -2341,6 +3181,48 @@ button { font-family: inherit; cursor: pointer; }
     setupCodeLock();
     setupConfirmModal();
     setupFolderDialog();
+
+    
+    var savedTheme = localStorage.getItem('dt_vault_theme') || 'cyber';
+    setTheme(savedTheme);
+  }
+
+  function setTheme(theme) {
+    currentTheme = theme;
+    localStorage.setItem('dt_vault_theme', theme);
+    var rootEl = document.documentElement;
+    rootEl.classList.remove('theme-apple', 'theme-cyber');
+    rootEl.classList.add('theme-' + theme);
+
+    var lockScreen = document.getElementById('vault-lock');
+    var explorer = document.getElementById('vault-explorer');
+    if (lockScreen) {
+      lockScreen.classList.remove('theme-apple', 'theme-cyber');
+      lockScreen.classList.add('theme-' + theme);
+    }
+    if (explorer) {
+      explorer.classList.remove('theme-apple', 'theme-cyber');
+      explorer.classList.add('theme-' + theme);
+    }
+
+    var themeBtn = document.getElementById('ve-theme-toggle');
+    if (themeBtn) {
+      themeBtn.textContent = theme === 'apple' ? ' APPLE' : '⚡ CYBER';
+    }
+
+    
+    var scanline = document.querySelector('.vault-scanline');
+    var gridBg = document.querySelector('.vault-grid');
+    var vaultBg = document.querySelector('.vault-bg');
+    if (theme === 'apple') {
+      if (scanline) scanline.style.display = 'none';
+      if (gridBg) gridBg.style.display = 'none';
+      if (vaultBg) vaultBg.style.background = '#000000';
+    } else {
+      if (scanline) scanline.style.display = '';
+      if (gridBg) gridBg.style.display = '';
+      if (vaultBg) vaultBg.style.background = '';
+    }
   }
 
   function setupConfirmModal() {
@@ -2751,7 +3633,11 @@ button { font-family: inherit; cursor: pointer; }
 
   
   function navigateToFolder(id) {
-    if (currentFolder === id) return;
+    if (currentFolder === id) {
+      var explorer = document.getElementById('vault-explorer');
+      if (explorer) explorer.classList.remove('sidebar-open');
+      return;
+    }
     
     folderHistory = folderHistory.slice(0, folderHistoryIdx + 1);
     folderHistory.push(id);
@@ -2762,6 +3648,8 @@ button { font-family: inherit; cursor: pointer; }
     renderSidebar();
     renderFiles();
     updateNavButtons();
+    var explorer = document.getElementById('vault-explorer');
+    if (explorer) explorer.classList.remove('sidebar-open');
   }
 
   function navBack() {
@@ -2773,6 +3661,8 @@ button { font-family: inherit; cursor: pointer; }
     renderSidebar();
     renderFiles();
     updateNavButtons();
+    var explorer = document.getElementById('vault-explorer');
+    if (explorer) explorer.classList.remove('sidebar-open');
   }
 
   function navForward() {
@@ -2784,6 +3674,8 @@ button { font-family: inherit; cursor: pointer; }
     renderSidebar();
     renderFiles();
     updateNavButtons();
+    var explorer = document.getElementById('vault-explorer');
+    if (explorer) explorer.classList.remove('sidebar-open');
   }
 
   function navUp() {
@@ -3023,6 +3915,15 @@ button { font-family: inherit; cursor: pointer; }
       }
       var nameText = cel('span', 've-file-name-text', f.name);
       nameCell.appendChild(nameText);
+
+      
+      var subText = cel('div', 've-file-subtext');
+      var typeLabelForSub = getFolderLabel(f.category);
+      var dateForSub = f.date ? new Date(f.date).toLocaleDateString('ja-JP', { year:'2-digit', month:'2-digit', day:'2-digit' }) : '-';
+      var sizeForSub = f.size || '-';
+      subText.textContent = typeLabelForSub.toUpperCase() + ' • ' + sizeForSub + ' • ' + dateForSub;
+      nameCell.appendChild(subText);
+
       row.appendChild(nameCell);
 
       var sizeCell = cel('span', 've-file-size-cell', f.size || '-');
@@ -3051,6 +3952,15 @@ button { font-family: inherit; cursor: pointer; }
       row.addEventListener('click', function() { selectFile(f.id); });
       row.addEventListener('dblclick', function() { openFile(f); });
       row.addEventListener('contextmenu', function(e) { showContext(e, f); });
+      addLongPressListener(row, function(e) {
+        var touch = e.touches ? e.touches[0] : e;
+        var mockEvent = {
+          preventDefault: function() {},
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        };
+        showContext(mockEvent, f);
+      });
       list.appendChild(row);
     });
     container.appendChild(list);
@@ -3100,6 +4010,15 @@ button { font-family: inherit; cursor: pointer; }
       card.addEventListener('click', function() { selectFile(f.id); });
       card.addEventListener('dblclick', function() { openFile(f); });
       card.addEventListener('contextmenu', function(e) { showContext(e, f); });
+      addLongPressListener(card, function(e) {
+        var touch = e.touches ? e.touches[0] : e;
+        var mockEvent = {
+          preventDefault: function() {},
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        };
+        showContext(mockEvent, f);
+      });
       grid.appendChild(card);
     });
     container.appendChild(grid);
@@ -3178,10 +4097,14 @@ button { font-family: inherit; cursor: pointer; }
     content.appendChild(actions);
 
     panel.classList.add('visible');
+    var explorer = document.getElementById('vault-explorer');
+    if (explorer) explorer.classList.add('preview-open');
   }
 
   function hidePreview() {
     document.getElementById('ve-preview').classList.remove('visible');
+    var explorer = document.getElementById('vault-explorer');
+    if (explorer) explorer.classList.remove('preview-open');
   }
 
   
@@ -3545,6 +4468,46 @@ button { font-family: inherit; cursor: pointer; }
     pendingFileDataUrl = null;
   }
 
+  function addLongPressListener(el, callback) {
+    var timer = null;
+    var startX = 0, startY = 0;
+
+    el.addEventListener('touchstart', function(e) {
+      if (e.touches.length > 1) return;
+      var touch = e.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+
+      timer = setTimeout(function() {
+        timer = null;
+        callback(e);
+      }, 600);
+    }, { passive: true });
+
+    el.addEventListener('touchmove', function(e) {
+      if (!timer) return;
+      var touch = e.touches[0];
+      if (Math.abs(touch.clientX - startX) > 10 || Math.abs(touch.clientY - startY) > 10) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    }, { passive: true });
+
+    el.addEventListener('touchend', function() {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    });
+
+    el.addEventListener('touchcancel', function() {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    });
+  }
+
   
   function extractDomain(url) {
     try {
@@ -3593,6 +4556,41 @@ button { font-family: inherit; cursor: pointer; }
 
   
   function setupExplorerEvents() {
+    
+    var themeToggle = document.getElementById('ve-theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', function() {
+        setTheme(currentTheme === 'apple' ? 'cyber' : 'apple');
+      });
+    }
+
+    
+    var sidebarToggle = document.getElementById('ve-sidebar-toggle');
+    if (sidebarToggle) {
+      sidebarToggle.addEventListener('click', function() {
+        var explorer = document.getElementById('vault-explorer');
+        if (explorer) explorer.classList.toggle('sidebar-open');
+      });
+    }
+
+    var sidebarBackdrop = document.getElementById('ve-sidebar-backdrop');
+    if (sidebarBackdrop) {
+      sidebarBackdrop.addEventListener('click', function() {
+        var explorer = document.getElementById('vault-explorer');
+        if (explorer) explorer.classList.remove('sidebar-open');
+      });
+    }
+
+    
+    var previewCloseBtn = document.getElementById('ve-preview-close-btn');
+    if (previewCloseBtn) {
+      previewCloseBtn.addEventListener('click', hidePreview);
+    }
+    var previewBackdrop = document.getElementById('ve-preview-backdrop');
+    if (previewBackdrop) {
+      previewBackdrop.addEventListener('click', hidePreview);
+    }
+
     
     document.getElementById('ve-nav-back').addEventListener('click', navBack);
     document.getElementById('ve-nav-forward').addEventListener('click', navForward);
