@@ -534,6 +534,62 @@
 }
 .sd-overlay.sd-hidden { display: none; }
 
+ 
+.sd-overlay h1, .sd-overlay h2, .sd-overlay h3, .sd-overlay h4, .sd-overlay h5,
+.sd-lock-screen h1, .sd-lock-screen h2, .sd-lock-screen h3, .sd-lock-screen h4,
+.sd-sheet h1, .sd-sheet h2, .sd-sheet h3, .sd-sheet h4,
+.sd-dialog h1, .sd-dialog h2, .sd-dialog h3, .sd-dialog h4,
+.sd-modal h1, .sd-modal h2, .sd-modal h3, .sd-modal h4 {
+  color: inherit !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+}
+.sd-overlay p, .sd-lock-screen p, .sd-sheet p, .sd-dialog p, .sd-modal p {
+  margin: 0 !important;
+  color: inherit !important;
+  line-height: inherit !important;
+}
+.sd-overlay a, .sd-lock-screen a {
+  color: inherit !important;
+  text-decoration: none !important;
+  font-weight: inherit !important;
+}
+.sd-overlay button, .sd-lock-screen button, .sd-sheet button, .sd-dialog button, .sd-modal button {
+  color: inherit !important;
+  margin: 0 !important;
+}
+.sd-overlay input, .sd-overlay select, .sd-overlay textarea,
+.sd-lock-screen input, .sd-sheet input, .sd-sheet textarea, .sd-dialog input, .sd-modal input {
+  color: inherit !important;
+  margin: 0 !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+.sd-overlay svg, .sd-lock-screen svg, .sd-sheet svg, .sd-dialog svg, .sd-modal svg {
+  display: inline-block !important;
+  margin: 0 !important;
+}
+.sd-overlay img {
+  margin: 0 !important;
+}
+.sd-overlay ul, .sd-overlay ol, .sd-overlay li, .sd-sheet ul, .sd-sheet li {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+.sd-overlay hr {
+  margin: 0 !important;
+  border-color: var(--apple-border) !important;
+}
+.sd-overlay label, .sd-lock-screen label, .sd-sheet label, .sd-dialog label, .sd-modal label {
+  color: inherit !important;
+  font-weight: inherit !important;
+}
+
 .sd-app {
   display: flex;
   flex-direction: column;
@@ -4912,6 +4968,25 @@
     loadDesiresData();
   }
 
+  
+  function relocateDOM() {
+    var overlay = document.getElementById('secret-diary-overlay');
+    var lockScreen = document.getElementById('sd-lock-screen');
+    var confirmModal = document.getElementById('sd-sync-confirm-dialog');
+    var scoreDialog = document.getElementById('sd-score-dialog');
+    var pinSetup = document.getElementById('sd-pin-setup-modal');
+    var historyModal = document.getElementById('sd-gaman-history-modal');
+    var composeSheet = document.getElementById('sd-compose-sheet');
+
+    var elements = [overlay, lockScreen, confirmModal, scoreDialog, pinSetup, historyModal, composeSheet];
+    elements.forEach(function(el) {
+      if (el && el.parentNode !== document.body) {
+        document.body.appendChild(el);
+      }
+    });
+  }
+
+  relocateDOM();
   loadSettingsConfig();
   initEventListeners();
   checkPinLockOnLaunch();
