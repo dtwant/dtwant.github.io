@@ -1,0 +1,1878 @@
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8">
+  
+    <meta http-equiv="content-language" content="en">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color">
+
+  
+  
+    <title>PHYSICS_SOLVER &middot; dt&#39;s world</title>
+    <meta name="title" content="PHYSICS_SOLVER &middot; dt&#39;s world">
+  
+
+  
+  
+    <meta name="description" content="高校物理ステップ解法エンジン">
+  
+  
+  
+  
+  <link rel="canonical" href="https://dtwant.github.io/lab/physics/">
+  
+
+  
+  
+    <meta name="author" content="dt">
+  
+  
+    
+      
+        
+          <link href="https://x.com/iambunnkei" rel="me">
+        
+      
+    
+  
+
+  
+  <meta property="og:url" content="https://dtwant.github.io/lab/physics/">
+  <meta property="og:site_name" content="dt&#39;s world">
+  <meta property="og:title" content="PHYSICS_SOLVER">
+  <meta property="og:description" content="高校物理ステップ解法エンジン">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="lab">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PHYSICS_SOLVER">
+  <meta name="twitter:description" content="高校物理ステップ解法エンジン">
+
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+  
+    
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+    
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.761ff0e5dacc327220ca1b4b78d68b28d7dd62cf2f9b242d43a2441065a3a050e8496bcfcc1d50df266eecd51142883595be944cfa20738346238eed9c703b20.css"
+    integrity="sha512-dh/w5drMMnIgyhtLeNaLKNfdYs8vmyQtQ6JEEGWjoFDoSWvPzB1Q3yZu7NURQog1lb6UTPogc4NGI47tnHA7IA==">
+
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.4080cca54f0846f36f81f334d01ff18907713d293fbc79e0f54632bf45d1c5037affb9a9915f28bc07b6416657c984d9de59d824fe91bcb53a3cc5d0fd74e4e4.js"
+    integrity="sha512-QIDMpU8IRvNvgfM00B/xiQdxPSk/vHng9UYyv0XRxQN6/7mpkV8ovAe2QWZXyYTZ3lnYJP6RvLU6PMXQ/XTk5A=="></script>
+  
+  
+  
+  
+  
+    
+    <script
+      type="text/javascript"
+      src="/js/zen-mode.min.9814dee9614d32aeb56239d118edfe20acd6231424f9b19c2dd48835038414130a5e946c0d1c9087d60e60e31840c9babfd217e3d4b95643dc8d651a71ccdf4a.js"
+      integrity="sha512-mBTe6WFNMq61YjnRGO3&#43;IKzWIxQk&#43;bGcLdSINQOEFBMKXpRsDRyQh9YOYOMYQMm6v9IX49S5VkPcjWUacczfSg=="></script>
+  
+  
+    
+    <script src="/lib/zoom/zoom.min.umd.a527109b68c082a70f3697716dd72a9d5aa8b545cf800cecbbc7399f2ca6f6e0ce3e431f2062b48bbfa47c9ea42822714060bef309be073f49b9c0e30d318d7b.js" integrity="sha512-pScQm2jAgqcPNpdxbdcqnVqotUXPgAzsu8c5nyym9uDOPkMfIGK0i7&#43;kfJ6kKCJxQGC&#43;8wm&#43;Bz9JucDjDTGNew=="></script>
+  
+
+  
+  
+  
+    
+  
+  
+    
+  
+  
+    
+  
+  
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.9cc802d09f28c6af56ceee7bc6e320a39251fdae98243f2a9942f221ac57a9f49c51609699a91794a7b2580ee1deaa8e4d794a68ffa94aa317c66e893ce51e02.js"
+      integrity="sha512-nMgC0J8oxq9Wzu57xuMgo5JR/a6YJD8qmULyIaxXqfScUWCWmakXlKeyWA7h3qqOTXlKaP&#43;pSqMXxm6JPOUeAg=="
+      data-copy="Copy"
+      data-copied="Copied"></script>
+  
+
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+  
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Labs",
+    "name": "PHYSICS_SOLVER",
+    "headline": "PHYSICS_SOLVER",
+    "description": "高校物理ステップ解法エンジン",
+    
+    "inLanguage": "en",
+    "url" : "https:\/\/dtwant.github.io\/lab\/physics\/",
+    "author" : {
+      "@type": "Person",
+      "name": "dt"
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "78"
+  }]
+  </script>
+
+
+
+  
+  
+    
+
+
+
+
+  
+
+  
+  
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+   
+  
+   
+  .fixed.inset-0.z-40.flex,
+  .bg-neutral-800\/90, 
+  .bg-neutral-900\/90,
+  [x-show="mobileMenu"] {
+      background-color: #050505 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+  }
+
+   
+  nav ul li a {
+      font-family: 'Orbitron', sans-serif !important;  
+      color: #00f3ff !important;  
+      letter-spacing: 0.15em !important;
+      text-transform: uppercase !important;  
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.5) !important;
+      padding: 10px 0 !important;
+      border-bottom: 1px solid rgba(0, 243, 255, 0.1) !important;
+  }
+
+   
+  nav ul li a:hover {
+      color: #ff0055 !important;  
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.8) !important;
+      border-bottom-color: rgba(255, 0, 85, 0.5) !important;
+  }
+
+   
+  button[aria-label="Close menu"],
+  button[aria-label="Open menu"],
+  #menu button {
+      color: #00f3ff !important;
+  }
+
+   
+  ::-webkit-scrollbar {
+      width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+      background: #050505; 
+  }
+  ::-webkit-scrollbar-thumb {
+      background: #00f3ff; 
+      border-radius: 4px;
+  }
+</style>
+  
+
+  
+  
+
+  
+  
+
+  
+  
+</head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+  
+
+
+
+
+
+
+  
+  
+  <body class="flex flex-col h-screen m-auto leading-7 max-w-7xl px-6 sm:px-14 md:px-24 lg:px-32 text-lg bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content">
+        <span class="font-bold text-primary-600 pe-2 dark:text-primary-400">&darr;</span>
+        Skip to main content
+      </a>
+    </div>
+    
+    
+      <div class="min-h-[148px]"></div>
+<div class="fixed inset-x-0 z-100">
+  <div
+    id="menu-blur"
+    class="absolute opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom bg-neutral dark:bg-neutral-800"></div>
+  <div class="relative m-auto leading-7 max-w-7xl px-6 sm:px-14 md:px-24 lg:px-32">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+  class="main-menu flex items-center justify-between py-6 md:justify-start gap-x-3 pt-[2px] pr-2 md:pr-4 pb-[3px] pl-0">
+  
+  
+    
+    
+      <div>
+        <a href="/" class="flex">
+          <span class="sr-only">dt&rsquo;s world</span>
+          
+            <img
+              src="/dt.jpg"
+              width="199"
+              height="199"
+              class="logo max-h-[5rem] max-w-[5rem] object-scale-down object-left nozoom"
+              alt="">
+          
+        </a>
+      </div>
+    
+
+  <div class="flex flex-1 items-center justify-between">
+    <nav class="flex space-x-3">
+      
+        <a href="/" class="text-base font-medium">
+          dt&rsquo;s world
+        </a>
+      
+    </nav>
+    
+  <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+    
+      
+        
+  <a
+  href="/posts/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="Blogs"
+  title="Posts">
+  
+  
+    <p class="text-base font-medium">
+      Blogs
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="/tags/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="Tags"
+  title="Tags">
+  
+  
+    <p class="text-base font-medium">
+      Tags
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="/series/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="Series"
+  title="Series">
+  
+  
+    <p class="text-base font-medium">
+      Series
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="/tasks/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="Tasks"
+  title="Tasks">
+  
+  
+    <p class="text-base font-medium">
+      Tasks
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="/lab/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="Labs"
+  title="Labs">
+  
+  
+    <p class="text-base font-medium">
+      Labs
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="/library/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="Library"
+  title="My Library">
+  
+  
+    <p class="text-base font-medium">
+      Library
+    </p>
+  
+</a>
+
+
+
+      
+    
+
+    
+
+    
+
+    
+      <button
+        id="search-button"
+        aria-label="Search"
+        class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+        title="Search (/)">
+        <span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+      </button>
+    
+
+    
+      <div class=" flex items-center">
+        <button
+          id="appearance-switcher"
+          aria-label="Dark mode switcher"
+          type="button"
+          class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+          <div class="flex items-center justify-center dark:hidden">
+            <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+          </div>
+          <div class="items-center justify-center hidden dark:flex">
+            <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+          </div>
+        </button>
+      </div>
+    
+  </nav>
+
+    
+  <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+    <span></span>
+
+    
+
+    
+
+    
+      <button
+        id="search-button-mobile"
+        aria-label="Search"
+        class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+        title="Search (/)">
+        <span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+      </button>
+    
+
+    
+      <button
+        id="appearance-switcher-mobile"
+        aria-label="Dark mode switcher"
+        type="button"
+        class="text-base hover:text-primary-600 dark:hover:text-primary-400 me-1">
+        <div class="flex items-center justify-center dark:hidden">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+        </div>
+        <div class="items-center justify-center hidden dark:flex">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+        </div>
+      </button>
+    
+  </div>
+
+  </div>
+  
+  <div class="-my-2 md:hidden">
+    <div id="menu-button" class="block">
+      
+        <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+</span>
+        </div>
+        <div
+          id="menu-wrapper"
+          class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50 pt-[5px]">
+          <ul
+            class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none text-end max-w-7xl">
+            <li id="menu-close-button">
+              <span
+                class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+                <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+              </span>
+            </li>
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/posts/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="Blogs"
+    title="Posts">
+    
+    
+      <p class="text-bg font-bg">
+        Blogs
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/tags/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="Tags"
+    title="Tags">
+    
+    
+      <p class="text-bg font-bg">
+        Tags
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/series/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="Series"
+    title="Series">
+    
+    
+      <p class="text-bg font-bg">
+        Series
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/tasks/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="Tasks"
+    title="Tasks">
+    
+    
+      <p class="text-bg font-bg">
+        Tasks
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/lab/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="Labs"
+    title="Labs">
+    
+    
+      <p class="text-bg font-bg">
+        Labs
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/library/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="Library"
+    title="My Library">
+    
+    
+      <p class="text-bg font-bg">
+        Library
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+
+          </ul>
+          
+        </div>
+      
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+</div>
+
+
+<script
+  type="text/javascript"
+  src="/js/background-blur.min.00a57c73ea12f2cab2980c3c3d649e89f6d82f190f74bbe2b67f2f5e39ab7d032ece47086400ca05396758aace13299da49aca43ea643d2625e62c506267a169.js"
+  integrity="sha512-AKV8c&#43;oS8sqymAw8PWSeifbYLxkPdLvitn8vXjmrfQMuzkcIZADKBTlnWKrOEymdpJrKQ&#43;pkPSYl5ixQYmehaQ=="
+  data-blur-id="menu-blur"></script>
+
+    
+    <div class="relative flex flex-col grow">
+      <main id="main-content" class="grow">
+        
+  <article class="max-w-full">
+    <header>
+      
+        <ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden">
+  
+  
+    
+  
+    
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/"
+      >dt</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="inline">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/"
+      >Labs</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/lab/physics/"
+      >PHYSICS_SOLVER</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        PHYSICS_SOLVER
+      </h1>
+    </header>
+    <section class="max-w-full mt-6 prose dark:prose-invert">
+      
+<h1 class="relative group">PHYSICS_SOLVER <span style="font-size:12px;color:#00f3ff;">// STEP_BY_STEP_ENGINE</span>
+    <div id="physics_solver--step_by_step_engine" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#physics_solver--step_by_step_engine" aria-label="Anchor">#</a>
+    </span>
+    
+</h1>
+<p>条件（質量、速度、角度、摩擦係数など）を入力すると、使うべき公式を自動選択し、式変形の過程を一つずつ表示して最終解に至る学習支援ソルバー。</p>
+<blockquote>
+<p>[!NOTE]
+<strong>AVAILABLE MODULES:</strong></p>
+<ul>
+<li><strong>[ PROJECTILE_MOTION ]</strong> 斜方投射（放物運動）</li>
+<li><strong>[ INCLINED_PLANE ]</strong> 斜面上の運動（摩擦あり/なし）</li>
+<li><strong>[ ENERGY_CONSERVATION ]</strong> 力学的エネルギー保存</li>
+<li><strong>[ CIRCULAR_MOTION ]</strong> 円運動（鉛直面内・水平面内）</li>
+</ul>
+<p><strong>KaTeXによる高品質な数式レンダリング ・ ステップバイステップ解説</strong> 搭載</p></blockquote>
+<hr>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+
+   
+  .katex { font-size: 1.1em !important; color: #e2e8f0; }
+  .katex-display { margin: 0.5em 0 !important; color: #00f3ff; text-shadow: 0 0 5px rgba(0, 243, 255, 0.3); }
+
+   
+  #ps-app {
+    --neon-cyan: #00f3ff;
+    --neon-pink: #ff0055;
+    --neon-yellow: #fcee0a;
+    --neon-green: #00ff41;
+    --bg-dark: #050505;
+    
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    color: #e2e8f0;
+    
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 99999;
+    background: var(--bg-dark);
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #ps-app * { box-sizing: inherit; }
+
+   
+  .ps-bg-grid {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background-image: 
+      radial-gradient(circle at 50% 50%, rgba(0, 243, 255, 0.05) 0%, transparent 60%),
+      linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px; 
+    z-index: 1; pointer-events: none;
+  }
+  .ps-scanline {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%);
+    background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.6;
+  }
+
+   
+  .ps-container {
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column;
+    width: 100%; height: 100%;
+  }
+
+   
+  .ps-header {
+    background: rgba(5, 5, 5, 0.5);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 15px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0; box-shadow: 0 4px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .ps-title {
+    font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
+    color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+    letter-spacing: 2px; display: flex; align-items: center; gap: 10px;
+  }
+  .ps-header-right { display: flex; align-items: center; gap: 10px; }
+  .ps-sys-status {
+    font-size: 0.65rem; color: var(--neon-cyan);
+    background: rgba(0, 243, 255, 0.05); padding: 4px 8px; border: 1px solid rgba(0, 243, 255, 0.2);
+    font-family: 'Orbitron', sans-serif;
+  }
+  .ps-exit-btn {
+    background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
+    font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: bold;
+    padding: 5px 12px; cursor: pointer; transition: all 0.2s;
+  }
+  .ps-exit-btn:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px rgba(255,0,85,0.5); }
+
+   
+  .ps-workspace {
+    flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;
+  }
+  @media(min-width: 800px) { .ps-workspace { flex-direction: row; } }
+
+   
+  .ps-panel-left {
+    width: 100%;
+    background: rgba(5, 5, 5, 0.45);
+    backdrop-filter: blur(14px) url(#liquid-refract);
+    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex; flex-direction: column; padding: 15px; overflow-y: auto;
+    flex-shrink: 0;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  @media(min-width: 800px) { 
+    .ps-panel-left { width: 320px; border-bottom: none; border-right: 1px solid rgba(255, 255, 255, 0.08); } 
+  }
+  .ps-panel-left::-webkit-scrollbar { width: 4px; }
+  .ps-panel-left::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.3); }
+
+  .ps-section-title {
+    font-family: 'Orbitron', sans-serif; font-size: 0.85rem; color: #888;
+    margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px; letter-spacing: 1px;
+  }
+
+  .ps-select {
+    width: 100%; background: #000; border: 1px solid #444; color: var(--neon-cyan);
+    padding: 10px; font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: bold;
+    font-size: 0.9rem; outline: none; margin-bottom: 20px; cursor: pointer;
+  }
+  .ps-select:focus { border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0,243,255,0.2); }
+
+  .ps-input-group { margin-bottom: 12px; }
+  .ps-input-label {
+    display: flex; justify-content: space-between; font-size: 0.75rem; color: #aaa; margin-bottom: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ps-input-label span.sym { color: var(--neon-yellow); font-weight: bold; }
+  .ps-input-row { display: flex; align-items: stretch; height: 36px; }
+  .ps-input {
+    flex-grow: 1; background: #000; border: 1px solid #333; color: #fff;
+    font-family: 'JetBrains Mono', monospace; padding: 0 10px; outline: none; transition: 0.2s;
+  }
+  .ps-input:focus { border-color: var(--neon-cyan); }
+  .ps-unit {
+    background: rgba(0,243,255,0.05); border: 1px solid #333; border-left: none;
+    color: #666; padding: 0 10px; display: flex; align-items: center; font-size: 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .ps-btn-solve {
+    background: rgba(0, 243, 255, 0.1); border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan); font-family: 'Orbitron', sans-serif; font-size: 0.9rem;
+    font-weight: bold; padding: 12px; margin-top: 10px; cursor: pointer; transition: all 0.2s;
+    text-shadow: 0 0 5px rgba(0, 243, 255, 0.4); text-transform: uppercase; letter-spacing: 2px;
+  }
+  .ps-btn-solve:hover {
+    background: var(--neon-cyan); color: #000; box-shadow: 0 0 20px rgba(0,243,255,0.5);
+  }
+
+   
+  .ps-panel-right {
+    flex-grow: 1; padding: 20px; overflow-y: auto; background: transparent; position: relative;
+  }
+  .ps-panel-right::-webkit-scrollbar { width: 6px; }
+  .ps-panel-right::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.2); }
+
+  .ps-output-title {
+    font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: #fff;
+    margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1);
+    letter-spacing: 2px;
+  }
+
+  .ps-placeholder {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100%; color: #444; font-family: 'JetBrains Mono', monospace; text-align: center;
+  }
+  .ps-placeholder svg { width: 64px; height: 64px; stroke: #333; margin-bottom: 15px; }
+
+   
+  .ps-step {
+    background: rgba(5, 5, 5, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-left: 3px solid #444;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 4px 15px rgba(0,0,0,0.2);
+    padding: 15px 20px; margin-bottom: 15px; border-radius: 2px;
+    opacity: 0; transform: translateY(10px); animation: fadeInUp 0.4s forwards;
+  }
+  .ps-step:hover { border-color: rgba(255,255,255,0.12); }
+  .ps-step.important { border-left-color: var(--neon-pink); background: rgba(255,0,85,0.08); }
+  .ps-step.result { border-left-color: var(--neon-green); background: rgba(0,255,65,0.08); }
+
+  @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+  .ps-step-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+  }
+  .ps-step-badge {
+    background: #000; border: 1px solid #555; color: #aaa;
+    font-family: 'Orbitron', sans-serif; font-size: 0.65rem; padding: 2px 6px;
+  }
+  .ps-step.important .ps-step-badge { border-color: var(--neon-pink); color: var(--neon-pink); }
+  .ps-step.result .ps-step-badge { border-color: var(--neon-green); color: var(--neon-green); font-size: 0.75rem; font-weight: bold; }
+  
+  .ps-step-title {
+    font-weight: bold; font-size: 0.95rem; color: #e2e8f0;
+  }
+  .ps-step-desc {
+    font-size: 0.85rem; color: #a0aec0; line-height: 1.6; margin-bottom: 10px;
+  }
+
+  .ps-diagram {
+    background: rgba(0,0,0,0.5); border: 1px solid #222; border-radius: 4px; padding: 10px;
+    margin: 15px 0; text-align: center; color: #888; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace;
+  }
+
+   
+  @media(max-width: 640px) {
+    .ps-header { padding: 8px 10px; }
+    .ps-title { font-size: 0.9rem; }
+    .ps-sys-status { display: none; }
+    .ps-panel-left { padding: 12px; }
+    .ps-panel-right { padding: 12px; }
+    .ps-step { padding: 12px 15px; }
+  }
+</style>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js"></script>
+
+<div id="ps-app">
+  
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="liquid-refract">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+  <div class="ps-bg-grid"></div>
+  <div class="ps-scanline"></div>
+
+  <div class="ps-container">
+    <div class="ps-header">
+      <div class="ps-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--neon-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+        PHYSICS_SOLVER
+      </div>
+      <div class="ps-header-right">
+        <div class="ps-sys-status"><span style="color:var(--neon-cyan);">&#x25CF;</span> ENGINE: ACTIVE</div>
+        <button class="ps-exit-btn" onclick="history.back()">EXIT_</button>
+      </div>
+    </div>
+
+    <div class="ps-workspace">
+      
+      <div class="ps-panel-left">
+        <div class="ps-section-title">PROBLEM SETUP</div>
+        
+        <select class="ps-select" id="ps-problem-type" onchange="psApp.loadInputs()">
+          <option value="projectile">1. 斜方投射 (Projectile Motion)</option>
+          <option value="incline">2. 斜面上の運動 (Inclined Plane)</option>
+          <option value="energy">3. 力学的エネルギー保存 (Energy Conservation)</option>
+          <option value="circular">4. 鉛直面内の円運動 (Vertical Circular)</option>
+          <option value="momentum">5. 1次元衝突と運動量保存 (1D Collision)</option>
+          <option value="spring">6. 水平ばね振り子 (Spring Oscillator)</option>
+          <option value="doppler">7. ドップラー効果 (Doppler Effect)</option>
+          <option value="two_body">8. 糸で結ばれた2物体の運動 (Connected Bodies)</option>
+        </select>
+
+        <div id="ps-inputs-container">
+          
+        </div>
+
+        <button class="ps-btn-solve" onclick="psApp.solve()">ANALYZE & SOLVE</button>
+      </div>
+
+      
+      <div class="ps-panel-right" id="ps-output-panel">
+        <div class="ps-placeholder" id="ps-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 14 10 14 10 20"></polyline>
+            <polyline points="20 10 14 10 14 4"></polyline>
+            <line x1="14" y1="10" x2="21" y2="3"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+          <p>条件を入力し、[ANALYZE & SOLVE] を実行する</p>
+          <span style="font-size:0.7rem; color:#333;">AWAITING PARAMETERS...</span>
+        </div>
+        
+        <div id="ps-solution-container" style="display:none;">
+          <div class="ps-output-title" id="ps-solution-title">SOLUTION TRACE</div>
+          <div id="ps-steps"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var psApp = (function() {
+  "use strict";
+
+  const problems = {
+    projectile: {
+      title: "斜方投射 (Projectile Motion)",
+      inputs: [
+        { id: "v0", sym: "v_0", name: "初速度", unit: "m/s", val: "20" },
+        { id: "theta", sym: "\\theta", name: "投射角", unit: "deg", val: "45" },
+        { id: "h0", sym: "h_0", name: "初期高さ", unit: "m", val: "0" },
+        { id: "g", sym: "g", name: "重力加速度", unit: "m/s²", val: "9.8" }
+      ]
+    },
+    incline: {
+      title: "斜面上を滑り降りる運動 (Inclined Plane)",
+      inputs: [
+        { id: "m", sym: "m", name: "質量", unit: "kg", val: "5.0" },
+        { id: "theta", sym: "\\theta", name: "斜面角", unit: "deg", val: "30" },
+        { id: "mu", sym: "\\mu", name: "動摩擦係数", unit: "", val: "0.2" },
+        { id: "g", sym: "g", name: "重力加速度", unit: "m/s²", val: "9.8" }
+      ]
+    },
+    energy: {
+      title: "力学的エネルギー保存 (自由落下)",
+      inputs: [
+        { id: "m", sym: "m", name: "質量", unit: "kg", val: "2.0" },
+        { id: "h", sym: "h", name: "落下高さ", unit: "m", val: "10" },
+        { id: "v0", sym: "v_0", name: "初速度", unit: "m/s", val: "0" },
+        { id: "g", sym: "g", name: "重力加速度", unit: "m/s²", val: "9.8" }
+      ]
+    },
+    circular: {
+      title: "鉛直面内の円運動 (糸についたおもり)",
+      inputs: [
+        { id: "m", sym: "m", name: "質量", unit: "kg", val: "0.5" },
+        { id: "r", sym: "r", name: "糸の長さ(半径)", unit: "m", val: "1.0" },
+        { id: "v0", sym: "v_0", name: "最下点での速度", unit: "m/s", val: "5.0" },
+        { id: "g", sym: "g", name: "重力加速度", unit: "m/s²", val: "9.8" }
+      ]
+    },
+    momentum: {
+      title: "1次元衝突と運動量保存 (1D Collision)",
+      inputs: [
+        { id: "m1", sym: "m_1", name: "物体1の質量", unit: "kg", val: "2.0" },
+        { id: "v1", sym: "v_1", name: "物体1の初速度", unit: "m/s", val: "5.0" },
+        { id: "m2", sym: "m_2", name: "物体2の質量", unit: "kg", val: "3.0" },
+        { id: "v2", sym: "v_2", name: "物体2の初速度", unit: "m/s", val: "-2.0" },
+        { id: "e", sym: "e", name: "反発係数", unit: "", val: "0.5" }
+      ]
+    },
+    spring: {
+      title: "水平ばね振り子の単振動 (Spring Oscillator)",
+      inputs: [
+        { id: "m", sym: "m", name: "質量", unit: "kg", val: "1.5" },
+        { id: "k", sym: "k", name: "ばね定数", unit: "N/m", val: "60.0" },
+        { id: "A", sym: "A", name: "振幅", unit: "m", val: "0.2" }
+      ]
+    },
+    doppler: {
+      title: "ドップラー効果 (Doppler Effect)",
+      inputs: [
+        { id: "f0", sym: "f_0", name: "音源の振動数", unit: "Hz", val: "500" },
+        { id: "V", sym: "V", name: "音速", unit: "m/s", val: "340" },
+        { id: "vs", sym: "v_s", name: "音源の速度(右向+)", unit: "m/s", val: "20" },
+        { id: "vo", sym: "v_o", name: "観測者の速度(右向+)", unit: "m/s", val: "0" }
+      ]
+    },
+    two_body: {
+      title: "糸で結ばれた2物体の運動 (Connected Bodies)",
+      inputs: [
+        { id: "mA", sym: "m_A", name: "台上の物体A質量", unit: "kg", val: "3.0" },
+        { id: "mB", sym: "m_B", name: "宙吊り物体B質量", unit: "kg", val: "2.0" },
+        { id: "mu", sym: "\\mu", name: "Aと台の動摩擦係数", unit: "", val: "0.2" },
+        { id: "g", sym: "g", name: "重力加速度", unit: "m/s²", val: "9.8" }
+      ]
+    }
+  };
+
+  function loadInputs() {
+    const type = document.getElementById('ps-problem-type').value;
+    const container = document.getElementById('ps-inputs-container');
+    const prob = problems[type];
+    
+    container.innerHTML = '';
+    prob.inputs.forEach(inp => {
+      container.innerHTML += `
+        <div class="ps-input-group">
+          <div class="ps-input-label">
+            <span>${inp.name}</span>
+            <span class="sym" id="tex-${inp.id}"></span>
+          </div>
+          <div class="ps-input-row">
+            <input type="text" id="inp-${inp.id}" class="ps-input" value="${inp.val}">
+            ${inp.unit ? `<div class="ps-unit">${inp.unit}</div>` : ''}
+          </div>
+        </div>
+      `;
+    });
+
+    
+    setTimeout(() => {
+      prob.inputs.forEach(inp => {
+        katex.render(inp.sym, document.getElementById(`tex-${inp.id}`));
+      });
+    }, 50);
+
+    
+    document.getElementById('ps-placeholder').style.display = 'flex';
+    document.getElementById('ps-solution-container').style.display = 'none';
+  }
+
+  function formatNum(n) {
+    return Math.round(n * 1000) / 1000;
+  }
+
+  
+  function getSym(id) {
+    const raw = document.getElementById(`inp-${id}`).value;
+    try {
+      return nerdamer(raw);
+    } catch (e) {
+      console.error("Invalid math input:", raw);
+      return nerdamer("0");
+    }
+  }
+
+  
+  function getTeX(expr) {
+    return nerdamer(expr).toTeX();
+  }
+
+  
+  function getDec(expr) {
+    return formatNum(Number(nerdamer(expr).evaluate().text()));
+  }
+
+  function renderStep(container, delay, type, title, desc, formula) {
+    const step = document.createElement('div');
+    step.className = `ps-step ${type}`;
+    step.style.animationDelay = `${delay}s`;
+    
+    let typeLabel = "STEP";
+    if (type === 'important') typeLabel = "LAW / EQUATION";
+    if (type === 'result') typeLabel = "FINAL ANSWER";
+
+    const parseMath = (text) => {
+      let t = text;
+      const matches = t.match(/\$(.+?)\$/g);
+      if(matches) {
+         matches.forEach(m => {
+            try {
+              const h = katex.renderToString(m.replace(/\$/g, ''), { throwOnError: false, displayMode: false });
+              t = t.replace(m, h);
+            } catch(e) {}
+         });
+      }
+      return t;
+    };
+
+    let parsedTitle = parseMath(title);
+    let parsedDesc = parseMath(desc);
+
+    step.innerHTML = `
+      <div class="ps-step-header">
+        <span class="ps-step-badge">${typeLabel}</span>
+        <span class="ps-step-title">${parsedTitle}</span>
+      </div>
+      <div class="ps-step-desc">${parsedDesc}</div>
+      ${formula ? `<div class="ps-formula"></div>` : ''}
+    `;
+    container.appendChild(step);
+
+    if (formula) {
+      const fWrap = step.querySelector('.ps-formula');
+      katex.render(formula, fWrap, { displayMode: true, throwOnError: false });
+    }
+  }
+
+  function solve() {
+    const type = document.getElementById('ps-problem-type').value;
+    document.getElementById('ps-placeholder').style.display = 'none';
+    const solContainer = document.getElementById('ps-solution-container');
+    const stepsDiv = document.getElementById('ps-steps');
+    solContainer.style.display = 'block';
+    stepsDiv.innerHTML = '';
+    
+    let delay = 0;
+    const addStep = (t, title, desc, form) => { renderStep(stepsDiv, delay, t, title, desc, form); delay += 0.2; };
+
+    try {
+      if (type === 'projectile') {
+        const v0 = getSym('v0'), thetaStr = getSym('theta'), h0 = getSym('h0'), g = getSym('g');
+        
+        
+        
+        nerdamer.set('RADIAN', false); 
+        const rad = `(${thetaStr.text()} * pi / 180)`;
+        const v0x = nerdamer(`${v0.text()} * cos(${rad})`);
+        const v0y = nerdamer(`${v0.text()} * sin(${rad})`);
+
+        addStep('normal', '1. 初期条件と速度の分解', '初速度 $v_0$ を水平方向（x）と鉛直方向（y）に分解する。', 
+          `\\begin{aligned} v_{0x} &= v_0 \\cos\\theta = ${getTeX(v0x)} \\approx ${getDec(v0x)} \\text{ m/s} \\\\ v_{0y} &= v_0 \\sin\\theta = ${getTeX(v0y)} \\approx ${getDec(v0y)} \\text{ m/s} \\end{aligned}`);
+        
+        addStep('important', '2. 運動方程式', '水平方向には力が働かず等速直線運動、鉛直方向には重力 $-mg$ が働き等加速度運動をする。',
+          `\\begin{aligned} m a_x &= 0 \\quad \\Rightarrow \\quad a_x = 0 \\\\ m a_y &= -mg \\quad \\Rightarrow \\quad a_y = -g \\end{aligned}`);
+        
+        addStep('normal', '3. 任意時刻 $t$ での位置と速度', '加速度を積分して、時刻 $t$ における速度 $v$ と位置 $(x, y)$ を求める。',
+          `\\begin{aligned} v_x(t) &= v_{0x} \\\\ v_y(t) &= v_{0y} - gt \\\\ x(t) &= v_{0x} t \\\\ y(t) &= h_0 + v_{0y} t - \\frac{1}{2}gt^2 \\end{aligned}`);
+        
+        const t_top = nerdamer(`${v0y.text()} / ${g.text()}`);
+        const y_max = nerdamer(`${h0.text()} + ${v0y.text()} * (${t_top.text()}) - 1/2 * ${g.text()} * (${t_top.text()})^2`);
+        addStep('normal', '4. 最高点に達する時間と高さ', '最高点では鉛直方向の速度が $v_y = 0$ になる。',
+          `0 = v_{0y} - g t_{top} \\quad \\Rightarrow \\quad t_{top} = \\frac{v_{0y}}{g} = ${getTeX(t_top)} \\approx ${getDec(t_top)} \\text{ s}`);
+        addStep('result', '最高点 (Maximum Height)', '求めた $t_{top}$ を $y(t)$ に代入する。',
+          `H = h_0 + \\frac{v_{0y}^2}{2g} = ${getTeX(y_max)} \\approx ${getDec(y_max)} \\text{ m}`);
+
+        addStep('normal', '5. 水平到達距離', '$y(t) = 0$ となる解を求める。',
+          `0 = ${getTeX(h0)} + (${getTeX(v0y)}) t - \\frac{1}{2}(${getTeX(g)}) t^2`);
+          
+        
+        
+        const roots = nerdamer.solve(`-1/2 * (${g.text()}) * t^2 + (${v0y.text()}) * t + (${h0.text()}) = 0`, 't');
+        
+        if (roots && roots.elements && roots.elements.length > 0) {
+           
+           let t_end_sym = null;
+           let t_end_val = -Infinity;
+           roots.elements.forEach(r => {
+             const val = Number(r.evaluate().text());
+             if (val > 0 && val > t_end_val) {
+               t_end_val = val;
+               t_end_sym = r;
+             }
+           });
+           
+           if (t_end_sym) {
+             const x_max = nerdamer(`(${v0x.text()}) * (${t_end_sym.text()})`);
+             addStep('result', '水平到達距離 (Range)', `着地時間は $t = ${getTeX(t_end_sym)} \\approx ${getDec(t_end_sym)}\\text{ s}$`,
+              `L = v_{0x} t = ${getTeX(x_max)} \\approx ${getDec(x_max)} \\text{ m}`);
+           } else {
+             addStep('result', '水平到達距離 (Range)', '有効な着地時間が見つかりません。', '');
+           }
+        }
+      } 
+      else if (type === 'incline') {
+        const m = getSym('m'), thetaStr = getSym('theta'), mu = getSym('mu'), g = getSym('g');
+        const rad = `(${thetaStr.text()} * pi / 180)`;
+        const Wx = nerdamer(`${m.text()} * ${g.text()} * sin(${rad})`);
+        const Wy = nerdamer(`${m.text()} * ${g.text()} * cos(${rad})`);
+
+        addStep('normal', '1. 重力の分解', '重力 $mg$ を斜面に平行な成分(x)と垂直な成分(y)に分解する。',
+          `\\begin{aligned} W_x &= mg \\sin\\theta = ${getTeX(Wx)} \\approx ${getDec(Wx)} \\text{ N} \\\\ W_y &= mg \\cos\\theta = ${getTeX(Wy)} \\approx ${getDec(Wy)} \\text{ N} \\end{aligned}`);
+        
+        addStep('important', '2. 垂直抗力', '斜面に垂直な方向(y)では力のつりあいが成り立つ。',
+          `N - W_y = 0 \\quad \\Rightarrow \\quad N = mg \\cos\\theta = ${getTeX(Wy)} \\approx ${getDec(Wy)} \\text{ N}`);
+        
+        const f_k = nerdamer(`(${mu.text()}) * (${Wy.text()})`);
+        addStep('normal', '3. 動摩擦力', '滑り降りているため、運動の逆向き（斜面上向き）に動摩擦力が働く。',
+          `f_k = \\mu N = \\mu mg \\cos\\theta = ${getTeX(f_k)} \\approx ${getDec(f_k)} \\text{ N}`);
+        
+        const F_net = nerdamer(`(${Wx.text()}) - (${f_k.text()})`);
+        addStep('important', '4. 斜面方向の運動方程式', '斜面下向きを正としてニュートンの運動方程式を立てる。',
+          `ma = W_x - f_k \\quad \\Rightarrow \\quad ma = mg \\sin\\theta - \\mu mg \\cos\\theta`);
+        
+        const a = nerdamer(`(${F_net.text()}) / (${m.text()})`);
+        const a_val = Number(a.evaluate().text());
+        
+        if (a_val > 0) {
+          addStep('result', '物体の加速度 (Acceleration)', '方程式を $a$ について解く。質量 $m$ は両辺で約分される。',
+            `a = g(\\sin\\theta - \\mu \\cos\\theta) = ${getTeX(a)} \\approx ${getDec(a)} \\text{ m/s}^2`);
+        } else {
+          addStep('result', '物体の加速度 (Acceleration)', '計算上の加速度が0以下のため、物体は滑り出さない（静かに置いた場合）か、減速して止まる。',
+            `a = ${getTeX(a)} \\approx ${getDec(a)} \\text{ m/s}^2 \\quad (\\text{Deceleration})`);
+        }
+      }
+      else if (type === 'energy') {
+        const m = getSym('m'), h = getSym('h'), v0 = getSym('v0'), g = getSym('g');
+        const E_init = nerdamer(`1/2 * (${m.text()}) * (${v0.text()})^2 + (${m.text()}) * (${g.text()}) * (${h.text()})`);
+        
+        addStep('normal', '1. 初期状態の力学的エネルギー', '高さ $h$ にあるときの運動エネルギー $K$ と位置エネルギー $U$ の和を求める。',
+          `E_1 = \\frac{1}{2}mv_0^2 + mgh = ${getTeX(E_init)} \\approx ${getDec(E_init)} \\text{ J}`);
+        
+        addStep('important', '2. 力学的エネルギー保存則', '空気抵抗等の非保存力が働かない場合、どの地点でも力学的エネルギーの和は一定である。着地点（高さ0）での速度を $v_1$ とする。',
+          `E_1 = E_2 \\quad \\Rightarrow \\quad \\frac{1}{2}mv_0^2 + mgh = \\frac{1}{2}mv_1^2 + 0`);
+        
+        
+        const v1_sq = nerdamer(`2 * (${E_init.text()}) / (${m.text()})`);
+        const v1_val = Number(v1_sq.evaluate().text());
+        const v1 = v1_val > 0 ? nerdamer(`sqrt(${v1_sq.text()})`) : nerdamer('0');
+        
+        addStep('result', '着地時の速度 (Final Velocity)', '式を $v_1$ について解く。質量 $m$ は両辺で約分される。',
+          `v_1 = \\sqrt{v_0^2 + 2gh} = ${getTeX(v1)} \\approx ${getDec(v1)} \\text{ m/s}`);
+      }
+      else if (type === 'circular') {
+        const m = getSym('m'), r = getSym('r'), v0 = getSym('v0'), g = getSym('g');
+        
+        addStep('normal', '1. 最下点での張力', '最下点での速さが $v_0$ のとき、円運動の中心（上向き）に向かう向心力が必要である。',
+          `T_{bottom} - mg = m\\frac{v_0^2}{r}`);
+        const T0 = nerdamer(`(${m.text()}) * (${g.text()}) + (${m.text()}) * (${v0.text()})^2 / (${r.text()})`);
+        addStep('result', '最下点の張力 (Tension at bottom)', '',
+          `T_{bottom} = m\\left(g + \\frac{v_0^2}{r}\\right) = ${getTeX(T0)} \\approx ${getDec(T0)} \\text{ N}`);
+
+        addStep('important', '2. 力学的エネルギー保存則', '角度 $\\theta$（最下点から測る）の位置にあるときの速さ $v$ をエネルギー保存から求める。高さの変化は $r(1-\\cos\\theta)$ である。',
+          `\\frac{1}{2}mv_0^2 = \\frac{1}{2}mv^2 + mgr(1-\\cos\\theta)`);
+        
+        addStep('normal', '3. 任意の角度 $\\theta$ での張力', '半径方向の運動方程式を立てる。',
+          `T(\\theta) - mg\\cos\\theta = m\\frac{v^2}{r}`);
+        
+        
+        const v_top_sq = nerdamer(`(${v0.text()})^2 - 4 * (${g.text()}) * (${r.text()})`);
+        const v_top_sq_val = Number(v_top_sq.evaluate().text());
+        
+        if (v_top_sq_val > 0) {
+          const v_top = nerdamer(`sqrt(${v_top_sq.text()})`);
+          const T_top = nerdamer(`(${m.text()}) * (${v_top_sq.text()}) / (${r.text()}) - (${m.text()}) * (${g.text()})`);
+          const T_top_val = Number(T_top.evaluate().text());
+          
+          addStep('normal', '4. 最上点への到達判定', '最上点で $v > 0$ かつ張力 $T > 0$ となるか確認する（糸がたるまない条件）。',
+             `v_{top}^2 = v_0^2 - 4gr = ${getTeX(v_top_sq)} \\approx ${getDec(v_top_sq)} > 0`);
+          if (T_top_val >= 0) {
+             addStep('result', '最上点の張力 (Tension at top)', '物体は糸がたるむことなく円運動を一周する。',
+              `T_{top} = m\\frac{v_{top}^2}{r} - mg = ${getTeX(T_top)} \\approx ${getDec(T_top)} \\text{ N}`);
+          } else {
+             addStep('result', '結果', '最上点に達する前に張力が0になり、糸がたるんで放物運動に移る。',
+              `T_{top} < 0 \\text{ (Tension goes negative)}`);
+          }
+        } else {
+          addStep('result', '結果', '初速度が足りません。最上点に達する前に速度が0になり、振り子運動をするか、途中で糸がたるむ。',
+            `v_{top}^2 \\le 0`);
+        }
+      }
+
+      else if (type === 'momentum') {
+        const m1 = getSym('m1'), v1 = getSym('v1'), m2 = getSym('m2'), v2 = getSym('v2'), e = getSym('e');
+        
+        const P_init = nerdamer(`(${m1.text()}) * (${v1.text()}) + (${m2.text()}) * (${v2.text()})`);
+        addStep('normal', '1. 衝突前の全運動量', '各物体の運動量の和を求める。',
+          `P_{init} = m_1 v_1 + m_2 v_2 = ${getTeX(P_init)} \\approx ${getDec(P_init)} \\text{ kg} \\cdot \\text{m/s}`);
+          
+        addStep('important', '2. 運動量保存則', '外力が働かない場合、衝突前後で系の全運動量は保存される（衝突後の速度を $v_1^\\prime, v_2^\\prime$ とする）。',
+          `m_1 v_1 + m_2 v_2 = m_1 v_1^\\prime + m_2 v_2^\\prime`);
+          
+        addStep('important', '3. 反発係数（はねかえり係数）の式', '近づく速さと遠ざかる速さの比 $e$ の関係式を立てる。',
+          `e = -\\frac{v_1^\\prime - v_2^\\prime}{v_1 - v_2} \\quad \\Rightarrow \\quad v_1^\\prime - v_2^\\prime = -e(v_1 - v_2)`);
+          
+        const delta_v = nerdamer(`-(${e.text()}) * ((${v1.text()}) - (${v2.text()}))`); 
+        
+        const v1_post = nerdamer(`(${P_init.text()} + (${m2.text()}) * (${delta_v.text()})) / ((${m1.text()}) + (${m2.text()}))`);
+        const v2_post = nerdamer(`(${v1_post.text()}) - (${delta_v.text()})`);
+        
+        addStep('result', '4. 衝突後の速度', '連立方程式を解いて、それぞれの衝突後の速度を求める。',
+          `\\begin{aligned} v_1^\\prime &= ${getTeX(v1_post)} \\approx ${getDec(v1_post)} \\text{ m/s} \\\\ v_2^\\prime &= ${getTeX(v2_post)} \\approx ${getDec(v2_post)} \\text{ m/s} \\end{aligned}`);
+          
+        const E_init = nerdamer(`1/2 * (${m1.text()}) * (${v1.text()})^2 + 1/2 * (${m2.text()}) * (${v2.text()})^2`);
+        const E_post = nerdamer(`1/2 * (${m1.text()}) * (${v1_post.text()})^2 + 1/2 * (${m2.text()}) * (${v2_post.text()})^2`);
+        const dE = nerdamer(`(${E_post.text()}) - (${E_init.text()})`);
+        
+        addStep('normal', '5. 力学的エネルギーの損失', '弾性衝突（$e=1$）以外では、衝突によりエネルギーが失われる。',
+          `\\Delta E = E_{post} - E_{init} = ${getTeX(dE)} \\approx ${getDec(dE)} \\text{ J}`);
+      }
+      else if (type === 'spring') {
+        const m = getSym('m'), k = getSym('k'), A = getSym('A');
+        
+        const omega = nerdamer(`sqrt((${k.text()}) / (${m.text()}))`);
+        addStep('normal', '1. 角振動数 $\\omega$', 'ばね定数 $k$ と質量 $m$ から単振動の角振動数を求める。',
+          `\\omega = \\sqrt{\\frac{k}{m}} = ${getTeX(omega)} \\approx ${getDec(omega)} \\text{ rad/s}`);
+          
+        const T = nerdamer(`2 * pi / (${omega.text()})`);
+        const f = nerdamer(`1 / (${T.text()})`);
+        addStep('result', '2. 周期 $T$ と振動数 $f$', '1往復する時間と、1秒あたりの振動回数を求める。',
+          `\\begin{aligned} T &= \\frac{2\\pi}{\\omega} = ${getTeX(T)} \\approx ${getDec(T)} \\text{ s} \\\\ f &= \\frac{1}{T} = ${getTeX(f)} \\approx ${getDec(f)} \\text{ Hz} \\end{aligned}`);
+          
+        const vmax = nerdamer(`(${A.text()}) * (${omega.text()})`);
+        const amax = nerdamer(`(${A.text()}) * (${omega.text()})^2`);
+        addStep('normal', '3. 最大速度と最大加速度', '速度は振動の中心で最大となり、加速度は両端（振幅の位置）で最大となる。',
+          `\\begin{aligned} v_{max} &= A\\omega = ${getTeX(vmax)} \\approx ${getDec(vmax)} \\text{ m/s} \\\\ a_{max} &= A\\omega^2 = ${getTeX(amax)} \\approx ${getDec(amax)} \\text{ m/s}^2 \\end{aligned}`);
+          
+        const E = nerdamer(`1/2 * (${k.text()}) * (${A.text()})^2`);
+        addStep('important', '4. 力学的エネルギー', '単振動における力学的エネルギーは常に一定であり、振幅の端での弾性エネルギーに等しい。',
+          `E = \\frac{1}{2}kA^2 = \\frac{1}{2}mv_{max}^2 = ${getTeX(E)} \\approx ${getDec(E)} \\text{ J}`);
+      }
+      else if (type === 'doppler') {
+        const f0 = getSym('f0'), V = getSym('V'), vs = getSym('vs'), vo = getSym('vo');
+        
+        addStep('important', '1. ドップラー効果の基本公式', '音源と観測者が動く場合の観測振動数 $f$ の公式を立てる。音源から観測者に向かう向きを正とするのが一般的だが、ここでは右向きを正とする。',
+          `f = f_0 \\frac{V - v_o}{V - v_s}`);
+          
+        const V_val = Number(V.evaluate().text());
+        const vs_val = Number(vs.evaluate().text());
+        const vo_val = Number(vo.evaluate().text());
+        
+        if (V_val <= Math.abs(vs_val) || V_val <= Math.abs(vo_val)) {
+          addStep('important', '警告: 音速超え', '音速を超える設定になっているため、通常のドップラー効果の公式は適用できない衝撃波の領域となる。', '');
+        } else {
+          const f_obs = nerdamer(`(${f0.text()}) * ((${V.text()}) - (${vo.text()})) / ((${V.text()}) - (${vs.text()}))`);
+          addStep('result', '2. 観測される振動数', '公式に値を代入して計算する。',
+            `f = ${getTeX(f0)} \\times \\frac{${getTeX(V)} - ${getTeX(vo)}}{${getTeX(V)} - ${getTeX(vs)}} = ${getTeX(f_obs)} \\approx ${getDec(f_obs)} \\text{ Hz}`);
+            
+          const lambda_front = nerdamer(`((${V.text()}) - (${vs.text()})) / (${f0.text()})`);
+          const lambda_back = nerdamer(`((${V.text()}) + (${vs.text()})) / (${f0.text()})`);
+          addStep('normal', '3. 音源の前方と後方の波長', '音源が動くことで、前方の波長は短縮され、後方の波長は引き伸ばされる。',
+            `\\begin{aligned} \\lambda_{front} &= \\frac{V - v_s}{f_0} = ${getTeX(lambda_front)} \\approx ${getDec(lambda_front)} \\text{ m} \\\\ \\lambda_{back} &= \\frac{V + v_s}{f_0} = ${getTeX(lambda_back)} \\approx ${getDec(lambda_back)} \\text{ m} \\end{aligned}`);
+        }
+      }
+      else if (type === 'two_body') {
+        const mA = getSym('mA'), mB = getSym('mB'), mu = getSym('mu'), g = getSym('g');
+        
+        const f_k = nerdamer(`(${mu.text()}) * (${mA.text()}) * (${g.text()})`);
+        addStep('normal', '1. 摩擦力の計算', '台上の物体A（質量 $m_A$）に働く動摩擦力 $f_k$ を求める。',
+          `f_k = \\mu N = \\mu m_A g = ${getTeX(f_k)} \\approx ${getDec(f_k)} \\text{ N}`);
+          
+        addStep('important', '2. 運動方程式の立式', '2つの物体が同じ加速度 $a$ で動くとし、糸の張力を $T$ としてそれぞれの運動方程式を立てる。',
+          `\\begin{aligned} \\text{A:} \\quad m_A a &= T - \\mu m_A g \\\\ \\text{B:} \\quad m_B a &= m_B g - T \\end{aligned}`);
+          
+        addStep('normal', '3. 加速度 $a$ の導出', '2式を足し合わせると張力 $T$ が消去され、系全体の運動方程式となる。',
+          `(m_A + m_B)a = m_B g - \\mu m_A g`);
+          
+        const a = nerdamer(`((${mB.text()}) * (${g.text()}) - (${mu.text()}) * (${mA.text()}) * (${g.text()})) / ((${mA.text()}) + (${mB.text()}))`);
+        const a_val = Number(a.evaluate().text());
+        
+        if (a_val > 0) {
+          addStep('result', '系の加速度 (Acceleration)', '方程式を解く。',
+            `a = \\frac{m_B - \\mu m_A}{m_A + m_B}g = ${getTeX(a)} \\approx ${getDec(a)} \\text{ m/s}^2`);
+            
+          const T_tension = nerdamer(`(${mB.text()}) * ((${g.text()}) - (${a.text()}))`);
+          addStep('result', '糸の張力 (Tension)', '求めた $a$ を元の運動方程式に代入する。',
+            `T = m_B (g - a) = ${getTeX(T_tension)} \\approx ${getDec(T_tension)} \\text{ N}`);
+        } else {
+          addStep('result', '系の加速度 (Acceleration)', '物体Bの重力よりも物体Aの最大静止摩擦力の方が大きいため、系は動かない（$a=0$）。',
+            `a = 0 \\text{ m/s}^2`);
+        }
+      }
+
+    } catch(e) {
+      console.error(e);
+      addStep('important', 'ERROR', '計算中にエラーが発生した。', '');
+    }
+  }
+
+  
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', loadInputs); } 
+  else { setTimeout(loadInputs, 50); }
+
+  return { loadInputs, solve };
+})();
+</script>
+
+
+    </section>
+    <footer class="pt-8">
+      
+
+    </footer>
+  </article>
+
+        
+
+
+  
+
+
+
+
+
+
+<div
+  id="scroll-to-top"
+  class="fixed bottom-6 end-6 z-50 transform translate-y-4 opacity-0 duration-200">
+  <a
+    href="#the-top"
+    class="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="Scroll to top"
+    title="Scroll to top">
+    &uarr;
+  </a>
+</div>
+
+      </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      &copy;
+      2026
+      dt
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      Powered by <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false}]
+    });
+  });
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+   
+  div.fixed.z-40, 
+  div.fixed.z-50,
+  .backdrop-blur-sm,
+  .backdrop-blur-md,
+  .bg-neutral-800\/90,
+  .bg-neutral-900\/90,
+  [x-show="mobileMenu"] {
+      background-color: #050505 !important;
+      background: #050505 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+  }
+
+   
+  .main-menu nav > a,
+  .main-menu nav > a.text-base.font-medium {
+      font-family: 'Orbitron', sans-serif !important;
+      color: #00f3ff !important;
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.4) !important;
+      letter-spacing: 0.1em !important;
+      -webkit-text-fill-color: #00f3ff !important;
+      transition: all 0.3s ease !important;
+  }
+  .main-menu nav > a:hover {
+      color: #ff0055 !important;
+      text-shadow: 0 0 10px rgba(255, 0, 85, 0.8), 0 0 20px rgba(255, 0, 85, 0.4) !important;
+      -webkit-text-fill-color: #ff0055 !important;
+  }
+
+   
+  .main-menu nav.hidden.md\:flex a,
+  .main-menu nav.hidden.md\:flex span {
+      font-family: 'Orbitron', sans-serif !important;
+      color: #00f3ff !important;
+      letter-spacing: 0.1em !important;
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.5) !important;
+      -webkit-text-fill-color: #00f3ff !important;
+      transition: all 0.3s ease !important;
+  }
+  .main-menu nav.hidden.md\:flex a:hover,
+  .main-menu nav.hidden.md\:flex a:hover span {
+      color: #ff0055 !important;
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.8) !important;
+      -webkit-text-fill-color: #ff0055 !important;
+  }
+
+   
+  div.fixed.z-40 nav a, 
+  div.fixed.z-50 nav a,
+  [x-show="mobileMenu"] nav a {
+      font-family: 'Orbitron', sans-serif !important;
+      color: #00f3ff !important;
+      letter-spacing: 0.1em !important;
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.5) !important;
+      -webkit-text-fill-color: #00f3ff !important;
+      transition: all 0.3s ease !important;
+  }
+  div.fixed.z-40 nav a:hover, 
+  div.fixed.z-50 nav a:hover,
+  [x-show="mobileMenu"] nav a:hover {
+      color: #ff0055 !important;
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.8) !important;
+      -webkit-text-fill-color: #ff0055 !important;
+  }
+
+   
+  div.fixed.z-40 nav ul li,
+  div.fixed.z-50 nav ul li {
+      border-bottom: 1px solid rgba(0, 243, 255, 0.1) !important;
+      padding-bottom: 0.5rem !important;
+      margin-bottom: 0.5rem !important;
+  }
+
+   
+  .main-menu svg,
+  div.fixed.z-40 svg,
+  div.fixed.z-50 svg,
+  button[aria-label="Close menu"] svg,
+  button[aria-label="Open menu"] svg {
+      color: #00f3ff !important; 
+      fill: currentColor !important;
+      stroke: currentColor !important;
+      filter: drop-shadow(0 0 3px rgba(0, 243, 255, 0.8)) !important; 
+      transition: all 0.3s ease !important;
+  }
+  .main-menu button:hover svg,
+  .main-menu a:hover svg,
+  div.fixed.z-40 button:hover svg,
+  div.fixed.z-50 button:hover svg {
+      color: #ff0055 !important;
+      filter: drop-shadow(0 0 5px rgba(255, 0, 85, 0.8)) !important;
+  }
+
+   
+  ::-webkit-scrollbar {
+      width: 8px !important;
+  }
+  ::-webkit-scrollbar-track {
+      background: #050505 !important; 
+  }
+  ::-webkit-scrollbar-thumb {
+      background: #00f3ff !important; 
+      border-radius: 4px !important;
+  }
+
+   
+  main#main-content h2.text-2xl.font-extrabold {
+      font-family: 'Orbitron', sans-serif !important;
+      color: #00f3ff !important;
+      letter-spacing: 0.1em !important;
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.4) !important;
+      -webkit-text-fill-color: #00f3ff !important;
+      border-bottom: 1px dashed rgba(0, 243, 255, 0.3) !important;
+      padding-bottom: 0.5rem !important;
+  }
+
+   
+  
+   
+  main#main-content section.grid > * {
+      transition: all 0.3s ease !important;
+      border: 1px solid rgba(0, 243, 255, 0.1) !important;
+      border-radius: 8px !important;
+      background: rgba(5, 5, 5, 0.3) !important;
+      overflow: hidden !important;
+  }
+
+   
+  main#main-content section.grid > *:hover {
+      box-shadow: 0 0 20px rgba(255, 0, 85, 0.2) !important;
+      border-color: rgba(255, 0, 85, 0.5) !important;
+      transform: translateY(-2px) !important;
+      background: rgba(5, 5, 5, 0.6) !important;
+  }
+
+   
+  main#main-content section.grid > * h3,
+  main#main-content section.grid > * h3 a,
+  main#main-content section.grid > * .text-xl,
+  main#main-content section.grid > * .font-semibold {
+      font-family: 'Orbitron', sans-serif !important;
+      font-size: 1.1rem !important; 
+      line-height: 1.4 !important;
+      color: #00f3ff !important;
+      -webkit-text-fill-color: #00f3ff !important;
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.2) !important;
+      transition: all 0.3s ease !important;
+      text-decoration: none !important;
+  }
+
+   
+  main#main-content section.grid > *:hover h3,
+  main#main-content section.grid > *:hover h3 a,
+  main#main-content section.grid > *:hover .text-xl,
+  main#main-content section.grid > *:hover .font-semibold {
+      color: #ff0055 !important;
+      -webkit-text-fill-color: #ff0055 !important;
+      text-shadow: 0 0 10px rgba(255, 0, 85, 0.8), 0 0 20px rgba(255, 0, 85, 0.4) !important;
+  }
+
+   
+   
+  article.prose .flex-col.items-center.text-center h1 {
+      font-family: 'Orbitron', sans-serif !important;
+      color: #00f3ff !important;
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.4) !important;
+      -webkit-text-fill-color: #00f3ff !important;
+      letter-spacing: 0.15em !important;
+  }
+
+   
+  article.prose .flex-col.items-center.text-center h2 {
+      font-family: 'JetBrains Mono', 'Orbitron', sans-serif !important;
+      color: #ff0055 !important;  
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.8) !important;
+      -webkit-text-fill-color: #ff0055 !important;
+      letter-spacing: 0.1em !important;
+  }
+
+   
+  article.prose .flex-col.items-center.text-center a svg {
+      color: #00f3ff !important;
+      fill: #00f3ff !important;
+      stroke: #00f3ff !important;
+      filter: drop-shadow(0 0 5px rgba(0, 243, 255, 0.8)) !important;
+      transition: all 0.3s ease !important;
+  }
+  article.prose .flex-col.items-center.text-center a:hover svg {
+      color: #ff0055 !important;
+      fill: #ff0055 !important;
+      stroke: #ff0055 !important;
+      filter: drop-shadow(0 0 8px rgba(255, 0, 85, 0.8)) !important;
+      transform: scale(1.1) !important;
+  }
+</style>
+</footer><div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh] z-500"
+  data-url="https://dtwant.github.io/">
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800">
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          <span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0">
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)">
+        <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+  
+</html>

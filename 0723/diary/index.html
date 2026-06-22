@@ -1,0 +1,4924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Secret Diary</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #09090b;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=SF+Pro+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+
+<div id="sd-lock-screen" class="sd-lock-screen sd-hidden">
+  <div class="sd-lock-container">
+    <div class="sd-lock-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <h1 class="sd-lock-title">パスコードを入力</h1>
+    <div class="sd-pin-dots" id="sd-pin-dots">
+      <div class="sd-pin-dot"></div>
+      <div class="sd-pin-dot"></div>
+      <div class="sd-pin-dot"></div>
+      <div class="sd-pin-dot"></div>
+    </div>
+    <div class="sd-keypad">
+      <button class="sd-key-btn" data-val="1">1</button>
+      <button class="sd-key-btn" data-val="2">2</button>
+      <button class="sd-key-btn" data-val="3">3</button>
+      <button class="sd-key-btn" data-val="4">4</button>
+      <button class="sd-key-btn" data-val="5">5</button>
+      <button class="sd-key-btn" data-val="6">6</button>
+      <button class="sd-key-btn" data-val="7">7</button>
+      <button class="sd-key-btn" data-val="8">8</button>
+      <button class="sd-key-btn" data-val="9">9</button>
+      <button class="sd-key-btn sd-empty-key"></button>
+      <button class="sd-key-btn" data-val="0">0</button>
+      <button class="sd-key-btn sd-delete-key" id="sd-pin-delete">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="secret-diary-overlay" class="sd-overlay sd-hidden">
+  <div class="sd-app">
+    
+    <header class="sd-header">
+      <div class="sd-header-left">
+        <button class="sd-back-btn" id="sd-close-btn" aria-label="Close diary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="sd-header-title">
+          <span class="sd-title-text" id="sd-header-title-text">日記</span>
+          <span class="sd-entry-count" id="sd-entry-count">0 件</span>
+        </div>
+      </div>
+      <div class="sd-header-actions" id="sd-header-actions-timeline">
+        <button class="sd-icon-btn" id="sd-search-toggle" aria-label="Search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <button class="sd-icon-btn" id="sd-fav-filter-toggle" aria-label="Filter Favorites">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </button>
+      </div>
+    </header>
+
+    
+    <div class="sd-search-bar sd-hidden" id="sd-search-bar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" class="sd-search-input" id="sd-search-input" placeholder="本文、タグで検索..." autocomplete="off" />
+    </div>
+
+    
+    <div class="sd-tabs-container">
+      
+      
+      <div class="sd-tab-content sd-active" id="sd-tab-timeline">
+        
+        <div class="sd-tag-cloud" id="sd-tag-cloud"></div>
+        <div class="sd-feed" id="sd-feed">
+          <div class="sd-empty-state" id="sd-empty-state">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.25; color:var(--apple-blue);"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            <p class="sd-empty-title">日記がありません</p>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="sd-tab-content" id="sd-tab-calendar">
+        <div class="sd-calendar-view">
+          <div class="sd-calendar-header">
+            <button class="sd-cal-nav" id="sd-cal-prev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg></button>
+            <span class="sd-calendar-title" id="sd-cal-month-year">2026年6月</span>
+            <button class="sd-cal-nav" id="sd-cal-next"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></button>
+          </div>
+          <div class="sd-calendar-weekdays">
+            <span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span>
+          </div>
+          <div class="sd-calendar-days" id="sd-calendar-days"></div>
+        </div>
+        <div class="sd-calendar-focused-section">
+          <h3 class="sd-section-title" id="sd-calendar-focused-date-label">6月9日</h3>
+          
+          
+          <div class="sd-focused-score-box">
+            <div class="sd-focused-score-left">
+              <span class="sd-focused-score-title">一日の満足度</span>
+              <span class="sd-focused-score-value sd-empty" id="sd-calendar-focused-score-val">未記録</span>
+            </div>
+            <button class="sd-apple-btn sd-secondary-btn" id="sd-calendar-focused-score-btn" style="padding: 8px 14px; font-size: 13px; border-radius: 8px;">
+              点数を記録
+            </button>
+          </div>
+
+          <div id="sd-calendar-focused-list"></div>
+          <button class="sd-apple-btn sd-primary-btn" id="sd-calendar-add-btn" style="margin-top: 12px; width:100%;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            この日の日記を書く
+          </button>
+        </div>
+      </div>
+
+      
+      <div class="sd-tab-content" id="sd-tab-gaman">
+        <div class="sd-gaman-container" id="sd-gaman-container">
+          <button class="sd-gaman-btn" id="sd-gaman-trigger">我慢</button>
+          <div class="sd-gaman-counter-box">
+            我慢した回数: <span id="sd-gaman-count-val">0</span> 回
+          </div>
+          <div style="display: flex; gap: 12px; margin-top: 30px;">
+            <button class="sd-apple-btn sd-secondary-btn" id="sd-gaman-history-btn" style="padding: 10px 16px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+              履歴
+            </button>
+            <button class="sd-gaman-reset-btn" id="sd-gaman-reset" style="margin: 0; padding: 10px 14px;">リセット</button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="sd-tab-content" id="sd-tab-desires">
+        <div class="sd-desires-container">
+          
+          <div class="sd-desires-stats">
+            <div class="sd-desires-stat-box">
+              <span class="sd-desires-stat-label">やりたいことの達成率</span>
+              <div class="sd-progress-bar-container">
+                <div class="sd-progress-bar" id="sd-wants-progress-bar" style="width: 0%"></div>
+              </div>
+              <span class="sd-desires-stat-text" id="sd-wants-progress-text">0 / 0 (0%)</span>
+            </div>
+            <div class="sd-desires-stat-box">
+              <span class="sd-desires-stat-label">死ぬまでにやりたいこと</span>
+              <div class="sd-progress-bar-container">
+                <div class="sd-progress-bar" id="sd-bucket-progress-bar" style="width: 0%; background: var(--apple-purple);"></div>
+              </div>
+              <span class="sd-desires-stat-text" id="sd-bucket-progress-text">0 / 0 (0%)</span>
+            </div>
+          </div>
+
+          
+          <div class="sd-segmented-control">
+            <button class="sd-segment-btn sd-active" data-type="wants">やりたいこと</button>
+            <button class="sd-segment-btn" data-type="bucketList">死ぬまでにやりたいこと</button>
+          </div>
+
+          
+          <div class="sd-desires-input-group">
+            <input type="text" id="sd-desire-input" class="sd-simple-input" placeholder="新しい「やりたいこと」を入力..." autocomplete="off" />
+            <button class="sd-apple-btn sd-primary-btn" id="sd-desire-add-btn">
+              追加
+            </button>
+          </div>
+
+          
+          <div class="sd-desires-list" id="sd-desires-list">
+            
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="sd-tab-content" id="sd-tab-stats">
+        <div class="sd-stats-scroll">
+          
+          <div class="sd-stats-card">
+            <h3 class="sd-stats-card-title">セルフケアの習慣達成率</h3>
+            <div class="sd-habits-stats-grid" id="sd-habits-stats-grid">
+              
+            </div>
+          </div>
+
+          <div class="sd-stats-card">
+            <h3 class="sd-stats-card-title">気分の割合</h3>
+            <div class="sd-chart-box">
+              <svg class="sd-pie-chart" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" fill="transparent" stroke="#27272a" stroke-width="12"/>
+                <circle id="sd-chart-pie-accent" cx="50" cy="50" r="40" fill="transparent" stroke="var(--apple-blue)" stroke-width="12" stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+              </svg>
+              <div class="sd-chart-legend" id="sd-chart-legend"></div>
+            </div>
+          </div>
+          
+          <div class="sd-stats-card">
+            <h3 class="sd-stats-card-title">よく使うタグ</h3>
+            <div class="sd-tag-stats-list" id="sd-tag-stats-list"></div>
+          </div>
+
+          <div class="sd-stats-card">
+            <h3 class="sd-stats-card-title">継続日数</h3>
+            <div class="sd-streak-container">
+              <div class="sd-streak-val" id="sd-stat-streak">0</div>
+              <div class="sd-streak-label">連続投稿日数</div>
+            </div>
+            <div class="sd-streak-sub" id="sd-stat-total">総日記数: 0 件</div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="sd-tab-content" id="sd-tab-settings">
+        <div class="sd-settings-list">
+          
+          <div class="sd-settings-section">
+            <h4 class="sd-settings-sec-title">カラーテーマ</h4>
+            <div class="sd-theme-grid">
+              <button class="sd-theme-btn sd-active" data-theme="default">
+                <span class="sd-theme-preview" style="background: linear-gradient(135deg, #09090b, #007aff);"></span>
+                <span class="sd-theme-label">Default</span>
+              </button>
+              <button class="sd-theme-btn" data-theme="midnight-green">
+                <span class="sd-theme-preview" style="background: linear-gradient(135deg, #0b1411, #30b096);"></span>
+                <span class="sd-theme-label">Midnight</span>
+              </button>
+              <button class="sd-theme-btn" data-theme="rose-gold">
+                <span class="sd-theme-preview" style="background: linear-gradient(135deg, #140d10, #ff85a2);"></span>
+                <span class="sd-theme-label">Rose</span>
+              </button>
+              <button class="sd-theme-btn" data-theme="deep-purple">
+                <span class="sd-theme-preview" style="background: linear-gradient(135deg, #0d0b14, #af52de);"></span>
+                <span class="sd-theme-label">Purple</span>
+              </button>
+              <button class="sd-theme-btn" data-theme="aqua-blue">
+                <span class="sd-theme-preview" style="background: linear-gradient(135deg, #050b14, #00c7fc);"></span>
+                <span class="sd-theme-label">Aqua</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="sd-settings-section">
+            <div class="sd-setting-item">
+              <div class="sd-setting-info">
+                <span class="sd-setting-title">パスコードロック</span>
+              </div>
+              <label class="sd-switch">
+                <input type="checkbox" id="sd-setting-lock-toggle">
+                <span class="sd-slider"></span>
+              </label>
+            </div>
+            <div class="sd-setting-item sd-hidden" id="sd-setting-change-pin-row">
+              <button class="sd-text-btn" id="sd-setting-change-pin">パスコードを変更</button>
+            </div>
+          </div>
+
+          <div class="sd-settings-section">
+            <h4 class="sd-settings-sec-title">日記と我慢データの他ブラウザ同期</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px; padding: 8px 0 12px;">
+              <span class="sd-setting-desc" style="color:var(--apple-text-secondary); font-size:12px;">このダイアリーを他の端末やブラウザと同期するための設定です。</span>
+              
+              <div style="display: flex; gap: 8px; margin-top: 4px;">
+                <button class="sd-apple-btn sd-primary-btn" id="sd-gaman-sync-copy-key-btn" style="flex: 1; justify-content: center;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 6px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  同期キーをコピー
+                </button>
+              </div>
+
+              <div style="margin-top: 10px; border-top: 1px solid var(--apple-border); padding-top: 10px;">
+                <span class="sd-setting-desc" style="color:var(--apple-text-secondary); font-size:11px; display:block; margin-bottom: 6px;">別のブラウザから同期キーを入力して接続する：</span>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="sd-gaman-sync-key-input" class="sd-simple-input" style="background:rgba(255,255,255,0.05); border:1px solid var(--apple-border); padding:8px 12px; border-radius:8px;" placeholder="同期キーを入力" />
+                  <button class="sd-apple-btn sd-secondary-btn" id="sd-gaman-sync-save-btn" style="padding:0 16px; font-size:13px; flex-shrink:0;">接続</button>
+                </div>
+              </div>
+
+              <div id="sd-gaman-sync-status" style="font-size:12px; color:var(--apple-text-secondary); margin-top:4px;">同期キー: 未接続</div>
+            </div>
+          </div>
+
+          <div class="sd-settings-section">
+            <h4 class="sd-settings-sec-title">データ管理</h4>
+            <div class="sd-setting-action-row">
+              <button class="sd-apple-btn sd-secondary-btn" id="sd-action-export">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                エクスポート (JSON)
+              </button>
+              <button class="sd-apple-btn sd-secondary-btn" id="sd-action-import-trigger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                インポート (JSON)
+              </button>
+              <input type="file" id="sd-import-file" accept=".json" style="display:none;" />
+            </div>
+          </div>
+
+          <div class="sd-settings-section">
+            <h4 class="sd-settings-sec-title">データ削除</h4>
+            <button class="sd-apple-btn sd-danger-btn" id="sd-action-clear-all" style="width: 100%;">
+              すべてのデータを完全に削除
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    
+    <nav class="sd-tabbar">
+      <button class="sd-tab-btn sd-active" data-tab="timeline">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        <span>日記</span>
+      </button>
+      <button class="sd-tab-btn" data-tab="calendar">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>カレンダー</span>
+      </button>
+      <button class="sd-tab-btn" data-tab="gaman">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>我慢</span>
+      </button>
+      <button class="sd-tab-btn" data-tab="desires">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/></svg>
+        <span>欲</span>
+      </button>
+      <button class="sd-tab-btn" data-tab="stats">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>統計</span>
+      </button>
+      <button class="sd-tab-btn" data-tab="settings">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>設定</span>
+      </button>
+    </nav>
+
+    
+    <button class="sd-fab" id="sd-fab" aria-label="Write new entry">+</button>
+  </div>
+</div>
+
+
+<div class="sd-modal-overlay sd-hidden" id="sd-gaman-history-modal" style="z-index: 250000;">
+  <div class="sd-modal" style="max-height: 80%; display: flex; flex-direction: column;">
+    <div class="sd-modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--apple-border); padding-bottom:8px;">
+      <span class="sd-modal-title">我慢の履歴</span>
+      <button class="sd-icon-btn" id="sd-gaman-history-close" style="width:28px; height:28px; border-radius:50%;">×</button>
+    </div>
+    <div style="flex: 1; overflow-y: auto; margin: 16px 0; max-height: 300px;" id="sd-gaman-history-list"></div>
+  </div>
+</div>
+
+
+<div class="sd-sheet-overlay sd-hidden" id="sd-compose-sheet">
+  <div class="sd-sheet">
+    <div class="sd-sheet-header">
+      <button class="sd-sheet-close" id="sd-compose-cancel">キャンセル</button>
+      <span class="sd-sheet-title" id="sd-compose-sheet-title">新規作成</span>
+      <button class="sd-sheet-done" id="sd-compose-save" disabled>保存</button>
+    </div>
+    
+    <div class="sd-sheet-body">
+      
+      <div class="sd-sheet-row sd-datetime-picker-row">
+        <label for="sd-input-date">日時</label>
+        <input type="datetime-local" id="sd-input-date" class="sd-datetime-input" />
+      </div>
+
+      
+      <div class="sd-sheet-row">
+        <input type="text" id="sd-input-tags" class="sd-simple-input" placeholder="タグを追加 (例: #アイデア #旅行)" autocomplete="off" />
+      </div>
+
+      
+      <div class="sd-compose-mood" id="sd-compose-mood">
+        <button class="sd-compose-mood-btn sd-active" data-mood="📝">📝</button>
+        <button class="sd-compose-mood-btn" data-mood="😊">😊</button>
+        <button class="sd-compose-mood-btn" data-mood="😐">😐</button>
+        <button class="sd-compose-mood-btn" data-mood="😔">😔</button>
+        <button class="sd-compose-mood-btn" data-mood="🔥">🔥</button>
+        <button class="sd-compose-mood-btn" data-mood="💡">💡</button>
+      </div>
+
+      
+      <div class="sd-compose-habits-section">
+        <span class="sd-compose-habits-title">今日のセルフケア</span>
+        <div class="sd-compose-habits" id="sd-compose-habits">
+          <button class="sd-habit-btn" data-habit="sleep">
+            <span class="sd-habit-icon">😴</span>
+            <span class="sd-habit-name">睡眠</span>
+          </button>
+          <button class="sd-habit-btn" data-habit="exercise">
+            <span class="sd-habit-icon">🏃</span>
+            <span class="sd-habit-name">運動</span>
+          </button>
+          <button class="sd-habit-btn" data-habit="hydration">
+            <span class="sd-habit-icon">💧</span>
+            <span class="sd-habit-name">水分</span>
+          </button>
+          <button class="sd-habit-btn" data-habit="reading">
+            <span class="sd-habit-icon">📚</span>
+            <span class="sd-habit-name">読書</span>
+          </button>
+        </div>
+      </div>
+
+      
+      <div class="sd-editor-toolbar">
+        <button class="sd-editor-tool" data-wrap="**" title="太字"><strong>B</strong></button>
+        <button class="sd-editor-tool" data-wrap="*" title="斜体"><em>I</em></button>
+        <button class="sd-editor-tool" data-wrap="-" title="リスト">リスト</button>
+        <button class="sd-editor-tool" data-wrap="`" title="コード">コード</button>
+      </div>
+
+      <textarea class="sd-textarea" id="sd-textarea" placeholder="ここに日記を書く..." rows="8"></textarea>
+      
+      
+      <div class="sd-media-picker-area">
+        <div class="sd-attachment-header">
+          <span>写真</span>
+          <button class="sd-attachment-add-btn" id="sd-attachment-trigger">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            写真を追加
+          </button>
+          <input type="file" id="sd-media-input" accept="image/*" multiple style="display:none;" />
+        </div>
+        <div class="sd-media-grid" id="sd-compose-media-preview"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="sd-modal-overlay sd-hidden" id="sd-pin-setup-modal">
+  <div class="sd-modal">
+    <div class="sd-modal-header">
+      <span class="sd-modal-title">パスコード設定</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; margin: 16px 0;">
+      <p class="sd-modal-body-text">4桁 of パスコードを入力してください。</p>
+      <input type="password" id="sd-pin-setup-input1" class="sd-modal-pin-input" maxlength="4" placeholder="パスコードを入力" pattern="[0-9]*" inputmode="numeric" />
+      <input type="password" id="sd-pin-setup-input2" class="sd-modal-pin-input" maxlength="4" placeholder="もう一度入力" pattern="[0-9]*" inputmode="numeric" />
+    </div>
+    <div class="sd-modal-actions">
+      <button class="sd-modal-btn sd-modal-cancel" id="sd-pin-setup-cancel">キャンセル</button>
+      <button class="sd-modal-btn sd-modal-save" id="sd-pin-setup-save">設定する</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="sd-dialog-overlay sd-hidden" id="sd-score-dialog">
+  <div class="sd-dialog">
+    <div class="sd-dialog-header">
+      <h2 class="sd-dialog-title" id="sd-score-dialog-title">一日の点数を記録</h2>
+      <p class="sd-dialog-desc" id="sd-score-dialog-desc">昨日の一日は何点でしたか？</p>
+    </div>
+    <div class="sd-dialog-content">
+      <div class="sd-score-display">
+        <span class="sd-score-number" id="sd-score-display-val">80</span>
+        <span class="sd-score-label">点</span>
+        <span class="sd-score-eval" id="sd-score-display-eval">良い一日でした！</span>
+      </div>
+      <input type="range" min="0" max="100" value="80" class="sd-range-slider" id="sd-score-slider" />
+    </div>
+    <div class="sd-dialog-footer">
+      <button class="sd-dialog-btn sd-dialog-btn-outline" id="sd-score-dialog-skip">スキップ</button>
+      <button class="sd-dialog-btn sd-dialog-btn-primary" id="sd-score-dialog-save">保存する</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="sd-dialog-overlay sd-hidden" id="sd-sync-confirm-dialog" style="z-index: 300000;">
+  <div class="sd-dialog">
+    <div class="sd-dialog-header">
+      <h2 class="sd-dialog-title">同期の解除</h2>
+      <p class="sd-dialog-desc">同期を解除しますか？<br>(他ブラウザとのリアルタイム同期が停止します。ローカルデータは保持されます)</p>
+    </div>
+    <div class="sd-dialog-footer">
+      <button class="sd-dialog-btn sd-dialog-btn-outline" id="sd-sync-confirm-cancel">キャンセル</button>
+      <button class="sd-dialog-btn sd-dialog-btn-primary" id="sd-sync-confirm-ok" style="background:var(--apple-red); color:#fff; border:none;">解除する</button>
+    </div>
+  </div>
+</div>
+
+<style>
+ 
+
+:root {
+  --apple-bg: #000000;
+  --apple-card-bg: rgba(22, 22, 26, 0.72);
+  --apple-sheet-bg: #121217;
+  --apple-border: rgba(255, 255, 255, 0.08);
+  --apple-text-primary: #ffffff;
+  --apple-text-secondary: #8e8e93;
+  --apple-text-tertiary: #48484a;
+  
+  --apple-blue: #007aff;
+  --apple-green: #34c759;
+  --apple-purple: #af52de;
+  --apple-orange: #ff9500;
+  --apple-red: #ff3b30;
+}
+
+.sd-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90000;
+  background: var(--apple-bg);
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
+  color: var(--apple-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+.sd-overlay.sd-hidden { display: none; }
+
+.sd-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 760px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  background: var(--apple-bg);
+}
+
+ 
+.sd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--apple-border);
+  flex-shrink: 0;
+  min-height: 60px;
+  z-index: 10;
+  position: sticky;
+  top: 0;
+}
+.sd-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.sd-back-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--apple-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+.sd-back-btn:hover { background: rgba(255, 255, 255, 0.12); }
+.sd-back-btn:active { transform: scale(0.92); }
+
+.sd-header-title { display: flex; flex-direction: column; }
+.sd-title-text {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.sd-entry-count {
+  font-size: 12px;
+  color: var(--apple-text-secondary);
+}
+.sd-header-actions {
+  display: flex;
+  gap: 6px;
+}
+.sd-icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--apple-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.sd-icon-btn:hover { background: rgba(255, 255, 255, 0.1); color: var(--apple-text-primary); }
+.sd-icon-btn.sd-active { color: var(--apple-blue); background: rgba(0, 122, 255, 0.15); }
+
+ 
+.sd-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--apple-border);
+  background: rgba(9, 9, 11, 0.85);
+  color: var(--apple-text-secondary);
+  flex-shrink: 0;
+}
+.sd-search-bar.sd-hidden { display: none; }
+.sd-search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--apple-text-primary);
+  font-family: inherit;
+  font-size: 15px;
+  padding: 4px 0;
+}
+
+ 
+.sd-tabs-container {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.sd-tab-content {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+}
+.sd-tab-content.sd-active {
+  display: flex;
+}
+
+ 
+.sd-tag-cloud {
+  display: flex;
+  gap: 8px;
+  padding: 12px 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--apple-border);
+  background: #09090b;
+}
+.sd-tag-cloud::-webkit-scrollbar { display: none; }
+.sd-tag-chip {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--apple-border);
+  color: var(--apple-text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sd-tag-chip:hover { background: rgba(255,255,255,0.08); color: var(--apple-text-primary); }
+.sd-tag-chip.sd-active { background: var(--apple-blue); color: #fff; border-color: var(--apple-blue); }
+
+.sd-feed {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px 80px;
+  -webkit-overflow-scrolling: touch;
+}
+.sd-feed::-webkit-scrollbar { width: 4px; }
+.sd-feed::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+
+ 
+.sd-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 30px;
+  gap: 16px;
+  text-align: center;
+}
+.sd-empty-title { font-size: 17px; font-weight: 600; color: var(--apple-text-secondary); margin: 0; }
+
+ 
+.sd-card {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 20px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+.sd-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.sd-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sd-card-date-mood {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sd-card-mood {
+  font-size: 20px;
+}
+.sd-card-date-info {
+  display: flex;
+  flex-direction: column;
+}
+.sd-card-date {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--apple-text-primary);
+}
+.sd-card-time {
+  font-size: 11px;
+  color: var(--apple-text-secondary);
+}
+.sd-card-actions {
+  display: flex;
+  gap: 4px;
+}
+.sd-card-action-btn {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--apple-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sd-card-action-btn:hover { background: rgba(255,255,255,0.12); color: var(--apple-text-primary); }
+.sd-card-action-btn.sd-fav-btn.sd-active { color: var(--apple-orange); background: rgba(255, 149, 0, 0.15); }
+.sd-card-action-btn.sd-del-btn:hover { color: var(--apple-red); background: rgba(255, 59, 48, 0.15); }
+
+.sd-card-body {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #e5e5ea;
+  word-break: break-word;
+}
+.sd-card-body ul { margin: 8px 0; padding-left: 20px; }
+.sd-card-body li { margin-bottom: 4px; }
+.sd-card-body strong { color: #fff; font-weight: 600; }
+.sd-inline-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  background: rgba(255,255,255,0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #ff453a;
+}
+
+ 
+.sd-card-media {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.sd-card-media-item {
+  width: 100%;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--apple-border);
+  cursor: zoom-in;
+  transition: opacity 0.2s;
+}
+.sd-card-media-item:hover { opacity: 0.85; }
+
+ 
+.sd-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.sd-card-tag {
+  font-size: 12px;
+  color: var(--apple-blue);
+  font-weight: 500;
+}
+
+ 
+.sd-calendar-view {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 24px;
+  padding: 20px;
+  margin: 16px 20px;
+}
+.sd-calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.sd-calendar-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+.sd-cal-nav {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.06);
+  color: var(--apple-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.sd-calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  margin-bottom: 8px;
+}
+.sd-calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 8px;
+}
+.sd-cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+  color: var(--apple-text-primary);
+}
+.sd-cal-day:hover { background: rgba(255,255,255,0.08); }
+.sd-cal-day.sd-other-month { color: var(--apple-text-tertiary); }
+.sd-cal-day.sd-today { background: rgba(255,255,255,0.15); font-weight: 700; }
+.sd-cal-day.sd-selected { background: var(--apple-blue); color: #fff; font-weight: 700; }
+.sd-cal-dot {
+  width: 4px; height: 4px;
+  background: var(--apple-text-secondary);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 4px;
+}
+.sd-cal-day.sd-selected .sd-cal-dot { background: #fff; }
+
+.sd-calendar-focused-section {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 20px 80px;
+}
+.sd-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  margin: 0 0 12px;
+}
+
+ 
+.sd-gaman-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 20px;
+  background: #09090b;
+  position: relative;
+}
+.sd-gaman-btn {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff453a, #ff9500);
+  border: 4px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 36px;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 0 #b3241c, 0 15px 25px rgba(255, 69, 58, 0.35);
+  transition: all 0.08s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.sd-gaman-btn:active {
+  transform: translateY(8px);
+  box-shadow: 0 2px 0 #b3241c, 0 5px 12px rgba(255, 69, 58, 0.35);
+}
+.sd-gaman-counter-box {
+  margin-top: 40px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+}
+#sd-gaman-count-val {
+  font-size: 36px;
+  color: var(--apple-orange);
+  font-variant-numeric: tabular-nums;
+  margin: 0 4px;
+}
+.sd-gaman-reset-btn {
+  background: transparent;
+  border: none;
+  color: #48484a;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.sd-gaman-reset-btn:hover {
+  color: var(--apple-text-secondary);
+}
+
+ 
+.sd-confetti {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 20%;
+  z-index: 500000;
+  pointer-events: none;
+}
+
+ 
+.sd-gaman-history-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--apple-border);
+  font-size: 15px;
+}
+.sd-gaman-history-item:last-child {
+  border-bottom: none;
+}
+.sd-gaman-history-date {
+  color: var(--apple-text-primary);
+  font-weight: 500;
+}
+.sd-gaman-history-count {
+  color: var(--apple-orange);
+  font-weight: 600;
+}
+
+ 
+.sd-stats-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px 80px;
+}
+.sd-stats-card {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.sd-stats-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: var(--apple-text-primary);
+}
+.sd-chart-box {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.sd-pie-chart {
+  width: 110px; height: 110px;
+  transform: rotate(-90deg);
+}
+.sd-chart-legend {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+}
+.sd-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--apple-text-secondary);
+}
+.sd-legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.sd-tag-stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sd-tag-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sd-tag-stat-name {
+  width: 80px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--apple-blue);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sd-tag-stat-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.sd-tag-stat-bar-fg {
+  height: 100%;
+  background: var(--apple-blue);
+  border-radius: 99px;
+}
+.sd-tag-stat-count {
+  font-size: 12px;
+  color: var(--apple-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.sd-streak-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+}
+.sd-streak-val {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--apple-orange);
+  background: linear-gradient(135deg, var(--apple-orange), #ff453a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.sd-streak-label {
+  font-size: 13px;
+  color: var(--apple-text-secondary);
+  font-weight: 500;
+}
+.sd-streak-sub {
+  font-size: 12px;
+  text-align: center;
+  color: var(--apple-text-tertiary);
+  margin-top: 10px;
+}
+
+ 
+#sd-tab-settings {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.sd-settings-list {
+  flex: 1;
+  overflow-y: visible;
+  padding: 16px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.sd-setting-desc, #sd-gaman-sync-status {
+  word-break: break-all;
+  white-space: normal;
+}
+.sd-settings-section {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 6px 16px;
+}
+.sd-settings-sec-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 12px 0 6px;
+}
+.sd-setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--apple-border);
+}
+.sd-setting-item:last-child { border-bottom: none; }
+.sd-setting-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sd-setting-title { font-size: 15px; font-weight: 500; }
+
+ 
+.sd-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 28px;
+}
+.sd-switch input { opacity: 0; width: 0; height: 0; }
+.sd-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #3a3a3c;
+  transition: .2s;
+  border-radius: 34px;
+}
+.sd-slider:before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .25s cubic-bezier(0.25, 0.1, 0.25, 1.35);
+  border-radius: 50%;
+  box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+}
+.sd-switch input:checked + .sd-slider {
+  background-color: var(--apple-green);
+}
+.sd-switch input:checked + .sd-slider:before {
+  transform: translateX(20px);
+}
+
+.sd-setting-action-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 0;
+}
+
+ 
+.sd-fab {
+  position: absolute;
+  right: 20px;
+  bottom: calc(84px + env(safe-area-inset-bottom));
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--apple-blue);
+  color: #fff;
+  border: none;
+  font-size: 28px;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.4);
+  cursor: pointer;
+  z-index: 99;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+.sd-fab:hover { transform: scale(1.05); background: #0066d6; }
+.sd-fab:active { transform: scale(0.95); }
+
+ 
+.sd-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  animation: sd-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
+}
+.sd-sheet button,
+.sd-sheet input,
+.sd-sheet textarea {
+  font-family: inherit;
+}
+.sd-sheet-overlay.sd-hidden { display: none; }
+.sd-sheet {
+  width: 100%;
+  height: 92%;
+  background: var(--apple-sheet-bg);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  animation: sd-slide-up-sheet 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-top: 1px solid var(--apple-border);
+}
+@keyframes sd-slide-up-sheet {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.sd-sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--apple-border);
+}
+.sd-sheet-title { font-weight: 600; font-size: 17px; }
+.sd-sheet-close {
+  background: none; border: none;
+  color: var(--apple-blue); font-size: 16px; cursor: pointer;
+}
+.sd-sheet-done {
+  background: none; border: none;
+  color: var(--apple-blue); font-size: 16px; font-weight: 600; cursor: pointer;
+}
+.sd-sheet-done:disabled { color: var(--apple-text-tertiary); cursor: default; }
+
+.sd-sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 80px;
+}
+.sd-sheet-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--apple-border);
+  padding: 8px 14px;
+  border-radius: 12px;
+}
+.sd-sheet-row label { font-size: 14px; color: var(--apple-text-secondary); }
+.sd-datetime-input {
+  background: none; border: none; color: #fff; font-family: inherit; font-size: 14px; outline: none;
+}
+.sd-simple-input {
+  width: 100%;
+  background: none; border: none; color: #fff; font-family: inherit; font-size: 14px; outline: none;
+}
+.sd-simple-input::placeholder { color: var(--apple-text-secondary); }
+
+ 
+.sd-compose-mood {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+.sd-compose-mood-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 10px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.sd-compose-mood-btn.sd-active {
+  background: rgba(255,255,255,0.12);
+  border-color: var(--apple-blue);
+  box-shadow: 0 0 10px rgba(0, 122, 255, 0.3);
+}
+
+.sd-editor-toolbar {
+  display: flex;
+  gap: 6px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--apple-border);
+  padding: 6px;
+  border-radius: 12px;
+}
+.sd-editor-tool {
+  background: none; border: none;
+  color: var(--apple-text-secondary);
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.sd-editor-tool:hover { background: rgba(255,255,255,0.06); color: #fff; }
+
+.sd-textarea {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--apple-border);
+  border-radius: 16px;
+  padding: 14px;
+  color: var(--apple-text-primary);
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+ 
+.sd-media-picker-area {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sd-attachment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: var(--apple-text-secondary);
+}
+.sd-attachment-add-btn {
+  background: rgba(0, 122, 255, 0.1);
+  color: var(--apple-blue);
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.sd-media-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.sd-media-thumb-wrapper {
+  position: relative;
+  aspect-ratio: 1;
+}
+.sd-media-thumb {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--apple-border);
+}
+.sd-media-thumb-del {
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: rgba(255,59,48,0.9);
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+ 
+.sd-tabbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(18, 18, 23, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid var(--apple-border);
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 64px;
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 10;
+}
+.sd-tab-btn {
+  background: none; border: none;
+  color: var(--apple-text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  flex: 1;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.2s;
+}
+.sd-tab-btn:hover { color: var(--apple-text-primary); }
+.sd-tab-btn.sd-active { color: var(--apple-blue); }
+.sd-tab-btn span { font-size: 10px; font-weight: 500; }
+
+ 
+.sd-lock-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 200000;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, sans-serif;
+  color: #fff;
+}
+.sd-lock-screen.sd-hidden { display: none; }
+.sd-lock-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+}
+.sd-lock-icon {
+  margin-bottom: 16px;
+  color: var(--apple-blue);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.sd-lock-title { font-size: 20px; font-weight: 600; margin: 0 0 24px; }
+
+.sd-pin-dots { display: flex; gap: 16px; margin-bottom: 40px; }
+.sd-pin-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  transition: background-color 0.15s;
+}
+.sd-pin-dot.sd-filled { background-color: #fff; }
+
+.sd-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.sd-key-btn {
+  width: 68px; height: 68px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.sd-key-btn:active { background: rgba(255,255,255,0.2); }
+.sd-empty-key { background: transparent; cursor: default; }
+.sd-empty-key:active { background: transparent; }
+.sd-delete-key { background: transparent; }
+.sd-delete-key:active { background: transparent; color: var(--apple-text-secondary); }
+
+.sd-keypad-shake {
+  animation: shake 0.35s ease-in-out;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+ 
+.sd-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300000;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: sd-fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
+}
+.sd-modal button,
+.sd-modal input,
+.sd-modal textarea {
+  font-family: inherit;
+}
+.sd-modal-overlay.sd-hidden { display: none; }
+@keyframes sd-fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.sd-modal {
+  background: var(--apple-sheet-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 22px;
+  width: 100%;
+  max-width: 340px;
+  padding: 24px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+}
+.sd-modal-title { font-size: 17px; font-weight: 600; color: #fff; text-align: center; width: 100%; }
+.sd-modal-body-text { font-size: 13px; color: var(--apple-text-secondary); line-height: 1.5; text-align: center; margin: 0; }
+.sd-modal-pin-input {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--apple-border);
+  border-radius: 10px;
+  padding: 12px;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 4px;
+  outline: none;
+  font-family: inherit;
+}
+.sd-modal-actions { display: flex; gap: 8px; margin-top: 8px; }
+.sd-modal-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+.sd-modal-cancel { background: rgba(255,255,255,0.06); color: var(--apple-text-primary); }
+.sd-modal-save { background: var(--apple-blue); color: #fff; }
+
+.sd-apple-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+.sd-primary-btn { background: var(--apple-blue); color: #fff; }
+.sd-primary-btn:hover { background: #0066d6; }
+.sd-secondary-btn { background: rgba(255,255,255,0.06); color: var(--apple-text-primary); border: 1px solid var(--apple-border); }
+.sd-secondary-btn:hover { background: rgba(255,255,255,0.1); }
+.sd-danger-btn { background: rgba(255,59,48,0.15); color: var(--apple-red); }
+.sd-danger-btn:hover { background: rgba(255,59,48,0.25); }
+
+ 
+@media (min-width: 640px) {
+  .sd-app {
+    height: 100%;
+    background: #000;
+  }
+}
+
+ 
+
+ 
+.sd-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: sd-fade-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sd-dialog-overlay.sd-hidden {
+  display: none;
+}
+.sd-dialog {
+  background: #09090b;
+  border: 1px solid rgba(39, 39, 42, 0.8);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.8);
+  animation: sd-scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sd-dialog-header {
+  margin-bottom: 24px;
+}
+.sd-dialog-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f4f4f5;
+  margin: 0 0 6px 0;
+}
+.sd-dialog-desc {
+  font-size: 14px;
+  color: #a1a1aa;
+  margin: 0;
+}
+.sd-dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.sd-score-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.sd-score-number {
+  font-size: 64px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(135deg, #fff, #a1a1aa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.sd-score-label {
+  font-size: 12px;
+  color: #a1a1aa;
+  font-weight: 500;
+  margin-top: 4px;
+}
+.sd-score-eval {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--apple-blue);
+  background: rgba(0, 122, 255, 0.1);
+  padding: 6px 14px;
+  border-radius: 99px;
+  margin-top: 8px;
+  transition: all 0.2s;
+}
+
+ 
+.sd-range-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #27272a;
+  height: 6px;
+  border-radius: 99px;
+  outline: none;
+}
+.sd-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fafafa;
+  border: 1px solid #d4d4d8;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.1s;
+}
+.sd-range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+.sd-range-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fafafa;
+  border: 1px solid #d4d4d8;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.1s;
+}
+.sd-range-slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+}
+
+.sd-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.sd-dialog-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s, border-color 0.2s;
+  outline: none;
+}
+.sd-dialog-btn-outline {
+  background: transparent;
+  border: 1px solid #27272a;
+  color: #fafafa;
+}
+.sd-dialog-btn-outline:hover {
+  background: #18181b;
+  border-color: #3f3f46;
+}
+.sd-dialog-btn-primary {
+  background: #fafafa;
+  color: #18181b;
+}
+.sd-dialog-btn-primary:hover {
+  background: #e4e4e7;
+}
+
+ 
+.sd-cal-day {
+  aspect-ratio: auto;
+  min-height: 48px;
+  border-radius: 10px;  
+  padding: 6px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.sd-cal-day-num {
+  font-size: 14px;
+  font-weight: 500;
+}
+.sd-cal-day-score {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--apple-text-secondary);
+  line-height: 1;
+  margin-top: auto;
+}
+ 
+.sd-score-high { color: var(--apple-green); }
+.sd-score-mid { color: var(--apple-blue); }
+.sd-score-low { color: var(--apple-orange); }
+.sd-score-verylow { color: var(--apple-red); }
+
+ 
+.sd-cal-day .sd-cal-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  bottom: auto;
+}
+
+ 
+.sd-focused-score-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  padding: 14px 18px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+.sd-focused-score-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sd-focused-score-title {
+  font-size: 14px;
+  color: var(--apple-text-secondary);
+  font-weight: 500;
+}
+.sd-focused-score-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+.sd-focused-score-value.sd-empty {
+  color: var(--apple-text-tertiary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+ 
+@keyframes sd-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes sd-scale-in {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+ 
+@media (max-width: 600px) {
+  .sd-tabbar {
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    height: auto;
+  }
+  .sd-calendar-view {
+    margin: 8px 12px;
+    padding: 12px;
+    border-radius: 16px;
+  }
+  .sd-calendar-days {
+    row-gap: 4px;
+  }
+  .sd-cal-day {
+    min-height: 42px;
+    border-radius: 8px;
+  }
+  .sd-cal-day-num {
+    font-size: 13px;
+  }
+  .sd-cal-day-score {
+    font-size: 8px;
+  }
+  .sd-feed {
+    padding: 12px 12px 100px;
+  }
+  .sd-card {
+    padding: 14px 16px;
+    border-radius: 16px;
+  }
+  .sd-calendar-focused-section {
+    padding: 0 12px 100px;
+  }
+  .sd-focused-score-box {
+    padding: 12px 14px;
+    border-radius: 12px;
+  }
+}
+
+ 
+.sd-overlay.theme-midnight-green {
+  --apple-bg: #070d0b;
+  --apple-card-bg: rgba(14, 26, 21, 0.72);
+  --apple-sheet-bg: #0a1411;
+  --apple-border: rgba(48, 176, 150, 0.15);
+  --apple-blue: #30b096;
+}
+.sd-overlay.theme-rose-gold {
+  --apple-bg: #0f0709;
+  --apple-card-bg: rgba(26, 14, 18, 0.72);
+  --apple-sheet-bg: #140a0e;
+  --apple-border: rgba(255, 133, 162, 0.15);
+  --apple-blue: #ff85a2;
+}
+.sd-overlay.theme-deep-purple {
+  --apple-bg: #08070f;
+  --apple-card-bg: rgba(18, 14, 28, 0.72);
+  --apple-sheet-bg: #110a1a;
+  --apple-border: rgba(175, 82, 222, 0.15);
+  --apple-blue: #af52de;
+}
+.sd-overlay.theme-aqua-blue {
+  --apple-bg: #03070f;
+  --apple-card-bg: rgba(10, 18, 30, 0.72);
+  --apple-sheet-bg: #060e1c;
+  --apple-border: rgba(0, 199, 252, 0.15);
+  --apple-blue: #00c7fc;
+}
+
+ 
+.sd-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  padding: 8px 0;
+}
+.sd-theme-btn {
+  background: none;
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+.sd-theme-btn:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.sd-theme-btn.sd-active {
+  border-color: var(--apple-blue);
+  background: rgba(0, 122, 255, 0.05);
+}
+.sd-theme-btn.sd-active[data-theme="midnight-green"] { background: rgba(48, 176, 150, 0.05); }
+.sd-theme-btn.sd-active[data-theme="rose-gold"] { background: rgba(255, 133, 162, 0.05); }
+.sd-theme-btn.sd-active[data-theme="deep-purple"] { background: rgba(175, 82, 222, 0.05); }
+.sd-theme-btn.sd-active[data-theme="aqua-blue"] { background: rgba(0, 199, 252, 0.05); }
+
+.sd-theme-preview {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+.sd-theme-label {
+  font-size: 11px;
+  color: var(--apple-text-secondary);
+  font-weight: 500;
+}
+.sd-theme-btn.sd-active .sd-theme-label {
+  color: var(--apple-text-primary);
+  font-weight: 600;
+}
+
+ 
+.sd-compose-habits-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0 8px;
+}
+.sd-compose-habits-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+}
+.sd-compose-habits {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.sd-habit-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--apple-border);
+  border-radius: 14px;
+  padding: 10px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+.sd-habit-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+.sd-habit-btn.sd-active {
+  border-color: var(--apple-blue);
+  background: rgba(0, 122, 255, 0.1);
+}
+.sd-habit-icon {
+  font-size: 20px;
+}
+.sd-habit-name {
+  font-size: 12px;
+  color: var(--apple-text-secondary);
+  font-weight: 500;
+}
+.sd-habit-btn.sd-active .sd-habit-name {
+  color: var(--apple-text-primary);
+  font-weight: 600;
+}
+
+ 
+.sd-card-habits {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+.sd-card-habit-badge {
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--apple-border);
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ 
+.sd-habits-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 10px 0;
+}
+.sd-habit-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.sd-habit-ring-container {
+  position: relative;
+  width: 54px;
+  height: 54px;
+}
+.sd-habit-ring-svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+.sd-habit-ring-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 5;
+}
+.sd-habit-ring-fg {
+  fill: none;
+  stroke: var(--apple-blue);
+  stroke-width: 5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sd-habit-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.sd-habit-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+}
+.sd-habit-stat-percent {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+  margin-top: -4px;
+ 
+.sd-desires-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px 20px 80px;
+  overflow-y: auto;
+  gap: 20px;
+}
+.sd-desires-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.sd-desires-stat-box {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sd-desires-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.sd-progress-bar-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  height: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.sd-progress-bar {
+  background: var(--apple-blue);
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sd-desires-stat-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+}
+
+ 
+.sd-segmented-control {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--apple-border);
+  border-radius: 10px;
+  padding: 2px;
+  display: flex;
+  gap: 2px;
+}
+.sd-segment-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--apple-text-secondary);
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+.sd-segment-btn.sd-active {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--apple-text-primary);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+ 
+.sd-desires-input-group {
+  display: flex;
+  gap: 10px;
+}
+.sd-desires-input-group .sd-simple-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--apple-border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--apple-text-primary);
+  outline: none;
+  transition: all 0.2s;
+}
+.sd-desires-input-group .sd-simple-input:focus {
+  border-color: var(--apple-blue);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.15);
+}
+.sd-desires-input-group .sd-apple-btn {
+  padding: 0 20px;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+ 
+.sd-desires-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sd-desire-item {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sd-desire-item:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+.sd-desire-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--apple-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: transparent;
+  flex-shrink: 0;
+}
+.sd-desire-checkbox:hover {
+  border-color: var(--apple-blue);
+  background: rgba(0, 122, 255, 0.05);
+}
+.sd-desire-item.sd-completed .sd-desire-checkbox {
+  background: var(--apple-blue);
+  border-color: var(--apple-blue);
+  color: #fff;
+}
+.sd-desire-item.sd-completed[data-type="bucketList"] .sd-desire-checkbox {
+  background: var(--apple-purple);
+  border-color: var(--apple-purple);
+}
+.sd-desire-text-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sd-desire-text {
+  font-size: 14px;
+  color: #e5e5ea;
+  transition: all 0.2s;
+  word-break: break-word;
+}
+.sd-desire-item.sd-completed .sd-desire-text {
+  text-decoration: line-through;
+  color: var(--apple-text-tertiary);
+}
+.sd-desire-date {
+  font-size: 10px;
+  color: var(--apple-text-tertiary);
+}
+.sd-desire-actions {
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.sd-desire-item:hover .sd-desire-actions {
+  opacity: 1;
+}
+@media (hover: none) {
+  .sd-desire-actions {
+    opacity: 1;
+  }
+}
+.sd-desire-action-btn {
+  background: none;
+  border: none;
+  color: var(--apple-text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.sd-desire-action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--apple-text-primary);
+}
+.sd-desire-action-btn.sd-delete:hover {
+  color: var(--apple-red);
+  background: rgba(255, 59, 48, 0.1);
+}
+}
+</style>
+
+<script>
+
+
+(function() {
+  'use strict';
+  
+  
+  var DB_NAME = 'SecretDiaryDB';
+  var DB_VERSION = 2;
+  var STORE_NAME = 'entries';
+  
+  
+  var overlay = document.getElementById('secret-diary-overlay');
+  var lockScreen = document.getElementById('sd-lock-screen');
+  var pinDotsContainer = document.getElementById('sd-pin-dots');
+  
+  var feed = document.getElementById('sd-feed');
+  var emptyState = document.getElementById('sd-empty-state');
+  var entryCountEl = document.getElementById('sd-entry-count');
+  var tagCloudEl = document.getElementById('sd-tag-cloud');
+  
+  
+  var tabButtons = document.querySelectorAll('.sd-tab-btn');
+  var tabContents = document.querySelectorAll('.sd-tab-content');
+  var headerTitleText = document.getElementById('sd-header-title-text');
+  var headerActionsTimeline = document.getElementById('sd-header-actions-timeline');
+  
+  
+  var composeSheet = document.getElementById('sd-compose-sheet');
+  var inputDate = document.getElementById('sd-input-date');
+  var inputTags = document.getElementById('sd-input-tags');
+  var textarea = document.getElementById('sd-textarea');
+  var saveBtn = document.getElementById('sd-compose-save');
+  var cancelBtn = document.getElementById('sd-compose-cancel');
+  var sheetTitle = document.getElementById('sd-compose-sheet-title');
+  var composeMoodContainer = document.getElementById('sd-compose-mood');
+  var mediaInput = document.getElementById('sd-media-input');
+  var mediaTrigger = document.getElementById('sd-attachment-trigger');
+  var mediaPreview = document.getElementById('sd-compose-media-preview');
+  
+  
+  var calMonthYear = document.getElementById('sd-cal-month-year');
+  var calDaysContainer = document.getElementById('sd-calendar-days');
+  var calPrevBtn = document.getElementById('sd-cal-prev');
+  var calNextBtn = document.getElementById('sd-cal-next');
+  var focusedDateLabel = document.getElementById('sd-calendar-focused-date-label');
+  var focusedList = document.getElementById('sd-calendar-focused-list');
+  var calendarAddBtn = document.getElementById('sd-calendar-add-btn');
+  
+  
+  var searchToggle = document.getElementById('sd-search-toggle');
+  var searchBar = document.getElementById('sd-search-bar');
+  var searchInput = document.getElementById('sd-search-input');
+  var favFilterToggle = document.getElementById('sd-fav-filter-toggle');
+  
+  
+  var lockToggle = document.getElementById('sd-setting-lock-toggle');
+  var changePinRow = document.getElementById('sd-setting-change-pin-row');
+  var changePinBtn = document.getElementById('sd-setting-change-pin');
+  var pinSetupModal = document.getElementById('sd-pin-setup-modal');
+  var pinSetupInput1 = document.getElementById('sd-pin-setup-input1');
+  var pinSetupInput2 = document.getElementById('sd-pin-setup-input2');
+  var pinSetupCancel = document.getElementById('sd-pin-setup-cancel');
+  var pinSetupSave = document.getElementById('sd-pin-setup-save');
+  
+  
+  var exportBtn = document.getElementById('sd-action-export');
+  var importTrigger = document.getElementById('sd-action-import-trigger');
+  var importFile = document.getElementById('sd-import-file');
+  var clearAllBtn = document.getElementById('sd-action-clear-all');
+  
+  
+  var fab = document.getElementById('sd-fab');
+  var closeBtn = document.getElementById('sd-close-btn');
+
+  
+  var gamanTrigger = document.getElementById('sd-gaman-trigger');
+  var gamanCountVal = document.getElementById('sd-gaman-count-val');
+  var gamanHistoryBtn = document.getElementById('sd-gaman-history-btn');
+  var gamanHistoryModal = document.getElementById('sd-gaman-history-modal');
+  var gamanHistoryClose = document.getElementById('sd-gaman-history-close');
+  var gamanHistoryList = document.getElementById('sd-gaman-history-list');
+  var gamanSyncKeyInput = document.getElementById('sd-gaman-sync-key-input');
+  var gamanSyncSaveBtn = document.getElementById('sd-gaman-sync-save-btn');
+  var gamanSyncCopyKeyBtn = document.getElementById('sd-gaman-sync-copy-key-btn');
+  var gamanSyncStatus = document.getElementById('sd-gaman-sync-status');
+  var gamanResetBtn = document.getElementById('sd-gaman-reset');
+  var gamanContainer = document.getElementById('sd-gaman-container');
+  
+  
+  var scoreDialog = document.getElementById('sd-score-dialog');
+  var scoreDialogTitle = document.getElementById('sd-score-dialog-title');
+  var scoreDialogDesc = document.getElementById('sd-score-dialog-desc');
+  var scoreDisplayVal = document.getElementById('sd-score-display-val');
+  var scoreDisplayEval = document.getElementById('sd-score-display-eval');
+  var scoreSlider = document.getElementById('sd-score-slider');
+  var scoreDialogSkip = document.getElementById('sd-score-dialog-skip');
+  var scoreDialogSave = document.getElementById('sd-score-dialog-save');
+
+  
+  var syncConfirmDialog = document.getElementById('sd-sync-confirm-dialog');
+  var syncConfirmCancel = document.getElementById('sd-sync-confirm-cancel');
+  var syncConfirmOk = document.getElementById('sd-sync-confirm-ok');
+  
+  var focusedScoreVal = document.getElementById('sd-calendar-focused-score-val');
+  var focusedScoreBtn = document.getElementById('sd-calendar-focused-score-btn');
+
+  
+  var db = null;
+  var currentTab = 'timeline';
+  var selectedMood = '📝';
+  var selectedImages = []; 
+  var selectedHabits = []; 
+  var currentDesireTab = 'wants'; 
+  var desires = { wants: [], bucketList: [] };
+  var editingId = null;
+  
+  var currentSearchQuery = '';
+  var currentTagFilter = '';
+  var showFavoritesOnly = false;
+  
+  
+  var calendarDate = new Date(); 
+  var calendarSelectedDate = new Date(); 
+  
+  
+  var enteredPin = "";
+  
+  
+  var appScores = {}; 
+  var scoreEditTargetDate = null; 
+  
+  
+  function initDB(callback) {
+    var request = indexedDB.open(DB_NAME, DB_VERSION);
+    request.onupgradeneeded = function(e) {
+      var database = e.target.result;
+      if (!database.objectStoreNames.contains(STORE_NAME)) {
+        database.createObjectStore(STORE_NAME, { keyPath: 'id' });
+      }
+      if (!database.objectStoreNames.contains('settings')) {
+        database.createObjectStore('settings', { keyPath: 'key' });
+      }
+    };
+    request.onsuccess = function(e) {
+      db = e.target.result;
+      migrateFromLocalStorage(function() {
+        dbGetSetting('sd_scores', function(cachedScores) {
+          appScores = cachedScores || {};
+          if (callback) callback();
+        });
+      });
+    };
+    request.onerror = function(e) {
+      console.error('IndexedDB open error:', e);
+      if (callback) callback();
+    };
+  }
+
+  function dbGetSetting(key, callback) {
+    if (!db) { callback(null); return; }
+    try {
+      var transaction = db.transaction(['settings'], 'readonly');
+      var store = transaction.objectStore('settings');
+      var request = store.get(key);
+      request.onsuccess = function(e) {
+        callback(e.target.result ? e.target.result.value : null);
+      };
+      request.onerror = function() {
+        callback(null);
+      };
+    } catch(err) {
+      callback(null);
+    }
+  }
+
+  function dbPutSetting(key, value, callback) {
+    if (!db) { if (callback) callback(); return; }
+    try {
+      var transaction = db.transaction(['settings'], 'readwrite');
+      var store = transaction.objectStore('settings');
+      var request = store.put({ key: key, value: value });
+      request.onsuccess = function() {
+        if (callback) callback(true);
+      };
+      request.onerror = function() {
+        if (callback) callback(false);
+      };
+    } catch(err) {
+      if (callback) callback(false);
+    }
+  }
+
+  
+  function migrateFromLocalStorage(callback) {
+    try {
+      var legacyData = localStorage.getItem('dt_secret_diary_entries');
+      if (legacyData) {
+        var parsed = JSON.parse(legacyData);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          var transaction = db.transaction([STORE_NAME], 'readwrite');
+          var store = transaction.objectStore(STORE_NAME);
+          parsed.forEach(function(entry) {
+            var cleanEntry = {
+              id: entry.id || (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)),
+              text: entry.text || '',
+              mood: entry.mood || '📝',
+              ts: entry.ts || Date.now(),
+              images: entry.images || [],
+              favorite: entry.favorite || false,
+              tags: entry.tags || []
+            };
+            store.put(cleanEntry);
+          });
+          transaction.oncomplete = function() {
+            localStorage.removeItem('dt_secret_diary_entries');
+            if (callback) callback();
+          };
+          transaction.onerror = function() {
+            if (callback) callback();
+          };
+        } else {
+          if (callback) callback();
+        }
+      } else {
+        if (callback) callback();
+      }
+    } catch(err) {
+      console.error('Migration failed:', err);
+      if (callback) callback();
+    }
+  }
+
+  function dbGetAll(callback) {
+    if (!db) { callback([]); return; }
+    var transaction = db.transaction([STORE_NAME], 'readonly');
+    var store = transaction.objectStore(STORE_NAME);
+    var request = store.getAll();
+    request.onsuccess = function(e) {
+      callback(e.target.result || []);
+    };
+    request.onerror = function() {
+      callback([]);
+    };
+  }
+
+  function dbPut(entry, callback) {
+    if (!db) { if (callback) callback(); return; }
+    var transaction = db.transaction([STORE_NAME], 'readwrite');
+    var store = transaction.objectStore(STORE_NAME);
+    var request = store.put(entry);
+    request.onsuccess = function() {
+      if (callback) callback(true);
+    };
+    request.onerror = function() {
+      if (callback) callback(false);
+    };
+  }
+
+  function dbDelete(id, callback) {
+    if (!db) { if (callback) callback(); return; }
+    var transaction = db.transaction([STORE_NAME], 'readwrite');
+    var store = transaction.objectStore(STORE_NAME);
+    var request = store.delete(id);
+    request.onsuccess = function() {
+      if (callback) callback(true);
+    };
+  }
+
+  function dbClearAll(callback) {
+    if (!db) { if (callback) callback(); return; }
+    var transaction = db.transaction([STORE_NAME], 'readwrite');
+    var store = transaction.objectStore(STORE_NAME);
+    var request = store.clear();
+    request.onsuccess = function() {
+      if (callback) callback();
+    };
+  }
+
+  
+  function generateId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
+  }
+  
+  function formatLongDate(ts) {
+    var d = new Date(ts);
+    return d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() + '日';
+  }
+
+  function formatTime(ts) {
+    var d = new Date(ts);
+    var hours = String(d.getHours()).padStart(2, '0');
+    var minutes = String(d.getMinutes()).padStart(2, '0');
+    return hours + ':' + minutes;
+  }
+
+  function encryptText(text, key) {
+    if (!text || !key) return text;
+    var result = "";
+    for (var i = 0; i < text.length; i++) {
+      result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+    }
+    try {
+      return btoa(unescape(encodeURIComponent(result)));
+    } catch (e) {
+      return text;
+    }
+  }
+
+  function decryptText(encoded, key) {
+    if (!encoded || !key) return encoded;
+    try {
+      var text = decodeURIComponent(escape(atob(encoded)));
+      var result = "";
+      for (var i = 0; i < text.length; i++) {
+        result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+      }
+      return result;
+    } catch(e) {
+      return encoded;
+    }
+  }
+  
+  
+  
+  function getGamanData() {
+    try {
+      var d = localStorage.getItem('sd_gaman_data');
+      return d ? JSON.parse(d) : { total: 0, history: {} };
+    } catch(e) {
+      return { total: 0, history: {} };
+    }
+  }
+
+  function saveGamanData(data) {
+    localStorage.setItem('sd_gaman_data', JSON.stringify(data));
+    gamanCountVal.textContent = data.total;
+    pushToCloud();
+    dbPutSetting('sd_gaman_data', data);
+  }
+
+  function renderGaman() {
+    var data = getGamanData();
+    gamanCountVal.textContent = data.total;
+  }
+
+  function incrementGaman() {
+    var data = getGamanData();
+    data.total++;
+    
+    
+    var d = new Date();
+    var dateKey = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    data.history[dateKey] = (data.history[dateKey] || 0) + 1;
+    
+    saveGamanData(data);
+    
+    
+    if (navigator.vibrate) navigator.vibrate(50);
+    
+    
+    if (data.total > 0 && data.total % 10 === 0) {
+      triggerConfetti();
+    }
+  }
+
+  function resetGaman() {
+    if (confirm('我慢した回数をリセットしますか？')) {
+      var emptyData = { total: 0, history: {} };
+      saveGamanData(emptyData);
+    }
+  }
+
+  
+  function triggerConfetti() {
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:500000;';
+    document.body.appendChild(canvas);
+    
+    var ctx = canvas.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+    
+    function resizeCanvas() {
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    var particles = [];
+    var colors = [
+      '#ff2d55', 
+      '#ff9500', 
+      '#ffcc00', 
+      '#34c759', 
+      '#007aff', 
+      '#af52de', 
+      '#5ac8fa', 
+      '#ff5e3a', 
+      '#ffdb4c'  
+    ];
+    
+    function createConfetti(side) {
+      var startX = side === 'left' ? 40 : window.innerWidth - 40;
+      var startY = window.innerHeight + 10;
+      
+      
+      for (var i = 0; i < 160; i++) {
+        var angle = side === 'left'
+          ? (Math.random() * 30 + 40) * Math.PI / 180
+          : (Math.random() * 30 + 110) * Math.PI / 180;
+        
+        var speed = Math.random() * 22 + 12; 
+        
+        var shapes = ['rect', 'circle', 'triangle', 'ribbon'];
+        var shape = shapes[Math.floor(Math.random() * shapes.length)];
+        
+        particles.push({
+          type: 'confetti',
+          shape: shape,
+          x: startX,
+          y: startY,
+          vx: Math.cos(angle) * speed,
+          vy: -Math.sin(angle) * speed,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          width: shape === 'ribbon' ? Math.random() * 3 + 3 : Math.random() * 6 + 6,
+          height: shape === 'ribbon' ? Math.random() * 15 + 15 : Math.random() * 7 + 7,
+          rotation: Math.random() * Math.PI * 2,
+          rotationSpeed: (Math.random() - 0.5) * 0.1,
+          wobble: Math.random() * Math.PI * 2,
+          wobbleSpeed: Math.random() * 0.08 + 0.04,
+          wobbleDistance: Math.random() * 4 + 2,
+          opacity: 1,
+          decay: Math.random() * 0.005 + 0.003, 
+          gravity: Math.random() * 0.12 + 0.22,  
+          drag: 0.982 + Math.random() * 0.008   
+        });
+      }
+      
+      
+      for (var j = 0; j < 50; j++) {
+        var angle = side === 'left'
+          ? (Math.random() * 45 + 30) * Math.PI / 180
+          : (Math.random() * 45 + 105) * Math.PI / 180;
+          
+        var speed = Math.random() * 28 + 10;
+        
+        particles.push({
+          type: 'spark',
+          x: startX,
+          y: startY - 10,
+          vx: Math.cos(angle) * speed,
+          vy: -Math.sin(angle) * speed,
+          color: Math.random() > 0.4 ? '#ffffff' : '#ffcc00',
+          radius: Math.random() * 3 + 1.5,
+          opacity: 1,
+          decay: Math.random() * 0.03 + 0.02,
+          gravity: 0.15,
+          drag: 0.94
+        });
+      }
+    }
+    
+    createConfetti('left');
+    createConfetti('right');
+    
+    function loop() {
+      if (particles.length === 0) {
+        window.removeEventListener('resize', resizeCanvas);
+        canvas.remove();
+        return;
+      }
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      for (var i = particles.length - 1; i >= 0; i--) {
+        var p = particles[i];
+        
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += p.gravity;
+        p.vx *= p.drag;
+        p.vy *= p.drag;
+        p.opacity -= p.decay;
+        
+        if (p.opacity <= 0 || p.y > window.innerHeight + 50 || p.x < -50 || p.x > window.innerWidth + 50) {
+          particles.splice(i, 1);
+          continue;
+        }
+        
+        if (p.type === 'confetti') {
+          p.rotation += p.rotationSpeed;
+          p.wobble += p.wobbleSpeed;
+          
+          var drift = Math.sin(p.wobble) * p.wobbleDistance;
+          
+          ctx.save();
+          ctx.translate(p.x + drift, p.y);
+          ctx.rotate(p.rotation);
+          
+          var scaleX = Math.sin(p.wobble);
+          ctx.scale(scaleX, 1);
+          
+          ctx.globalAlpha = p.opacity;
+          ctx.fillStyle = p.color;
+          
+          if (p.shape === 'circle') {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.width / 2, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (p.shape === 'triangle') {
+            ctx.beginPath();
+            ctx.moveTo(0, -p.height / 2);
+            ctx.lineTo(p.width / 2, p.height / 2);
+            ctx.lineTo(-p.width / 2, p.height / 2);
+            ctx.closePath();
+            ctx.fill();
+          } else {
+            ctx.fillRect(-p.width / 2, -p.height / 2, p.width, p.height);
+          }
+          
+          ctx.restore();
+        } else if (p.type === 'spark') {
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.globalAlpha = p.opacity;
+          ctx.fillStyle = p.color;
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = p.color;
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+      
+      requestAnimationFrame(loop);
+    }
+    
+    requestAnimationFrame(loop);
+  }
+
+  function renderGamanHistory() {
+    var data = getGamanData();
+    gamanHistoryList.innerHTML = '';
+    
+    var dates = Object.keys(data.history).sort(function(a, b) {
+      return new Date(b) - new Date(a);
+    });
+
+    if (dates.length === 0) {
+      var noHistory = document.createElement('div');
+      noHistory.style.cssText = 'text-align:center; padding:20px; font-size:13px; color:var(--apple-text-tertiary);';
+      noHistory.textContent = '履歴はありません。';
+      gamanHistoryList.appendChild(noHistory);
+      return;
+    }
+
+    dates.forEach(function(dStr) {
+      var count = data.history[dStr];
+      var item = document.createElement('div');
+      item.className = 'sd-gaman-history-item';
+      
+      var dateLbl = document.createElement('span');
+      dateLbl.className = 'sd-gaman-history-date';
+      var parts = dStr.split('-');
+      dateLbl.textContent = parts[0] + '年' + parseInt(parts[1], 10) + '月' + parseInt(parts[2], 10) + '日';
+
+      var countLbl = document.createElement('span');
+      countLbl.className = 'sd-gaman-history-count';
+      countLbl.textContent = count + ' 回';
+
+      item.appendChild(dateLbl);
+      item.appendChild(countLbl);
+      gamanHistoryList.appendChild(item);
+    });
+  }
+
+  
+  const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const BIN_CREATE_URL = 'https://api.jsonbin.io/v3/b';
+  const getBinUrl = function(binId) { return 'https://api.jsonbin.io/v3/b/' + binId + '/latest'; };
+  const getBinPutUrl = function(binId) { return 'https://api.jsonbin.io/v3/b/' + binId; };
+  const JSONBIN_HEADERS = function() {
+    return {
+      'X-Master-Key': JSONBIN_KEY,
+      'Content-Type': 'application/json'
+    };
+  };
+
+  function isJsonBinId(key) {
+    if (!key) return false;
+    return /^[0-9a-f]{24}$/.test(key);
+  }
+
+  function initSyncKey() {
+    dbGetSetting('sd_gaman_sync_key', function(dbKey) {
+      var localKey = localStorage.getItem('sd_gaman_sync_key') || dbKey;
+      
+      
+      if (localKey && (isJsonBinId(localKey) || localKey.indexOf('lk_') === 0)) {
+        localStorage.setItem('sd_gaman_sync_key', localKey);
+        dbPutSetting('sd_gaman_sync_key', localKey);
+        updateSyncStatusUI(localKey, true);
+        pullFromCloud(function() {
+          checkYesterdayScore();
+        });
+      } else {
+        
+        fetch(BIN_CREATE_URL, {
+          method: 'POST',
+          headers: {
+            'X-Master-Key': JSONBIN_KEY,
+            'Content-Type': 'application/json',
+            'X-Bin-Name': 'secret_diary_sync'
+          },
+          body: JSON.stringify({ isInitial: true })
+        })
+        .then(function(res) {
+          if (!res.ok) throw new Error('status: ' + res.status);
+          return res.json();
+        })
+        .then(function(json) {
+          var userKey = json.metadata.id;
+          if (userKey) {
+            registerNewSyncKey(userKey);
+          } else {
+            fallbackLocalSyncKey();
+          }
+          checkYesterdayScore();
+        })
+        .catch(function(e) {
+          console.error('Key generation failed:', e);
+          if (localKey) {
+            
+            updateSyncStatusUI(localKey, true);
+          } else {
+            fallbackLocalSyncKey();
+          }
+          checkYesterdayScore();
+        });
+      }
+    });
+  }
+
+  
+
+  function formatDate(date) {
+    var y = date.getFullYear();
+    var m = String(date.getMonth() + 1).padStart(2, '0');
+    var d = String(date.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + d;
+  }
+
+  function getScoreEvaluation(score) {
+    score = parseInt(score, 10);
+    if (score >= 90) return '最高の一日！ 🎉';
+    if (score >= 70) return '良い一日でした！ 😊';
+    if (score >= 40) return '普通の普通な一日 😐';
+    if (score >= 15) return '少し調子の悪い日 😔';
+    return 'あまり良くない日でした 💔';
+  }
+
+  function checkYesterdayScore() {
+    var todayStr = formatDate(new Date());
+    var lastCheck = localStorage.getItem('sd_last_daily_score_check_date');
+    if (lastCheck === todayStr) return;
+    
+    var yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    var yesterdayStr = formatDate(yesterday);
+    
+    if (appScores[yesterdayStr] !== undefined) return;
+    
+    dbGetAll(function(entries) {
+      var localGaman = getGamanData();
+      if (entries.length === 0 && (!localGaman || localGaman.total === 0)) {
+        localStorage.setItem('sd_last_daily_score_check_date', todayStr);
+        return;
+      }
+      showScoreDialog(yesterdayStr, true);
+    });
+  }
+
+  function showScoreDialog(dateStr, isDailyCheck) {
+    scoreEditTargetDate = dateStr;
+    
+    var parts = dateStr.split('-');
+    var formattedLabel = parseInt(parts[1], 10) + '月' + parseInt(parts[2], 10) + '日';
+    
+    if (isDailyCheck) {
+      scoreDialogTitle.textContent = '昨日の点数を記録';
+      scoreDialogDesc.textContent = '昨日 (' + formattedLabel + ') の一日は何点でしたか？';
+      scoreDialogSkip.classList.remove('sd-hidden');
+    } else {
+      scoreDialogTitle.textContent = '一日の満足度を記録';
+      scoreDialogDesc.textContent = formattedLabel + ' の一日は何点でしたか？';
+      scoreDialogSkip.classList.add('sd-hidden');
+    }
+    
+    var currentScore = appScores[dateStr] !== undefined ? appScores[dateStr] : 80;
+    scoreSlider.value = currentScore;
+    scoreDisplayVal.textContent = currentScore;
+    scoreDisplayEval.textContent = getScoreEvaluation(currentScore);
+    
+    scoreDialog.classList.remove('sd-hidden');
+  }
+
+  function saveScore(dateStr, score) {
+    appScores[dateStr] = parseInt(score, 10);
+    dbPutSetting('sd_scores', appScores, function(success) {
+      if (success) {
+        pushToCloud();
+        renderCalendarDays();
+        renderCalendarFocusedList();
+      }
+    });
+  }
+
+  function registerNewSyncKey(key) {
+    localStorage.setItem('sd_gaman_sync_key', key);
+    dbPutSetting('sd_gaman_sync_key', key);
+    updateSyncStatusUI(key, true);
+    pushToCloud();
+  }
+
+  function fallbackLocalSyncKey() {
+    var tempKey = 'lk_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    registerNewSyncKey(tempKey);
+  }
+
+  function updateSyncStatusUI(key, isConnected) {
+    gamanSyncKeyInput.value = key || '';
+    if (isConnected && key) {
+      gamanSyncKeyInput.readOnly = true;
+      gamanSyncKeyInput.style.background = 'rgba(255,255,255,0.02)';
+      gamanSyncKeyInput.style.color = 'var(--apple-text-secondary)';
+      gamanSyncSaveBtn.textContent = '同期解除';
+      gamanSyncSaveBtn.className = 'sd-apple-btn sd-danger-btn';
+      
+      var isLocal = key.indexOf('lk_') === 0;
+      if (isLocal) {
+        gamanSyncStatus.textContent = '同期キー: ' + key + ' (ローカル保存のみ - オフライン)';
+      } else {
+        gamanSyncStatus.textContent = '同期キー: ' + key + ' (同期中 - 編集不可ロック)';
+      }
+    } else {
+      gamanSyncKeyInput.readOnly = false;
+      gamanSyncKeyInput.style.background = 'rgba(255,255,255,0.05)';
+      gamanSyncKeyInput.style.color = '#fff';
+      gamanSyncSaveBtn.textContent = '接続';
+      gamanSyncSaveBtn.className = 'sd-apple-btn sd-primary-btn';
+      gamanSyncStatus.textContent = '同期キー: 未接続';
+    }
+  }
+
+  function pushToCloud(callback) {
+    var key = localStorage.getItem('sd_gaman_sync_key');
+    if (!key || key.indexOf('lk_') === 0) {
+      if (callback) callback();
+      return;
+    }
+
+    dbGetAll(function(entries) {
+      var gamanData = getGamanData();
+      
+      var encryptedEntries = entries.map(function(e) {
+        var encryptedImages = [];
+        if (Array.isArray(e.images)) {
+          encryptedImages = e.images.map(function(img) {
+            return encryptText(img, key);
+          });
+        }
+        return {
+          id: e.id,
+          text: encryptText(e.text, key),
+          mood: e.mood,
+          ts: e.ts,
+          favorite: e.favorite,
+          tags: e.tags,
+          images: encryptedImages,
+          habits: e.habits || []
+        };
+      });
+
+      var now = Date.now();
+      localStorage.setItem('sd_last_sync_updated', now);
+
+      dbGetSetting('sd_desires_data', function(desiresData) {
+        var payload = {
+          gaman: gamanData,
+          entries: encryptedEntries,
+          scores: appScores,
+          desires: desiresData || { wants: [], bucketList: [] },
+          updatedAt: now
+        };
+
+        fetch(getBinPutUrl(key), {
+          method: 'PUT',
+          headers: JSONBIN_HEADERS(),
+          body: JSON.stringify(payload)
+        })
+        .then(function(res) {
+          if (!res.ok) throw new Error('status: ' + res.status);
+          if (callback) callback(true);
+        })
+        .catch(function(e) {
+          console.error('Push to cloud failed:', e);
+          if (callback) callback(false);
+        });
+      });
+    });
+  }
+
+  function pullFromCloud(callback) {
+    var key = localStorage.getItem('sd_gaman_sync_key');
+    if (!key || key.indexOf('lk_') === 0) {
+      if (callback) callback();
+      return;
+    }
+
+    fetch(getBinUrl(key), {
+      headers: { 'X-Master-Key': JSONBIN_KEY },
+      cache: 'no-store'
+    })
+    .then(function(res) {
+      if (res.status === 200) return res.json();
+      return null;
+    })
+    .then(function(json) {
+      var cloudData = json ? json.record : null;
+      if (cloudData && typeof cloudData.updatedAt === 'number') {
+        var localLastUpdated = parseInt(localStorage.getItem('sd_last_sync_updated') || '0', 10);
+        
+        if (cloudData.updatedAt > localLastUpdated) {
+          if (cloudData.gaman) {
+            localStorage.setItem('sd_gaman_data', JSON.stringify(cloudData.gaman));
+            dbPutSetting('sd_gaman_data', cloudData.gaman);
+            if (currentTab === 'gaman') renderGaman();
+          }
+
+          if (cloudData.scores) {
+            appScores = cloudData.scores;
+            dbPutSetting('sd_scores', appScores);
+          }
+
+          if (cloudData.desires) {
+            desires = cloudData.desires;
+            localStorage.setItem('sd_desires_data', JSON.stringify(cloudData.desires));
+            dbPutSetting('sd_desires_data', cloudData.desires);
+            if (currentTab === 'desires') renderDesires();
+          }
+
+          if (Array.isArray(cloudData.entries)) {
+            dbGetAll(function(localEntries) {
+              var localMap = {};
+              localEntries.forEach(function(e) { localMap[e.id] = e; });
+
+              var transaction = db.transaction([STORE_NAME], 'readwrite');
+              var store = transaction.objectStore(STORE_NAME);
+
+              cloudData.entries.forEach(function(cloudEntry) {
+                var localEntry = localMap[cloudEntry.id];
+                var decryptedText = decryptText(cloudEntry.text, key);
+
+                var decryptedImages = [];
+                if (Array.isArray(cloudEntry.images)) {
+                  decryptedImages = cloudEntry.images.map(function(img) {
+                    return decryptText(img, key);
+                  });
+                } else if (localEntry && Array.isArray(localEntry.images)) {
+                  decryptedImages = localEntry.images;
+                }
+
+                var mergedEntry = {
+                  id: cloudEntry.id,
+                  text: decryptedText,
+                  mood: cloudEntry.mood || '📝',
+                  ts: cloudEntry.ts || Date.now(),
+                  favorite: cloudEntry.favorite || false,
+                  tags: cloudEntry.tags || [],
+                  images: decryptedImages,
+                  habits: cloudEntry.habits || []
+                };
+                
+                store.put(mergedEntry);
+              });
+              
+              var cloudIdSet = new Set(cloudData.entries.map(function(e) { return e.id; }));
+              localEntries.forEach(function(localEntry) {
+                if (!cloudIdSet.has(localEntry.id)) {
+                  if (localEntry.ts > localLastUpdated) {
+                    
+                  } else {
+                    store.delete(localEntry.id);
+                  }
+                }
+              });
+
+              transaction.oncomplete = function() {
+                localStorage.setItem('sd_last_sync_updated', cloudData.updatedAt);
+                renderTimeline();
+                if (currentTab === 'stats') renderStats();
+                if (currentTab === 'calendar') {
+                  renderCalendarDays();
+                  renderCalendarFocusedList();
+                }
+                if (callback) callback(true);
+              };
+            });
+          } else {
+            if (callback) callback(true);
+          }
+        } else {
+          if (cloudData.updatedAt < localLastUpdated) {
+            pushToCloud();
+          }
+          if (callback) callback(true);
+        }
+      } else {
+        pushToCloud();
+        if (callback) callback(true);
+      }
+    })
+    .catch(function(e) {
+      console.error('Sync pull failed:', e);
+      if (callback) callback(false);
+    });
+  }
+
+  function connectToSyncKey() {
+    var key = gamanSyncKeyInput.value.trim();
+    if (key.length < 5) {
+      alert('無効な同期キーです。');
+      return;
+    }
+    
+    fetch(getBinUrl(key), {
+      headers: { 'X-Master-Key': JSONBIN_KEY }
+    })
+    .then(function(res) {
+      if (res.status === 200) return res.json();
+      throw new Error('Key not found');
+    })
+    .then(function(json) {
+      var cloudData = json ? json.record : null;
+      if (cloudData && (typeof cloudData.updatedAt === 'number' || cloudData.isInitial)) {
+        localStorage.setItem('sd_gaman_sync_key', key);
+        dbPutSetting('sd_gaman_sync_key', key);
+        updateSyncStatusUI(key, true);
+        
+        localStorage.setItem('sd_last_sync_updated', '0');
+        pullFromCloud(function() {
+          alert('同期が完了しました！');
+        });
+      } else {
+        alert('同期データが見つかりません。');
+      }
+    })
+    .catch(function(e) {
+      alert('同期キーの接続に失敗しました。正しいキーを入力してください。');
+    });
+  }
+
+  function executeSyncDisconnect() {
+    localStorage.removeItem('sd_gaman_sync_key');
+    localStorage.removeItem('sd_last_sync_updated');
+    if (db) {
+      try {
+        var transaction = db.transaction(['settings'], 'readwrite');
+        transaction.objectStore('settings').delete('sd_gaman_sync_key');
+      } catch(e){
+        console.error('Failed to delete sync key from IndexedDB:', e);
+      }
+    }
+    updateSyncStatusUI('', false);
+  }
+
+  function handleSyncButtonClick() {
+    console.log('handleSyncButtonClick clicked');
+    var isConnected = gamanSyncSaveBtn.textContent === '同期解除' || gamanSyncSaveBtn.classList.contains('sd-danger-btn');
+    
+    console.log('isConnected:', isConnected);
+    
+    if (isConnected) {
+      if (syncConfirmDialog) {
+        syncConfirmDialog.classList.remove('sd-hidden');
+      } else {
+        if (confirm('同期を解除しますか？\n(他ブラウザとのリアルタイム同期が停止します。ローカルデータは保持されます)')) {
+          executeSyncDisconnect();
+        }
+      }
+    } else {
+      connectToSyncKey();
+    }
+  }
+
+  function extractTags(text) {
+    var regex = /#([a-zA-Z0-9ぁ-んァ-ヶー一-龠]+)/g;
+    var matches = [];
+    var match;
+    while ((match = regex.exec(text)) !== null) {
+      matches.push(match[1]);
+    }
+    return matches;
+  }
+
+  
+  function loadDesiresData() {
+    dbGetSetting('sd_desires_data', function(data) {
+      if (data) {
+        desires = data;
+      } else {
+        desires = { wants: [], bucketList: [] };
+      }
+      if (currentTab === 'desires') {
+        renderDesires();
+      }
+    });
+  }
+
+  function saveDesiresData(callback) {
+    dbPutSetting('sd_desires_data', desires, function(success) {
+      localStorage.setItem('sd_desires_data', JSON.stringify(desires));
+      pushToCloud();
+      if (callback) callback(success);
+    });
+  }
+
+  function renderDesires() {
+    var wantsList = desires.wants || [];
+    var bucketList = desires.bucketList || [];
+    
+    var wantsTotal = wantsList.length;
+    var wantsCompleted = wantsList.filter(function(i) { return i.done; }).length;
+    var wantsPct = wantsTotal > 0 ? Math.round((wantsCompleted / wantsTotal) * 100) : 0;
+    
+    var wantsBar = document.getElementById('sd-wants-progress-bar');
+    var wantsText = document.getElementById('sd-wants-progress-text');
+    if (wantsBar) wantsBar.style.width = wantsPct + '%';
+    if (wantsText) wantsText.textContent = wantsCompleted + ' / ' + wantsTotal + ' (' + wantsPct + '%)';
+
+    var bucketTotal = bucketList.length;
+    var bucketCompleted = bucketList.filter(function(i) { return i.done; }).length;
+    var bucketPct = bucketTotal > 0 ? Math.round((bucketCompleted / bucketTotal) * 100) : 0;
+    
+    var bucketBar = document.getElementById('sd-bucket-progress-bar');
+    var bucketText = document.getElementById('sd-bucket-progress-text');
+    if (bucketBar) bucketBar.style.width = bucketPct + '%';
+    if (bucketText) bucketText.textContent = bucketCompleted + ' / ' + bucketTotal + ' (' + bucketPct + '%)';
+
+    var listContainer = document.getElementById('sd-desires-list');
+    if (!listContainer) return;
+    listContainer.innerHTML = '';
+
+    var activeList = currentDesireTab === 'wants' ? wantsList : bucketList;
+
+    if (activeList.length === 0) {
+      var emptyMsg = document.createElement('div');
+      emptyMsg.style.cssText = 'text-align:center; padding:40px 20px; font-size:13px; color:var(--apple-text-tertiary);';
+      emptyMsg.textContent = 'やりたいことがまだ登録されていません。上の入力欄から追加してください。';
+      listContainer.appendChild(emptyMsg);
+      return;
+    }
+
+    var sortedList = activeList.slice().sort(function(a, b) {
+      if (a.done === b.done) {
+        return b.ts - a.ts;
+      }
+      return a.done ? 1 : -1;
+    });
+
+    sortedList.forEach(function(item) {
+      var el = document.createElement('div');
+      el.className = 'sd-desire-item' + (item.done ? ' sd-completed' : '');
+      el.setAttribute('data-id', item.id);
+      el.setAttribute('data-type', currentDesireTab);
+
+      var checkbox = document.createElement('div');
+      checkbox.className = 'sd-desire-checkbox';
+      checkbox.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+      checkbox.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleDesireItem(item.id);
+      });
+
+      var textWrapper = document.createElement('div');
+      textWrapper.className = 'sd-desire-text-wrapper';
+
+      var textSpan = document.createElement('span');
+      textSpan.className = 'sd-desire-text';
+      textSpan.textContent = item.text;
+
+      textWrapper.appendChild(textSpan);
+
+      if (item.completedTs && item.done) {
+        var dateSpan = document.createElement('span');
+        dateSpan.className = 'sd-desire-date';
+        dateSpan.textContent = '達成日: ' + formatLongDate(item.completedTs);
+        textWrapper.appendChild(dateSpan);
+      }
+
+      var actions = document.createElement('div');
+      actions.className = 'sd-desire-actions';
+
+      var editBtn = document.createElement('button');
+      editBtn.className = 'sd-desire-action-btn';
+      editBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>';
+      editBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        editDesireItem(item.id, item.text);
+      });
+
+      var delBtn = document.createElement('button');
+      delBtn.className = 'sd-desire-action-btn sd-delete';
+      delBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>';
+      delBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        deleteDesireItem(item.id);
+      });
+
+      actions.appendChild(editBtn);
+      actions.appendChild(delBtn);
+
+      el.appendChild(checkbox);
+      el.appendChild(textWrapper);
+      el.appendChild(actions);
+
+      listContainer.appendChild(el);
+    });
+  }
+
+  function addDesireItem() {
+    var input = document.getElementById('sd-desire-input');
+    if (!input) return;
+    var text = input.value.trim();
+    if (!text) return;
+
+    var newItem = {
+      id: generateId(),
+      text: text,
+      done: false,
+      ts: Date.now(),
+      completedTs: null
+    };
+
+    if (currentDesireTab === 'wants') {
+      if (!desires.wants) desires.wants = [];
+      desires.wants.push(newItem);
+    } else {
+      if (!desires.bucketList) desires.bucketList = [];
+      desires.bucketList.push(newItem);
+    }
+
+    input.value = '';
+    saveDesiresData(function() {
+      renderDesires();
+    });
+  }
+
+  function toggleDesireItem(id) {
+    var list = currentDesireTab === 'wants' ? desires.wants : desires.bucketList;
+    var item = list.find(function(i) { return i.id === id; });
+    if (item) {
+      item.done = !item.done;
+      item.completedTs = item.done ? Date.now() : null;
+      saveDesiresData(function() {
+        renderDesires();
+      });
+    }
+  }
+
+  function deleteDesireItem(id) {
+    if (confirm('この項目を削除しますか？')) {
+      if (currentDesireTab === 'wants') {
+        desires.wants = desires.wants.filter(function(i) { return i.id !== id; });
+      } else {
+        desires.bucketList = desires.bucketList.filter(function(i) { return i.id !== id; });
+      }
+      saveDesiresData(function() {
+        renderDesires();
+      });
+    }
+  }
+
+  function editDesireItem(id, currentText) {
+    var newText = prompt('やりたいことを編集します:', currentText);
+    if (newText === null) return;
+    newText = newText.trim();
+    if (!newText) return;
+
+    var list = currentDesireTab === 'wants' ? desires.wants : desires.bucketList;
+    var item = list.find(function(i) { return i.id === id; });
+    if (item) {
+      item.text = newText;
+      saveDesiresData(function() {
+        renderDesires();
+      });
+    }
+  }
+
+  
+  function parseSimpleMarkdown(text) {
+    var escaped = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+
+    escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    escaped = escaped.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    escaped = escaped.replace(/`(.*?)`/g, '<code class="sd-inline-code">$1</code>');
+    
+    escaped = escaped.replace(/#([a-zA-Z0-9\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+)/g, '<span class="sd-card-tag">#$1</span>');
+
+    var lines = escaped.split('\n');
+    var parsedLines = lines.map(function(line) {
+      if (line.trim().indexOf('- ') === 0) {
+        return '<li>' + line.trim().substring(2) + '</li>';
+      }
+      return line;
+    });
+    escaped = parsedLines.join('\n');
+    escaped = escaped.replace(/(<li>.*?<\/li>)+/g, '<ul>$&</ul>');
+    
+    return escaped.replace(/\n/g, '<br>');
+  }
+
+  
+  
+  function renderTimeline() {
+    dbGetAll(function(entries) {
+      var allTags = {};
+      entries.forEach(function(e) {
+        if (Array.isArray(e.tags)) {
+          e.tags.forEach(function(t) {
+            allTags[t] = (allTags[t] || 0) + 1;
+          });
+        }
+      });
+      renderTagCloud(allTags);
+
+      var filtered = entries.filter(function(e) {
+        if (showFavoritesOnly && !e.favorite) return false;
+        if (currentTagFilter && (!e.tags || e.tags.indexOf(currentTagFilter) === -1)) return false;
+        if (currentSearchQuery) {
+          var query = currentSearchQuery.toLowerCase();
+          var hasText = e.text.toLowerCase().indexOf(query) !== -1;
+          var hasTag = e.tags && e.tags.some(function(t) { return t.toLowerCase().indexOf(query) !== -1; });
+          return hasText || hasTag;
+        }
+        return true;
+      });
+
+      filtered.sort(function(a, b) { return b.ts - a.ts; });
+
+      var children = Array.from(feed.children);
+      children.forEach(function(c) {
+        if (c !== emptyState) feed.removeChild(c);
+      });
+
+      entryCountEl.textContent = entries.length + ' 件';
+
+      if (filtered.length === 0) {
+        emptyState.style.display = 'flex';
+        return;
+      }
+      emptyState.style.display = 'none';
+
+      filtered.forEach(function(entry) {
+        var card = document.createElement('div');
+        card.className = 'sd-card';
+        card.setAttribute('data-id', entry.id);
+
+        var header = document.createElement('div');
+        header.className = 'sd-card-header';
+
+        var dtMood = document.createElement('div');
+        dtMood.className = 'sd-card-date-mood';
+
+        var moodSpan = document.createElement('span');
+        moodSpan.className = 'sd-card-mood';
+        moodSpan.textContent = entry.mood || '📝';
+
+        var dtInfo = document.createElement('div');
+        dtInfo.className = 'sd-card-date-info';
+
+        var dLabel = document.createElement('span');
+        dLabel.className = 'sd-card-date';
+        dLabel.textContent = formatLongDate(entry.ts);
+        
+        var tLabel = document.createElement('span');
+        tLabel.className = 'sd-card-time';
+        tLabel.textContent = formatTime(entry.ts);
+
+        dtInfo.appendChild(dLabel);
+        dtInfo.appendChild(tLabel);
+        dtMood.appendChild(moodSpan);
+        dtMood.appendChild(dtInfo);
+
+        
+        var actions = document.createElement('div');
+        actions.className = 'sd-card-actions';
+
+        var favBtn = document.createElement('button');
+        favBtn.className = 'sd-card-action-btn sd-fav-btn' + (entry.favorite ? ' sd-active' : '');
+        favBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+        favBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          toggleFavorite(entry.id);
+        });
+
+        var editBtn = document.createElement('button');
+        editBtn.className = 'sd-card-action-btn';
+        editBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>';
+        editBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openEditSheet(entry);
+        });
+
+        var delBtn = document.createElement('button');
+        delBtn.className = 'sd-card-action-btn sd-del-btn';
+        delBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>';
+        delBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          deleteEntryPrompt(entry.id);
+        });
+
+        actions.appendChild(favBtn);
+        actions.appendChild(editBtn);
+        actions.appendChild(delBtn);
+
+        header.appendChild(dtMood);
+        header.appendChild(actions);
+        card.appendChild(header);
+
+        
+        var body = document.createElement('div');
+        body.className = 'sd-card-body';
+        body.innerHTML = parseSimpleMarkdown(entry.text);
+        card.appendChild(body);
+
+        if (Array.isArray(entry.images) && entry.images.length > 0) {
+          var mediaGrid = document.createElement('div');
+          mediaGrid.className = 'sd-card-media';
+          entry.images.forEach(function(imgBase64) {
+            var img = document.createElement('img');
+            img.className = 'sd-card-media-item';
+            img.src = imgBase64;
+            img.alt = 'Photo';
+            img.addEventListener('click', function(e) {
+              e.stopPropagation();
+              openFullscreenImage(imgBase64);
+            });
+            mediaGrid.appendChild(img);
+          });
+          card.appendChild(mediaGrid);
+        }
+
+        if (Array.isArray(entry.habits) && entry.habits.length > 0) {
+          var habitsDiv = document.createElement('div');
+          habitsDiv.className = 'sd-card-habits';
+          entry.habits.forEach(function(habit) {
+            var badge = document.createElement('span');
+            badge.className = 'sd-card-habit-badge';
+            var icon = '';
+            var title = '';
+            if (habit === 'sleep') { icon = '😴'; title = '睡眠'; }
+            else if (habit === 'exercise') { icon = '🏃'; title = '運動'; }
+            else if (habit === 'hydration') { icon = '💧'; title = '水分'; }
+            else if (habit === 'reading') { icon = '📚'; title = '読書'; }
+            badge.textContent = icon;
+            badge.title = title;
+            habitsDiv.appendChild(badge);
+          });
+          card.appendChild(habitsDiv);
+        }
+
+        feed.appendChild(card);
+      });
+    });
+  }
+
+  function renderTagCloud(tags) {
+    tagCloudEl.innerHTML = '';
+    
+    var allChip = document.createElement('button');
+    allChip.className = 'sd-tag-chip' + (currentTagFilter === '' ? ' sd-active' : '');
+    allChip.textContent = 'すべて';
+    allChip.addEventListener('click', function() {
+      currentTagFilter = '';
+      renderTimeline();
+    });
+    tagCloudEl.appendChild(allChip);
+
+    Object.keys(tags).forEach(function(tag) {
+      var count = tags[tag];
+      var chip = document.createElement('button');
+      chip.className = 'sd-tag-chip' + (currentTagFilter === tag ? ' sd-active' : '');
+      chip.textContent = '#' + tag + ' (' + count + ')';
+      chip.addEventListener('click', function() {
+        currentTagFilter = (currentTagFilter === tag) ? '' : tag;
+        renderTimeline();
+      });
+      tagCloudEl.appendChild(chip);
+    });
+  }
+
+  function openFullscreenImage(base64) {
+    var view = document.createElement('div');
+    view.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:400000;display:flex;align-items:center;justify-content:center;cursor:zoom-out;animation:sd-fade-in 0.2s;';
+    var img = document.createElement('img');
+    img.src = base64;
+    img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;';
+    view.appendChild(img);
+    view.addEventListener('click', function() { view.remove(); });
+    document.body.appendChild(view);
+  }
+
+  
+  
+  function toggleFavorite(id) {
+    dbGetAll(function(entries) {
+      var entry = entries.find(function(e) { return e.id === id; });
+      if (entry) {
+        entry.favorite = !entry.favorite;
+        dbPut(entry, function() {
+          renderTimeline();
+          if (currentTab === 'calendar') renderCalendarFocusedList();
+          pushToCloud();
+        });
+      }
+    });
+  }
+
+  function deleteEntryPrompt(id) {
+    if (confirm('この日記を削除しますか？')) {
+      dbDelete(id, function() {
+        renderTimeline();
+        if (currentTab === 'calendar') {
+          renderCalendarDays();
+          renderCalendarFocusedList();
+        }
+        pushToCloud();
+      });
+    }
+  }
+
+  
+  
+  function getDaysInMonth(year, month) {
+    return new Date(year, month + 1, 0).getDate();
+  }
+
+  function renderCalendarDays() {
+    dbGetAll(function(entries) {
+      calDaysContainer.innerHTML = '';
+      
+      var year = calendarDate.getFullYear();
+      var month = calendarDate.getMonth();
+      
+      calMonthYear.textContent = year + '年' + (month + 1) + '月';
+
+      var dateMap = {};
+      entries.forEach(function(e) {
+        var d = new Date(e.ts);
+        var key = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+        dateMap[key] = (dateMap[key] || 0) + 1;
+      });
+
+      var firstDayIndex = new Date(year, month, 1).getDay();
+      var prevMonthDays = getDaysInMonth(year, month - 1);
+      
+      for (var i = firstDayIndex - 1; i >= 0; i--) {
+        var dayNum = prevMonthDays - i;
+        var dayEl = createDayCell(dayNum, true, year, month - 1, dateMap);
+        calDaysContainer.appendChild(dayEl);
+      }
+
+      var currentMonthDays = getDaysInMonth(year, month);
+      for (var j = 1; j <= currentMonthDays; j++) {
+        var dayEl = createDayCell(j, false, year, month, dateMap);
+        calDaysContainer.appendChild(dayEl);
+      }
+
+      var totalCellsUsed = firstDayIndex + currentMonthDays;
+      var remainingCells = 42 - totalCellsUsed;
+      for (var k = 1; k <= remainingCells; k++) {
+        var dayEl = createDayCell(k, true, year, month + 1, dateMap);
+        calDaysContainer.appendChild(dayEl);
+      }
+    });
+  }
+
+  function createDayCell(dayNum, isOtherMonth, year, month, dateMap) {
+    var cell = document.createElement('div');
+    cell.className = 'sd-cal-day';
+    if (isOtherMonth) cell.classList.add('sd-other-month');
+    
+    var cellDate = new Date(year, month, dayNum);
+    var today = new Date();
+    
+    if (cellDate.getDate() === today.getDate() && cellDate.getMonth() === today.getMonth() && cellDate.getFullYear() === today.getFullYear()) {
+      cell.classList.add('sd-today');
+    }
+    
+    if (cellDate.getDate() === calendarSelectedDate.getDate() && cellDate.getMonth() === calendarSelectedDate.getMonth() && cellDate.getFullYear() === calendarSelectedDate.getFullYear()) {
+      cell.classList.add('sd-selected');
+    }
+
+    var numSpan = document.createElement('span');
+    numSpan.className = 'sd-cal-day-num';
+    numSpan.textContent = dayNum;
+    cell.appendChild(numSpan);
+
+    var dateStr = formatDate(cellDate);
+    var score = appScores[dateStr];
+    if (score !== undefined) {
+      var scoreSpan = document.createElement('span');
+      scoreSpan.className = 'sd-cal-day-score';
+      scoreSpan.textContent = score;
+      
+      if (score >= 90) scoreSpan.classList.add('sd-score-high');
+      else if (score >= 70) scoreSpan.classList.add('sd-score-mid');
+      else if (score >= 40) scoreSpan.classList.add('sd-score-low');
+      else scoreSpan.classList.add('sd-score-verylow');
+      
+      cell.appendChild(scoreSpan);
+    }
+
+    var key = cellDate.getFullYear() + '-' + cellDate.getMonth() + '-' + cellDate.getDate();
+    if (dateMap[key]) {
+      var dot = document.createElement('span');
+      dot.className = 'sd-cal-dot';
+      cell.appendChild(dot);
+    }
+
+    cell.addEventListener('click', function() {
+      calendarSelectedDate = cellDate;
+      renderCalendarDays();
+      renderCalendarFocusedList();
+    });
+
+    return cell;
+  }
+
+  function renderCalendarFocusedList() {
+    focusedDateLabel.textContent = (calendarSelectedDate.getMonth() + 1) + '月' + calendarSelectedDate.getDate() + '日';
+
+    var selectedDateStr = formatDate(calendarSelectedDate);
+    var currentScore = appScores[selectedDateStr];
+    if (currentScore !== undefined) {
+      focusedScoreVal.textContent = currentScore + '点 (' + getScoreEvaluation(currentScore) + ')';
+      focusedScoreVal.classList.remove('sd-empty');
+      focusedScoreBtn.textContent = '編集';
+    } else {
+      focusedScoreVal.textContent = '未記録';
+      focusedScoreVal.classList.add('sd-empty');
+      focusedScoreBtn.textContent = '記録';
+    }
+
+    dbGetAll(function(entries) {
+      focusedList.innerHTML = '';
+      
+      var targetYear = calendarSelectedDate.getFullYear();
+      var targetMonth = calendarSelectedDate.getMonth();
+      var targetDay = calendarSelectedDate.getDate();
+
+      var dayEntries = entries.filter(function(e) {
+        var d = new Date(e.ts);
+        return d.getFullYear() === targetYear && d.getMonth() === targetMonth && d.getDate() === targetDay;
+      });
+
+      if (dayEntries.length === 0) {
+        var empty = document.createElement('div');
+        empty.style.cssText = 'font-size:13px; color:var(--apple-text-tertiary); padding: 12px 0; text-align:center;';
+        empty.textContent = '日記はありません。';
+        focusedList.appendChild(empty);
+        return;
+      }
+
+      dayEntries.forEach(function(entry) {
+        var item = document.createElement('div');
+        item.className = 'sd-card';
+        
+        var hdr = document.createElement('div');
+        hdr.className = 'sd-card-header';
+        
+        var dt = document.createElement('div');
+        dt.className = 'sd-card-date-mood';
+        var moodVal = document.createElement('span');
+        moodVal.className = 'sd-card-mood';
+        moodVal.textContent = entry.mood || '📝';
+        var tmLabel = document.createElement('span');
+        tmLabel.className = 'sd-card-time';
+        tmLabel.textContent = formatTime(entry.ts);
+        dt.appendChild(moodVal);
+        dt.appendChild(tmLabel);
+        
+        var acts = document.createElement('div');
+        acts.className = 'sd-card-actions';
+
+        var fav = document.createElement('button');
+        fav.className = 'sd-card-action-btn sd-fav-btn' + (entry.favorite ? ' sd-active' : '');
+        fav.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+        fav.addEventListener('click', function(e) {
+          e.stopPropagation();
+          toggleFavorite(entry.id);
+        });
+
+        var edit = document.createElement('button');
+        edit.className = 'sd-card-action-btn';
+        edit.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>';
+        edit.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openEditSheet(entry);
+        });
+
+        var del = document.createElement('button');
+        del.className = 'sd-card-action-btn sd-del-btn';
+        del.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>';
+        del.addEventListener('click', function(e) {
+          e.stopPropagation();
+          deleteEntryPrompt(entry.id);
+        });
+
+        acts.appendChild(fav);
+        acts.appendChild(edit);
+        acts.appendChild(del);
+        hdr.appendChild(dt);
+        hdr.appendChild(acts);
+        item.appendChild(hdr);
+
+        var bdy = document.createElement('div');
+        bdy.className = 'sd-card-body';
+        bdy.innerHTML = parseSimpleMarkdown(entry.text);
+        item.appendChild(bdy);
+
+        focusedList.appendChild(item);
+      });
+    });
+  }
+
+  
+  
+  function renderStats() {
+    dbGetAll(function(entries) {
+      document.getElementById('sd-stat-total').textContent = '総日記数: ' + entries.length + ' 件';
+      calculateStreak(entries);
+
+      
+      var habitCounts = { sleep: 0, exercise: 0, hydration: 0, reading: 0 };
+      entries.forEach(function(e) {
+        if (Array.isArray(e.habits)) {
+          e.habits.forEach(function(h) {
+            if (habitCounts[h] !== undefined) {
+              habitCounts[h]++;
+            }
+          });
+        }
+      });
+
+      var habitsGrid = document.getElementById('sd-habits-stats-grid');
+      if (habitsGrid) {
+        habitsGrid.innerHTML = '';
+        var habitMeta = [
+          { key: 'sleep', name: '睡眠', icon: '😴', color: 'var(--apple-blue)' },
+          { key: 'exercise', name: '運動', icon: '🏃', color: 'var(--apple-orange)' },
+          { key: 'hydration', name: '水分', icon: '💧', color: 'var(--apple-green)' },
+          { key: 'reading', name: '読書', icon: '📚', color: 'var(--apple-purple)' }
+        ];
+
+        var totalDays = entries.length;
+
+        habitMeta.forEach(function(hm) {
+          var count = habitCounts[hm.key];
+          var pct = totalDays > 0 ? Math.round((count / totalDays) * 100) : 0;
+          
+          var circumference = 2 * Math.PI * 15; 
+          var strokeDashoffset = circumference - (pct / 100) * circumference;
+
+          var statItem = document.createElement('div');
+          statItem.className = 'sd-habit-stat-item';
+
+          var ringContainer = document.createElement('div');
+          ringContainer.className = 'sd-habit-ring-container';
+
+          var svgNs = "http://www.w3.org/2000/svg";
+          var ringSvg = document.createElementNS(svgNs, 'svg');
+          ringSvg.setAttribute('class', 'sd-habit-ring-svg');
+          ringSvg.setAttribute('viewBox', '0 0 36 36');
+
+          var bgCircle = document.createElementNS(svgNs, 'circle');
+          bgCircle.setAttribute('class', 'sd-habit-ring-bg');
+          bgCircle.setAttribute('cx', '18');
+          bgCircle.setAttribute('cy', '18');
+          bgCircle.setAttribute('r', '15');
+
+          var fgCircle = document.createElementNS(svgNs, 'circle');
+          fgCircle.setAttribute('class', 'sd-habit-ring-fg');
+          fgCircle.setAttribute('cx', '18');
+          fgCircle.setAttribute('cy', '18');
+          fgCircle.setAttribute('r', '15');
+          fgCircle.setAttribute('stroke', hm.color);
+          fgCircle.setAttribute('stroke-dasharray', circumference + ' ' + circumference);
+          fgCircle.setAttribute('stroke-dashoffset', strokeDashoffset);
+
+          ringSvg.appendChild(bgCircle);
+          ringSvg.appendChild(fgCircle);
+
+          var centerIcon = document.createElement('div');
+          centerIcon.className = 'sd-habit-ring-center';
+          centerIcon.textContent = hm.icon;
+
+          ringContainer.appendChild(ringSvg);
+          ringContainer.appendChild(centerIcon);
+
+          var label = document.createElement('span');
+          label.className = 'sd-habit-stat-label';
+          label.textContent = hm.name;
+
+          var percent = document.createElement('span');
+          percent.className = 'sd-habit-stat-percent';
+          percent.textContent = pct + '%';
+
+          statItem.appendChild(ringContainer);
+          statItem.appendChild(label);
+          statItem.appendChild(percent);
+
+          habitsGrid.appendChild(statItem);
+        });
+      }
+
+      var moodCounts = {};
+      var totalWithMood = 0;
+      entries.forEach(function(e) {
+        if (e.mood) {
+          moodCounts[e.mood] = (moodCounts[e.mood] || 0) + 1;
+          totalWithMood++;
+        }
+      });
+
+      var chartPie = document.getElementById('sd-chart-pie-accent');
+      var legend = document.getElementById('sd-chart-legend');
+      legend.innerHTML = '';
+
+      var moods = ['📝', '😊', '😐', '😔', '🔥', '💡'];
+      var moodColors = {
+        '📝': 'var(--apple-text-secondary)',
+        '😊': 'var(--apple-orange)',
+        '😐': 'var(--apple-green)',
+        '😔': 'var(--apple-blue)',
+        '🔥': 'var(--apple-red)',
+        '💡': 'var(--apple-purple)'
+      };
+
+      
+      var svg = document.querySelector('.sd-pie-chart');
+      var dynamicSegments = svg.querySelectorAll('.sd-dynamic-segment');
+      dynamicSegments.forEach(function(c) { c.remove(); });
+      chartPie.style.display = 'none'; 
+
+      if (totalWithMood === 0) {
+        var blank = document.createElement('div');
+        blank.style.cssText = 'font-size:12px; color:var(--apple-text-tertiary);';
+        blank.textContent = '気分の記録がまだありません。';
+        legend.appendChild(blank);
+      } else {
+        var currentAngle = -90; 
+        var circumference = 251.2;
+
+        moods.forEach(function(m) {
+          var count = moodCounts[m] || 0;
+          if (count > 0) {
+            var pct = count / totalWithMood;
+            var pctVal = Math.round(pct * 100);
+            
+            
+            var segmentLength = circumference * pct;
+            var gapLength = circumference - segmentLength;
+
+            var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('class', 'sd-dynamic-segment');
+            circle.setAttribute('cx', '50');
+            circle.setAttribute('cy', '50');
+            circle.setAttribute('r', '40');
+            circle.setAttribute('fill', 'transparent');
+            circle.setAttribute('stroke', moodColors[m] || 'var(--apple-blue)');
+            circle.setAttribute('stroke-width', '12');
+            circle.setAttribute('stroke-dasharray', segmentLength + ' ' + gapLength);
+            circle.setAttribute('stroke-dashoffset', '0');
+            circle.setAttribute('transform', 'rotate(' + currentAngle + ' 50 50)');
+            svg.appendChild(circle);
+
+            currentAngle += pct * 360;
+
+            
+            var item = document.createElement('div');
+            item.className = 'sd-legend-item';
+            
+            var dot = document.createElement('span');
+            dot.className = 'sd-legend-dot';
+            dot.style.background = moodColors[m] || 'var(--apple-blue)';
+            
+            var label = document.createElement('span');
+            label.textContent = m + ' ' + pctVal + '% (' + count + ')';
+            
+            item.appendChild(dot);
+            item.appendChild(label);
+            legend.appendChild(item);
+          }
+        });
+      }
+
+      var tagCounts = {};
+      entries.forEach(function(e) {
+        if (Array.isArray(e.tags)) {
+          e.tags.forEach(function(t) {
+            tagCounts[t] = (tagCounts[t] || 0) + 1;
+          });
+        }
+      });
+
+      var sortedTags = Object.keys(tagCounts).map(function(t) {
+        return { name: t, count: tagCounts[t] };
+      }).sort(function(a, b) { return b.count - a.count; }).slice(0, 5);
+
+      var tagStatsList = document.getElementById('sd-tag-stats-list');
+      tagStatsList.innerHTML = '';
+      if (sortedTags.length === 0) {
+        var noTags = document.createElement('p');
+        noTags.style.cssText = 'font-size:12px; color:var(--apple-text-tertiary); margin:0;';
+        noTags.textContent = 'タグがありません。本文に #タグ を含めて投稿してください。';
+        tagStatsList.appendChild(noTags);
+      } else {
+        var maxCount = sortedTags[0].count;
+        sortedTags.forEach(function(item) {
+          var pct = Math.round((item.count / maxCount) * 100);
+          var row = document.createElement('div');
+          row.className = 'sd-tag-stat-row';
+          
+          var name = document.createElement('span');
+          name.className = 'sd-tag-stat-name';
+          name.textContent = '#' + item.name;
+
+          var barBg = document.createElement('div');
+          barBg.className = 'sd-tag-stat-bar-bg';
+          var barFg = document.createElement('div');
+          barFg.style.width = pct + '%';
+          barFg.className = 'sd-tag-stat-bar-fg';
+          barBg.appendChild(barFg);
+
+          var count = document.createElement('span');
+          count.className = 'sd-tag-stat-count';
+          count.textContent = item.count;
+
+          row.appendChild(name);
+          row.appendChild(barBg);
+          row.appendChild(count);
+          tagStatsList.appendChild(row);
+        });
+      }
+    });
+  }
+
+  function calculateStreak(entries) {
+    if (entries.length === 0) {
+      document.getElementById('sd-stat-streak').textContent = '0';
+      return;
+    }
+    
+    var dates = entries.map(function(e) {
+      var d = new Date(e.ts);
+      return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    });
+    
+    var uniqueDates = Array.from(new Set(dates)).map(function(dStr) {
+      return new Date(dStr);
+    }).sort(function(a,b) { return b - a; });
+
+    var currentStreak = 0;
+    var today = new Date();
+    var checkDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    
+    var newestEntryDate = uniqueDates[0];
+    if (!newestEntryDate) {
+      document.getElementById('sd-stat-streak').textContent = '0';
+      return;
+    }
+    var diffTime = checkDate - new Date(newestEntryDate.getFullYear(), newestEntryDate.getMonth(), newestEntryDate.getDate());
+    var diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+    if (diffDays > 1) {
+      document.getElementById('sd-stat-streak').textContent = '0';
+      return;
+    }
+
+    for (var i = 0; i < uniqueDates.length; i++) {
+      var entryD = uniqueDates[i];
+      var diff = (checkDate - new Date(entryD.getFullYear(), entryD.getMonth(), entryD.getDate())) / (1000 * 60 * 60 * 24);
+      if (diff === currentStreak || diff === (currentStreak + 1)) {
+        currentStreak = Math.floor(diff) + 1;
+      } else {
+        break;
+      }
+    }
+    document.getElementById('sd-stat-streak').textContent = currentStreak;
+  }
+
+  
+  
+  function updateComposeHabitsUI() {
+    document.querySelectorAll('#sd-compose-habits .sd-habit-btn').forEach(function(btn) {
+      var habit = btn.getAttribute('data-habit');
+      if (selectedHabits.indexOf(habit) !== -1) {
+        btn.classList.add('sd-active');
+      } else {
+        btn.classList.remove('sd-active');
+      }
+    });
+  }
+
+  function openNewComposeSheet(defaultDate) {
+    editingId = null;
+    sheetTitle.textContent = '新規作成';
+    textarea.value = '';
+    inputTags.value = '';
+    
+    var d = defaultDate || new Date();
+    var tzOffset = d.getTimezoneOffset() * 60000;
+    var localISOTime = (new Date(d.getTime() - tzOffset)).toISOString().slice(0, 16);
+    inputDate.value = localISOTime;
+
+    selectedImages = [];
+    renderComposeMediaPreview();
+
+    selectedHabits = [];
+    updateComposeHabitsUI();
+
+    selectedMood = '📝';
+    composeMoodContainer.querySelectorAll('.sd-compose-mood-btn').forEach(function(b) {
+      b.classList.remove('sd-active');
+      if (b.getAttribute('data-mood') === '📝') b.classList.add('sd-active');
+    });
+
+    saveBtn.disabled = true;
+    composeSheet.classList.remove('sd-hidden');
+    textarea.focus();
+  }
+
+  function openEditSheet(entry) {
+    editingId = entry.id;
+    sheetTitle.textContent = '編集';
+    textarea.value = entry.text;
+    
+    inputTags.value = Array.isArray(entry.tags) ? entry.tags.map(function(t) { return '#' + t; }).join(' ') : '';
+    
+    var d = new Date(entry.ts);
+    var tzOffset = d.getTimezoneOffset() * 60000;
+    var localISOTime = (new Date(d.getTime() - tzOffset)).toISOString().slice(0, 16);
+    inputDate.value = localISOTime;
+
+    selectedMood = entry.mood || '📝';
+    composeMoodContainer.querySelectorAll('.sd-compose-mood-btn').forEach(function(b) {
+      b.classList.remove('sd-active');
+      if (b.getAttribute('data-mood') === selectedMood) b.classList.add('sd-active');
+    });
+
+    selectedImages = Array.isArray(entry.images) ? entry.images.slice() : [];
+    renderComposeMediaPreview();
+
+    selectedHabits = Array.isArray(entry.habits) ? entry.habits.slice() : [];
+    updateComposeHabitsUI();
+
+    saveBtn.disabled = !textarea.value.trim();
+    composeSheet.classList.remove('sd-hidden');
+    textarea.focus();
+  }
+
+  function handleImageUpload(e) {
+    var files = Array.from(e.target.files);
+    files.forEach(function(file) {
+      var reader = new FileReader();
+      reader.onload = function(evt) {
+        compressImage(evt.target.result, function(compressedBase64) {
+          selectedImages.push(compressedBase64);
+          renderComposeMediaPreview();
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+    mediaInput.value = '';
+  }
+
+  
+  function compressImage(base64Str, callback) {
+    var img = new Image();
+    img.src = base64Str;
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      var MAX_WIDTH = 1000;
+      var MAX_HEIGHT = 1000;
+      var width = img.width;
+      var height = img.height;
+
+      if (width > height) {
+        if (width > MAX_WIDTH) {
+          height *= MAX_WIDTH / width;
+          width = MAX_WIDTH;
+        }
+      } else {
+        if (height > MAX_HEIGHT) {
+          width *= MAX_HEIGHT / height;
+          height = MAX_HEIGHT;
+        }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      var compressed = canvas.toDataURL('image/jpeg', 0.7);
+      callback(compressed);
+    };
+  }
+
+  function renderComposeMediaPreview() {
+    mediaPreview.innerHTML = '';
+    selectedImages.forEach(function(imgBase64, index) {
+      var wrapper = document.createElement('div');
+      wrapper.className = 'sd-media-thumb-wrapper';
+      
+      var img = document.createElement('img');
+      img.className = 'sd-media-thumb';
+      img.src = imgBase64;
+      
+      var del = document.createElement('button');
+      del.className = 'sd-media-thumb-del';
+      del.textContent = '×';
+      del.addEventListener('click', function() {
+        selectedImages.splice(index, 1);
+        renderComposeMediaPreview();
+      });
+
+      wrapper.appendChild(img);
+      wrapper.appendChild(del);
+      mediaPreview.appendChild(wrapper);
+    });
+  }
+
+  function saveComposeSheet() {
+    var text = textarea.value.trim();
+    if (!text) return;
+
+    var inputTime = new Date(inputDate.value).getTime() || Date.now();
+    var textTags = extractTags(inputTags.value);
+    var inlineTags = extractTags(text);
+    var combinedTags = Array.from(new Set(textTags.concat(inlineTags)));
+
+    var entry = {
+      id: editingId || generateId(),
+      text: text,
+      mood: selectedMood,
+      ts: inputTime,
+      images: selectedImages,
+      habits: selectedHabits,
+      favorite: false,
+      tags: combinedTags
+    };
+
+    if (editingId) {
+      dbGetAll(function(entries) {
+        var old = entries.find(function(e) { return e.id === editingId; });
+        if (old) entry.favorite = old.favorite;
+        
+        dbPut(entry, function() {
+          composeSheet.classList.add('sd-hidden');
+          renderTimeline();
+          if (currentTab === 'calendar') {
+            renderCalendarDays();
+            renderCalendarFocusedList();
+          }
+          pushToCloud();
+        });
+      });
+    } else {
+      dbPut(entry, function() {
+        composeSheet.classList.add('sd-hidden');
+        renderTimeline();
+        if (currentTab === 'calendar') {
+          renderCalendarDays();
+          renderCalendarFocusedList();
+        }
+        pushToCloud();
+      });
+    }
+  }
+
+  
+  
+  function exportData() {
+    dbGetAll(function(entries) {
+      var exportPayload = {
+        app: 'SecretDiary',
+        exportedAt: new Date().toISOString(),
+        entries: entries,
+        desires: desires
+      };
+      var blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'backup_' + new Date().toISOString().split('T')[0] + '.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  function importData(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    
+    var reader = new FileReader();
+    reader.onload = function(evt) {
+      try {
+        var imported = JSON.parse(evt.target.result);
+        if (imported.app === 'SecretDiary' && Array.isArray(imported.entries)) {
+          if (confirm(imported.entries.length + ' 件の日記を読み込みます。よろしいですか？')) {
+            var transaction = db.transaction([STORE_NAME], 'readwrite');
+            var store = transaction.objectStore(STORE_NAME);
+            imported.entries.forEach(function(entry) {
+              store.put(entry);
+            });
+            
+            if (imported.desires) {
+              desires = imported.desires;
+              dbPutSetting('sd_desires_data', desires);
+              localStorage.setItem('sd_desires_data', JSON.stringify(desires));
+            }
+
+            transaction.oncomplete = function() {
+              alert('インポートが完了しました。');
+              renderTimeline();
+              renderStats();
+              renderCalendarDays();
+              if (currentTab === 'desires') renderDesires();
+            };
+          }
+        } else {
+          alert('非対応のファイル形式です。');
+        }
+      } catch(err) {
+        alert('ファイルの読み込みに失敗しました。');
+      }
+    };
+    reader.readAsText(file);
+    importFile.value = '';
+  }
+
+  function clearAllData() {
+    if (confirm('重要: すべての日記、写真、タグが完全に削除されます。よろしいですか？')) {
+      if (confirm('本当によろしいですか？この操作は取り消せません。')) {
+        dbClearAll(function() {
+          localStorage.removeItem('sd_pin_lock_enabled');
+          localStorage.removeItem('sd_pin_lock_hash');
+          alert('すべてのデータを削除しました。');
+          window.location.reload();
+        });
+      }
+    }
+  }
+
+  
+  
+  function checkPinLockOnLaunch() {
+    var isEnabled = localStorage.getItem('sd_pin_lock_enabled') === 'true';
+    var pinHash = localStorage.getItem('sd_pin_lock_hash');
+    
+    if (isEnabled && pinHash) {
+      lockScreen.classList.remove('sd-hidden');
+      overlay.classList.add('sd-hidden');
+      enteredPin = "";
+      updatePinDots();
+    } else {
+      lockScreen.classList.add('sd-hidden');
+      overlay.classList.remove('sd-hidden');
+      initDB(function() {
+        renderTimeline();
+        initSyncKey();
+      });
+    }
+  }
+
+  function updatePinDots() {
+    var dots = pinDotsContainer.querySelectorAll('.sd-pin-dot');
+    dots.forEach(function(dot, idx) {
+      if (idx < enteredPin.length) {
+        dot.classList.add('sd-filled');
+      } else {
+        dot.classList.remove('sd-filled');
+      }
+    });
+  }
+
+  function handleKeypadPress(val) {
+    if (enteredPin.length < 4) {
+      enteredPin += val;
+      updatePinDots();
+      
+      if (enteredPin.length === 4) {
+        setTimeout(verifyPin, 180);
+      }
+    }
+  }
+
+  function verifyPin() {
+    var storedHash = localStorage.getItem('sd_pin_lock_hash');
+    var inputHash = simpleHash(enteredPin);
+    
+    if (inputHash === storedHash) {
+      lockScreen.classList.add('sd-hidden');
+      overlay.classList.remove('sd-hidden');
+      initDB(function() {
+        renderTimeline();
+        initSyncKey();
+      });
+    } else {
+      pinDotsContainer.classList.add('sd-keypad-shake');
+      
+      setTimeout(function() {
+        pinDotsContainer.classList.remove('sd-keypad-shake');
+        enteredPin = "";
+        updatePinDots();
+      }, 400);
+    }
+  }
+
+  function simpleHash(str) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0;
+    }
+    return 'h_' + hash;
+  }
+
+  function setupPinSetupModal() {
+    pinSetupInput1.value = "";
+    pinSetupInput2.value = "";
+    pinSetupModal.classList.remove('sd-hidden');
+    pinSetupInput1.focus();
+  }
+
+  function savePinSetup() {
+    var pin1 = pinSetupInput1.value;
+    var pin2 = pinSetupInput2.value;
+
+    if (pin1.length !== 4 || !/^\d+$/.test(pin1)) {
+      alert('パスコードは4桁の数字で入力してください。');
+      return;
+    }
+    if (pin1 !== pin2) {
+      alert('確認用のパスコードが一致しません。');
+      return;
+    }
+
+    localStorage.setItem('sd_pin_lock_enabled', 'true');
+    localStorage.setItem('sd_pin_lock_hash', simpleHash(pin1));
+    pinSetupModal.classList.add('sd-hidden');
+    
+    lockToggle.checked = true;
+    changePinRow.classList.remove('sd-hidden');
+    alert('パスコードを設定しました。');
+  }
+
+  
+  
+  function initEventListeners() {
+    fab.addEventListener('click', function() {
+      openNewComposeSheet(currentTab === 'calendar' ? calendarSelectedDate : new Date());
+    });
+    
+    closeBtn.addEventListener('click', function() {
+      overlay.classList.add('sd-closing');
+      setTimeout(function() {
+        window.location.href = '../';
+      }, 300);
+    });
+
+    cancelBtn.addEventListener('click', function() { composeSheet.classList.add('sd-hidden'); });
+    saveBtn.addEventListener('click', saveComposeSheet);
+    
+    textarea.addEventListener('input', function() {
+      saveBtn.disabled = !textarea.value.trim();
+    });
+
+    
+    document.querySelectorAll('.sd-theme-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var theme = btn.getAttribute('data-theme');
+        
+        document.querySelectorAll('.sd-theme-btn').forEach(function(b) {
+          b.classList.toggle('sd-active', b === btn);
+        });
+
+        var overlay = document.getElementById('secret-diary-overlay');
+        var lockScreen = document.getElementById('sd-lock-screen');
+        
+        var themes = ['theme-midnight-green', 'theme-rose-gold', 'theme-deep-purple', 'theme-aqua-blue'];
+        themes.forEach(function(t) {
+          overlay.classList.remove(t);
+          if (lockScreen) lockScreen.classList.remove(t);
+        });
+
+        if (theme !== 'default') {
+          overlay.classList.add('theme-' + theme);
+          if (lockScreen) lockScreen.classList.add('theme-' + theme);
+        }
+
+        localStorage.setItem('sd_theme', theme);
+      });
+    });
+
+    
+    document.querySelectorAll('#sd-compose-habits .sd-habit-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var habit = btn.getAttribute('data-habit');
+        var idx = selectedHabits.indexOf(habit);
+        if (idx === -1) {
+          selectedHabits.push(habit);
+          btn.classList.add('sd-active');
+        } else {
+          selectedHabits.splice(idx, 1);
+          btn.classList.remove('sd-active');
+        }
+      });
+    });
+
+    document.querySelectorAll('.sd-editor-tool').forEach(function(tool) {
+      tool.addEventListener('click', function() {
+        var wrap = tool.getAttribute('data-wrap');
+        var start = textarea.selectionStart;
+        var end = textarea.selectionEnd;
+        var text = textarea.value;
+        
+        var selected = text.substring(start, end);
+        var replacement = wrap + (selected || 'text') + wrap;
+        textarea.value = text.substring(0, start) + replacement + text.substring(end);
+        
+        textarea.focus();
+        textarea.selectionStart = start + wrap.length;
+        textarea.selectionEnd = start + wrap.length + (selected ? selected.length : 4);
+        saveBtn.disabled = !textarea.value.trim();
+      });
+    });
+
+    composeMoodContainer.addEventListener('click', function(e) {
+      var btn = e.target.closest('.sd-compose-mood-btn');
+      if (!btn) return;
+      composeMoodContainer.querySelectorAll('.sd-compose-mood-btn').forEach(function(b) {
+        b.classList.remove('sd-active');
+      });
+      btn.classList.add('sd-active');
+      selectedMood = btn.getAttribute('data-mood');
+    });
+
+    mediaTrigger.addEventListener('click', function() { mediaInput.click(); });
+    mediaInput.addEventListener('change', handleImageUpload);
+
+    tabButtons.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var targetTab = btn.getAttribute('data-tab');
+        if (targetTab === currentTab) return;
+
+        tabButtons.forEach(function(b) { b.classList.remove('sd-active'); });
+        tabContents.forEach(function(c) { c.classList.remove('sd-active'); });
+        
+        btn.classList.add('sd-active');
+        document.getElementById('sd-tab-' + targetTab).classList.add('sd-active');
+        
+        currentTab = targetTab;
+        pullFromCloud();
+        
+        if (currentTab === 'timeline') {
+          headerTitleText.textContent = '日記';
+          headerActionsTimeline.style.display = 'flex';
+          fab.style.display = 'flex';
+          renderTimeline();
+        } else if (currentTab === 'calendar') {
+          headerTitleText.textContent = 'カレンダー';
+          headerActionsTimeline.style.display = 'none';
+          searchBar.classList.add('sd-hidden');
+          fab.style.display = 'none';
+          renderCalendarDays();
+          renderCalendarFocusedList();
+        } else if (currentTab === 'gaman') {
+          headerTitleText.textContent = '我慢';
+          headerActionsTimeline.style.display = 'none';
+          searchBar.classList.add('sd-hidden');
+          fab.style.display = 'none';
+          renderGaman();
+        } else if (currentTab === 'desires') {
+          headerTitleText.textContent = '欲';
+          headerActionsTimeline.style.display = 'none';
+          searchBar.classList.add('sd-hidden');
+          fab.style.display = 'none';
+          renderDesires();
+        } else if (currentTab === 'stats') {
+          headerTitleText.textContent = '統計';
+          headerActionsTimeline.style.display = 'none';
+          searchBar.classList.add('sd-hidden');
+          fab.style.display = 'none';
+          renderStats();
+        } else if (currentTab === 'settings') {
+          headerTitleText.textContent = '設定';
+          headerActionsTimeline.style.display = 'none';
+          searchBar.classList.add('sd-hidden');
+          fab.style.display = 'none';
+        }
+      });
+    });
+
+    calPrevBtn.addEventListener('click', function() {
+      calendarDate.setMonth(calendarDate.getMonth() - 1);
+      renderCalendarDays();
+    });
+    calNextBtn.addEventListener('click', function() {
+      calendarDate.setMonth(calendarDate.getMonth() + 1);
+      renderCalendarDays();
+    });
+    calendarAddBtn.addEventListener('click', function() {
+      openNewComposeSheet(calendarSelectedDate);
+    });
+
+    
+    gamanTrigger.addEventListener('click', incrementGaman);
+    gamanResetBtn.addEventListener('click', resetGaman);
+    gamanHistoryBtn.addEventListener('click', function() {
+      renderGamanHistory();
+      gamanHistoryModal.classList.remove('sd-hidden');
+    });
+    gamanHistoryClose.addEventListener('click', function() {
+      gamanHistoryModal.classList.add('sd-hidden');
+    });
+    gamanHistoryModal.addEventListener('click', function(e) {
+      if (e.target === gamanHistoryModal) gamanHistoryModal.classList.add('sd-hidden');
+    });
+
+    
+    gamanSyncSaveBtn.addEventListener('click', handleSyncButtonClick);
+    if (syncConfirmCancel) {
+      syncConfirmCancel.addEventListener('click', function() {
+        syncConfirmDialog.classList.add('sd-hidden');
+      });
+    }
+    if (syncConfirmOk) {
+      syncConfirmOk.addEventListener('click', function() {
+        executeSyncDisconnect();
+        syncConfirmDialog.classList.add('sd-hidden');
+      });
+    }
+    gamanSyncCopyKeyBtn.addEventListener('click', function() {
+      var key = localStorage.getItem('sd_gaman_sync_key');
+      if (!key) return;
+      
+      navigator.clipboard.writeText(key)
+      .then(function() {
+        var origHtml = gamanSyncCopyKeyBtn.innerHTML;
+        gamanSyncCopyKeyBtn.textContent = 'コピーしました！';
+        setTimeout(function() {
+          gamanSyncCopyKeyBtn.innerHTML = origHtml;
+        }, 1500);
+      })
+      .catch(function(err) {
+        alert('コピーに失敗しました。このキーを手動でコピーしてください:\n' + key);
+      });
+    });
+
+    
+    scoreSlider.addEventListener('input', function() {
+      var val = scoreSlider.value;
+      scoreDisplayVal.textContent = val;
+      scoreDisplayEval.textContent = getScoreEvaluation(val);
+    });
+    scoreDialogSkip.addEventListener('click', function() {
+      scoreDialog.classList.add('sd-hidden');
+      var todayStr = formatDate(new Date());
+      localStorage.setItem('sd_last_daily_score_check_date', todayStr);
+    });
+    scoreDialogSave.addEventListener('click', function() {
+      if (scoreEditTargetDate) {
+        saveScore(scoreEditTargetDate, scoreSlider.value);
+      }
+      scoreDialog.classList.add('sd-hidden');
+      var todayStr = formatDate(new Date());
+      localStorage.setItem('sd_last_daily_score_check_date', todayStr);
+    });
+    focusedScoreBtn.addEventListener('click', function() {
+      if (calendarSelectedDate) {
+        var dateStr = formatDate(calendarSelectedDate);
+        showScoreDialog(dateStr, false);
+      }
+    });
+
+    searchToggle.addEventListener('click', function() {
+      searchBar.classList.toggle('sd-hidden');
+      if (!searchBar.classList.contains('sd-hidden')) {
+        searchInput.focus();
+      } else {
+        searchInput.value = '';
+        currentSearchQuery = '';
+        renderTimeline();
+      }
+    });
+    searchInput.addEventListener('input', function() {
+      currentSearchQuery = searchInput.value;
+      renderTimeline();
+    });
+    
+    favFilterToggle.addEventListener('click', function() {
+      showFavoritesOnly = !showFavoritesOnly;
+      favFilterToggle.classList.toggle('sd-active', showFavoritesOnly);
+      renderTimeline();
+    });
+
+    document.querySelectorAll('.sd-key-btn[data-val]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        handleKeypadPress(btn.getAttribute('data-val'));
+      });
+    });
+    document.getElementById('sd-pin-delete').addEventListener('click', function() {
+      if (enteredPin.length > 0) {
+        enteredPin = enteredPin.slice(0, -1);
+        updatePinDots();
+      }
+    });
+
+    lockToggle.addEventListener('change', function() {
+      if (lockToggle.checked) {
+        setupPinSetupModal();
+      } else {
+        localStorage.removeItem('sd_pin_lock_enabled');
+        localStorage.removeItem('sd_pin_lock_hash');
+        changePinRow.classList.add('sd-hidden');
+        alert('パスコードロックを解除しました。');
+      }
+    });
+    changePinBtn.addEventListener('click', setupPinSetupModal);
+    
+    pinSetupCancel.addEventListener('click', function() {
+      pinSetupModal.classList.add('sd-hidden');
+      var isCurrentlyEnabled = localStorage.getItem('sd_pin_lock_enabled') === 'true';
+      lockToggle.checked = isCurrentlyEnabled;
+    });
+    pinSetupSave.addEventListener('click', savePinSetup);
+
+    
+    var addBtn = document.getElementById('sd-desire-add-btn');
+    var desireInput = document.getElementById('sd-desire-input');
+    if (addBtn) {
+      addBtn.addEventListener('click', addDesireItem);
+    }
+    if (desireInput) {
+      desireInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          addDesireItem();
+        }
+      });
+    }
+
+    document.querySelectorAll('.sd-segmented-control .sd-segment-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var type = btn.getAttribute('data-type');
+        if (type === currentDesireTab) return;
+        
+        document.querySelectorAll('.sd-segmented-control .sd-segment-btn').forEach(function(b) {
+          b.classList.toggle('sd-active', b === btn);
+        });
+
+        currentDesireTab = type;
+        
+        var inputEl = document.getElementById('sd-desire-input');
+        if (inputEl) {
+          inputEl.placeholder = type === 'wants' ? '新しい「やりたいこと」を入力...' : '新しい「死ぬまでにやりたいこと」を入力...';
+        }
+
+        renderDesires();
+      });
+    });
+
+    exportBtn.addEventListener('click', exportData);
+    importTrigger.addEventListener('click', function() { importFile.click(); });
+    importFile.addEventListener('change', importData);
+    clearAllBtn.addEventListener('click', clearAllData);
+  }
+
+  
+  
+  function loadSettingsConfig() {
+    var isEnabled = localStorage.getItem('sd_pin_lock_enabled') === 'true';
+    lockToggle.checked = isEnabled;
+    if (isEnabled) {
+      changePinRow.classList.remove('sd-hidden');
+    } else {
+      changePinRow.classList.add('sd-hidden');
+    }
+
+    
+    var savedTheme = localStorage.getItem('sd_theme') || 'default';
+    var themeBtn = document.querySelector('.sd-theme-btn[data-theme="' + savedTheme + '"]');
+    if (themeBtn) {
+      document.querySelectorAll('.sd-theme-btn').forEach(function(b) {
+        b.classList.toggle('sd-active', b === themeBtn);
+      });
+    }
+
+    var overlay = document.getElementById('secret-diary-overlay');
+    var lockScreen = document.getElementById('sd-lock-screen');
+    if (savedTheme !== 'default') {
+      overlay.classList.add('theme-' + savedTheme);
+      if (lockScreen) lockScreen.classList.add('theme-' + savedTheme);
+    }
+
+    loadDesiresData();
+  }
+
+  loadSettingsConfig();
+  initEventListeners();
+  checkPinLockOnLaunch();
+
+})();
+</script>
+
+
+</body>
+</html>
