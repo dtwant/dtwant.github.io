@@ -175,16 +175,59 @@
           </div>
 
           
-          <div class="sd-desires-input-group">
-            <input type="text" id="sd-desire-input" class="sd-simple-input" placeholder="新しい「やりたいこと」を入力..." autocomplete="off" />
-            <button class="sd-apple-btn sd-primary-btn" id="sd-desire-add-btn">
-              追加
-            </button>
+          <div class="sd-desires-input-container">
+            <div class="sd-desires-input-group">
+              <input type="text" id="sd-desire-input" class="sd-simple-input" placeholder="新しい「やりたいこと」を入力..." autocomplete="off" />
+              <button class="sd-apple-btn sd-primary-btn" id="sd-desire-add-btn">追加</button>
+            </div>
+            <div class="sd-desires-options-group">
+              <div class="sd-desires-option">
+                <label for="sd-desire-priority">優先度</label>
+                <select id="sd-desire-priority" class="sd-desires-select">
+                  <option value="1">低</option>
+                  <option value="2" selected>中</option>
+                  <option value="3">高</option>
+                </select>
+              </div>
+              <div class="sd-desires-option">
+                <label for="sd-desire-duedate">目標期限</label>
+                <input type="date" id="sd-desire-duedate" class="sd-desires-date-input" />
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="sd-desires-toolbar">
+            <div class="sd-desires-filters">
+              <button class="sd-filter-chip sd-active" data-filter="all" id="sd-filter-all">すべて</button>
+              <button class="sd-filter-chip" data-filter="pending" id="sd-filter-pending">未完了</button>
+              <button class="sd-filter-chip" data-filter="completed" id="sd-filter-completed">完了済</button>
+            </div>
+            <div class="sd-desires-sort">
+              <select id="sd-desires-sort-by" class="sd-desires-select-sm">
+                <option value="date-desc">追加日 (新)</option>
+                <option value="date-asc">追加日 (古)</option>
+                <option value="priority-desc">優先度 (高)</option>
+                <option value="priority-asc">優先度 (低)</option>
+                <option value="due-date">期限順</option>
+              </select>
+            </div>
           </div>
 
           
           <div class="sd-desires-list" id="sd-desires-list">
             
+          </div>
+
+          
+          <div class="sd-desires-completed-wrapper sd-hidden" id="sd-desires-completed-wrapper">
+            <div class="sd-desires-completed-header" id="sd-desires-completed-header">
+              <span>完了済みの項目 (<span id="sd-desires-completed-count">0</span>)</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="sd-arrow-icon"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="sd-desires-completed-list sd-hidden" id="sd-desires-completed-list">
+              
+            </div>
           </div>
         </div>
       </div>
@@ -496,6 +539,40 @@
     <div class="sd-dialog-footer">
       <button class="sd-dialog-btn sd-dialog-btn-outline" id="sd-sync-confirm-cancel">キャンセル</button>
       <button class="sd-dialog-btn sd-dialog-btn-primary" id="sd-sync-confirm-ok" style="background:var(--apple-red); color:#fff; border:none;">解除する</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="sd-modal-overlay sd-hidden" id="sd-desire-edit-modal" style="z-index: 260000;">
+  <div class="sd-modal">
+    <div class="sd-modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--apple-border); padding-bottom:8px;">
+      <span class="sd-modal-title">項目の編集</span>
+      <button class="sd-icon-btn" id="sd-desire-edit-close" style="width:28px; height:28px; border-radius:50%;">✕</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 14px; margin: 16px 0;">
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <label style="font-size: 12px; color: var(--apple-text-secondary); text-align: left; display: block;">やりたいこと</label>
+        <input type="text" id="sd-desire-edit-input" class="sd-simple-input" style="background:rgba(255,255,255,0.05); border:1px solid var(--apple-border); padding:8px 12px; border-radius:8px;" />
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-size: 12px; color: var(--apple-text-secondary); text-align: left; display: block;">優先度</label>
+          <select id="sd-desire-edit-priority" class="sd-desires-select" style="width:100%;">
+            <option value="1">低</option>
+            <option value="2">中</option>
+            <option value="3">高</option>
+          </select>
+        </div>
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-size: 12px; color: var(--apple-text-secondary); text-align: left; display: block;">目標期限</label>
+          <input type="date" id="sd-desire-edit-duedate" class="sd-desires-date-input" style="width:100%;" />
+        </div>
+      </div>
+    </div>
+    <div class="sd-modal-actions" style="margin-top: 12px;">
+      <button class="sd-modal-btn sd-modal-cancel" id="sd-desire-edit-cancel">キャンセル</button>
+      <button class="sd-modal-btn sd-modal-save" id="sd-desire-edit-save">保存する</button>
     </div>
   </div>
 </div>
@@ -2132,6 +2209,7 @@
   font-weight: 700;
   color: var(--apple-text-primary);
   margin-top: -4px;
+}
  
 .sd-desires-container {
   display: flex;
@@ -2210,6 +2288,15 @@
 }
 
  
+.sd-desires-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--apple-border);
+  border-radius: 14px;
+  padding: 12px;
+}
 .sd-desires-input-group {
   display: flex;
   gap: 10px;
@@ -2234,6 +2321,181 @@
   padding: 0 20px;
   font-size: 14px;
   border-radius: 10px;
+  cursor: pointer;
+}
+.sd-desires-options-group {
+  display: flex;
+  gap: 16px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+.sd-desires-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sd-desires-option label {
+  font-size: 12px;
+  color: var(--apple-text-secondary);
+  font-weight: 500;
+}
+.sd-desires-select {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--apple-border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--apple-text-primary);
+  outline: none;
+  cursor: pointer;
+}
+.sd-desires-date-input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--apple-border);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 12px;
+  color: var(--apple-text-primary);
+  outline: none;
+  cursor: pointer;
+}
+
+ 
+.sd-desires-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.sd-desires-filters {
+  display: flex;
+  gap: 6px;
+}
+.sd-filter-chip {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--apple-border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sd-filter-chip:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--apple-text-primary);
+}
+.sd-filter-chip.sd-active {
+  background: var(--apple-blue);
+  color: #fff;
+  border-color: var(--apple-blue);
+}
+.sd-desires-sort .sd-desires-select-sm {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--apple-border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--apple-text-primary);
+  outline: none;
+  cursor: pointer;
+}
+
+ 
+.sd-desire-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.sd-desire-priority-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.sd-desire-priority-1 {
+  background: rgba(10, 132, 255, 0.15);
+  color: var(--apple-blue);
+}
+.sd-desire-priority-2 {
+  background: rgba(255, 159, 10, 0.15);
+  color: var(--apple-orange);
+}
+.sd-desire-priority-3 {
+  background: rgba(255, 69, 58, 0.15);
+  color: var(--apple-red);
+}
+.sd-desire-duedate-badge {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--apple-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--apple-border);
+}
+.sd-desire-duedate-badge.sd-duedate-urgent {
+  background: rgba(255, 159, 10, 0.1);
+  color: var(--apple-orange);
+  border-color: rgba(255, 159, 10, 0.2);
+}
+.sd-desire-duedate-badge.sd-duedate-overdue {
+  background: rgba(255, 69, 58, 0.12);
+  color: var(--apple-red);
+  border-color: rgba(255, 69, 58, 0.2);
+}
+
+ 
+.sd-desires-completed-wrapper {
+  margin-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 16px;
+}
+.sd-desires-completed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--apple-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+.sd-desires-completed-header:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+.sd-desires-completed-header span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+}
+.sd-desires-completed-header .sd-arrow-icon {
+  color: var(--apple-text-secondary);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sd-desires-completed-header.sd-active .sd-arrow-icon {
+  transform: rotate(-180deg);
+}
+.sd-desires-completed-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sd-desires-completed-list.sd-hidden {
+  display: none;
 }
 
  
@@ -2335,7 +2597,6 @@
 .sd-desire-action-btn.sd-delete:hover {
   color: var(--apple-red);
   background: rgba(255, 59, 48, 0.1);
-}
 }
 </style>
 
@@ -2453,6 +2714,9 @@
   var selectedImages = []; 
   var selectedHabits = []; 
   var currentDesireTab = 'wants'; 
+  var currentDesireFilter = 'all'; 
+  var currentDesireSort = 'date-desc'; 
+  var desireToEdit = null;
   var desires = { wants: [], bucketList: [] };
   var editingId = null;
   
@@ -3391,27 +3655,54 @@
     if (bucketText) bucketText.textContent = bucketCompleted + ' / ' + bucketTotal + ' (' + bucketPct + '%)';
 
     var listContainer = document.getElementById('sd-desires-list');
+    var completedWrapper = document.getElementById('sd-desires-completed-wrapper');
+    var completedList = document.getElementById('sd-desires-completed-list');
+    var completedCountSpan = document.getElementById('sd-desires-completed-count');
+    
     if (!listContainer) return;
     listContainer.innerHTML = '';
+    if (completedList) completedList.innerHTML = '';
 
     var activeList = currentDesireTab === 'wants' ? wantsList : bucketList;
 
-    if (activeList.length === 0) {
-      var emptyMsg = document.createElement('div');
-      emptyMsg.style.cssText = 'text-align:center; padding:40px 20px; font-size:13px; color:var(--apple-text-tertiary);';
-      emptyMsg.textContent = 'やりたいことがまだ登録されていません。上の入力欄から追加してください。';
-      listContainer.appendChild(emptyMsg);
-      return;
-    }
-
-    var sortedList = activeList.slice().sort(function(a, b) {
-      if (a.done === b.done) {
-        return b.ts - a.ts;
-      }
-      return a.done ? 1 : -1;
+    
+    activeList = activeList.map(function(item) {
+      if (item.priority === undefined) item.priority = 2; 
+      if (item.dueDate === undefined) item.dueDate = '';
+      return item;
     });
 
-    sortedList.forEach(function(item) {
+    
+    var filteredList = activeList.filter(function(item) {
+      if (currentDesireFilter === 'pending') return !item.done;
+      if (currentDesireFilter === 'completed') return item.done;
+      return true; 
+    });
+
+    
+    filteredList.sort(function(a, b) {
+      if (currentDesireSort === 'date-desc') return b.ts - a.ts;
+      if (currentDesireSort === 'date-asc') return a.ts - b.ts;
+      if (currentDesireSort === 'priority-desc') {
+        if (b.priority !== a.priority) return b.priority - a.priority;
+        return b.ts - a.ts;
+      }
+      if (currentDesireSort === 'priority-asc') {
+        if (b.priority !== a.priority) return a.priority - b.priority;
+        return b.ts - a.ts;
+      }
+      if (currentDesireSort === 'due-date') {
+        if (!a.dueDate) return 1;
+        if (!b.dueDate) return -1;
+        return a.dueDate.localeCompare(b.dueDate);
+      }
+      return b.ts - a.ts;
+    });
+
+    var pendingCount = 0;
+    var completedCount = 0;
+
+    filteredList.forEach(function(item) {
       var el = document.createElement('div');
       el.className = 'sd-desire-item' + (item.done ? ' sd-completed' : '');
       el.setAttribute('data-id', item.id);
@@ -3434,12 +3725,56 @@
 
       textWrapper.appendChild(textSpan);
 
+      
+      var metaRow = document.createElement('div');
+      metaRow.className = 'sd-desire-meta-row';
+
+      
+      var pText = item.priority === 3 ? '高' : (item.priority === 1 ? '低' : '中');
+      var pBadge = document.createElement('span');
+      pBadge.className = 'sd-desire-priority-badge sd-desire-priority-' + item.priority;
+      pBadge.textContent = pText;
+      metaRow.appendChild(pBadge);
+
+      
+      if (item.dueDate && !item.done) {
+        var dateBadge = document.createElement('span');
+        dateBadge.className = 'sd-desire-duedate-badge';
+        
+        var today = new Date();
+        today.setHours(0,0,0,0);
+        var due = new Date(item.dueDate);
+        due.setHours(0,0,0,0);
+        var diffTime = due.getTime() - today.getTime();
+        var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        var dateIcon = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:2px; vertical-align:middle; display:inline-block;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+        
+        if (diffDays < 0) {
+          dateBadge.classList.add('sd-duedate-overdue');
+          dateBadge.innerHTML = dateIcon + '期限切れ (' + Math.abs(diffDays) + '日超過)';
+        } else if (diffDays === 0) {
+          dateBadge.classList.add('sd-duedate-urgent');
+          dateBadge.innerHTML = dateIcon + '今日期限';
+        } else if (diffDays <= 3) {
+          dateBadge.classList.add('sd-duedate-urgent');
+          dateBadge.innerHTML = dateIcon + '残り' + diffDays + '日';
+        } else {
+          dateBadge.innerHTML = dateIcon + item.dueDate.replace(/-/g, '/');
+        }
+        metaRow.appendChild(dateBadge);
+      }
+
+      
       if (item.completedTs && item.done) {
         var dateSpan = document.createElement('span');
         dateSpan.className = 'sd-desire-date';
+        dateSpan.style.cssText = 'font-size:11px; color:var(--apple-text-secondary); margin-left:4px;';
         dateSpan.textContent = '達成日: ' + formatLongDate(item.completedTs);
-        textWrapper.appendChild(dateSpan);
+        metaRow.appendChild(dateSpan);
       }
+
+      textWrapper.appendChild(metaRow);
 
       var actions = document.createElement('div');
       actions.className = 'sd-desire-actions';
@@ -3467,8 +3802,37 @@
       el.appendChild(textWrapper);
       el.appendChild(actions);
 
-      listContainer.appendChild(el);
+      
+      if (item.done) {
+        if (completedList) {
+          completedList.appendChild(el);
+          completedCount++;
+        } else {
+          listContainer.appendChild(el);
+          pendingCount++;
+        }
+      } else {
+        listContainer.appendChild(el);
+        pendingCount++;
+      }
     });
+
+    
+    if (completedWrapper && completedCountSpan) {
+      completedCountSpan.textContent = completedCount.toString();
+      if (completedCount > 0 && currentDesireFilter !== 'pending') {
+        completedWrapper.classList.remove('sd-hidden');
+      } else {
+        completedWrapper.classList.add('sd-hidden');
+      }
+    }
+
+    if (pendingCount === 0 && (currentDesireFilter === 'pending' || filteredList.length === 0)) {
+      var emptyMsg = document.createElement('div');
+      emptyMsg.style.cssText = 'text-align:center; padding:40px 20px; font-size:13px; color:var(--apple-text-tertiary);';
+      emptyMsg.textContent = '登録されているやりたいことがありません。';
+      listContainer.appendChild(emptyMsg);
+    }
   }
 
   function addDesireItem() {
@@ -3477,12 +3841,20 @@
     var text = input.value.trim();
     if (!text) return;
 
+    var prioritySelect = document.getElementById('sd-desire-priority');
+    var dateInput = document.getElementById('sd-desire-duedate');
+    
+    var priority = prioritySelect ? parseInt(prioritySelect.value) : 2;
+    var dueDate = dateInput ? dateInput.value : '';
+
     var newItem = {
       id: generateId(),
       text: text,
       done: false,
       ts: Date.now(),
-      completedTs: null
+      completedTs: null,
+      priority: priority,
+      dueDate: dueDate
     };
 
     if (currentDesireTab === 'wants') {
@@ -3494,6 +3866,9 @@
     }
 
     input.value = '';
+    if (dateInput) dateInput.value = '';
+    if (prioritySelect) prioritySelect.value = '2'; 
+
     saveDesiresData(function() {
       renderDesires();
     });
@@ -3525,19 +3900,54 @@
   }
 
   function editDesireItem(id, currentText) {
-    var newText = prompt('やりたいことを編集します:', currentText);
-    if (newText === null) return;
-    newText = newText.trim();
-    if (!newText) return;
-
     var list = currentDesireTab === 'wants' ? desires.wants : desires.bucketList;
     var item = list.find(function(i) { return i.id === id; });
-    if (item) {
-      item.text = newText;
-      saveDesiresData(function() {
-        renderDesires();
-      });
+    if (!item) return;
+
+    desireToEdit = item;
+
+    var editModal = document.getElementById('sd-desire-edit-modal');
+    var editInput = document.getElementById('sd-desire-edit-input');
+    var editPriority = document.getElementById('sd-desire-edit-priority');
+    var editDueDate = document.getElementById('sd-desire-edit-duedate');
+
+    if (editModal && editInput) {
+      editInput.value = item.text || '';
+      if (editPriority) editPriority.value = (item.priority !== undefined) ? item.priority.toString() : '2';
+      if (editDueDate) editDueDate.value = item.dueDate || '';
+      editModal.classList.remove('sd-hidden');
     }
+  }
+
+  function saveDesireEdit() {
+    if (!desireToEdit) return;
+
+    var editInput = document.getElementById('sd-desire-edit-input');
+    var editPriority = document.getElementById('sd-desire-edit-priority');
+    var editDueDate = document.getElementById('sd-desire-edit-duedate');
+
+    var text = editInput ? editInput.value.trim() : '';
+    if (!text) {
+      alert('項目を入力してください。');
+      return;
+    }
+
+    desireToEdit.text = text;
+    if (editPriority) desireToEdit.priority = parseInt(editPriority.value);
+    if (editDueDate) desireToEdit.dueDate = editDueDate.value;
+
+    saveDesiresData(function() {
+      closeDesireEditModal();
+      renderDesires();
+    });
+  }
+
+  function closeDesireEditModal() {
+    var editModal = document.getElementById('sd-desire-edit-modal');
+    if (editModal) {
+      editModal.classList.add('sd-hidden');
+    }
+    desireToEdit = null;
   }
 
   
@@ -4912,6 +5322,45 @@
       });
     }
 
+    
+    document.querySelectorAll('.sd-desires-filters .sd-filter-chip').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.sd-desires-filters .sd-filter-chip').forEach(function(b) {
+          b.classList.toggle('sd-active', b === btn);
+        });
+        currentDesireFilter = btn.getAttribute('data-filter') || 'all';
+        renderDesires();
+      });
+    });
+
+    
+    var sortBySelect = document.getElementById('sd-desires-sort-by');
+    if (sortBySelect) {
+      sortBySelect.addEventListener('change', function() {
+        currentDesireSort = sortBySelect.value;
+        renderDesires();
+      });
+    }
+
+    
+    var completedHeader = document.getElementById('sd-desires-completed-header');
+    var completedList = document.getElementById('sd-desires-completed-list');
+    if (completedHeader && completedList) {
+      completedHeader.addEventListener('click', function() {
+        var isHidden = completedList.classList.contains('sd-hidden');
+        completedList.classList.toggle('sd-hidden', !isHidden);
+        completedHeader.classList.toggle('sd-active', isHidden);
+      });
+    }
+
+    
+    var editModalClose = document.getElementById('sd-desire-edit-close');
+    var editModalCancel = document.getElementById('sd-desire-edit-cancel');
+    var editModalSave = document.getElementById('sd-desire-edit-save');
+    if (editModalClose) editModalClose.addEventListener('click', closeDesireEditModal);
+    if (editModalCancel) editModalCancel.addEventListener('click', closeDesireEditModal);
+    if (editModalSave) editModalSave.addEventListener('click', saveDesireEdit);
+
     document.querySelectorAll('.sd-segmented-control .sd-segment-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
         var type = btn.getAttribute('data-type');
@@ -4977,8 +5426,9 @@
     var pinSetup = document.getElementById('sd-pin-setup-modal');
     var historyModal = document.getElementById('sd-gaman-history-modal');
     var composeSheet = document.getElementById('sd-compose-sheet');
+    var desireEditModal = document.getElementById('sd-desire-edit-modal');
 
-    var elements = [overlay, lockScreen, confirmModal, scoreDialog, pinSetup, historyModal, composeSheet];
+    var elements = [overlay, lockScreen, confirmModal, scoreDialog, pinSetup, historyModal, composeSheet, desireEditModal];
     elements.forEach(function(el) {
       if (el && el.parentNode !== document.body) {
         document.body.appendChild(el);
