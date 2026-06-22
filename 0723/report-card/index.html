@@ -1197,6 +1197,57 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+ 
+.rc-app-container h1, .rc-app-container h2, .rc-app-container h3, .rc-app-container h4, .rc-app-container h5 {
+  color: inherit !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+}
+.rc-app-container p {
+  margin: 0 !important;
+  color: inherit !important;
+  line-height: inherit !important;
+}
+.rc-app-container a {
+  color: inherit !important;
+  text-decoration: none !important;
+  font-weight: inherit !important;
+}
+.rc-app-container button {
+  color: inherit !important;
+  margin: 0 !important;
+}
+.rc-app-container input, .rc-app-container select, .rc-app-container textarea {
+  color: inherit !important;
+  margin: 0 !important;
+  background-color: inherit !important;
+  border-color: inherit !important;
+}
+.rc-app-container svg {
+  display: inline-block !important;
+  margin: 0 !important;
+}
+.rc-app-container img {
+  margin: 0 !important;
+}
+.rc-app-container ul, .rc-app-container ol, .rc-app-container li {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+.rc-app-container hr {
+  margin: 0 !important;
+  border-color: var(--apple-border) !important;
+}
+.rc-app-container label {
+  color: inherit !important;
+  font-weight: inherit !important;
+}
+
 .rc-app {
   width: 100%;
   height: 100%;
@@ -4199,14 +4250,35 @@ input:disabled + .rc-slider {
   }
 
   
-  window.addEventListener('DOMContentLoaded', () => {
+  function init() {
+    
+    const container = document.querySelector('.rc-app-container');
+    if (container && container.parentNode !== document.body) {
+      document.body.appendChild(container);
+    }
+    
+    
+    const overlays = ['rc-detail-drawer', 'rc-subject-modal', 'rc-settings-modal', 'rc-confirm-modal', 'rc-toast-container'];
+    overlays.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.parentNode !== document.body) {
+        document.body.appendChild(el);
+      }
+    });
+
     initDB(() => {
       loadLocalData(() => {
         setupEventListeners();
         renderApp();
       });
     });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 
 })();
 </script>
