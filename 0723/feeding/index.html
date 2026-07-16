@@ -124,7 +124,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "42"
+    "wordCount": "59"
   }]
   </script>
 
@@ -923,6 +923,12 @@
     padding: 2px 10px;
     border-radius: 3px;
     margin-top: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .fl-sync-status:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 8px currentColor;
   }
   .fl-sync-online {
     background: rgba(16, 185, 129, 0.15);
@@ -1748,7 +1754,7 @@
       </div>
       <div style="width: 50px;"></div>
     </div>
-    <div class="fl-sync-status fl-sync-offline" id="fl-sync-badge">
+    <div class="fl-sync-status fl-sync-offline" id="fl-sync-badge" title="同期設定を表示">
       LOCAL ONLY
     </div>
   </header>
@@ -1864,6 +1870,31 @@
     <div id="fl-checklist-content" style="max-height: 50vh; overflow-y: auto; margin-bottom: 1rem;"></div>
     <div class="fl-modal-btns">
       <button class="fl-modal-btn cancel" id="fl-checklist-close" style="width:100%">閉じる</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="fl-modal-overlay" id="fl-sync-settings-overlay">
+  <div class="fl-modal">
+    <div class="fl-modal-title">⚙️ CLOUD_SYNC_SETTINGS</div>
+    <div class="fl-modal-meta">現在の同期ステータスと接続IDを確認できます。</div>
+    
+    <div style="margin: 1.5rem 0; text-align: left;">
+      <label style="font-family: 'Orbitron', sans-serif; font-size: 0.75rem; color: #10b981; display: block; margin-bottom: 0.5rem;">CURRENT BIN ID (READ ONLY)</label>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <input type="text" id="fl-sync-bin-id" readonly style="width: 100%; border: 1px solid #1f2937; border-radius: 4px; padding: 0.5rem; font-family: monospace; font-size: 0.8rem; color: #f3f4f6; outline: none; background: rgba(0,0,0,0.4);" />
+        <button id="fl-sync-copy-btn" style="background: #10b981; border: none; color: #000; font-weight: bold; font-size: 0.75rem; padding: 0.5rem 0.8rem; border-radius: 4px; cursor: pointer; white-space: nowrap;">コピー</button>
+      </div>
+      <p style="font-size: 0.65rem; color: #6b7280; margin-top: 0.4rem;">※ 誤操作防止のため、この画面からはIDの変更・保存はできません。</p>
+    </div>
+
+    <div style="margin-top: 1rem; border-top: 1px solid #1f2937; padding-top: 1rem;">
+      <a href="/project-x/sync-settings/" style="display: block; text-align: center; text-decoration: none; color: #10b981; font-size: 0.8rem; font-family: 'Orbitron', sans-serif; font-weight: bold; border: 1px solid #10b981; padding: 0.5rem; border-radius: 4px; background: rgba(16, 185, 129, 0.05); transition: all 0.2s;">⚙️ OPEN PORTAL SYNC SETTINGS</a>
+    </div>
+
+    <div class="fl-modal-btns" style="margin-top: 1.5rem;">
+      <button class="fl-modal-btn cancel" id="fl-sync-settings-close" style="width:100%">閉じる</button>
     </div>
   </div>
 </div>
@@ -2970,6 +3001,49 @@
     document.getElementById('fl-memo-cancel').addEventListener('click', closeMemo);
     memoOverlay.addEventListener('click', (e) => {
       if (e.target === memoOverlay) closeMemo();
+    });
+
+    
+    const syncSettingsOverlay = document.getElementById('fl-sync-settings-overlay');
+    const syncBinIdInput = document.getElementById('fl-sync-bin-id');
+    const syncCopyBtn = document.getElementById('fl-sync-copy-btn');
+    const syncSettingsClose = document.getElementById('fl-sync-settings-close');
+
+    function openSyncSettings() {
+      const directLocalId = localStorage.getItem(LS_BIN_KEY) || BIN_ID || '';
+      syncBinIdInput.value = directLocalId;
+      syncSettingsOverlay.style.display = 'flex';
+    }
+
+    function closeSyncSettings() {
+      syncSettingsOverlay.style.display = 'none';
+      syncCopyBtn.textContent = 'コピー';
+      syncCopyBtn.style.background = '#10b981';
+      syncCopyBtn.style.color = '#000';
+    }
+
+    syncBadge.addEventListener('click', openSyncSettings);
+    syncSettingsClose.addEventListener('click', closeSyncSettings);
+    syncSettingsOverlay.addEventListener('click', (e) => {
+      if (e.target === syncSettingsOverlay) closeSyncSettings();
+    });
+
+    syncCopyBtn.addEventListener('click', () => {
+      const textToCopy = syncBinIdInput.value;
+      if (!textToCopy) return;
+
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        syncCopyBtn.textContent = 'コピー完了';
+        syncCopyBtn.style.background = '#047857';
+        syncCopyBtn.style.color = '#fff';
+        toast('IDをコピーしました');
+      }).catch(err => {
+        console.error('Copy failed:', err);
+        syncBinIdInput.select();
+        document.execCommand('copy');
+        syncCopyBtn.textContent = 'コピー完了';
+        toast('IDをコピーしました');
+      });
     });
 
     
