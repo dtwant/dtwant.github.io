@@ -122,7 +122,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "164"
+    "wordCount": "0"
   }]
   </script>
 
@@ -732,1380 +732,547 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/htm@3/dist/htm.umd.js"></script>
 <script src="/js/pwa-config-sync.js"></script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
+ 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
 
-   
-  .dm-root {
-    font-family: "Zen Kaku Gothic New", "JetBrains Mono", sans-serif;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
-    margin: 0;
-    padding: 2rem 1rem;
-    background-color: #050508;
-    background-image:
-      linear-gradient(rgba(217, 70, 239, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(217, 70, 239, 0.05) 1px, transparent 1px),
-      radial-gradient(ellipse at 15% 15%, rgba(6, 182, 212, 0.1), transparent 50%),
-      radial-gradient(ellipse at 85% 85%, rgba(217, 70, 239, 0.1), transparent 50%),
-      radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.75) 120%);
-    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% 100%;
-    color: #e2e8f0;
-    border: none;
-    border-radius: 0;
-    z-index: 999990;
-    overflow-y: auto;
-    overflow-x: hidden;
-    box-sizing: border-box;
-  }
+:root {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 4.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 4.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 292.2 84.1% 60.6%;  
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 17%;
+  --input: 240 3.7% 15.9%;
+  --ring: 292.2 84.1% 60.6%;
+}
 
-  .dm-root > * {
-    position: relative;
-    z-index: 2;
-  }
-  .dm-root *, .dm-root *::before, .dm-root *::after {
-    box-sizing: border-box;
-  }
+.dm-app, .dm-app * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-   
-  .dm-root::after {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
-    pointer-events: none;
-    z-index: 10;
-  }
+.dm-app {
+  font-family: 'Inter', 'Zen Kaku Gothic New', sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  min-height: 100vh;
+  padding: 2.5rem 1.5rem;
+  position: relative;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(217, 70, 239, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.05) 0px, transparent 50%);
+}
 
-   
-  .dm-root::before {
-    content: "";
-    position: fixed;
-    top: -10%; left: 0; right: 0;
-    height: 10vh;
-    background: linear-gradient(to bottom, rgba(34, 211, 238, 0) 0%, rgba(34, 211, 238, 0.1) 50%, rgba(34, 211, 238, 0.5) 100%);
-    border-bottom: 2px solid rgba(34, 211, 238, 0.8);
-    animation: scan-laser 8s linear infinite;
-    pointer-events: none;
-    z-index: 999999;
-    box-shadow: 0 5px 20px rgba(34, 211, 238, 0.4);
-  }
+.dm-container {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
 
-  @keyframes scan-laser {
-    0% { transform: translateY(-100%); opacity: 0; }
-    5% { opacity: 1; }
-    95% { opacity: 1; }
-    100% { transform: translateY(1100%); opacity: 0; }
-  }
+ 
+.dm-card {
+  background: rgba(18, 18, 22, 0.65);
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.03);
+}
 
-  .dm-container {
-    font-family: "JetBrains Mono", "Consolas", "Monaco", "Courier New", monospace;
-    max-width: 900px;
-    width: 100%;
-    margin: 0 auto;
-    background: transparent;
-    padding: 2.5rem;
-    border: 1px solid rgba(34, 211, 238, 0.22);
-    border-radius: 8px;
-    box-shadow: 
-      0 25px 60px rgba(0, 0, 0, 0.75), 
-      inset 0 1px 0 rgba(255, 255, 255, 0.15),
-      inset 0 -3px 15px rgba(0, 0, 0, 0.65);
-    position: relative;
-    overflow: hidden;
-    color: #e2e8f0;
-  }
-  .dm-container::before {
-    content: "";
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(9, 9, 12, 0.85) 60%, rgba(0, 0, 0, 0.95) 100%);
-    backdrop-filter: blur(18px);
-    filter: url(#liquid-refract);
-    z-index: 0;
-    pointer-events: none;
-  }
-  .dm-container > * { position: relative; z-index: 1; }
-  .dm-corner { z-index: 2 !important; }
+.dm-hud-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  font-size: 1.75rem;
+  letter-spacing: 0.15em;
+  background: linear-gradient(to right, #d946ef, #06b6d4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(217, 70, 239, 0.15);
+}
 
-   
-  .dm-corner {
-    position: absolute; width: 18px; height: 18px;
-    border: 2px solid #06b6d4;
-    z-index: 100; pointer-events: none;
-  }
-  .dm-corner.tl { top: 5px; left: 5px; border-right: none; border-bottom: none; }
-  .dm-corner.tr { top: 5px; right: 5px; border-left: none; border-bottom: none; }
-  .dm-corner.bl { bottom: 5px; left: 5px; border-right: none; border-top: none; }
-  .dm-corner.br { bottom: 5px; right: 5px; border-left: none; border-top: none; }
+.dm-hud-desc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: hsl(var(--muted-foreground));
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
 
-  .dm-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid #333;
-    padding-bottom: 1.5rem;
-  }
+ 
+.dm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid hsl(var(--border));
+  background-color: transparent;
+  color: hsl(var(--foreground));
+  font-family: inherit;
+  gap: 0.4rem;
+}
+.dm-btn:hover:not(:disabled) {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  border-color: rgba(255,255,255,0.15);
+}
+.dm-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
 
-  .dm-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #22d3ee;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    position: relative;
-     
-    text-shadow: 0 0 12px rgba(34, 211, 238, 0.8), 2px 2px 0px rgba(217, 70, 239, 0.4), -2px -2px 0px rgba(6, 182, 212, 0.4);
-    animation: dm-glow 3s ease-in-out infinite;
-  }
-  
-   
-  .dm-title::before, .dm-title::after {
-    content: "_DEADLINE_SURVIVAL";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    color: #f1f5f9;
-    background: transparent;
-    overflow: hidden;
-    clip-path: inset(0 0 0 0);
-    pointer-events: none;
-  }
-  .dm-title::before {
-    left: 2px;
-    text-shadow: -2px 0 #ef4444;  
-    animation: text-glitch-1 2s infinite linear alternate-reverse;
-  }
-  .dm-title::after {
-    left: -2px;
-    text-shadow: -2px 0 #06b6d4;  
-    animation: text-glitch-2 3s infinite linear alternate-reverse;
-  }
-  
-  @keyframes text-glitch-1 {
-    0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
-    20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
-    40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
-    60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
-    80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 1px); }
-    100% { clip-path: inset(30% 0 50% 0); transform: translate(1px, -1px); }
-  }
-  @keyframes text-glitch-2 {
-    0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -1px); }
-    20% { clip-path: inset(30% 0 20% 0); transform: translate(-2px, 1px); }
-    40% { clip-path: inset(70% 0 10% 0); transform: translate(2px, -2px); }
-    60% { clip-path: inset(20% 0 50% 0); transform: translate(-2px, 2px); }
-    80% { clip-path: inset(50% 0 30% 0); transform: translate(1px, -1px); }
-    100% { clip-path: inset(10% 0 80% 0); transform: translate(-1px, 1px); }
-  }
+.dm-btn-primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+}
+.dm-btn-primary:hover:not(:disabled) {
+  background-color: #c026d3;
+  box-shadow: 0 0 15px rgba(217, 70, 239, 0.3);
+}
 
-  @keyframes dm-glow {
-    0%, 100% { filter: brightness(1); }
-    50%       { filter: brightness(1.2); }
-  }
+.dm-btn-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: 6px;
+}
 
-  .dm-header-right {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-  
-  .dm-clock-display {
-    font-size: 0.9rem;
-    color: #d946ef;  
-    text-shadow: 0 0 5px rgba(217, 70, 239, 0.4);
-    letter-spacing: 0.05em;
-  }
+ 
+.dm-input, .dm-select {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  border-radius: 6px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s;
+}
+.dm-input:focus, .dm-select:focus {
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 10px rgba(217, 70, 239, 0.15);
+  background: rgba(0,0,0,0.5);
+}
 
-   
-  .dm-sync-status {
-    font-size: 0.65rem;
-    padding: 0.25rem 0.6rem;
-    border-radius: 0;
-    letter-spacing: 0.08em;
-    font-family: 'JetBrains Mono', monospace;
-    clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-  }
-  .dm-sync-status.local { background: rgba(100,116,139,0.3); color: #94a3b8; }
-  .dm-sync-status.ok    { background: rgba(34,197,94,0.2);   color: #22c55e; }
-  .dm-sync-status.busy  { background: rgba(250,204,21,0.2);  color: #facc15; }
-  .dm-sync-status.err   { background: rgba(239,68,68,0.2);   color: #ef4444; }
+ 
+.dm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-bottom: 1px solid hsl(var(--border));
+  padding-bottom: 1.5rem;
+}
+.dm-header-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
 
-   
-  .dm-hbtn {
-    background: transparent;
-    border: 1px solid #333;
-    color: #a1a1aa;
-    padding: 0.3rem 0.65rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
-  }
-  .dm-hbtn:hover {
-    border-color: #22d3ee;
-    color: #22d3ee;
-    box-shadow: 0 0 8px rgba(34,211,238,0.3);
-  }
+ 
+.dm-sync-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+.dm-sync-status.local {
+  background: rgba(100, 116, 139, 0.1);
+  color: #94a3b8;
+  border-color: rgba(100, 116, 139, 0.2);
+}
+.dm-sync-status.ok {
+  background: rgba(217, 70, 239, 0.1);
+  color: #d946ef;
+  border-color: rgba(217, 70, 239, 0.2);
+  box-shadow: 0 0 12px rgba(217, 70, 239, 0.1);
+}
+.dm-sync-status.busy {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+.dm-sync-status.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
 
-   
-  .dm-progress-wrap {
-    height: 2px;
-    background: #1a1a2e;
-    margin-bottom: 1rem;
-  }
-  .dm-progress-bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #22d3ee, #d946ef);
-    transition: width 0.3s;
-  }
+ 
+.dm-stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.2);
+}
+.dm-stat-tab {
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-right: 1px solid hsl(var(--border));
+  background: transparent;
+}
+.dm-stat-tab:last-child {
+  border-right: none;
+}
+.dm-stat-tab:hover {
+  background: rgba(255,255,255,0.02);
+}
+.dm-stat-tab.active {
+  background: rgba(217, 70, 239, 0.08);
+  box-shadow: inset 0 -2px 0 0 hsl(var(--primary));
+}
+.dm-stat-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+}
+.dm-stat-num.active-count { color: #facc15; }
+.dm-stat-num.danger-count { color: #ef4444; }
+.dm-stat-num.done-count { color: #22c55e; }
+.dm-stat-label {
+  font-size: 0.6rem;
+  color: hsl(var(--muted-foreground));
+  text-transform: uppercase;
+  margin-top: 0.2rem;
+  letter-spacing: 0.05em;
+}
 
-   
-  .dm-stats {
-    display: flex;
-    border: 1px solid #1e293b;
-    margin-bottom: 1.5rem;
-    overflow: hidden;
-  }
-  .dm-stat {
-    flex: 1;
-    text-align: center;
-    padding: 0.6rem 0.4rem;
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
-    cursor: pointer;
-    transition: all 0.2s;
-    background: rgba(255, 255, 255, 0.01);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), inset 0 -10px 20px rgba(0, 0, 0, 0.2);
-  }
-  .dm-stat:last-child { border-right: none; }
-  .dm-stat:hover { background: rgba(34,211,238,0.05); }
-  .dm-stat-num {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #22d3ee;
-    text-shadow: 0 0 6px rgba(34,211,238,0.4);
-  }
-  .dm-stat-num.c-active { color: #facc15; }
-  .dm-stat-num.c-danger { color: #ef4444; }
-  .dm-stat-num.c-done { color: #22c55e; }
-  .dm-stat-num.c-over { color: #6b7280; }
-  .dm-stat-label {
-    font-size: 0.55rem;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-top: 0.2rem;
-  }
+ 
+.dm-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.dm-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+.dm-view-toggle {
+  display: flex;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid hsl(var(--border));
+  padding: 2px;
+  border-radius: 8px;
+}
+.dm-view-btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  color: hsl(var(--muted-foreground));
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.dm-view-btn.active {
+  background: hsl(var(--secondary));
+  color: hsl(var(--foreground));
+}
 
-   
-  .dm-toolbar {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .dm-search-wrap {
-    flex: 1;
-    min-width: 150px;
-    position: relative;
-  }
-  .dm-search-wrap .dm-search-icon {
-    position: absolute;
-    left: 0.6rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.75rem;
-    color: #4b5563;
-    pointer-events: none;
-  }
-  .dm-search {
-    width: 100%;
-    background: rgba(0,0,0,0.5);
-    border: 1px solid #333;
-    border-bottom: 2px solid #22d3ee;
-    color: #e2e8f0;
-    padding: 0.5rem 0.6rem 0.5rem 2rem;
-    font-family: inherit;
-    font-size: 0.8rem;
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
-  }
-  .dm-search:focus {
-    outline: none;
-    border-color: #d946ef;
-    background: rgba(217,70,239,0.05);
-  }
-  .dm-search::placeholder { color: #4b5563; }
+ 
+.dm-kanban-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+.dm-kanban-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: rgba(10, 10, 12, 0.4);
+  border: 1px solid hsl(var(--border));
+  border-radius: 10px;
+  padding: 0.75rem;
+  min-height: 400px;
+}
+.dm-kanban-header {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid hsl(var(--border));
+  margin-bottom: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+  letter-spacing: 0.05em;
+}
 
-  .dm-filter-tabs {
-    display: flex;
-    gap: 0.25rem;
-  }
-  .dm-tab {
-    background: transparent;
-    border: 1px solid #333;
-    color: #64748b;
-    padding: 0.35rem 0.6rem;
-    font-family: inherit;
-    font-size: 0.6rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .dm-tab:hover { border-color: #22d3ee; color: #22d3ee; }
-  .dm-tab.active { background: rgba(34,211,238,0.15); border-color: #22d3ee; color: #22d3ee; }
+ 
+.dm-task-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-left: 3px solid #3f3f46;
+  position: relative;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.dm-task-card:hover {
+  transform: translateY(-1px);
+  border-color: hsl(var(--primary));
+}
+.dm-task-card.status-safe { border-left-color: #22c55e; }
+.dm-task-card.status-warn { border-left-color: #facc15; }
+.dm-task-card.status-danger { border-left-color: #f97316; }
+.dm-task-card.status-critical { border-left-color: #ef4444; animation: shadow-pulse 2s infinite; }
+.dm-task-card.status-over { border-left-color: #6b7280; opacity: 0.5; }
 
-  .dm-sort-sel {
-    background: rgba(0,0,0,0.5);
-    border: 1px solid #333;
-    color: #a1a1aa;
-    padding: 0.35rem 0.5rem;
-    font-family: inherit;
-    font-size: 0.65rem;
-    cursor: pointer;
-  }
-  .dm-sort-sel:focus { outline: none; border-color: #22d3ee; }
+@keyframes shadow-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.1); }
+  50% { box-shadow: 0 0 18px rgba(239, 68, 68, 0.35); }
+}
 
-   
-  .dm-form { 
-    display: grid; 
-     
-    grid-template-columns: 2.5fr 1.5fr 1.5fr 1.2fr auto; 
-    gap: 15px; 
-    margin-bottom: 1.5rem; 
-    padding: 1.5rem; 
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.2));
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 6px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  }
-  
-   
-  .dm-input, .dm-select {
-    width: 100%;
-    min-width: 0;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid #333;
-    border-bottom: 2px solid #22d3ee;
-    color: #22d3ee;
-    padding: 0.8rem;
-    font-family: inherit;
-    font-size: 0.9rem;
-    border-radius: 0;
-    transition: all 0.2s;
-    text-overflow: ellipsis;
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
-  }
-  .dm-input::placeholder { color: #4b5563; }
-  
-  .dm-input:focus, .dm-select:focus {
-    outline: none;
-    border-color: #d946ef;
-    background: rgba(217, 70, 239, 0.05);
-    box-shadow: 0 0 15px rgba(217, 70, 239, 0.4);
-  }
+.dm-task-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  line-height: 1.3;
+}
+.dm-task-meta {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.dm-badge {
+  font-size: 0.6rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+}
+.dm-badge.p-high { background: rgba(239,68,68,0.15); color: #fca5a5; }
+.dm-badge.p-mid { background: rgba(250,204,21,0.12); color: #fde68a; }
+.dm-badge.p-low { background: rgba(100,116,139,0.2); color: #94a3b8; }
 
-  .dm-btn-add {
-    background: transparent;
-    color: #22d3ee;
-    border: 1px solid #22d3ee;
-    padding: 0 2rem;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: all 0.2s;
-    white-space: nowrap; 
-    position: relative;
-    overflow: hidden;
-    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-  }
-  .dm-btn-add::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.4), transparent);
-    transition: all 0.4s;
-  }
-  .dm-btn-add:hover::before {
-    left: 100%;
-  }
-  .dm-btn-add:hover {
-    background: rgba(217, 70, 239, 0.2);
-    border-color: #d946ef;
-    color: #fff;
-    box-shadow: 0 0 25px rgba(217, 70, 239, 0.9), inset 0 0 15px rgba(217, 70, 239, 0.5);
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
-  }
+.dm-countdown-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #22d3ee;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
+}
+.status-warn .dm-countdown-text { color: #facc15; }
+.status-danger .dm-countdown-text { color: #f97316; }
+.status-critical .dm-countdown-text { color: #ef4444; }
+.status-over .dm-countdown-text { color: #6b7280; text-decoration: line-through; }
 
-   
-  .dm-form-extra {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 1.5rem;
-    padding: 0 1.5rem 1.5rem;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.2));
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-top: none;
-    margin-top: -1.5rem;
-    padding-top: 0.75rem;
-    border-radius: 0 0 6px 6px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
-  }
+.dm-task-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+.dm-actions-group {
+  display: flex;
+  gap: 0.25rem;
+}
+.dm-action-icon-btn {
+  background: transparent;
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+  width: 1.85rem;
+  height: 1.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.dm-action-icon-btn:hover {
+  border-color: rgba(255,255,255,0.15);
+  color: hsl(var(--foreground));
+}
+.dm-action-icon-btn.check:hover { color: #22c55e; border-color: rgba(34,197,94,0.3); }
+.dm-action-icon-btn.del:hover { color: #ef4444; border-color: rgba(239,68,68,0.3); }
 
-  .dm-textarea {
-    width: 100%;
-    min-width: 0;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid #333;
-    border-bottom: 2px solid #22d3ee;
-    color: #22d3ee;
-    padding: 0.5rem 0.8rem;
-    font-family: inherit;
-    font-size: 0.8rem;
-    border-radius: 0;
-    transition: all 0.2s;
-    resize: vertical;
-    min-height: 2rem;
-    max-height: 5rem;
-  }
-  .dm-textarea:focus {
-    outline: none;
-    border-color: #d946ef;
-    background: rgba(217, 70, 239, 0.05);
-  }
-  .dm-textarea::placeholder { color: #4b5563; }
+ 
+.dm-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.dm-list-item {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
 
-   
-  .dm-btn-icon {
-    background: #18181b;
-    border: 1px solid #333;
-    color: #a1a1aa;
-    width: 2.5rem; height: 2.5rem;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 1.2rem;
-    border-radius: 0;
-    clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
-    transition: all 0.2s;
-  }
-  .dm-btn-icon:hover {
-    border-color: #fff;
-    color: #fff;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-  }
-  .dm-btn-check:hover { border-color: #22c55e; color: #22c55e; box-shadow: 0 0 12px rgba(34, 197, 94, 0.5); }
-  .dm-btn-edit:hover { border-color: #facc15; color: #facc15; box-shadow: 0 0 12px rgba(250, 204, 21, 0.5); }
-  .dm-btn-del:hover { border-color: #ef4444; color: #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.5); }
+ 
+.dm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.dm-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.dm-modal {
+  width: 90%;
+  max-width: 480px;
+  background: #0c0c0e;
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  padding: 1.75rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  transform: scale(0.95);
+  transition: transform 0.2s ease;
+}
+.dm-overlay.show .dm-modal {
+  transform: scale(1);
+}
+.dm-modal-header {
+  border-bottom: 1px solid hsl(var(--border));
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dm-modal-footer {
+  border-top: 1px solid hsl(var(--border));
+  padding-top: 1rem;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
 
-  .dm-empty { 
-    text-align: center; 
-    color: #4b5563; 
-    padding: 3rem; 
-    border: 1px dashed #333; 
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-  }
+ 
+.dm-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+}
+.dm-form-field label {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  font-weight: 500;
+}
 
-   
-  .dm-task {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1rem;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 0.5rem;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.3));
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-left: 3px solid #22c55e;
-    transition: all 0.25s;
-    position: relative;
-    overflow: hidden;
-    animation: dm-task-in 0.3s ease-out;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -2px 6px rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-  }
-  @keyframes dm-task-in {
-    from { opacity: 0; transform: translateX(-10px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-  .dm-task:hover {
-    background: rgba(34, 211, 238, 0.03);
-    border-color: rgba(34, 211, 238, 0.3);
-  }
-  .dm-task.status-safe { border-left-color: #22c55e; }
-  .dm-task.status-warn { border-left-color: #facc15; background: rgba(250, 204, 21, 0.02); }
-  .dm-task.status-danger { border-left-color: #f97316; background: rgba(249, 115, 22, 0.03); }
-  .dm-task.status-critical { 
-    border-left-color: #ef4444; 
-    background: rgba(239, 68, 68, 0.04);
-    animation: dm-task-in 0.3s ease-out, border-pulse 2s infinite;
-  }
-  .dm-task.status-over { 
-    border-left-color: #6b7280; 
-    opacity: 0.5; 
-  }
-  @keyframes border-pulse {
-    0%, 100% { border-left-color: #ef4444; box-shadow: inset 3px 0 12px rgba(239, 68, 68, 0.3); }
-    50%      { border-left-color: #fca5a5; box-shadow: inset 3px 0 20px rgba(239, 68, 68, 0.6); }
-  }
+ 
+.dm-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(18,18,22,0.95);
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: hsl(var(--foreground));
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 10000000;
+  pointer-events: none;
+}
+.dm-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
 
-  .dm-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    min-width: 0;
+ 
+@media (max-width: 768px) {
+  .dm-kanban-grid {
+    grid-template-columns: 1fr;
   }
-  .dm-task-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+  .dm-kanban-col {
+    min-height: auto;
   }
-  .dm-task-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #f1f5f9;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-  }
-  .dm-priority-badge {
-    font-size: 0.5rem;
-    padding: 0.15rem 0.4rem;
-    letter-spacing: 0.08em;
-    font-weight: 700;
-    text-transform: uppercase;
-    clip-path: polygon(3px 0, 100% 0, calc(100% - 3px) 100%, 0 100%);
-  }
-  .dm-priority-badge.p-high { background: rgba(239,68,68,0.3); color: #fca5a5; }
-  .dm-priority-badge.p-mid  { background: rgba(250,204,21,0.25); color: #fde68a; }
-  .dm-priority-badge.p-low  { background: rgba(100,116,139,0.3); color: #94a3b8; }
-
-  .dm-category-badge {
-    font-size: 0.5rem;
-    padding: 0.15rem 0.45rem;
-    background: rgba(217,70,239,0.2);
-    color: #e879f9;
-    letter-spacing: 0.05em;
-    clip-path: polygon(3px 0, 100% 0, calc(100% - 3px) 100%, 0 100%);
-  }
-
-  .dm-meta {
-    display: flex;
-    gap: 1rem;
-    font-size: 0.75rem;
-    color: #64748b;
-    flex-wrap: wrap;
-  }
-  .dm-meta span {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
-
-  .dm-task-note {
-    font-size: 0.7rem;
-    color: #64748b;
-    font-style: italic;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-    margin-top: 0.15rem;
-  }
-
-   
-  .dm-task-progress {
-    margin-top: 0.3rem;
-    display: flex;
-    align-items: center;
+  .dm-list-item {
+    grid-template-columns: 1fr;
     gap: 0.5rem;
   }
-  .dm-task-progress-bar {
-    flex: 1;
-    height: 3px;
-    background: #1a1a2e;
-    position: relative;
-    overflow: hidden;
-  }
-  .dm-task-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #22d3ee, #d946ef);
-    transition: width 0.3s;
-  }
-  .dm-task-progress-label {
-    font-size: 0.6rem;
-    color: #64748b;
-    min-width: 2.5rem;
-    text-align: right;
-  }
-
   .dm-right-col {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 0.5rem;
+    align-items: flex-start;
   }
-
-  .dm-time-label {
-    font-size: 0.6rem;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    display: block;
-    text-align: right;
-  }
-
-  .dm-countdown {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #22d3ee;
-    text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
-    letter-spacing: 0.05em;
-  }
-  .status-warn .dm-countdown { color: #facc15; text-shadow: 0 0 10px rgba(250, 204, 21, 0.5); }
-  .status-danger .dm-countdown { color: #f97316; text-shadow: 0 0 10px rgba(249, 115, 22, 0.5); }
-  .status-critical .dm-countdown { color: #ef4444; text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); animation: countdown-blink 1s infinite; }
-  .status-over .dm-countdown { color: #6b7280; text-shadow: none; text-decoration: line-through; }
-
-  @keyframes countdown-blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  .dm-actions {
-    display: flex;
-    gap: 0.35rem;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-  .dm-task:hover .dm-actions {
-    opacity: 1;
-  }
-
-   
-  .dm-section-divider {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin: 2rem 0 1rem;
-    color: #4b5563;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-  .dm-section-divider::before,
-  .dm-section-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: #1e293b;
-  }
-  .dm-section-divider .dm-section-toggle {
-    background: transparent;
-    border: 1px solid #333;
-    color: #4b5563;
-    padding: 0.2rem 0.5rem;
-    font-family: inherit;
-    font-size: 0.55rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .dm-section-divider .dm-section-toggle:hover {
-    border-color: #22d3ee;
-    color: #22d3ee;
-  }
-
-   
-  .dm-completed-list {
-    overflow: hidden;
-    transition: max-height 0.4s ease;
-  }
-  .dm-completed-list.collapsed {
-    max-height: 0 !important;
-  }
-  .dm-task-done {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 1rem;
-    margin-bottom: 0.25rem;
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.04), rgba(0, 0, 0, 0.2));
-    border: 1px solid rgba(34, 197, 94, 0.15);
-    border-left: 3px solid rgba(34, 197, 94, 0.4);
-    opacity: 0.6;
-    transition: opacity 0.2s;
-    border-radius: 4px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
-  .dm-task-done:hover { opacity: 0.9; }
-  .dm-task-done .dm-done-title {
-    font-size: 0.8rem;
-    color: #94a3b8;
-    text-decoration: line-through;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .dm-task-done .dm-done-date {
-    font-size: 0.6rem;
-    color: #4b5563;
-  }
-
-   
-  .dm-guide {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px dashed #333;
-    font-size: 0.85rem;
-    color: #94a3b8;
-    font-family: "Zen Kaku Gothic New", sans-serif;
-  }
-  .dm-guide-desc {
-    margin-bottom: 2rem;
-    text-align: center;
-    color: #a1a1aa;
-    letter-spacing: 0.05em;
-  }
-  .dm-guide-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 2rem;
-  }
-  .dm-guide-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1rem;
-    color: #22d3ee;
-    margin-bottom: 1rem;
-    margin-top: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-  .dm-guide-list, .dm-guide-list-status {
-    margin: 0;
-    padding-left: 1.5rem;
-    line-height: 1.8;
-  }
-  .dm-guide-list-status {
-    list-style: none;
-    padding-left: 0;
-  }
-  .dm-guide-list li, .dm-guide-list-status li {
-    margin-bottom: 0.5rem;
-  }
-  .dm-guide-list strong, .dm-guide-list-status strong {
-    color: #e2e8f0;
-    font-family: "JetBrains Mono", monospace;
-  }
-  .dm-status-dot {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-right: 8px;
-  }
-  .dm-status-dot.status-safe { background: #22c55e; box-shadow: 0 0 8px rgba(34, 197, 94, 0.6); }
-  .dm-status-dot.status-warn { background: #facc15; box-shadow: 0 0 8px rgba(250, 204, 21, 0.6); }
-  .dm-status-dot.status-danger { background: #f97316; box-shadow: 0 0 8px rgba(249, 115, 22, 0.6); }
-  .dm-status-dot.status-critical { background: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.6); animation: border-pulse 2s infinite; }
-  
-  .dm-guide-footer {
-    text-align: center;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.75rem;
-    color: #64748b;
-  }
-
-   
-  .dm-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000010;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s;
-    padding: 1rem;
-  }
-  .dm-overlay.open {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .dm-overlay { align-items: flex-end; }
   .dm-modal {
-    background: rgba(12, 12, 20, 0.75);
-    border: 1px solid rgba(34, 211, 238, 0.25);
-    max-width: 480px;
     width: 100%;
-    max-height: 85vh;
-    display: flex;
-    flex-direction: column;
-    animation: dm-modal-in 0.25s ease-out;
-    box-shadow: 
-      0 20px 60px rgba(0, 0, 0, 0.8),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12),
-      inset 0 -3px 15px rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(14px);
-    border-radius: 6px;
+    border-radius: 12px 12px 0 0;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  @keyframes dm-modal-in {
-    from { transform: scale(0.95) translateY(10px); opacity: 0; }
-    to { transform: scale(1) translateY(0); opacity: 1; }
+  .dm-overlay.show .dm-modal {
+    transform: translateY(0);
   }
-  .dm-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid #1e293b;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.75rem;
-    color: #22d3ee;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  .dm-modal-close {
-    background: transparent;
-    border: none;
-    color: #64748b;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: color 0.2s;
-    padding: 0.2rem;
-  }
-  .dm-modal-close:hover { color: #ef4444; }
-  .dm-modal-body {
-    padding: 1.25rem;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  .dm-modal-footer {
-    padding: 0.75rem 1.25rem;
-    border-top: 1px solid #1e293b;
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-  }
-  .dm-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-  .dm-field label {
-    font-size: 0.6rem;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .dm-field .dm-input,
-  .dm-field .dm-select,
-  .dm-field .dm-textarea {
-    clip-path: none;
-    font-size: 0.85rem;
-    padding: 0.6rem 0.75rem;
-  }
-  .dm-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-  }
-
-  .dm-btn {
-    background: transparent;
-    border: 1px solid #333;
-    color: #a1a1aa;
-    padding: 0.45rem 1rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.05em;
-  }
-  .dm-btn:hover { border-color: #22d3ee; color: #22d3ee; }
-  .dm-btn.save { background: rgba(34,211,238,0.15); border-color: #22d3ee; color: #22d3ee; }
-  .dm-btn.save:hover { background: rgba(34,211,238,0.3); }
-  .dm-btn.del { border-color: #ef4444; color: #ef4444; }
-  .dm-btn.del:hover { background: rgba(239,68,68,0.15); }
-
-   
-  .dm-settings-panel {
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    overflow-y: auto;
-  }
-  .dm-settings-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.75rem;
-    color: #d946ef;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 0.25rem;
-  }
-  .dm-blob-info {
-    font-size: 0.7rem;
-    color: #64748b;
-    line-height: 1.6;
-  }
-  .dm-blob-id-display {
-    margin-top: 0.5rem;
-    padding: 0.4rem 0.6rem;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid #1e293b;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: #22d3ee;
-    word-break: break-all;
-    user-select: all;
-  }
-
-   
-  .dm-toast {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background: #0c0c14;
-    border: 1px solid #333;
-    padding: 0.6rem 1.2rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: #e2e8f0;
-    z-index: 1000020;
-    transform: translateY(100px);
-    opacity: 0;
-    transition: all 0.3s;
-    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
-  }
-  .dm-toast.show { transform: translateY(0); opacity: 1; }
-  .dm-toast.ok { border-color: #22c55e; color: #22c55e; }
-  .dm-toast.err { border-color: #ef4444; color: #ef4444; }
-  .dm-toast.info { border-color: #22d3ee; color: #22d3ee; }
-
-   
-  @media (max-width: 768px) {
-    .dm-root { padding: 0.75rem 0.25rem; }
-    .dm-container {
-      padding: 1rem 0.6rem;
-      width: 100%; margin: 0;
-      border-radius: 0; border-left: none; border-right: none;
-    }
-
-    .dm-header {
-      flex-direction: column; align-items: flex-start;
-      gap: 0.4rem; margin-bottom: 0.75rem; padding-bottom: 0.75rem;
-    }
-    .dm-title { font-size: 1rem; letter-spacing: 0.08em; }
-    .dm-title::before, .dm-title::after { display: none; }
-    .dm-header-right {
-      width: 100%; justify-content: flex-start;
-      gap: 0.35rem; flex-wrap: nowrap;
-    }
-    .dm-clock-display { font-size: 0.7rem; }
-    .dm-hbtn { font-size: 0.55rem; padding: 0.2rem 0.45rem; }
-    .dm-sync-status { font-size: 0.55rem; padding: 0.15rem 0.4rem; }
-
-    .dm-progress-wrap { margin-bottom: 0.5rem; }
-
-     
-    .dm-stats {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      border: 1px solid #1e293b;
-    }
-    .dm-stat {
-      padding: 0.4rem 0.2rem;
-      border-right: 1px solid #1e293b;
-      flex: none;
-    }
-    .dm-stat:last-child { border-right: none; }
-    .dm-stat-num { font-size: 0.9rem; }
-    .dm-stat-label { font-size: 0.4rem; letter-spacing: 0.04em; }
-
-     
-    .dm-toolbar {
-      flex-direction: column; gap: 0.4rem;
-      margin-bottom: 0.75rem;
-    }
-    .dm-search-wrap { width: 100%; }
-    .dm-search { font-size: 16px; padding: 0.45rem 0.5rem 0.45rem 1.8rem; }
-    .dm-filter-tabs {
-      width: 100%; overflow-x: auto;
-      display: flex; flex-wrap: nowrap;
-    }
-    .dm-tab { font-size: 0.55rem; padding: 0.3rem 0.5rem; white-space: nowrap; }
-    .dm-sort-sel { font-size: 0.6rem; padding: 0.3rem 0.4rem; width: 100%; }
-
-     
-    .dm-form {
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem; padding: 0.75rem;
-      margin-bottom: 0;
-    }
-    .dm-form-extra {
-      grid-template-columns: 1fr;
-      margin-top: 0; padding-top: 0.5rem;
-      gap: 0.5rem;
-    }
-    .dm-input, .dm-select {
-      font-size: 16px; padding: 0.5rem;
-      clip-path: none;
-    }
-    .dm-btn-add {
-      width: 100%; padding: 0.7rem;
-      grid-column: 1 / -1;
-    }
-
-     
-    .dm-task {
-      grid-template-columns: 1fr;
-      gap: 0.5rem; padding: 0.75rem;
-    }
-    .dm-task-title { font-size: 0.85rem; }
-    .dm-priority-badge { font-size: 0.55rem; padding: 1px 4px; }
-    .dm-category-badge { font-size: 0.55rem; }
-    .dm-meta { font-size: 0.6rem; gap: 0.4rem; }
-    .dm-task-note { font-size: 0.7rem; }
-
-    .dm-right-col {
-      flex-direction: row; justify-content: space-between;
-      align-items: center; width: 100%;
-      border-top: 1px dashed #333;
-      padding-top: 0.5rem; margin-top: 0;
-    }
-    .dm-actions { opacity: 1; }
-    .dm-time-label { display: block; text-align: left; font-size: 0.5rem; }
-    .dm-countdown { font-size: 1.2rem; }
-
-    .dm-guide { margin-top: 1.5rem; padding-top: 1rem; }
-    .dm-guide-grid { grid-template-columns: 1fr; gap: 1rem; }
-    .dm-guide-title { font-size: 0.8rem; }
-    .dm-guide-list { font-size: 0.75rem; }
-
-    .dm-modal { max-width: 100%; border-radius: 8px 8px 0 0; border-bottom: none; }
-    .dm-overlay { align-items: flex-end; padding: 0; }
-    .dm-row { grid-template-columns: 1fr; }
-    .dm-toast { bottom: 1rem; right: 1rem; left: 1rem; text-align: center; }
-  }
-
-  @media (max-width: 400px) {
-    .dm-container { padding: 0.6rem 0.4rem; }
-    .dm-title { font-size: 0.85rem; }
-    .dm-clock-display { display: none; }
-    .dm-stat-num { font-size: 0.8rem; }
-    .dm-stat-label { font-size: 0.35rem; }
-    .dm-form { grid-template-columns: 1fr; gap: 0.4rem; }
-    .dm-countdown { font-size: 1rem; }
-    .dm-task { padding: 0.6rem; }
-  }
-
+}
 </style>
 
-<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
-  <filter id="liquid-refract">
-    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
-    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
-  </filter>
-</svg>
-
-<div class="dm-root">
-<div class="dm-container">
-  <div class="dm-corner tl"></div>
-  <div class="dm-corner tr"></div>
-  <div class="dm-corner bl"></div>
-  <div class="dm-corner br"></div>
-  <header class="dm-header">
-    <div class="dm-title">
-      <span>_DEADLINE_SURVIVAL</span>
-    </div>
-    <div class="dm-header-right">
-      <button class="dm-hbtn" onclick="window.history.back()">◀ EXIT</button>
-      <span class="dm-sync-status local" id="dm-sync">◉ LOCAL</span>
-      <div class="dm-clock-display">
-        SYS: <span id="dm-clock">--:--</span>
-      </div>
-      <button class="dm-hbtn" onclick="dmOpenSettings()">⚙ CONFIG</button>
-      <button class="dm-hbtn" onclick="dmSync()">⇅ SYNC</button>
-    </div>
-  </header>
-
-  <div class="dm-progress-wrap"><div class="dm-progress-bar" id="dm-progress-bar"></div></div>
-
-  
-  <div class="dm-stats">
-    <div class="dm-stat" onclick="dmSetFilter('all')">
-      <div class="dm-stat-num" id="dm-n-total">0</div>
-      <div class="dm-stat-label">全件</div>
-    </div>
-    <div class="dm-stat" onclick="dmSetFilter('active')">
-      <div class="dm-stat-num c-active" id="dm-n-active">0</div>
-      <div class="dm-stat-label">進行中</div>
-    </div>
-    <div class="dm-stat" onclick="dmSetFilter('danger')">
-      <div class="dm-stat-num c-danger" id="dm-n-danger">0</div>
-      <div class="dm-stat-label">危険</div>
-    </div>
-    <div class="dm-stat" onclick="dmSetFilter('done')">
-      <div class="dm-stat-num c-done" id="dm-n-done">0</div>
-      <div class="dm-stat-label">完了</div>
-    </div>
-    <div class="dm-stat">
-      <div class="dm-stat-num c-over" id="dm-n-over">0</div>
-      <div class="dm-stat-label">期限切れ</div>
-    </div>
-  </div>
-
-  
-  <div class="dm-toolbar">
-    <div class="dm-search-wrap">
-      <span class="dm-search-icon">🔍</span>
-      <input type="text" class="dm-search" id="dm-search" placeholder="タスク名 / カテゴリで検索..." oninput="dmRender()">
-    </div>
-    <div class="dm-filter-tabs">
-      <button class="dm-tab active" id="dm-tab-all" onclick="dmSetFilter('all')">全件</button>
-      <button class="dm-tab" id="dm-tab-active" onclick="dmSetFilter('active')">進行中</button>
-      <button class="dm-tab" id="dm-tab-danger" onclick="dmSetFilter('danger')">危険</button>
-      <button class="dm-tab" id="dm-tab-done" onclick="dmSetFilter('done')">完了</button>
-    </div>
-    <select class="dm-sort-sel" id="dm-sort" onchange="dmRender()">
-      <option value="deadline">締切順</option>
-      <option value="priority">優先度順</option>
-      <option value="added">追加順</option>
-      <option value="est">作業量順</option>
-    </select>
-  </div>
-
-  
-  <form id="dm-form" class="dm-form">
-    <input type="text" id="task-title" class="dm-input" placeholder="課題名" required>
-    
-    <input type="date" id="task-date" class="dm-input" required>
-    
-    <select id="task-period" class="dm-select" required>
-      <option value="1">1限 (08:50)</option>
-      <option value="2">2限 (10:30)</option>
-      <option value="3">3限 (13:00)</option>
-      <option value="4">4限 (14:40)</option>
-      <option value="5">5限 (16:20)</option>
-      <option value="end">指定なし (23:59)</option>
-    </select>
-    
-    <input type="number" id="task-est" class="dm-input" placeholder="推定時間(分)" min="10" step="10" required>
-    <button type="submit" class="dm-btn-add">追加</button>
-  </form>
-  <div class="dm-form-extra">
-    <select id="task-priority" class="dm-select">
-      <option value="mid">⬡ 優先度: 普通</option>
-      <option value="high">▲ 優先度: 高</option>
-      <option value="low">▽ 優先度: 低</option>
-    </select>
-    <input type="text" id="task-category" class="dm-input" placeholder="カテゴリ（例: 数学）">
-    <input type="text" id="task-note" class="dm-input" placeholder="メモ">
-  </div>
-
-  <div id="dm-list" class="dm-list">
-    
-  </div>
-
-  
-  <div id="dm-done-section" style="display:none;">
-    <div class="dm-section-divider">
-      <span>完了済み</span>
-      <button class="dm-section-toggle" id="dm-toggle-done" onclick="dmToggleDone()">▼ 表示</button>
-    </div>
-    <div id="dm-done-list" class="dm-completed-list collapsed"></div>
-  </div>
-
-  <div class="dm-guide">
-    <div class="dm-guide-desc">提出期限と推定所要時間を入力し，締め切りまでの時間を管理する.</div>
-    
-    <div class="dm-guide-grid">
-      <div class="dm-guide-col">
-        <h3 class="dm-guide-title">SYSTEM_GUIDE</h3>
-        <ol class="dm-guide-list">
-          <li><strong>TASK_NAME</strong>: 課題名を入力</li>
-          <li><strong>DATE / PERIOD</strong>: 提出日と時限（1〜5限）を選択</li>
-          <li><strong>EST (MIN)</strong>: 完了にかかる推定時間を「分」で入力</li>
-          <li><strong>PRIORITY</strong>: HIGH / MID / LOW で優先度設定</li>
-          <li><strong>CATEGORY</strong>: 教科名などカテゴリを入力</li>
-          <li><strong>⇅ SYNC</strong>: スマホ/PC間でデータを同期</li>
-          <li><strong>⚙ CONFIG</strong>: Blob ID入力で別端末と連携</li>
-        </ol>
-      </div>
-      <div class="dm-guide-col">
-        <h3 class="dm-guide-title">STATUS_CODE</h3>
-        <ul class="dm-guide-list-status">
-          <li><span class="dm-status-dot status-safe"></span> <strong>GREEN</strong>: 安全圏.</li>
-          <li><span class="dm-status-dot status-warn"></span> <strong>YELLOW</strong>: 猶予 24時間未満.</li>
-          <li><span class="dm-status-dot status-danger"></span> <strong>ORANGE</strong>: 猶予 3時間未満.</li>
-          <li><span class="dm-status-dot status-critical"></span> <strong>RED (BLINKING)</strong>: <strong>CRITICAL WARNING</strong>. 残り時間が作業時間を下回っているため，着手推奨.</li>
-        </ul>
-      </div>
-    </div>
-    
-    <div class="dm-guide-footer">
-      &gt; CLOUD_SYNC_ENABLED. JSONBIN_CONNECTED. DATA_PERSISTENCE_ACTIVE.
-    </div>
-  </div>
-</div>
-</div>
-
-
-<div class="dm-toast" id="dm-toast"></div>
-
-
-<div class="dm-overlay" id="dm-overlay-edit">
-  <div class="dm-modal">
-    <div class="dm-modal-header">
-      <span>タスク編集</span>
-      <button class="dm-modal-close" onclick="dmCloseEdit()">✕</button>
-    </div>
-    <div class="dm-modal-body">
-      <input type="hidden" id="dm-edit-id">
-      <div class="dm-field">
-        <label>課題名</label>
-        <input type="text" class="dm-input" id="dm-edit-title" placeholder="課題名">
-      </div>
-      <div class="dm-row">
-        <div class="dm-field">
-          <label>提出日</label>
-          <input type="date" class="dm-input" id="dm-edit-date">
-        </div>
-        <div class="dm-field">
-          <label>時限</label>
-          <select class="dm-select" id="dm-edit-period">
-            <option value="1">1限 (08:50)</option>
-            <option value="2">2限 (10:30)</option>
-            <option value="3">3限 (13:00)</option>
-            <option value="4">4限 (14:40)</option>
-            <option value="5">5限 (16:20)</option>
-            <option value="end">指定なし (23:59)</option>
-          </select>
-        </div>
-      </div>
-      <div class="dm-row">
-        <div class="dm-field">
-          <label>推定時間(分)</label>
-          <input type="number" class="dm-input" id="dm-edit-est" min="10" step="10">
-        </div>
-        <div class="dm-field">
-          <label>優先度</label>
-          <select class="dm-select" id="dm-edit-priority">
-            <option value="high">▲ 高</option>
-            <option value="mid">⬡ 普通</option>
-            <option value="low">▽ 低</option>
-          </select>
-        </div>
-      </div>
-      <div class="dm-row">
-        <div class="dm-field">
-          <label>カテゴリ</label>
-          <input type="text" class="dm-input" id="dm-edit-category" placeholder="教科名">
-        </div>
-        <div class="dm-field">
-          <label>進捗 (%)</label>
-          <input type="number" class="dm-input" id="dm-edit-progress" min="0" max="100" step="5" placeholder="0">
-        </div>
-      </div>
-      <div class="dm-field">
-        <label>メモ</label>
-        <textarea class="dm-textarea" id="dm-edit-note" placeholder="メモ..."></textarea>
-      </div>
-    </div>
-    <div class="dm-modal-footer">
-      <button class="dm-btn del" id="dm-edit-del" onclick="dmDeleteFromEdit()">🗑 削除</button>
-      <button class="dm-btn" onclick="dmCloseEdit()">キャンセル</button>
-      <button class="dm-btn save" onclick="dmSaveEdit()">保存</button>
-    </div>
-  </div>
-</div>
-
-
-<div class="dm-overlay" id="dm-overlay-settings">
-  <div class="dm-modal">
-    <div class="dm-modal-header">
-      <span>⚙ CONFIG</span>
-      <button class="dm-modal-close" onclick="dmCloseSettings()">✕</button>
-    </div>
-    <div class="dm-settings-panel">
-      <div class="dm-settings-title">JSONBIN CLOUD SYNC</div>
-      <div class="dm-blob-info">
-        jsonbin.io を使ってデータをクラウド保存。初回 SYNC で自動作成されます。
-        <b>CONFIG</b> に表示される Blob ID を控えると別端末でも継続使用できます。
-        <div class="dm-blob-id-display" id="dm-blob-id-display">—</div>
-      </div>
-      <div class="dm-field">
-        <label>既存のBLOB ID</label>
-        <input type="text" class="dm-input" id="dm-blob-id-input" placeholder="別端末から引き継ぐ場合に入力">
-      </div>
-      <div class="dm-field">
-        <label>データ管理</label>
-        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-          <button class="dm-btn" type="button" onclick="dmExport()">⬇ JSON EXPORT</button>
-          <button class="dm-btn" type="button" onclick="document.getElementById('dm-import-file').click()">⬆ JSON IMPORT</button>
-          <input type="file" id="dm-import-file" accept=".json" style="display:none" onchange="dmImport(this)">
-        </div>
-      </div>
-      <div class="dm-field">
-        <label>DANGER ZONE</label>
-        <button class="dm-btn del" type="button" onclick="dmClearAll()">⚠ 全データ削除</button>
-      </div>
-    </div>
-    <div class="dm-modal-footer">
-      <button class="dm-btn" onclick="dmCloseSettings()">キャンセル</button>
-      <button class="dm-btn save" onclick="dmApplySettings()">適用</button>
-    </div>
-  </div>
-</div>
+<div class="dm-app" id="dm-root"></div>
 
 <script>
 (function() {
+  const { useState, useEffect, useRef, useMemo } = React;
+  const h = htm.bind(React.createElement);
+
    
   const STORAGE_KEY = 'dt_deadline_v5';
-  const DONE_KEY   = 'dt_deadline_done_v5';
-  const BLOB_KEY   = 'dt_deadline_blob_id';
+  const DONE_KEY = 'dt_deadline_done_v5';
+  const BLOB_KEY = 'dt_deadline_blob_id';
   const SHORTCODE_BLOB = '';
+  const APP_KEY = 'deadline';
 
   const PERIOD_TIMES = {
     1: "08:50",
@@ -2119,642 +1286,794 @@
   const PRIORITY_ORDER = { high: 0, mid: 1, low: 2 };
   const PRIORITY_LABEL = { high: '▲ 高', mid: '⬡ 普通', low: '▽ 低' };
 
-   
-  let tasks = [];
-  let doneTasks = [];
-  let blobId = null;
-  let activeFilter = 'all';
-  let doneExpanded = false;
-
-   
-  const listEl     = document.getElementById('dm-list');
-  const formEl     = document.getElementById('dm-form');
-  const clockEl    = document.getElementById('dm-clock');
-  const searchEl   = document.getElementById('dm-search');
-  const sortEl     = document.getElementById('dm-sort');
-
-   
-  function migrateV2() {
-    try {
-      const oldData = localStorage.getItem('dt_deadline_v2');
-      if (oldData && !localStorage.getItem(STORAGE_KEY)) {
-        const old = JSON.parse(oldData);
-        if (Array.isArray(old) && old.length > 0) {
-          const migrated = old.map(t => ({
-            id: String(t.id),
-            title: t.title,
-            date: t.date,
-            period: t.period,
-            est: t.est,
-            priority: 'mid',
-            category: '',
-            note: '',
-            progress: 0,
-            addedAt: t.id || Date.now(),
-            updatedAt: Date.now()
-          }));
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
-        }
-      }
-    } catch(e) {   }
-  }
-
-   
-  async function init() {
-    migrateV2();
-    try { tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { tasks = []; }
-    try { doneTasks = JSON.parse(localStorage.getItem(DONE_KEY) || '[]'); } catch(e) { doneTasks = []; }
-    
-    blobId = SHORTCODE_BLOB || localStorage.getItem(BLOB_KEY) || null;
-    if (window.PWAConfigSync) {
-      blobId = await window.PWAConfigSync.syncAppBinId('deadline', blobId);
-    }
-    if (blobId) {
-      try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
-    }
-
-    updateBlobDisplay();
-    dmRender();
-    if (blobId) dmSync(true);
-  }
-
-   
-  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
-
-  const formatTime = (ms) => {
-    if (ms < 0) return "期限切れ";
-    const d = Math.floor(ms / (1000 * 60 * 60 * 24));
-    const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-    const hh = String(h).padStart(2, '0');
-    const mm = String(m).padStart(2, '0');
-    if (d > 0) return `${d}日 ${hh}時間`;
-    return `${hh}:${mm}`;
-  };
-
-  const getDeadlineDate = (dateStr, period) => {
-    const timeStr = PERIOD_TIMES[period] || "23:59";
-    return new Date(`${dateStr}T${timeStr}`);
-  };
-
-  const getStatusClass = (deadlineDate, estMinutes) => {
-    const now = new Date().getTime();
-    const dueDate = deadlineDate.getTime();
-    const estMs = estMinutes * 60 * 1000;
-    const remaining = dueDate - now;
-    const margin = remaining - estMs;
-
-    if (remaining < 0) return 'status-over';
-    if (margin < 0) return 'status-critical'; 
-    if (margin < 1000 * 60 * 60 * 3) return 'status-danger';
-    if (margin < 1000 * 60 * 60 * 24) return 'status-warn';
-    return 'status-safe';
-  };
-
-  function save() { 
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)); } catch(e) {} 
-    try { localStorage.setItem(DONE_KEY, JSON.stringify(doneTasks.slice(0, 50))); } catch(e) {}  
-  }
-
-   
-  const DEFAULT_JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
-  const getJsonbinKey = () => {
+  const DEFAULT_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const getJbKey = () => {
     if (window.PWAConfigSync) {
       return window.PWAConfigSync.getApiKey();
     }
-    return DEFAULT_JSONBIN_KEY;
+    return DEFAULT_KEY;
   };
-  const BIN_CREATE_URL = 'https://api.jsonbin.io/v3/b';
-  const JSONBIN_HEADERS = () => ({ 'X-Master-Key': getJsonbinKey(), 'Content-Type': 'application/json' });
-  const getBinUrl    = () => `https://api.jsonbin.io/v3/b/${blobId}/latest`;
-  const getBinPutUrl = () => `https://api.jsonbin.io/v3/b/${blobId}`;
 
-  function setSyncStatus(cls, txt) { 
-    const e = document.getElementById('dm-sync'); 
-    e.className = 'dm-sync-status ' + cls; 
-    e.textContent = txt; 
-  }
-  function setProgress(p) { document.getElementById('dm-progress-bar').style.width = p + '%'; }
-  function updateBlobDisplay() { document.getElementById('dm-blob-id-display').textContent = blobId ? blobId : '（未設定）'; }
+  const binUrl = (id) => `https://api.jsonbin.io/v3/b/${id}/latest`;
+  const binPut = (id) => `https://api.jsonbin.io/v3/b/${id}`;
 
-  let toastTimer;
-  function toast(msg, type) {
-    const e = document.getElementById('dm-toast');
-    e.textContent = msg;
-    e.className = 'dm-toast ' + type + ' show';
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => e.classList.remove('show'), 2500);
-  }
+  function App() {
+    
+    const [tasks, setTasks] = useState([]);
+    const [doneTasks, setDoneTasks] = useState([]);
+    const [blobId, setBlobId] = useState(() => SHORTCODE_BLOB || localStorage.getItem(BLOB_KEY) || null);
+    const [syncStatus, setSyncStatus] = useState(blobId ? 'ok' : 'local');
+    const [showConfig, setShowConfig] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
+    
+    
+    const [viewMode, setViewMode] = useState('kanban'); 
+    const [filterType, setFilterType] = useState('all'); 
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortBy, setSortBy] = useState('due'); 
 
-  function mergeData(local, remote) {
-    const m = {};
-    [...local, ...remote].forEach(x => {
-      if (!m[x.id] || (x.updatedAt || 0) > (m[x.id].updatedAt || 0)) m[x.id] = x;
-    });
-    return Object.values(m);
-  }
+    
+    const [ticker, setTicker] = useState(0);
 
-  async function dmSync(silent) {
-    if (!silent) setProgress(20);
-    setSyncStatus('busy', '◌ SYNC…');
-    try {
-      const payload = { tasks: tasks, done: doneTasks };
-      if (!blobId) {
-        const res = await fetch(BIN_CREATE_URL, {
-          method: 'POST',
-          headers: { ...JSONBIN_HEADERS(), 'X-Bin-Name': 'deadline_manager' },
-          body: JSON.stringify(payload)
-        });
-        if (!res.ok) throw new Error(`create failed: ${res.status}`);
-        const json = await res.json();
-        blobId = json.metadata.id;
-        try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+    
+    const [newTitle, setNewTitle] = useState('');
+    const [newSubject, setNewSubject] = useState('');
+    const [newPriority, setNewPriority] = useState('mid');
+    const [newDate, setNewDate] = useState('');
+    const [newPeriod, setNewPeriod] = useState('end');
+    const [newMemo, setNewMemo] = useState('');
+
+    
+    const [toastMsg, setToastMsg] = useState('');
+    const [toastShow, setToastShow] = useState(false);
+    const toastTimerRef = useRef(null);
+
+    
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setTicker(t => t + 1);
+      }, 30000); 
+      return () => clearInterval(interval);
+    }, []);
+
+    
+    useEffect(() => {
+      let localTasks = [];
+      let localDone = [];
+      try {
+        localTasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch (e) {}
+      try {
+        localDone = JSON.parse(localStorage.getItem(DONE_KEY)) || [];
+      } catch (e) {}
+
+      
+      const sanitizedTasks = localTasks.map(t => ({
+        ...t,
+        status: t.status || 'todo'
+      }));
+
+      setTasks(sanitizedTasks);
+      setDoneTasks(localDone);
+    }, []);
+
+    
+    useEffect(() => {
+      async function checkSync() {
+        let currentBlobId = blobId;
         if (window.PWAConfigSync) {
-          await window.PWAConfigSync.syncAppBinId('deadline', blobId);
+          currentBlobId = await window.PWAConfigSync.syncAppBinId('deadline', blobId);
+          if (currentBlobId !== blobId) {
+            setBlobId(currentBlobId);
+            if (currentBlobId) {
+              localStorage.setItem(BLOB_KEY, currentBlobId);
+            } else {
+              localStorage.removeItem(BLOB_KEY);
+            }
+          }
         }
-        updateBlobDisplay();
-        setSyncStatus('ok', '◉ SYNCED');
-        if (!silent) { setProgress(100); toast('Bin作成・同期完了', 'ok'); }
-      } else {
-        const r = await fetch(getBinUrl(), { headers: { 'X-Master-Key': getJsonbinKey() }, cache: 'no-store' });
-        if (!r.ok) {
-          throw new Error(`get failed: ${r.status}`);
+        if (currentBlobId) {
+          syncCloud(true, currentBlobId);
         }
-        const json = await r.json();
-        const rec = json.record || json;
-        const remTasks = Array.isArray(rec.tasks) ? rec.tasks : [];
-        const remDone = Array.isArray(rec.done) ? rec.done : [];
-        tasks = mergeData(tasks, remTasks);
-        doneTasks = mergeData(doneTasks, remDone).slice(0, 50);
-        save();
-        const p = await fetch(getBinPutUrl(), {
+      }
+      checkSync();
+    }, []);
+
+    
+    const triggerToast = (msg) => {
+      setToastMsg(msg);
+      setToastShow(true);
+      clearTimeout(toastTimerRef.current);
+      toastTimerRef.current = setTimeout(() => {
+        setToastShow(false);
+      }, 2500);
+    };
+
+    
+    const saveLocal = (nextTasks, nextDone) => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextTasks));
+        localStorage.setItem(DONE_KEY, JSON.stringify(nextDone));
+      } catch (e) {}
+    };
+
+    
+    const syncCloud = async (silent = false, customBlobId = null) => {
+      setSyncStatus('busy');
+      const targetBlobId = customBlobId !== null ? customBlobId : blobId;
+      const jbKey = getJbKey();
+
+      try {
+        if (!targetBlobId) {
+          
+          const res = await fetch('https://api.jsonbin.io/v3/b', {
+            method: 'POST',
+            headers: {
+              'X-Master-Key': jbKey,
+              'Content-Type': 'application/json',
+              'X-Bin-Name': 'deadline_survival'
+            },
+            body: JSON.stringify({ tasks, doneTasks })
+          });
+          if (!res.ok) throw new Error('create failed: ' + res.status);
+          const json = await res.json();
+          const nextId = json.metadata.id;
+          setBlobId(nextId);
+          localStorage.setItem(BLOB_KEY, nextId);
+          if (window.PWAConfigSync) {
+            await window.PWAConfigSync.syncAppBinId('deadline', nextId);
+          }
+          setSyncStatus('ok');
+          if (!silent) triggerToast('クラウド保管庫を構築・同期しました');
+        } else {
+          
+          const res = await fetch(binUrl(targetBlobId), {
+            headers: { 'X-Master-Key': jbKey },
+            cache: 'no-store'
+          });
+          if (!res.ok) throw new Error('fetch failed: ' + res.status);
+          const json = await res.json();
+          const record = json.record || json;
+          const rTasks = Array.isArray(record.tasks) ? record.tasks : [];
+          const rDone = Array.isArray(record.doneTasks) ? record.doneTasks : [];
+
+          
+          const mergedTasksMap = {};
+          [...rTasks, ...tasks].forEach(t => {
+            mergedTasksMap[t.id] = { ...t, status: t.status || 'todo' };
+          });
+          const mergedTasks = Object.values(mergedTasksMap);
+
+          const mergedDoneMap = {};
+          [...rDone, ...doneTasks].forEach(t => {
+            mergedDoneMap[t.id] = t;
+          });
+          const mergedDone = Object.values(mergedDoneMap);
+
+          
+          const doneIds = new Set(mergedDone.map(d => d.id));
+          const finalTasks = mergedTasks.filter(t => !doneIds.has(t.id));
+
+          setTasks(finalTasks);
+          setDoneTasks(mergedDone);
+          saveLocal(finalTasks, mergedDone);
+
+          
+          const p = await fetch(binPut(targetBlobId), {
+            method: 'PUT',
+            headers: {
+              'X-Master-Key': jbKey,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ tasks: finalTasks, doneTasks: mergedDone })
+          });
+          if (!p.ok) throw new Error('push failed: ' + p.status);
+          setSyncStatus('ok');
+          if (!silent) triggerToast('クラウド同期を完了しました');
+        }
+      } catch (err) {
+        setSyncStatus('error');
+        if (!silent) triggerToast('同期失敗: ' + err.message);
+      }
+    };
+
+    
+    const pushBlob = async (nextTasks, nextDone) => {
+      if (!blobId) return;
+      try {
+        const p = await fetch(binPut(blobId), {
           method: 'PUT',
-          headers: JSONBIN_HEADERS(),
-          body: JSON.stringify({ tasks: tasks, done: doneTasks })
+          headers: {
+            'X-Master-Key': getJbKey(),
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ tasks: nextTasks, doneTasks: nextDone })
         });
-        if (!p.ok) {
-          throw new Error(`put failed: ${p.status}`);
+        if (p.ok) setSyncStatus('ok');
+        else setSyncStatus('error');
+      } catch (e) {
+        setSyncStatus('error');
+      }
+    };
+
+    
+    const handleAdd = (e) => {
+      e.preventDefault();
+      if (!newTitle.trim()) return;
+
+      const newTask = {
+        id: Date.now(),
+        title: newTitle.trim(),
+        subject: newSubject.trim() || 'その他',
+        priority: newPriority,
+        date: newDate || new Date().toISOString().split('T')[0],
+        period: newPeriod,
+        memo: newMemo.trim(),
+        status: 'todo'
+      };
+
+      const nextTasks = [...tasks, newTask];
+      setTasks(nextTasks);
+      saveLocal(nextTasks, doneTasks);
+      pushBlob(nextTasks, doneTasks);
+
+      
+      setNewTitle('');
+      setNewSubject('');
+      setNewPriority('mid');
+      setNewDate('');
+      setNewPeriod('end');
+      setNewMemo('');
+      setShowAddModal(false);
+      triggerToast('課題を登録しました');
+    };
+
+    const handleUpdateStatus = (id, newStatus) => {
+      let nextTasks = [...tasks];
+      let nextDone = [...doneTasks];
+
+      if (newStatus === 'done') {
+        
+        const target = tasks.find(t => t.id === id);
+        if (target) {
+          nextTasks = tasks.filter(t => t.id !== id);
+          nextDone = [...doneTasks, { ...target, doneAt: Date.now() }];
         }
-        setSyncStatus('ok', '◉ SYNCED');
-        if (!silent) { setProgress(100); toast('同期完了', 'ok'); }
-        dmRender();
+        triggerToast('課題を完了しました！🎉');
+      } else {
+        
+        const doneTarget = doneTasks.find(t => t.id === id);
+        if (doneTarget) {
+          nextDone = doneTasks.filter(t => t.id !== id);
+          nextTasks = [...tasks, { ...doneTarget, status: newStatus }];
+          triggerToast('課題を元に戻しました');
+        } else {
+          
+          nextTasks = tasks.map(t => t.id === id ? { ...t, status: newStatus } : t);
+        }
       }
-    } catch(err) {
-      setSyncStatus('err', '✕ ERR');
-      if (!silent) toast('同期失敗: ' + err.message, 'err');
-    }
-    if (!silent) setTimeout(() => setProgress(0), 600);
-  }
 
-  async function pushBlob(silent = true) {
-    if (!blobId) return;
-    try {
-      const p = await fetch(getBinPutUrl(), {
-        method: 'PUT',
-        headers: JSONBIN_HEADERS(),
-        body: JSON.stringify({ tasks: tasks, done: doneTasks })
-      });
-      if (!p.ok) {
-        throw new Error(`put failed: ${p.status}`);
+      setTasks(nextTasks);
+      setDoneTasks(nextDone);
+      saveLocal(nextTasks, nextDone);
+      pushBlob(nextTasks, nextDone);
+    };
+
+    const handleDelete = (id, isDone) => {
+      if (!confirm('この課題データを削除しますか？')) return;
+      let nextTasks = tasks;
+      let nextDone = doneTasks;
+
+      if (isDone) {
+        nextDone = doneTasks.filter(t => t.id !== id);
+      } else {
+        nextTasks = tasks.filter(t => t.id !== id);
       }
-      setSyncStatus('ok', '◉ SYNCED');
-    } catch(e) { setSyncStatus('err', '✕ ERR'); }
-  }
 
-   
-  function getFiltered() {
-    const q = searchEl.value.trim().toLowerCase();
-    const sort = sortEl.value;
-    const now = new Date().getTime();
+      setTasks(nextTasks);
+      setDoneTasks(nextDone);
+      saveLocal(nextTasks, nextDone);
+      pushBlob(nextTasks, nextDone);
+      triggerToast('課題を削除しました');
+    };
 
-    let arr = tasks.slice();
+    const handleApplySettings = async (nextBlobId) => {
+      const cleaned = nextBlobId.trim();
+      if (cleaned !== (blobId || '')) {
+        const nextId = cleaned || null;
+        setBlobId(nextId);
+        if (nextId) {
+          localStorage.setItem(BLOB_KEY, nextId);
+        } else {
+          localStorage.removeItem(BLOB_KEY);
+        }
+        if (window.PWAConfigSync) {
+          await window.PWAConfigSync.syncAppBinId('deadline', nextId);
+        }
+        setShowConfig(false);
+        triggerToast('システム設定を適用しました');
+        if (nextId) {
+          setTimeout(() => syncCloud(false, nextId), 100);
+        }
+      } else {
+        setShowConfig(false);
+      }
+    };
+
+    const handleClearAll = () => {
+      if (!confirm('本当にすべての課題データを削除しますか？この操作は取り消せません。')) return;
+      setTasks([]);
+      setDoneTasks([]);
+      saveLocal([], []);
+      pushBlob([], []);
+      setShowConfig(false);
+      triggerToast('全データを削除しました');
+    };
+
+    const handleExport = () => {
+      const blob = new Blob([JSON.stringify({ tasks, doneTasks }, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `deadline_survival_${Date.now()}.json`;
+      a.click();
+      triggerToast('バックアップをエクスポートしました');
+    };
+
+    const handleImport = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        try {
+          const parsed = JSON.parse(evt.target.result);
+          const rTasks = Array.isArray(parsed.tasks) ? parsed.tasks : [];
+          const rDone = Array.isArray(parsed.doneTasks) ? parsed.doneTasks : [];
+          
+          const mergedTasksMap = {};
+          [...rTasks, ...tasks].forEach(t => {
+            mergedTasksMap[t.id] = { ...t, status: t.status || 'todo' };
+          });
+          const finalTasks = Object.values(mergedTasksMap);
+
+          const mergedDoneMap = {};
+          [...rDone, ...doneTasks].forEach(t => {
+            mergedDoneMap[t.id] = t;
+          });
+          const finalDone = Object.values(mergedDoneMap);
+
+          setTasks(finalTasks);
+          setDoneTasks(finalDone);
+          saveLocal(finalTasks, finalDone);
+          pushBlob(finalTasks, finalDone);
+          triggerToast('バックアップをインポートしました');
+        } catch(err) {
+          triggerToast('データのインポートに失敗しました');
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    };
 
     
-    if (activeFilter === 'active') {
-      arr = arr.filter(t => {
-        const dl = getDeadlineDate(t.date, t.period);
-        return dl.getTime() > now;
-      });
-    } else if (activeFilter === 'danger') {
-      arr = arr.filter(t => {
-        const dl = getDeadlineDate(t.date, t.period);
-        const sc = getStatusClass(dl, t.est);
-        return sc === 'status-danger' || sc === 'status-critical';
-      });
-    } else if (activeFilter === 'done') {
+    const getCountdown = (dateStr, periodStr) => {
+      const timeStr = PERIOD_TIMES[periodStr] || "23:59";
+      const targetTime = new Date(`${dateStr}T${timeStr}:00`).getTime();
+      const nowTime = Date.now();
+      const diff = targetTime - nowTime;
+
+      if (diff <= 0) return { label: '期限切', status: 'status-over', critical: false };
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+      if (days > 3) {
+        return { label: `残り ${days}日`, status: 'status-safe', critical: false };
+      } else if (days > 1) {
+        return { label: `残り ${days}日`, status: 'status-warn', critical: false };
+      } else if (days === 1) {
+        return { label: `残り 1日 ${hours}h`, status: 'status-danger', critical: false };
+      } else {
+        return { label: `残り ${hours}h ${minutes}m`, status: 'status-critical', critical: true };
+      }
+    };
+
+    
+    const filteredTasks = useMemo(() => {
       
-    }
-
-    
-    if (q) {
-      arr = arr.filter(t =>
-        t.title.toLowerCase().includes(q) ||
-        (t.category || '').toLowerCase().includes(q) ||
-        (t.note || '').toLowerCase().includes(q)
-      );
-    }
-
-    
-    arr.sort((a, b) => {
-      if (sort === 'priority') {
-        const pa = PRIORITY_ORDER[a.priority] ?? 1;
-        const pb = PRIORITY_ORDER[b.priority] ?? 1;
-        if (pa !== pb) return pa - pb;
+      let result = [...tasks];
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        result = result.filter(t => 
+          t.title.toLowerCase().includes(query) || 
+          t.subject.toLowerCase().includes(query) || 
+          (t.memo && t.memo.toLowerCase().includes(query))
+        );
       }
-      if (sort === 'est') return (b.est || 0) - (a.est || 0);
-      if (sort === 'added') return (b.addedAt || 0) - (a.addedAt || 0);
+
       
-      const dlA = getDeadlineDate(a.date, a.period);
-      const dlB = getDeadlineDate(b.date, b.period);
-      return dlA - dlB;
-    });
-
-    return arr;
-  }
-
-  function dmRender() {
-    const now = new Date().getTime();
-    const arr = activeFilter === 'done' ? [] : getFiltered();
-
-    
-    let nActive = 0, nDanger = 0, nOver = 0;
-    tasks.forEach(t => {
-      const dl = getDeadlineDate(t.date, t.period);
-      const sc = getStatusClass(dl, t.est);
-      if (sc === 'status-over') nOver++;
-      else {
-        nActive++;
-        if (sc === 'status-danger' || sc === 'status-critical') nDanger++;
+      if (filterType === 'danger') {
+        result = result.filter(t => {
+          const cd = getCountdown(t.date, t.period);
+          return cd.status === 'status-critical' || cd.status === 'status-danger';
+        });
       }
-    });
-    document.getElementById('dm-n-total').textContent  = tasks.length;
-    document.getElementById('dm-n-active').textContent = nActive;
-    document.getElementById('dm-n-danger').textContent = nDanger;
-    document.getElementById('dm-n-done').textContent   = doneTasks.length;
-    document.getElementById('dm-n-over').textContent   = nOver;
+
+      
+      result.sort((a, b) => {
+        if (sortBy === 'due') {
+          const tA = new Date(`${a.date}T${PERIOD_TIMES[a.period] || "23:59"}:00`).getTime();
+          const tB = new Date(`${b.date}T${PERIOD_TIMES[b.period] || "23:59"}:00`).getTime();
+          return tA - tB;
+        } else {
+          return PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
+        }
+      });
+
+      return result;
+    }, [tasks, searchQuery, filterType, sortBy, ticker]);
+
+    const activeDoneTasks = useMemo(() => {
+      let result = [...doneTasks];
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        result = result.filter(t => 
+          t.title.toLowerCase().includes(query) || 
+          t.subject.toLowerCase().includes(query)
+        );
+      }
+      
+      result.sort((a, b) => b.doneAt - a.doneAt);
+      return result;
+    }, [doneTasks, searchQuery]);
 
     
-    ['all','active','danger','done'].forEach(k => {
-      const el = document.getElementById('dm-tab-' + k);
-      el.className = 'dm-tab' + (k === activeFilter ? ' active' : '');
-    });
+    const stats = useMemo(() => {
+      const activeCount = tasks.length;
+      const doneCount = doneTasks.length;
+      const dangerCount = tasks.filter(t => {
+        const cd = getCountdown(t.date, t.period);
+        return cd.status === 'status-critical' || cd.status === 'status-danger';
+      }).length;
+      return { activeCount, doneCount, dangerCount };
+    }, [tasks, doneTasks, ticker]);
+
+    return h`
+      <div class="dm-container">
+        \x3C!-- Header -->
+        <header class="dm-header">
+          <div>
+            <h1 class="dm-hud-title">_DEADLINE_SURVIVAL</h1>
+            <div class="dm-hud-desc">> HUD: ACTIVE // 課題締切サバイバル</div>
+          </div>
+          <div class="dm-header-actions">
+            <button class="dm-btn" onClick=${() => window.history.back()}>◀ EXIT</button>
+            <span class=${`dm-sync-status ${syncStatus === 'ok' ? 'ok' : syncStatus === 'busy' ? 'busy' : syncStatus === 'error' ? 'error' : 'local'}`} onClick=${() => syncCloud()}>
+              ${syncStatus === 'ok' ? '● SYNCED' : syncStatus === 'busy' ? '◌ SYNCING...' : syncStatus === 'error' ? '✕ ERROR' : '◌ LOCAL'}
+            </span>
+            <button class="dm-btn dm-btn-icon" onClick=${() => syncCloud()} title="今すぐ同期">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            </button>
+            <button class="dm-btn dm-btn-icon" onClick=${() => setShowConfig(true)} title="設定">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
+          </div>
+        </header>
+
+        \x3C!-- Stats Bar (Tabs Filter) -->
+        <section class="dm-stats-bar">
+          <div class=${`dm-stat-tab ${filterType === 'all' ? 'active' : ''}`} onClick=${() => setFilterType('all')}>
+            <div class="dm-stat-num">${stats.activeCount + stats.doneCount}</div>
+            <div class="dm-stat-label">総課題数</div>
+          </div>
+          <div class=${`dm-stat-tab ${filterType === 'active' ? 'active' : ''}`} onClick=${() => setFilterType('active')}>
+            <div class="dm-stat-num c-active">${stats.activeCount}</div>
+            <div class="dm-stat-label">未完了</div>
+          </div>
+          <div class=${`dm-stat-tab ${filterType === 'danger' ? 'active' : ''}`} onClick=${() => setFilterType('danger')}>
+            <div class="dm-stat-num c-danger">${stats.dangerCount}</div>
+            <div class="dm-stat-label">期限間近</div>
+          </div>
+          <div class=${`dm-stat-tab ${filterType === 'done' ? 'active' : ''}`} onClick=${() => setFilterType('done')}>
+            <div class="dm-stat-num c-done">${stats.doneCount}</div>
+            <div class="dm-stat-label">完了済</div>
+          </div>
+        </section>
+
+        \x3C!-- Toolbar -->
+        <section class="dm-toolbar">
+          <div class="dm-search-wrap">
+            <span class="dm-search-icon">🔍</span>
+            <input type="text" placeholder="科目・課題を検索..." class="dm-search" value=${searchQuery} onChange=${e => setSearchQuery(e.target.value)} />
+          </div>
+
+          <div style=${ { display: 'flex', gap: '0.5rem', alignItems: 'center' } }>
+            <select class="dm-sort-sel" value=${sortBy} onChange=${e => setSortBy(e.target.value)}>
+              <option value="due">⏰ 締切が近い順</option>
+              <option value="priority">⚠️ 優先度が高い順</option>
+            </select>
+
+            <div class="dm-view-toggle">
+              <div class=${`dm-view-btn ${viewMode === 'kanban' ? 'active' : ''}`} onClick=${() => setViewMode('kanban')}>
+                <span>🗂️ カンバン</span>
+              </div>
+              <div class=${`dm-view-btn ${viewMode === 'list' ? 'active' : ''}`} onClick=${() => setViewMode('list')}>
+                <span>📋 リスト</span>
+              </div>
+            </div>
+
+            <button class="dm-btn dm-btn-primary" onClick=${() => setShowAddModal(true)} style=${ { height: '2.15rem' } }>+ ADD</button>
+          </div>
+        </section>
+
+        \x3C!-- Main Workspace -->
+        ${filterType === 'done' ? (
+          
+          h`
+            <div class="dm-list-wrap">
+              ${activeDoneTasks.length === 0 ? (
+                h`<div class="dm-empty">完了した課題はありません</div>`
+              ) : activeDoneTasks.map(task => h`
+                <div key=${task.id} class="dm-card dm-list-item status-over">
+                  <div>
+                    <div class="dm-task-title" style=${ { textDecoration: 'line-through' } }>${task.title}</div>
+                    <div class="dm-task-meta" style=${ { marginTop: '0.2rem' } }>
+                      <span class="dm-badge">${task.subject}</span>
+                      <span class="dm-badge">${PRIORITY_LABEL[task.priority]}</span>
+                    </div>
+                  </div>
+                  <div>-</div>
+                  <div style=${ { fontSize: '0.7rem', color: '#4b5563' } }>
+                    完了日: ${new Date(task.doneAt).toLocaleDateString()}
+                  </div>
+                  <div class="dm-actions-group">
+                    <button class="dm-action-icon-btn check" onClick=${() => handleUpdateStatus(task.id, 'todo')} title="未完了に戻す">↺</button>
+                    <button class="dm-action-icon-btn del" onClick=${() => handleDelete(task.id, true)} title="消去">×</button>
+                  </div>
+                </div>
+              `)}
+            </div>
+          `
+        ) : viewMode === 'kanban' ? (
+          
+          h`
+            <div class="dm-kanban-grid">
+              \x3C!-- Column Todo -->
+              <div class="dm-kanban-col">
+                <div class="dm-kanban-header">
+                  <span>To Do</span>
+                  <span>${filteredTasks.filter(t => t.status === 'todo').length}</span>
+                </div>
+                ${filteredTasks.filter(t => t.status === 'todo').map(task => renderTaskCard(task))}
+              </div>
+
+              \x3C!-- Column In Progress -->
+              <div class="dm-kanban-col">
+                <div class="dm-kanban-header">
+                  <span>In Progress</span>
+                  <span>${filteredTasks.filter(t => t.status === 'inprogress').length}</span>
+                </div>
+                ${filteredTasks.filter(t => t.status === 'inprogress').map(task => renderTaskCard(task))}
+              </div>
+
+              \x3C!-- Column Completed (Compact logs) -->
+              <div class="dm-kanban-col">
+                <div class="dm-kanban-header">
+                  <span>Completed</span>
+                  <span>${activeDoneTasks.length}</span>
+                </div>
+                ${activeDoneTasks.slice(0, 10).map(task => h`
+                  <div key=${task.id} class="dm-card" style=${ { padding: '0.75rem', opacity: 0.6 } }>
+                    <div style=${ { fontSize: '0.8rem', fontWeight: 'bold', textDecoration: 'line-through' } }>${task.title}</div>
+                    <div style=${ { display: 'flex', justifyContent: 'space-between', marginTop: '0.4rem', fontSize: '0.6rem', color: '#64748b' } }>
+                      <span>${task.subject}</span>
+                      <button style=${ { background: 'none', border: 'none', color: '#10b981', cursor: 'pointer' } } onClick=${() => handleUpdateStatus(task.id, 'todo')}>↺</button>
+                    </div>
+                  </div>
+                `)}
+                ${activeDoneTasks.length > 10 && h`<div style=${ { textAlign: 'center', fontSize: '0.65rem', color: '#4b5563' } }>+ 他 ${activeDoneTasks.length - 10}件の完了課題</div>`}
+              </div>
+            </div>
+          `
+        ) : (
+          
+          h`
+            <div class="dm-list-wrap">
+              ${filteredTasks.length === 0 ? (
+                h`<div class="dm-empty">該当する課題はありません</div>`
+              ) : filteredTasks.map(task => {
+                const countdown = getCountdown(task.date, task.period);
+                return h`
+                  <div key=${task.id} class=${`dm-card dm-list-item ${countdown.status}`}>
+                    <div>
+                      <div class="dm-task-title">${task.title}</div>
+                      <div class="dm-task-meta" style=${ { marginTop: '0.2rem' } }>
+                        <span class="dm-badge">${task.subject}</span>
+                        <span class=${`dm-badge p-${task.priority}`}>${PRIORITY_LABEL[task.priority]}</span>
+                        ${task.memo && h`<span style=${ { fontSize: '0.65rem', color: '#4b5563' } }>${task.memo}</span>`}
+                      </div>
+                    </div>
+                    <div>
+                      <span class="dm-countdown-text">${countdown.label}</span>
+                    </div>
+                    <div style=${ { fontSize: '0.7rem', color: '#64748b' } }>
+                      ${task.date} (${task.period}限)
+                    </div>
+                    <div class="dm-actions-group">
+                      ${task.status === 'todo' ? (
+                        h`<button class="dm-action-icon-btn" onClick=${() => handleUpdateStatus(task.id, 'inprogress')} title="進行中に移動">▶</button>`
+                      ) : (
+                        h`<button class="dm-action-icon-btn" onClick=${() => handleUpdateStatus(task.id, 'todo')} title="ToDoに移動">◀</button>`
+                      )}
+                      <button class="dm-action-icon-btn check" onClick=${() => handleUpdateStatus(task.id, 'done')} title="完了">✓</button>
+                      <button class="dm-action-icon-btn del" onClick=${() => handleDelete(task.id, false)} title="消去">×</button>
+                    </div>
+                  </div>
+                `;
+              })}
+            </div>
+          `
+        )}
+
+        \x3C!-- System usage guide -->
+        <section class="dm-card" style=${ { fontSize: '0.8rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', flexWrap: 'wrap' } }>
+          <div>
+            <h4 style=${ { fontFamily: 'Orbitron', color: '#d946ef', marginBottom: '0.5rem' } }>[SURVIVAL_MANUAL]</h4>
+            <div style=${ { color: '#a1a1aa', lineHeight: '1.6' } }>
+              課題の締切は時限ごとの終了時刻に基づいて判定され、リアルタイムにカウントダウンされます。
+              カンバンのドラッグや矢印操作で、ToDoから進行中、完了へと直感的に移行できます。
+            </div>
+          </div>
+          <div>
+            <h4 style=${ { fontFamily: 'Orbitron', color: '#06b6d4', marginBottom: '0.5rem' } }>[SECURE_SYNC]</h4>
+            <div style=${ { color: '#a1a1aa', lineHeight: '1.6', fontSize: '0.75rem' } }>
+              PWA一括同期に対応しています。設定で割り振られた一意の同期IDを用いることで、複数デバイス間で課題の締切リストを即時同期・バックアップ可能です。
+            </div>
+          </div>
+        </section>
+
+        \x3C!-- Add Task Modal -->
+        <div class=${`dm-overlay ${showAddModal ? 'show' : ''}`} onClick=${(e) => e.target.classList.contains('dm-overlay') && setShowAddModal(false)}>
+          <div class="dm-modal">
+            <div class="dm-modal-header">
+              <span style=${ { fontFamily: 'Orbitron', fontWeight: 'bold', color: '#d946ef' } }>📝 REGISTER_NEW_TASK</span>
+              <button style=${ { background: 'none', border: 'none', color: '#71717a', cursor: 'pointer', fontSize: '1.2rem' } } onClick=${() => setShowAddModal(false)}>×</button>
+            </div>
+            
+            <form onSubmit=${handleAdd} class="ag-form-layout">
+              <div class="dm-form-field">
+                <label>課題タイトル</label>
+                <input type="text" placeholder="例: レポート第1回" class="dm-input" value=${newTitle} onChange=${e => setNewTitle(e.target.value)} required />
+              </div>
+              <div class="dm-form-field">
+                <label>科目名</label>
+                <input type="text" placeholder="例: 電磁気学 (デフォルト: その他)" class="dm-input" value=${newSubject} onChange=${e => setNewSubject(e.target.value)} />
+              </div>
+              <div class="dm-form-field">
+                <label>優先度</label>
+                <select class="dm-select" value=${newPriority} onChange=${e => setNewPriority(e.target.value)}>
+                  <option value="high">▲ 高 (至急)</option>
+                  <option value="mid">⬡ 普通</option>
+                  <option value="low">▽ 低 (いつでも)</option>
+                </select>
+              </div>
+              <div class="dm-form-field">
+                <label>締切日</label>
+                <input type="date" class="dm-input" value=${newDate} onChange=${e => setNewDate(e.target.value)} required />
+              </div>
+              <div class="dm-form-field">
+                <label>締切時限</label>
+                <select class="dm-select" value=${newPeriod} onChange=${e => setNewPeriod(e.target.value)}>
+                  <option value="1">1限終 (10:20)</option>
+                  <option value="2">2限終 (12:00)</option>
+                  <option value="3">3限終 (14:30)</option>
+                  <option value="4">4限終 (16:10)</option>
+                  <option value="5">5限終 (17:50)</option>
+                  <option value="end">終日 (23:59)</option>
+                </select>
+              </div>
+              <div class="dm-form-field">
+                <label>メモ</label>
+                <input type="text" placeholder="提出方法や範囲など" class="dm-input" value=${newMemo} onChange=${e => setNewMemo(e.target.value)} />
+              </div>
+
+              <div class="dm-modal-footer">
+                <button type="button" class="dm-btn" onClick=${() => setShowAddModal(false)}>キャンセル</button>
+                <button type="submit" class="dm-btn dm-btn-primary">追加</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        \x3C!-- Settings Modal Overlay -->
+        <div class=${`dm-overlay ${showConfig ? 'show' : ''}`} onClick=${(e) => e.target.classList.contains('dm-overlay') && setShowConfig(false)}>
+          <div class="dm-modal">
+            <div class="dm-modal-header">
+              <span style=${ { fontFamily: 'Orbitron', fontWeight: 'bold' } }>⚙️ SYSTEM CONFIGURATION</span>
+              <button style=${ { background: 'none', border: 'none', color: '#71717a', cursor: 'pointer', fontSize: '1.2rem' } } onClick=${() => setShowConfig(false)}>×</button>
+            </div>
+            
+            <div style=${ { display: 'flex', flexDirection: 'column', gap: '1.25rem' } }>
+              <div>
+                <label style=${ { fontSize: '0.7rem', color: '#71717a', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' } }>Current Connection Sync ID</label>
+                <div class="ag-blob-display">${blobId || '（未同期／ローカル保存のみ）'}</div>
+              </div>
+              
+              <div>
+                <label style=${ { fontSize: '0.7rem', color: '#71717a', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' } }>Apply Existing Sync ID</label>
+                <input type="text" id="dm-blob-input" class="dm-input" placeholder="接続IDを入力してロード" defaultValue=${blobId || ''} />
+              </div>
+
+              <div style=${ { borderTop: '1px solid hsl(var(--border))', paddingTop: '1rem' } }>
+                <span style=${ { fontSize: '0.7rem', color: '#71717a', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' } }>Data Backup & Purge</span>
+                <div style=${ { display: 'flex', gap: '0.5rem', flexWrap: 'wrap' } }>
+                  <button class="dm-btn" onClick=${handleExport}>📤 エクスポート</button>
+                  <label class="dm-btn" style=${ { cursor: 'pointer' } }>
+                    📥 インポート
+                    <input type="file" accept=".json" style=${ { display: 'none' } } onChange=${handleImport} />
+                  </label>
+                  <button class="dm-btn dm-btn-primary" style=${ { background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' } } onClick=${handleClearAll}>🗑️ 全データ削除</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="dm-modal-footer">
+              <button class="dm-btn" onClick=${() => setShowConfig(false)}>キャンセル</button>
+              <button class="dm-btn dm-btn-primary" onClick=${() => {
+                const val = document.getElementById('dm-blob-input').value;
+                handleApplySettings(val);
+              }}>適用</button>
+            </div>
+          </div>
+        </div>
+
+        \x3C!-- Toast Notification -->
+        <div class=${`dm-toast ${toastShow ? 'show' : ''}`}>
+          ${toastMsg}
+        </div>
+      </div>
+    `;
 
     
-    if (activeFilter === 'done') {
-      listEl.innerHTML = '<div class="dm-empty">// 完了タスクは下に表示されます</div>';
-    } else if (arr.length === 0) {
-      listEl.innerHTML = '<div class="dm-empty">タスクはありません<br>// 待機中</div>';
-    } else {
-      listEl.innerHTML = '';
-      arr.forEach((task, i) => {
-        const deadlineDate = getDeadlineDate(task.date, task.period);
-        const statusClass = getStatusClass(deadlineDate, task.est);
-        const remaining = deadlineDate.getTime() - now;
-        
-        const month = String(deadlineDate.getMonth() + 1).padStart(2, '0');
-        const day = String(deadlineDate.getDate()).padStart(2, '0');
-        const dueStr = `${month}.${day}`;
-        
-        let periodDisplay = `P-${task.period}`;
-        if (task.period === "end") periodDisplay = "23:59";
-
-        const pClass = task.priority === 'high' ? 'p-high' : task.priority === 'low' ? 'p-low' : 'p-mid';
-        const progress = task.progress || 0;
-
-        const item = document.createElement('div');
-        item.className = `dm-task ${statusClass}`;
-        item.style.animationDelay = `${i * 0.05}s`;
-        item.dataset.taskId = task.id;
-        item.dataset.date = task.date;
-        item.dataset.period = task.period;
-        item.dataset.est = task.est;
-        
-        item.innerHTML = `
+    function renderTaskCard(task) {
+      const countdown = getCountdown(task.date, task.period);
+      
+      return h`
+        <div key=${task.id} class=${`dm-card dm-task-card ${countdown.status}`}>
           <div class="dm-info">
             <div class="dm-task-header">
-              <div class="dm-task-title">${esc(task.title)}</div>
-              <span class="dm-priority-badge ${pClass}">${PRIORITY_LABEL[task.priority] || '⬡ 普通'}</span>
-              ${task.category ? `<span class="dm-category-badge">${esc(task.category)}</span>` : ''}
+              <span class="dm-task-title" title=${task.title}>${task.title}</span>
             </div>
-            <div class="dm-meta">
-              <span>[締切] ${dueStr} / ${periodDisplay}</span>
-              <span>[作業] ${task.est}分</span>
+            <div class="dm-task-meta">
+              <span class="dm-badge">${task.subject}</span>
+              <span class=${`dm-badge p-${task.priority}`}>${PRIORITY_LABEL[task.priority]}</span>
             </div>
-            ${task.note ? `<div class="dm-task-note">📝 ${esc(task.note)}</div>` : ''}
-            ${progress > 0 ? `
-              <div class="dm-task-progress">
-                <div class="dm-task-progress-bar"><div class="dm-task-progress-fill" style="width:${progress}%"></div></div>
-                <span class="dm-task-progress-label">${progress}%</span>
-              </div>
-            ` : ''}
+            ${task.memo && h`<div class="dm-task-note">${task.memo}</div>`}
           </div>
-          <div class="dm-right-col">
+
+          <div class="dm-task-actions">
             <div>
-              <span class="dm-time-label">残り時間</span>
-              <div class="dm-countdown">${formatTime(remaining)}</div>
+              <span class="dm-time-label">Deadline</span>
+              <span class="dm-countdown-text">${countdown.label}</span>
             </div>
-            <div class="dm-actions">
-              <button class="dm-btn-icon dm-btn-edit" data-id="${task.id}" title="編集">✎</button>
-              <button class="dm-btn-icon dm-btn-check" data-id="${task.id}" title="完了">✓</button>
-              <button class="dm-btn-icon dm-btn-del" data-id="${task.id}" title="削除">×</button>
+
+            <div class="dm-actions-group">
+              ${task.status === 'todo' && h`
+                <button class="dm-action-icon-btn" onClick=${() => handleUpdateStatus(task.id, 'inprogress')} title="進行中へ">➔</button>
+              `}
+              ${task.status === 'inprogress' && h`
+                <button class="dm-action-icon-btn" onClick=${() => handleUpdateStatus(task.id, 'todo')} title="ToDoへ">左</button>
+              `}
+              <button class="dm-action-icon-btn check" onClick=${() => handleUpdateStatus(task.id, 'done')} title="完了">✓</button>
+              <button class="dm-action-icon-btn del" onClick=${() => handleDelete(task.id, false)} title="消去">×</button>
             </div>
           </div>
-        `;
-        listEl.appendChild(item);
-      });
-
-      
-      listEl.querySelectorAll('.dm-btn-edit').forEach(btn => {
-        btn.addEventListener('click', () => dmOpenEdit(btn.dataset.id));
-      });
-      listEl.querySelectorAll('.dm-btn-check').forEach(btn => {
-        btn.addEventListener('click', () => dmDone(btn.dataset.id));
-      });
-      listEl.querySelectorAll('.dm-btn-del').forEach(btn => {
-        btn.addEventListener('click', () => dmDel(btn.dataset.id));
-      });
-    }
-
-    
-    renderDone();
-  }
-
-  function renderDone() {
-    const doneSection = document.getElementById('dm-done-section');
-    const doneList = document.getElementById('dm-done-list');
-    if (doneTasks.length === 0) {
-      doneSection.style.display = 'none';
-      return;
-    }
-    doneSection.style.display = '';
-    doneList.innerHTML = doneTasks.map(t => `
-      <div class="dm-task-done">
-        <div class="dm-done-title">
-          <span>✓</span>
-          <span>${esc(t.title)}</span>
-          ${t.category ? `<span class="dm-category-badge">${esc(t.category)}</span>` : ''}
         </div>
-        <div class="dm-done-date">${t.completedAt ? new Date(t.completedAt).toLocaleDateString('ja-JP') : ''}</div>
-      </div>
-    `).join('');
+      `;
+    }
   }
 
-   
-  function dmDone(id) {
-    const task = tasks.find(t => t.id === id || String(t.id) === id);
-    if (!task) return;
-    doneTasks.unshift({ ...task, completedAt: Date.now() });
-    tasks = tasks.filter(t => t.id !== id && String(t.id) !== id);
-    save();
-    dmRender();
-    pushBlob();
-    toast('タスク完了！', 'ok');
-  }
-
-  function dmDel(id) {
-    if (!confirm('このタスクを削除しますか？')) return;
-    tasks = tasks.filter(t => t.id !== id && String(t.id) !== id);
-    save();
-    dmRender();
-    pushBlob();
-  }
-
-   
-  formEl.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const title = document.getElementById('task-title').value.trim();
-    const date = document.getElementById('task-date').value;
-    const period = document.getElementById('task-period').value;
-    const est = parseInt(document.getElementById('task-est').value);
-    const priority = document.getElementById('task-priority').value;
-    const category = document.getElementById('task-category').value.trim();
-    const note = document.getElementById('task-note').value.trim();
-
-    if (title && date && period && est) {
-      const now = Date.now();
-      tasks.push({
-        id: genId(),
-        title,
-        date,
-        period,
-        est,
-        priority: priority || 'mid',
-        category: category || '',
-        note: note || '',
-        progress: 0,
-        addedAt: now,
-        updatedAt: now
-      });
-      formEl.reset();
-      document.getElementById('task-category').value = '';
-      document.getElementById('task-note').value = '';
-      save();
-      dmRender();
-      pushBlob();
-      toast('タスク追加', 'ok');
-    }
-  });
-
-   
-  window.dmOpenEdit = function(id) {
-    const task = tasks.find(t => t.id === id || String(t.id) === id);
-    if (!task) return;
-    document.getElementById('dm-edit-id').value = task.id;
-    document.getElementById('dm-edit-title').value = task.title;
-    document.getElementById('dm-edit-date').value = task.date;
-    document.getElementById('dm-edit-period').value = task.period;
-    document.getElementById('dm-edit-est').value = task.est;
-    document.getElementById('dm-edit-priority').value = task.priority || 'mid';
-    document.getElementById('dm-edit-category').value = task.category || '';
-    document.getElementById('dm-edit-progress').value = task.progress || 0;
-    document.getElementById('dm-edit-note').value = task.note || '';
-    document.getElementById('dm-overlay-edit').classList.add('open');
-  };
-  window.dmCloseEdit = function() { document.getElementById('dm-overlay-edit').classList.remove('open'); };
-
-  window.dmSaveEdit = function() {
-    const id = document.getElementById('dm-edit-id').value;
-    const idx = tasks.findIndex(t => t.id === id || String(t.id) === id);
-    if (idx < 0) return;
-    tasks[idx] = {
-      ...tasks[idx],
-      title: document.getElementById('dm-edit-title').value.trim(),
-      date: document.getElementById('dm-edit-date').value,
-      period: document.getElementById('dm-edit-period').value,
-      est: parseInt(document.getElementById('dm-edit-est').value) || tasks[idx].est,
-      priority: document.getElementById('dm-edit-priority').value,
-      category: document.getElementById('dm-edit-category').value.trim(),
-      progress: parseInt(document.getElementById('dm-edit-progress').value) || 0,
-      note: document.getElementById('dm-edit-note').value.trim(),
-      updatedAt: Date.now()
-    };
-    save();
-    dmCloseEdit();
-    dmRender();
-    pushBlob();
-    toast('更新しました', 'ok');
-  };
-
-  window.dmDeleteFromEdit = function() {
-    const id = document.getElementById('dm-edit-id').value;
-    if (!id || !confirm('削除しますか？')) return;
-    tasks = tasks.filter(t => t.id !== id && String(t.id) !== id);
-    save();
-    dmCloseEdit();
-    dmRender();
-    pushBlob();
-    toast('削除しました', 'info');
-  };
-
-   
-  window.dmSetFilter = function(f) { activeFilter = f; dmRender(); };
-
-  window.dmToggleDone = function() {
-    const list = document.getElementById('dm-done-list');
-    const btn = document.getElementById('dm-toggle-done');
-    doneExpanded = !doneExpanded;
-    if (doneExpanded) {
-      list.classList.remove('collapsed');
-      btn.textContent = '▲ 隠す';
-    } else {
-      list.classList.add('collapsed');
-      btn.textContent = '▼ 表示';
-    }
-  };
-
-   
-  window.dmOpenSettings = function() {
-    document.getElementById('dm-blob-id-input').value = blobId || '';
-    document.getElementById('dm-overlay-settings').classList.add('open');
-  };
-  window.dmCloseSettings = function() { document.getElementById('dm-overlay-settings').classList.remove('open'); };
-
-  window.dmApplySettings = async function() {
-    const v = document.getElementById('dm-blob-id-input').value.trim();
-    if (v && v !== blobId) {
-      blobId = v;
-      try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
-      if (window.PWAConfigSync) {
-        await window.PWAConfigSync.syncAppBinId('deadline', blobId);
-      }
-      updateBlobDisplay();
-      toast('Blob ID を適用しました', 'ok');
-      dmSync();
-    }
-    dmCloseSettings();
-  };
-
-  window.dmExport = function() {
-    const blob = new Blob([JSON.stringify({ tasks, done: doneTasks }, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'deadline_manager.json';
-    a.click();
-    toast('エクスポート完了', 'ok');
-  };
-
-  window.dmImport = function(input) {
-    const file = input.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      try {
-        const data = JSON.parse(e.target.result);
-        const importedTasks = Array.isArray(data.tasks) ? data.tasks : (Array.isArray(data) ? data : []);
-        const importedDone = Array.isArray(data.done) ? data.done : [];
-        tasks = mergeData(tasks, importedTasks);
-        doneTasks = mergeData(doneTasks, importedDone).slice(0, 50);
-        save();
-        dmRender();
-        pushBlob();
-        toast(`${importedTasks.length}件インポートしました`, 'ok');
-      } catch(ex) { toast('インポート失敗: 不正なJSON', 'err'); }
-    };
-    reader.readAsText(file);
-    input.value = '';
-  };
-
-  window.dmClearAll = function() {
-    if (!confirm('全データを削除しますか？')) return;
-    tasks = [];
-    doneTasks = [];
-    save();
-    dmRender();
-    pushBlob();
-    toast('全データを削除しました', 'info');
-    dmCloseSettings();
-  };
-
-   
-  ['dm-overlay-edit', 'dm-overlay-settings'].forEach(id => {
-    document.getElementById(id).addEventListener('click', function(e) {
-      if (e.target === this) this.classList.remove('open');
-    });
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.dm-overlay.open').forEach(el => el.classList.remove('open'));
-    }
-  });
-
-   
-  function updateCountdowns() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    const s = String(now.getSeconds()).padStart(2, '0');
-    clockEl.innerText = `${h}:${m}:${s}`;
-
-    
-    const cards = listEl.querySelectorAll('.dm-task[data-task-id]');
-    cards.forEach(card => {
-      const dateStr = card.dataset.date;
-      const period = card.dataset.period;
-      const est = parseInt(card.dataset.est) || 0;
-      if (!dateStr) return;
-      const deadlineDate = getDeadlineDate(dateStr, period);
-      const remaining = deadlineDate.getTime() - now.getTime();
-      const newStatus = getStatusClass(deadlineDate, est);
-
-      
-      const cdEl = card.querySelector('.dm-countdown');
-      if (cdEl) cdEl.textContent = formatTime(remaining);
-
-      
-      const statusClasses = ['status-safe','status-warn','status-danger','status-critical','status-over'];
-      const currentStatus = statusClasses.find(c => card.classList.contains(c));
-      if (currentStatus !== newStatus) {
-        statusClasses.forEach(c => card.classList.remove(c));
-        card.classList.add(newStatus);
-      }
-    });
-
-    
-    let nActive = 0, nDanger = 0, nOver = 0;
-    tasks.forEach(t => {
-      const dl = getDeadlineDate(t.date, t.period);
-      const sc = getStatusClass(dl, t.est);
-      if (sc === 'status-over') nOver++;
-      else {
-        nActive++;
-        if (sc === 'status-danger' || sc === 'status-critical') nDanger++;
-      }
-    });
-    document.getElementById('dm-n-total').textContent  = tasks.length;
-    document.getElementById('dm-n-active').textContent = nActive;
-    document.getElementById('dm-n-danger').textContent = nDanger;
-    document.getElementById('dm-n-done').textContent   = doneTasks.length;
-    document.getElementById('dm-n-over').textContent   = nOver;
-  }
-  setInterval(updateCountdowns, 1000);
-
-   
-  window.dmSync = dmSync;
-  window.dmRender = dmRender;
-
-   
-  init();
+  ReactDOM.createRoot(document.getElementById('dm-root')).render(h`<${App} />`);
 })();
 </script>
 
