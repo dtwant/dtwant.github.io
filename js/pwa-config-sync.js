@@ -1,0 +1,186 @@
+/**
+ * PWA Config Sync Manager
+ * LocalStorageとJSONBinのマスターBinを利用して、同一Origin内の複数PWA間でAPIキーや各Bin IDを同期します。
+ */
+(function() {
+  const MASTER_BIN_KEY = 'shared_master_bin_id';
+  const API_KEY_KEY = 'shared_jsonbin_api_key';
+  const BINS_CACHE_KEY = 'shared_pwa_bins_cache';
+  
+  // デフォルトのマスターAPIキー (公開されてもデータ破壊は起きないよう基本的には個人の読み書き用)
+  const DEFAULT_API_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+
+  window.PWAConfigSync = {
+    // マスターBin IDを取得
+    getMasterBinId() {
+      return localStorage.getItem(MASTER_BIN_KEY) || '';
+    },
+
+    // マスターBin IDを設定
+    setMasterBinId(id) {
+      if (id) {
+        localStorage.setItem(MASTER_BIN_KEY, id.trim());
+      } else {
+        localStorage.removeItem(MASTER_BIN_KEY);
+      }
+      window.dispatchEvent(new Event('storage'));
+    },
+
+    // APIキーを取得 (未設定ならデフォルトキーを返す)
+    getApiKey() {
+      return localStorage.getItem(API_KEY_KEY) || DEFAULT_API_KEY;
+    },
+
+    // APIキーを設定
+    setApiKey(key) {
+      if (key) {
+        localStorage.setItem(API_KEY_KEY, key.trim());
+      } else {
+        localStorage.removeItem(API_KEY_KEY);
+      }
+      window.dispatchEvent(new Event('storage'));
+    },
+
+    // キャッシュされたすべての Bin ID マップを取得
+    getBinsMap() {
+      try {
+        const cache = localStorage.getItem(BINS_CACHE_KEY);
+        return cache ? JSON.parse(cache) : {};
+      } catch (e) {
+        return {};
+      }
+    },
+
+    // キャッシュされた特定のアプリ of Bin ID を取得
+    getCachedBinId(appKey) {
+      return this.getBinsMap()[appKey] || null;
+    },
+
+    // キャッシュに特定のアプリ of Bin ID を設定
+    setCachedBinId(appKey, binId) {
+      try {
+        const map = this.getBinsMap();
+        if (binId) {
+          map[appKey] = binId;
+        } else {
+          delete map[appKey];
+        }
+        localStorage.setItem(BINS_CACHE_KEY, JSON.stringify(map));
+        window.dispatchEvent(new Event('storage'));
+      } catch (e) {
+        console.error("Failed to cache bin ID:", e);
+      }
+    },
+
+    // リモートのマスターBinからデータを同期する
+    async fetchMasterConfig() {
+      const masterBinId = this.getMasterBinId();
+      const apiKey = this.getApiKey();
+      if (!masterBinId) return null;
+
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${masterBinId}/latest`, {
+          headers: { 'X-Master-Key': apiKey },
+          cache: 'no-store'
+        });
+        if (!res.ok) throw new Error(`Fetch master bin failed: ${res.status}`);
+        const data = await res.json();
+        
+        const record = data.record || {};
+        const remoteBins = record.bins || {};
+        
+        // ローカルの既存キャッシュとマージする (リモート優先)
+        const localBins = this.getBinsMap();
+        const mergedBins = { ...localBins, ...remoteBins };
+        
+        localStorage.setItem(BINS_CACHE_KEY, JSON.stringify(mergedBins));
+        
+        if (record.apiKey && record.apiKey !== DEFAULT_API_KEY) {
+          this.setApiKey(record.apiKey);
+        }
+        
+        window.dispatchEvent(new Event('storage'));
+        return mergedBins;
+      } catch (e) {
+        console.error("Failed to fetch master config from JSONBin:", e);
+        return null;
+      }
+    },
+
+    // ローカルのキャッシュをリモートのマスターBinに保存する
+    async pushMasterConfig() {
+      const masterBinId = this.getMasterBinId();
+      const apiKey = this.getApiKey();
+      const bins = this.getBinsMap();
+      
+      const payload = {
+        bins: bins,
+        apiKey: apiKey === DEFAULT_API_KEY ? "" : apiKey, // デフォルトキーの場合は保存しない
+        updatedAt: new Date().toISOString()
+      };
+
+      try {
+        if (masterBinId) {
+          // 既存マスターBinの更新 (PUT)
+          const res = await fetch(`https://api.jsonbin.io/v3/b/${masterBinId}`, {
+            method: 'PUT',
+            headers: {
+              'X-Master-Key': apiKey,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error(`Push master config failed: ${res.status}`);
+          return masterBinId;
+        } else {
+          // マスターBinの新規作成 (POST)
+          const res = await fetch('https://api.jsonbin.io/v3/b', {
+            method: 'POST',
+            headers: {
+              'X-Master-Key': apiKey,
+              'Content-Type': 'application/json',
+              'X-Bin-Name': 'pwa_master_config',
+              'X-Bin-Private': 'true'
+            },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error(`Create master config failed: ${res.status}`);
+          const data = await res.json();
+          const newId = data.metadata.id;
+          this.setMasterBinId(newId);
+          return newId;
+        }
+      } catch (e) {
+        console.error("Failed to push master config to JSONBin:", e);
+        throw e;
+      }
+    },
+
+    // アプリのIDを同期する (起動時や設定変更時に呼び出し)
+    async syncAppBinId(appKey, currentBinId) {
+      const cached = this.getCachedBinId(appKey);
+      
+      // 1. 新しいIDがアプリ側で生成または入力され、キャッシュと異なる場合
+      if (currentBinId && currentBinId !== cached) {
+        this.setCachedBinId(appKey, currentBinId);
+        
+        // マスターBinが存在するならリモートへプッシュ
+        if (this.getMasterBinId()) {
+          try {
+            await this.pushMasterConfig();
+          } catch (e) {
+            console.warn("Could not push new app bin ID to master config, saved locally.");
+          }
+        }
+        return currentBinId;
+      }
+      
+      // 2. アプリ側にIDがなく、キャッシュ側にIDがある場合はキャッシュの値を優先適用
+      if (!currentBinId && cached) {
+        return cached;
+      }
+
+      return currentBinId;
+    }
+  };
+})();
