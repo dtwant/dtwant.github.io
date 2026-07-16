@@ -122,7 +122,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "0"
+    "wordCount": "4"
   }]
   </script>
 
@@ -732,10 +732,21 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 <script src="https://unpkg.com/htm@3/dist/htm.umd.js"></script>
 <script src="/js/pwa-config-sync.js"></script>
+
+<script>
+
+(function(){
+  var el = document.currentScript;
+  var section = el.closest('section');
+  if (section && section.previousElementSibling && section.previousElementSibling.tagName === 'HEADER') {
+    section.previousElementSibling.style.display = 'none';
+  }
+})();
+</script>
 
 <style>
  
@@ -773,7 +784,7 @@
   font-family: 'Inter', 'Zen Kaku Gothic New', sans-serif;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  min-height: 100vh;
+  min-height: 200px;
   padding: 2.5rem 1.5rem;
   position: relative;
   overflow-x: hidden;
@@ -1288,12 +1299,13 @@
 @media (max-width: 640px) {
   .ag-app { padding: 1.5rem 0.75rem; }
   .ag-card { padding: 1.25rem 1rem; }
-  .ag-stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .ag-stat-card { padding: 1rem 0.75rem; }
-  .ag-stat-value { font-size: 1.35rem; }
-  .ag-course-card-top { flex-wrap: wrap; }
-  .ag-course-controls { grid-template-columns: 1fr; }
-  .ag-course-controls button { padding: 0.65rem 0.5rem; }
+  .ag-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .ag-stats-grid .ag-card { padding: 1rem 0.75rem; }
+  .ag-stat-num { font-size: 1.35rem; }
+  .ag-course-card-top { flex-wrap: nowrap; }
+  .ag-course-controls { grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
+  .ag-control-btn { padding: 0.5rem 0.25rem; font-size: 0.7rem; }
+  .ag-control-btn .sub-label { font-size: 0.55rem; }
   .ag-overlay { align-items: flex-end; }
   .ag-modal {
     width: 100%;
@@ -1304,13 +1316,25 @@
   .ag-overlay.show .ag-modal {
     transform: translateY(0);
   }
+  .ag-header { flex-direction: column; align-items: stretch; gap: 1rem; }
+  .ag-header-actions { width: 100%; justify-content: flex-end; }
 }
 </style>
 
-<div class="ag-app" id="ag-root"></div>
+<div class="ag-app" id="ag-root">
+  <div id="ag-loading" style="padding:2rem;color:#a1a1aa;font-family:monospace;font-size:14px;">⏳ Loading Attendance Guardian...</div>
+</div>
+
+<script>
+window.onerror = function(msg, url, line, col, err) {
+  var el = document.getElementById('ag-root');
+  if (el) el.innerHTML = '<pre style="color:#ef4444;padding:2rem;font-size:13px;white-space:pre-wrap;">JS ERROR: ' + msg + '\nLine: ' + line + '\nCol: ' + col + '\n' + (err && err.stack ? err.stack : '') + '</pre>';
+};
+</script>
 
 <script>
 (function() {
+try {
   const { useState, useEffect, useRef, useMemo } = React;
   const h = htm.bind(React.createElement);
 
@@ -1361,10 +1385,13 @@
       let local = localList;
       if (local === null) {
         try {
-          local = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+          local = JSON.parse(localStorage.getItem(STORAGE_KEY));
         } catch(e) {
           local = [];
         }
+      }
+      if (!Array.isArray(local)) {
+        local = [];
       }
       if (local.length === 0 && !localStorage.getItem(STORAGE_KEY)) {
         local = [{ id: 1, name: 'サンプル: 物理学', type: 'half', credit: 2, current: 0, history: [] }];
@@ -1373,54 +1400,68 @@
       let timetableCourses = [];
       try {
         const timetableData = JSON.parse(localStorage.getItem('dt_subject_progress_data')) || {};
-        timetableCourses = Object.keys(timetableData).map(subName => {
-          const subjectData = timetableData[subName];
-          let currentLoss = 0;
-          const historyList = [];
-          let maxIndex = 15;
+        if (timetableData && typeof timetableData === 'object' && !Array.isArray(timetableData)) {
+          timetableCourses = Object.keys(timetableData).map(subName => {
+            const subjectData = timetableData[subName];
+            let currentLoss = 0;
+            const historyList = [];
+            let maxIndex = 15;
 
-          Object.keys(subjectData).forEach(idxKey => {
-            const idx = parseInt(idxKey);
-            if (idx > 15) maxIndex = 30;
+            if (subjectData && typeof subjectData === 'object' && !Array.isArray(subjectData)) {
+              Object.keys(subjectData).forEach(idxKey => {
+                const idx = parseInt(idxKey);
+                if (isNaN(idx)) return; 
+                if (idx > 15) maxIndex = 30;
 
-            const item = subjectData[idxKey];
-            if (item.status === 'delayed') {
-              currentLoss -= 1;
-              historyList.push({
-                timestamp: item.date ? new Date(item.date).getTime() : Date.now() - (15 - idx) * 24 * 60 * 60 * 1000,
-                delta: -1,
-                type: 'late',
-                memo: `第${idx}回講義: ${item.memo || ''}`
-              });
-            } else if (item.status === 'offline') {
-              currentLoss -= 2;
-              historyList.push({
-                timestamp: item.date ? new Date(item.date).getTime() : Date.now() - (15 - idx) * 24 * 60 * 60 * 1000,
-                delta: -2,
-                type: 'absent',
-                memo: `第${idx}回講義: ${item.memo || ''}`
+                const item = subjectData[idxKey];
+                if (item === null || typeof item !== 'object') return; 
+
+                let ts = Date.now() - (15 - idx) * 24 * 60 * 60 * 1000;
+                if (item.date) {
+                  const parsed = new Date(item.date).getTime();
+                  if (!isNaN(parsed)) ts = parsed;
+                }
+
+                if (item.status === 'delayed') {
+                  currentLoss -= 1;
+                  historyList.push({
+                    timestamp: ts,
+                    delta: -1,
+                    type: 'late',
+                    memo: `第${idx}回講義: ${item.memo || ''}`
+                  });
+                } else if (item.status === 'offline') {
+                  currentLoss -= 2;
+                  historyList.push({
+                    timestamp: ts,
+                    delta: -2,
+                    type: 'absent',
+                    memo: `第${idx}回講義: ${item.memo || ''}`
+                  });
+                }
               });
             }
+
+            historyList.sort((a, b) => a.timestamp - b.timestamp);
+
+            return {
+              id: `tt-${subName}`,
+              name: subName,
+              type: maxIndex > 15 ? 'full' : 'half',
+              credit: 2,
+              current: currentLoss,
+              history: historyList,
+              isTimetableLinked: true
+            };
           });
-
-          historyList.sort((a, b) => a.timestamp - b.timestamp);
-
-          return {
-            id: `tt-${subName}`,
-            name: subName,
-            type: maxIndex > 15 ? 'full' : 'half',
-            credit: 2,
-            current: currentLoss,
-            history: historyList,
-            isTimetableLinked: true
-          };
-        });
+        }
       } catch (e) {
         console.error('Failed to parse timetable data:', e);
       }
 
       const merged = [...timetableCourses];
       local.forEach(lc => {
+        if (!lc || typeof lc !== 'object') return; 
         const matchedIndex = merged.findIndex(tc => tc.name === lc.name);
         if (matchedIndex !== -1) {
           merged[matchedIndex].credit = lc.credit || merged[matchedIndex].credit;
@@ -1501,6 +1542,7 @@
 
       try {
         if (!targetBlobId) {
+          const latest = loadAndMergeCourses();
           const res = await fetch('https://api.jsonbin.io/v3/b', {
             method: 'POST',
             headers: {
@@ -1508,7 +1550,7 @@
               'Content-Type': 'application/json',
               'X-Bin-Name': 'attendance_guardian'
             },
-            body: JSON.stringify({ courses })
+            body: JSON.stringify({ courses: latest })
           });
           if (!res.ok) throw new Error('create error: ' + res.status);
           const json = await res.json();
@@ -1530,7 +1572,8 @@
           const record = json.record || json;
           const remoteCourses = Array.isArray(record.courses) ? record.courses : (Array.isArray(record) ? record : []);
 
-          const merged = loadAndMergeCourses(courses, remoteCourses);
+          const latest = loadAndMergeCourses();
+          const merged = loadAndMergeCourses(latest, remoteCourses);
           setCourses(merged);
           saveLocal(merged);
 
@@ -1605,7 +1648,7 @@
       const nextCourses = courses.map(c => {
         if (c.id === id) {
           if (c.isTimetableLinked) return c; 
-          const rule = RULES[c.type];
+          const rule = RULES[c.type] || RULES.half;
           const nextVal = Math.min(0, c.current + delta);
           
           const nextHistory = [...c.history];
@@ -1779,13 +1822,15 @@
 
     
     const stats = useMemo(() => {
-      const totalCredits = courses.reduce((acc, c) => acc + c.credit, 0);
+      const totalCredits = courses.reduce((acc, c) => acc + (c && typeof c.credit === 'number' ? c.credit : 0), 0);
       const dangerCount = courses.filter(c => {
-        const rule = RULES[c.type];
+        if (!c) return false;
+        const rule = RULES[c.type] || RULES.half;
         return c.current <= rule.danger && c.current > rule.fail;
       }).length;
       const failCount = courses.filter(c => {
-        const rule = RULES[c.type];
+        if (!c) return false;
+        const rule = RULES[c.type] || RULES.half;
         return c.current <= rule.fail;
       }).length;
       return { totalCredits, dangerCount, failCount };
@@ -1816,14 +1861,14 @@
         \x3C!-- Stats Cards -->
         <section class="ag-stats-grid">
           <div class="ag-card">
-            <div style="font-size: 0.75rem; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.05em;">総登録単位数</div>
+            <div style=${ { fontSize: '0.75rem', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '0.05em' } }>総登録単位数</div>
             <div class="ag-stat-num">${stats.totalCredits}<span class="ag-stat-sub">(${courses.length}科目)</span></div>
           </div>
           <div class="ag-card">
-            <div style="font-size: 0.75rem; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.05em;">要注意 / 落単回避不可</div>
+            <div style=${ { fontSize: '0.75rem', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '0.05em' } }>要注意 / 落単回避不可</div>
             <div class="ag-stat-num">
               <span style=${ { color: stats.dangerCount > 0 ? '#f59e0b' : '#3f3f46' } }>${stats.dangerCount}</span>
-              <span style="color: #27272a; margin: 0 0.5rem;">/</span>
+              <span style=${ { color: '#27272a', margin: '0 0.5rem' } }>/</span>
               <span style=${ { color: stats.failCount > 0 ? '#ef4444' : '#3f3f46' } }>${stats.failCount}</span>
             </div>
           </div>
@@ -1832,7 +1877,7 @@
         \x3C!-- Course List -->
         <section class="ag-container" style=${ { gap: '1rem' } }>
           ${courses.map(course => {
-            const rule = RULES[course.type];
+            const rule = RULES[course.type] || RULES.half;
             const currentVal = course.current;
             const limitVal = rule.limit;
             const failVal = rule.fail;
@@ -1930,14 +1975,15 @@
 
                   ${isHistoryOpen && h`
                     <div class="ag-history-panel">
-                      ${course.history.length === 0 ? h`
+                      ${(!course.history || course.history.length === 0) ? h`
                         <div style=${ { textAlign: 'center', fontSize: '0.7rem', color: '#3f3f46', padding: '0.5rem' } }>出欠履歴がありません</div>
                       ` : course.history.map(item => {
-                        const dateStr = new Date(item.timestamp).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                        if (!item) return null;
+                        const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '不明';
                         return h`
                           <div key=${item.timestamp} class="ag-history-item">
-                            <span class=${`ag-history-badge ${item.type}`}>
-                              ${item.type === 'late' ? '遅刻' : '欠席'} (${item.delta})
+                            <span class=${`ag-history-badge ${item.type || 'late'}`}>
+                              ${item.type === 'late' ? '遅刻' : '欠席'} (${item.delta || 0})
                             </span>
                             <span style=${ { color: '#71717a', fontSize: '0.7rem' } }>${dateStr}</span>
                             ${!course.isTimetableLinked && h`
@@ -2051,7 +2097,17 @@
     `;
   }
 
-  ReactDOM.createRoot(document.getElementById('ag-root')).render(h`<${App} />`);
+  try {
+    ReactDOM.createRoot(document.getElementById('ag-root')).render(h`<${App} />`);
+  } catch(mountErr) {
+    console.error('MOUNT ERROR:', mountErr);
+    document.getElementById('ag-root').innerHTML = '<pre style="color:red;padding:2rem;font-size:14px;">MOUNT ERROR: ' + mountErr.message + '\n' + mountErr.stack + '</pre>';
+  }
+} catch(globalErr) {
+  console.error('GLOBAL SCRIPT ERROR:', globalErr);
+  var el = document.getElementById('ag-root');
+  if (el) el.innerHTML = '<pre style="color:red;padding:2rem;font-size:14px;">SCRIPT ERROR: ' + globalErr.message + '\n' + globalErr.stack + '</pre>';
+}
 })();
 </script>
 
