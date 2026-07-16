@@ -17,6 +17,7 @@
 </head>
 <body>
   
+<script src="/js/pwa-config-sync.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=SF+Pro+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 
@@ -3182,13 +3183,19 @@
   }
 
   
-  const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const DEFAULT_JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const getJsonbinKey = function() {
+    if (window.PWAConfigSync) {
+      return window.PWAConfigSync.getApiKey();
+    }
+    return DEFAULT_JSONBIN_KEY;
+  };
   const BIN_CREATE_URL = 'https://api.jsonbin.io/v3/b';
   const getBinUrl = function(binId) { return 'https://api.jsonbin.io/v3/b/' + binId + '/latest'; };
   const getBinPutUrl = function(binId) { return 'https://api.jsonbin.io/v3/b/' + binId; };
   const JSONBIN_HEADERS = function() {
     return {
-      'X-Master-Key': JSONBIN_KEY,
+      'X-Master-Key': getJsonbinKey(),
       'Content-Type': 'application/json'
     };
   };
@@ -3199,8 +3206,12 @@
   }
 
   function initSyncKey() {
-    dbGetSetting('sd_gaman_sync_key', function(dbKey) {
+    dbGetSetting('sd_gaman_sync_key', async function(dbKey) {
       var localKey = localStorage.getItem('sd_gaman_sync_key') || dbKey;
+      
+      if (window.PWAConfigSync) {
+        localKey = await window.PWAConfigSync.syncAppBinId('diary', localKey);
+      }
       
       
       if (localKey && (isJsonBinId(localKey) || localKey.indexOf('lk_') === 0)) {
@@ -3215,7 +3226,7 @@
         fetch(BIN_CREATE_URL, {
           method: 'POST',
           headers: {
-            'X-Master-Key': JSONBIN_KEY,
+            'X-Master-Key': getJsonbinKey(),
             'Content-Type': 'application/json',
             'X-Bin-Name': 'secret_diary_sync'
           },
@@ -3325,6 +3336,9 @@
   function registerNewSyncKey(key) {
     localStorage.setItem('sd_gaman_sync_key', key);
     dbPutSetting('sd_gaman_sync_key', key);
+    if (window.PWAConfigSync) {
+      window.PWAConfigSync.syncAppBinId('diary', key);
+    }
     updateSyncStatusUI(key, true);
     pushToCloud();
   }
@@ -3425,7 +3439,7 @@
     }
 
     fetch(getBinUrl(key), {
-      headers: { 'X-Master-Key': JSONBIN_KEY },
+      headers: { 'X-Master-Key': getJsonbinKey() },
       cache: 'no-store'
     })
     .then(function(res) {
@@ -3541,7 +3555,7 @@
     }
     
     fetch(getBinUrl(key), {
-      headers: { 'X-Master-Key': JSONBIN_KEY }
+      headers: { 'X-Master-Key': getJsonbinKey() }
     })
     .then(function(res) {
       if (res.status === 200) return res.json();

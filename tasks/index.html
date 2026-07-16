@@ -724,6 +724,7 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       
+<script src="/js/pwa-config-sync.js"></script>
 
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -1274,8 +1275,14 @@
   
   
   const JB_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const getJbKey = () => {
+    if (window.PWAConfigSync) {
+      return window.PWAConfigSync.getApiKey();
+    }
+    return JB_KEY;
+  };
   const JB_CREATE = 'https://api.jsonbin.io/v3/b';
-  const JB_HDR = () => ({ 'X-Master-Key': JB_KEY, 'Content-Type': 'application/json' });
+  const JB_HDR = () => ({ 'X-Master-Key': getJbKey(), 'Content-Type': 'application/json' });
   const binUrl = (id) => `https://api.jsonbin.io/v3/b/${id}/latest`;
   const binPut = (id) => `https://api.jsonbin.io/v3/b/${id}`;
 
@@ -1418,9 +1425,26 @@
 
     
     useEffect(() => {
-      if (unlocked && blobId) {
-        syncCloud(true);
+      async function checkSyncAndSync() {
+        if (unlocked) {
+          let currentBlobId = blobId;
+          if (window.PWAConfigSync) {
+            currentBlobId = await window.PWAConfigSync.syncAppBinId('tasklist', blobId);
+            if (currentBlobId !== blobId) {
+              setBlobId(currentBlobId);
+              if (currentBlobId) {
+                localStorage.setItem(BLOB_KEY, currentBlobId);
+              } else {
+                localStorage.removeItem(BLOB_KEY);
+              }
+            }
+          }
+          if (currentBlobId) {
+            syncCloud(true, currentBlobId);
+          }
+        }
       }
+      checkSyncAndSync();
     }, [unlocked]);
 
     
@@ -1494,9 +1518,9 @@
     };
 
     
-    const syncCloud = async (silent = false) => {
+    const syncCloud = async (silent = false, customBlobId = null) => {
       setSyncStatus('busy');
-      let currentBlobId = blobId;
+      let currentBlobId = customBlobId !== null ? customBlobId : blobId;
       try {
         if (!currentBlobId) {
           
@@ -1510,11 +1534,14 @@
           currentBlobId = json.metadata.id;
           setBlobId(currentBlobId);
           localStorage.setItem(BLOB_KEY, currentBlobId);
+          if (window.PWAConfigSync) {
+            await window.PWAConfigSync.syncAppBinId('tasklist', currentBlobId);
+          }
           setSyncStatus('ok');
           if (!silent) addToast('CLOUD STORAGE SYNCED', 'success');
         } else {
           
-          const r = await fetch(binUrl(currentBlobId), { headers: { 'X-Master-Key': JB_KEY }, cache: 'no-store' });
+          const r = await fetch(binUrl(currentBlobId), { headers: { 'X-Master-Key': getJbKey() }, cache: 'no-store' });
           if (!r.ok) {
             if ([400, 401, 403, 404, 422].includes(r.status)) {
               setBlobId(null);
@@ -1645,7 +1672,7 @@
     };
 
     
-    const handleApplyConfig = () => {
+    const handleApplyConfig = async () => {
       const cleanedInput = configBlobInput.trim();
       if (cleanedInput !== (blobId || '')) {
         const nextBlobId = cleanedInput || null;
@@ -1655,12 +1682,15 @@
         } else {
           localStorage.removeItem(BLOB_KEY);
         }
+        if (window.PWAConfigSync) {
+          await window.PWAConfigSync.syncAppBinId('tasklist', nextBlobId);
+        }
         setIsConfigOpen(false);
         addToast('SYSTEM CONFIG UPDATED', 'success');
         
         
         setTimeout(() => {
-          syncCloud(false);
+          syncCloud(false, nextBlobId);
         }, 100);
       } else {
         setIsConfigOpen(false);

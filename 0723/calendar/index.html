@@ -1023,6 +1023,7 @@
 
         <div class="article-content max-w-prose mb-20">
           
+<script src="/js/pwa-config-sync.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 
@@ -2153,7 +2154,12 @@
   let data = { attendance: {}, attendance_ts: {}, events: {} };
 
   const JB_KEY_DEFAULT = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
-  let jbKey = localStorage.getItem('cg_jb_key') || JB_KEY_DEFAULT;
+  function getJbKey() {
+    if (window.PWAConfigSync) {
+      return window.PWAConfigSync.getApiKey();
+    }
+    return localStorage.getItem('cg_jb_key') || JB_KEY_DEFAULT;
+  }
   let ghPat = localStorage.getItem('cg_gh_pat') || '';
   let ghOwner = localStorage.getItem('cg_gh_owner') || 'dtwant';
   let ghRepo = localStorage.getItem('cg_gh_repo') || 'dtwant.github.io';
@@ -2162,7 +2168,7 @@
   const grid = document.getElementById('cg-grid');
 
    
-  function init() {
+  async function init() {
     const d = new Date(new Date().toLocaleString('sv', { timeZone: 'Asia/Tokyo' }));
     viewYear = d.getFullYear();
     viewMonth = d.getMonth();
@@ -2173,6 +2179,9 @@
     if (!data.events)        data.events = {};
 
     blobId = SC_BLOB || localStorage.getItem(BLOB_KEY) || null;
+    if (window.PWAConfigSync) {
+      blobId = await window.PWAConfigSync.syncAppBinId('calendar', blobId);
+    }
     if (blobId) try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
 
     
@@ -2566,7 +2575,7 @@
 
    
   const JB_CREATE = 'https://api.jsonbin.io/v3/b';
-  const JB_HDR = () => ({ 'X-Master-Key': jbKey, 'Content-Type': 'application/json' });
+  const JB_HDR = () => ({ 'X-Master-Key': getJbKey(), 'Content-Type': 'application/json' });
   const binUrl = () => `https://api.jsonbin.io/v3/b/${blobId}/latest`;
   const binPut = () => `https://api.jsonbin.io/v3/b/${blobId}`;
 
@@ -2609,10 +2618,13 @@
         const json = await res.json();
         blobId = json.metadata.id;
         try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+        if (window.PWAConfigSync) {
+          await window.PWAConfigSync.syncAppBinId('calendar', blobId);
+        }
         setSS('ok', '◉ SYNCED');
         if (!silent) toast('Bin作成・同期完了', 'ok');
       } else {
-        const r = await fetch(binUrl(), { headers: { 'X-Master-Key': jbKey }, cache: 'no-store' });
+        const r = await fetch(binUrl(), { headers: { 'X-Master-Key': getJbKey() }, cache: 'no-store' });
         if (!r.ok) {
           throw new Error(`get: ${r.status}`);
         }
@@ -2644,22 +2656,29 @@
    
   window.cgOpenSettings = function() {
     document.getElementById('cg-blob-input').value = blobId || '';
-    document.getElementById('cg-jbkey-input').value = jbKey === JB_KEY_DEFAULT ? '' : jbKey;
+    const currentJbKey = getJbKey();
+    document.getElementById('cg-jbkey-input').value = currentJbKey === JB_KEY_DEFAULT ? '' : currentJbKey;
     document.getElementById('cg-gh-pat').value = ghPat;
     document.getElementById('cg-gh-owner').value = ghOwner;
     document.getElementById('cg-gh-repo').value = ghRepo;
     document.getElementById('cg-ov-settings').classList.add('open');
   };
   window.cgCloseSettings = function() { document.getElementById('cg-ov-settings').classList.remove('open'); };
-  window.cgApplySettings = function() {
+  window.cgApplySettings = async function() {
     const v = document.getElementById('cg-blob-input').value.trim();
     if (v !== (blobId||'')) {
       blobId = v || null;
       if (blobId) try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
       else try { localStorage.removeItem(BLOB_KEY); } catch(e) {}
+      if (window.PWAConfigSync) {
+        await window.PWAConfigSync.syncAppBinId('calendar', blobId);
+      }
     }
-    jbKey = document.getElementById('cg-jbkey-input').value.trim() || JB_KEY_DEFAULT;
-    localStorage.setItem('cg_jb_key', jbKey);
+    const inputJbKey = document.getElementById('cg-jbkey-input').value.trim() || JB_KEY_DEFAULT;
+    localStorage.setItem('cg_jb_key', inputJbKey);
+    if (window.PWAConfigSync) {
+      window.PWAConfigSync.setApiKey(inputJbKey === JB_KEY_DEFAULT ? '' : inputJbKey);
+    }
     ghPat = document.getElementById('cg-gh-pat').value.trim();
     localStorage.setItem('cg_gh_pat', ghPat);
     ghOwner = document.getElementById('cg-gh-owner').value.trim() || 'dtwant';

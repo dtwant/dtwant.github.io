@@ -7,6 +7,9 @@ window.DtSync = (() => {
   const JB_KEY_DEFAULT = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
   
   function getJbKey() {
+    if (window.PWAConfigSync) {
+      return window.PWAConfigSync.getApiKey();
+    }
     const key = localStorage.getItem('cg_jb_key') || JB_KEY_DEFAULT;
     return key.trim();
   }
@@ -549,6 +552,9 @@ window.DtSync = (() => {
           const newId = await createRemoteVault(localData);
           blobId = newId;
           localStorage.setItem(BLOB_KEY, blobId);
+          if (window.PWAConfigSync) {
+            await window.PWAConfigSync.syncAppBinId('timetable', blobId);
+          }
           
           updateUI();
           log(`NEW VAULT LINKED: ${blobId}`);
@@ -579,6 +585,9 @@ window.DtSync = (() => {
       if (confirm("このVault IDでクラウドに接続し、同期しますか？")) {
         blobId = inputVal;
         localStorage.setItem(BLOB_KEY, blobId);
+        if (window.PWAConfigSync) {
+          await window.PWAConfigSync.syncAppBinId('timetable', blobId);
+        }
         updateUI();
         log(`VAULT SELECTED: ${blobId}`);
         await syncProcess();
@@ -695,12 +704,19 @@ window.DtSync = (() => {
   }
 
   // 初期化関数
-  function init(options) {
+  async function init(options) {
     if (options) {
       if (options.storageKey) config.storageKey = options.storageKey;
       if (options.onSyncComplete) config.onSyncComplete = options.onSyncComplete;
     }
     
+    if (window.PWAConfigSync) {
+      blobId = await window.PWAConfigSync.syncAppBinId('timetable', blobId);
+      if (blobId) {
+        localStorage.setItem(BLOB_KEY, blobId);
+      }
+    }
+
     injectSyncPanelHTML();
     updateUI();
     

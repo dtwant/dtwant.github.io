@@ -124,7 +124,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "218"
+    "wordCount": "207"
   }]
   </script>
 
@@ -867,7 +867,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <span>218 words</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <span>207 words</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -2178,20 +2178,12 @@
         <label>EXISTING BLOB ID</label>
         <input type="text" class="ns-input" id="ns-blob-id-input" placeholder="別端末から引き継ぐ場合に入力">
       </div>
-      <div class="ns-settings-title" style="margin-top: 1.5rem;">SHARED MASTER CONFIG (プランC)</div>
+      <div class="ns-settings-title" style="margin-top: 1.5rem;">クラウド一括同期設定</div>
       <div class="ns-blob-info">
-        異なる端末やブラウザ間ですべてのツールの設定を自動同期するための「マスターBin ID」を設定します。空白の状態で「同期」を押すと新規作成されます。
-      </div>
-      <div class="ns-field">
-        <label>MASTER BIN ID</label>
-        <div style="display:flex;gap:.5rem;">
-          <input type="text" class="ns-input" id="ns-master-bin-input" placeholder="マスターBin IDを入力" style="flex:1">
-          <button class="ns-btn save" onclick="nsSyncMasterConfig()" style="font-size:0.75rem;padding:0 0.75rem;">同期</button>
+        異なる端末やブラウザ間ですべてのツールの同期IDを一括設定・管理するには、ポータルの共通同期設定ページを利用してください。
+        <div style="margin-top: 0.5rem; text-align: right;">
+          <a href="/project-x/sync-settings/" style="color: var(--ns-cyan); text-decoration: underline; font-weight: bold;">⚙ 共通同期設定を開く</a>
         </div>
-      </div>
-      <div class="ns-field">
-        <label>JSONBIN CUSTOM API KEY (任意)</label>
-        <input type="text" class="ns-input" id="ns-custom-api-key-input" placeholder="デフォルトキー以外を使う場合に入力">
       </div>
       <div class="ns-field">
         <label>EXPORT / IMPORT</label>
@@ -2803,40 +2795,11 @@ function openEdit(m){
 }
 window.nsOpenSettings=function(){
   document.getElementById('ns-blob-id-input').value=blobId||'';
-  if (window.PWAConfigSync) {
-    document.getElementById('ns-master-bin-input').value=window.PWAConfigSync.getMasterBinId()||'';
-    const key = window.PWAConfigSync.getApiKey();
-    document.getElementById('ns-custom-api-key-input').value = (key && key !== '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q') ? key : '';
-  }
   document.getElementById('ns-overlay-settings').classList.add('open');
 };
 window.nsCloseSettings=function(){ document.getElementById('ns-overlay-settings').classList.remove('open'); };
 window.nsApplySettings=async function(){
   const v=document.getElementById('ns-blob-id-input').value.trim();
-  const masterId = document.getElementById('ns-master-bin-input').value.trim();
-  const customKey = document.getElementById('ns-custom-api-key-input').value.trim();
-
-  let changed = false;
-
-  if (window.PWAConfigSync) {
-    const oldMasterId = window.PWAConfigSync.getMasterBinId();
-    const oldKey = window.PWAConfigSync.getApiKey();
-
-    if (masterId !== oldMasterId) {
-      window.PWAConfigSync.setMasterBinId(masterId);
-      changed = true;
-    }
-    
-    if (customKey) {
-      if (customKey !== oldKey) {
-        window.PWAConfigSync.setApiKey(customKey);
-        changed = true;
-      }
-    } else if (oldKey !== '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q') {
-      window.PWAConfigSync.setApiKey('');
-      changed = true;
-    }
-  }
 
   if(v&&v!==blobId){
     blobId=v; try{ localStorage.setItem(LS_BLOB,blobId); }catch(e){}
@@ -2847,52 +2810,8 @@ window.nsApplySettings=async function(){
       } catch(e) {}
     }
     updateBlobDisplay(); toast('Blob ID を適用しました','ok'); nsSync();
-  } else if (changed) {
-    toast('設定を保存しました。再ロードします','ok');
-    setTimeout(() => location.reload(), 1000);
   }
   nsCloseSettings();
-};
-window.nsSyncMasterConfig=async function(){
-  const masterInput = document.getElementById('ns-master-bin-input');
-  const keyInput = document.getElementById('ns-custom-api-key-input');
-  if (!masterInput) return;
-  
-  const id = masterInput.value.trim();
-  const key = keyInput ? keyInput.value.trim() : '';
-
-  if (window.PWAConfigSync) {
-    if (key) {
-      window.PWAConfigSync.setApiKey(key);
-    } else {
-      window.PWAConfigSync.setApiKey('');
-    }
-
-    if (id) {
-      window.PWAConfigSync.setMasterBinId(id);
-      toast("マスターBin同期中...", "busy");
-      try {
-        const bins = await window.PWAConfigSync.fetchMasterConfig();
-        if (bins) {
-          toast("同期完了。再ロードします", "ok");
-          setTimeout(() => location.reload(), 1500);
-        } else {
-          toast("同期失敗。ID/キーが無効です", "error");
-        }
-      } catch (e) {
-        toast("同期エラーが発生しました", "error");
-      }
-    } else {
-      toast("マスターBin新規作成中...", "busy");
-      try {
-        const newId = await window.PWAConfigSync.pushMasterConfig();
-        masterInput.value = newId;
-        toast(`マスター作成成功: ${newId}`, "ok");
-      } catch (e) {
-        toast("新規作成に失敗しました", "error");
-      }
-    }
-  }
 };
 window.nsFilter=function(f){ activeFilter=f; nsRender(); };
 window.nsSetRating=function(v){ formRating=v; updateStarUI(); };

@@ -734,6 +734,7 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       
+<script src="/js/pwa-config-sync.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=SF+Pro+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <div class="rc-app-container">
@@ -2438,7 +2439,13 @@ input:disabled + .rc-slider {
 (function() {
   const DB_NAME = 'sd_report_db';
   const DB_VERSION = 1;
-  const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const DEFAULT_JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const getJsonbinKey = () => {
+    if (window.PWAConfigSync) {
+      return window.PWAConfigSync.getApiKey();
+    }
+    return DEFAULT_JSONBIN_KEY;
+  };
   const BIN_URL_PREFIX = 'https://api.jsonbin.io/v3/b/';
   const BIN_CREATE_URL = 'https://api.jsonbin.io/v3/b';
 
@@ -2599,9 +2606,13 @@ input:disabled + .rc-slider {
   function initSyncKey(callback) {
     const transaction = db.transaction(['settings'], 'readonly');
     const keyReq = transaction.objectStore('settings').get('sd_academic_sync_key');
-    keyReq.onsuccess = function() {
+    keyReq.onsuccess = async function() {
       const dbKey = keyReq.result;
       let localKey = localStorage.getItem('sd_academic_sync_key') || dbKey;
+      
+      if (window.PWAConfigSync) {
+        localKey = await window.PWAConfigSync.syncAppBinId('report_card', localKey);
+      }
       
       if (localKey && isJsonBinId(localKey)) {
         
@@ -2621,7 +2632,7 @@ input:disabled + .rc-slider {
         fetch(BIN_CREATE_URL, {
           method: 'POST',
           headers: {
-            'X-Master-Key': JSONBIN_KEY,
+            'X-Master-Key': getJsonbinKey(),
             'Content-Type': 'application/json',
             'X-Bin-Name': 'academic_report_sync',
             'X-Bin-Private': 'true'
@@ -2632,13 +2643,16 @@ input:disabled + .rc-slider {
           if (!res.ok) throw new Error('status: ' + res.status);
           return res.json();
         })
-        .then(json => {
+        .then(async json => {
           const userKey = json.metadata.id;
           if (userKey) {
             syncConfig.binId = userKey;
             syncConfig.key = userKey;
             
             localStorage.setItem('sd_academic_sync_key', userKey);
+            if (window.PWAConfigSync) {
+              await window.PWAConfigSync.syncAppBinId('report_card', userKey);
+            }
             saveSettings();
             
             const writeTrans = db.transaction(['settings'], 'readwrite');
@@ -3745,13 +3759,13 @@ input:disabled + .rc-slider {
 
   function pullFromCloud(callback) {
     const key = localStorage.getItem('sd_academic_sync_key');
-    if (!key || !isJsonBinId(key)) {
+    if (!key || key.indexOf('lk_') === 0) {
       if (callback) callback();
       return;
     }
 
     fetch(BIN_URL_PREFIX + key + '/latest', {
-      headers: { 'X-Master-Key': JSONBIN_KEY }
+      headers: { 'X-Master-Key': getJsonbinKey() }
     })
     .then(res => {
       if (!res.ok) throw new Error();
@@ -3803,15 +3817,15 @@ input:disabled + .rc-slider {
     
     
     fetch(BIN_URL_PREFIX + enteredKey + '/latest', {
-      headers: { 'X-Master-Key': JSONBIN_KEY }
+      headers: { 'X-Master-Key': getJsonbinKey() }
     })
     .then(res => {
-      if (!res.ok) throw new Error();
+      if (res.status !== 200) throw new Error();
       return res.json();
     })
-    .then(body => {
-      const encryptedStr = body.record.data;
+    .then(async json => {
       try {
+        const encryptedStr = json.record ? json.record.data : json.data;
         const decryptedStr = decryptText(encryptedStr, enteredKey);
         const cloudData = JSON.parse(decryptedStr);
 
@@ -3827,6 +3841,9 @@ input:disabled + .rc-slider {
         syncConfig.binId = enteredKey;
         syncConfig.key = enteredKey;
         localStorage.setItem('sd_academic_sync_key', enteredKey);
+        if (window.PWAConfigSync) {
+          await window.PWAConfigSync.syncAppBinId('report_card', enteredKey);
+        }
         
         const transaction = db.transaction(['settings'], 'readwrite');
         transaction.objectStore('settings').put(enteredKey, 'sd_academic_sync_key');

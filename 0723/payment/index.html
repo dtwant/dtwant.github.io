@@ -1019,6 +1019,7 @@
 
         <div class="article-content max-w-prose mb-20">
           
+<script src="/js/pwa-config-sync.js"></script>
 
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -1669,8 +1670,14 @@ const Calendar = I(html`<rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
 
 const S_KEY='dt_pay_v2', SUB_KEY='dt_pay_subs', BLOB_KEY='dt_pay_blob', BUDGET_KEY='dt_pay_budget';
 const JSONBIN_KEY='$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+const getJsonbinKey=()=>{
+  if(window.PWAConfigSync){
+    return window.PWAConfigSync.getApiKey();
+  }
+  return JSONBIN_KEY;
+};
 const BIN_URL='https://api.jsonbin.io/v3/b';
-const jbH=()=>({'X-Master-Key':JSONBIN_KEY,'Content-Type':'application/json'});
+const jbH=()=>({'X-Master-Key':getJsonbinKey(),'Content-Type':'application/json'});
 const genId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const fmt=n=>new Intl.NumberFormat('ja-JP',{style:'currency',currency:'JPY'}).format(n||0);
 const fmtNum=n=>new Intl.NumberFormat('ja-JP').format(n||0);
@@ -1839,8 +1846,9 @@ function App(){
     }catch(e){setSyncStatus('error'); toast('同期エラー','error');}
   },[blobId,entries,subs,toast]);
 
-  const doSync = useCallback(async(silent=false)=>{
-    if(!blobId){
+  const doSync = useCallback(async(silent=false, customBlobId=null)=>{
+    let currentBlobId = customBlobId !== null ? customBlobId : blobId;
+    if(!currentBlobId){
       
       setSyncStatus('syncing');
       try{
@@ -1848,6 +1856,9 @@ function App(){
         const data=await res.json();
         const newId=data.metadata.id;
         setBlobId(newId); localStorage.setItem(BLOB_KEY,newId);
+        if (window.PWAConfigSync) {
+          await window.PWAConfigSync.syncAppBinId('payment', newId);
+        }
         setSyncStatus('ok');
         if(!silent) toast('クラウド同期を確立しました','success');
       }catch(e){setSyncStatus('error'); toast('同期初期化失敗','error');}
@@ -1855,7 +1866,7 @@ function App(){
       
       setSyncStatus('syncing');
       try{
-        const res=await fetch(`${BIN_URL}/${blobId}/latest`,{headers:{'X-Master-Key':JSONBIN_KEY}});
+        const res=await fetch(`${BIN_URL}/${currentBlobId}/latest`,{headers:{'X-Master-Key':getJsonbinKey()}});
         if(!res.ok) throw new Error();
         const remote=await res.json();
         const rE=remote.record.entries||{}, rS=remote.record.subs||[];
@@ -1888,7 +1899,26 @@ function App(){
   },[blobId,entries,subs,toast]);
 
   
-  useEffect(()=>{if(blobId) doSync(true);},[]);
+  useEffect(()=>{
+    async function checkSyncAndSync() {
+      let currentBlobId = blobId;
+      if (window.PWAConfigSync) {
+        currentBlobId = await window.PWAConfigSync.syncAppBinId('payment', blobId);
+        if (currentBlobId !== blobId) {
+          setBlobId(currentBlobId);
+          if (currentBlobId) {
+            localStorage.setItem(BLOB_KEY, currentBlobId);
+          } else {
+            localStorage.removeItem(BLOB_KEY);
+          }
+        }
+      }
+      if (currentBlobId) {
+        doSync(true, currentBlobId);
+      }
+    }
+    checkSyncAndSync();
+  },[]);
 
   
   const changeMonth = useCallback((d)=>{
@@ -2185,11 +2215,14 @@ function App(){
         onExport=${doExport}
         onImport=${doImport}
         onClearAll=${()=>setDeleteConfirm({type:'all',name:'全データ'})}
-        onBlobApply=${(val)=>{
+        onBlobApply=${async(val)=>{
           if(val&&val!==blobId){
             setBlobId(val); localStorage.setItem(BLOB_KEY,val);
+            if (window.PWAConfigSync) {
+              await window.PWAConfigSync.syncAppBinId('payment', val);
+            }
             toast('同期先を更新しました','success');
-            doSync(true);
+            doSync(true, val);
           }
           setSettingsOpen(false);
         }}

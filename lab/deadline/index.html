@@ -732,6 +732,7 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       
+<script src="/js/pwa-config-sync.js"></script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
@@ -2159,12 +2160,15 @@
   }
 
    
-  function init() {
+  async function init() {
     migrateV2();
     try { tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { tasks = []; }
     try { doneTasks = JSON.parse(localStorage.getItem(DONE_KEY) || '[]'); } catch(e) { doneTasks = []; }
     
     blobId = SHORTCODE_BLOB || localStorage.getItem(BLOB_KEY) || null;
+    if (window.PWAConfigSync) {
+      blobId = await window.PWAConfigSync.syncAppBinId('deadline', blobId);
+    }
     if (blobId) {
       try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
     }
@@ -2214,9 +2218,15 @@
   }
 
    
-  const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const DEFAULT_JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const getJsonbinKey = () => {
+    if (window.PWAConfigSync) {
+      return window.PWAConfigSync.getApiKey();
+    }
+    return DEFAULT_JSONBIN_KEY;
+  };
   const BIN_CREATE_URL = 'https://api.jsonbin.io/v3/b';
-  const JSONBIN_HEADERS = () => ({ 'X-Master-Key': JSONBIN_KEY, 'Content-Type': 'application/json' });
+  const JSONBIN_HEADERS = () => ({ 'X-Master-Key': getJsonbinKey(), 'Content-Type': 'application/json' });
   const getBinUrl    = () => `https://api.jsonbin.io/v3/b/${blobId}/latest`;
   const getBinPutUrl = () => `https://api.jsonbin.io/v3/b/${blobId}`;
 
@@ -2260,11 +2270,14 @@
         const json = await res.json();
         blobId = json.metadata.id;
         try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+        if (window.PWAConfigSync) {
+          await window.PWAConfigSync.syncAppBinId('deadline', blobId);
+        }
         updateBlobDisplay();
         setSyncStatus('ok', '◉ SYNCED');
         if (!silent) { setProgress(100); toast('Bin作成・同期完了', 'ok'); }
       } else {
-        const r = await fetch(getBinUrl(), { headers: { 'X-Master-Key': JSONBIN_KEY }, cache: 'no-store' });
+        const r = await fetch(getBinUrl(), { headers: { 'X-Master-Key': getJsonbinKey() }, cache: 'no-store' });
         if (!r.ok) {
           throw new Error(`get failed: ${r.status}`);
         }
@@ -2617,11 +2630,14 @@
   };
   window.dmCloseSettings = function() { document.getElementById('dm-overlay-settings').classList.remove('open'); };
 
-  window.dmApplySettings = function() {
+  window.dmApplySettings = async function() {
     const v = document.getElementById('dm-blob-id-input').value.trim();
     if (v && v !== blobId) {
       blobId = v;
       try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
+      if (window.PWAConfigSync) {
+        await window.PWAConfigSync.syncAppBinId('deadline', blobId);
+      }
       updateBlobDisplay();
       toast('Blob ID を適用しました', 'ok');
       dmSync();

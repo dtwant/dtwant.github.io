@@ -1023,6 +1023,7 @@
 
         <div class="article-content max-w-prose mb-20">
           
+<script src="/js/pwa-config-sync.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -3361,8 +3362,14 @@
     const SK = 'dt_vocal_range_v2', BK = 'dt_vocal_range_blob', PK = 'dt_vocal_range_prefs';
     
     const JBK = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+    const getJsonbinKey = () => {
+      if (window.PWAConfigSync) {
+        return window.PWAConfigSync.getApiKey();
+      }
+      return JBK;
+    };
     const BURL = 'https://api.jsonbin.io/v3/b';
-    const jbH = () => ({ 'X-Master-Key': JBK, 'Content-Type': 'application/json' });
+    const jbH = () => ({ 'X-Master-Key': getJsonbinKey(), 'Content-Type': 'application/json' });
 
     
     const SEARCH_APIS = [
@@ -3839,21 +3846,25 @@
       if (!blobId) return;
       try { await fetch(BURL + '/' + blobId, { method: 'PUT', headers: jbH(), body: JSON.stringify({ tracks }) }); } catch (e) { }
     }
-    async function doSync(silent) {
-      if (!blobId) {
+    async function doSync(silent, customBlobId = null) {
+      let currentBlobId = customBlobId !== null ? customBlobId : blobId;
+      if (!currentBlobId) {
         if (silent) return;
         if (!confirm('クラウド同期を開始しますか？')) return;
         setSB('busy');
         try {
           const r = await fetch(BURL, { method: 'POST', headers: jbH(), body: JSON.stringify({ tracks }) });
           const d = await r.json(); blobId = d.metadata.id; localStorage.setItem(BK, blobId);
+          if (window.PWAConfigSync) {
+            await window.PWAConfigSync.syncAppBinId('vocal_range', blobId);
+          }
           setSB('ok'); toast('同期を開始しました');
         } catch (e) { setSB('err'); toast('初期化失敗', true); }
         return;
       }
       setSB('busy');
       try {
-        const r = await fetch(BURL + '/' + blobId + '/latest', { headers: { 'X-Master-Key': JBK } });
+        const r = await fetch(BURL + '/' + currentBlobId + '/latest', { headers: { 'X-Master-Key': getJsonbinKey() } });
         if (!r.ok) throw new Error();
         const d = await r.json(); const remote = d.record.tracks || [];
         const merged = new Map(tracks.map(t => [t.id, t])); let changed = false;
@@ -3872,9 +3883,15 @@
 
      
     function openCfg() { $('cfg-bid').value = blobId || ''; $('cfg-blob').textContent = blobId || '未接続'; openM('vr-m-cfg'); }
-    function applyCfg() {
+    async function applyCfg() {
       const v = $('cfg-bid').value.trim();
-      if (v && v !== blobId) { blobId = v; localStorage.setItem(BK, blobId); toast('接続先を更新'); doSync(true); }
+      if (v && v !== blobId) {
+        blobId = v; localStorage.setItem(BK, blobId);
+        if (window.PWAConfigSync) {
+          await window.PWAConfigSync.syncAppBinId('vocal_range', blobId);
+        }
+        toast('接続先を更新'); doSync(true, blobId);
+      }
       closeM('vr-m-cfg'); setSB(blobId ? 'ok' : 'local');
     }
     function purge() {
@@ -4164,7 +4181,17 @@
     document.addEventListener('click', () => { document.querySelectorAll('.vr-smenu.open').forEach(m => m.classList.remove('open')); });
 
      
-    load(); render(); setSB(blobId ? 'ok' : 'local'); if (blobId) doSync(true);
+    async function initApp() {
+      load();
+      if (window.PWAConfigSync) {
+        blobId = await window.PWAConfigSync.syncAppBinId('vocal_range', blobId);
+        if (blobId) localStorage.setItem(BK, blobId);
+      }
+      render();
+      setSB(blobId ? 'ok' : 'local');
+      if (blobId) doSync(true);
+    }
+    initApp();
     setupArtistSuggest();
 
     return {

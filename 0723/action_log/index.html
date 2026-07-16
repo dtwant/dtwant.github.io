@@ -1025,6 +1025,7 @@
 
         <div class="article-content max-w-prose mb-20">
           
+<script src="/js/pwa-config-sync.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -1476,10 +1477,16 @@
 "use strict";
 
 
-const JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+const DEFAULT_JSONBIN_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+const getJsonbinKey = () => {
+  if (window.PWAConfigSync) {
+    return window.PWAConfigSync.getApiKey();
+  }
+  return DEFAULT_JSONBIN_KEY;
+};
 const LS_BIN_KEY = 'dt_task_cal_bin_id';
 let BIN_ID = localStorage.getItem(LS_BIN_KEY) || '6a004707adc21f119a7bbbff';
-const JSONBIN_HEADERS = () => ({'X-Master-Key': JSONBIN_KEY, 'Content-Type': 'application/json'});
+const JSONBIN_HEADERS = () => ({'X-Master-Key': getJsonbinKey(), 'Content-Type': 'application/json'});
 const getBinUrl = () => `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
 const getBinPutUrl = () => `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 const BIN_CREATE_URL = 'https://api.jsonbin.io/v3/b';
@@ -1565,7 +1572,7 @@ async function fetchFromBlob() {
       await createNewBin();
       return;
     }
-    const r = await fetch(getBinUrl(), {headers: {'X-Master-Key': JSONBIN_KEY}, cache: 'no-store'});
+    const r = await fetch(getBinUrl(), {headers: {'X-Master-Key': getJsonbinKey()}, cache: 'no-store'});
     if (r.status === 404) {
       await createNewBin();
       return;
@@ -1596,6 +1603,9 @@ async function createNewBin() {
     const j = await r.json();
     BIN_ID = j.metadata.id;
     localStorage.setItem(LS_BIN_KEY, BIN_ID);
+    if (window.PWAConfigSync) {
+      await window.PWAConfigSync.syncAppBinId('task_calendar', BIN_ID);
+    }
     toast('📡 ONLINE SYNC ESTABLISHED');
     syncOk = true;
   } catch (e) {
@@ -2860,12 +2870,18 @@ $('ntc-cfg-apply').addEventListener('click', async () => {
   if (newId && newId !== BIN_ID) {
     BIN_ID = newId;
     localStorage.setItem(LS_BIN_KEY, BIN_ID);
+    if (window.PWAConfigSync) {
+      await window.PWAConfigSync.syncAppBinId('task_calendar', BIN_ID);
+    }
     toast('🔗 BIN ID UPDATED');
     closeCfg();
     await fetchFromBlob();
   } else if (!newId) {
     BIN_ID = null;
     localStorage.removeItem(LS_BIN_KEY);
+    if (window.PWAConfigSync) {
+      await window.PWAConfigSync.syncAppBinId('task_calendar', null);
+    }
     toast('📡 CREATING NEON LINK...');
     closeCfg();
     await createNewBin();
@@ -2920,9 +2936,19 @@ $('ntc-cfg-clear').addEventListener('click', () => {
 });
 
 
-loadFromLocal();
-render();
-fetchFromBlob();
+async function initApp() {
+  loadFromLocal();
+  if (window.PWAConfigSync) {
+    const syncedBinId = await window.PWAConfigSync.syncAppBinId('task_calendar', BIN_ID);
+    if (syncedBinId && syncedBinId !== BIN_ID) {
+      BIN_ID = syncedBinId;
+      localStorage.setItem(LS_BIN_KEY, BIN_ID);
+    }
+  }
+  render();
+  fetchFromBlob();
+}
+initApp();
 })();
 </script>
 
