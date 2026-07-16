@@ -160,8 +160,14 @@
     async syncAppBinId(appKey, currentBinId) {
       const cached = this.getCachedBinId(appKey);
       
+      const isCurrentValid = currentBinId && 
+                             currentBinId !== 'local' && 
+                             currentBinId !== 'undefined' && 
+                             currentBinId !== 'null' && 
+                             currentBinId.trim() !== '';
+      
       // 1. 新しいIDがアプリ側で生成または入力され、キャッシュと異なる場合
-      if (currentBinId && currentBinId !== cached) {
+      if (isCurrentValid && currentBinId !== cached) {
         this.setCachedBinId(appKey, currentBinId);
         
         // マスターBinが存在するならリモートへプッシュ
@@ -175,8 +181,8 @@
         return currentBinId;
       }
       
-      // 2. アプリ側にIDがなく、キャッシュ側にIDがある場合はキャッシュの値を優先適用
-      if (!currentBinId && cached) {
+      // 2. アプリ側に有効なIDがなく、キャッシュ側にIDがある場合はキャッシュの値を優先適用
+      if (!isCurrentValid && cached) {
         return cached;
       }
 
