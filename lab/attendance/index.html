@@ -1357,26 +1357,92 @@
     const toastTimerRef = useRef(null);
 
     
-    useEffect(() => {
-      let localCourses = [];
+    const loadAndMergeCourses = (localList = null, remoteList = null) => {
+      let local = localList;
+      if (local === null) {
+        try {
+          local = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        } catch(e) {
+          local = [];
+        }
+      }
+      if (local.length === 0 && !localStorage.getItem(STORAGE_KEY)) {
+        local = [{ id: 1, name: 'サンプル: 物理学', type: 'half', credit: 2, current: 0, history: [] }];
+      }
+
+      let timetableCourses = [];
       try {
-        localCourses = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        const timetableData = JSON.parse(localStorage.getItem('dt_subject_progress_data')) || {};
+        timetableCourses = Object.keys(timetableData).map(subName => {
+          const subjectData = timetableData[subName];
+          let currentLoss = 0;
+          const historyList = [];
+          let maxIndex = 15;
+
+          Object.keys(subjectData).forEach(idxKey => {
+            const idx = parseInt(idxKey);
+            if (idx > 15) maxIndex = 30;
+
+            const item = subjectData[idxKey];
+            if (item.status === 'delayed') {
+              currentLoss -= 1;
+              historyList.push({
+                timestamp: item.date ? new Date(item.date).getTime() : Date.now() - (15 - idx) * 24 * 60 * 60 * 1000,
+                delta: -1,
+                type: 'late',
+                memo: `第${idx}回講義: ${item.memo || ''}`
+              });
+            } else if (item.status === 'offline') {
+              currentLoss -= 2;
+              historyList.push({
+                timestamp: item.date ? new Date(item.date).getTime() : Date.now() - (15 - idx) * 24 * 60 * 60 * 1000,
+                delta: -2,
+                type: 'absent',
+                memo: `第${idx}回講義: ${item.memo || ''}`
+              });
+            }
+          });
+
+          historyList.sort((a, b) => a.timestamp - b.timestamp);
+
+          return {
+            id: `tt-${subName}`,
+            name: subName,
+            type: maxIndex > 15 ? 'full' : 'half',
+            credit: 2,
+            current: currentLoss,
+            history: historyList,
+            isTimetableLinked: true
+          };
+        });
       } catch (e) {
-        localCourses = [];
+        console.error('Failed to parse timetable data:', e);
       }
 
-      if (localCourses.length === 0 && !localStorage.getItem(STORAGE_KEY)) {
-        
-        localCourses = [{ id: 1, name: 'サンプル: 物理学', type: 'half', credit: 2, current: 0, history: [] }];
-      }
+      const merged = [...timetableCourses];
+      local.forEach(lc => {
+        const matchedIndex = merged.findIndex(tc => tc.name === lc.name);
+        if (matchedIndex !== -1) {
+          merged[matchedIndex].credit = lc.credit || merged[matchedIndex].credit;
+          merged[matchedIndex].type = lc.type || merged[matchedIndex].type;
+          merged[matchedIndex].id = lc.id;
+        } else if (!lc.isTimetableLinked) {
+          merged.push({
+            ...lc,
+            history: Array.isArray(lc.history) ? lc.history : [],
+            isTimetableLinked: false
+          });
+        }
+      });
 
-      
-      const sanitized = localCourses.map(c => ({
-        ...c,
-        history: Array.isArray(c.history) ? c.history : []
-      }));
+      return merged;
+    };
 
-      setCourses(sanitized);
+    
+    useEffect(() => {
+      const merged = loadAndMergeCourses();
+      setCourses(merged);
+      saveLocal(merged);
     }, []);
 
     
@@ -1384,7 +1450,6 @@
       async function checkSync() {
         let currentBlobId = blobId;
         if (window.PWAConfigSync) {
-          
           currentBlobId = await window.PWAConfigSync.syncAppBinId('attendance', blobId);
           if (currentBlobId !== blobId) {
             setBlobId(currentBlobId);
@@ -1400,6 +1465,15 @@
         }
       }
       checkSync();
+
+      const handleStorageChange = (e) => {
+        if (e.key === 'dt_subject_progress_data' || e.key === STORAGE_KEY) {
+          const next = loadAndMergeCourses();
+          setCourses(next);
+        }
+      };
+      window.addEventListener('storage', handleStorageChange);
+      return () => window.removeEventListener('storage', handleStorageChange);
     }, []);
 
     
@@ -1420,18 +1494,6 @@
     };
 
     
-    const mergeData = (local, remote) => {
-      const byId = {};
-      [...(remote || []), ...(local || [])].forEach(c => {
-        byId[c.id] = {
-          ...c,
-          history: Array.isArray(c.history) ? c.history : []
-        };
-      });
-      return Object.values(byId);
-    };
-
-    
     const syncCloud = async (silent = false, customBlobId = null) => {
       setSyncStatus('busy');
       const targetBlobId = customBlobId !== null ? customBlobId : blobId;
@@ -1439,7 +1501,6 @@
 
       try {
         if (!targetBlobId) {
-          
           const res = await fetch('https://api.jsonbin.io/v3/b', {
             method: 'POST',
             headers: {
@@ -1460,7 +1521,6 @@
           setSyncStatus('ok');
           if (!silent) triggerToast('クラウド同期保管庫を作成しました');
         } else {
-          
           const res = await fetch(binUrl(targetBlobId), {
             headers: { 'X-Master-Key': jbKey },
             cache: 'no-store'
@@ -1470,12 +1530,10 @@
           const record = json.record || json;
           const remoteCourses = Array.isArray(record.courses) ? record.courses : (Array.isArray(record) ? record : []);
 
-          
-          const merged = mergeData(remoteCourses, courses);
+          const merged = loadAndMergeCourses(courses, remoteCourses);
           setCourses(merged);
           saveLocal(merged);
 
-          
           const p = await fetch(binPut(targetBlobId), {
             method: 'PUT',
             headers: {
@@ -1515,12 +1573,40 @@
     };
 
     
+    const toggleCourseType = (courseId) => {
+      const nextCourses = courses.map(c => {
+        if (c.id === courseId) {
+          const nextType = c.type === 'half' ? 'full' : 'half';
+          triggerToast(`${c.name} の期間を ${nextType === 'half' ? '半期' : '通年'} に変更しました`);
+          return { ...c, type: nextType };
+        }
+        return c;
+      });
+      setCourses(nextCourses);
+      saveLocal(nextCourses);
+      pushBlob(nextCourses);
+    };
+
+    const toggleCourseCredit = (courseId) => {
+      const nextCourses = courses.map(c => {
+        if (c.id === courseId) {
+          const nextCredit = c.credit === 4 ? 1 : c.credit + 1;
+          triggerToast(`${c.name} の単位数を ${nextCredit} 単位に変更しました`);
+          return { ...c, credit: nextCredit };
+        }
+        return c;
+      });
+      setCourses(nextCourses);
+      saveLocal(nextCourses);
+      pushBlob(nextCourses);
+    };
+
     const handleUpdate = (id, delta, actionType) => {
       const nextCourses = courses.map(c => {
         if (c.id === id) {
+          if (c.isTimetableLinked) return c; 
           const rule = RULES[c.type];
           const nextVal = Math.min(0, c.current + delta);
-          
           
           const nextHistory = [...c.history];
           if (actionType !== 'undo') {
@@ -1554,11 +1640,12 @@
     };
 
     const handleUndoHistoryItem = (courseId, historyItemTimestamp, delta) => {
+      const target = courses.find(c => c.id === courseId);
+      if (target && target.isTimetableLinked) return; 
+
       const nextCourses = courses.map(c => {
         if (c.id === courseId) {
-          
           const nextHistory = c.history.filter(h => h.timestamp !== historyItemTimestamp);
-          
           const nextVal = Math.min(0, c.current - delta);
           return {
             ...c,
@@ -1576,6 +1663,11 @@
     };
 
     const handleDelete = (id, name) => {
+      const target = courses.find(c => c.id === id);
+      if (target && target.isTimetableLinked) {
+        triggerToast('時間割連動科目の削除は時間割ページで行ってください');
+        return;
+      }
       if (!confirm(`科目「${name}」を削除しますか？`)) return;
       const nextCourses = courses.filter(c => c.id !== id);
       setCourses(nextCourses);
@@ -1588,13 +1680,20 @@
       e.preventDefault();
       if (!newCourseName.trim()) return;
 
+      
+      if (courses.some(c => c.name.toLowerCase() === newCourseName.trim().toLowerCase())) {
+        triggerToast('同名の科目が既に存在します');
+        return;
+      }
+
       const newCourse = {
         id: Date.now(),
         name: newCourseName.trim(),
         credit: Number(newCourseCredit),
         type: termType,
         current: 0,
-        history: []
+        history: [],
+        isTimetableLinked: false
       };
 
       const nextCourses = [...courses, newCourse];
@@ -1760,13 +1859,16 @@
                   <div style=${ { minWidth: 0, flex: 1 } }>
                     <div style=${ { display: 'flex', alignItems: 'center', gap: '0.75rem' } }>
                       <span class="ag-card-title">${course.name}</span>
-                      <button style=${ { background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' } } onClick=${() => handleDelete(course.id, course.name)}>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                      </button>
+                      ${!course.isTimetableLinked && h`
+                        <button style=${ { background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' } } onClick=${() => handleDelete(course.id, course.name)}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        </button>
+                      `}
                     </div>
                     <div class="ag-course-meta">
-                      <span class="ag-badge">${course.credit}単位</span>
-                      <span class="ag-badge">${rule.label}</span>
+                      <span class="ag-badge" style=${ { cursor: 'pointer' } } onClick=${() => toggleCourseCredit(course.id)} title="クリックで単位数を変更">${course.credit}単位 ✎</span>
+                      <span class="ag-badge" style=${ { cursor: 'pointer' } } onClick=${() => toggleCourseType(course.id)} title="クリックで半期/通年を変更">${rule.label} ✎</span>
+                      ${course.isTimetableLinked && h`<span class="ag-badge" style=${ { background: 'rgba(6, 182, 212, 0.1)', color: '#06b6d4', borderColor: 'rgba(6, 182, 212, 0.2)' } }>時間割連動 🔗</span>`}
                       ${isFailed && h`<span class="ag-badge" style=${ { background: 'rgba(239,68,68,0.1)', color: '#ef4444', borderColor: 'rgba(239,68,68,0.2)' } }>落単アウト</span>`}
                     </div>
                   </div>
@@ -1796,20 +1898,28 @@
                 </div>
 
                 \x3C!-- Interactive controls -->
-                <div class="ag-course-controls">
-                  <button class="ag-control-btn late" onClick=${() => handleUpdate(course.id, -1, 'late')} disabled=${isFailed}>
-                    <span>遅刻</span>
-                    <span class="sub-label">-1点</span>
-                  </button>
-                  <button class="ag-control-btn absent" onClick=${() => handleUpdate(course.id, -2, 'absent')} disabled=${isFailed}>
-                    <span>欠席</span>
-                    <span class="sub-label">-2点</span>
-                  </button>
-                  <button class="ag-control-btn" onClick=${() => handleUpdate(course.id, 1, 'undo')} title="手動微修正 (＋1)">
-                    <span>＋1点</span>
-                    <span class="sub-label">手動</span>
-                  </button>
-                </div>
+                ${course.isTimetableLinked ? h`
+                  <div style=${ { gridColumn: 'span 3', display: 'flex', width: '100%' } }>
+                    <a href="/project-x/timetable/" class="ag-control-btn" style=${ { width: '100%', textDecoration: 'none', color: '#06b6d4', borderColor: 'rgba(6, 182, 212, 0.3)', background: 'rgba(6, 182, 212, 0.03)', flexDirection: 'row', gap: '0.5rem', padding: '0.65rem 0.5rem' } }>
+                      <span>🔗 TIMETABLE LOG で出欠を記録する</span>
+                    </a>
+                  </div>
+                ` : h`
+                  <div class="ag-course-controls">
+                    <button class="ag-control-btn late" onClick=${() => handleUpdate(course.id, -1, 'late')} disabled=${isFailed}>
+                      <span>遅刻</span>
+                      <span class="sub-label">-1点</span>
+                    </button>
+                    <button class="ag-control-btn absent" onClick=${() => handleUpdate(course.id, -2, 'absent')} disabled=${isFailed}>
+                      <span>欠席</span>
+                      <span class="sub-label">-2点</span>
+                    </button>
+                    <button class="ag-control-btn" onClick=${() => handleUpdate(course.id, 1, 'undo')} title="手動微修正 (＋1)">
+                      <span>＋1点</span>
+                      <span class="sub-label">手動</span>
+                    </button>
+                  </div>
+                `}
 
                 \x3C!-- History toggle -->
                 <div>
@@ -1830,9 +1940,11 @@
                               ${item.type === 'late' ? '遅刻' : '欠席'} (${item.delta})
                             </span>
                             <span style=${ { color: '#71717a', fontSize: '0.7rem' } }>${dateStr}</span>
-                            <button class="ag-history-undo-btn" onClick=${() => handleUndoHistoryItem(course.id, item.timestamp, item.delta)} title="このイベントを消去しカウンターを戻す">
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                            </button>
+                            ${!course.isTimetableLinked && h`
+                              <button class="ag-history-undo-btn" onClick=${() => handleUndoHistoryItem(course.id, item.timestamp, item.delta)} title="このイベントを消去しカウンターを戻す">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                              </button>
+                            `}
                           </div>
                         `;
                       })}
