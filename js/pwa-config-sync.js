@@ -2,11 +2,11 @@
  * PWA Config Sync Manager
  * LocalStorageとJSONBinのマスターBinを利用して、同一Origin内の複数PWA間でAPIキーや各Bin IDを同期します。
  */
-(function() {
+(function () {
   const MASTER_BIN_KEY = 'shared_master_bin_id';
   const API_KEY_KEY = 'shared_jsonbin_api_key';
   const BINS_CACHE_KEY = 'shared_pwa_bins_cache';
-  
+
   // 各ツール名と、対応する個別LocalStorage同期用キー
   const APP_KEYS_MAP = {
     manga: 'ms_blob_id',
@@ -22,9 +22,10 @@
     tasklist: 'dt_tasks_blob',
     payment: 'dt_pay_blob',
     vocal_range: 'dt_vocal_range_blob',
-    library: 'dt_library_blob'
+    library: 'dt_library_blob',
+    attendance: 'dt_attendance_blob'
   };
-  
+
   // デフォルトのマスターAPIキー (公開されてもデータ破壊は起きないよう基本的には個人の読み書き用)
   const DEFAULT_API_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
 
@@ -66,7 +67,7 @@
       try {
         const cache = localStorage.getItem(BINS_CACHE_KEY);
         if (cache) Object.assign(map, JSON.parse(cache));
-      } catch (e) {}
+      } catch (e) { }
 
       // 各アプリの実際のLocalStorageに入っているIDをスキャンして反映
       for (const [appKey, lsKey] of Object.entries(APP_KEYS_MAP)) {
@@ -112,14 +113,14 @@
         });
         if (!res.ok) throw new Error(`Fetch master bin failed: ${res.status}`);
         const data = await res.json();
-        
+
         const record = data.record || {};
         const remoteBins = record.bins || {};
-        
+
         // ローカルの既存キャッシュとマージする (リモート優先)
         const localBins = this.getBinsMap();
         const mergedBins = { ...localBins, ...remoteBins };
-        
+
         localStorage.setItem(BINS_CACHE_KEY, JSON.stringify(mergedBins));
 
         // 各アプリのLocalStorageキーにそれぞれのIDを配信
@@ -128,11 +129,11 @@
             localStorage.setItem(lsKey, mergedBins[appKey]);
           }
         }
-        
+
         if (record.apiKey && record.apiKey !== DEFAULT_API_KEY) {
           this.setApiKey(record.apiKey);
         }
-        
+
         window.dispatchEvent(new Event('storage'));
         return mergedBins;
       } catch (e) {
@@ -146,7 +147,7 @@
       const masterBinId = this.getMasterBinId();
       const apiKey = this.getApiKey();
       const bins = this.getBinsMap();
-      
+
       const payload = {
         bins: bins,
         apiKey: apiKey === DEFAULT_API_KEY ? "" : apiKey, // デフォルトキーの場合は保存しない
@@ -193,17 +194,17 @@
     // アプリのIDを同期する (起動時や設定変更時に呼び出し)
     async syncAppBinId(appKey, currentBinId) {
       const cached = this.getCachedBinId(appKey);
-      
-      const isCurrentValid = currentBinId && 
-                             currentBinId !== 'local' && 
-                             currentBinId !== 'undefined' && 
-                             currentBinId !== 'null' && 
-                             currentBinId.trim() !== '';
-      
+
+      const isCurrentValid = currentBinId &&
+        currentBinId !== 'local' &&
+        currentBinId !== 'undefined' &&
+        currentBinId !== 'null' &&
+        currentBinId.trim() !== '';
+
       // 1. 新しいIDがアプリ側で生成または入力され、キャッシュと異なる場合
       if (isCurrentValid && currentBinId !== cached) {
         this.setCachedBinId(appKey, currentBinId);
-        
+
         // マスターBinが存在するならリモートへプッシュ
         if (this.getMasterBinId()) {
           try {
@@ -214,7 +215,7 @@
         }
         return currentBinId;
       }
-      
+
       // 2. アプリ側に有効なIDがなく、キャッシュ側にIDがある場合はキャッシュの値を優先適用
       if (!isCurrentValid && cached) {
         return cached;
