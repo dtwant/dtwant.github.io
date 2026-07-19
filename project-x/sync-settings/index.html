@@ -120,7 +120,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "31"
+    "wordCount": "32"
   }]
   </script>
 
@@ -818,6 +818,11 @@
       </div>
 
       <div class="flex justify-end gap-3 pt-3 border-t border-zinc-800">
+        <button id="btn-clear-all-connections"
+          class="bg-red-950/40 hover:bg-red-950/60 text-red-400 border border-red-800/50 font-medium text-sm py-2 px-6 rounded-md transition-colors flex items-center gap-2">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+          <span>全接続IDをクリア</span>
+        </button>
         <button id="btn-save-master"
           class="bg-zinc-100 hover:bg-zinc-200 text-zinc-900 font-medium text-sm py-2 px-6 rounded-md transition-colors flex items-center gap-2">
           <i data-lucide="save" class="w-4 h-4"></i>
@@ -923,6 +928,20 @@
     document.getElementById('master-bin-input').value = window.PWAConfigSync.getMasterBinId() || '';
     const apiKey = window.PWAConfigSync.getApiKey();
     document.getElementById('custom-api-key-input').value = (apiKey && apiKey !== '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q') ? apiKey : '';
+
+    // 全接続IDをクリアするボタン
+    document.getElementById('btn-clear-all-connections').addEventListener('click', () => {
+      if (confirm("すべての個別ツールのクラウド同期接続（Bin ID）を一度解除し、ローカル保存（Local Only）の状態に戻しますか？\n（データ自体はローカルに保存されているため消えません）")) {
+        const map = window.PWAConfigSync.APP_KEYS_MAP;
+        Object.values(map).forEach(lsKey => {
+          localStorage.removeItem(lsKey);
+        });
+        localStorage.removeItem('shared_pwa_bins_cache');
+        localStorage.removeItem('shared_master_bin_id');
+        showToast("リセット完了", "すべての同期接続を解除しました。", "success");
+        setTimeout(() => location.reload(), 1000);
+      }
+    });
 
     // マスター保存ボタン
     document.getElementById('btn-save-master').addEventListener('click', () => {
