@@ -120,7 +120,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "48"
+    "wordCount": "49"
   }]
   </script>
 
@@ -757,29 +757,23 @@ body {
 }
 
 /* 背景グラデーション */
-.cyber-bg {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: 0;
-  background: radial-gradient(circle at 50% -20%, #1e1e30 0%, #000000 70%);
-}
-.cyber-bg-image, .cyber-grid, .scanline {
-  display: none !important;
+.apple-bg-gradient {
+  display: none; /* Blowfish テーマ共通の背景を維持するために非表示化 */
 }
 
-/* メインコンテナ */
-.secret-container {
+/* メインコンテナ - 共通レイアウトに上品にマージ */
+.apple-container {
   max-width: 900px;
-  margin: 0 auto;
-  padding: 3rem 1.5rem 5rem;
-  min-height: 100vh;
+  margin: 2rem auto;
+  padding: 2rem 1.5rem;
   position: relative;
   z-index: 10;
-  background: rgba(0, 0, 0, 0.35);
-  border-left: 1px solid var(--apple-border);
-  border-right: 1px solid var(--apple-border);
-  backdrop-filter: blur(30px);
+  background: var(--apple-card);
+  border: 1px solid var(--apple-border);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 /* Apple Header Card */
@@ -897,8 +891,11 @@ body {
 }
 
 .cyber-table {
-  width: 100%;
+  width: 100% !important;
   border-collapse: collapse;
+  table-layout: fixed;
+  margin: 0 !important;
+  display: table !important;
 }
 .cyber-table th, .cyber-table td {
   padding: 1rem 0.6rem;
@@ -930,77 +927,110 @@ body {
   cursor: pointer;
   color: var(--apple-blue);
   font-weight: 600;
-  transition: background-color 0.2s, color 0.2s;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .cyber-table td.clickable-subject:hover {
-  background: rgba(0, 113, 227, 0.08) !important;
+  background: rgba(0, 113, 227, 0.1) !important;
   color: #fff !important;
 }
 
-/* Subject Progress Monitor (Apple UI Sheet Style) */
-.monitor-section {
-  display: none;
-  border: 1px solid var(--apple-border);
-  border-radius: 16px;
-  background: rgba(22, 22, 23, 0.92);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(25px);
-  margin-bottom: 2rem;
-  overflow: hidden;
-  animation: monitor-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+/* Modal Overlay (Emil Kowalski standard glass overlay) */
+.apple-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: modal-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.monitor-header {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #fff;
-  padding: 1rem 1.2rem;
-  border-bottom: 1px solid var(--apple-border);
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.apple-modal-content {
+  background: rgba(28, 28, 30, 0.85);
+  border: 1px solid var(--apple-border);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 680px;
+  box-shadow: 0 30px 60px -15px rgba(0,0,0,0.8);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: modal-scale-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modal-scale-up {
+  from { transform: scale(0.95) translateY(10px); }
+  to { transform: scale(1) translateY(0); }
+}
+
+.apple-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.02);
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--apple-border);
+  background: rgba(255, 255, 255, 0.01);
 }
 
-.monitor-close-btn {
-  background: rgba(255, 255, 255, 0.05);
+.apple-modal-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.apple-modal-close {
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--apple-border);
-  color: var(--apple-text);
-  padding: 0.35rem 0.8rem;
-  font-size: 0.72rem;
-  border-radius: 8px;
+  color: var(--apple-text-secondary);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  font-weight: 500;
   transition: all 0.2s;
 }
-.monitor-close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+.apple-modal-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
 }
 
 /* Dock styles */
 .subject-toggle-dock {
   display: flex;
   gap: 0.5rem;
-  padding: 0.8rem 1.2rem;
-  background: rgba(0, 0, 0, 0.2);
+  padding: 0.8rem 1.5rem;
+  background: rgba(0, 0, 0, 0.15);
   border-bottom: 1px solid var(--apple-border);
   overflow-x: auto;
   scrollbar-width: none;
 }
+.subject-toggle-dock::-webkit-scrollbar { display: none; }
+
 .subject-chip {
   flex-shrink: 0;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--apple-border);
   color: var(--apple-text-secondary);
-  padding: 0.45rem 0.9rem;
-  font-size: 0.75rem;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.72rem;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.2s;
 }
 .subject-chip:hover {
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.15);
   color: #fff;
 }
 .subject-chip.active {
@@ -1009,16 +1039,38 @@ body {
   color: #fff;
 }
 
+/* Monitor Status Bar */
+.monitor-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 1.5rem;
+  background: rgba(255, 255, 255, 0.01);
+  border-bottom: 1px solid var(--apple-border);
+  font-size: 0.78rem;
+  color: var(--apple-text-secondary);
+}
+.status-subject-name {
+  color: #fff;
+  font-weight: 600;
+}
+.status-loss-counter {
+  color: var(--apple-red);
+  font-weight: 700;
+}
+
 /* Progress Table */
 .progress-table-container {
-  padding: 1.2rem;
+  padding: 1.2rem 1.5rem;
+  max-height: 48vh;
+  overflow-y: auto;
 }
 .progress-table {
   width: 100%;
   border-collapse: collapse;
 }
 .progress-table th, .progress-table td {
-  padding: 0.7rem;
+  padding: 0.8rem 0.6rem;
   border: 1px solid var(--apple-border);
   font-size: 0.78rem;
 }
@@ -1033,31 +1085,12 @@ body {
   text-align: center;
 }
 
-/* Monitor Status Bar */
-.monitor-status-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.8rem 1.2rem;
-  background: rgba(255, 255, 255, 0.01);
-  border-bottom: 1px solid var(--apple-border);
-  font-size: 0.8rem;
-}
-.status-subject-name {
-  color: #fff;
-  font-weight: 600;
-}
-.status-loss-counter {
-  color: var(--apple-red);
-  font-weight: 600;
-}
-
 /* Date input */
 .cyber-date-input {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.2);
   border: 1px solid var(--apple-border);
   color: #fff;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   border-radius: 6px;
   padding: 0.35rem 0.5rem;
   outline: none;
@@ -1076,11 +1109,11 @@ body {
 }
 .att-btn {
   flex: 1;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--apple-border);
   color: var(--apple-text-secondary);
-  font-size: 0.7rem;
-  padding: 0.4rem 0.2rem;
+  font-size: 0.68rem;
+  padding: 0.4rem 0.1rem;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
@@ -1088,7 +1121,7 @@ body {
   font-weight: 500;
 }
 .att-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
 }
 .att-btn.active-status {
   border-color: var(--apple-green);
@@ -1113,10 +1146,10 @@ body {
 
 /* Memo input */
 .cyber-memo-input {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.2);
   border: 1px solid var(--apple-border);
   color: var(--apple-text);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   border-radius: 6px;
   padding: 0.35rem 0.5rem;
   outline: none;
@@ -1133,12 +1166,12 @@ body {
   display: none;
   flex-direction: column;
   gap: 0.8rem;
-  padding: 1rem;
-  max-height: 60vh;
+  padding: 1.2rem;
+  max-height: 48vh;
   overflow-y: auto;
 }
 .progress-card {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.01);
   border: 1px solid var(--apple-border);
   border-radius: 12px;
   padding: 1rem;
@@ -1154,12 +1187,8 @@ body {
   border-radius: 12px 0 0 12px;
   background: var(--apple-text-secondary);
 }
-.progress-card.has-status::before {
-  background: var(--apple-green);
-}
-.progress-card.has-offline::before {
-  background: var(--apple-red);
-}
+.progress-card.has-status::before { background: var(--apple-green); }
+.progress-card.has-offline::before { background: var(--apple-red); }
 
 .card-header-row {
   display: flex;
@@ -1171,14 +1200,6 @@ body {
   font-weight: 600;
   color: var(--apple-text-secondary);
 }
-.card-date-wrap {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  flex: 1;
-  max-width: 70%;
-  justify-content: flex-end;
-}
 .card-day-label {
   font-size: 0.72rem;
   color: var(--apple-text-secondary);
@@ -1187,12 +1208,319 @@ body {
   text-align: right;
 }
 
-/* --- Footer --- */
-.tt-footer {
+/* --- Apple Sync Panel Styles --- */
+.apple-sync-panel {
+  border: 1px solid var(--apple-border);
+  border-radius: 18px;
+  background: var(--apple-card);
+  margin-top: 2rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+}
+
+.apple-sync-header {
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--apple-border);
+}
+
+.apple-sync-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.apple-sync-status-row {
+  display: flex;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 0.8rem 1.2rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.78rem;
+}
+
+.apple-status-item {
+  color: var(--apple-text-secondary);
+}
+
+.apple-status-val {
+  font-weight: 600;
+  color: #fff;
+}
+.apple-status-val.offline {
+  color: var(--apple-red);
+}
+.apple-status-val.online {
+  color: var(--apple-green);
+}
+.apple-status-val.syncing {
+  color: var(--apple-blue);
+}
+
+.apple-sync-desc {
+  font-size: 0.8rem;
+  color: var(--apple-text-secondary);
+  line-height: 1.5;
+  margin: 0 0 1.2rem 0;
+}
+
+/* Button & Grid Layout */
+.apple-btn-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+}
+
+.apple-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--apple-border);
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
   text-align: center;
-  padding-top: 2rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.apple-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.01);
+}
+.apple-btn:active {
+  transform: scale(0.99);
+}
+
+.apple-btn-accent {
+  background: var(--apple-blue);
+  border-color: var(--apple-blue);
+}
+.apple-btn-accent:hover {
+  background: #0077ed;
+}
+
+.apple-btn-danger {
+  background: var(--apple-red);
+  border-color: var(--apple-red);
+}
+.apple-btn-danger:hover {
+  background: #ff453a;
+}
+
+.apple-btn-small {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.72rem;
+  border-radius: 6px;
+}
+
+/* Form Input Elements */
+.apple-input-group {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.apple-input-label {
+  font-size: 0.78rem;
+  color: var(--apple-text-secondary);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.apple-text-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--apple-border);
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.82rem;
+  outline: none;
+  transition: all 0.2s;
+}
+.apple-text-input:focus {
+  border-color: var(--apple-blue);
+  box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.15);
+}
+
+.apple-link-btn {
+  background: none;
+  border: none;
+  color: var(--apple-blue);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Vault Info Card */
+.apple-vault-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 0.8rem 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.apple-vault-label {
+  font-size: 0.68rem;
+  color: var(--apple-text-secondary);
+  margin-bottom: 0.3rem;
+}
+.apple-vault-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.apple-vault-input {
+  background: none;
+  border: none;
+  color: var(--apple-orange);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: bold;
+  width: 65%;
+  outline: none;
+}
+.apple-vault-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* Header Sync Badge Overlay (コントロールセンター風の綺麗なカプセルボタン) */
+.apple-sync-badge {
+  cursor: pointer;
+  font-size: 0.7rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--apple-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--apple-text-secondary);
+  transition: all 0.2s;
+}
+.apple-sync-badge:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  transform: scale(1.02);
+}
+.apple-sync-badge.badge-ok {
+  background: rgba(52, 199, 89, 0.15);
+  border-color: rgba(52, 199, 89, 0.3);
+  color: var(--apple-green);
+}
+.apple-sync-badge.badge-err {
+  background: rgba(255, 59, 48, 0.15);
+  border-color: rgba(255, 59, 48, 0.3);
+  color: var(--apple-red);
+}
+
+/* Console System Section */
+.apple-console-section {
+  border-top: 1px dashed var(--apple-border);
+  margin-top: 1rem;
+  padding-top: 0.6rem;
+}
+.apple-console-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--apple-text-secondary);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.4rem 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.apple-console-toggle:hover {
+  color: #fff;
+}
+#console-dock-content {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.8rem;
   border-top: 1px solid var(--apple-border);
+  padding-top: 0.8rem;
+}
+.apple-console-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.apple-console-desc {
+  font-size: 0.68rem;
+  color: var(--apple-text-secondary);
+}
+
+/* Raw Editor view */
+.apple-raw-view {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--apple-border);
+  border-radius: 8px;
+  padding: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+.apple-raw-title {
+  font-size: 0.72rem;
+  color: var(--apple-text-secondary);
+  margin-bottom: 0.4rem;
+}
+.apple-raw-textarea {
+  width: 100%;
+  height: 80px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--apple-border);
+  color: var(--apple-green);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  padding: 0.4rem;
+  resize: none;
+  margin-bottom: 0.5rem;
+  outline: none;
+}
+.apple-raw-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+/* Log Display */
+.apple-log-section {
+  display: flex;
+  flex-direction: column;
+}
+.apple-log-title {
+  font-size: 0.72rem;
+  color: var(--apple-text-secondary);
+  margin-bottom: 0.3rem;
+}
+.apple-log-textarea {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--apple-green);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.5rem;
+  border: 1px solid var(--apple-border);
+  border-radius: 6px;
+  height: 100px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Footer Section */
+.tt-footer {
   margin-top: 3rem;
+  text-align: center;
 }
 .tt-footer-link {
   font-size: 0.8rem;
@@ -1209,109 +1537,177 @@ body {
   background: rgba(255, 255, 255, 0.05);
 }
 
+/* Hugo共通のパンくずやタイトルを非表示化 (共通グローバルヘッダーは消さない) */
+.meta-breadcrumb,
+.article-title,
+.post-title,
+.article-header,
+main article > header,
+h1:not(.apple-page-title) {
+  display: none !important;
+}
+
 /* Apply display mode based on responsive rules */
 @media (max-width: 768px) {
   .progress-table-container { display: none; }
   .progress-cards-container { display: flex; }
-  .secret-container { padding: 1.5rem 0.8rem 3rem; border: none; }
-  .cmd-title { font-size: 1.25rem; }
-  .cmd-header { padding: 1.2rem; }
-  .radar-ring { display: none; }
-  .cyber-table th, .cyber-table td { padding: 0.6rem 0.3rem; font-size: 0.7rem; }
+  .apple-container { padding: 1.5rem 0.8rem 3rem; border: none; }
+  
+  .cyber-table th, .cyber-table td {
+    padding: 0.8rem 0.2rem;
+    font-size: 0.72rem;
+  }
+  
+  /* スマホ用ハーフシート (iOS Bottom Sheet Drawer) */
+  .apple-modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+  
+  .apple-modal-content {
+    max-width: 100%;
+    border-radius: 24px 24px 0 0;
+    border-bottom: none;
+    max-height: 85vh;
+    animation: sheet-slide-up 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .apple-modal-header {
+    flex-direction: column;
+    padding: 0.8rem 1.5rem 1.2rem;
+    gap: 0.6rem;
+  }
+  
+  /* iOSノッチバー風のツマミ */
+  .apple-modal-header::before {
+    content: '';
+    display: block;
+    width: 38px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 3px;
+    margin: 0 auto 0.4rem;
+  }
+}
+
+@keyframes sheet-slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }
 </style>
-<div class="cyber-bg"></div>
-<div class="secret-container unlocked" id="main-secret-container">
-<div class="cmd-header">
-  <div class="cmd-title-row">
-    <h1 class="cmd-title page-title">時間割 & 出欠管理</h1>
-    <div class="cmd-badge" id="cmd-badge-ver">TIMETABLE v2.0</div>
+<div class="apple-bg-gradient"></div>
+<div class="apple-container" id="main-secret-container">
+  <header class="apple-header">
+    <div class="header-left">
+      <button class="apple-back-btn" onclick="window.location.href='/'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <h1 class="apple-page-title">時間割 & 出席</h1>
+    </div>
+    <div class="header-right">
+      <div class="cmd-title-row" style="margin: 0;"><!-- PWAConfigSync がバッジをここにインジェクション --></div>
+    </div>
+  </header>
+  <main class="apple-main-content">
+    <div class="tt-section">
+      <div class="tt-header">時間割 — 2年前期</div>
+      <table class="cyber-table">
+        <colgroup>
+          <col style="width:10%">
+          <col style="width:18%">
+          <col style="width:18%">
+          <col style="width:18%">
+          <col style="width:18%">
+          <col style="width:18%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>MON</th>
+            <th>TUE</th>
+            <th>WED</th>
+            <th>THU</th>
+            <th>FRI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>微分積分I</td>
+            <td>物理2A</td>
+            <td>微分積分I</td>
+            <td>化学III</td>
+            <td>自然科学</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>英語2A</td>
+            <td>線形代数I</td>
+            <td>リベラルI</td>
+            <td>倫理I</td>
+            <td>電工概論</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>論理回路I</td>
+            <td>国語表現</td>
+            <td>情報処理2</td>
+            <td>英語2A</td>
+            <td>工学実習I</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>保健体育II</td>
+            <td>-</td>
+            <td>H.R.</td>
+            <td>物理2A</td>
+            <td>工学実習I</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <div id="cyber-sync-panel"></div>
+  <div class="tt-footer">
+    <a href="/project-x/" class="tt-footer-link">RETURN TO SURFACE HUB</a>
   </div>
-  <div class="cmd-stats">
-    <div class="cmd-stat"><span class="cmd-stat-dot"></span> SYSTEM ONLINE</div>
-    <div class="cmd-stat"><span class="cmd-stat-dot purple"></span> NODE: DT-SEC</div>
+</div>
+<!-- モーダル形式の出欠モニター -->
+<div class="apple-modal-overlay" id="subject-progress-monitor" style="display: none;">
+  <div class="apple-modal-content">
+    <div class="apple-modal-header">
+      <div class="apple-modal-title" id="status-subject-name-top">科目進捗モニター</div>
+      <button class="apple-modal-close" id="monitor-close-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="subject-toggle-dock" id="subject-toggle-dock"></div>
+    <div class="monitor-status-bar">
+      <div>対象科目: <span class="status-subject-name" id="status-subject-name-bar">--</span></div>
+      <div>欠課合計: <span class="status-loss-counter" id="status-loss-counter-bar">0</span></div>
+    </div>
+    <div class="progress-table-container">
+      <table class="progress-table">
+        <thead>
+          <tr>
+            <th style="width: 10%;">回</th>
+            <th style="width: 25%;">日付</th>
+            <th style="width: 40%;">出欠状況</th>
+            <th style="width: 25%;">メモ</th>
+          </tr>
+        </thead>
+        <tbody id="progress-table-body"></tbody>
+      </table>
+    </div>
+    <div class="progress-cards-container" id="progress-cards-container"></div>
   </div>
 </div>
-<div class="profile-compact">
-<img src="/IMG_2489_hu_2454aada2623b4a6.JPG" alt="dt" id="secret-trigger">
-<div class="p-info">
-<div class="p-name">OPERATOR: dt</div>
-<span class="p-label">STATUS:</span> <span style="color:var(--apple-green); font-weight: 600;">ACTIVE</span> &nbsp;&nbsp;
-<span class="p-label">ROLE:</span> ADMIN
-</div>
-</div>
-<div class="tt-section">
-<div class="tt-header">時間割 — 2年前期</div>
-<table class="cyber-table">
-<colgroup><col style="width:10%"><col style="width:18%"><col style="width:18%"><col style="width:18%"><col style="width:18%"><col style="width:18%"></colgroup>
-<thead><tr><th>#</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th></tr></thead>
-<tbody>
-<tr><td>1</td><td>微分積分I</td><td>物理2A</td><td>微分積分I</td><td>化学III</td><td>自然科学</td></tr>
-<tr><td>2</td><td>英語2A</td><td>線形代数I</td><td>リベラルI</td><td>倫理I</td><td>電工概論</td></tr>
-<tr><td>3</td><td>論理回路I</td><td>国語表現</td><td>情報処理2</td><td>英語2A</td><td>工学実習I</td></tr>
-<tr><td>4</td><td>保健体育II</td><td>-</td><td>H.R.</td><td>物理2A</td><td>工学実習I</td></tr>
-</tbody>
-</table>
-</div>
-<div id="cyber-sync-panel"></div>
-<!-- Subject Progress Monitor Container -->
-<div class="monitor-section" id="subject-progress-monitor">
-  <div class="monitor-header">
-    <div>[ MODULE: SUBJECT PROGRESS MONITOR ]</div>
-    <button class="monitor-close-btn" id="monitor-close-btn">✕ CLOSE MONITOR</button>
-  </div>
-  <div class="subject-toggle-dock" id="subject-toggle-dock"></div>
-  <!-- Status line (Subject name & Loss counter) -->
-  <div class="monitor-status-bar">
-    <span class="status-subject-name" id="monitor-subject-name">-</span>
-    <span class="status-loss-counter" id="monitor-loss-counter">欠課合計: 0</span>
-  </div>
-  <!-- PC View -->
-  <div class="progress-table-container">
-    <table class="progress-table" style="table-layout:fixed; width:100% !important;">
-      <colgroup>
-        <col style="width: 8%">
-        <col style="width: 25%">
-        <col style="width: 32%">
-        <col style="width: 35%">
-      </colgroup>
-      <thead>
-        <tr>
-          <th>回</th>
-          <th>日付 (DATE)</th>
-          <th>出欠 (STATUS)</th>
-          <th>備考 (LOG DATA)</th>
-        </tr>
-      </thead>
-      <tbody id="progress-table-body"></tbody>
-    </table>
-  </div>
-  <!-- Mobile View -->
-  <div class="progress-cards-container" id="progress-cards-container"></div>
-</div>
-<div class="tt-footer">
-<a href="/project-x/" class="tt-footer-link">RETURN TO SURFACE HUB</a>
-</div>
-</div>
-<script src="/js/dt-timetable-sync.js?v=4"></script>
+<script src="/js/dt-timetable-sync.js?v=7"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // Move elements to body root
-  var bg = document.querySelector('.cyber-bg');
-  var grd = document.querySelector('.cyber-grid');
-  var scn = document.querySelector('.scanline');
-  var main = document.getElementById('main-secret-container');
-  if (bg) document.body.appendChild(bg);
-  if (grd) document.body.appendChild(grd);
-  if (scn) document.body.appendChild(scn);
-  if (main) document.body.appendChild(main);
-  
-  // Clean layout
-  var KEEP = {'HEADER':1,'STYLE':1,'LINK':1,'SCRIPT':1,'NOSCRIPT':1,'META':1};
-  Array.from(document.body.children).forEach(function(el) {
-    var ours = el.classList.contains('cyber-bg') || el.classList.contains('cyber-grid') || el.classList.contains('scanline') || el.id === 'main-secret-container';
-    if (!ours && !KEEP[el.tagName]) el.style.setProperty('display','none','important');
-  });
+  // モーダルのみ body 直下に移動させて position: fixed を安定させる
+  var monitor = document.getElementById('subject-progress-monitor');
+  if (monitor) document.body.appendChild(monitor);
 
   // Uptime counter
   const start = Date.now();
@@ -1424,8 +1820,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (status === 'delayed') loss -= 1;
       if (status === 'offline') loss -= 2;
     });
-    const el = document.getElementById('monitor-loss-counter');
-    if (el) el.textContent = '欠課合計: ' + loss;
+    const el = document.getElementById('status-loss-counter-bar');
+    if (el) el.textContent = loss;
   };
 
   const renderToggleDock = () => {
@@ -1448,8 +1844,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const tbody = document.getElementById('progress-table-body');
     tbody.replaceChildren();
     
+    const statuses = [
+      { code: 'active', label: '出席', cls: 'active-status' },
+      { code: 'delayed', label: '遅刻', cls: 'delayed-status' },
+      { code: 'offline', label: '欠席', cls: 'offline-status' },
+      { code: 'exempt', label: '公欠', cls: 'exempt-status' }
+    ];
+    
     for (let i = 1; i <= maxLessons; i++) {
       const rowData = subjectData[i] || { date: '', status: '', memo: '' };
+      
       const tr = document.createElement('tr');
       
       const tdIdx = document.createElement('td');
@@ -1459,45 +1863,45 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const tdDate = document.createElement('td');
       tdDate.className = 'col-date';
-      const dateContainer = document.createElement('div');
-      dateContainer.style.cssText = 'display:flex;align-items:center;gap:6px;';
+      
+      const dateWrap = document.createElement('div');
+      dateWrap.className = 'card-date-wrap';
+      dateWrap.style.justifyContent = 'center';
       
       const dateInput = document.createElement('input');
       dateInput.type = 'date';
       dateInput.className = 'cyber-date-input';
+      dateInput.style.maxWidth = '130px';
       dateInput.value = rowData.date || '';
+      dateInput.setAttribute('data-idx', i);
       
       const dayLabel = document.createElement('span');
-      dayLabel.style.cssText = 'font-size:0.72rem;color:var(--neon-cyan);font-weight:bold;min-width:32px;';
+      dayLabel.className = 'card-day-label';
+      dayLabel.style.marginLeft = '0.5rem';
       dayLabel.textContent = getDayOfWeek(rowData.date);
       
       dateInput.addEventListener('change', (e) => {
         const val = e.target.value;
         dayLabel.textContent = getDayOfWeek(val);
         updateSingleData(subjectName, i, 'date', val);
-        const mobInput = document.querySelector(`.mob-date[data-idx="${i}"]`);
-        if (mobInput) mobInput.value = val;
-        const mobDay = document.querySelector(`.mob-day[data-idx="${i}"]`);
-        if (mobDay) mobDay.textContent = getDayOfWeek(val);
+        const mobCard = document.querySelector(`.progress-card[data-idx="${i}"]`);
+        if (mobCard) {
+          const mobInput = mobCard.querySelector('.cyber-date-input');
+          if (mobInput) mobInput.value = val;
+          const mobDay = mobCard.querySelector('.mob-day');
+          if (mobDay) mobDay.textContent = getDayOfWeek(val);
+        }
       });
       
-      dateContainer.appendChild(dateInput);
-      dateContainer.appendChild(dayLabel);
-      tdDate.appendChild(dateContainer);
+      dateWrap.appendChild(dateInput);
+      dateWrap.appendChild(dayLabel);
+      tdDate.appendChild(dateWrap);
       tr.appendChild(tdDate);
       
       const tdAtt = document.createElement('td');
-      tdAtt.className = 'col-att';
       const btnGroup = document.createElement('div');
       btnGroup.className = 'att-btn-group pc-att-group';
       btnGroup.setAttribute('data-idx', i);
-      
-      const statuses = [
-        { code: 'active', label: 'ACTIVE', cls: 'active-status' },
-        { code: 'delayed', label: 'DELAYED', cls: 'delayed-status' },
-        { code: 'offline', label: 'OFFLINE', cls: 'offline-status' },
-        { code: 'exempt', label: 'EXEMPT', cls: 'exempt-status' }
-      ];
       
       statuses.forEach(st => {
         const btn = document.createElement('button');
@@ -1544,7 +1948,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const memoInput = document.createElement('input');
       memoInput.type = 'text';
       memoInput.className = 'cyber-memo-input';
-      memoInput.placeholder = 'LOG DATA...';
+      memoInput.placeholder = 'メモを入力...';
       memoInput.value = rowData.memo || '';
       memoInput.setAttribute('data-idx', i);
       memoInput.addEventListener('input', (e) => {
@@ -1563,11 +1967,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('progress-cards-container');
     container.replaceChildren();
     
+    const statuses = [
+      { code: 'active', label: '出席', cls: 'active-status' },
+      { code: 'delayed', label: '遅刻', cls: 'delayed-status' },
+      { code: 'offline', label: '欠席', cls: 'offline-status' },
+      { code: 'exempt', label: '公欠', cls: 'exempt-status' }
+    ];
+
     for (let i = 1; i <= maxLessons; i++) {
       const rowData = subjectData[i] || { date: '', status: '', memo: '' };
       
       const card = document.createElement('div');
       card.className = 'progress-card';
+      card.setAttribute('data-idx', i);
       if (rowData.status === 'active') card.classList.add('has-status');
       if (rowData.status === 'offline') card.classList.add('has-offline');
       
@@ -1576,7 +1988,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const idxLabel = document.createElement('div');
       idxLabel.className = 'card-idx-label';
-      idxLabel.textContent = '回 ' + String(i).padStart(2, '0');
+      idxLabel.textContent = '第 ' + i + ' 回';
       headerRow.appendChild(idxLabel);
       
       const dateWrap = document.createElement('div');
@@ -1614,13 +2026,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const btnGroup = document.createElement('div');
       btnGroup.className = 'att-btn-group mob-att-group';
       btnGroup.setAttribute('data-idx', i);
-      
-      const statuses = [
-        { code: 'active', label: 'ACT', cls: 'active-status' },
-        { code: 'delayed', label: 'DL', cls: 'delayed-status' },
-        { code: 'offline', label: 'OFF', cls: 'offline-status' },
-        { code: 'exempt', label: 'EX', cls: 'exempt-status' }
-      ];
       
       statuses.forEach(st => {
         const btn = document.createElement('button');
@@ -1667,7 +2072,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const memoInput = document.createElement('input');
       memoInput.type = 'text';
       memoInput.className = 'cyber-memo-input mob-memo';
-      memoInput.placeholder = 'LOG DATA...';
+      memoInput.placeholder = 'メモを入力...';
       memoInput.value = rowData.memo || '';
       memoInput.setAttribute('data-idx', i);
       memoInput.addEventListener('input', (e) => {
@@ -1687,11 +2092,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const openSubjectProgress = (subjectName) => {
     currentActiveSubject = subjectName;
     const monitor = document.getElementById('subject-progress-monitor');
-    monitor.style.display = 'block';
+    monitor.style.display = 'flex';
     
     // UI更新 (科目名、欠課合計)
-    const nameEl = document.getElementById('monitor-subject-name');
-    if (nameEl) nameEl.textContent = subjectName;
+    const nameElTop = document.getElementById('status-subject-name-top');
+    if (nameElTop) nameElTop.textContent = subjectName;
+    const nameElBar = document.getElementById('status-subject-name-bar');
+    if (nameElBar) nameElBar.textContent = subjectName;
     updateLossCounter(subjectName);
     
     renderToggleDock();
@@ -1700,7 +2107,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const subjectData = allData[subjectName] || {};
     const freq = getSubjectFrequency(subjectName) || 1;
 
-    // Load attendance config to determine if the course is full-year or half-year
     let isFull = false;
     try {
       const attData = JSON.parse(localStorage.getItem('dt_attendance_v2')) || [];
@@ -1715,8 +2121,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     renderPCView(subjectName, maxLessons, subjectData);
     renderMobileView(subjectName, maxLessons, subjectData);
-    
-    monitor.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   // Close monitor
@@ -1725,7 +2129,17 @@ document.addEventListener('DOMContentLoaded', () => {
     closeBtn.addEventListener('click', () => {
       document.getElementById('subject-progress-monitor').style.display = 'none';
       currentActiveSubject = null;
-      document.querySelector('.tt-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  // Modal Overlay click to close
+  const monitorOverlay = document.getElementById('subject-progress-monitor');
+  if (monitorOverlay) {
+    monitorOverlay.addEventListener('click', (e) => {
+      if (e.target === monitorOverlay) {
+        monitorOverlay.style.display = 'none';
+        currentActiveSubject = null;
+      }
     });
   }
 

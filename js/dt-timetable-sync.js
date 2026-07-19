@@ -141,6 +141,15 @@ window.DtSync = (() => {
         return null;
       }
       if (!response.ok) {
+        if (response.status === 403) {
+          log("ACCESS FORBIDDEN (403). CLEARING EXPIRED VAULT KEY FOR AUTO-RECOVERY...");
+          localStorage.removeItem(BLOB_KEY);
+          blobId = null;
+          if (window.PWAConfigSync) {
+            await window.PWAConfigSync.syncAppBinId('timetable', null);
+          }
+          setTimeout(() => { window.location.reload(); }, 300);
+        }
         throw new Error(`HTTP ${response.status}`);
       }
       const json = await response.json();
@@ -266,27 +275,25 @@ window.DtSync = (() => {
       const timeEl = document.getElementById('sync-time');
       if (timeEl) {
         timeEl.textContent = timeStr;
-        timeEl.style.color = 'var(--cmd-green)';
+        timeEl.className = 'apple-status-val';
       }
     } catch(e) {
       log(`SYNC FAILED: ${e.message}`);
       
       const statusEl = document.getElementById('sync-status');
       if (statusEl) {
-        statusEl.textContent = `ERR (${e.message.substring(0, 12)})`;
-        statusEl.style.color = 'var(--cmd-red)';
-        statusEl.style.textShadow = '0 0 8px var(--cmd-red)';
-        statusEl.classList.add('blink-error');
+        statusEl.textContent = `エラー`;
+        statusEl.className = 'apple-status-val offline blink-error';
       }
       
       const container = document.getElementById('cyber-sync-panel');
       if (container) {
-        container.style.transition = 'all 0.1s ease-out';
-        container.style.borderColor = 'var(--cmd-red)';
-        container.style.boxShadow = '0 0 30px rgba(255, 0, 51, 0.3)';
+        container.style.transition = 'all 0.15s ease-out';
+        container.style.borderColor = 'var(--apple-red)';
+        container.style.boxShadow = '0 0 30px rgba(255, 59, 48, 0.35)';
         setTimeout(() => {
-          container.style.borderColor = 'var(--cmd-purple)';
-          container.style.boxShadow = '0 0 30px rgba(188, 19, 254, 0.15)';
+          container.style.borderColor = 'var(--apple-border)';
+          container.style.boxShadow = '0 8px 40px rgba(0, 0, 0, 0.3)';
         }, 1000);
       }
     }
@@ -320,18 +327,20 @@ window.DtSync = (() => {
     const topBadge = document.getElementById('sync-badge-top');
 
     if (statusEl) {
-      statusEl.classList.remove('blink-error');
+      statusEl.classList.remove('blink-error', 'offline', 'online', 'syncing');
+    }
+    if (topBadge) {
+      topBadge.classList.remove('badge-ok', 'badge-err');
     }
 
     if (blobId) {
       if (statusEl) {
-        statusEl.textContent = 'ONLINE';
-        statusEl.style.color = 'var(--cmd-green)';
-        statusEl.style.textShadow = '0 0 8px var(--cmd-green)';
+        statusEl.textContent = '同期中';
+        statusEl.className = 'apple-status-val online';
       }
       if (cryptoEl) {
-        cryptoEl.textContent = 'SHIELDED (JSONBIN)';
-        cryptoEl.style.color = 'var(--cmd-purple)';
+        cryptoEl.textContent = '有効 (JSONBIN)';
+        cryptoEl.className = 'apple-status-val online';
       }
       if (initView) initView.style.display = 'none';
       if (inputView) inputView.style.display = 'none';
@@ -340,19 +349,16 @@ window.DtSync = (() => {
       
       if (topBadge) {
         topBadge.textContent = '● SYNCED';
-        topBadge.style.background = 'rgba(0, 255, 102, 0.1)';
-        topBadge.style.color = 'var(--cmd-green)';
-        topBadge.style.borderColor = 'rgba(0, 255, 102, 0.2)';
+        topBadge.classList.add('badge-ok');
       }
     } else {
       if (statusEl) {
-        statusEl.textContent = 'OFFLINE';
-        statusEl.style.color = 'var(--neon-pink)';
-        statusEl.style.textShadow = '0 0 8px var(--neon-pink)';
+        statusEl.textContent = '未接続';
+        statusEl.className = 'apple-status-val offline';
       }
       if (cryptoEl) {
-        cryptoEl.textContent = 'INACTIVE';
-        cryptoEl.style.color = '#666';
+        cryptoEl.textContent = '無効';
+        cryptoEl.className = 'apple-status-val val-inactive';
       }
       if (initView) initView.style.display = 'block';
       if (inputView) inputView.style.display = 'none';
@@ -361,9 +367,7 @@ window.DtSync = (() => {
 
       if (topBadge) {
         topBadge.textContent = '◌ OFFLINE';
-        topBadge.style.background = 'rgba(255, 0, 85, 0.1)';
-        topBadge.style.color = 'var(--neon-pink)';
-        topBadge.style.borderColor = 'rgba(255, 0, 85, 0.2)';
+        topBadge.classList.add('badge-err');
       }
     }
   }
@@ -431,116 +435,112 @@ window.DtSync = (() => {
     const container = document.getElementById('cyber-sync-panel');
     if (!container) return;
 
-    injectErrorBlinkCSS();
-
-    container.className = 'tt-section monitor-section';
-    container.style.cssText = 'display: block; border-color: var(--cmd-purple); background: rgba(10, 5, 20, 0.85); box-shadow: 0 0 30px rgba(188, 19, 254, 0.15); margin-top: 2rem; position: relative; transition: all 0.3s;';
+    container.className = 'apple-sync-panel';
     
     container.innerHTML = `
-      <div class="monitor-header" style="border-bottom-color: rgba(188, 19, 254, 0.3); background: rgba(188, 19, 254, 0.05); color: var(--cmd-purple); text-shadow: 0 0 8px var(--cmd-purple);">
-        <div>[ CLOUD SYNC SYSTEM ]</div>
+      <div class="apple-sync-header">
+        <h2 class="apple-sync-title">クラウド同期設定</h2>
       </div>
-      <div style="padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem;">
+      <div class="apple-sync-body">
         <!-- ステータス表示 -->
-        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.8rem; font-family: 'Orbitron', sans-serif; font-size: 0.78rem;">
-          <div>STATUS: <span id="sync-status" style="color: var(--neon-pink); font-weight: bold; text-shadow: 0 0 8px var(--neon-pink);">OFFLINE</span></div>
-          <div>ENCRYPTION: <span id="sync-crypto" style="color: #666;">INACTIVE</span></div>
-          <div>LAST SYNC: <span id="sync-time" style="color: rgba(200,220,200,0.5);">-</span></div>
+        <div class="apple-sync-status-row">
+          <div class="apple-status-item">接続状況: <span id="sync-status" class="apple-status-val offline">未接続</span></div>
+          <div class="apple-status-item">暗号化: <span id="sync-crypto" class="apple-status-val val-inactive">無効</span></div>
+          <div class="apple-status-item">最終更新: <span id="sync-time" class="apple-status-val val-time">-</span></div>
         </div>
         
         <!-- 未同期時の表示 -->
         <div id="sync-init-view" style="display: block;">
-          <p style="font-size: 0.72rem; color: rgba(200, 220, 200, 0.4); font-family: 'JetBrains Mono', monospace; margin: 0 0 1rem 0;">
-            > STATUS: CLOUD SYNC MODULE INACTIVE. ESTABLISH SECURE LINK OR GENERATE NEW VAULT.
+          <p class="apple-sync-desc">
+            クラウドと同期されていません。新規保管庫を作成するか、既存の保管庫に接続してください。
           </p>
-          <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
-            <button class="att-btn delayed-status" id="btn-sync-generate" style="flex: 1; min-width: 140px; font-size: 0.72rem; padding: 0.6rem 1rem; border-color: var(--cmd-amber); color: var(--cmd-amber);">
-              CREATE NEW VAULT
+          <div class="apple-btn-grid">
+            <button class="apple-btn apple-btn-accent" id="btn-sync-generate">
+              新規保管庫の作成
             </button>
-            <button class="att-btn exempt-status" id="btn-sync-link" style="flex: 1; min-width: 140px; font-size: 0.72rem; padding: 0.6rem 1rem; border-color: var(--cmd-purple); color: var(--cmd-purple);">
-              LINK EXISTING VAULT
+            <button class="apple-btn apple-btn-secondary" id="btn-sync-link">
+              既存の保管庫に接続
             </button>
-            <button class="att-btn active-status" id="btn-sync-import-cg" style="flex: 1.5; min-width: 180px; font-size: 0.72rem; padding: 0.6rem 1rem; border-color: var(--cmd-green); color: var(--cmd-green); background: rgba(0, 255, 102, 0.04);">
-              IMPORT CHRONO_GRID CONFIG
+            <button class="apple-btn apple-btn-secondary" id="btn-sync-import-cg" style="grid-column: span 2;">
+              タスクカレンダーの設定から同期を適用
             </button>
           </div>
         </div>
 
         <!-- キー入力エリア -->
         <div id="sync-input-view" style="display: none;">
-          <label style="font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: var(--cmd-purple); margin-bottom: 0.4rem; display: block;">ENTER EXISTING VAULT ID:</label>
-          <div style="display: flex; gap: 0.6rem;">
-            <input type="text" id="sync-key-input" class="cyber-memo-input" placeholder="Enter Bin ID" style="border-color: var(--cmd-purple); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">
-            <button class="att-btn active-status" id="btn-sync-connect" style="flex: 0; min-width: 80px; font-size: 0.72rem; padding: 0.4rem 0.8rem; border-color: var(--cmd-green); color: var(--cmd-green);">
-              CONNECT
+          <label class="apple-input-label">接続する保管庫のID（BIN ID）を入力してください:</label>
+          <div class="apple-input-group">
+            <input type="text" id="sync-key-input" class="apple-text-input" placeholder="Bin ID を入力">
+            <button class="apple-btn apple-btn-accent" id="btn-sync-connect">
+              接続
             </button>
           </div>
-          <div style="margin-top: 0.6rem; text-align: right;">
-            <button id="btn-sync-cancel" style="background: none; border: none; color: var(--neon-pink); font-family: 'Orbitron', sans-serif; font-size: 0.65rem; cursor: pointer;">CANCEL</button>
+          <div style="margin-top: 0.8rem; text-align: right;">
+            <button id="btn-sync-cancel" class="apple-link-btn">キャンセル</button>
           </div>
         </div>
 
         <!-- 同期有効化時の表示 -->
         <div id="sync-active-view" style="display: none;">
-          <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(188, 19, 254, 0.2); padding: 0.8rem; margin-bottom: 1rem; position: relative;">
-            <div style="font-family: 'Orbitron', sans-serif; font-size: 0.62rem; color: var(--cmd-purple); margin-bottom: 0.4rem;">TERMINAL VAULT ID:</div>
-            <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.8rem;">
-              <input type="password" id="sync-key-display" readonly style="background: none; border: none; color: var(--cmd-amber); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: bold; width: 65%; outline: none;" value="">
-              <div style="display: flex; gap: 0.4rem;">
-                <button id="btn-sync-toggle-show" style="background: none; border: 1px solid rgba(255,255,255,0.2); color: #ccc; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; padding: 0.2rem 0.4rem; cursor: pointer;">SHOW</button>
-                <button id="btn-sync-copy" style="background: none; border: 1px solid var(--cmd-purple); color: var(--cmd-purple); font-family: 'Orbitron', sans-serif; font-size: 0.6rem; padding: 0.2rem 0.4rem; cursor: pointer;">COPY</button>
+          <div class="apple-vault-card">
+            <div class="apple-vault-label">接続中の BIN ID:</div>
+            <div class="apple-vault-row">
+              <input type="password" id="sync-key-display" readonly class="apple-vault-input" value="">
+              <div class="apple-vault-actions">
+                <button id="btn-sync-toggle-show" class="apple-btn apple-btn-small">表示</button>
+                <button id="btn-sync-copy" class="apple-btn apple-btn-small">コピー</button>
               </div>
             </div>
           </div>
-          <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
-            <button class="att-btn active-status" id="btn-sync-now" style="flex: 1; font-size: 0.72rem; padding: 0.5rem; border-color: var(--cmd-green); color: var(--cmd-green);">
-              FORCE SYNC NOW
+          <div class="apple-btn-grid">
+            <button class="apple-btn apple-btn-accent" id="btn-sync-now">
+              今すぐ手動同期
             </button>
-            <button class="att-btn offline-status" id="btn-sync-disconnect" style="flex: 1; font-size: 0.72rem; padding: 0.5rem; border-color: var(--neon-pink); color: var(--neon-pink);">
-              TERMINATE SYNC
+            <button class="apple-btn apple-btn-danger" id="btn-sync-disconnect">
+              同期を解除
             </button>
           </div>
         </div>
         
         <!-- アコーディオン式ドック -->
-        <div style="border-top: 1px dashed rgba(188, 19, 254, 0.2); margin-top: 0.8rem; padding-top: 0.5rem;">
-          <button id="btn-toggle-console-dock" style="width: 100%; background: none; border: none; color: rgba(188, 19, 254, 0.7); font-family: 'Orbitron', sans-serif; font-size: 0.7rem; padding: 0.4rem 0; cursor: pointer; text-align: left; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s;">
-            <span>[▶] ADVANCED CONSOLE DOCK</span>
-            <span id="console-dock-indicator" style="font-size:0.6rem; color:#888;">COLLAPSED</span>
+        <div class="apple-console-section">
+          <button id="btn-toggle-console-dock" class="apple-console-toggle">
+            <span>[▶] 詳細設定 / システムログ</span>
+            <span id="console-dock-indicator">COLLAPSED</span>
           </button>
           
-          <div id="console-dock-content" style="display: none; flex-direction: column; gap: 1rem; margin-top: 0.8rem; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 0.8rem;">
-            <!-- 手動バックアップ / エクスポート -->
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-              <span style="font-size: 0.65rem; color: rgba(200,220,200,0.4);">DATA INTEGRITY SECURITY PROTOCOL</span>
-              <button id="btn-sync-backup-export" style="background: none; border: 1px solid rgba(255,255,255,0.2); color: rgba(200,220,200,0.6); font-family: 'Orbitron', sans-serif; font-size: 0.6rem; padding: 0.2rem 0.6rem; cursor: pointer; transition: all 0.2s;">
-                MANUAL BACKUP EXPORT
+          <div id="console-dock-content" style="display: none;">
+            <div class="apple-console-row">
+              <span class="apple-console-desc">DATA INTEGRITY SECURITY PROTOCOL</span>
+              <button id="btn-sync-backup-export" class="apple-btn apple-btn-small">
+                手動データバックアップ
               </button>
             </div>
     
-            <div id="sync-backup-view" style="display: none; background: rgba(0, 0, 0, 0.7); border: 1px solid rgba(255,255,255,0.15); padding: 0.8rem;">
-              <div style="font-family: 'Orbitron', sans-serif; font-size: 0.62rem; color: var(--cmd-amber); margin-bottom: 0.4rem;">RAW DATA EXPORT:</div>
-              <textarea id="sync-backup-text" readonly style="width: 100%; height: 80px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: var(--cmd-green); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.4rem; resize: none; margin-bottom: 0.5rem;"></textarea>
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <button id="btn-sync-backup-copy" style="background: none; border: 1px solid var(--cmd-amber); color: var(--cmd-amber); font-family: 'Orbitron', sans-serif; font-size: 0.65rem; cursor: pointer;">COPY DATA</button>
-                <button id="btn-sync-backup-import-toggle" style="background: none; border: none; color: var(--cmd-purple); font-family: 'Orbitron', sans-serif; font-size: 0.65rem; cursor: pointer;">IMPORT MODE</button>
-                <button id="btn-sync-backup-close" style="background: none; border: none; color: #888; font-family: 'Orbitron', sans-serif; font-size: 0.65rem; cursor: pointer;">CLOSE</button>
+            <div id="sync-backup-view" style="display: none;" class="apple-raw-view">
+              <div class="apple-raw-title">エクスポートされたRAWデータ:</div>
+              <textarea id="sync-backup-text" readonly class="apple-raw-textarea"></textarea>
+              <div class="apple-raw-actions">
+                <button id="btn-sync-backup-copy" class="apple-btn apple-btn-small">データをコピー</button>
+                <button id="btn-sync-backup-import-toggle" class="apple-btn apple-btn-small">インポートに切替</button>
+                <button id="btn-sync-backup-close" class="apple-btn apple-btn-small">閉じる</button>
               </div>
             </div>
     
-            <div id="sync-import-view" style="display: none; background: rgba(0, 0, 0, 0.7); border: 1px solid var(--cmd-purple); padding: 0.8rem;">
-              <div style="font-family: 'Orbitron', sans-serif; font-size: 0.62rem; color: var(--cmd-purple); margin-bottom: 0.4rem;">PASTE BACKUP DATA TO IMPORT:</div>
-              <textarea id="sync-import-text" style="width: 100%; height: 80px; background: rgba(0,0,0,0.5); border: 1px solid rgba(188,19,254,0.3); color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.4rem; resize: none; margin-bottom: 0.5rem;"></textarea>
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <button id="btn-sync-import-run" style="background: none; border: solid 1px var(--cmd-purple); color: var(--cmd-purple); font-family: 'Orbitron', sans-serif; font-size: 0.65rem; padding: 0.2rem 0.5rem; cursor: pointer; font-weight: bold;">APPLY IMPORT</button>
-                <button id="btn-sync-import-close" style="background: none; border: none; color: #888; font-family: 'Orbitron', sans-serif; font-size: 0.65rem; cursor: pointer;">CANCEL</button>
+            <div id="sync-import-view" style="display: none;" class="apple-raw-view">
+              <div class="apple-raw-title">インポートするRAWデータを貼り付けてください:</div>
+              <textarea id="sync-import-text" class="apple-raw-textarea"></textarea>
+              <div class="apple-raw-actions">
+                <button id="btn-sync-import-run" class="apple-btn apple-btn-small apple-btn-accent">適用</button>
+                <button id="btn-sync-import-close" class="apple-btn apple-btn-small">キャンセル</button>
               </div>
             </div>
     
             <!-- ログ表示エリア -->
-            <div>
-              <div style="font-family: 'Orbitron', sans-serif; font-size: 0.62rem; color: rgba(0, 255, 102, 0.5); margin-bottom: 0.3rem;">SYSTEM DEPLOYMENT LOGS:</div>
-              <div id="sync-log" style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(0, 255, 102, 0.75); background: rgba(0, 5, 0, 0.75); padding: 0.5rem; border: 1px solid rgba(0, 255, 102, 0.15); height: 100px; overflow-y: auto; white-space: pre-wrap; word-break: break-all;"></div>
+            <div class="apple-log-section">
+              <div class="apple-log-title">システム同期ログ:</div>
+              <div id="sync-log" class="apple-log-textarea"></div>
             </div>
           </div>
         </div>

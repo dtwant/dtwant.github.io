@@ -3254,9 +3254,17 @@
         localStorage.setItem('sd_gaman_sync_key', localKey);
         dbPutSetting('sd_gaman_sync_key', localKey);
         updateSyncStatusUI(localKey, true);
-        pullFromCloud(function() {
+        
+        var isLocal = localKey.indexOf('lk_') === 0;
+        if (!isLocal) {
+          updateSyncBadgeUI('busy');
+          pullFromCloud(function(success) {
+            updateSyncBadgeUI(success ? 'ok' : 'err');
+            checkYesterdayScore();
+          });
+        } else {
           checkYesterdayScore();
-        });
+        }
       } else {
         
         fetch(BIN_CREATE_URL, {
