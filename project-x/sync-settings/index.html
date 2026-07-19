@@ -971,6 +971,7 @@
         if (confirm("新しくマスター保管庫（Master Bin）を作成して同期を開始しますか？")) {
           showToast("作成中", "新しいマスターBinをクラウド上に生成しています...", "info");
           try {
+            window.PWAConfigSync.setMasterBinId(''); // 古いマスターBin IDのキャッシュを確実にクリア
             const newId = await window.PWAConfigSync.pushMasterConfig();
             document.getElementById('master-bin-input').value = newId;
             showToast("作成成功", `新しいマスターBinを有効化しました: ${newId}`, "success");
