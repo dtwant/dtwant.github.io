@@ -23,7 +23,8 @@
     payment: 'dt_pay_blob',
     vocal_range: 'dt_vocal_range_blob',
     library: 'dt_library_blob',
-    attendance: 'dt_attendance_blob'
+    attendance: 'dt_attendance_blob',
+    weight_log: 'dt_weight_log_bin_id'
   };
 
   // デフォルトのマスターAPIキー (公開されてもデータ破壊は起きないよう基本的には個人の読み書き用)

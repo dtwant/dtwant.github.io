@@ -66,6 +66,9 @@
         </div>
       </div>
       <div class="sd-header-actions" id="sd-header-actions-timeline">
+        <span class="sd-sync-status-badge local" id="sd-sync-badge-top" style="cursor: pointer; font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; height: 18px; margin-right: 4px; font-family:-apple-system,BlinkMacSystemFont,sans-serif;" onclick="window.triggerManualSync()">
+          ◌ LOCAL
+        </span>
         <button class="sd-icon-btn" id="sd-search-toggle" aria-label="Search">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </button>
@@ -677,6 +680,39 @@
   margin: 0 auto;
   position: relative;
   background: var(--apple-bg);
+}
+
+ 
+.sd-sync-status-badge {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  letter-spacing: 0.3px;
+  font-size: 10px;
+}
+.sd-sync-status-badge.local {
+  background: rgba(255, 255, 255, 0.08);
+  color: #8e8e93;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.sd-sync-status-badge.busy {
+  background: rgba(0, 122, 255, 0.1);
+  color: #007aff;
+  border: 1px solid rgba(0, 122, 255, 0.2);
+  animation: sd-sync-pulse-anim 1.5s ease-in-out infinite;
+}
+.sd-sync-status-badge.ok {
+  background: rgba(52, 199, 89, 0.1);
+  color: #34c759;
+  border: 1px solid rgba(52, 199, 89, 0.2);
+}
+.sd-sync-status-badge.err {
+  background: rgba(255, 59, 48, 0.1);
+  color: #ff3b30;
+  border: 1px solid rgba(255, 59, 48, 0.2);
+}
+@keyframes sd-sync-pulse-anim {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.03); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
 }
 
  
@@ -3348,6 +3384,61 @@
     registerNewSyncKey(tempKey);
   }
 
+  function updateSyncBadgeUI(status) {
+    var badge = document.getElementById('sd-sync-badge-top');
+    if (!badge) return;
+    badge.className = 'sd-sync-status-badge ' + status;
+    if (status === 'local') {
+      badge.textContent = '◌ LOCAL';
+    } else if (status === 'busy') {
+      badge.textContent = '◌ SYNCING...';
+    } else if (status === 'ok') {
+      badge.textContent = '● SYNCED';
+    } else if (status === 'err') {
+      badge.textContent = '✕ ERROR';
+    }
+  }
+
+  window.triggerManualSync = function() {
+    var key = localStorage.getItem('sd_gaman_sync_key');
+    if (!key || key.indexOf('lk_') === 0) {
+      
+      updateSyncBadgeUI('busy');
+      fetch(BIN_CREATE_URL, {
+        method: 'POST',
+        headers: {
+          'X-Master-Key': getJsonbinKey(),
+          'Content-Type': 'application/json',
+          'X-Bin-Name': 'secret_diary_sync'
+        },
+        body: JSON.stringify({ isInitial: true })
+      })
+      .then(function(res) {
+        if (!res.ok) throw new Error('Failed to create bin');
+        return res.json();
+      })
+      .then(function(json) {
+        var userKey = json.metadata.id;
+        if (userKey) {
+          registerNewSyncKey(userKey);
+        } else {
+          updateSyncBadgeUI('err');
+        }
+      })
+      .catch(function(e) {
+        console.error("Manual sync bin creation failed:", e);
+        updateSyncBadgeUI('err');
+      });
+    } else {
+      updateSyncBadgeUI('busy');
+      pullFromCloud(function() {
+        pushToCloud(function(success) {
+          updateSyncBadgeUI(success ? 'ok' : 'err');
+        });
+      });
+    }
+  };
+
   function updateSyncStatusUI(key, isConnected) {
     gamanSyncKeyInput.value = key || '';
     if (isConnected && key) {
@@ -3360,8 +3451,10 @@
       var isLocal = key.indexOf('lk_') === 0;
       if (isLocal) {
         gamanSyncStatus.textContent = '同期キー: ' + key + ' (ローカル保存のみ - オフライン)';
+        updateSyncBadgeUI('local');
       } else {
         gamanSyncStatus.textContent = '同期キー: ' + key + ' (同期中 - 編集不可ロック)';
+        updateSyncBadgeUI('ok');
       }
     } else {
       gamanSyncKeyInput.readOnly = false;
@@ -3370,6 +3463,7 @@
       gamanSyncSaveBtn.textContent = '接続';
       gamanSyncSaveBtn.className = 'sd-apple-btn sd-primary-btn';
       gamanSyncStatus.textContent = '同期キー: 未接続';
+      updateSyncBadgeUI('local');
     }
   }
 

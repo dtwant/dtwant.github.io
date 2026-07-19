@@ -317,6 +317,7 @@ window.DtSync = (() => {
     const inputView = document.getElementById('sync-input-view');
     const activeView = document.getElementById('sync-active-view');
     const keyDisplay = document.getElementById('sync-key-display');
+    const topBadge = document.getElementById('sync-badge-top');
 
     if (statusEl) {
       statusEl.classList.remove('blink-error');
@@ -336,6 +337,13 @@ window.DtSync = (() => {
       if (inputView) inputView.style.display = 'none';
       if (activeView) activeView.style.display = 'block';
       if (keyDisplay) keyDisplay.value = blobId;
+      
+      if (topBadge) {
+        topBadge.textContent = '● SYNCED';
+        topBadge.style.background = 'rgba(0, 255, 102, 0.1)';
+        topBadge.style.color = 'var(--cmd-green)';
+        topBadge.style.borderColor = 'rgba(0, 255, 102, 0.2)';
+      }
     } else {
       if (statusEl) {
         statusEl.textContent = 'OFFLINE';
@@ -350,6 +358,13 @@ window.DtSync = (() => {
       if (inputView) inputView.style.display = 'none';
       if (activeView) activeView.style.display = 'none';
       if (keyDisplay) keyDisplay.value = '';
+
+      if (topBadge) {
+        topBadge.textContent = '◌ OFFLINE';
+        topBadge.style.background = 'rgba(255, 0, 85, 0.1)';
+        topBadge.style.color = 'var(--neon-pink)';
+        topBadge.style.borderColor = 'rgba(255, 0, 85, 0.2)';
+      }
     }
   }
 
@@ -372,6 +387,47 @@ window.DtSync = (() => {
 
   // コントロールパネルのDOM生成
   function injectSyncPanelHTML() {
+    // ヘッダーへの同期バッジ動的インジェクション
+    const titleRow = document.querySelector('.cmd-title-row');
+    if (titleRow && !document.getElementById('sync-badge-top')) {
+      const badgeSpan = document.createElement('span');
+      badgeSpan.id = 'sync-badge-top';
+      badgeSpan.style.cssText = 'cursor: pointer; font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: bold; font-family: "Orbitron", sans-serif; display: inline-flex; align-items: center; gap: 4px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #888; transition: all 0.2s;';
+      badgeSpan.textContent = '◌ OFFLINE';
+      
+      // クリックで手動同期を実行
+      badgeSpan.addEventListener('click', async () => {
+        if (!blobId) {
+          if (confirm("時間割の同期保管庫を新しく作成して同期を開始しますか？")) {
+            log("CREATING NEW VAULT VIA BADGE CLICK...");
+            try {
+              let localData = {};
+              try {
+                const raw = localStorage.getItem(config.storageKey);
+                if (raw) localData = JSON.parse(raw);
+              } catch(e) {}
+              const newId = await createRemoteVault(localData);
+              blobId = newId;
+              localStorage.setItem(BLOB_KEY, newId);
+              if (window.PWAConfigSync) {
+                await window.PWAConfigSync.syncAppBinId('timetable', newId);
+              }
+              log(`NEW VAULT CREATED: ${newId}`);
+              updateUI();
+              syncProcess();
+              startAutoSync();
+            } catch(e) {
+              alert("作成失敗: " + e.message);
+            }
+          }
+        } else {
+          log("FORCE SYNC TRIGGERED BY BADGE CLICK...");
+          syncProcess();
+        }
+      });
+      titleRow.appendChild(badgeSpan);
+    }
+
     const container = document.getElementById('cyber-sync-panel');
     if (!container) return;
 
@@ -714,6 +770,27 @@ window.DtSync = (() => {
       blobId = await window.PWAConfigSync.syncAppBinId('timetable', blobId);
       if (blobId) {
         localStorage.setItem(BLOB_KEY, blobId);
+      }
+    }
+
+    // 自動保管庫作成 (他ツールとの挙動統一)
+    if (!blobId) {
+      log("NO VAULT ID DETECTED. ATTEMPTING AUTOMATIC VAULT CREATION...");
+      try {
+        let localData = {};
+        try {
+          const raw = localStorage.getItem(config.storageKey);
+          if (raw) localData = JSON.parse(raw);
+        } catch(e) {}
+        const newId = await createRemoteVault(localData);
+        blobId = newId;
+        localStorage.setItem(BLOB_KEY, newId);
+        if (window.PWAConfigSync) {
+          await window.PWAConfigSync.syncAppBinId('timetable', newId);
+        }
+        log(`AUTOMATIC VAULT CREATED: ${newId}`);
+      } catch(e) {
+        log(`AUTOMATIC VAULT CREATION FAILED: ${e.message}`);
       }
     }
 
