@@ -7,11 +7,23 @@ window.DtSync = (() => {
   const JB_KEY_DEFAULT = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
   
   function getJbKey() {
+    // 優先度: PWAConfigSync(shared_jsonbin_api_key) → cg_jb_key(カレンダー) → デフォルト
     if (window.PWAConfigSync) {
-      return window.PWAConfigSync.getApiKey();
+      const sharedKey = window.PWAConfigSync.getApiKey();
+      // デフォルトキーしか返ってこない場合、cg_jb_keyにカレンダーの有効なキーがあるかもしれない
+      if (sharedKey && sharedKey !== JB_KEY_DEFAULT) {
+        return sharedKey;
+      }
     }
-    const key = localStorage.getItem('cg_jb_key') || JB_KEY_DEFAULT;
-    return key.trim();
+    const cgKey = localStorage.getItem('cg_jb_key');
+    if (cgKey && cgKey.trim()) {
+      // カレンダーの有効なキーが見つかったらPWAConfigSyncにも同期しておく
+      if (window.PWAConfigSync) {
+        window.PWAConfigSync.setApiKey(cgKey.trim());
+      }
+      return cgKey.trim();
+    }
+    return JB_KEY_DEFAULT;
   }
   
   let config = {
