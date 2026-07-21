@@ -116,7 +116,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "101"
+    "wordCount": "115"
   }]
   </script>
 
@@ -863,7 +863,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>101 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>115 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -2011,6 +2011,17 @@
       <label class="cg-btn" style="cursor:pointer;">📥 Import<input type="file" accept=".json" style="display:none" onchange="cgImport(this)"></label>
       <button class="cg-btn" style="border-color:rgba(239,68,68,0.3); color:#ef4444;" onclick="cgClearAll()">🗑 全削除</button>
     </div>
+    <div class="cg-section-label" style="margin-top:1rem;">旧アカウント移行 (Bin Migration)</div>
+    <div id="cg-migrate-area" style="background:rgba(250,204,21,0.04); border:1px solid rgba(250,204,21,0.2); border-radius:6px; padding:0.8rem; margin-bottom:0.5rem;">
+      <div style="font-size:0.65rem; color:#facc15; margin-bottom:0.6rem;">⚠ 旧アカウントのBin IDとAPIキーを入力して、データを移行します</div>
+      <label class="cg-section-label" style="margin-top:0">旧 Bin ID</label>
+      <input type="text" class="cg-input" id="cg-old-bin-id" placeholder="例: 69fc9c93adc21f119a68a40b" style="margin-bottom:0.4rem;">
+      <label class="cg-section-label" style="margin-top:0.3rem">旧 API Key</label>
+      <input type="password" class="cg-input" id="cg-old-api-key" placeholder="旧アカウントのMaster Key" style="margin-bottom:0.4rem;">
+      <button class="cg-btn" style="margin-top:0.4rem; border-color:rgba(250,204,21,0.4); color:#facc15; width:100%;" onclick="cgMigrateFromOldBin()">⟳ 旧Binからデータを取得して移行</button>
+      <div id="cg-migrate-status" style="font-size:0.6rem; color:#888; margin-top:0.4rem;"></div>
+    </div>
+
     <div class="cg-modal-footer">
       <button class="cg-btn" onclick="cgCloseSettings()">Cancel</button>
       <button class="cg-btn cg-btn-add" onclick="cgApplySettings()">Apply</button>
@@ -2149,12 +2160,14 @@
   let statMode = 'all';
   let data = { attendance: {}, attendance_ts: {}, events: {} };
 
-  const JB_KEY_DEFAULT = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const JB_KEY_DEFAULT = '$2a$10$C0Z.Fl3F.BCvUaC5rHVt3OD6aYt8SXRkmXExr3mfmtCrGdDzG8Aae';
   function getJbKey() {
+    const cgKey = localStorage.getItem('cg_jb_key');
+    if (cgKey && cgKey.trim()) return cgKey.trim();
     if (window.PWAConfigSync) {
       return window.PWAConfigSync.getApiKey();
     }
-    return localStorage.getItem('cg_jb_key') || JB_KEY_DEFAULT;
+    return JB_KEY_DEFAULT;
   }
   let ghPat = localStorage.getItem('cg_gh_pat') || '';
   let ghOwner = localStorage.getItem('cg_gh_owner') || 'dtwant';
@@ -2610,7 +2623,18 @@
         const res = await fetch(JB_CREATE, {
           method: 'POST', headers: { ...JB_HDR(), 'X-Bin-Name': 'chrono_grid' }, body: JSON.stringify(data)
         });
-        if (!res.ok) throw new Error(`create: ${res.status}`);
+        if (!res.ok) {
+          const st = res.status;
+          if (st === 401 || st === 403) {
+            setSS('err', '✕ ERR');
+            if (!silent) {
+              toast('APIキーエラー('+st+') — ⚙CONFIGでBin IDとAPIキーを確認してください', 'err');
+              cgOpenSettings();
+            }
+            return;
+          }
+          throw new Error(`create: ${st}`);
+        }
         const json = await res.json();
         blobId = json.metadata.id;
         try { localStorage.setItem(BLOB_KEY, blobId); } catch(e) {}
@@ -2622,7 +2646,22 @@
       } else {
         const r = await fetch(binUrl(), { headers: { 'X-Master-Key': getJbKey() }, cache: 'no-store' });
         if (!r.ok) {
-          throw new Error(`get: ${r.status}`);
+          const st = r.status;
+          if (st === 401 || st === 403) {
+            setSS('err', '✕ ERR');
+            if (!silent) {
+              toast('APIキーエラー('+st+') — ⚙CONFIGでAPIキーを再設定してください', 'err');
+              cgOpenSettings();
+            }
+            return;
+          }
+          if (st === 404) {
+            setSS('err', '✕ ERR');
+            if (!silent) toast('Bin IDが見つかりません(404) — ⚙CONFIGで正しいIDを入力してください', 'err');
+            if (!silent) cgOpenSettings();
+            return;
+          }
+          throw new Error(`get: ${st}`);
         }
         const json = await r.json();
         data = mergeData(data, json.record || json);
@@ -2685,6 +2724,65 @@
     if (blobId) cgSync(false);
     cgCloseSettings();
   };
+
+   
+  window.cgMigrateFromOldBin = async function() {
+    const oldBinId  = (document.getElementById('cg-old-bin-id').value || '').trim();
+    const oldApiKey = (document.getElementById('cg-old-api-key').value || '').trim();
+    const statusEl  = document.getElementById('cg-migrate-status');
+
+    if (!oldBinId || !oldApiKey) {
+      statusEl.style.color = '#ef4444';
+      statusEl.textContent = '⚠ 旧Bin IDと旧APIキーを両方入力してください';
+      return;
+    }
+
+    statusEl.style.color = '#facc15';
+    statusEl.textContent = '⏳ 旧Binからデータを取得中…';
+
+    try {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${oldBinId}/latest`, {
+        headers: { 'X-Master-Key': oldApiKey },
+        cache: 'no-store'
+      });
+      if (!res.ok) {
+        if (res.status === 403) {
+          statusEl.style.color = '#ef4444';
+          statusEl.textContent = `✕ 403: 旧APIキーで旧Binにアクセスできません。JSONBinダッシュボードからJSONをコピーしてImportボタンで読み込んでください。`;
+          return;
+        }
+        if (res.status === 429) {
+          statusEl.style.color = '#ef4444';
+          statusEl.textContent = `✕ 429: リクエスト上限超過。しばらく待ってから再試行してください。`;
+          return;
+        }
+        statusEl.style.color = '#ef4444';
+        statusEl.textContent = `✕ HTTP ${res.status}: 取得失敗`;
+        return;
+      }
+      const json = await res.json();
+      const remote = json.record || json;
+
+      if (!remote.attendance && !remote.events) {
+        statusEl.style.color = '#ef4444';
+        statusEl.textContent = '✕ 取得データの形式が不正です（attendance/eventsキーなし）';
+        return;
+      }
+
+      
+      data = mergeData(data, remote);
+      save();
+      renderAll();
+      statusEl.style.color = '#22c55e';
+      statusEl.textContent = '✓ 旧Binのデータをローカルにマージしました。このまま Apply を押すと新Binに同期されます。';
+      toast('旧Binからデータ取得成功！Applyして新Binに同期してください', 'ok');
+    } catch(e) {
+      statusEl.style.color = '#ef4444';
+      statusEl.textContent = '✕ 通信エラー: ' + e.message;
+    }
+  };
+
+
   window.cgExport = function() {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);

@@ -28,7 +28,7 @@
   };
 
   // デフォルトのマスターAPIキー (公開されてもデータ破壊は起きないよう基本的には個人の読み書き用)
-  const DEFAULT_API_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const DEFAULT_API_KEY = '$2a$10$C0Z.Fl3F.BCvUaC5rHVt3OD6aYt8SXRkmXExr3mfmtCrGdDzG8Aae';
 
   window.PWAConfigSync = {
     APP_KEYS_MAP, // 外部公開

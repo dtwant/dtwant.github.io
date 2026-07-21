@@ -4,7 +4,7 @@ window.DtSync = (() => {
   const BLOB_KEY = 'dt_timetable_sync_blob'; // localStorage に保存するBlob IDキー
   
   // Chrono Grid と共通の jsonbin.io マスターキーを取得、無ければデフォルト
-  const JB_KEY_DEFAULT = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
+  const JB_KEY_DEFAULT = '$2a$10$C0Z.Fl3F.BCvUaC5rHVt3OD6aYt8SXRkmXExr3mfmtCrGdDzG8Aae';
   
   function getJbKey() {
     // 優先度: PWAConfigSync(shared_jsonbin_api_key) → cg_jb_key(カレンダー) → デフォルト
