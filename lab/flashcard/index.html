@@ -118,7 +118,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "76"
+    "wordCount": "83"
   }]
   </script>
 
@@ -750,287 +750,542 @@
 </ul>
 <p><strong>デッキ</strong> (微積分/線形代数/電磁気学/論理学/情報理論)</p></blockquote>
 <hr>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="/js/pwa-config-sync.js"></script>
+
+<script>
+(function(){
+  var el = document.currentScript;
+  var section = el ? el.closest('section') : null;
+  if (section && section.previousElementSibling && section.previousElementSibling.tagName === 'HEADER') {
+    section.previousElementSibling.style.display = 'none';
+  }
+})();
+</script>
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
-  #fc-app {
-    --neon-cyan: #00f3ff; --neon-pink: #ff0055; --neon-green: #00ff41; --neon-yellow: #fcee0a; --bg-dark: #050505;
-    font-family: 'Zen Kaku Gothic New', sans-serif; color: #e2e8f0;
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    z-index: 99999; background: var(--bg-dark); margin: 0; padding: 0;
-    box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden;
-  }
-  #fc-app * { box-sizing: inherit; text-decoration: none !important; }
-  .fc-bg {
-    position: absolute; top:0; left:0; width:100%; height:100%;
-    background-image: radial-gradient(circle at 80% 80%, rgba(252,238,10,0.06) 0%, transparent 50%),
-      linear-gradient(rgba(252,238,10,0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(252,238,10,0.02) 1px, transparent 1px);
-    background-size: 100% 100%, 40px 40px, 40px 40px; z-index:1; pointer-events:none;
-  }
-  .fc-scan {
-    position: absolute; top:0; left:0; width:100%; height:100%;
-    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.25) 50%);
-    background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.4;
-  }
-  .fc-container { position: relative; z-index: 10; display: flex; flex-direction: column; width: 100%; height: 100%; }
-  .fc-header {
-    background: rgba(5, 5, 5, 0.5);
-    backdrop-filter: blur(14px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
-    box-shadow: 0 4px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
-  }
-  .fc-title {
-    font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
-    color: var(--neon-yellow); text-shadow: 0 0 10px rgba(252,238,10,0.5);
-    letter-spacing: 2px; display: flex; align-items: center; gap: 12px;
-  }
-  .fc-title svg { flex-shrink:0; }
-  .fc-hdr-r { display: flex; align-items: center; }
-  .fc-sys {
-    font-size: 0.7rem; color: var(--neon-cyan); display: flex; align-items: center; gap: 6px;
-    background: rgba(0,243,255,0.05); padding: 4px 10px; border: 1px solid rgba(0,243,255,0.2);
-    font-family: 'JetBrains Mono', monospace; font-weight: bold; white-space: nowrap;
-  }
-  .fc-exit {
-    background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
-    font-size: 0.7rem; font-weight: bold; padding: 5px 12px; cursor: pointer; transition: all 0.2s; margin-left: 10px;
-    font-family: 'Zen Kaku Gothic New', sans-serif; letter-spacing: 1px;
-  }
-  .fc-exit:hover { background: var(--neon-pink); color: #000; }
-  .fc-ws { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
-  @media(min-width: 900px) { .fc-ws { flex-direction: row; } }
-  .fc-side {
-    width: 100%; max-height: 35vh;
-    background: rgba(5, 5, 5, 0.45);
-    backdrop-filter: blur(14px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
-    display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; padding: 12px; gap: 10px;
-    box-shadow: 0 4px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-  }
-  @media(min-width: 900px) { .fc-side { width: 290px; max-height: none; } }
-  .fc-side::-webkit-scrollbar { width: 4px; }
-  .fc-side::-webkit-scrollbar-thumb { background: rgba(252,238,10,0.3); }
-  .fc-ctrl {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-left: 3px solid var(--neon-yellow);
-    padding: 10px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 2px 10px rgba(0,0,0,0.3);
-    transition: all 0.3s;
-  }
-  .fc-ctrl:hover { border-color: rgba(255, 255, 255, 0.12); border-left-color: var(--neon-yellow); background: rgba(252,238,10,0.02); }
-  .fc-lbl-en { font-family: 'Orbitron', sans-serif; font-size: 0.6rem; color: var(--neon-cyan); letter-spacing: 1px; display: block; }
-  .fc-lbl-jp { font-size: 0.78rem; color: #fff; font-weight: bold; margin-bottom: 4px; display: block; }
-  .fc-select, .fc-input {
-    width: 100%; background: #000; border: 1px solid #444; color: #fff;
-    font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.82rem; padding: 7px;
-    outline: none; transition: all 0.2s; font-weight: bold;
-  }
-  .fc-select:focus, .fc-input:focus { border-color: var(--neon-yellow); box-shadow: 0 0 10px rgba(252,238,10,0.2); }
-  .fc-textarea {
-    width: 100%; background: #000; border: 1px solid #444; color: #fff;
-    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; padding: 6px;
-    outline: none; resize: vertical; min-height: 40px;
-  }
-  .fc-textarea:focus { border-color: var(--neon-yellow); box-shadow: 0 0 10px rgba(252,238,10,0.2); }
-  .fc-btn-row { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-  .fc-btn {
-    flex: 1; min-width: 50px; background: transparent; border: 1px solid var(--neon-yellow); color: var(--neon-yellow);
-    font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.75rem; font-weight: bold; padding: 8px 4px;
-    cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 2px;
-  }
-  .fc-btn-en { font-family: 'Orbitron', sans-serif; font-size: 0.45rem; opacity: 0.8; }
-  .fc-btn:hover { background: rgba(252,238,10,0.2); }
-  .fc-btn.active { background: var(--neon-yellow); color: #000; }
-  .fc-btn.green { border-color: var(--neon-green); color: var(--neon-green); }
-  .fc-btn.green:hover { background: rgba(0,255,65,0.2); }
-  .fc-btn.pink { border-color: var(--neon-pink); color: var(--neon-pink); }
-  .fc-btn.pink:hover { background: rgba(255,0,85,0.2); }
-  .fc-panel { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow-y: auto; overflow-x: hidden; padding: 15px; }
-  .fc-card-container {
-    perspective: 1200px; width: 100%; max-width: 550px; height: 320px; cursor: pointer;
-  }
-  .fc-card {
-    width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .fc-card.flipped { transform: rotateY(180deg); }
-  .fc-card-face {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    backface-visibility: hidden; -webkit-backface-visibility: hidden;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 30px;
-    background: rgba(5, 5, 5, 0.45);
-    backdrop-filter: blur(14px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
-    border: 2px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
-    overflow: auto;
-  }
-  .fc-card-front { border-color: rgba(252,238,10,0.4); }
-  .fc-card-front .fc-card-label {
-    position: absolute; top: 10px; left: 12px; font-family: 'Orbitron', sans-serif;
-    font-size: 0.6rem; color: var(--neon-yellow); letter-spacing: 1px; opacity: 0.7;
-  }
-  .fc-card-front .fc-card-content {
-    font-size: 1.2rem; color: #fff; text-align: center; line-height: 1.8;
-  }
-  .fc-card-back {
-    transform: rotateY(180deg); border-color: rgba(0,243,255,0.4);
-  }
-  .fc-card-back .fc-card-label {
-    position: absolute; top: 10px; left: 12px; font-family: 'Orbitron', sans-serif;
-    font-size: 0.6rem; color: var(--neon-cyan); letter-spacing: 1px; opacity: 0.7;
-  }
-  .fc-card-back .fc-card-content {
-    font-size: 1rem; color: #ccc; text-align: center; line-height: 1.8;
-  }
-  .fc-card-num {
-    position: absolute; bottom: 10px; right: 12px; font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem; color: #666;
-  }
-  .fc-controls { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
-  .fc-ctrl-btn {
-    background: transparent; border: 1px solid #555; color: #aaa;
-    font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.85rem; font-weight: bold;
-    padding: 10px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px;
-  }
-  .fc-ctrl-btn:hover { border-color: #888; color: #fff; }
-  .fc-ctrl-btn.correct { border-color: var(--neon-green); color: var(--neon-green); }
-  .fc-ctrl-btn.correct:hover { background: rgba(0,255,65,0.2); }
-  .fc-ctrl-btn.wrong { border-color: var(--neon-pink); color: var(--neon-pink); }
-  .fc-ctrl-btn.wrong:hover { background: rgba(255,0,85,0.2); }
-  .fc-progress-bar {
-    width: 100%; max-width: 550px; height: 6px; background: rgba(255,255,255,0.1);
-    margin-top: 15px; position: relative; overflow: hidden;
-  }
-  .fc-progress-fill { height: 100%; background: var(--neon-yellow); transition: width 0.3s; }
-  .fc-stats { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 20px; width: 100%; max-width: 600px; }
-  .fc-stat {
-    background: rgba(5, 5, 5, 0.4);
-    backdrop-filter: blur(10px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(10px) url(#liquid-refract);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
-    padding: 6px 10px; flex: 1; min-width: 80px; text-align: center;
-  }
-  .fc-stat-en { font-family: 'Orbitron', sans-serif; font-size: 0.5rem; color: #888; letter-spacing: 1px; }
-  .fc-stat-v { font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #fff; }
-  .fc-stat-v.green { color: var(--neon-green); }
-  .fc-stat-v.pink { color: var(--neon-pink); }
-  @media(max-width: 600px) {
-    .fc-title { font-size: 0.85rem; letter-spacing: 1px; }
-    .fc-sys { display: none; }
-    .fc-card-container { height: 220px; flex-shrink: 0; }
-    .fc-card-front .fc-card-content { font-size: 0.95rem; }
-    .fc-card-back .fc-card-content { font-size: 0.8rem; }
-    .fc-card-face { padding: 20px 15px; }
-    .fc-controls { gap: 6px; margin-top: 10px; }
-    .fc-ctrl-btn { padding: 8px 12px; font-size: 0.75rem; }
-    .fc-stats { padding: 6px 10px; }
-    .fc-stat { min-width: 60px; padding: 4px 6px; }
-    .fc-stat-v { font-size: 0.85rem; }
-    .fc-panel { padding: 10px; justify-content: flex-start; }
-    .fc-progress-bar { margin-top: 8px; }
-  }
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700;800&family=SF+Pro+Text:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+
+ 
+.portal-body footer,
+.portal-body .breadcrumbs,
+.portal-body nav[aria-label="breadcrumb"],
+.portal-body article > div > a.hover\:underline,
+.portal-body .article-header,
+.portal-body .prose > div:first-child > nav,
+.portal-body h1.mt-0.text-4xl.font-extrabold {
+  display: none !important;
+}
+
+.portal-body article.prose,
+.portal-body .prose {
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+html,
+body.portal-body,
+.portal-body main,
+.portal-body main#main-content,
+.portal-body article,
+.portal-body .prose {
+  background-color: #000000 !important;
+  background: #000000 !important;
+}
+
+ 
+#fc-app, #fc-app *,
+#fc-app a, #fc-app button, #fc-app div, #fc-app span {
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+:root {
+  --apple-bg: #000000;
+  --apple-card: rgba(24, 24, 28, 0.78);
+  --apple-border: rgba(255, 255, 255, 0.1);
+  --apple-text: #ffffff;
+  --apple-subtext: #86868b;
+  --apple-blue: #0a84ff;
+  --apple-green: #30d158;
+  --apple-red: #ff453a;
+  --apple-yellow: #ffd60a;
+  --apple-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'Zen Kaku Gothic New', sans-serif;
+  --apple-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --apple-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#fc-app {
+  font-family: var(--apple-font);
+  color: var(--apple-text);
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 999990;
+  background: radial-gradient(circle at 50% 0%, rgba(10, 132, 255, 0.08) 0%, rgba(0, 0, 0, 0) 70%), #000000;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.fc-container {
+  max-width: 760px;
+  width: 100%;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 5.5rem 1.25rem 2rem 1.25rem;
+  box-sizing: border-box;
+}
+
+ 
+.fc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+.fc-title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+.fc-subtitle {
+  font-size: 0.8rem;
+  color: var(--apple-subtext);
+}
+
+ 
+.fc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.6rem 1.1rem;
+  cursor: pointer;
+  border: 1px solid var(--apple-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--apple-text);
+  transition: transform 0.15s var(--apple-bounce), background 0.2s ease;
+  user-select: none;
+  font-family: inherit;
+}
+.fc-btn:active {
+  transform: scale(0.94);
+  background: rgba(255, 255, 255, 0.14);
+}
+.fc-btn-primary {
+  background: var(--apple-blue);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(10, 132, 255, 0.35);
+}
+.fc-btn-circle {
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  border-radius: 50%;
+}
+
+ 
+.fc-nav-bar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+.fc-deck-select {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--apple-border);
+  color: #fff;
+  border-radius: 14px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  outline: none;
+  font-family: inherit;
+}
+.fc-deck-select option,
+select option {
+  background-color: #1c1c1e !important;
+  color: #ffffff !important;
+}
+.fc-segmented-control {
+  display: flex;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--apple-border);
+  border-radius: 14px;
+  padding: 3px;
+  flex: 1.2;
+}
+.fc-segment-btn {
+  flex: 1;
+  text-align: center;
+  padding: 0.55rem 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 11px;
+  cursor: pointer;
+  color: var(--apple-subtext);
+  transition: all 0.2s var(--apple-spring);
+  user-select: none;
+}
+.fc-segment-btn.active {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+ 
+.fc-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 0;
+}
+
+.fc-card-3d-wrap {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 520px;
+  height: 340px;
+  cursor: pointer;
+}
+
+.fc-card-3d {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s var(--apple-spring);
+}
+.fc-card-3d.flipped {
+  transform: rotateY(180deg);
+}
+
+.fc-card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 26px;
+  background: var(--apple-card);
+  border: 1px solid var(--apple-border);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.25rem;
+  text-align: center;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: auto;
+}
+
+.fc-card-back {
+  transform: rotateY(180deg);
+  border-color: rgba(10, 132, 255, 0.3);
+  background: rgba(18, 24, 38, 0.85);
+}
+
+.fc-card-tag {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--apple-subtext);
+  text-transform: uppercase;
+}
+
+.fc-card-body {
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #ffffff;
+  width: 100%;
+}
+
+.fc-card-num {
+  position: absolute;
+  bottom: 18px;
+  right: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--apple-subtext);
+}
+
+ 
+.fc-progress-wrap {
+  width: 100%;
+  max-width: 520px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  margin-top: 1.25rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.fc-progress-bar {
+  height: 100%;
+  background: var(--apple-blue);
+  border-radius: 999px;
+  transition: width 0.35s var(--apple-spring);
+}
+
+ 
+.fc-actions {
+  display: flex;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+  width: 100%;
+  max-width: 520px;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.fc-act-btn {
+  flex: 1;
+  padding: 0.85rem 0.5rem;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: 1px solid var(--apple-border);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: transform 0.15s var(--apple-bounce), background 0.2s ease;
+  user-select: none;
+  font-family: inherit;
+}
+.fc-act-btn:active {
+  transform: scale(0.95);
+}
+.fc-act-btn.wrong {
+  color: var(--apple-red);
+  border-color: rgba(255, 69, 58, 0.3);
+  background: rgba(255, 69, 58, 0.08);
+}
+.fc-act-btn.correct {
+  color: var(--apple-green);
+  border-color: rgba(48, 209, 88, 0.3);
+  background: rgba(48, 209, 88, 0.08);
+}
+
+ 
+.fc-stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  width: 100%;
+  max-width: 520px;
+  flex-shrink: 0;
+}
+.fc-stat-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--apple-border);
+  border-radius: 14px;
+  padding: 0.6rem 0.4rem;
+  text-align: center;
+}
+.fc-stat-label {
+  font-size: 0.68rem;
+  color: var(--apple-subtext);
+  font-weight: 600;
+}
+.fc-stat-val {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-top: 0.15rem;
+}
+
+ 
+.fc-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  z-index: 9999999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--apple-spring);
+}
+.fc-sheet-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.fc-sheet {
+  width: 100%;
+  max-width: 520px;
+  background: #1c1c1e;
+  border: 1px solid var(--apple-border);
+  border-radius: 28px 28px 0 0;
+  padding: 1.5rem 1.75rem 2.5rem 1.75rem;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7);
+  transform: translateY(100%);
+  transition: transform 0.35s var(--apple-spring);
+}
+.fc-sheet-overlay.show .fc-sheet {
+  transform: translateY(0);
+}
+.fc-sheet-handle {
+  width: 36px; height: 5px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  margin: 0 auto 1.25rem auto;
+}
+
+.fc-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.fc-form-label {
+  font-size: 0.75rem;
+  color: var(--apple-subtext);
+  font-weight: 600;
+}
+.fc-input-box {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--apple-border);
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  font-family: inherit;
+}
+
+@media (max-width: 640px) {
+  .fc-card-3d-wrap { height: 260px; }
+  .fc-card-body { font-size: 1.15rem; }
+  .fc-nav-bar { flex-direction: column; }
+}
 </style>
 
 <div id="fc-app">
-  
-  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
-    <filter id="liquid-refract">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
-    </filter>
-  </svg>
-  <div class="fc-bg"></div>
-  <div class="fc-scan"></div>
   <div class="fc-container">
+    
     <div class="fc-header">
-      <div class="fc-title">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fcee0a" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-        FLASH_CARD
+      <div>
+        <h1 class="fc-title">Flashcards</h1>
+        <div class="fc-subtitle">Interactive Memory Engine</div>
       </div>
-      <div class="fc-hdr-r">
-        <div class="fc-sys" id="fc-status"><span style="color:#fcee0a;">●</span> READY</div>
-        <button class="fc-exit" onclick="history.back()">DISCONNECT</button>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <button class="fc-btn fc-btn-circle" id="fc-auto-play-btn" onclick="fcApp.toggleAutoPlay()" title="自動めくり再生">▶</button>
+        <button class="fc-btn fc-btn-circle" onclick="fcApp.openAddModal()" title="カード追加">＋</button>
       </div>
     </div>
-    <div class="fc-ws">
-      <div class="fc-side">
-        <div class="fc-ctrl">
-          <span class="fc-lbl-en">DECK_SELECT</span>
-          <span class="fc-lbl-jp">デッキ選択</span>
-          <select id="fc-deck" class="fc-select" onchange="fcApp.loadDeck()">
-            <option value="calculus">微分積分</option>
-            <option value="linalg">線形代数</option>
-            <option value="emag">電磁気学</option>
-            <option value="logic">論理学・集合</option>
-            <option value="info">情報理論</option>
-            <option value="custom">カスタムデッキ</option>
-          </select>
-        </div>
-        <div class="fc-ctrl">
-          <span class="fc-lbl-en">STUDY_MODE</span>
-          <span class="fc-lbl-jp">学習モード</span>
-          <div class="fc-btn-row">
-            <button class="fc-btn active" id="mode-seq" onclick="fcApp.setStudyMode('seq')">順番<span class="fc-btn-en">SEQ</span></button>
-            <button class="fc-btn" id="mode-rand" onclick="fcApp.setStudyMode('rand')">ランダム<span class="fc-btn-en">RANDOM</span></button>
-            <button class="fc-btn" id="mode-weak" onclick="fcApp.setStudyMode('weak')">苦手<span class="fc-btn-en">WEAK</span></button>
+
+    
+    <div class="fc-nav-bar">
+      <select id="fc-deck" class="fc-deck-select" onchange="fcApp.loadDeck()">
+        <option value="calculus">微分積分学</option>
+        <option value="linalg">線形代数</option>
+        <option value="emag">電磁気学</option>
+        <option value="logic">論理学・集合</option>
+        <option value="info">情報理論</option>
+        <option value="custom">カスタム単語帳</option>
+      </select>
+      <div class="fc-segmented-control">
+        <div class="fc-segment-btn active" id="mode-seq" onclick="fcApp.setStudyMode('seq')">順番</div>
+        <div class="fc-segment-btn" id="mode-rand" onclick="fcApp.setStudyMode('rand')">シャッフル</div>
+        <div class="fc-segment-btn" id="mode-weak" onclick="fcApp.setStudyMode('weak')">苦手集中</div>
+      </div>
+    </div>
+
+    
+    <div class="fc-stage">
+      <div class="fc-card-3d-wrap" onclick="fcApp.flipCard()">
+        <div class="fc-card-3d" id="fc-card">
+          <div class="fc-card-face fc-card-front">
+            <span class="fc-card-tag">問題 // QUESTION</span>
+            <div class="fc-card-body" id="fc-front-content">デッキを選択してください</div>
+            <span class="fc-card-num" id="fc-card-num">0/0</span>
           </div>
-        </div>
-        <div class="fc-ctrl" id="fc-add-section">
-          <span class="fc-lbl-en">ADD_CARD</span>
-          <span class="fc-lbl-jp">カード追加</span>
-          <textarea class="fc-textarea" id="fc-front" placeholder="表面（LaTeX可: $E=mc^2$）" rows="2"></textarea>
-          <textarea class="fc-textarea" id="fc-back" placeholder="裏面（説明）" rows="2" style="margin-top:4px;"></textarea>
-          <div class="fc-btn-row">
-            <button class="fc-btn green" onclick="fcApp.addCard()">追加<span class="fc-btn-en">ADD</span></button>
-          </div>
-        </div>
-        <div class="fc-ctrl">
-          <span class="fc-lbl-en">SYSTEM</span>
-          <span class="fc-lbl-jp">操作</span>
-          <div class="fc-btn-row">
-            <button class="fc-btn" onclick="fcApp.shuffle()">シャッフル<span class="fc-btn-en">SHUFFLE</span></button>
-            <button class="fc-btn pink" onclick="fcApp.resetProgress()">進捗リセット<span class="fc-btn-en">RESET</span></button>
+          <div class="fc-card-face fc-card-back">
+            <span class="fc-card-tag" style="color:var(--apple-blue);">解答 // ANSWER</span>
+            <div class="fc-card-body" id="fc-back-content">—</div>
           </div>
         </div>
       </div>
-      <div class="fc-panel">
-        <div class="fc-card-container" id="fc-card-container" onclick="fcApp.flipCard()">
-          <div class="fc-card" id="fc-card">
-            <div class="fc-card-face fc-card-front">
-              <span class="fc-card-label">FRONT // QUESTION</span>
-              <div class="fc-card-content" id="fc-front-content">デッキを選択してください</div>
-              <span class="fc-card-num" id="fc-card-num">0/0</span>
-            </div>
-            <div class="fc-card-face fc-card-back">
-              <span class="fc-card-label">BACK // ANSWER</span>
-              <div class="fc-card-content" id="fc-back-content">—</div>
-            </div>
-          </div>
+
+      <div class="fc-progress-wrap">
+        <div class="fc-progress-bar" id="fc-progress" style="width:0%;"></div>
+      </div>
+
+      <div class="fc-actions">
+        <button class="fc-act-btn wrong" onclick="fcApp.markWrong()">✕ 不正解</button>
+        <button class="fc-act-btn" onclick="fcApp.prev()">◀ 前へ</button>
+        <button class="fc-act-btn" onclick="fcApp.next()">次へ ▶</button>
+        <button class="fc-act-btn correct" onclick="fcApp.markCorrect()">✓ 正解</button>
+      </div>
+
+      <div class="fc-stats-bar">
+        <div class="fc-stat-item">
+          <div class="fc-stat-label">総数</div>
+          <div class="fc-stat-val" id="st-total">0</div>
         </div>
-        <div class="fc-progress-bar"><div class="fc-progress-fill" id="fc-progress" style="width:0%;"></div></div>
-        <div class="fc-controls">
-          <button class="fc-ctrl-btn" onclick="fcApp.prev()">◀ 前へ</button>
-          <button class="fc-ctrl-btn wrong" onclick="fcApp.markWrong()">✗ 不正解</button>
-          <button class="fc-ctrl-btn correct" onclick="fcApp.markCorrect()">✓ 正解</button>
-          <button class="fc-ctrl-btn" onclick="fcApp.next()">次へ ▶</button>
+        <div class="fc-stat-item">
+          <div class="fc-stat-label">正解</div>
+          <div class="fc-stat-val" style="color:var(--apple-green);" id="st-correct">0</div>
         </div>
-        <div class="fc-stats">
-          <div class="fc-stat"><span class="fc-stat-en">CARDS</span><span class="fc-stat-v" id="st-total">0</span></div>
-          <div class="fc-stat"><span class="fc-stat-en">CORRECT</span><span class="fc-stat-v green" id="st-correct">0</span></div>
-          <div class="fc-stat"><span class="fc-stat-en">WRONG</span><span class="fc-stat-v pink" id="st-wrong">0</span></div>
-          <div class="fc-stat"><span class="fc-stat-en">ACCURACY</span><span class="fc-stat-v" id="st-accuracy">—</span></div>
+        <div class="fc-stat-item">
+          <div class="fc-stat-label">不正解</div>
+          <div class="fc-stat-val" style="color:var(--apple-red);" id="st-wrong">0</div>
+        </div>
+        <div class="fc-stat-item">
+          <div class="fc-stat-label">正答率</div>
+          <div class="fc-stat-val" style="color:var(--apple-blue);" id="st-accuracy">—</div>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+
+<div id="fc-add-modal" class="fc-sheet-overlay" onclick="if(event.target===this)fcApp.closeAddModal()">
+  <div class="fc-sheet">
+    <div class="fc-sheet-handle"></div>
+    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; text-align: center;">新規暗記カードを追加</h3>
+    <form onsubmit="fcApp.addCardSubmit(event)" style="display: flex; flex-direction: column; gap: 1rem;">
+      <div class="fc-form-group">
+        <label class="fc-form-label">表面 (問題 / LaTeX可: $E=mc^2$)</label>
+        <textarea id="fc-input-front" class="fc-input-box" rows="2" required placeholder="例: $\frac{d}{dx}\sin x$"></textarea>
+      </div>
+      <div class="fc-form-group">
+        <label class="fc-form-label">裏面 (解答 / 説明)</label>
+        <textarea id="fc-input-back" class="fc-input-box" rows="2" required placeholder="例: $\cos x$"></textarea>
+      </div>
+      <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
+        <button type="button" class="fc-btn" style="flex: 1;" onclick="fcApp.closeAddModal()">キャンセル</button>
+        <button type="submit" class="fc-btn fc-btn-primary" style="flex: 1.5;">追加</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -1052,7 +1307,7 @@ var fcApp = (function() {
       { f: '合成関数の微分（連鎖律）', b: '$\\dfrac{d}{dx}f(g(x)) = f\'(g(x))\\cdot g\'(x)$' },
       { f: '$\\displaystyle\\frac{d}{dx}\\ln x$', b: '$\\dfrac{1}{x}$' },
       { f: '$\\displaystyle\\frac{d}{dx}\\tan x$', b: '$\\sec^2 x = \\dfrac{1}{\\cos^2 x}$' },
-      { f: '部分積分の公式', b: '$\\int u\\,dv = uv - \\int v\\,du$' },
+      { f: '部分積分の公式', b: '$\\int u\\,dv = uv - \\int v\\,du$' }
     ],
     linalg: [
       { f: '行列Aの固有値の定義', b: '$Av = \\lambda v$ を満たすスカラー $\\lambda$（$v \\neq 0$）' },
@@ -1064,7 +1319,7 @@ var fcApp = (function() {
       { f: '$(AB)^{-1}$', b: '$B^{-1}A^{-1}$（逆順になる）' },
       { f: 'ランク・退化次元定理', b: '$\\text{rank}(A) + \\text{nullity}(A) = n$' },
       { f: 'グラム・シュミットの直交化', b: '線形独立なベクトルから正規直交基底を構成する手法' },
-      { f: 'ケーリー・ハミルトンの定理', b: '行列Aは自身の固有多項式を零化する: $p(A) = 0$' },
+      { f: 'ケーリー・ハミルトンの定理', b: '行列Aは自身の固音楽多項式を零化する: $p(A) = 0$' }
     ],
     emag: [
       { f: 'クーロンの法則', b: '$F = \\dfrac{1}{4\\pi\\varepsilon_0}\\dfrac{q_1 q_2}{r^2}$' },
@@ -1074,7 +1329,7 @@ var fcApp = (function() {
       { f: 'コンデンサの容量（平行平板）', b: '$C = \\varepsilon_0 \\dfrac{A}{d}$' },
       { f: 'コンデンサのエネルギー', b: '$U = \\dfrac{1}{2}CV^2 = \\dfrac{Q^2}{2C}$' },
       { f: 'オームの法則', b: '$V = IR$　（電圧 = 電流 × 抵抗）' },
-      { f: 'ローレンツ力', b: '$\\vec{F} = q(\\vec{E} + \\vec{v}\\times\\vec{B})$' },
+      { f: 'ローレンツ力', b: '$\\vec{F} = q(\\vec{E} + \\vec{v}\\times\\vec{B})$' }
     ],
     logic: [
       { f: 'ド・モルガンの法則', b: '$\\overline{A \\cup B} = \\overline{A} \\cap \\overline{B}$\n$\\overline{A \\cap B} = \\overline{A} \\cup \\overline{B}$' },
@@ -1084,7 +1339,7 @@ var fcApp = (function() {
       { f: '単射（injection）の定義', b: '$f(x_1) = f(x_2) \\Rightarrow x_1 = x_2$' },
       { f: '可算無限集合の例', b: '$\\mathbb{N}, \\mathbb{Z}, \\mathbb{Q}$ は可算。$\\mathbb{R}$ は非可算' },
       { f: '分配法則（集合）', b: '$A \\cap (B \\cup C) = (A \\cap B) \\cup (A \\cap C)$' },
-      { f: '冪集合 $\\mathcal{P}(A)$ の要素数', b: '$|\\mathcal{P}(A)| = 2^{|A|}$' },
+      { f: '冪集合 $\\mathcal{P}(A)$ の要素数', b: '$|\\mathcal{P}(A)| = 2^{|A|}$' }
     ],
     info: [
       { f: 'シャノンの情報量', b: '$I(x) = -\\log_2 P(x)$　（単位: bit）' },
@@ -1094,13 +1349,14 @@ var fcApp = (function() {
       { f: '二分探索の計算量', b: '$O(\\log n)$' },
       { f: 'クイックソートの平均計算量', b: '$O(n \\log n)$（最悪: $O(n^2)$）' },
       { f: 'P vs NP 問題', b: '多項式時間で解ける問題(P)と多項式時間で検証できる問題(NP)が等しいか未解決' },
-      { f: 'ハフマン符号化', b: '出現頻度に基づく最適な接頭辞符号を構成するアルゴリズム' },
+      { f: 'ハフマン符号化', b: '出現頻度に基づく最適な接頭辞符号を構成するアルゴリズム' }
     ]
   };
 
   let currentDeck = [], currentIdx = 0, flipped = false;
-  let correct = 0, wrong = 0, studyMode = 'seq';
+  let correct = 0, wrong = 0;
   let customCards = [];
+  let autoPlayTimer = null;
 
   function loadCustom() {
     try { customCards = JSON.parse(localStorage.getItem('fc-custom') || '[]'); } catch(e) { customCards = []; }
@@ -1110,9 +1366,8 @@ var fcApp = (function() {
   function loadDeck() {
     const key = document.getElementById('fc-deck').value;
     if (key === 'custom') { loadCustom(); currentDeck = [...customCards]; }
-    else { currentDeck = [...DECKS[key]]; }
+    else { currentDeck = [...(DECKS[key] || [])]; }
     currentIdx = 0; correct = 0; wrong = 0; flipped = false;
-    document.getElementById('fc-add-section').style.display = key === 'custom' ? 'block' : 'block';
     showCard(); updateStats();
   }
 
@@ -1140,16 +1395,17 @@ var fcApp = (function() {
     card.classList.remove('flipped');
     flipped = false;
     if (currentDeck.length === 0) {
-      document.getElementById('fc-front-content').textContent = 'カードがありません';
+      document.getElementById('fc-front-content').textContent = 'カードが登録されていません';
       document.getElementById('fc-back-content').textContent = '—';
       document.getElementById('fc-card-num').textContent = '0/0';
+      document.getElementById('fc-progress').style.width = '0%';
       return;
     }
     const c = currentDeck[currentIdx];
     renderKatex(c.f, document.getElementById('fc-front-content'));
     renderKatex(c.b, document.getElementById('fc-back-content'));
-    document.getElementById('fc-card-num').textContent = (currentIdx+1) + '/' + currentDeck.length;
-    document.getElementById('fc-progress').style.width = ((currentIdx+1)/currentDeck.length*100) + '%';
+    document.getElementById('fc-card-num').textContent = (currentIdx + 1) + ' / ' + currentDeck.length;
+    document.getElementById('fc-progress').style.width = ((currentIdx + 1) / currentDeck.length * 100) + '%';
   }
 
   function flipCard() {
@@ -1173,8 +1429,7 @@ var fcApp = (function() {
     wrong++;
     if (currentDeck.length > 0) {
       const c = currentDeck[currentIdx];
-      if (!c._wrongCount) c._wrongCount = 0;
-      c._wrongCount++;
+      c._wrongCount = (c._wrongCount || 0) + 1;
     }
     updateStats(); next();
   }
@@ -1188,39 +1443,61 @@ var fcApp = (function() {
   }
 
   function setStudyMode(m) {
-    studyMode = m;
-    ['mode-seq','mode-rand','mode-weak'].forEach(id => document.getElementById(id).classList.remove('active'));
+    ['mode-seq','mode-rand','mode-weak'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.classList.remove('active');
+    });
     document.getElementById('mode-' + m).classList.add('active');
     if (m === 'rand') shuffle();
     else if (m === 'weak') {
       currentDeck.sort((a,b) => (b._wrongCount||0) - (a._wrongCount||0));
       currentIdx = 0; showCard();
     } else {
-      const key = document.getElementById('fc-deck').value;
-      if (key === 'custom') currentDeck = [...customCards];
-      else currentDeck = [...DECKS[key]];
-      currentIdx = 0; showCard();
+      loadDeck();
     }
   }
 
-  function addCard() {
-    const f = document.getElementById('fc-front').value.trim();
-    const b = document.getElementById('fc-back').value.trim();
+  function toggleAutoPlay() {
+    const btn = document.getElementById('fc-auto-play-btn');
+    if (autoPlayTimer) {
+      clearInterval(autoPlayTimer);
+      autoPlayTimer = null;
+      btn.textContent = '▶';
+      btn.style.background = 'rgba(255,255,255,0.06)';
+    } else {
+      btn.textContent = '⏸';
+      btn.style.background = 'var(--apple-blue)';
+      autoPlayTimer = setInterval(() => {
+        if (!flipped) flipCard();
+        else { flipCard(); setTimeout(next, 400); }
+      }, 3000);
+    }
+  }
+
+  function openAddModal() {
+    document.getElementById('fc-add-modal').classList.add('show');
+  }
+  function closeAddModal() {
+    document.getElementById('fc-add-modal').classList.remove('show');
+  }
+
+  function addCardSubmit(e) {
+    e.preventDefault();
+    const f = document.getElementById('fc-input-front').value.trim();
+    const b = document.getElementById('fc-input-back').value.trim();
     if (!f || !b) return;
-    const card = { f, b };
-    customCards.push(card);
-    saveCustom();
-    if (document.getElementById('fc-deck').value === 'custom') {
-      currentDeck.push(card);
-    }
-    document.getElementById('fc-front').value = '';
-    document.getElementById('fc-back').value = '';
-    showCard(); updateStats();
-    document.getElementById('fc-status').innerHTML = '<span style="color:#00ff41;">●</span> CARD ADDED';
-    setTimeout(() => { document.getElementById('fc-status').innerHTML = '<span style="color:#fcee0a;">●</span> READY'; }, 1500);
-  }
 
-  function resetProgress() { correct = 0; wrong = 0; currentDeck.forEach(c => c._wrongCount = 0); updateStats(); }
+    const newCard = { f, b };
+    customCards.push(newCard);
+    saveCustom();
+
+    document.getElementById('fc-deck').value = 'custom';
+    loadDeck();
+
+    document.getElementById('fc-input-front').value = '';
+    document.getElementById('fc-input-back').value = '';
+    closeAddModal();
+  }
 
   function updateStats() {
     document.getElementById('st-total').textContent = currentDeck.length;
@@ -1231,8 +1508,9 @@ var fcApp = (function() {
   }
 
   function init() { loadCustom(); loadDeck(); }
-  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else setTimeout(init, 50);
-  return { loadDeck, flipCard, next, prev, markCorrect, markWrong, shuffle, setStudyMode, addCard, resetProgress };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else setTimeout(init, 50);
+
+  return { loadDeck, flipCard, next, prev, markCorrect, markWrong, shuffle, setStudyMode, toggleAutoPlay, openAddModal, closeAddModal, addCardSubmit };
 })();
 </script>
 

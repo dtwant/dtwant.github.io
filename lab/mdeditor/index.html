@@ -118,7 +118,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "67"
+    "wordCount": "79"
   }]
   </script>
 
@@ -749,6 +749,7 @@
 <li>📐 <strong>MERMAID_DIAGRAM:</strong> <code>` ` `mermaid</code> で囲んでテキストを書くと、自動でフローチャートやシーケンス図に変換されます。</li>
 </ul></blockquote>
 <hr>
+
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 <script>
@@ -768,6 +769,17 @@
   };
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<script src="/js/pwa-config-sync.js"></script>
+
+<script>
+(function(){
+  var el = document.currentScript;
+  var section = el ? el.closest('section') : null;
+  if (section && section.previousElementSibling && section.previousElementSibling.tagName === 'HEADER') {
+    section.previousElementSibling.style.display = 'none';
+  }
+})();
+</script>
 
 
 <script type="text/template" id="tpl-report"># 令和○年度 専門実験 報告書
@@ -836,800 +848,717 @@ graph TD
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700;800&family=SF+Pro+Text:wght@400;500;600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
 
-   
-  #ne-root {
-    --neon-cyan: #00f3ff;
-    --neon-pink: #ff0055;
-    --neon-green: #00ff41;
-    --neon-purple: #b026ff;
-    --bg-dark: #070510;
-    --panel-bg: rgba(26, 22, 44, 0.35);
-    
-    font-family: 'JetBrains Mono', monospace;
-    color: #f5f5f7;
-    
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    z-index: 99999;
-    background: var(--bg-dark);
-    background-image: 
-      radial-gradient(circle 500px at 15% 15%, rgba(88, 86, 214, 0.16), transparent),
-      radial-gradient(circle 600px at 85% 20%, rgba(10, 132, 255, 0.14), transparent),
-      radial-gradient(circle 700px at 50% 85%, rgba(255, 138, 154, 0.08), transparent);
-    margin: 0; padding: 0;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-  }
+ 
+.portal-body footer,
+.portal-body .breadcrumbs,
+.portal-body nav[aria-label="breadcrumb"],
+.portal-body article > div > a.hover\:underline,
+.portal-body .article-header,
+.portal-body .prose > div:first-child > nav,
+.portal-body h1.mt-0.text-4xl.font-extrabold {
+  display: none !important;
+}
 
-  #ne-root * { box-sizing: inherit; }
+.portal-body article.prose,
+.portal-body .prose {
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
 
-   
-  .ne-header {
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.08) 0%, 
-      rgba(255, 255, 255, 0.01) 40%, 
-      rgba(8, 5, 20, 0.35) 100%
-    );
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 12px 20px;
-    display: flex; justify-content: space-between; align-items: center;
-    flex-shrink: 0;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 
-      inset 0 -0.8px 0px rgba(255, 255, 255, 0.15),
-      0 4px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  .ne-brand {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 900;
-    color: #fff;
-    text-shadow: 0 0 10px rgba(0, 243, 255, 0.35);
-    letter-spacing: 2px;
-    display: flex; align-items: center; gap: 15px;
-  }
-  .ne-brand span { color: var(--neon-cyan); }
-  @media(max-width: 768px) { .ne-brand { font-size: 1rem; } }
+html,
+body.portal-body,
+.portal-body main,
+.portal-body main#main-content,
+.portal-body article,
+.portal-body .prose {
+  background-color: #000000 !important;
+  background: #000000 !important;
+}
 
-   
-  .ne-toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  
-  .ne-btn {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #8e8e93;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.75rem; font-weight: bold;
-    padding: 7px 14px; cursor: pointer; transition: all 0.2s;
-    border-radius: 6px; letter-spacing: 1px;
-    backdrop-filter: blur(8px);
-  }
-  .ne-btn:hover { 
-    background: rgba(255, 255, 255, 0.08); 
-    color: #f5f5f7; 
-    border-color: rgba(255, 255, 255, 0.20);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05); 
-  }
-  .ne-btn.danger { border-color: rgba(255, 138, 154, 0.2); color: #FF8A9A; background: rgba(255, 138, 154, 0.03); }
-  .ne-btn.danger:hover { background: rgba(255, 138, 154, 0.15); color: #ffffff; border-color: #FF8A9A; box-shadow: 0 0 15px rgba(255, 138, 154, 0.25); }
-  .ne-btn.active { background: var(--neon-purple); border-color: var(--neon-purple); color: #000; box-shadow: 0 0 12px rgba(176,38,255,0.6); }
+#ne-root, #ne-root *,
+#ne-root a, #ne-root button, #ne-root div, #ne-root span {
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
 
-  .ne-separator { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.08); margin: 0 4px; }
-  
-  .ne-select {
-    background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #f5f5f7; font-family: 'Orbitron', sans-serif;
-    font-size: 0.72rem; font-weight: bold; padding: 6px 12px; outline: none; cursor: pointer;
-    border-radius: 6px; backdrop-filter: blur(8px);
-  }
-  .ne-select:hover, .ne-select:focus { border-color: rgba(255, 255, 255, 0.2); }
+:root {
+  --apple-bg: #000000;
+  --apple-card: rgba(22, 22, 26, 0.85);
+  --apple-border: rgba(255, 255, 255, 0.1);
+  --apple-text: #ffffff;
+  --apple-subtext: #86868b;
+  --apple-accent: #0071e3;
+  --neon-cyan: #00f2fe;
+  --neon-cyan-glow: rgba(0, 242, 254, 0.35);
+  --neon-pink: #ff2d55;
+  --apple-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'Zen Kaku Gothic New', sans-serif;
+  --apple-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --apple-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
 
-   
-  .ne-workspace {
-    flex-grow: 1;
-    display: flex;
-    overflow: hidden;
-    position: relative;
-    background: transparent;
-  }
-  @media (max-width: 900px) { .ne-workspace { flex-direction: column; } }
+#ne-root {
+  font-family: var(--apple-font);
+  color: var(--apple-text);
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 999990;
+  background: radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.05) 0%, rgba(0, 0, 0, 0) 70%), #000000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
 
-   
-  .ne-editor-wrap {
-    width: 50%;
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.08) 0%, 
-      rgba(255, 255, 255, 0.02) 40%, 
-      rgba(15, 12, 28, 0.30) 100%
-    );
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
-    display: flex; flex-direction: column;
-    position: relative;
-    overflow: hidden;  
-    backdrop-filter: blur(22px) url(#liquid-refract) saturate(140%);
-    -webkit-backdrop-filter: blur(22px) url(#liquid-refract) saturate(140%);
-    box-shadow: 
-      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.18),
-      inset 2px 2px 5px rgba(255, 255, 255, 0.05),
-      inset -2px -2px 8px rgba(0, 0, 0, 0.40);
-  }
-  @media (max-width: 900px) { .ne-editor-wrap { width: 100%; height: 50%; border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.08); } }
+ 
+.ne-header {
+  background: rgba(18, 18, 20, 0.85);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-bottom: 1px solid var(--apple-border);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.ne-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
 
-   
-  .ne-editor-wrap .ne-bg {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: 
-      radial-gradient(circle at 20% 0%, rgba(88, 86, 214, 0.08) 0%, transparent 70%),
-      radial-gradient(circle at 80% 100%, rgba(10, 132, 255, 0.08) 0%, transparent 70%);
-    z-index: 1; pointer-events: none;
-  }
-  .ne-editor-wrap .ne-grid {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
-    background-size: 35px 35px; z-index: 2; pointer-events: none;
-  }
-  .ne-editor-wrap .ne-scanline {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.06)); 
-    background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.4;
-  }
+.ne-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  border: 1px solid var(--apple-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--apple-text);
+  transition: transform 0.15s var(--apple-bounce), background 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+  font-family: inherit;
+}
+.ne-btn:active {
+  transform: scale(0.94);
+  background: rgba(255, 255, 255, 0.14);
+}
+.ne-btn.active {
+  background: rgba(0, 242, 254, 0.15);
+  color: var(--neon-cyan);
+  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 0 12px var(--neon-cyan-glow);
+}
 
-  .ne-pane-header {
-    background: rgba(0, 0, 0, 0.25);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 8px 20px; font-size: 0.68rem; color: rgba(255, 255, 255, 0.5);
-    letter-spacing: 2px; font-family: 'Orbitron', sans-serif;
-    display: flex; justify-content: space-between; align-items: center;
-    position: relative; z-index: 60;  
-    backdrop-filter: blur(8px);
-  }
-  
-   
-  .ne-editor-wrap.focus-mode textarea { color: rgba(245, 245, 247, 0.25); }
+.ne-select {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--apple-border);
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  outline: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+.ne-select option,
+select option {
+  background-color: #1c1c1e !important;
+  color: #ffffff !important;
+}
 
-  textarea.ne-textarea {
-    flex-grow: 1; width: 100%;
-    background: transparent; border: none; outline: none;
-    color: #ffffff; font-family: 'JetBrains Mono', monospace;
-    font-size: 15px; line-height: 1.8; padding: 24px;
-    resize: none; overflow-y: auto; position: relative; z-index: 60;
-    transition: color 0.3s;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.25);
-  }
-  textarea.ne-textarea::-webkit-scrollbar { width: 4px; }
-  textarea.ne-textarea::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 2px; }
+ 
+.ne-workspace {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
 
-   
-  .ne-preview-wrap {
-    width: 50%;
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.06) 0%, 
-      rgba(255, 255, 255, 0.01) 40%, 
-      rgba(5, 3, 12, 0.25) 100%
-    );
-    display: flex; flex-direction: column;
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(20px) url(#liquid-refract) saturate(135%);
-    -webkit-backdrop-filter: blur(20px) url(#liquid-refract) saturate(135%);
-    box-shadow: 
-      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.15),
-      inset -1px -1px 3px rgba(0, 0, 0, 0.3);
-  }
-  @media (max-width: 900px) { .ne-preview-wrap { width: 100%; height: 50%; } }
+ 
+.ne-editor-wrap {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--apple-border);
+  background: rgba(12, 12, 14, 0.6);
+  backdrop-filter: blur(30px);
+}
+.ne-editor-wrap.hidden-mobile {
+  display: flex;
+}
 
-  .ne-preview-scroll {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 24px;
-    scroll-behavior: auto;  
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
-  }
-  .ne-preview-scroll::-webkit-scrollbar { width: 4px; }
-  .ne-preview-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); }
-  
-   
-  .ne-a4-paper {
-    box-sizing: border-box !important; 
-    background-color: #ffffff !important;
-    background-image: none !important;
-    color: #111111 !important; 
-    margin: 0 auto 40px auto !important; 
-    padding: 20mm !important; 
-    width: 100% !important; 
-    max-width: 210mm !important;  
-    min-height: 297mm !important; 
-    height: auto !important;      
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    font-family: 'Zen Kaku Gothic New', "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.8;
-  }
+ 
+.ne-preview-wrap {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.95);
+  overflow-y: auto;
+  padding: 24px;
+}
 
-   
-  .ne-a4-paper h1, .ne-a4-paper h2, .ne-a4-paper h3, .ne-a4-paper h4, .ne-a4-paper h5, .ne-a4-paper h6,
-  .ne-a4-paper p, .ne-a4-paper li, .ne-a4-paper td, .ne-a4-paper th, .ne-a4-paper strong, .ne-a4-paper em {
-    color: #111111 !important; background: transparent !important;
-    text-shadow: none !important; box-shadow: none !important; border: none;
+@media (max-width: 800px) {
+  .ne-editor-wrap, .ne-preview-wrap {
+    width: 100%;
   }
+  .ne-editor-wrap.hidden-mobile { display: none; }
+  .ne-preview-wrap.hidden-mobile { display: none; }
+}
 
-  .ne-a4-paper li::marker,
-  .ne-a4-paper ol,
-  .ne-a4-paper ul {
-    color: #111111 !important;
-  }
-  
-   
-  .ne-a4-paper h1 { font-size: 1.8rem !important; border-bottom: 2px solid #222 !important; padding-bottom: 0.5rem; margin-top: 0 !important; margin-bottom: 1.5rem; }
-  .ne-a4-paper h2 { font-size: 1.4rem !important; border-left: 5px solid #222 !important; padding-left: 12px; margin-top: 2rem; margin-bottom: 1rem; }
-  .ne-a4-paper h3 { font-size: 1.2rem !important; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-  .ne-a4-paper p { margin-bottom: 1rem; text-align: justify; }
-  .ne-a4-paper ul, .ne-a4-paper ol { margin-bottom: 1rem; padding-left: 1.5rem; }
-  
-  .ne-a4-paper table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; font-size: 0.95rem; }
-  .ne-a4-paper th, .ne-a4-paper td { border: 1px solid #ddd !important; padding: 8px 12px !important; }
-  .ne-a4-paper th { background-color: #f7f7f9 !important; font-weight: bold !important; text-align: center !important; }
-  
-  .ne-a4-paper pre { background-color: #f6f8fa !important; padding: 1.2rem !important; border: 1px solid #e1e4e6 !important; overflow-x: auto; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; border-radius: 6px; }
-  .ne-a4-paper code { background-color: #f6f8fa !important; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace; color: #d63384 !important; font-size: 0.88em;}
-  .ne-a4-paper pre code { color: #24292e !important; } 
-  .ne-a4-paper blockquote { border-left: 4px solid #dfe2e5 !important; padding-left: 1rem; color: #6a737d !important; margin: 1rem 0; background: transparent !important; }
-  .ne-a4-paper img { max-width: 100%; height: auto; display: block; margin: 1.5rem auto; border: 1px solid #e1e4e6 !important; border-radius: 4px; }
-  
-   
-  .math-display { display: flex !important; justify-content: center !important; align-items: center !important; width: 100% !important; margin: 1.5rem 0 !important; }
-  .ne-a4-paper mjx-container { color: #111 !important; margin: 0 !important; padding: 0 !important;}
-  .ne-a4-paper mjx-container:not([display="true"]) { display: inline-block !important; }
-  mjx-assistive-mml { display: none !important; clip: rect(1px, 1px, 1px, 1px) !important; clip-path: inset(50%) !important; height: 1px !important; width: 1px !important; position: absolute !important; overflow: hidden !important; }
+ 
+.ne-mobile-nav {
+  display: none;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 3px;
+  margin-right: 0.5rem;
+}
+.ne-mobile-btn {
+  padding: 0.35rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 9px;
+  cursor: pointer;
+  color: var(--apple-subtext);
+}
+.ne-mobile-btn.active {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+@media (max-width: 800px) {
+  .ne-mobile-nav { display: flex; }
+}
 
-   
-  .ne-footer {
-    height: 32px; background: rgba(8, 5, 20, 0.45);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 0 20px; font-size: 0.68rem; color: rgba(255, 255, 255, 0.5);
-    font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
-    flex-shrink: 0;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-  
-  .ne-footer-tools { display: flex; gap: 15px; align-items: center; }
+ 
+.ne-sub-bar {
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--apple-border);
+  padding: 8px 12px;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
 
-   
-  .ne-particles {
-    position: absolute; top: 0; left: 0; width: 50%; height: 100%;
-    pointer-events: none; z-index: 100; overflow: hidden;
-  }
-  @media(max-width: 900px) { .ne-particles { width: 100%; height: 50%; } }
-  .ne-particle {
-    position: absolute; border-radius: 50%;
-    animation: ne-spark 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-    pointer-events: none;
-  }
-  @keyframes ne-spark {
-    0% { transform: translate(0, 0) scale(1); opacity: 1; }
-    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
-  }
+ 
+.ne-find-bar {
+  background: rgba(26, 26, 30, 0.9);
+  border-bottom: 1px solid var(--apple-border);
+  padding: 8px 12px;
+  display: none;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.ne-find-bar.show { display: flex; }
 
-   
-  .ne-history-panel {
-    position: absolute; top: 0; right: -320px; width: 320px; height: 100%;
-    background: rgba(15, 12, 28, 0.95); border-left: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 200; transition: right 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-    display: flex; flex-direction: column; padding: 15px; font-family: 'JetBrains Mono', monospace;
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    box-shadow: -10px 0 35px rgba(0,0,0,0.5);
-  }
-  .ne-history-panel.show { right: 0; }
-  .ne-hist-item {
-    background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 12px; margin-bottom: 10px; cursor: pointer; font-size: 0.75rem;
-    color: #ffffff; transition: all 0.2s;
-    border-radius: 8px;
-    box-shadow: inset 0.8px 0.8px 0px rgba(255,255,255,0.1);
-  }
-  .ne-hist-item:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.2); }
-  .ne-hist-time { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: #8e8e93; margin-bottom: 4px; }
+.ne-find-input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--apple-border);
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  outline: none;
+  font-family: inherit;
+}
 
-   
-  .ne-toast {
-    position: absolute; bottom: 45px; right: 20px;
-    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #ffffff; padding: 12px 24px; font-family: 'Orbitron', sans-serif;
-    font-size: 0.82rem; font-weight: bold; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
-    opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 500;
-    border-radius: 8px; backdrop-filter: blur(8px);
-  }
-  .ne-toast.show { opacity: 1; }
+textarea.ne-textarea {
+  flex: 1;
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  line-height: 1.8;
+  padding: 20px;
+  resize: none;
+  overflow-y: auto;
+}
 
-   
-  @media print {
-    body * { visibility: hidden !important; }
-  }
+ 
+.ne-a4-paper {
+  box-sizing: border-box !important;
+  background-color: #ffffff !important;
+  color: #111111 !important;
+  margin: 0 auto 40px auto !important;
+  padding: 20mm !important;
+  width: 100% !important;
+  max-width: 210mm !important;
+  min-height: 297mm !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  line-height: 1.8;
+}
+
+.ne-a4-paper.dark-style {
+  background-color: #1c1c1e !important;
+  color: #f5f5f7 !important;
+}
+.ne-a4-paper.dark-style h1, .ne-a4-paper.dark-style h2, .ne-a4-paper.dark-style h3, .ne-a4-paper.dark-style p, .ne-a4-paper.dark-style li, .ne-a4-paper.dark-style td, .ne-a4-paper.dark-style th {
+  color: #f5f5f7 !important;
+}
+
+.ne-a4-paper h1, .ne-a4-paper h2, .ne-a4-paper h3, .ne-a4-paper p, .ne-a4-paper li, .ne-a4-paper td, .ne-a4-paper th {
+  color: #111111 !important;
+  background: transparent !important;
+}
+.ne-a4-paper h1 { font-size: 1.8rem !important; border-bottom: 2px solid #222 !important; padding-bottom: 0.5rem; }
+.ne-a4-paper h2 { font-size: 1.4rem !important; border-left: 4px solid #222 !important; padding-left: 10px; margin-top: 1.5rem; }
+.ne-a4-paper table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+.ne-a4-paper th, .ne-a4-paper td { border: 1px solid #ddd !important; padding: 8px 12px !important; }
+.ne-a4-paper pre { background: #f6f8fa !important; padding: 1rem !important; border-radius: 6px; overflow-x: auto; }
+.ne-a4-paper code { color: #d63384 !important; background: #f6f8fa !important; padding: 2px 5px; border-radius: 4px; }
+
+ 
+.ne-footer-bar {
+  background: rgba(18, 18, 20, 0.85);
+  backdrop-filter: blur(30px);
+  border-top: 1px solid var(--apple-border);
+  padding: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--apple-subtext);
+  flex-shrink: 0;
+}
+
+ 
+.ne-history-panel {
+  position: absolute;
+  top: 0; right: -320px;
+  width: 320px; height: 100%;
+  background: rgba(22, 22, 26, 0.95);
+  border-left: 1px solid var(--apple-border);
+  z-index: 200;
+  transition: right 0.35s var(--apple-spring);
+  display: flex; flex-direction: column; padding: 18px;
+  backdrop-filter: blur(30px);
+}
+.ne-history-panel.show { right: 0; }
+.ne-hist-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--apple-border);
+  padding: 12px; margin-bottom: 10px; cursor: pointer;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: #ffffff;
+}
+.ne-hist-item:hover { background: rgba(255, 255, 255, 0.08); }
+
+ 
+.ne-particles {
+  position: absolute; top: 0; left: 0; width: 50%; height: 100%;
+  pointer-events: none; z-index: 100; overflow: hidden;
+}
+@media(max-width: 800px) { .ne-particles { width: 100%; height: 100%; } }
+.ne-particle {
+  position: absolute; border-radius: 50%;
+  animation: ne-spark 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  pointer-events: none;
+}
+@keyframes ne-spark {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+}
+
+ 
+.ne-toast {
+  position: absolute; bottom: 45px; right: 20px;
+  background: rgba(30, 30, 35, 0.95);
+  border: 1px solid var(--apple-border);
+  color: #ffffff; padding: 10px 20px;
+  font-size: 0.85rem; font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 500;
+  border-radius: 999px; backdrop-filter: blur(20px);
+}
+.ne-toast.show { opacity: 1; }
 </style>
 
 <div id="ne-root">
+  <div class="ne-particles" id="ne-particles"></div>
+
   
   <header class="ne-header">
-    <div class="ne-brand">NEURAL<span>_</span>EDITOR</div>
-    
-    <div class="ne-toolbar">
+    <div style="display: flex; align-items: center;">
+      <div class="ne-mobile-nav">
+        <div class="ne-mobile-btn active" id="mob-edit" onclick="neApp.switchMobileView('edit')">編集</div>
+        <div class="ne-mobile-btn" id="mob-prev" onclick="neApp.switchMobileView('prev')">プレビュー</div>
+      </div>
+      <h1 class="ne-title">Markdown Studio Pro</h1>
+    </div>
+
+    <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
       <select id="ne-slot-select" class="ne-select">
         <option value="1">SLOT 1</option>
         <option value="2">SLOT 2</option>
         <option value="3">SLOT 3</option>
       </select>
-      <div class="ne-separator"></div>
-      <button class="ne-btn" id="btn-focus" title="Zen Typewriter Mode">ZEN_MODE</button>
-      <button class="ne-btn" id="btn-sparks" title="Typing Particles">SPARKS</button>
-      <button class="ne-btn" id="btn-hist" title="Time Travel">HISTORY</button>
-      <div class="ne-separator"></div>
-      <button class="ne-btn danger" onclick="history.back()" title="Return to Portal">DISCONNECT</button>
+      <button class="ne-btn" id="btn-sparks" onclick="neApp.toggleSparks()">Sparks OFF</button>
+      <button class="ne-btn" id="btn-focus">Focus</button>
+      <button class="ne-btn" id="btn-find" onclick="neApp.toggleFind()">置換/検索</button>
+      <button class="ne-btn" id="btn-hist">履歴</button>
+      <select id="ne-export-select" class="ne-select" onchange="neApp.handleExport(this.value)">
+        <option value="">書き出し ▾</option>
+        <option value="copy-html">HTMLをコピー</option>
+        <option value="copy-text">テキストをコピー</option>
+        <option value="download-md">.mdファイルを保存</option>
+        <option value="print">印刷 / PDF出力</option>
+      </select>
     </div>
   </header>
 
+  
   <div class="ne-workspace">
-
     
     <div class="ne-editor-wrap" id="ne-editor-wrap">
-      <div class="ne-bg"></div>
-      <div class="ne-grid"></div>
-      <div class="ne-scanline"></div>
-
-      <div class="ne-pane-header">
-        <span>// SOURCE_CODE</span>
-        <div class="ne-toolbar" style="gap:4px;">
-          <select id="ne-template" class="ne-select" style="padding:2px 6px; font-size:0.6rem;">
-            <option value="">[ TEMPLATE ]</option>
-            <option value="report">Report</option>
-            <option value="mermaid">Diagrams</option>
-          </select>
-          <button class="ne-btn" onclick="neApp.insert('**', '**')" style="padding:2px 6px; font-size:0.6rem;">B</button>
-          <button class="ne-btn" onclick="neApp.insert('## ', '')" style="padding:2px 6px; font-size:0.6rem;">H2</button>
-          <button class="ne-btn" onclick="neApp.insert('$$\n', '\n$$')" style="padding:2px 6px; font-size:0.6rem;">MATH</button>
-          <button class="ne-btn" onclick="neApp.insert('```mermaid\n', '\n```')" style="padding:2px 6px; font-size:0.6rem;">DIAG</button>
-        </div>
+      
+      <div class="ne-sub-bar">
+        <select id="ne-template" class="ne-select" style="padding: 3px 6px; font-size: 0.72rem;">
+          <option value="">テンプレート挿入 ▾</option>
+          <option value="report">実験レポート</option>
+          <option value="mermaid">図形・ダイアグラム</option>
+        </select>
+        <button class="ne-btn" onclick="neApp.insert('**', '**')" title="太字" style="padding: 3px 6px; font-size: 0.72rem;">B</button>
+        <button class="ne-btn" onclick="neApp.insert('*', '*')" title="斜体" style="padding: 3px 6px; font-size: 0.72rem;"><i>I</i></button>
+        <button class="ne-btn" onclick="neApp.insert('~~', '~~')" title="取り消し線" style="padding: 3px 6px; font-size: 0.72rem;"><s>S</s></button>
+        <button class="ne-btn" onclick="neApp.insert('## ', '')" style="padding: 3px 6px; font-size: 0.72rem;">H2</button>
+        <button class="ne-btn" onclick="neApp.insert('### ', '')" style="padding: 3px 6px; font-size: 0.72rem;">H3</button>
+        <button class="ne-btn" onclick="neApp.insert('$$\n', '\n$$')" style="padding: 3px 6px; font-size: 0.72rem;">Math</button>
+        <button class="ne-btn" onclick="neApp.insert('`', '`')" style="padding: 3px 6px; font-size: 0.72rem;">Code</button>
+        <button class="ne-btn" onclick="neApp.insert('> ', '')" style="padding: 3px 6px; font-size: 0.72rem;">引用</button>
+        <button class="ne-btn" onclick="neApp.insert('- ', '')" style="padding: 3px 6px; font-size: 0.72rem;">リスト</button>
+        <button class="ne-btn" onclick="neApp.insert('- [ ] ', '')" style="padding: 3px 6px; font-size: 0.72rem;">Todo</button>
+        <button class="ne-btn" onclick="neApp.insert('| 見出し | 見出し |\n|:---:|:---:|\n| 内容 | 内容 |', '')" style="padding: 3px 6px; font-size: 0.72rem;">表</button>
+        <button class="ne-btn" onclick="neApp.insert('[リンク名](', ')')" style="padding: 3px 6px; font-size: 0.72rem;">Link</button>
       </div>
-      <textarea id="ne-input" class="ne-textarea" placeholder="[ SYS_READY ] Awaiting input..."></textarea>
+
       
-      
-      <div class="ne-particles" id="ne-particles"></div>
+      <div class="ne-find-bar" id="ne-find-bar">
+        <input type="text" id="ne-find-target" placeholder="検索文字列..." class="ne-find-input" />
+        <input type="text" id="ne-replace-target" placeholder="置換文字列..." class="ne-find-input" />
+        <button class="ne-btn" onclick="neApp.executeReplace()">一括置換</button>
+        <button class="ne-btn" onclick="neApp.toggleFind()">閉じる</button>
+      </div>
+
+      <textarea id="ne-input" class="ne-textarea" placeholder="Markdown形式で入力してください..."></textarea>
     </div>
 
     
-    <div class="ne-preview-wrap">
-      <div class="ne-pane-header" style="background: #111; color: #888; border-bottom: 1px solid #333;">
-        <span>// RENDER_PREVIEW (A4)</span>
-        <div class="ne-toolbar" style="gap:4px;">
-          <button class="ne-btn" onclick="neApp.downloadMd()" style="padding:2px 6px; font-size:0.6rem;">DL .MD</button>
-          <button class="ne-btn" onclick="neApp.printPDF()" style="padding:2px 6px; font-size:0.6rem; color:var(--neon-green); border-color:var(--neon-green);">PRINT PDF</button>
-        </div>
-      </div>
-      <div class="ne-preview-scroll" id="ne-preview-scroll">
-        <div class="ne-a4-paper" id="ne-preview"></div>
+    <div class="ne-preview-wrap" id="ne-preview-wrap">
+      <div class="ne-a4-paper" id="ne-output">
+        
       </div>
     </div>
 
     
-    <div class="ne-history-panel" id="ne-history">
-      <div class="ne-pane-header" style="margin:-15px -15px 15px -15px; padding:15px; background:rgba(0,0,0,0.8);">
-        <span>// TIME_MACHINE</span>
-        <button class="ne-btn" onclick="document.getElementById('ne-history').classList.remove('show')" style="padding:2px 6px; font-size:0.6rem;">CLOSE</button>
+    <div class="ne-history-panel" id="ne-history-panel">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h4 style="font-size: 1rem; font-weight: 700;">変更履歴 (History)</h4>
+        <button class="ne-btn" onclick="neApp.toggleHistory()">閉じる</button>
       </div>
-      <div id="ne-hist-list" style="overflow-y:auto; flex-grow:1;"></div>
+      <div id="ne-history-list" style="overflow-y: auto; flex: 1;"></div>
     </div>
-
   </div>
 
-  <footer class="ne-footer">
-    <div class="ne-footer-tools">
-      <span id="ne-save-status">STATUS: SECURE</span>
-      <span id="ne-word-count">WORDS: 0</span>
-    </div>
-    <div>ENCRYPTION: ENABLED | ENGINE: V2.OVERKILL</div>
-  </footer>
   
-  <div id="ne-toast" class="ne-toast">SYS_MSG</div>
+  <div class="ne-footer-bar">
+    <div style="display: flex; gap: 1rem; align-items: center;">
+      <span id="st-chars">0 文字</span>
+      <span id="st-lines">0 行</span>
+      <span id="st-pages">0.0 原稿用紙</span>
+      <span id="st-read-time">読了 約1分</span>
+    </div>
+    <div style="display: flex; gap: 0.5rem; align-items: center;">
+      <button class="ne-btn" style="padding:2px 8px; font-size:0.7rem;" onclick="neApp.togglePaperStyle()">用紙スタイル切替</button>
+    </div>
+  </div>
+
+  <div class="ne-toast" id="ne-toast"></div>
 </div>
 
 <script>
 var neApp = (function() {
   "use strict";
 
-  
-  const root = document.getElementById('ne-root');
-  const input = document.getElementById('ne-input');
-  const preview = document.getElementById('ne-preview');
-  const previewScroll = document.getElementById('ne-preview-scroll');
-  const status = document.getElementById('ne-save-status');
-  const wordCount = document.getElementById('ne-word-count');
-  const toast = document.getElementById('ne-toast');
-  const particlesCont = document.getElementById('ne-particles');
-  const histPanel = document.getElementById('ne-history');
-  const histList = document.getElementById('ne-hist-list');
-  const slotSelect = document.getElementById('ne-slot-select');
-  
-  
   let currentSlot = '1';
-  let isSparks = false;
-  let isFocusMode = false;
-  let compileTimer = null;
-  let histTimer = null;
-  
-  
-  let isSyncingLeft = false;
-  let isSyncingRight = false;
-  
-  
-  const getSlotKey = () => `dt_neural_slot_${currentSlot}`;
-  const getHistKey = () => `dt_neural_hist_${currentSlot}`;
+  let historySnapshots = [];
+  let focusMode = false;
+  let sparksMode = false;
+  let mobileView = 'edit';
+  let isDarkPaper = false;
 
-  function init() {
-    mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
-    
-    loadSlot(currentSlot);
-
-    
-    input.addEventListener('input', handleInput);
-    input.addEventListener('keydown', handleKeydown);
-    
-    
-    input.addEventListener('scroll', handleLeftScroll);
-    previewScroll.addEventListener('scroll', handleRightScroll);
-    
-    slotSelect.addEventListener('change', (e) => {
-      saveHistSnapshot(); 
-      currentSlot = e.target.value;
-      loadSlot(currentSlot);
-      showToast(`SWAPPED TO SLOT ${currentSlot}`);
-    });
-
-    document.getElementById('btn-sparks').addEventListener('click', toggleSparks);
-    document.getElementById('btn-focus').addEventListener('click', toggleFocusMode);
-    document.getElementById('btn-hist').addEventListener('click', toggleHistory);
-    document.getElementById('ne-template').addEventListener('change', loadTemplate);
-
-    
-    histTimer = setInterval(saveHistSnapshot, 3 * 60 * 1000);
+  function showToast(msg) {
+    const el = document.getElementById('ne-toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2200);
   }
 
-  
-  function handleLeftScroll() {
-    if (isSyncingLeft) { isSyncingLeft = false; return; }
-    isSyncingRight = true;
-    const percentage = input.scrollTop / (input.scrollHeight - input.clientHeight);
-    if(previewScroll.scrollHeight > previewScroll.clientHeight && percentage >= 0) {
-      previewScroll.scrollTop = percentage * (previewScroll.scrollHeight - previewScroll.clientHeight);
-    }
-  }
+  function renderMarkdown() {
+    const text = document.getElementById('ne-input').value;
+    const output = document.getElementById('ne-output');
 
-  function handleRightScroll() {
-    if (isSyncingRight) { isSyncingRight = false; return; }
-    isSyncingLeft = true;
-    const percentage = previewScroll.scrollTop / (previewScroll.scrollHeight - previewScroll.clientHeight);
-    if(input.scrollHeight > input.clientHeight && percentage >= 0) {
-      input.scrollTop = percentage * (input.scrollHeight - input.clientHeight);
-    }
-  }
-
-  
-  function handleInput(e) {
-    status.innerHTML = `<span style="color:#f59e0b;">●</span> COMPILING...`;
-    
-    if (isSparks) createParticle();
-    
-    clearTimeout(compileTimer);
-    compileTimer = setTimeout(() => {
-      compile();
-      saveContent();
-    }, 300);
-  }
-
-  function handleKeydown(e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-      e.preventDefault(); saveContent(); saveHistSnapshot(); showToast("MANUAL_SYNC_COMPLETE"); return;
-    }
-    if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
-      e.preventDefault(); insert('**', '**'); return;
-    }
-    if ((e.ctrlKey || e.metaKey) && e.key === 'i') {
-      e.preventDefault(); insert('*', '*'); return;
-    }
-    if (e.key === 'Tab') {
-      e.preventDefault(); insert('    ', ''); return;
-    }
-  }
-
-  
-  async function compile() {
-    let text = input.value;
-    const blockMath = [];
-    const inlineMath = [];
-    const mermaids = [];
-    
-    
-    text = text.replace(/```mermaid([\s\S]+?)```/g, (match, code) => {
-      mermaids.push(code.trim());
-      return `%%%MERMAID_${mermaids.length - 1}%%%`;
-    });
-
-    
-    text = text.replace(/\$\$([\s\S]+?)\$\$/g, (match) => { blockMath.push(match); return `%%%BLOCK_MATH_${blockMath.length - 1}%%%`; });
-    text = text.replace(/\$([\s\S]+?)\$/g, (match) => { inlineMath.push(match); return `%%%INLINE_MATH_${inlineMath.length - 1}%%%`; });
-
-    
-    let html = marked.parse(text);
-
-    
-    html = html.replace(/<p>\s*(%%%BLOCK_MATH_\d+%%%)\s*<\/p>/g, "$1");
-    html = html.replace(/%%%BLOCK_MATH_(\d+)%%%/g, (m, i) => `<div class="math-display">${blockMath[i]}</div>`);
-    html = html.replace(/%%%INLINE_MATH_(\d+)%%%/g, (m, i) => `<span class="math-inline-placeholder">${inlineMath[i]}</span>`);
-
-    
-    html = html.replace(/%%%MERMAID_(\d+)%%%/g, (m, i) => `<div class="mermaid-target" data-idx="${i}" style="text-align:center; padding:10px;"></div>`);
-
-    preview.innerHTML = html;
-
-    
-    if (window.MathJax && window.MathJax.typesetPromise) {
-      try { await window.MathJax.typesetPromise([preview]); } catch(e) {}
-    }
-
-    
-    if (mermaids.length > 0) {
-      const targets = preview.querySelectorAll('.mermaid-target');
-      targets.forEach(async (target) => {
-        const idx = target.dataset.idx;
-        const code = mermaids[idx];
-        try {
-          const { svg } = await mermaid.render(`mermaid-svg-${Date.now()}-${idx}`, code);
-          target.innerHTML = svg;
-        } catch (err) {
-          target.innerHTML = `<pre style="color:red;font-size:10px;">Mermaid Error: ${err.message}</pre>`;
-        }
-      });
-    }
-
-    
-    wordCount.innerText = `WORDS: ${input.value.replace(/\s+/g, '').length}`;
-  }
-
-  
-  function loadSlot(slotIdx) {
-    const data = localStorage.getItem(`dt_neural_slot_${slotIdx}`);
-    if (data) {
-      input.value = data;
+    if (typeof marked !== 'undefined') {
+      output.innerHTML = marked.parse(text);
     } else {
-      input.value = document.getElementById('tpl-report').innerHTML.trim();
+      output.innerText = text;
     }
-    compile();
+
+    
+    if (typeof mermaid !== 'undefined') {
+      try {
+        const codeBlocks = output.querySelectorAll('pre code.language-mermaid');
+        codeBlocks.forEach((block) => {
+          const pre = block.parentElement;
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = block.textContent;
+          pre.replaceWith(div);
+        });
+        mermaid.init(undefined, output.querySelectorAll('.mermaid'));
+      } catch(e) {}
+    }
+
+    
+    if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+      MathJax.typesetPromise([output]).catch(e => {});
+    }
+
+    updateMetrics(text);
   }
 
-  function saveContent() {
-    localStorage.setItem(getSlotKey(), input.value);
-    status.innerHTML = `<span style="color:#10b981;">●</span> SYNCED: ${new Date().toLocaleTimeString()}`;
+  function updateMetrics(text) {
+    const charCount = text.length;
+    const lineCount = text ? text.split('\n').length : 0;
+    const pages = (charCount / 400).toFixed(1);
+    const readMinutes = Math.max(1, Math.ceil(charCount / 500));
+
+    document.getElementById('st-chars').textContent = charCount + ' 文字';
+    document.getElementById('st-lines').textContent = lineCount + ' 行';
+    document.getElementById('st-pages').textContent = pages + ' 原稿用紙枚';
+    document.getElementById('st-read-time').textContent = '読了 約' + readMinutes + '分';
   }
 
-  
+  function saveSlot() {
+    const text = document.getElementById('ne-input').value;
+    try { localStorage.setItem('ne_slot_' + currentSlot, text); } catch(e) {}
+    renderMarkdown();
+  }
+
+  function loadSlot(slot) {
+    currentSlot = slot;
+    const text = localStorage.getItem('ne_slot_' + slot) || '# 新しいノート\n\nここに文章を入力してください。';
+    document.getElementById('ne-input').value = text;
+    renderMarkdown();
+  }
+
+  function insert(before, after) {
+    const textarea = document.getElementById('ne-input');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    const selected = text.substring(start, end);
+    const replacement = before + selected + after;
+
+    textarea.value = text.substring(0, start) + replacement + text.substring(end);
+    textarea.focus();
+    textarea.setSelectionRange(start + before.length, end + before.length);
+    saveSlot();
+  }
+
+  function toggleFind() {
+    document.getElementById('ne-find-bar').classList.toggle('show');
+  }
+
+  function executeReplace() {
+    const target = document.getElementById('ne-find-target').value;
+    const replaceVal = document.getElementById('ne-replace-target').value;
+    if (!target) return;
+    const textarea = document.getElementById('ne-input');
+    textarea.value = textarea.value.replaceAll(target, replaceVal);
+    saveSlot();
+    showToast('一括置換を完了しました');
+  }
+
+  function togglePaperStyle() {
+    isDarkPaper = !isDarkPaper;
+    document.getElementById('ne-output').classList.toggle('dark-style', isDarkPaper);
+    showToast(isDarkPaper ? 'ダークペーパー表示へ切替' : 'ホワイトA4表示へ切替');
+  }
+
+  function handleExport(val) {
+    if (!val) return;
+    const text = document.getElementById('ne-input').value;
+
+    if (val === 'copy-html') {
+      const html = document.getElementById('ne-output').innerHTML;
+      navigator.clipboard.writeText(html).then(() => showToast('HTMLをクリップボードにコピーしました'));
+    } else if (val === 'copy-text') {
+      navigator.clipboard.writeText(text).then(() => showToast('プレーンテキストをコピーしました'));
+    } else if (val === 'download-md') {
+      const blob = new Blob([text], { type: 'text/markdown' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'document.md';
+      a.click();
+      showToast('.mdファイルを保存しました');
+    } else if (val === 'print') {
+      window.print();
+    }
+
+    document.getElementById('ne-export-select').value = '';
+  }
+
+  function switchMobileView(view) {
+    mobileView = view;
+    document.getElementById('mob-edit').classList.toggle('active', view === 'edit');
+    document.getElementById('mob-prev').classList.toggle('active', view === 'prev');
+
+    const ed = document.getElementById('ne-editor-wrap');
+    const pr = document.getElementById('ne-preview-wrap');
+
+    if (view === 'edit') {
+      ed.classList.remove('hidden-mobile');
+      pr.classList.add('hidden-mobile');
+    } else {
+      ed.classList.add('hidden-mobile');
+      pr.classList.remove('hidden-mobile');
+      renderMarkdown();
+    }
+  }
+
   function toggleSparks() {
-    isSparks = !isSparks;
+    sparksMode = !sparksMode;
     const btn = document.getElementById('btn-sparks');
-    if (isSparks) { btn.classList.add('active'); showToast('PARTICLES ARMED'); }
-    else { btn.classList.remove('active'); particlesCont.innerHTML = ''; }
+    btn.textContent = sparksMode ? 'Sparks ON' : 'Sparks OFF';
+    btn.classList.toggle('active', sparksMode);
   }
 
-  function createParticle() {
-    const wrapRect = document.getElementById('ne-editor-wrap').getBoundingClientRect();
-    for (let i = 0; i < 20; i++) {
-       const p = document.createElement('div');
-       p.className = 'ne-particle';
-       const colors = ['#00f3ff', '#ff0055', '#b026ff', '#fcee0a', '#ffffff'];
-       const color = colors[Math.floor(Math.random() * colors.length)];
-       const size = 3 + Math.random() * 4;
-       p.style.width = `${size}px`; p.style.height = `${size}px`;
-       
-       
-       const x = Math.random() * wrapRect.width;
-       const y = wrapRect.height - 40 + (Math.random() * 20 - 10);
-       
-       p.style.left = `${x}px`; p.style.top = `${y}px`;
-       p.style.background = color;
-       p.style.boxShadow = `0 0 ${size*2}px ${color}`;
-       
-       const tx = (Math.random() - 0.5) * 400; 
-       const ty = - (Math.random() * 500 + 200); 
-       p.style.setProperty('--tx', `${tx}px`);
-       p.style.setProperty('--ty', `${ty}px`);
-       
-       particlesCont.appendChild(p);
-       setTimeout(() => { if (p.parentNode) p.parentNode.removeChild(p); }, 800);
+  function triggerSparks(e) {
+    if (!sparksMode) return;
+    const container = document.getElementById('ne-particles');
+    const colors = ['#00f2fe', '#30d158', '#ff2d55', '#ffd60a'];
+
+    for (let i = 0; i < 5; i++) {
+      const p = document.createElement('div');
+      p.className = 'ne-particle';
+      const size = Math.random() * 6 + 3;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.left = (Math.random() * 80 + 10) + '%';
+      p.style.top = (Math.random() * 80 + 10) + '%';
+
+      const tx = (Math.random() - 0.5) * 80;
+      const ty = (Math.random() - 0.5) * 80;
+      p.style.setProperty('--tx', tx + 'px');
+      p.style.setProperty('--ty', ty + 'px');
+
+      container.appendChild(p);
+      setTimeout(() => p.remove(), 800);
     }
   }
 
-  function toggleFocusMode() {
-    isFocusMode = !isFocusMode;
-    const btn = document.getElementById('btn-focus');
-    const wrap = document.getElementById('ne-editor-wrap');
-    if (isFocusMode) {
-      wrap.classList.add('focus-mode'); btn.classList.add('active'); showToast('ZEN MODE ENGAGED');
-    } else {
-      wrap.classList.remove('focus-mode'); btn.classList.remove('active');
+  function addSnapshot() {
+    const text = document.getElementById('ne-input').value;
+    if (!text.trim()) return;
+    const snapshot = { time: new Date().toLocaleTimeString(), text };
+    historySnapshots.unshift(snapshot);
+    if (historySnapshots.length > 10) historySnapshots.pop();
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('ne-history-list');
+    if (!list) return;
+    list.innerHTML = historySnapshots.map((s, idx) => `
+      <div class="ne-hist-item" onclick="neApp.restoreHistory(${idx})">
+        <div style="color:var(--apple-subtext);font-size:0.75rem;">${s.time}</div>
+        <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.text.substring(0, 30)}...</div>
+      </div>
+    `).join('');
+  }
+
+  function restoreHistory(idx) {
+    if (historySnapshots[idx]) {
+      document.getElementById('ne-input').value = historySnapshots[idx].text;
+      saveSlot();
+      showToast('過去のバージョンを復元しました');
     }
   }
 
   function toggleHistory() {
-    histPanel.classList.toggle('show');
-    if(histPanel.classList.contains('show')) renderHistory();
+    document.getElementById('ne-history-panel').classList.toggle('show');
   }
 
-  function saveHistSnapshot() {
-    let histJSON = localStorage.getItem(getHistKey());
-    let hist = histJSON ? JSON.parse(histJSON) : [];
-    if (hist.length > 0 && hist[0].text === input.value) return;
-
-    hist.unshift({ time: new Date().getTime(), text: input.value });
-    if (hist.length > 10) hist.pop(); 
-    
-    localStorage.setItem(getHistKey(), JSON.stringify(hist));
-    if(histPanel.classList.contains('show')) renderHistory();
-  }
-
-  function renderHistory() {
-    let histJSON = localStorage.getItem(getHistKey());
-    let hist = histJSON ? JSON.parse(histJSON) : [];
-    histList.innerHTML = '';
-    
-    if(hist.length === 0) {
-      histList.innerHTML = '<div style="color:#666; font-size:10px;">NO SNAPSHOTS YET</div>';
-      return;
+  function init() {
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({ startOnLoad: false, theme: 'neutral' });
     }
 
-    hist.forEach((h, idx) => {
-      const d = new Date(h.time);
-      const div = document.createElement('div');
-      div.className = 'ne-hist-item';
-      div.innerHTML = `<div class="ne-hist-time">${d.toLocaleString()}</div><div>[${h.text.length} CHARS] Click to restore</div>`;
-      div.onclick = () => {
-        if(confirm('現在のエディタ内容をスナップショットで上書きしますか？')) {
-          saveHistSnapshot(); 
-          input.value = h.text;
-          compile(); saveContent();
-          showToast('TIME_TRAVEL_SUCCESS');
-        }
-      };
-      histList.appendChild(div);
+    document.getElementById('ne-slot-select').addEventListener('change', (e) => {
+      loadSlot(e.target.value);
     });
-  }
 
-  
-  function insert(before, after) {
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
-    const text = input.value;
-    const selected = text.substring(start, end);
-    input.value = text.substring(0, start) + before + selected + after + text.substring(end);
-    input.focus();
-    input.selectionStart = start + before.length;
-    input.selectionEnd = end + before.length;
-    compile(); saveContent();
-  }
+    document.getElementById('ne-template').addEventListener('change', (e) => {
+      const val = e.target.value;
+      if (!val) return;
+      const tplEl = document.getElementById('tpl-' + val);
+      if (tplEl) {
+        document.getElementById('ne-input').value = tplEl.textContent.trim();
+        saveSlot();
+        showToast('テンプレートを読み込みました');
+      }
+      e.target.value = '';
+    });
 
-  function loadTemplate(e) {
-    const type = typeof e === 'object' ? e.target.value : e;
-    if (!type) return;
-    if (input.value.trim().length > 0 && !confirm('現在の入力内容が上書きされます。よろしいですか？')) {
-       document.getElementById('ne-template').value = ''; return;
+    document.getElementById('ne-input').addEventListener('input', (e) => {
+      saveSlot();
+      triggerSparks(e);
+    });
+
+    document.getElementById('btn-focus').addEventListener('click', () => {
+      focusMode = !focusMode;
+      document.getElementById('btn-focus').classList.toggle('active', focusMode);
+      document.getElementById('ne-editor-wrap').style.opacity = focusMode ? '0.7' : '1';
+    });
+
+    document.getElementById('btn-hist').addEventListener('click', toggleHistory);
+
+    
+    setInterval(addSnapshot, 180000);
+
+    loadSlot('1');
+    if (window.innerWidth <= 800) {
+      switchMobileView('edit');
     }
-    input.value = document.getElementById(`tpl-${type}`).innerHTML.trim();
-    compile(); saveContent(); showToast(`TEMPLATE_LOADED`);
-    document.getElementById('ne-template').value = '';
   }
 
-  function downloadMd() {
-    const blob = new Blob([input.value], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `neural_log_${new Date().getTime()}.md`;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-    showToast("FILE_DOWNLOADED");
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else setTimeout(init, 50);
 
-  function printPDF() {
-    showToast('GENERATING RENDER...');
-    const content = preview.innerHTML;
-    const mathJaxStyles = document.getElementById('MJX-SVG-styles') ? document.getElementById('MJX-SVG-styles').outerHTML : '';
-    
-    
-    const iframe = document.createElement('iframe');
-    iframe.style.position = 'fixed';
-    iframe.style.right = '0';
-    iframe.style.bottom = '0';
-    iframe.style.width = '0';
-    iframe.style.height = '0';
-    iframe.style.border = 'none';
-    document.body.appendChild(iframe);
-    
-    const doc = iframe.contentWindow.document;
-    doc.open();
-    
-    doc.write(`
-      <html>
-      <head>
-        <title>Document Print</title>
-        ${mathJaxStyles} <style>
-          @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
-          @page { size: A4; margin: 25mm; } 
-          body { 
-            font-family: 'Zen Kaku Gothic New', "Helvetica Neue", Arial, sans-serif; 
-            line-height: 1.8; color: #000; margin: 0; padding: 0; 
-            background: #fff;
-          }
-          h1 { font-size: 1.8rem; border-bottom: 2px solid #000; padding-bottom: 0.5rem; margin-top: 0; margin-bottom: 1.5rem; page-break-after: avoid; }
-          h2 { font-size: 1.4rem; border-left: 5px solid #000; padding-left: 12px; margin-top: 2rem; margin-bottom: 1rem; page-break-after: avoid; }
-          h3 { font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.5rem; page-break-after: avoid; }
-          p { margin-bottom: 1rem; text-align: justify; }
-          ul, ol { margin-bottom: 1rem; padding-left: 1.5rem; color: #000; }
-          li::marker { color: #000; }
-          table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; font-size: 0.95rem; page-break-inside: avoid; }
-          th, td { border: 1px solid #333; padding: 8px 12px; color:#000; }
-          th { background-color: #f0f0f0; font-weight: bold; text-align: center; }
-          pre { background-color: #f5f5f5; padding: 1.2rem; border: 1px solid #ccc; overflow-x: auto; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; page-break-inside: avoid; }
-          code { font-family: 'JetBrains Mono', monospace; color: #d63384; font-size: 0.9em; }
-          pre code { color: #333; }
-          blockquote { border-left: 4px solid #aaa; padding-left: 1rem; color: #555; margin: 1rem 0; }
-          img { max-width: 100%; height: auto; display: block; margin: 1.5rem auto; border: 1px solid #ccc; page-break-inside: avoid; }
-          .math-display { display: flex; justify-content: center; align-items: center; width: 100%; margin: 1.5rem 0; page-break-inside: avoid; }
-          mjx-container { color: #000 !important; }
-          mjx-assistive-mml { display: none !important; clip: rect(1px, 1px, 1px, 1px) !important; clip-path: inset(50%) !important; height: 1px !important; width: 1px !important; position: absolute !important; overflow: hidden !important; }
-        </style>
-      </head>
-      <body>
-        ${content}
-      </body>
-      </html>
-    `);
-    doc.close();
-    
-    setTimeout(() => {
-      iframe.contentWindow.focus();
-      iframe.contentWindow.print();
-      setTimeout(() => { 
-        if (document.body.contains(iframe)) document.body.removeChild(iframe); 
-      }, 3000);
-    }, 1000); 
-  }
-
-  function showToast(msg) {
-    toast.textContent = `> ${msg}`;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2000);
-  }
-
-  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { setTimeout(init, 50); }
-
-  return { insert, downloadMd, printPDF };
+  return { insert, switchMobileView, toggleHistory, restoreHistory, handleExport, toggleFind, executeReplace, togglePaperStyle, toggleSparks };
 })();
 </script>
-
-
-<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
-  <filter id="liquid-refract">
-    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
-    <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
-  </filter>
-</svg>
 
     </section>
     <footer class="pt-8">
