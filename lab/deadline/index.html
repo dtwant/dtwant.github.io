@@ -114,7 +114,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "0"
+    "wordCount": "35"
   }]
   </script>
 
@@ -820,197 +820,184 @@
 
     <main id="main-content" class="w-full min-h-screen">
       
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/htm@3/dist/htm.umd.js"></script>
 <script src="/js/pwa-config-sync.js"></script>
 
+<script>
+(function(){
+  var el = document.currentScript;
+  var section = el ? el.closest('section') : null;
+  if (section && section.previousElementSibling && section.previousElementSibling.tagName === 'HEADER') {
+    section.previousElementSibling.style.display = 'none';
+  }
+})();
+</script>
+
 <style>
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700;800&family=SF+Pro+Text:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+
  
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+.portal-body footer,
+.portal-body .breadcrumbs,
+.portal-body nav[aria-label="breadcrumb"],
+.portal-body article > div > a.hover\:underline,
+.portal-body .article-header,
+.portal-body .prose > div:first-child > nav,
+.portal-body h1.mt-0.text-4xl.font-extrabold {
+  display: none !important;
+}
 
-   
-  .portal-body footer,
-  .portal-body .breadcrumbs,
-  .portal-body nav[aria-label="breadcrumb"],
-  .portal-body article > div > a.hover\:underline,
-  .portal-body .article-header,
-  .portal-body .prose > div:first-child > nav,
-  .portal-body h1.mt-0.text-4xl.font-extrabold {
-    display: none !important;
-  }
+.portal-body article.prose,
+.portal-body .prose {
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
 
-   
-  
+html,
+body.portal-body,
+.portal-body main,
+.portal-body main#main-content,
+.portal-body article,
+.portal-body .prose {
+  background-color: #000000 !important;
+  background: #000000 !important;
+}
 
-  .portal-body article.prose,
-  .portal-body .prose {
-    max-width: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  .portal-body .min-h-\[calc\(100vh-10rem\)\],
-  .portal-body main#main-content > article {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-    padding-bottom: 0 !important;
-    margin-bottom: 0 !important;
-  }
-     
-  html,
-  body.portal-body,
-  .portal-body main,
-  .portal-body main#main-content,
-  .portal-body article,
-  .portal-body .prose {
-    background-color: #050508 !important;
-    background: #050508 !important;
-  }
-
-  .portal-body main#main-content {
-    background-color: hsl(240 10% 3.9%) !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-   
-  a, a *,
-  button, button *,
-  span, span *,
-  div, div *,
-  .dm-stat-tab, .dm-stat-tab *,
-  .dm-view-btn, .dm-view-btn *,
-  .dm-btn, .dm-btn *,
-  .ag-btn, .ag-btn *,
-  .ag-radio-tab, .ag-radio-tab *,
-  .dm-badge, .dm-badge * {
-    text-decoration: none !important;
-  }
+ 
+.dm-app, .dm-app *,
+.dm-app a, .dm-app a:hover, .dm-app a:focus, .dm-app a:visited,
+.dm-app span, .dm-app div, .dm-app button, .dm-app label, .dm-app h1, .dm-app h3,
+.dm-sheet-overlay, .dm-sheet-overlay * {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  border-bottom: none !important;
+}
 
 :root {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 240 10% 4.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 240 10% 4.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 292.2 84.1% 60.6%;  
-  --primary-foreground: 0 0% 98%;
-  --secondary: 240 3.7% 15.9%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 240 3.7% 15.9%;
-  --muted-foreground: 240 5% 64.9%;
-  --accent: 240 3.7% 15.9%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 240 3.7% 17%;
-  --input: 240 3.7% 15.9%;
-  --ring: 292.2 84.1% 60.6%;
+  --apple-bg: #000000;
+  --apple-card: rgba(20, 20, 24, 0.8);
+  --apple-border: rgba(255, 255, 255, 0.1);
+  --apple-separator: rgba(255, 255, 255, 0.06);
+  --apple-text: #f5f5f7;
+  --apple-subtext: #86868b;
+  
+   
+  --neon-cyan: #00f2fe;
+  --neon-cyan-glow: rgba(0, 242, 254, 0.35);
+  --neon-pink: #ff2d55;
+  --neon-pink-glow: rgba(255, 45, 85, 0.35);
+  --neon-green: #30d158;
+  --neon-green-glow: rgba(48, 209, 88, 0.35);
+  --neon-orange: #ff9f0a;
+  --neon-orange-glow: rgba(255, 159, 10, 0.35);
+  --neon-purple: #bf5af2;
+
+  --apple-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'Zen Kaku Gothic New', sans-serif;
+  --apple-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --apple-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .dm-app, .dm-app * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .dm-app {
-  font-family: 'Inter', 'Zen Kaku Gothic New', sans-serif;
-  color: hsl(var(--foreground));
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  max-width: none; margin: 0;
-  padding: 10rem 1.5rem 2.5rem 1.5rem;  
-  z-index: 999990;
-  overflow-y: auto; overflow-x: hidden;
-  background: transparent;
-}
-
- 
-.dm-bg {
-  position: fixed;
-  inset: 0;
-  background-color: hsl(var(--background));
-  background-image: 
-    radial-gradient(circle at 50% 50%, rgba(217, 70, 239, 0.05) 0%, transparent 80%),
-    radial-gradient(circle at 100% 0%, rgba(6, 182, 212, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 0% 100%, rgba(217, 70, 239, 0.03) 0%, transparent 50%);
-  z-index: 0;
-}
-.dm-grid {
-  position: fixed;
-  inset: 0;
-  background-image: 
-    linear-gradient(to right, rgba(217, 70, 239, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(217, 70, 239, 0.04) 1px, transparent 1px);
-  background-size: 30px 30px;
-  background-position: center center;
-  z-index: 1;
-  pointer-events: none;
-}
-.dm-scanline {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0),
-    rgba(255,255,255,0) 50%,
-    rgba(217, 70, 239, 0.015) 50%,
-    rgba(217, 70, 239, 0.015)
-  );
-  background-size: 100% 4px;
-  z-index: 2;
-  pointer-events: none;
-}
-.dm-vignette {
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.7) 100%);
-  z-index: 3;
-  pointer-events: none;
-}
-
-.dm-container {
-  max-width: 960px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  font-family: var(--apple-font);
+  color: var(--apple-text);
+  min-height: 100vh;
+  width: 100%;
+  padding: 5.5rem 1.25rem 6rem 1.25rem;
+  background: radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.06) 0%, rgba(0, 0, 0, 0) 65%), #000000;
+  -webkit-font-smoothing: antialiased;
   position: relative;
   z-index: 10;
 }
 
- 
-.dm-card {
-  background: rgba(18, 18, 22, 0.65);
-  border: 1px solid hsl(var(--border));
-  border-radius: 12px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  padding: 1.5rem;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.03);
+.dm-container {
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.dm-hud-title {
-  font-family: 'Orbitron', sans-serif;
+ 
+.dm-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0;
+}
+.dm-title {
+  font-size: 2.1rem;
   font-weight: 800;
-  font-size: 1.75rem;
-  letter-spacing: 0.15em;
-  background: linear-gradient(to right, #d946ef, #06b6d4);
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #ffffff 30%, var(--neon-cyan) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(217, 70, 239, 0.15);
+  text-shadow: 0 0 30px rgba(0, 242, 254, 0.25);
+}
+.dm-subtitle {
+  font-size: 0.82rem;
+  color: var(--apple-subtext);
+  font-weight: 400;
+  letter-spacing: 0.03em;
 }
 
-.dm-hud-desc {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: hsl(var(--muted-foreground));
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+ 
+.dm-widget-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+}
+.dm-widget-card {
+  background: var(--apple-card);
+  border: 1px solid var(--apple-border);
+  border-radius: 18px;
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  padding: 1.1rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s var(--apple-spring), border-color 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+.dm-widget-card.urgent { border-color: rgba(255, 45, 85, 0.3); }
+.dm-widget-card.urgent:hover { box-shadow: 0 0 25px var(--neon-pink-glow); }
+
+.dm-widget-card.all { border-color: rgba(0, 242, 254, 0.3); }
+.dm-widget-card.all:hover { box-shadow: 0 0 25px var(--neon-cyan-glow); }
+
+.dm-widget-card.done { border-color: rgba(48, 209, 88, 0.3); }
+.dm-widget-card.done:hover { box-shadow: 0 0 25px var(--neon-green-glow); }
+
+.dm-widget-card:active {
+  transform: scale(0.95);
+}
+
+.dm-widget-val {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.dm-widget-label {
+  font-size: 0.72rem;
+  color: var(--apple-subtext);
+  font-weight: 500;
+  margin-top: 0.35rem;
+  letter-spacing: 0.02em;
 }
 
  
@@ -1018,585 +1005,408 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 1px solid hsl(var(--border));
-  background-color: transparent;
-  color: hsl(var(--foreground));
-  font-family: inherit;
   gap: 0.4rem;
-}
-.dm-btn:hover:not(:disabled) {
-  background-color: hsl(var(--accent));
-  color: hsl(var(--accent-foreground));
-  border-color: rgba(255,255,255,0.15);
-}
-.dm-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.dm-btn-primary {
-  background-color: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
-  border: none;
-}
-.dm-btn-primary:hover:not(:disabled) {
-  background-color: #c026d3;
-  box-shadow: 0 0 15px rgba(217, 70, 239, 0.3);
-}
-
-.dm-btn-icon {
-  width: 2.25rem;
-  height: 2.25rem;
-  padding: 0;
-  border-radius: 6px;
-}
-
- 
-.dm-input, .dm-select {
-  background: rgba(0,0,0,0.3);
-  border: 1px solid hsl(var(--border));
-  color: hsl(var(--foreground));
-  border-radius: 6px;
-  padding: 0.65rem 0.85rem;
-  font-size: 0.9rem;
-  font-family: inherit;
-  outline: none;
-  transition: all 0.2s;
-}
-.dm-input:focus, .dm-select:focus {
-  border-color: hsl(var(--primary));
-  box-shadow: 0 0 10px rgba(217, 70, 239, 0.15);
-  background: rgba(0,0,0,0.5);
-}
-
- 
-.dm-title-bar {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
-    text-align: center !important;
-    gap: 1rem !important;
-    border-bottom: 1px solid hsl(var(--border)) !important;
-    padding-bottom: 1.5rem !important;
-    width: 100% !important;
-  }
-.dm-title-actions {
-    display: flex !important;
-    gap: 0.5rem !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-wrap: wrap !important;
-    width: 100% !important;
-  }
-
- 
-.dm-sync-status {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  border: 1px solid transparent;
-}
-.dm-sync-status.local {
-  background: rgba(100, 116, 139, 0.1);
-  color: #94a3b8;
-  border-color: rgba(100, 116, 139, 0.2);
-}
-.dm-sync-status.ok {
-  background: rgba(217, 70, 239, 0.1);
-  color: #d946ef;
-  border-color: rgba(217, 70, 239, 0.2);
-  box-shadow: 0 0 12px rgba(217, 70, 239, 0.1);
-}
-.dm-sync-status.busy {
-  background: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
-  border-color: rgba(245, 158, 11, 0.2);
-}
-.dm-sync-status.error {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.2);
-}
-
- 
-.dm-stats-bar {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.5rem;
-  border: 1px solid hsl(var(--border));
-  border-radius: 8px;
-  overflow: hidden;
-  background: rgba(0,0,0,0.2);
-}
-.dm-stat-tab {
-  padding: 0.75rem 0.5rem;
-  text-align: center;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.6rem 1.1rem;
   cursor: pointer;
-  transition: all 0.2s;
-  border-right: 1px solid hsl(var(--border));
-  background: transparent;
+  border: 1px solid var(--apple-border);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--apple-text);
+  transition: transform 0.15s var(--apple-bounce), background 0.2s ease;
+  user-select: none;
+  font-family: inherit;
 }
-.dm-stat-tab:last-child {
-  border-right: none;
+.dm-btn:active {
+  transform: scale(0.94);
+  background: rgba(255, 255, 255, 0.12);
 }
-.dm-stat-tab:hover {
-  background: rgba(255,255,255,0.02);
-}
-.dm-stat-tab.active {
-  background: rgba(217, 70, 239, 0.08);
-  box-shadow: inset 0 -2px 0 0 hsl(var(--primary));
-}
-.dm-stat-num {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.25rem;
+.dm-btn-primary {
+  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+  color: #000000;
+  border: none;
   font-weight: 700;
-  color: hsl(var(--foreground));
+  box-shadow: 0 4px 18px var(--neon-cyan-glow);
 }
-.dm-stat-num.active-count { color: #facc15; }
-.dm-stat-num.danger-count { color: #ef4444; }
-.dm-stat-num.done-count { color: #22c55e; }
-.dm-stat-label {
-  font-size: 0.6rem;
-  color: hsl(var(--muted-foreground));
-  text-transform: uppercase;
-  margin-top: 0.2rem;
-  letter-spacing: 0.05em;
+.dm-btn-primary:active {
+  background: #00c6ff;
 }
-
- 
-.dm-search-icon {
-  position: absolute;
-  left: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: hsl(var(--muted-foreground));
-  pointer-events: none;
-}
-.dm-search {
-  background: rgba(0, 0, 0, 0.4) !important;
-  border: 1px solid rgba(217, 70, 239, 0.25) !important;
-  color: hsl(var(--foreground)) !important;
-  border-radius: 6px !important;
-  padding: 0.5rem 0.85rem 0.5rem 2.25rem !important;
-  font-size: 0.85rem !important;
-  outline: none !important;
-  transition: all 0.2s !important;
-  width: 100% !important;
-}
-.dm-search:focus {
-  border-color: rgba(217, 70, 239, 0.6) !important;
-  box-shadow: 0 0 15px rgba(217, 70, 239, 0.3) !important;
-  background: rgba(0, 0, 0, 0.6) !important;
-}
-
-.dm-sort-sel {
-  background: rgba(0, 0, 0, 0.4) !important;
-  border: 1px solid rgba(217, 70, 239, 0.25) !important;
-  color: hsl(var(--foreground)) !important;
-  border-radius: 6px !important;
-  padding: 0.5rem 1.75rem 0.5rem 0.75rem !important;
-  font-size: 0.85rem !important;
-  outline: none !important;
-  cursor: pointer !important;
-  transition: all 0.2s !important;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-.dm-sort-sel:focus {
-  border-color: rgba(217, 70, 239, 0.6) !important;
-  box-shadow: 0 0 15px rgba(217, 70, 239, 0.3) !important;
-  background: rgba(0, 0, 0, 0.6) !important;
+.dm-btn-circle {
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  border-radius: 50%;
 }
 
  
-.dm-toolbar {
+.dm-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+  color: #000000;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 1.7rem;
+  font-weight: 600;
+  box-shadow: 0 8px 25px var(--neon-cyan-glow);
+  border: none;
+  cursor: pointer;
+  z-index: 9999;
+  transition: transform 0.15s var(--apple-bounce), box-shadow 0.2s ease;
 }
-.dm-search-wrap {
-  position: relative;
-  flex: 1;
-  min-width: 220px;
+.dm-fab:active {
+  transform: scale(0.88);
+  box-shadow: 0 4px 12px var(--neon-cyan-glow);
 }
-.dm-view-toggle {
-  display: flex;
-  background: rgba(0,0,0,0.3);
-  border: 1px solid hsl(var(--border));
-  padding: 2px;
-  border-radius: 8px;
-}
-.dm-view-btn {
-  padding: 0.4rem 0.8rem;
+
+ 
+.dm-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 600;
-  border-radius: 6px;
+  border: 1px solid var(--apple-border);
+  background: rgba(255, 255, 255, 0.04);
   cursor: pointer;
-  color: hsl(var(--muted-foreground));
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
+  transition: transform 0.15s var(--apple-bounce);
 }
-.dm-view-btn.active {
-  background: hsl(var(--secondary));
-  color: hsl(var(--foreground));
-}
+.dm-pill:active { transform: scale(0.94); }
+.dm-pill.ok { color: var(--neon-green); border-color: rgba(48, 209, 88, 0.3); background: rgba(48, 209, 88, 0.1); box-shadow: 0 0 10px rgba(48, 209, 88, 0.15); }
+.dm-pill.busy { color: var(--neon-orange); border-color: rgba(255, 159, 10, 0.3); background: rgba(255, 159, 10, 0.1); }
 
  
-.dm-kanban-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  align-items: start;
-}
-.dm-kanban-col {
+.dm-segmented-control {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  background: rgba(10, 10, 12, 0.4);
-  border: 1px solid hsl(var(--border));
-  border-radius: 10px;
-  padding: 0.75rem;
-  min-height: 400px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--apple-border);
+  border-radius: 14px;
+  padding: 3px;
 }
-.dm-kanban-header {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: hsl(var(--muted-foreground));
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid hsl(var(--border));
-  margin-bottom: 0.25rem;
-  display: flex;
-  justify-content: space-between;
-  letter-spacing: 0.05em;
+.dm-segment-btn {
+  flex: 1;
+  text-align: center;
+  padding: 0.55rem 0.25rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 11px;
+  cursor: pointer;
+  color: var(--apple-subtext);
+  transition: all 0.2s var(--apple-spring);
+  user-select: none;
+}
+.dm-segment-btn.active {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.08);
 }
 
  
 .dm-task-card {
+  background: var(--apple-card);
+  border: 1px solid var(--apple-border);
+  border-radius: 18px;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  border-left: 3px solid #3f3f46;
-  position: relative;
-  transition: transform 0.2s, border-color 0.2s;
-}
-.dm-task-card:hover {
-  transform: translateY(-1px);
-  border-color: hsl(var(--primary));
-}
-.dm-task-card.status-safe { border-left-color: #22c55e; }
-.dm-task-card.status-warn { border-left-color: #facc15; }
-.dm-task-card.status-danger { border-left-color: #f97316; }
-.dm-task-card.status-critical { border-left-color: #ef4444; animation: shadow-pulse 2s infinite; }
-.dm-task-card.status-over { border-left-color: #6b7280; opacity: 0.5; }
-
-@keyframes shadow-pulse {
-  0%, 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.1); }
-  50% { box-shadow: 0 0 18px rgba(239, 68, 68, 0.35); }
-}
-
-.dm-task-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: hsl(var(--foreground));
-  line-height: 1.3;
-}
-.dm-task-meta {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
-.dm-badge {
-  font-size: 0.6rem;
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid hsl(var(--border));
-  color: hsl(var(--muted-foreground));
-}
-.dm-badge.p-high { background: rgba(239,68,68,0.15); color: #fca5a5; }
-.dm-badge.p-mid { background: rgba(250,204,21,0.12); color: #fde68a; }
-.dm-badge.p-low { background: rgba(100,116,139,0.2); color: #94a3b8; }
-
-.dm-countdown-text {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #22d3ee;
-  text-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
-}
-.status-warn .dm-countdown-text { color: #facc15; }
-.status-danger .dm-countdown-text { color: #f97316; }
-.status-critical .dm-countdown-text { color: #ef4444; }
-.status-over .dm-countdown-text { color: #6b7280; text-decoration: line-through; }
-
-.dm-task-actions {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-top: 0.25rem;
+  text-align: center;
+  gap: 0.65rem;
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s var(--apple-spring), border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  cursor: pointer;
 }
-.dm-actions-group {
-  display: flex;
-  gap: 0.25rem;
+.dm-task-card:active {
+  transform: scale(0.985);
+  background: rgba(30, 30, 35, 0.85);
 }
-.dm-action-icon-btn {
-  background: transparent;
-  border: 1px solid hsl(var(--border));
-  color: hsl(var(--muted-foreground));
-  width: 1.85rem;
-  height: 1.85rem;
+.dm-task-card.danger {
+  border-top: 3px solid var(--neon-pink);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 2px 10px rgba(255, 45, 85, 0.08);
+}
+.dm-task-card.warn {
+  border-top: 3px solid var(--neon-orange);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 2px 10px rgba(255, 159, 10, 0.08);
+}
+.dm-task-card.safe {
+  border-top: 3px solid var(--neon-green);
+}
+.dm-task-card.done {
+  opacity: 0.45;
+  border-top: 3px solid var(--apple-subtext);
+}
+
+ 
+.dm-check-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--apple-subtext);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s;
+  transition: all 0.2s var(--apple-bounce);
+  margin-bottom: 0.1rem;
 }
-.dm-action-icon-btn:hover {
-  border-color: rgba(255,255,255,0.15);
-  color: hsl(var(--foreground));
+.dm-check-circle.checked {
+  background: var(--neon-green);
+  border-color: var(--neon-green);
+  color: #000000;
+  font-weight: 800;
+  font-size: 0.85rem;
+  box-shadow: 0 0 12px var(--neon-green-glow);
 }
-.dm-action-icon-btn.check:hover { color: #22c55e; border-color: rgba(34,197,94,0.3); }
-.dm-action-icon-btn.del:hover { color: #ef4444; border-color: rgba(239,68,68,0.3); }
-
- 
-.dm-list-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.dm-list-item {
-  display: grid;
-  grid-template-columns: 3fr 1fr 1fr auto;
-  align-items: center;
-  gap: 1rem;
+.dm-check-circle:active {
+  transform: scale(0.82);
 }
 
- 
-.dm-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(8px);
+.dm-task-title-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  text-align: center;
+}
+.dm-task-title-text.done {
+  text-decoration: line-through !important;
+  color: var(--apple-subtext);
+}
+
+.dm-task-submeta {
   display: flex;
+  gap: 0.6rem;
   align-items: center;
   justify-content: center;
-  z-index: 1000000;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  color: var(--apple-subtext);
+  font-weight: 400;
+  text-align: center;
+}
+
+ 
+.dm-badge-tag {
+  font-size: 0.72rem;
+  padding: 0.22rem 0.7rem;
+  border-radius: 999px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.dm-badge-tag.danger {
+  color: var(--neon-pink);
+  background: rgba(255, 45, 85, 0.15);
+  border: 1px solid rgba(255, 45, 85, 0.3);
+  box-shadow: 0 0 12px rgba(255, 45, 85, 0.2);
+}
+.dm-badge-tag.warn {
+  color: var(--neon-orange);
+  background: rgba(255, 159, 10, 0.15);
+  border: 1px solid rgba(255, 159, 10, 0.3);
+  box-shadow: 0 0 12px rgba(255, 159, 10, 0.18);
+}
+.dm-badge-tag.safe {
+  color: var(--neon-green);
+  background: rgba(48, 209, 88, 0.15);
+  border: 1px solid rgba(48, 209, 88, 0.3);
+}
+
+ 
+.dm-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  z-index: 9999999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s var(--apple-spring);
 }
-.dm-overlay.show {
+.dm-sheet-overlay.show {
   opacity: 1;
   pointer-events: auto;
 }
-.dm-modal {
-  width: 90%;
-  max-width: 480px;
-  background: #0c0c0e;
-  border: 1px solid hsl(var(--border));
-  border-radius: 12px;
-  padding: 1.75rem;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-  transform: scale(0.95);
-  transition: transform 0.2s ease;
+.dm-sheet {
+  width: 100%;
+  max-width: 500px;
+  background: #18181a;
+  border: 1px solid var(--apple-border);
+  border-radius: 26px 26px 0 0;
+  padding: 1.5rem 1.75rem 2.5rem 1.75rem;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8);
+  transform: translateY(100%);
+  transition: transform 0.35s var(--apple-spring);
+  text-align: center;
 }
-.dm-overlay.show .dm-modal {
-  transform: scale(1);
+.dm-sheet-overlay.show .dm-sheet {
+  transform: translateY(0);
 }
-.dm-modal-header {
-  border-bottom: 1px solid hsl(var(--border));
-  padding-bottom: 1rem;
-  margin-bottom: 1.25rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.dm-modal-footer {
-  border-top: 1px solid hsl(var(--border));
-  padding-top: 1rem;
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
+.dm-sheet-handle {
+  width: 36px; height: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  margin: 0 auto 1.25rem auto;
 }
 
- 
-.dm-form-field {
+.dm-form-group {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  width: 100%;
+  text-align: left;
 }
-.dm-form-field label {
+.dm-form-label {
   font-size: 0.75rem;
-  color: hsl(var(--muted-foreground));
+  color: var(--apple-subtext);
   font-weight: 500;
+}
+.dm-input-box {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--apple-border);
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  font-family: inherit;
+}
+.dm-input-box:focus {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px var(--neon-cyan-glow);
 }
 
  
 .dm-toast {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: rgba(18,18,22,0.95);
-  border: 1px solid hsl(var(--border));
-  border-radius: 8px;
-  padding: 0.75rem 1.25rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
-  color: hsl(var(--foreground));
-  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-  transform: translateY(100px);
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: rgba(30, 30, 35, 0.95);
+  border: 1px solid var(--apple-border);
+  backdrop-filter: blur(25px);
+  padding: 0.75rem 1.35rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.6);
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.35s var(--apple-bounce), opacity 0.25s ease;
   z-index: 10000000;
   pointer-events: none;
+  white-space: nowrap;
 }
 .dm-toast.show {
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
   opacity: 1;
 }
 
- 
-@media (max-width: 768px) {
-  .dm-app { padding: 8rem 0.75rem 1.5rem 0.75rem; }
-   
-.dm-bg {
-  position: fixed;
-  inset: 0;
-  background-color: hsl(var(--background));
-  background-image: 
-    radial-gradient(circle at 50% 50%, rgba(217, 70, 239, 0.05) 0%, transparent 80%),
-    radial-gradient(circle at 100% 0%, rgba(6, 182, 212, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 0% 100%, rgba(217, 70, 239, 0.03) 0%, transparent 50%);
-  z-index: 0;
-}
-.dm-grid {
-  position: fixed;
-  inset: 0;
-  background-image: 
-    linear-gradient(to right, rgba(217, 70, 239, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(217, 70, 239, 0.04) 1px, transparent 1px);
-  background-size: 30px 30px;
-  background-position: center center;
-  z-index: 1;
-  pointer-events: none;
-}
-.dm-scanline {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0),
-    rgba(255,255,255,0) 50%,
-    rgba(217, 70, 239, 0.015) 50%,
-    rgba(217, 70, 239, 0.015)
-  );
-  background-size: 100% 4px;
-  z-index: 2;
-  pointer-events: none;
-}
-.dm-vignette {
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.7) 100%);
-  z-index: 3;
-  pointer-events: none;
-}
-
-.dm-container { gap: 1.25rem; }
-  .dm-stats-bar { grid-template-columns: repeat(2, 1fr); }
-  .dm-stat-tab { border-bottom: 1px solid hsl(var(--border)); }
-  .dm-stat-tab:nth-child(2n) { border-right: none; }
-  .dm-stat-tab:nth-child(3), .dm-stat-tab:nth-child(4) { border-bottom: none; }
-  
-  .dm-toolbar { flex-direction: column; align-items: stretch; gap: 0.75rem; }
-  .dm-search-wrap { width: 100%; min-width: unset; }
-  .dm-toolbar > div:last-child { width: 100%; justify-content: space-between; }
-
-  .dm-kanban-grid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-  .dm-kanban-col {
-    min-height: auto;
-  }
-  
-  .dm-list-item {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto;
-    gap: 0.5rem 1rem;
-    padding: 1.25rem 1rem;
-    align-items: center;
-  }
-  .dm-list-item > div:nth-child(1) {
-    grid-column: 1;
-    grid-row: 1;
-    min-width: 0;
-  }
-  .dm-list-item > div:nth-child(2) {
-    grid-column: 2;
-    grid-row: 1;
-    text-align: right;
-    align-self: flex-start;
-  }
-  .dm-list-item > div:nth-child(3) {
-    grid-column: 1;
-    grid-row: 2;
-    font-size: 0.65rem;
-    color: #64748b;
-  }
-  .dm-list-item > div:nth-child(4) {
-    grid-column: 2;
-    grid-row: 2;
-    justify-content: flex-end;
-  }
-  
-  .dm-overlay { align-items: flex-end; }
-  .dm-modal {
-    width: 100%;
-    border-radius: 12px 12px 0 0;
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  .dm-overlay.show .dm-modal {
-    transform: translateY(0);
-  }
+@media (min-width: 641px) {
+  .dm-sheet-overlay { align-items: center; }
+  .dm-sheet { border-radius: 22px; padding-bottom: 1.75rem; }
+  .dm-sheet-handle { display: none; }
 }
 </style>
 
-<div class="dm-app" id="dm-root"></div>
+<div class="dm-app">
+  <div class="dm-container" id="dm-main-content">
+    
+  </div>
+</div>
+
+<button class="dm-fab" onclick="dmOpenAddModal()" title="新規タスク追加">＋</button>
+
+
+<div id="dm-task-modal" class="dm-sheet-overlay" onclick="if(event.target===this)dmCloseTaskModal()">
+  <div class="dm-sheet">
+    <div class="dm-sheet-handle"></div>
+    <h3 id="dm-modal-title" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; text-align: center;">新規タスク</h3>
+    <form onsubmit="dmTaskSubmit(event)" style="display: flex; flex-direction: column; gap: 1rem;">
+      <input type="hidden" id="dm-edit-id" />
+      <div class="dm-form-group">
+        <label class="dm-form-label">タイトル</label>
+        <input type="text" id="dm-input-title" placeholder="例: レポート提出" class="dm-input-box" required />
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <div class="dm-form-group" style="flex:1;">
+          <label class="dm-form-label">科目・カテゴリ</label>
+          <input type="text" id="dm-input-course" placeholder="例: 物理学" class="dm-input-box" />
+        </div>
+        <div class="dm-form-group" style="flex:1;">
+          <label class="dm-form-label">優先度</label>
+          <select id="dm-input-priority" class="dm-input-box">
+            <option value="high">高 (緊急)</option>
+            <option value="mid" selected>普通</option>
+            <option value="low">低</option>
+          </select>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <div class="dm-form-group" style="flex:1.5;">
+          <label class="dm-form-label">締切日</label>
+          <input type="date" id="dm-input-date" class="dm-input-box" required />
+        </div>
+        <div class="dm-form-group" style="flex:1;">
+          <label class="dm-form-label">時刻 / 限目</label>
+          <select id="dm-input-period" class="dm-input-box">
+            <option value="end">23:59 (23:59)</option>
+            <option value="1">1限開始 (08:50)</option>
+            <option value="2">2限開始 (10:30)</option>
+            <option value="3">3限開始 (13:00)</option>
+            <option value="4">4限開始 (14:40)</option>
+            <option value="5">5限開始 (16:20)</option>
+          </select>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
+        <button type="button" id="dm-del-btn" class="dm-btn" style="color:var(--neon-pink);display:none;" onclick="dmDeleteCurrentTask()">削除</button>
+        <button type="button" class="dm-btn" style="flex:1;" onclick="dmCloseTaskModal()">キャンセル</button>
+        <button type="submit" class="dm-btn dm-btn-primary" style="flex:1.5;">保存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<div id="dm-config-modal" class="dm-sheet-overlay" onclick="if(event.target===this)dmCloseConfigModal()">
+  <div class="dm-sheet">
+    <div class="dm-sheet-handle"></div>
+    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; text-align: center;">システム設定</h3>
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <div>
+        <label style="font-size: 0.75rem; color: var(--apple-subtext); display: block; margin-bottom: 0.4rem; text-align: left;">接続 BIN ID</label>
+        <div id="dm-config-blob-id" style="padding: 0.85rem; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid var(--apple-border); font-family: monospace; font-size: 0.85rem;">未接続 (LOCAL)</div>
+      </div>
+      <button class="dm-btn" style="width: 100%;" onclick="dmCloseConfigModal()">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<div id="dm-toast" class="dm-toast"></div>
 
 <script>
 (function() {
-  const { useState, useEffect, useRef, useMemo } = React;
-  const h = htm.bind(React.createElement);
-
-   
   const STORAGE_KEY = 'dt_deadline_v5';
   const DONE_KEY = 'dt_deadline_done_v5';
   const BLOB_KEY = 'dt_deadline_blob_id';
-  const SHORTCODE_BLOB = '';
-  const APP_KEY = 'deadline';
 
   const PERIOD_TIMES = {
     1: "08:50",
@@ -1607,803 +1417,267 @@
     "end": "23:59"
   };
 
-  const PRIORITY_ORDER = { high: 0, mid: 1, low: 2 };
-  const PRIORITY_LABEL = { high: '▲ 高', mid: '⬡ 普通', low: '▽ 低' };
-
-  const DEFAULT_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
-  const getJbKey = () => {
-    if (window.PWAConfigSync) {
-      return window.PWAConfigSync.getApiKey();
-    }
-    return DEFAULT_KEY;
-  };
-
-  const binUrl = (id) => `https://api.jsonbin.io/v3/b/${id}/latest`;
-  const binPut = (id) => `https://api.jsonbin.io/v3/b/${id}`;
-
-  function App() {
-    
-    const [tasks, setTasks] = useState([]);
-    const [doneTasks, setDoneTasks] = useState([]);
-    const [blobId, setBlobId] = useState(() => SHORTCODE_BLOB || localStorage.getItem(BLOB_KEY) || null);
-    const [syncStatus, setSyncStatus] = useState(blobId ? 'ok' : 'local');
-    const [showConfig, setShowConfig] = useState(false);
-    const [showAddModal, setShowAddModal] = useState(false);
-    
-    
-    const [viewMode, setViewMode] = useState('kanban'); 
-    const [filterType, setFilterType] = useState('all'); 
-    const [searchQuery, setSearchQuery] = useState('');
-    const [sortBy, setSortBy] = useState('due'); 
-
-    
-    const [ticker, setTicker] = useState(0);
-
-    
-    const [newTitle, setNewTitle] = useState('');
-    const [newSubject, setNewSubject] = useState('');
-    const [newPriority, setNewPriority] = useState('mid');
-    const [newDate, setNewDate] = useState('');
-    const [newPeriod, setNewPeriod] = useState('end');
-    const [newMemo, setNewMemo] = useState('');
-
-    
-    const [toastMsg, setToastMsg] = useState('');
-    const [toastShow, setToastShow] = useState(false);
-    const toastTimerRef = useRef(null);
-
-    
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setTicker(t => t + 1);
-      }, 30000); 
-      return () => clearInterval(interval);
-    }, []);
-
-    
-    useEffect(() => {
-      let localTasks = [];
-      let localDone = [];
-      try {
-        localTasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      } catch (e) {}
-      try {
-        localDone = JSON.parse(localStorage.getItem(DONE_KEY)) || [];
-      } catch (e) {}
-
-      
-      const sanitizedTasks = localTasks.map(t => ({
-        ...t,
-        status: t.status || 'todo'
-      }));
-
-      setTasks(sanitizedTasks);
-      setDoneTasks(localDone);
-    }, []);
-
-    
-    useEffect(() => {
-      async function checkSync() {
-        let currentBlobId = blobId;
-        if (window.PWAConfigSync) {
-          currentBlobId = await window.PWAConfigSync.syncAppBinId('deadline', blobId);
-          if (currentBlobId !== blobId) {
-            setBlobId(currentBlobId);
-            if (currentBlobId) {
-              localStorage.setItem(BLOB_KEY, currentBlobId);
-            } else {
-              localStorage.removeItem(BLOB_KEY);
-            }
-          }
-        }
-        if (currentBlobId) {
-          syncCloud(true, currentBlobId);
-        }
-      }
-      checkSync();
-    }, []);
-
-    
-    const triggerToast = (msg) => {
-      setToastMsg(msg);
-      setToastShow(true);
-      clearTimeout(toastTimerRef.current);
-      toastTimerRef.current = setTimeout(() => {
-        setToastShow(false);
-      }, 2500);
-    };
-
-    
-    const saveLocal = (nextTasks, nextDone) => {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextTasks));
-        localStorage.setItem(DONE_KEY, JSON.stringify(nextDone));
-      } catch (e) {}
-    };
-
-    
-    const syncCloud = async (silent = false, customBlobId = null) => {
-      setSyncStatus('busy');
-      const targetBlobId = customBlobId !== null ? customBlobId : blobId;
-      const jbKey = getJbKey();
-
-      try {
-        if (!targetBlobId) {
-          
-          const res = await fetch('https://api.jsonbin.io/v3/b', {
-            method: 'POST',
-            headers: {
-              'X-Master-Key': jbKey,
-              'Content-Type': 'application/json',
-              'X-Bin-Name': 'deadline_survival'
-            },
-            body: JSON.stringify({ tasks, doneTasks })
-          });
-          if (!res.ok) throw new Error('create failed: ' + res.status);
-          const json = await res.json();
-          const nextId = json.metadata.id;
-          setBlobId(nextId);
-          localStorage.setItem(BLOB_KEY, nextId);
-          if (window.PWAConfigSync) {
-            await window.PWAConfigSync.syncAppBinId('deadline', nextId);
-          }
-          setSyncStatus('ok');
-          if (!silent) triggerToast('クラウド保管庫を構築・同期しました');
-        } else {
-          
-          const res = await fetch(binUrl(targetBlobId), {
-            headers: { 'X-Master-Key': jbKey },
-            cache: 'no-store'
-          });
-          if (!res.ok) throw new Error('fetch failed: ' + res.status);
-          const json = await res.json();
-          const record = json.record || json;
-          const rTasks = Array.isArray(record.tasks) ? record.tasks : [];
-          const rDone = Array.isArray(record.doneTasks) ? record.doneTasks : [];
-
-          
-          const mergedTasksMap = {};
-          [...rTasks, ...tasks].forEach(t => {
-            mergedTasksMap[t.id] = { ...t, status: t.status || 'todo' };
-          });
-          const mergedTasks = Object.values(mergedTasksMap);
-
-          const mergedDoneMap = {};
-          [...rDone, ...doneTasks].forEach(t => {
-            mergedDoneMap[t.id] = t;
-          });
-          const mergedDone = Object.values(mergedDoneMap);
-
-          
-          const doneIds = new Set(mergedDone.map(d => d.id));
-          const finalTasks = mergedTasks.filter(t => !doneIds.has(t.id));
-
-          setTasks(finalTasks);
-          setDoneTasks(mergedDone);
-          saveLocal(finalTasks, mergedDone);
-
-          
-          const p = await fetch(binPut(targetBlobId), {
-            method: 'PUT',
-            headers: {
-              'X-Master-Key': jbKey,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ tasks: finalTasks, doneTasks: mergedDone })
-          });
-          if (!p.ok) throw new Error('push failed: ' + p.status);
-          setSyncStatus('ok');
-          if (!silent) triggerToast('クラウド同期を完了しました');
-        }
-      } catch (err) {
-        setSyncStatus('error');
-        if (!silent) triggerToast('同期失敗: ' + err.message);
-      }
-    };
-
-    
-    const pushBlob = async (nextTasks, nextDone) => {
-      if (!blobId) return;
-      try {
-        const p = await fetch(binPut(blobId), {
-          method: 'PUT',
-          headers: {
-            'X-Master-Key': getJbKey(),
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ tasks: nextTasks, doneTasks: nextDone })
-        });
-        if (p.ok) setSyncStatus('ok');
-        else setSyncStatus('error');
-      } catch (e) {
-        setSyncStatus('error');
-      }
-    };
-
-    
-    const handleAdd = (e) => {
-      e.preventDefault();
-      if (!newTitle.trim()) return;
-
-      const newTask = {
-        id: Date.now(),
-        title: newTitle.trim(),
-        subject: newSubject.trim() || 'その他',
-        priority: newPriority,
-        date: newDate || new Date().toISOString().split('T')[0],
-        period: newPeriod,
-        memo: newMemo.trim(),
-        status: 'todo'
-      };
-
-      const nextTasks = [...tasks, newTask];
-      setTasks(nextTasks);
-      saveLocal(nextTasks, doneTasks);
-      pushBlob(nextTasks, doneTasks);
-
-      
-      setNewTitle('');
-      setNewSubject('');
-      setNewPriority('mid');
-      setNewDate('');
-      setNewPeriod('end');
-      setNewMemo('');
-      setShowAddModal(false);
-      triggerToast('課題を登録しました');
-    };
-
-    const handleUpdateStatus = (id, newStatus) => {
-      let nextTasks = [...tasks];
-      let nextDone = [...doneTasks];
-
-      if (newStatus === 'done') {
-        
-        const target = tasks.find(t => t.id === id);
-        if (target) {
-          nextTasks = tasks.filter(t => t.id !== id);
-          nextDone = [...doneTasks, { ...target, doneAt: Date.now() }];
-        }
-        triggerToast('課題を完了しました！🎉');
-      } else {
-        
-        const doneTarget = doneTasks.find(t => t.id === id);
-        if (doneTarget) {
-          nextDone = doneTasks.filter(t => t.id !== id);
-          nextTasks = [...tasks, { ...doneTarget, status: newStatus }];
-          triggerToast('課題を元に戻しました');
-        } else {
-          
-          nextTasks = tasks.map(t => t.id === id ? { ...t, status: newStatus } : t);
-        }
-      }
-
-      setTasks(nextTasks);
-      setDoneTasks(nextDone);
-      saveLocal(nextTasks, nextDone);
-      pushBlob(nextTasks, nextDone);
-    };
-
-    const handleDelete = (id, isDone) => {
-      if (!confirm('この課題データを削除しますか？')) return;
-      let nextTasks = tasks;
-      let nextDone = doneTasks;
-
-      if (isDone) {
-        nextDone = doneTasks.filter(t => t.id !== id);
-      } else {
-        nextTasks = tasks.filter(t => t.id !== id);
-      }
-
-      setTasks(nextTasks);
-      setDoneTasks(nextDone);
-      saveLocal(nextTasks, nextDone);
-      pushBlob(nextTasks, nextDone);
-      triggerToast('課題を削除しました');
-    };
-
-    const handleApplySettings = async (nextBlobId) => {
-      const cleaned = nextBlobId.trim();
-      if (cleaned !== (blobId || '')) {
-        const nextId = cleaned || null;
-        setBlobId(nextId);
-        if (nextId) {
-          localStorage.setItem(BLOB_KEY, nextId);
-        } else {
-          localStorage.removeItem(BLOB_KEY);
-        }
-        if (window.PWAConfigSync) {
-          await window.PWAConfigSync.syncAppBinId('deadline', nextId);
-        }
-        setShowConfig(false);
-        triggerToast('システム設定を適用しました');
-        if (nextId) {
-          setTimeout(() => syncCloud(false, nextId), 100);
-        }
-      } else {
-        setShowConfig(false);
-      }
-    };
-
-    const handleClearAll = () => {
-      if (!confirm('本当にすべての課題データを削除しますか？この操作は取り消せません。')) return;
-      setTasks([]);
-      setDoneTasks([]);
-      saveLocal([], []);
-      pushBlob([], []);
-      setShowConfig(false);
-      triggerToast('全データを削除しました');
-    };
-
-    const handleExport = () => {
-      const blob = new Blob([JSON.stringify({ tasks, doneTasks }, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `deadline_survival_${Date.now()}.json`;
-      a.click();
-      triggerToast('バックアップをエクスポートしました');
-    };
-
-    const handleImport = (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (evt) => {
-        try {
-          const parsed = JSON.parse(evt.target.result);
-          const rTasks = Array.isArray(parsed.tasks) ? parsed.tasks : [];
-          const rDone = Array.isArray(parsed.doneTasks) ? parsed.doneTasks : [];
-          
-          const mergedTasksMap = {};
-          [...rTasks, ...tasks].forEach(t => {
-            mergedTasksMap[t.id] = { ...t, status: t.status || 'todo' };
-          });
-          const finalTasks = Object.values(mergedTasksMap);
-
-          const mergedDoneMap = {};
-          [...rDone, ...doneTasks].forEach(t => {
-            mergedDoneMap[t.id] = t;
-          });
-          const finalDone = Object.values(mergedDoneMap);
-
-          setTasks(finalTasks);
-          setDoneTasks(finalDone);
-          saveLocal(finalTasks, finalDone);
-          pushBlob(finalTasks, finalDone);
-          triggerToast('バックアップをインポートしました');
-        } catch(err) {
-          triggerToast('データのインポートに失敗しました');
-        }
-      };
-      reader.readAsText(file);
-      e.target.value = '';
-    };
-
-    
-    const getCountdown = (dateStr, periodStr) => {
-      const timeStr = PERIOD_TIMES[periodStr] || "23:59";
-      const targetTime = new Date(`${dateStr}T${timeStr}:00`).getTime();
-      const nowTime = Date.now();
-      const diff = targetTime - nowTime;
-
-      if (diff <= 0) return { label: '期限切', status: 'status-over', critical: false };
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-      if (days > 3) {
-        return { label: `残り ${days}日`, status: 'status-safe', critical: false };
-      } else if (days > 1) {
-        return { label: `残り ${days}日`, status: 'status-warn', critical: false };
-      } else if (days === 1) {
-        return { label: `残り 1日 ${hours}h`, status: 'status-danger', critical: false };
-      } else {
-        return { label: `残り ${hours}h ${minutes}m`, status: 'status-critical', critical: true };
-      }
-    };
-
-    
-    const filteredTasks = useMemo(() => {
-      
-      let result = [...tasks];
-      if (searchQuery.trim()) {
-        const query = searchQuery.toLowerCase();
-        result = result.filter(t => 
-          t.title.toLowerCase().includes(query) || 
-          t.subject.toLowerCase().includes(query) || 
-          (t.memo && t.memo.toLowerCase().includes(query))
-        );
-      }
-
-      
-      if (filterType === 'danger') {
-        result = result.filter(t => {
-          const cd = getCountdown(t.date, t.period);
-          return cd.status === 'status-critical' || cd.status === 'status-danger';
-        });
-      }
-
-      
-      result.sort((a, b) => {
-        if (sortBy === 'due') {
-          const tA = new Date(`${a.date}T${PERIOD_TIMES[a.period] || "23:59"}:00`).getTime();
-          const tB = new Date(`${b.date}T${PERIOD_TIMES[b.period] || "23:59"}:00`).getTime();
-          return tA - tB;
-        } else {
-          return PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
-        }
-      });
-
-      return result;
-    }, [tasks, searchQuery, filterType, sortBy, ticker]);
-
-    const activeDoneTasks = useMemo(() => {
-      let result = [...doneTasks];
-      if (searchQuery.trim()) {
-        const query = searchQuery.toLowerCase();
-        result = result.filter(t => 
-          t.title.toLowerCase().includes(query) || 
-          t.subject.toLowerCase().includes(query)
-        );
-      }
-      
-      result.sort((a, b) => b.doneAt - a.doneAt);
-      return result;
-    }, [doneTasks, searchQuery]);
-
-    
-    const stats = useMemo(() => {
-      const activeCount = tasks.length;
-      const doneCount = doneTasks.length;
-      const dangerCount = tasks.filter(t => {
-        const cd = getCountdown(t.date, t.period);
-        return cd.status === 'status-critical' || cd.status === 'status-danger';
-      }).length;
-      return { activeCount, doneCount, dangerCount };
-    }, [tasks, doneTasks, ticker]);
-
-    return h`
-      <${React.Fragment}>
-        <div class="dm-bg"></div>
-        <div class="dm-grid"></div>
-        <div class="dm-scanline"></div>
-        <div class="dm-vignette"></div>
-        <div class="dm-container">
-        \x3C!-- Header -->
-        <div class="dm-title-bar">
-          <div>
-            <h1 class="dm-hud-title">_DEADLINE_MANAGER</h1>
-            <div class="dm-hud-desc">> HUD: ACTIVE // 課題管理</div>
-          </div>
-          <div class="dm-title-actions">
-            <button class="dm-btn" onClick=${() => window.history.back()}>◀ EXIT</button>
-            <span class=${`dm-sync-status ${syncStatus === 'ok' ? 'ok' : syncStatus === 'busy' ? 'busy' : syncStatus === 'error' ? 'error' : 'local'}`} onClick=${() => syncCloud()}>
-              ${syncStatus === 'ok' ? '● SYNCED' : syncStatus === 'busy' ? '◌ SYNCING...' : syncStatus === 'error' ? '✕ ERROR' : '◌ LOCAL'}
-            </span>
-            <button class="dm-btn dm-btn-icon" onClick=${() => syncCloud()} title="今すぐ同期">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-            </button>
-            <button class="dm-btn dm-btn-icon" onClick=${() => setShowConfig(true)} title="設定">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </button>
-          </div>
-        </div>
-
-        \x3C!-- Stats Bar (Tabs Filter) -->
-        <section class="dm-stats-bar">
-          <div class=${`dm-stat-tab ${filterType === 'all' ? 'active' : ''}`} onClick=${() => setFilterType('all')}>
-            <div class="dm-stat-num">${stats.activeCount + stats.doneCount}</div>
-            <div class="dm-stat-label">総課題数</div>
-          </div>
-          <div class=${`dm-stat-tab ${filterType === 'active' ? 'active' : ''}`} onClick=${() => setFilterType('active')}>
-            <div class="dm-stat-num c-active">${stats.activeCount}</div>
-            <div class="dm-stat-label">未完了</div>
-          </div>
-          <div class=${`dm-stat-tab ${filterType === 'danger' ? 'active' : ''}`} onClick=${() => setFilterType('danger')}>
-            <div class="dm-stat-num c-danger">${stats.dangerCount}</div>
-            <div class="dm-stat-label">期限間近</div>
-          </div>
-          <div class=${`dm-stat-tab ${filterType === 'done' ? 'active' : ''}`} onClick=${() => setFilterType('done')}>
-            <div class="dm-stat-num c-done">${stats.doneCount}</div>
-            <div class="dm-stat-label">完了済</div>
-          </div>
-        </section>
-
-        \x3C!-- Toolbar -->
-        <section class="dm-toolbar">
-          <div class="dm-search-wrap">
-            <span class="dm-search-icon">🔍</span>
-            <input type="text" placeholder="科目・課題を検索..." class="dm-search" value=${searchQuery} onChange=${e => setSearchQuery(e.target.value)} />
-          </div>
-
-          <div style=${ { display: 'flex', gap: '0.5rem', alignItems: 'center' } }>
-            <select class="dm-sort-sel" value=${sortBy} onChange=${e => setSortBy(e.target.value)}>
-              <option value="due">⏰ 締切が近い順</option>
-              <option value="priority">⚠️ 優先度が高い順</option>
-            </select>
-
-            <div class="dm-view-toggle">
-              <div class=${`dm-view-btn ${viewMode === 'kanban' ? 'active' : ''}`} onClick=${() => setViewMode('kanban')}>
-                <span>🗂️ カンバン</span>
-              </div>
-              <div class=${`dm-view-btn ${viewMode === 'list' ? 'active' : ''}`} onClick=${() => setViewMode('list')}>
-                <span>📋 リスト</span>
-              </div>
-            </div>
-
-            <button class="dm-btn dm-btn-primary" onClick=${() => setShowAddModal(true)} style=${ { height: '2.15rem' } }>+ ADD</button>
-          </div>
-        </section>
-
-        \x3C!-- Main Workspace -->
-        ${filterType === 'done' ? (
-          
-          h`
-            <div class="dm-list-wrap">
-              ${activeDoneTasks.length === 0 ? (
-                h`<div class="dm-empty">完了した課題はありません</div>`
-              ) : activeDoneTasks.map(task => h`
-                <div key=${task.id} class="dm-card dm-list-item status-over">
-                  <div>
-                    <div class="dm-task-title" style=${ { textDecoration: 'line-through' } }>${task.title}</div>
-                    <div class="dm-task-meta" style=${ { marginTop: '0.2rem' } }>
-                      <span class="dm-badge">${task.subject}</span>
-                      <span class="dm-badge">${PRIORITY_LABEL[task.priority]}</span>
-                    </div>
-                  </div>
-                  <div>-</div>
-                  <div style=${ { fontSize: '0.7rem', color: '#4b5563' } }>
-                    完了日: ${new Date(task.doneAt).toLocaleDateString()}
-                  </div>
-                  <div class="dm-actions-group">
-                    <button class="dm-action-icon-btn check" onClick=${() => handleUpdateStatus(task.id, 'todo')} title="未完了に戻す">↺</button>
-                    <button class="dm-action-icon-btn del" onClick=${() => handleDelete(task.id, true)} title="消去">×</button>
-                  </div>
-                </div>
-              `)}
-            </div>
-          `
-        ) : viewMode === 'kanban' ? (
-          
-          h`
-            <div class="dm-kanban-grid">
-              \x3C!-- Column Todo -->
-              <div class="dm-kanban-col">
-                <div class="dm-kanban-header">
-                  <span>To Do</span>
-                  <span>${filteredTasks.filter(t => t.status === 'todo').length}</span>
-                </div>
-                ${filteredTasks.filter(t => t.status === 'todo').map(task => renderTaskCard(task))}
-              </div>
-
-              \x3C!-- Column In Progress -->
-              <div class="dm-kanban-col">
-                <div class="dm-kanban-header">
-                  <span>In Progress</span>
-                  <span>${filteredTasks.filter(t => t.status === 'inprogress').length}</span>
-                </div>
-                ${filteredTasks.filter(t => t.status === 'inprogress').map(task => renderTaskCard(task))}
-              </div>
-
-              \x3C!-- Column Completed (Compact logs) -->
-              <div class="dm-kanban-col">
-                <div class="dm-kanban-header">
-                  <span>Completed</span>
-                  <span>${activeDoneTasks.length}</span>
-                </div>
-                ${activeDoneTasks.slice(0, 10).map(task => h`
-                  <div key=${task.id} class="dm-card" style=${ { padding: '0.75rem', opacity: 0.6 } }>
-                    <div style=${ { fontSize: '0.8rem', fontWeight: 'bold', textDecoration: 'line-through' } }>${task.title}</div>
-                    <div style=${ { display: 'flex', justifyContent: 'space-between', marginTop: '0.4rem', fontSize: '0.6rem', color: '#64748b' } }>
-                      <span>${task.subject}</span>
-                      <button style=${ { background: 'none', border: 'none', color: '#10b981', cursor: 'pointer' } } onClick=${() => handleUpdateStatus(task.id, 'todo')}>↺</button>
-                    </div>
-                  </div>
-                `)}
-                ${activeDoneTasks.length > 10 && h`<div style=${ { textAlign: 'center', fontSize: '0.65rem', color: '#4b5563' } }>+ 他 ${activeDoneTasks.length - 10}件の完了課題</div>`}
-              </div>
-            </div>
-          `
-        ) : (
-          
-          h`
-            <div class="dm-list-wrap">
-              ${filteredTasks.length === 0 ? (
-                h`<div class="dm-empty">該当する課題はありません</div>`
-              ) : filteredTasks.map(task => {
-                const countdown = getCountdown(task.date, task.period);
-                return h`
-                  <div key=${task.id} class=${`dm-card dm-list-item ${countdown.status}`}>
-                    <div>
-                      <div class="dm-task-title">${task.title}</div>
-                      <div class="dm-task-meta" style=${ { marginTop: '0.2rem' } }>
-                        <span class="dm-badge">${task.subject}</span>
-                        <span class=${`dm-badge p-${task.priority}`}>${PRIORITY_LABEL[task.priority]}</span>
-                        ${task.memo && h`<span style=${ { fontSize: '0.65rem', color: '#4b5563' } }>${task.memo}</span>`}
-                      </div>
-                    </div>
-                    <div>
-                      <span class="dm-countdown-text">${countdown.label}</span>
-                    </div>
-                    <div style=${ { fontSize: '0.7rem', color: '#64748b' } }>
-                      ${task.date} (${task.period}限)
-                    </div>
-                    <div class="dm-actions-group">
-                      ${task.status === 'todo' ? (
-                        h`<button class="dm-action-icon-btn" onClick=${() => handleUpdateStatus(task.id, 'inprogress')} title="進行中に移動">▶</button>`
-                      ) : (
-                        h`<button class="dm-action-icon-btn" onClick=${() => handleUpdateStatus(task.id, 'todo')} title="ToDoに移動">◀</button>`
-                      )}
-                      <button class="dm-action-icon-btn check" onClick=${() => handleUpdateStatus(task.id, 'done')} title="完了">✓</button>
-                      <button class="dm-action-icon-btn del" onClick=${() => handleDelete(task.id, false)} title="消去">×</button>
-                    </div>
-                  </div>
-                `;
-              })}
-            </div>
-          `
-        )}
-
-        \x3C!-- System usage guide -->
-        <section class="dm-card" style=${ { fontSize: '0.8rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', flexWrap: 'wrap' } }>
-          <div>
-            <h4 style=${ { fontFamily: 'Orbitron', color: '#d946ef', marginBottom: '0.5rem' } }>[SURVIVAL_MANUAL]</h4>
-            <div style=${ { color: '#a1a1aa', lineHeight: '1.6' } }>
-              課題の締切は時限ごとの終了時刻に基づいて判定され、リアルタイムにカウントダウンされます。
-              カンバンのドラッグや矢印操作で、ToDoから進行中、完了へと直感的に移行できます。
-            </div>
-          </div>
-          <div>
-            <h4 style=${ { fontFamily: 'Orbitron', color: '#06b6d4', marginBottom: '0.5rem' } }>[SECURE_SYNC]</h4>
-            <div style=${ { color: '#a1a1aa', lineHeight: '1.6', fontSize: '0.75rem' } }>
-              PWA一括同期に対応しています。設定で割り振られた一意の同期IDを用いることで、複数デバイス間で課題の締切リストを即時同期・バックアップ可能です。
-            </div>
-          </div>
-        </section>
-
-        \x3C!-- Add Task Modal -->
-        <div class=${`dm-overlay ${showAddModal ? 'show' : ''}`} onClick=${(e) => e.target.classList.contains('dm-overlay') && setShowAddModal(false)}>
-          <div class="dm-modal">
-            <div class="dm-modal-header">
-              <span style=${ { fontFamily: 'Orbitron', fontWeight: 'bold', color: '#d946ef' } }>📝 REGISTER_NEW_TASK</span>
-              <button style=${ { background: 'none', border: 'none', color: '#71717a', cursor: 'pointer', fontSize: '1.2rem' } } onClick=${() => setShowAddModal(false)}>×</button>
-            </div>
-            
-            <form onSubmit=${handleAdd} class="ag-form-layout">
-              <div class="dm-form-field">
-                <label>課題タイトル</label>
-                <input type="text" placeholder="例: レポート第1回" class="dm-input" value=${newTitle} onChange=${e => setNewTitle(e.target.value)} required />
-              </div>
-              <div class="dm-form-field">
-                <label>科目名</label>
-                <input type="text" placeholder="例: 電磁気学 (デフォルト: その他)" class="dm-input" value=${newSubject} onChange=${e => setNewSubject(e.target.value)} />
-              </div>
-              <div class="dm-form-field">
-                <label>優先度</label>
-                <select class="dm-select" value=${newPriority} onChange=${e => setNewPriority(e.target.value)}>
-                  <option value="high">▲ 高 (至急)</option>
-                  <option value="mid">⬡ 普通</option>
-                  <option value="low">▽ 低 (いつでも)</option>
-                </select>
-              </div>
-              <div class="dm-form-field">
-                <label>締切日</label>
-                <input type="date" class="dm-input" value=${newDate} onChange=${e => setNewDate(e.target.value)} required />
-              </div>
-              <div class="dm-form-field">
-                <label>締切時限</label>
-                <select class="dm-select" value=${newPeriod} onChange=${e => setNewPeriod(e.target.value)}>
-                  <option value="1">1限終 (10:20)</option>
-                  <option value="2">2限終 (12:00)</option>
-                  <option value="3">3限終 (14:30)</option>
-                  <option value="4">4限終 (16:10)</option>
-                  <option value="5">5限終 (17:50)</option>
-                  <option value="end">終日 (23:59)</option>
-                </select>
-              </div>
-              <div class="dm-form-field">
-                <label>メモ</label>
-                <input type="text" placeholder="提出方法や範囲など" class="dm-input" value=${newMemo} onChange=${e => setNewMemo(e.target.value)} />
-              </div>
-
-              <div class="dm-modal-footer">
-                <button type="button" class="dm-btn" onClick=${() => setShowAddModal(false)}>キャンセル</button>
-                <button type="submit" class="dm-btn dm-btn-primary">追加</button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        \x3C!-- Settings Modal Overlay -->
-        <div class=${`dm-overlay ${showConfig ? 'show' : ''}`} onClick=${(e) => e.target.classList.contains('dm-overlay') && setShowConfig(false)}>
-          <div class="dm-modal">
-            <div class="dm-modal-header">
-              <span style=${ { fontFamily: 'Orbitron', fontWeight: 'bold' } }>⚙️ SYSTEM CONFIGURATION</span>
-              <button style=${ { background: 'none', border: 'none', color: '#71717a', cursor: 'pointer', fontSize: '1.2rem' } } onClick=${() => setShowConfig(false)}>×</button>
-            </div>
-            
-            <div style=${ { display: 'flex', flexDirection: 'column', gap: '1.25rem' } }>
-              <div>
-                <label style=${ { fontSize: '0.7rem', color: '#71717a', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' } }>Current Connection Sync ID</label>
-                <div class="ag-blob-display">${blobId || '（未同期／ローカル保存のみ）'}</div>
-              </div>
-              
-              <div>
-                <label style=${ { fontSize: '0.7rem', color: '#71717a', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' } }>Apply Existing Sync ID</label>
-                <input type="text" id="dm-blob-input" class="dm-input" placeholder="接続IDを入力してロード" defaultValue=${blobId || ''} />
-              </div>
-
-              <div style=${ { borderTop: '1px solid hsl(var(--border))', paddingTop: '1rem' } }>
-                <span style=${ { fontSize: '0.7rem', color: '#71717a', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' } }>Data Backup & Purge</span>
-                <div style=${ { display: 'flex', gap: '0.5rem', flexWrap: 'wrap' } }>
-                  <button class="dm-btn" onClick=${handleExport}>📤 エクスポート</button>
-                  <label class="dm-btn" style=${ { cursor: 'pointer' } }>
-                    📥 インポート
-                    <input type="file" accept=".json" style=${ { display: 'none' } } onChange=${handleImport} />
-                  </label>
-                  <button class="dm-btn dm-btn-primary" style=${ { background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' } } onClick=${handleClearAll}>🗑️ 全データ削除</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="dm-modal-footer">
-              <button class="dm-btn" onClick=${() => setShowConfig(false)}>キャンセル</button>
-              <button class="dm-btn dm-btn-primary" onClick=${() => {
-                const val = document.getElementById('dm-blob-input').value;
-                handleApplySettings(val);
-              }}>適用</button>
-            </div>
-          </div>
-        </div>
-
-        \x3C!-- Toast Notification -->
-        <div class=${`dm-toast ${toastShow ? 'show' : ''}`}>
-          ${toastMsg}
-        </div>
-      </div>
-      </${React.Fragment}>
-    `;
-
-    
-    function renderTaskCard(task) {
-      const countdown = getCountdown(task.date, task.period);
-      
-      return h`
-        <div key=${task.id} class=${`dm-card dm-task-card ${countdown.status}`}>
-          <div class="dm-info">
-            <div class="dm-task-header">
-              <span class="dm-task-title" title=${task.title}>${task.title}</span>
-            </div>
-            <div class="dm-task-meta">
-              <span class="dm-badge">${task.subject}</span>
-              <span class=${`dm-badge p-${task.priority}`}>${PRIORITY_LABEL[task.priority]}</span>
-            </div>
-            ${task.memo && h`<div class="dm-task-note">${task.memo}</div>`}
-          </div>
-
-          <div class="dm-task-actions">
-            <div>
-              <span class="dm-time-label">Deadline</span>
-              <span class="dm-countdown-text">${countdown.label}</span>
-            </div>
-
-            <div class="dm-actions-group">
-              ${task.status === 'todo' && h`
-                <button class="dm-action-icon-btn" onClick=${() => handleUpdateStatus(task.id, 'inprogress')} title="進行中へ">➔</button>
-              `}
-              ${task.status === 'inprogress' && h`
-                <button class="dm-action-icon-btn" onClick=${() => handleUpdateStatus(task.id, 'todo')} title="ToDoへ">左</button>
-              `}
-              <button class="dm-action-icon-btn check" onClick=${() => handleUpdateStatus(task.id, 'done')} title="完了">✓</button>
-              <button class="dm-action-icon-btn del" onClick=${() => handleDelete(task.id, false)} title="消去">×</button>
-            </div>
-          </div>
-        </div>
-      `;
+  let tasks = [];
+  let doneTasks = [];
+  let blobId = localStorage.getItem(BLOB_KEY) || null;
+  let syncStatus = blobId ? 'ok' : 'local';
+  let activeTab = 'all'; 
+  let toastTimer = null;
+
+  function showToast(msg) {
+    const el = document.getElementById('dm-toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+  }
+
+  function getJbKey() {
+    return (window.PWAConfigSync ? window.PWAConfigSync.getApiKey() : '$2a$10$C0Z.Fl3F.BCvUaC5rHVt3OD6aYt8SXRkmXExr3mfmtCrGdDzG8Aae');
+  }
+
+  function loadLocalData() {
+    try { tasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { tasks = []; }
+    try { doneTasks = JSON.parse(localStorage.getItem(DONE_KEY)) || []; } catch(e) { doneTasks = []; }
+
+    if (tasks.length === 0 && doneTasks.length === 0 && !localStorage.getItem(STORAGE_KEY)) {
+      const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+      tasks = [
+        { id: 1, title: 'サンプル: 物理学レポート', course: '物理学', priority: 'high', date: tomorrow, period: 'end' }
+      ];
     }
   }
 
-  ReactDOM.createRoot(document.getElementById('dm-root')).render(h`<${App} />`);
+  function saveAndSync() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+      localStorage.setItem(DONE_KEY, JSON.stringify(doneTasks));
+    } catch(e) {}
+    renderApp();
+
+    if (!blobId) return;
+    fetch('https://api.jsonbin.io/v3/b/' + blobId, {
+      method: 'PUT',
+      headers: { 'X-Master-Key': getJbKey(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tasks, doneTasks })
+    }).then(res => {
+      syncStatus = res.ok ? 'ok' : 'error';
+      renderApp();
+    }).catch(() => {
+      syncStatus = 'error';
+      renderApp();
+    });
+  }
+
+  function calculateCountdown(dateStr, periodStr) {
+    if (!dateStr) return { text: '期限未設定', diffMs: 999999999, state: 'safe' };
+    const timeStr = PERIOD_TIMES[periodStr] || "23:59";
+    const target = new Date(`${dateStr}T${timeStr}:00`).getTime();
+    const now = Date.now();
+    const diff = target - now;
+
+    if (diff <= 0) return { text: '期限切れ', diffMs: diff, state: 'danger' };
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(hours / 24);
+
+    let state = 'safe';
+    if (hours <= 24) state = 'danger';
+    else if (hours <= 72) state = 'warn';
+
+    if (days >= 1) return { text: `残り ${days}日`, diffMs: diff, state };
+    return { text: `残り ${hours}時間`, diffMs: diff, state };
+  }
+
+  function renderApp() {
+    const container = document.getElementById('dm-main-content');
+    if (!container) return;
+
+    let displayTasks = [];
+    if (activeTab === 'all') displayTasks = tasks;
+    else if (activeTab === 'urgent') displayTasks = tasks.filter(t => calculateCountdown(t.date, t.period).state === 'danger');
+    else if (activeTab === 'done') displayTasks = doneTasks;
+
+    if (activeTab !== 'done') {
+      displayTasks.sort((a, b) => calculateCountdown(a.date, a.period).diffMs - calculateCountdown(b.date, b.period).diffMs);
+    }
+
+    const urgentCount = tasks.filter(t => calculateCountdown(t.date, t.period).state === 'danger').length;
+
+    let listHtml = '';
+    if (displayTasks.length === 0) {
+      listHtml = `<div style="text-align:center;padding:3.5rem 1rem;color:var(--apple-subtext);font-size:0.9rem;">タスクはありません</div>`;
+    } else {
+      listHtml = displayTasks.map(task => {
+        const isDone = activeTab === 'done';
+        const cd = isDone ? { text: '完了', state: 'safe' } : calculateCountdown(task.date, task.period);
+
+        return `
+          <div class="dm-task-card ${cd.state}" onclick="dmOpenEditModal('${task.id}', ${isDone})">
+            <div class="dm-check-circle ${isDone ? 'checked' : ''}" onclick="event.stopPropagation(); dmToggleTask('${task.id}', ${isDone})">
+              ${isDone ? '✓' : ''}
+            </div>
+            <div class="dm-task-title-text ${isDone ? 'done' : ''}">${task.title}</div>
+            <div class="dm-task-submeta">
+              ${task.course ? `<span>${task.course}</span>` : ''}
+              <span>${task.date || ''} (${PERIOD_TIMES[task.period] || '23:59'})</span>
+            </div>
+            ${!isDone ? `<div class="dm-badge-tag ${cd.state}">${cd.text}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    container.innerHTML = `
+      <div class="dm-header">
+        <h1 class="dm-title">Deadline Manager</h1>
+        <div class="dm-subtitle">Task & Schedule Tracker</div>
+        <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.4rem;">
+          <span class="dm-pill ${syncStatus}" onclick="showToast('同期状態: ' + syncStatus)">
+            ${syncStatus === 'ok' ? '● SYNCED' : syncStatus === 'busy' ? '◌ SYNCING' : '◌ LOCAL'}
+          </span>
+          <button class="dm-btn dm-btn-circle" onclick="dmOpenConfigModal()" title="設定">⚙</button>
+        </div>
+      </div>
+
+      \x3C!-- Chic Center Metric Cards with Neon Accent -->
+      <div class="dm-widget-grid">
+        <div class="dm-widget-card urgent" onclick="dmSwitchTab('urgent')">
+          <div class="dm-widget-val" style="color:var(--neon-pink); text-shadow:0 0 15px var(--neon-pink-glow);">${urgentCount}</div>
+          <div class="dm-widget-label">緊急 (24h以内)</div>
+        </div>
+        <div class="dm-widget-card all" onclick="dmSwitchTab('all')">
+          <div class="dm-widget-val" style="color:var(--neon-cyan); text-shadow:0 0 15px var(--neon-cyan-glow);">${tasks.length}</div>
+          <div class="dm-widget-label">未完了タスク</div>
+        </div>
+        <div class="dm-widget-card done" onclick="dmSwitchTab('done')">
+          <div class="dm-widget-val" style="color:var(--neon-green); text-shadow:0 0 15px var(--neon-green-glow);">${doneTasks.length}</div>
+          <div class="dm-widget-label">完了済み</div>
+        </div>
+      </div>
+
+      \x3C!-- Chic Segment Control -->
+      <div class="dm-segmented-control">
+        <div class="dm-segment-btn ${activeTab === 'all' ? 'active' : ''}" onclick="dmSwitchTab('all')">全件</div>
+        <div class="dm-segment-btn ${activeTab === 'urgent' ? 'active' : ''}" onclick="dmSwitchTab('urgent')">緊急 (${urgentCount})</div>
+        <div class="dm-segment-btn ${activeTab === 'done' ? 'active' : ''}" onclick="dmSwitchTab('done')">完了 (${doneTasks.length})</div>
+      </div>
+
+      \x3C!-- Task Cards List -->
+      <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+        ${listHtml}
+      </div>
+    `;
+  }
+
+  
+  window.dmSwitchTab = function(tab) {
+    activeTab = tab;
+    renderApp();
+  };
+
+  window.dmToggleTask = function(id, isDone) {
+    if (isDone) {
+      const idx = doneTasks.findIndex(t => String(t.id) === String(id));
+      if (idx !== -1) {
+        const item = doneTasks.splice(idx, 1)[0];
+        tasks.push(item);
+        showToast('タスクを未完了に戻しました');
+      }
+    } else {
+      const idx = tasks.findIndex(t => String(t.id) === String(id));
+      if (idx !== -1) {
+        const item = tasks.splice(idx, 1)[0];
+        doneTasks.push(item);
+        showToast('タスクを完了しました');
+      }
+    }
+    saveAndSync();
+  };
+
+  window.dmOpenAddModal = function() {
+    document.getElementById('dm-modal-title').textContent = '新規タスク';
+    document.getElementById('dm-edit-id').value = '';
+    document.getElementById('dm-input-title').value = '';
+    document.getElementById('dm-input-course').value = '';
+    document.getElementById('dm-input-priority').value = 'mid';
+    document.getElementById('dm-input-date').value = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+    document.getElementById('dm-input-period').value = 'end';
+    document.getElementById('dm-del-btn').style.display = 'none';
+
+    document.getElementById('dm-task-modal').classList.add('show');
+  };
+
+  window.dmOpenEditModal = function(id, isDone) {
+    if (isDone) return;
+    const target = tasks.find(t => String(t.id) === String(id));
+    if (!target) return;
+
+    document.getElementById('dm-modal-title').textContent = 'タスクの編集';
+    document.getElementById('dm-edit-id').value = target.id;
+    document.getElementById('dm-input-title').value = target.title;
+    document.getElementById('dm-input-course').value = target.course || '';
+    document.getElementById('dm-input-priority').value = target.priority || 'mid';
+    document.getElementById('dm-input-date').value = target.date || '';
+    document.getElementById('dm-input-period').value = target.period || 'end';
+    document.getElementById('dm-del-btn').style.display = 'inline-flex';
+
+    document.getElementById('dm-task-modal').classList.add('show');
+  };
+
+  window.dmCloseTaskModal = function() {
+    document.getElementById('dm-task-modal').classList.remove('show');
+  };
+
+  window.dmTaskSubmit = function(e) {
+    e.preventDefault();
+    const editId = document.getElementById('dm-edit-id').value;
+    const title = document.getElementById('dm-input-title').value.trim();
+    const course = document.getElementById('dm-input-course').value.trim();
+    const priority = document.getElementById('dm-input-priority').value;
+    const date = document.getElementById('dm-input-date').value;
+    const period = document.getElementById('dm-input-period').value;
+
+    if (!title) return;
+
+    if (editId) {
+      tasks = tasks.map(t => String(t.id) === String(editId) ? { ...t, title, course, priority, date, period } : t);
+      showToast('タスクを更新しました');
+    } else {
+      tasks.push({ id: Date.now(), title, course, priority, date, period });
+      showToast('新規タスクを追加しました');
+    }
+
+    saveAndSync();
+    dmCloseTaskModal();
+  };
+
+  window.dmDeleteCurrentTask = function() {
+    const editId = document.getElementById('dm-edit-id').value;
+    if (!editId) return;
+    if (!confirm('このタスクを削除しますか？')) return;
+    tasks = tasks.filter(t => String(t.id) !== String(editId));
+    saveAndSync();
+    dmCloseTaskModal();
+    showToast('タスクを削除しました');
+  };
+
+  window.dmOpenConfigModal = function() {
+    document.getElementById('dm-config-blob-id').textContent = blobId || '未接続 (LOCAL)';
+    document.getElementById('dm-config-modal').classList.add('show');
+  };
+  window.dmCloseConfigModal = function() {
+    document.getElementById('dm-config-modal').classList.remove('show');
+  };
+
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    loadLocalData();
+    renderApp();
+  });
+  loadLocalData();
+  renderApp();
 })();
 </script>
 

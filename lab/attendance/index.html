@@ -114,7 +114,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "4"
+    "wordCount": "44"
   }]
   </script>
 
@@ -820,16 +820,12 @@
 
     <main id="main-content" class="w-full min-h-screen">
       
-<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/htm@3/dist/htm.umd.js"></script>
 <script src="/js/pwa-config-sync.js"></script>
 
 <script>
-
 (function(){
   var el = document.currentScript;
-  var section = el.closest('section');
+  var section = el ? el.closest('section') : null;
   if (section && section.previousElementSibling && section.previousElementSibling.tagName === 'HEADER') {
     section.previousElementSibling.style.display = 'none';
   }
@@ -837,153 +833,108 @@
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+
  
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+.portal-body footer,
+.portal-body .breadcrumbs,
+.portal-body nav[aria-label="breadcrumb"],
+.portal-body article > div > a.hover\:underline,
+.portal-body .article-header,
+.portal-body .prose > div:first-child > nav,
+.portal-body h1.mt-0.text-4xl.font-extrabold {
+  display: none !important;
+}
 
-   
-   
-  .portal-body footer,
-  .portal-body .breadcrumbs,
-  .portal-body nav[aria-label="breadcrumb"],
-  .portal-body article > div > a.hover\:underline,
-  .portal-body .article-header,
-  .portal-body .prose > div:first-child > nav,
-  .portal-body h1.mt-0.text-4xl.font-extrabold {
-    display: none !important;
-  }
+.portal-body article.prose,
+.portal-body .prose {
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
 
-   
-  
-
-   
-  .portal-body article.prose,
-  .portal-body .prose {
-    max-width: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  .portal-body .min-h-\[calc\(100vh-10rem\)\],
-  .portal-body main#main-content > article {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-    padding-bottom: 0 !important;
-    margin-bottom: 0 !important;
-  }
-   
-  html,
-  body.portal-body,
-  .portal-body main,
-  .portal-body main#main-content,
-  .portal-body article,
-  .portal-body .prose {
-    background-color: #050508 !important;
-    background: #050508 !important;
-  }
-
-   
-  .portal-body main#main-content {
-    background-color: hsl(240 10% 3.9%) !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
+html,
+body.portal-body,
+.portal-body main,
+.portal-body main#main-content,
+.portal-body article,
+.portal-body .prose {
+  background-color: #000000 !important;
+  background: #000000 !important;
+}
 
 :root {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 240 10% 4.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 240 10% 4.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 142.1 76.2% 36.3%;  
-  --primary-foreground: 355.7 100% 97.3%;
-  --secondary: 240 3.7% 15.9%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 240 3.7% 15.9%;
-  --muted-foreground: 240 5% 64.9%;
-  --accent: 240 3.7% 15.9%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 240 3.7% 17%;
-  --input: 240 3.7% 15.9%;
-  --ring: 142.1 76.2% 36.3%;
+  --apple-bg: #000000;
+  --apple-card: rgba(28, 28, 30, 0.75);
+  --apple-border: rgba(255, 255, 255, 0.1);
+  --apple-text: #f5f5f7;
+  --apple-subtext: #8e8e93;
+  --apple-accent: #0a84ff;
+  --apple-green: #30d158;
+  --apple-yellow: #ffd60a;
+  --apple-red: #ff453a;
+  --apple-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Zen Kaku Gothic New', sans-serif;
+  --apple-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --apple-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .ag-app, .ag-app * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .ag-app {
-  font-family: 'Inter', 'Zen Kaku Gothic New', sans-serif;
-  color: hsl(var(--foreground));
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  max-width: none; margin: 0;
-  padding: 10rem 1.5rem 2.5rem 1.5rem;  
-  z-index: 999990;
-  overflow-y: auto; overflow-x: hidden;
-  background: transparent;
+  font-family: var(--apple-font);
+  color: var(--apple-text);
+  min-height: 100vh;
+  width: 100%;
+  padding: 6rem 1.25rem 4rem 1.25rem;
+  background: radial-gradient(circle at 50% 0%, rgba(10, 132, 255, 0.1) 0%, rgba(0, 0, 0, 0) 65%), #000000;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  z-index: 10;
 }
 
 .ag-container {
-  max-width: 960px;
+  max-width: 820px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
  
 .ag-card {
-  background: rgba(18, 18, 22, 0.65);
-  border: 1px solid hsl(var(--border));
-  border-radius: 12px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  padding: 1.75rem;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.03);
-}
-
-.ag-card-header {
-  margin-bottom: 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.ag-card-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: hsl(var(--foreground));
-}
-
-.ag-card-desc {
-  font-size: 0.8rem;
-  color: hsl(var(--muted-foreground));
-  margin-top: 0.25rem;
+  background: var(--apple-card);
+  border: 1px solid var(--apple-border);
+  border-radius: 22px;
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
  
-.ag-hud-title {
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 800;
-  font-size: 1.75rem;
-  letter-spacing: 0.15em;
-  color: #10b981 !important;  
-  -webkit-text-fill-color: #10b981 !important;  
-  text-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
+.ag-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-
-.ag-hud-desc {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: hsl(var(--muted-foreground));
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+.ag-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.ag-subtitle {
+  font-size: 0.8rem;
+  color: var(--apple-subtext);
+  margin-top: 0.15rem;
 }
 
  
@@ -991,1261 +942,752 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
+  gap: 0.4rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.6rem 1.1rem;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid hsl(var(--border));
-  background-color: transparent;
-  color: hsl(var(--foreground));
+  border: 1px solid var(--apple-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--apple-text);
+  transition: transform 0.15s var(--apple-bounce), background 0.2s ease;
+  user-select: none;
   font-family: inherit;
 }
-.ag-btn:hover:not(:disabled) {
-  background-color: hsl(var(--accent));
-  color: hsl(var(--accent-foreground));
-  border-color: rgba(255,255,255,0.15);
+.ag-btn:active {
+  transform: scale(0.94);
+  background: rgba(255, 255, 255, 0.14);
 }
-.ag-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
 .ag-btn-primary {
-  background-color: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--apple-accent);
+  color: #ffffff;
   border: none;
+  box-shadow: 0 4px 14px rgba(10, 132, 255, 0.35);
 }
-.ag-btn-primary:hover:not(:disabled) {
-  background-color: rgb(16, 163, 112);
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+.ag-btn-primary:active {
+  background: #0071e3;
 }
-
-.ag-btn-icon {
-  width: 2.25rem;
-  height: 2.25rem;
+.ag-btn-danger {
+  background: rgba(255, 69, 58, 0.12);
+  color: var(--apple-red);
+  border-color: rgba(255, 69, 58, 0.3);
+}
+.ag-btn-circle {
+  width: 2.5rem;
+  height: 2.5rem;
   padding: 0;
-  border-radius: 6px;
+  border-radius: 50%;
+  font-size: 1.1rem;
 }
 
  
-.ag-input {
-  background: rgba(0,0,0,0.3);
-  border: 1px solid hsl(var(--border));
-  color: hsl(var(--foreground));
-  border-radius: 6px;
-  padding: 0.65rem 0.85rem;
-  font-size: 0.9rem;
-  font-family: inherit;
-  outline: none;
-  transition: all 0.2s;
-  width: 100%;
+.ag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--apple-border);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: transform 0.15s var(--apple-bounce);
 }
-.ag-input:focus {
-  border-color: hsl(var(--primary));
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
-  background: rgba(0,0,0,0.5);
-}
+.ag-pill:active { transform: scale(0.94); }
+.ag-pill.ok { color: var(--apple-green); border-color: rgba(48, 209, 88, 0.3); background: rgba(48, 209, 88, 0.1); }
+.ag-pill.busy { color: var(--apple-yellow); border-color: rgba(255, 214, 10, 0.3); background: rgba(255, 214, 10, 0.1); }
+.ag-pill.error { color: var(--apple-red); border-color: rgba(255, 69, 58, 0.3); background: rgba(255, 69, 58, 0.1); }
 
  
-.ag-title-bar {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  text-align: center !important;
-  gap: 0.75rem !important;
-  border-bottom: 1px solid hsl(var(--border)) !important;
-  padding-bottom: 1.5rem !important;
-  width: 100% !important;
-}
-.ag-title-actions {
-  display: flex !important;
-  gap: 0.5rem !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex-wrap: wrap !important;
-  width: 100% !important;
-}
-
- 
-.ag-sync-status {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  border: 1px solid transparent;
-}
-.ag-sync-status.local {
-  background: rgba(100, 116, 139, 0.1);
-  color: #94a3b8;
-  border-color: rgba(100, 116, 139, 0.2);
-}
-.ag-sync-status.ok {
-  background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
-  border-color: rgba(16, 185, 129, 0.2);
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.1);
-}
-.ag-sync-status.busy {
-  background: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
-  border-color: rgba(245, 158, 11, 0.2);
-}
-.ag-sync-status.error {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.2);
-}
-
- 
-.ag-stats-grid {
+.ag-stats-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
-.ag-stat-num {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: #f4f4f5;
-  margin-top: 0.5rem;
+.ag-stat-card {
+  padding: 1.25rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--apple-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
-.ag-stat-sub {
-  font-family: 'JetBrains Mono', monospace;
+.ag-stat-label {
   font-size: 0.75rem;
-  color: hsl(var(--muted-foreground));
-  margin-left: 0.35rem;
+  color: var(--apple-subtext);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.ag-stat-val {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
  
 .ag-course-card {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  border-left: 4px solid #3f3f46;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.2s, border-color 0.3s;
+  gap: 1.1rem;
+  border-radius: 20px;
+  transition: transform 0.25s var(--apple-spring), border-color 0.25s ease;
 }
-.ag-course-card:hover {
-  transform: translateY(-2px);
-}
-.ag-course-card.safe { border-left-color: #10b981; }
-.ag-course-card.warn { border-left-color: #f59e0b; }
-.ag-course-card.danger { border-left-color: #ef4444; }
+.ag-course-card.safe { border-color: rgba(48, 209, 88, 0.25); }
+.ag-course-card.warn { border-color: rgba(255, 214, 10, 0.35); }
+.ag-course-card.danger { border-color: rgba(255, 69, 58, 0.4); }
 
-.ag-course-card-top {
+.ag-course-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
 }
-.ag-course-meta {
+.ag-course-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.ag-tags {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
   margin-top: 0.35rem;
+  flex-wrap: wrap;
 }
-.ag-badge {
-  font-size: 0.65rem;
-  padding: 0.15rem 0.5rem;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid hsl(var(--border));
-  color: hsl(var(--muted-foreground));
-  border-radius: 4px;
+.ag-tag {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--apple-subtext);
+  border: 1px solid var(--apple-border);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.ag-tag:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+.ag-tag.edit-trigger {
+  color: var(--apple-accent);
+  border-color: rgba(10, 132, 255, 0.3);
+  background: rgba(10, 132, 255, 0.08);
 }
 
  
-.ag-donut-container {
-  position: relative;
-  width: 58px;
-  height: 58px;
+.ag-ring-wrap {
+  width: 56px; height: 56px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.ag-donut-center {
-  width: 44px;
-  height: 44px;
-  background: #111115;
+.ag-ring-inner {
+  width: 44px; height: 44px;
+  background: #141416;
   border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; font-weight: 700;
 }
 
  
-.ag-meter-container {
+.ag-gauge-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.ag-gauge-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s var(--apple-spring);
+}
+
+ 
+.ag-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.6rem;
+}
+.ag-act-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--apple-border);
+  color: var(--apple-text);
+  padding: 0.7rem;
+  border-radius: 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s var(--apple-bounce), background 0.2s ease;
+  font-family: inherit;
+}
+.ag-act-btn:active {
+  transform: scale(0.94);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+ 
+.ag-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  z-index: 9999999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--apple-spring);
+}
+.ag-sheet-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.ag-sheet {
+  width: 100%;
+  max-width: 520px;
+  background: #1c1c1e;
+  border: 1px solid var(--apple-border);
+  border-radius: 28px 28px 0 0;
+  padding: 1.5rem 1.75rem 2.5rem 1.75rem;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7);
+  transform: translateY(100%);
+  transition: transform 0.35s var(--apple-spring);
+}
+.ag-sheet-overlay.show .ag-sheet {
+  transform: translateY(0);
+}
+.ag-sheet-handle {
+  width: 36px; height: 5px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  margin: 0 auto 1.25rem auto;
+}
+
+.ag-form-group {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
-.ag-meter-labels {
-  display: flex;
-  justify-content: space-between;
+.ag-form-label {
   font-size: 0.75rem;
-  font-family: 'JetBrains Mono', monospace;
+  color: var(--apple-subtext);
+  font-weight: 500;
 }
-.ag-meter-bg {
-  height: 6px;
-  background: rgba(0,0,0,0.3);
-  border-radius: 9999px;
+.ag-input-box {
   width: 100%;
-  overflow: hidden;
-}
-.ag-meter-fill {
-  height: 100%;
-  border-radius: 9999px;
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.safe .ag-meter-fill { background: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
-.warn .ag-meter-fill { background: #f59e0b; box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
-.danger .ag-meter-fill { background: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
-
- 
-.ag-course-controls {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 0.5rem;
-}
-.ag-control-btn {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid hsl(var(--border));
-  color: hsl(var(--foreground));
-  padding: 0.5rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
+  padding: 0.85rem 1.1rem;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--apple-border);
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
   font-family: inherit;
 }
-.ag-control-btn:hover:not(:disabled) {
-  border-color: rgba(255,255,255,0.15);
-  background: rgba(255,255,255,0.05);
-}
-.ag-control-btn .sub-label {
-  font-size: 0.6rem;
-  color: hsl(var(--muted-foreground));
-  margin-top: 0.1rem;
-}
-.ag-control-btn.late:hover:not(:disabled) {
-  border-color: #f59e0b;
-  color: #f59e0b;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
-}
-.ag-control-btn.absent:hover:not(:disabled) {
-  border-color: #ef4444;
-  color: #ef4444;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.15);
-}
-
- 
-.ag-history-trigger {
-  width: 100%;
-  text-align: center;
-  background: transparent;
-  border: none;
-  font-size: 0.7rem;
-  color: hsl(var(--muted-foreground));
-  cursor: pointer;
-  padding: 0.25rem 0;
-  font-family: inherit;
-  transition: color 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-}
-.ag-history-trigger:hover {
-  color: hsl(var(--foreground));
-}
-
-.ag-history-panel {
-  border-top: 1px dashed hsl(var(--border));
-  margin-top: 0.5rem;
-  padding-top: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  animation: slide-down 0.2s ease-out;
-}
-@keyframes slide-down {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.ag-history-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.75rem;
-  font-family: 'JetBrains Mono', monospace;
-  background: rgba(0,0,0,0.2);
-  padding: 0.35rem 0.65rem;
-  border-radius: 4px;
-}
-.ag-history-badge {
-  font-size: 0.6rem;
-  padding: 0.1rem 0.35rem;
-  border-radius: 3px;
-  font-weight: 700;
-}
-.ag-history-badge.late { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-.ag-history-badge.absent { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
-
-.ag-history-undo-btn {
-  background: transparent;
-  border: none;
-  color: hsl(var(--muted-foreground));
-  cursor: pointer;
-  transition: color 0.2s;
-  font-family: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.ag-history-undo-btn:hover {
-  color: #ef4444;
-}
-
- 
-.ag-form-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-.ag-form-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1rem;
-}
-.ag-radio-tabs {
-  display: flex;
-  background: rgba(0,0,0,0.3);
-  border: 1px solid hsl(var(--border));
-  padding: 2px;
-  border-radius: 8px;
-}
-.ag-radio-tab {
-  flex: 1;
-  text-align: center;
-  padding: 0.5rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: all 0.2s;
-  color: hsl(var(--muted-foreground));
-}
-.ag-radio-tab.active {
-  background: hsl(var(--secondary));
-  color: hsl(var(--foreground));
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
- 
-.ag-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-.ag-overlay.show {
-  opacity: 1;
-  pointer-events: auto;
-}
-.ag-modal {
-  width: 90%;
-  max-width: 460px;
-  background: #0c0c0e;
-  border: 1px solid hsl(var(--border));
-  border-radius: 12px;
-  padding: 1.75rem;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-  transform: scale(0.95);
-  transition: transform 0.2s ease;
-}
-.ag-overlay.show .ag-modal {
-  transform: scale(1);
-}
-.ag-modal-header {
-  border-bottom: 1px solid hsl(var(--border));
-  padding-bottom: 1rem;
-  margin-bottom: 1.25rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.ag-modal-footer {
-  border-top: 1px solid hsl(var(--border));
-  padding-top: 1rem;
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
+.ag-input-box:focus {
+  border-color: var(--apple-accent);
 }
 
  
 .ag-toast {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: rgba(18,18,22,0.95);
-  border: 1px solid hsl(var(--border));
-  border-radius: 8px;
-  padding: 0.75rem 1.25rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
-  color: hsl(var(--foreground));
-  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-  transform: translateY(100px);
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: rgba(44, 44, 46, 0.95);
+  border: 1px solid var(--apple-border);
+  backdrop-filter: blur(25px);
+  padding: 0.75rem 1.35rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.6);
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.35s var(--apple-bounce), opacity 0.25s ease;
   z-index: 10000000;
   pointer-events: none;
+  white-space: nowrap;
 }
 .ag-toast.show {
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
   opacity: 1;
 }
 
- 
-@media (max-width: 640px) {
-  .ag-app { padding: 8rem 0.75rem 1.5rem 0.75rem; }
-  .ag-card { padding: 1.25rem 1rem; }
-  .ag-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-  .ag-stats-grid .ag-card { padding: 1rem 0.75rem; }
-  .ag-stat-num { font-size: 1.35rem; }
-  .ag-course-card-top { flex-wrap: nowrap; }
-  .ag-course-controls { grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
-  .ag-control-btn { padding: 0.5rem 0.25rem; font-size: 0.7rem; }
-  .ag-control-btn .sub-label { font-size: 0.55rem; }
-  .ag-overlay { align-items: flex-end; }
-  .ag-modal {
-    width: 100%;
-    border-radius: 12px 12px 0 0;
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  .ag-overlay.show .ag-modal {
-    transform: translateY(0);
-  }
-  .ag-title-bar { flex-direction: column; align-items: stretch; gap: 1rem; }
-  .ag-title-actions { width: 100%; justify-content: flex-end; }
+@media (min-width: 641px) {
+  .ag-sheet-overlay { align-items: center; }
+  .ag-sheet { border-radius: 24px; padding-bottom: 1.75rem; }
+  .ag-sheet-handle { display: none; }
 }
 </style>
 
-<div class="ag-app" id="ag-root">
-  <div id="ag-loading" style="padding:2rem;color:#a1a1aa;font-family:monospace;font-size:14px;">⏳ Loading Attendance Guardian...</div>
+<div class="ag-app">
+  <div class="ag-container" id="ag-main-content">
+    
+  </div>
 </div>
 
-<script>
-window.onerror = function(msg, url, line, col, err) {
-  var el = document.getElementById('ag-root');
-  if (el) el.innerHTML = '<pre style="color:#ef4444;padding:2rem;font-size:13px;white-space:pre-wrap;">JS ERROR: ' + msg + '\nLine: ' + line + '\nCol: ' + col + '\n' + (err && err.stack ? err.stack : '') + '</pre>';
-};
-</script>
+
+<div id="ag-add-modal" class="ag-sheet-overlay" onclick="if(event.target===this)agCloseAddModal()">
+  <div class="ag-sheet">
+    <div class="ag-sheet-handle"></div>
+    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem;">新規科目を追加</h3>
+    <form onsubmit="agAddCourseSubmit(event)" style="display: flex; flex-direction: column; gap: 1rem;">
+      <div class="ag-form-group">
+        <label class="ag-form-label">授業名</label>
+        <input type="text" id="ag-input-name" placeholder="例: 微分積分I" class="ag-input-box" required />
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <div class="ag-form-group" style="flex:1;">
+          <label class="ag-form-label">単位数</label>
+          <input type="number" id="ag-input-credit" value="2" min="1" max="10" class="ag-input-box" required />
+        </div>
+        <div class="ag-form-group" style="flex:1;">
+          <label class="ag-form-label">期間</label>
+          <select id="ag-input-type" class="ag-input-box">
+            <option value="half">半期科目</option>
+            <option value="full">通年科目</option>
+          </select>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <div class="ag-form-group" style="flex:1;">
+          <label class="ag-form-label">落単ライン (許容減点)</label>
+          <select id="ag-input-fail" class="ag-input-box">
+            <option value="-11">半期基準 (-11点で落単)</option>
+            <option value="-21">通年基準 (-21点で落単)</option>
+            <option value="-10">-10点で落単</option>
+            <option value="-20">-20点で落単</option>
+            <option value="-15">-15点で落単</option>
+          </select>
+        </div>
+        <div class="ag-form-group" style="flex:1;">
+          <label class="ag-form-label">週コマ数</label>
+          <input type="number" id="ag-input-weekly" value="1" min="1" max="10" class="ag-input-box" required />
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
+        <button type="button" class="ag-btn" style="flex: 1;" onclick="agCloseAddModal()">キャンセル</button>
+        <button type="submit" class="ag-btn ag-btn-primary" style="flex: 1;">追加</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<div id="ag-edit-modal" class="ag-sheet-overlay" onclick="if(event.target===this)agCloseEditModal()">
+  <div class="ag-sheet">
+    <div class="ag-sheet-handle"></div>
+    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem;">科目の設定を変更</h3>
+    <form onsubmit="agEditCourseSubmit(event)" style="display: flex; flex-direction: column; gap: 1rem;">
+      <input type="hidden" id="ag-edit-id" />
+      <div class="ag-form-group">
+        <label class="ag-form-label">授業名</label>
+        <input type="text" id="ag-edit-name" class="ag-input-box" required />
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <div class="ag-form-group" style="flex:1;">
+          <label class="ag-form-label">単位数</label>
+          <input type="number" id="ag-edit-credit" min="1" max="10" class="ag-input-box" required />
+        </div>
+        <div class="ag-form-group" style="flex:1;">
+          <label class="ag-form-label">期間</label>
+          <select id="ag-edit-type" class="ag-input-box">
+            <option value="half">半期科目</option>
+            <option value="full">通年科目</option>
+          </select>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <div class="ag-form-group" style="flex:1;">
+          <label class="ag-form-label">落単ライン (許容減点)</label>
+          <select id="ag-edit-fail" class="ag-input-box">
+            <option value="-11">半期基準 (-11点)</option>
+            <option value="-21">通年基準 (-21点)</option>
+            <option value="-10">-10点で落単</option>
+            <option value="-20">-20点で落単</option>
+            <option value="-15">-15点で落単</option>
+            <option value="-30">-30点で落単</option>
+          </select>
+        </div>
+        <div class="ag-form-group" style="flex:1;">
+          <label class="ag-form-label">週コマ数</label>
+          <input type="number" id="ag-edit-weekly" min="1" max="10" class="ag-input-box" required />
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
+        <button type="button" class="ag-btn ag-btn-danger" style="flex: 1;" onclick="agDeleteCourseCurrent()">削除</button>
+        <button type="submit" class="ag-btn ag-btn-primary" style="flex: 1.5;">変更を保存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<div id="ag-config-modal" class="ag-sheet-overlay" onclick="if(event.target===this)agCloseConfigModal()">
+  <div class="ag-sheet">
+    <div class="ag-sheet-handle"></div>
+    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem;">システム設定</h3>
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <div>
+        <label style="font-size: 0.75rem; color: var(--apple-subtext); display: block; margin-bottom: 0.4rem;">接続 BIN ID</label>
+        <div id="ag-config-blob-id" style="padding: 0.85rem; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid var(--apple-border); font-family: monospace; font-size: 0.85rem;">未接続 (LOCAL)</div>
+      </div>
+      <button class="ag-btn" style="width: 100%;" onclick="agCloseConfigModal()">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<div id="ag-toast" class="ag-toast"></div>
 
 <script>
 (function() {
-try {
-  const { useState, useEffect, useRef, useMemo } = React;
-  const h = htm.bind(React.createElement);
-
-   
   const STORAGE_KEY = 'dt_attendance_v2';
   const BLOB_KEY = 'dt_attendance_blob';
-  const SC_BLOB = '';
-  const APP_KEY = 'attendance';
-
   const RULES = {
     half: { limit: -10, fail: -11, danger: -9, label: '半期' },
     full: { limit: -20, fail: -21, danger: -18, label: '通年' }
   };
 
-  const DEFAULT_KEY = '$2a$10$iVNuU6AA4DGWLiU8/Gl.oOIvr166q/dgd995DrQ1ziA/9eSq7Fh7q';
-  const getJbKey = () => {
-    if (window.PWAConfigSync) {
-      return window.PWAConfigSync.getApiKey();
+  let courses = [];
+  let blobId = localStorage.getItem(BLOB_KEY) || null;
+  let syncStatus = blobId ? 'ok' : 'local';
+  let toastTimer = null;
+
+  function showToast(msg) {
+    const el = document.getElementById('ag-toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+  }
+
+  function getJbKey() {
+    return (window.PWAConfigSync ? window.PWAConfigSync.getApiKey() : '$2a$10$C0Z.Fl3F.BCvUaC5rHVt3OD6aYt8SXRkmXExr3mfmtCrGdDzG8Aae');
+  }
+
+  function loadAndMergeCourses() {
+    let local = [];
+    try { local = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { local = []; }
+    if (local.length === 0 && !localStorage.getItem(STORAGE_KEY)) {
+      local = [{ id: 1, name: 'サンプル: 物理学', type: 'half', credit: 2, customFail: -11, weeklyLessons: 1, current: 0, history: [] }];
     }
-    return DEFAULT_KEY;
-  };
 
-  const binUrl = (id) => `https://api.jsonbin.io/v3/b/${id}/latest`;
-  const binPut = (id) => `https://api.jsonbin.io/v3/b/${id}`;
+    let timetableCourses = [];
+    try {
+      const timetableData = JSON.parse(localStorage.getItem('dt_subject_progress_data')) || {};
+      if (timetableData && typeof timetableData === 'object' && !Array.isArray(timetableData)) {
+        timetableCourses = Object.keys(timetableData).map(subName => {
+          const subjectData = timetableData[subName];
+          let currentLoss = 0;
+          let maxIndex = 15;
 
-  function App() {
-    
-    const [courses, setCourses] = useState([]);
-    const [blobId, setBlobId] = useState(() => SC_BLOB || localStorage.getItem(BLOB_KEY) || null);
-    const [syncStatus, setSyncStatus] = useState(blobId ? 'ok' : 'local');
-    const [showConfig, setShowConfig] = useState(false);
-    const [toastMsg, setToastMsg] = useState('');
-    const [toastShow, setToastShow] = useState(false);
-    
-    
-    const [newCourseName, setNewCourseName] = useState('');
-    const [newCourseCredit, setNewCourseCredit] = useState(2);
-    const [termType, setTermType] = useState('half'); 
+          if (subjectData && typeof subjectData === 'object' && !Array.isArray(subjectData)) {
+            Object.keys(subjectData).forEach(idxKey => {
+              const idx = parseInt(idxKey);
+              if (isNaN(idx)) return;
+              if (idx > 15) maxIndex = 30;
+              const item = subjectData[idxKey];
+              if (!item || typeof item !== 'object') return;
 
-    
-    const [openedHistory, setOpenedHistory] = useState({});
-
-    
-    const toastTimerRef = useRef(null);
-
-    
-    const loadAndMergeCourses = (localList = null, remoteList = null) => {
-      let local = localList;
-      if (local === null) {
-        try {
-          local = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        } catch(e) {
-          local = [];
-        }
-      }
-      if (!Array.isArray(local)) {
-        local = [];
-      }
-      if (local.length === 0 && !localStorage.getItem(STORAGE_KEY)) {
-        local = [{ id: 1, name: 'サンプル: 物理学', type: 'half', credit: 2, current: 0, history: [] }];
-      }
-
-      let timetableCourses = [];
-      try {
-        const timetableData = JSON.parse(localStorage.getItem('dt_subject_progress_data')) || {};
-        if (timetableData && typeof timetableData === 'object' && !Array.isArray(timetableData)) {
-          timetableCourses = Object.keys(timetableData).map(subName => {
-            const subjectData = timetableData[subName];
-            let currentLoss = 0;
-            const historyList = [];
-            let maxIndex = 15;
-
-            if (subjectData && typeof subjectData === 'object' && !Array.isArray(subjectData)) {
-              Object.keys(subjectData).forEach(idxKey => {
-                const idx = parseInt(idxKey);
-                if (isNaN(idx)) return; 
-                if (idx > 15) maxIndex = 30;
-
-                const item = subjectData[idxKey];
-                if (item === null || typeof item !== 'object') return; 
-
-                let ts = Date.now() - (15 - idx) * 24 * 60 * 60 * 1000;
-                if (item.date) {
-                  const parsed = new Date(item.date).getTime();
-                  if (!isNaN(parsed)) ts = parsed;
-                }
-
-                if (item.status === 'delayed') {
-                  currentLoss -= 1;
-                  historyList.push({
-                    timestamp: ts,
-                    delta: -1,
-                    type: 'late',
-                    memo: `第${idx}回講義: ${item.memo || ''}`
-                  });
-                } else if (item.status === 'offline') {
-                  currentLoss -= 2;
-                  historyList.push({
-                    timestamp: ts,
-                    delta: -2,
-                    type: 'absent',
-                    memo: `第${idx}回講義: ${item.memo || ''}`
-                  });
-                }
-              });
-            }
-
-            historyList.sort((a, b) => a.timestamp - b.timestamp);
-
-            return {
-              id: `tt-${subName}`,
-              name: subName,
-              type: maxIndex > 15 ? 'full' : 'half',
-              credit: 2,
-              current: currentLoss,
-              history: historyList,
-              isTimetableLinked: true
-            };
-          });
-        }
-      } catch (e) {
-        console.error('Failed to parse timetable data:', e);
-      }
-
-      const merged = [...timetableCourses];
-      local.forEach(lc => {
-        if (!lc || typeof lc !== 'object') return; 
-        const matchedIndex = merged.findIndex(tc => tc.name === lc.name);
-        if (matchedIndex !== -1) {
-          merged[matchedIndex].credit = lc.credit || merged[matchedIndex].credit;
-          merged[matchedIndex].type = lc.type || merged[matchedIndex].type;
-          merged[matchedIndex].id = lc.id;
-        } else if (!lc.isTimetableLinked) {
-          merged.push({
-            ...lc,
-            history: Array.isArray(lc.history) ? lc.history : [],
-            isTimetableLinked: false
-          });
-        }
-      });
-
-      return merged;
-    };
-
-    
-    useEffect(() => {
-      const merged = loadAndMergeCourses();
-      setCourses(merged);
-      saveLocal(merged);
-    }, []);
-
-    
-    useEffect(() => {
-      async function checkSync() {
-        let currentBlobId = blobId;
-        if (window.PWAConfigSync) {
-          currentBlobId = await window.PWAConfigSync.syncAppBinId('attendance', blobId);
-          if (currentBlobId !== blobId) {
-            setBlobId(currentBlobId);
-            if (currentBlobId) {
-              localStorage.setItem(BLOB_KEY, currentBlobId);
-            } else {
-              localStorage.removeItem(BLOB_KEY);
-            }
-          }
-        }
-        if (currentBlobId) {
-          syncCloud(true, currentBlobId);
-        }
-      }
-      checkSync();
-
-      const handleStorageChange = (e) => {
-        if (e.key === 'dt_subject_progress_data' || e.key === STORAGE_KEY) {
-          const next = loadAndMergeCourses();
-          setCourses(next);
-        }
-      };
-      window.addEventListener('storage', handleStorageChange);
-      return () => window.removeEventListener('storage', handleStorageChange);
-    }, []);
-
-    
-    const triggerToast = (msg) => {
-      setToastMsg(msg);
-      setToastShow(true);
-      clearTimeout(toastTimerRef.current);
-      toastTimerRef.current = setTimeout(() => {
-        setToastShow(false);
-      }, 2500);
-    };
-
-    
-    const saveLocal = (nextCourses) => {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextCourses));
-      } catch(e) {}
-    };
-
-    
-    const syncCloud = async (silent = false, customBlobId = null) => {
-      setSyncStatus('busy');
-      const targetBlobId = customBlobId !== null ? customBlobId : blobId;
-      const jbKey = getJbKey();
-
-      try {
-        if (!targetBlobId) {
-          const latest = loadAndMergeCourses();
-          const res = await fetch('https://api.jsonbin.io/v3/b', {
-            method: 'POST',
-            headers: {
-              'X-Master-Key': jbKey,
-              'Content-Type': 'application/json',
-              'X-Bin-Name': 'attendance_guardian'
-            },
-            body: JSON.stringify({ courses: latest })
-          });
-          if (!res.ok) throw new Error('create error: ' + res.status);
-          const json = await res.json();
-          const nextId = json.metadata.id;
-          setBlobId(nextId);
-          localStorage.setItem(BLOB_KEY, nextId);
-          if (window.PWAConfigSync) {
-            await window.PWAConfigSync.syncAppBinId('attendance', nextId);
-          }
-          setSyncStatus('ok');
-          if (!silent) triggerToast('クラウド同期保管庫を作成しました');
-        } else {
-          const res = await fetch(binUrl(targetBlobId), {
-            headers: { 'X-Master-Key': jbKey },
-            cache: 'no-store'
-          });
-          if (!res.ok) throw new Error('get error: ' + res.status);
-          const json = await res.json();
-          const record = json.record || json;
-          const remoteCourses = Array.isArray(record.courses) ? record.courses : (Array.isArray(record) ? record : []);
-
-          const latest = loadAndMergeCourses();
-          const merged = loadAndMergeCourses(latest, remoteCourses);
-          setCourses(merged);
-          saveLocal(merged);
-
-          const p = await fetch(binPut(targetBlobId), {
-            method: 'PUT',
-            headers: {
-              'X-Master-Key': jbKey,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ courses: merged })
-          });
-          if (!p.ok) throw new Error('put error: ' + p.status);
-          setSyncStatus('ok');
-          if (!silent) triggerToast('クラウド同期を完了しました');
-        }
-      } catch(err) {
-        setSyncStatus('error');
-        if (!silent) triggerToast('同期エラー: ' + err.message);
-        console.error(err);
-      }
-    };
-
-    
-    const pushBlob = async (nextCourses) => {
-      if (!blobId) return;
-      try {
-        const p = await fetch(binPut(blobId), {
-          method: 'PUT',
-          headers: {
-            'X-Master-Key': getJbKey(),
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ courses: nextCourses })
-        });
-        if (p.ok) setSyncStatus('ok');
-        else setSyncStatus('error');
-      } catch(e) {
-        setSyncStatus('error');
-      }
-    };
-
-    
-    const toggleCourseType = (courseId) => {
-      const nextCourses = courses.map(c => {
-        if (c.id === courseId) {
-          const nextType = c.type === 'half' ? 'full' : 'half';
-          triggerToast(`${c.name} の期間を ${nextType === 'half' ? '半期' : '通年'} に変更しました`);
-          return { ...c, type: nextType };
-        }
-        return c;
-      });
-      setCourses(nextCourses);
-      saveLocal(nextCourses);
-      pushBlob(nextCourses);
-    };
-
-    const toggleCourseCredit = (courseId) => {
-      const nextCourses = courses.map(c => {
-        if (c.id === courseId) {
-          const nextCredit = c.credit === 4 ? 1 : c.credit + 1;
-          triggerToast(`${c.name} の単位数を ${nextCredit} 単位に変更しました`);
-          return { ...c, credit: nextCredit };
-        }
-        return c;
-      });
-      setCourses(nextCourses);
-      saveLocal(nextCourses);
-      pushBlob(nextCourses);
-    };
-
-    const handleUpdate = (id, delta, actionType) => {
-      const nextCourses = courses.map(c => {
-        if (c.id === id) {
-          if (c.isTimetableLinked) return c; 
-          const rule = RULES[c.type] || RULES.half;
-          const nextVal = Math.min(0, c.current + delta);
-          
-          const nextHistory = [...c.history];
-          if (actionType !== 'undo') {
-            nextHistory.push({
-              timestamp: Date.now(),
-              delta: delta,
-              type: actionType
+              if (item.status === 'delayed') currentLoss -= 1;
+              else if (item.status === 'offline') currentLoss -= 2;
             });
           }
 
+          const isFull = maxIndex > 15;
           return {
-            ...c,
-            current: nextVal,
-            history: nextHistory
+            id: 'tt-' + subName,
+            name: subName,
+            type: isFull ? 'full' : 'half',
+            credit: 2,
+            customFail: isFull ? -21 : -11,
+            weeklyLessons: 1,
+            current: currentLoss,
+            history: [],
+            isTimetableLinked: true
           };
-        }
-        return c;
-      });
-
-      setCourses(nextCourses);
-      saveLocal(nextCourses);
-      pushBlob(nextCourses);
-      
-      const course = courses.find(c => c.id === id);
-      if (course && actionType !== 'undo') {
-        const typeLabel = actionType === 'late' ? '遅刻' : '欠席';
-        triggerToast(`${course.name} に ${typeLabel} を記録しました`);
-      } else if (course) {
-        triggerToast(`${course.name} の数値を修正しました`);
+        });
       }
-    };
+    } catch (e) {}
 
-    const handleUndoHistoryItem = (courseId, historyItemTimestamp, delta) => {
-      const target = courses.find(c => c.id === courseId);
-      if (target && target.isTimetableLinked) return; 
-
-      const nextCourses = courses.map(c => {
-        if (c.id === courseId) {
-          const nextHistory = c.history.filter(h => h.timestamp !== historyItemTimestamp);
-          const nextVal = Math.min(0, c.current - delta);
-          return {
-            ...c,
-            current: nextVal,
-            history: nextHistory
-          };
-        }
-        return c;
-      });
-
-      setCourses(nextCourses);
-      saveLocal(nextCourses);
-      pushBlob(nextCourses);
-      triggerToast('履歴の項目を削除し、カウンターを戻しました');
-    };
-
-    const handleDelete = (id, name) => {
-      const target = courses.find(c => c.id === id);
-      if (target && target.isTimetableLinked) {
-        triggerToast('時間割連動科目の削除は時間割ページで行ってください');
-        return;
+    const merged = [...timetableCourses];
+    local.forEach(lc => {
+      if (!lc || typeof lc !== 'object') return;
+      const matchedIndex = merged.findIndex(tc => tc.name === lc.name);
+      if (matchedIndex !== -1) {
+        merged[matchedIndex].credit = lc.credit || merged[matchedIndex].credit;
+        merged[matchedIndex].type = lc.type || merged[matchedIndex].type;
+        merged[matchedIndex].customFail = lc.customFail || merged[matchedIndex].customFail;
+        merged[matchedIndex].weeklyLessons = lc.weeklyLessons || merged[matchedIndex].weeklyLessons;
+        merged[matchedIndex].id = lc.id;
+      } else if (!lc.isTimetableLinked) {
+        merged.push({
+          ...lc,
+          customFail: lc.customFail || (lc.type === 'full' ? -21 : -11),
+          weeklyLessons: lc.weeklyLessons || 1,
+          history: Array.isArray(lc.history) ? lc.history : [],
+          isTimetableLinked: false
+        });
       }
-      if (!confirm(`科目「${name}」を削除しますか？`)) return;
-      const nextCourses = courses.filter(c => c.id !== id);
-      setCourses(nextCourses);
-      saveLocal(nextCourses);
-      pushBlob(nextCourses);
-      triggerToast('科目を削除しました');
-    };
+    });
+    return merged;
+  }
 
-    const handleAddCourse = (e) => {
-      e.preventDefault();
-      if (!newCourseName.trim()) return;
+  function saveAndSync(nextCourses) {
+    courses = nextCourses;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(nextCourses)); } catch(e) {}
+    renderApp();
 
-      
-      if (courses.some(c => c.name.toLowerCase() === newCourseName.trim().toLowerCase())) {
-        triggerToast('同名の科目が既に存在します');
-        return;
-      }
+    if (!blobId) return;
+    fetch('https://api.jsonbin.io/v3/b/' + blobId, {
+      method: 'PUT',
+      headers: { 'X-Master-Key': getJbKey(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ courses: nextCourses })
+    }).then(res => {
+      syncStatus = res.ok ? 'ok' : 'error';
+      renderApp();
+    }).catch(() => {
+      syncStatus = 'error';
+      renderApp();
+    });
+  }
 
-      const newCourse = {
-        id: Date.now(),
-        name: newCourseName.trim(),
-        credit: Number(newCourseCredit),
-        type: termType,
-        current: 0,
-        history: [],
-        isTimetableLinked: false
-      };
+  function getFailBorder(course) {
+    if (course.customFail && typeof course.customFail === 'number') {
+      return course.customFail;
+    }
+    const defaultRule = RULES[course.type] || RULES.half;
+    return defaultRule.fail;
+  }
 
-      const nextCourses = [...courses, newCourse];
-      setCourses(nextCourses);
-      saveLocal(nextCourses);
-      pushBlob(nextCourses);
+  function renderApp() {
+    const container = document.getElementById('ag-main-content');
+    if (!container) return;
 
-      setNewCourseName('');
-      setNewCourseCredit(2);
-      triggerToast(`${newCourse.name} を登録しました`);
-    };
+    const totalCredits = courses.reduce((acc, c) => acc + (c && c.credit ? c.credit : 0), 0);
+    const dangerCount = courses.filter(c => {
+      const failVal = getFailBorder(c);
+      const dangerVal = failVal + 2;
+      return c.current <= dangerVal && c.current > failVal;
+    }).length;
+    const failCount = courses.filter(c => {
+      const failVal = getFailBorder(c);
+      return c.current <= failVal;
+    }).length;
 
-    
-    const handleApplySettings = async (nextBlobId) => {
-      const cleaned = nextBlobId.trim();
-      if (cleaned !== (blobId || '')) {
-        const nextId = cleaned || null;
-        setBlobId(nextId);
-        if (nextId) {
-          localStorage.setItem(BLOB_KEY, nextId);
-        } else {
-          localStorage.removeItem(BLOB_KEY);
-        }
-        if (window.PWAConfigSync) {
-          await window.PWAConfigSync.syncAppBinId('attendance', nextId);
-        }
-        setShowConfig(false);
-        triggerToast('システム設定を適用しました');
-        if (nextId) {
-          setTimeout(() => syncCloud(false, nextId), 100);
-        }
-      } else {
-        setShowConfig(false);
-      }
-    };
+    let coursesHtml = courses.map(course => {
+      const rule = RULES[course.type] || RULES.half;
+      const failVal = getFailBorder(course);
+      const limitVal = failVal + 1; 
+      const isFailed = course.current <= failVal;
+      const isDanger = course.current <= (failVal + 2) && !isFailed;
+      const statusClass = isFailed ? 'danger' : isDanger ? 'warn' : 'safe';
+      const remainingToFail = Math.max(0, course.current - failVal);
+      const percent = Math.min((Math.abs(course.current) / Math.abs(limitVal)) * 100, 100);
+      const ringColor = isFailed ? 'var(--apple-red)' : isDanger ? 'var(--apple-yellow)' : 'var(--apple-green)';
+      const weekly = course.weeklyLessons || 1;
 
-    const handleClearAll = () => {
-      if (!confirm('本当にすべての科目データを削除しますか？この操作は取り消せません。')) return;
-      setCourses([]);
-      saveLocal([]);
-      pushBlob([]);
-      setShowConfig(false);
-      triggerToast('全データを削除しました');
-    };
+      const actionButtons = course.isTimetableLinked ? `
+        <a href="/project-x/timetable/" class="ag-btn" style="width: 100%; text-decoration: none; color: #64d2ff; background: rgba(100,210,255,0.06);">
+          時間割ログで出欠を記録 ➔
+        </a>
+      ` : `
+        <div class="ag-actions">
+          <button class="ag-act-btn" style="color:var(--apple-yellow);" onclick="agUpdateCourse('${course.id}', -1, 'late')" ${isFailed ? 'disabled' : ''}>
+            遅刻 (-1)
+          </button>
+          <button class="ag-act-btn" style="color:var(--apple-red);" onclick="agUpdateCourse('${course.id}', -2, 'absent')" ${isFailed ? 'disabled' : ''}>
+            欠席 (-2)
+          </button>
+          <button class="ag-act-btn" onclick="agUpdateCourse('${course.id}', 1, 'undo')">
+            ＋1
+          </button>
+        </div>
+      `;
 
-    const handleExport = () => {
-      const blob = new Blob([JSON.stringify({ courses }, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `attendance_guardian_${Date.now()}.json`;
-      a.click();
-      triggerToast('バックアップをエクスポートしました');
-    };
-
-    const handleImport = (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (evt) => {
-        try {
-          const parsed = JSON.parse(evt.target.result);
-          const imported = Array.isArray(parsed.courses) ? parsed.courses : (Array.isArray(parsed) ? parsed : []);
-          const merged = mergeData(courses, imported);
-          setCourses(merged);
-          saveLocal(merged);
-          pushBlob(merged);
-          triggerToast('バックアップをインポートしました');
-        } catch(err) {
-          triggerToast('データのインポートに失敗しました');
-        }
-      };
-      reader.readAsText(file);
-      e.target.value = '';
-    };
-
-    
-    const toggleHistory = (courseId) => {
-      setOpenedHistory(prev => ({
-        ...prev,
-        [courseId]: !prev[courseId]
-      }));
-    };
-
-    
-    const stats = useMemo(() => {
-      const totalCredits = courses.reduce((acc, c) => acc + (c && typeof c.credit === 'number' ? c.credit : 0), 0);
-      const dangerCount = courses.filter(c => {
-        if (!c) return false;
-        const rule = RULES[c.type] || RULES.half;
-        return c.current <= rule.danger && c.current > rule.fail;
-      }).length;
-      const failCount = courses.filter(c => {
-        if (!c) return false;
-        const rule = RULES[c.type] || RULES.half;
-        return c.current <= rule.fail;
-      }).length;
-      return { totalCredits, dangerCount, failCount };
-    }, [courses]);
-
-    return h`
-      <div class="ag-container">
-        \x3C!-- Header -->
-        <div class="ag-title-bar">
-          <div>
-            <h1 class="ag-hud-title">_ATTEND_GUARDIAN</h1>
-            <div class="ag-hud-desc">> SYS_STATUS: ACTIVE // 出欠モニター</div>
+      return `
+        <div class="ag-card ag-course-card ${statusClass}">
+          <div class="ag-course-header">
+            <div>
+              <div class="ag-course-name">${course.name}</div>
+              <div class="ag-tags">
+                <span class="ag-tag" onclick="agOpenEditModal('${course.id}')">${course.credit}単位</span>
+                <span class="ag-tag" onclick="agOpenEditModal('${course.id}')">${rule.label}</span>
+                <span class="ag-tag" onclick="agOpenEditModal('${course.id}')">${failVal}pt落単</span>
+                <span class="ag-tag" onclick="agOpenEditModal('${course.id}')">週${weekly}コマ</span>
+                <span class="ag-tag edit-trigger" onclick="agOpenEditModal('${course.id}')">✎ 設定</span>
+              </div>
+            </div>
+            <div class="ag-ring-wrap" style="background: conic-gradient(${ringColor} ${percent}%, rgba(255,255,255,0.08) 0%)">
+              <div class="ag-ring-inner">
+                <span style="color: ${ringColor}">${course.current}</span>
+              </div>
+            </div>
           </div>
-          <div class="ag-title-actions">
-            <button class="ag-btn" onClick=${() => window.history.back()}>◀ EXIT</button>
-            <span class=${`ag-sync-status ${syncStatus === 'ok' ? 'ok' : syncStatus === 'busy' ? 'busy' : syncStatus === 'error' ? 'error' : 'local'}`} onClick=${() => syncCloud()}>
-              ${syncStatus === 'ok' ? '● SYNCED' : syncStatus === 'busy' ? '◌ SYNCING...' : syncStatus === 'error' ? '✕ ERROR' : '◌ LOCAL'}
-            </span>
-            <button class="ag-btn ag-btn-icon" onClick=${() => syncCloud()} title="今すぐ同期">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-            </button>
-            <button class="ag-btn ag-btn-icon" onClick=${() => setShowConfig(true)} title="設定">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </button>
+
+          <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--apple-subtext);">
+              <span>${isFailed ? '落単確定' : `あと欠席 ${Math.floor(remainingToFail / 2)}回 (遅刻 ${remainingToFail}回)`}</span>
+              <span style="font-weight: 600; color: ${ringColor}">${Math.round(percent)}% RISK</span>
+            </div>
+            <div class="ag-gauge-bar">
+              <div class="ag-gauge-fill" style="width: ${percent}%"></div>
+            </div>
+          </div>
+
+          ${actionButtons}
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = `
+      <div class="ag-header">
+        <div>
+          <h1 class="ag-title">出欠 Guardian</h1>
+          <div class="ag-subtitle">Attendance & Risk Monitor</div>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <span class="ag-pill ${syncStatus}" onclick="agTriggerSync()">
+            ${syncStatus === 'ok' ? '● SYNCED' : syncStatus === 'busy' ? '◌ SYNCING' : '◌ LOCAL'}
+          </span>
+          <button class="ag-btn ag-btn-circle" onclick="agOpenAddModal()" title="科目追加">＋</button>
+          <button class="ag-btn ag-btn-circle" onclick="agOpenConfigModal()" title="設定">⚙</button>
+        </div>
+      </div>
+
+      <div class="ag-stats-row">
+        <div class="ag-stat-card">
+          <div class="ag-stat-label">登録単位数</div>
+          <div class="ag-stat-val">${totalCredits}<span style="font-size: 0.9rem; color: var(--apple-subtext); margin-left: 0.3rem;">単位</span></div>
+        </div>
+        <div class="ag-stat-card">
+          <div class="ag-stat-label">警告 / 落単リスク</div>
+          <div class="ag-stat-val">
+            <span style="color: ${dangerCount > 0 ? 'var(--apple-yellow)' : 'var(--apple-text)'}">${dangerCount}</span>
+            <span style="color: var(--apple-subtext); margin: 0 0.4rem; font-size: 1.2rem;">/</span>
+            <span style="color: ${failCount > 0 ? 'var(--apple-red)' : 'var(--apple-text)'}">${failCount}</span>
           </div>
         </div>
+      </div>
 
-        \x3C!-- Stats Cards -->
-        <section class="ag-stats-grid">
-          <div class="ag-card">
-            <div style=${ { fontSize: '0.75rem', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '0.05em' } }>総登録単位数</div>
-            <div class="ag-stat-num">${stats.totalCredits}<span class="ag-stat-sub">(${courses.length}科目)</span></div>
-          </div>
-          <div class="ag-card">
-            <div style=${ { fontSize: '0.75rem', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '0.05em' } }>要注意 / 落単回避不可</div>
-            <div class="ag-stat-num">
-              <span style=${ { color: stats.dangerCount > 0 ? '#f59e0b' : '#3f3f46' } }>${stats.dangerCount}</span>
-              <span style=${ { color: '#27272a', margin: '0 0.5rem' } }>/</span>
-              <span style=${ { color: stats.failCount > 0 ? '#ef4444' : '#3f3f46' } }>${stats.failCount}</span>
-            </div>
-          </div>
-        </section>
-
-        \x3C!-- Course List -->
-        <section class="ag-container" style=${ { gap: '1rem' } }>
-          ${courses.map(course => {
-            const rule = RULES[course.type] || RULES.half;
-            const currentVal = course.current;
-            const limitVal = rule.limit;
-            const failVal = rule.fail;
-            const isFailed = currentVal <= failVal;
-            const isDanger = currentVal <= rule.danger && currentVal > failVal;
-            const statusClass = isFailed ? 'danger' : isDanger ? 'warn' : 'safe';
-            
-            
-            const remainingToFail = Math.max(0, currentVal - failVal); 
-            
-            const percent = Math.min((Math.abs(currentVal) / Math.abs(limitVal)) * 100, 100);
-            
-            
-            const donutBgColor = isFailed ? '#ef4444' : isDanger ? '#f59e0b' : '#10b981';
-            const donutStyle = {
-              background: `conic-gradient(${donutBgColor} ${percent}%, #1e1e24 0%)`
-            };
-
-            const isHistoryOpen = !!openedHistory[course.id];
-
-            return h`
-              <div key=${course.id} class=${`ag-card ag-course-card ${statusClass}`}>
-                <div class="ag-course-card-top">
-                  <div style=${ { minWidth: 0, flex: 1 } }>
-                    <div style=${ { display: 'flex', alignItems: 'center', gap: '0.75rem' } }>
-                      <span class="ag-card-title">${course.name}</span>
-                      ${!course.isTimetableLinked && h`
-                        <button style=${ { background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' } } onClick=${() => handleDelete(course.id, course.name)}>
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                        </button>
-                      `}
-                    </div>
-                    <div class="ag-course-meta">
-                      <span class="ag-badge" style=${ { cursor: 'pointer' } } onClick=${() => toggleCourseCredit(course.id)} title="クリックで単位数を変更">${course.credit}単位 ✎</span>
-                      <span class="ag-badge" style=${ { cursor: 'pointer' } } onClick=${() => toggleCourseType(course.id)} title="クリックで半期/通年を変更">${rule.label} ✎</span>
-                      ${course.isTimetableLinked && h`<span class="ag-badge" style=${ { background: 'rgba(6, 182, 212, 0.1)', color: '#06b6d4', borderColor: 'rgba(6, 182, 212, 0.2)' } }>時間割連動 🔗</span>`}
-                      ${isFailed && h`<span class="ag-badge" style=${ { background: 'rgba(239,68,68,0.1)', color: '#ef4444', borderColor: 'rgba(239,68,68,0.2)' } }>落単アウト</span>`}
-                    </div>
-                  </div>
-                  
-                  \x3C!-- Round Donut HUD -->
-                  <div class="ag-donut-container" style=${donutStyle}>
-                    <div class="ag-donut-center">
-                      <span style=${ { fontSize: '0.8rem', fontWeight: 'bold', color: donutBgColor } }>${currentVal}</span>
-                      <span style=${ { fontSize: '0.5rem', color: '#71717a' } }>limit ${limitVal}</span>
-                    </div>
-                  </div>
-                </div>
-
-                \x3C!-- Custom Linear HUD Gauge -->
-                <div class="ag-meter-container">
-                  <div class="ag-meter-labels">
-                    <span style=${ { color: isFailed ? '#ef4444' : '#a1a1aa' } }>
-                      ${isFailed ? '落単確定' : `あと欠席 ${Math.floor(remainingToFail / 2)}回（または遅刻 ${remainingToFail}回）でアウト`}
-                    </span>
-                    <span class="ag-hud-desc" style=${ { color: donutBgColor } }>
-                      ${Math.round(percent)}% RISK
-                    </span>
-                  </div>
-                  <div class="ag-meter-bg">
-                    <div class="ag-meter-fill" style=${ { width: `${percent}%` } }></div>
-                  </div>
-                </div>
-
-                \x3C!-- Interactive controls -->
-                ${course.isTimetableLinked ? h`
-                  <div style=${ { gridColumn: 'span 3', display: 'flex', width: '100%' } }>
-                    <a href="/project-x/timetable/" class="ag-control-btn" style=${ { width: '100%', textDecoration: 'none', color: '#06b6d4', borderColor: 'rgba(6, 182, 212, 0.3)', background: 'rgba(6, 182, 212, 0.03)', flexDirection: 'row', gap: '0.5rem', padding: '0.65rem 0.5rem' } }>
-                      <span>🔗 TIMETABLE LOG で出欠を記録する</span>
-                    </a>
-                  </div>
-                ` : h`
-                  <div class="ag-course-controls">
-                    <button class="ag-control-btn late" onClick=${() => handleUpdate(course.id, -1, 'late')} disabled=${isFailed}>
-                      <span>遅刻</span>
-                      <span class="sub-label">-1点</span>
-                    </button>
-                    <button class="ag-control-btn absent" onClick=${() => handleUpdate(course.id, -2, 'absent')} disabled=${isFailed}>
-                      <span>欠席</span>
-                      <span class="sub-label">-2点</span>
-                    </button>
-                    <button class="ag-control-btn" onClick=${() => handleUpdate(course.id, 1, 'undo')} title="手動微修正 (＋1)">
-                      <span>＋1点</span>
-                      <span class="sub-label">手動</span>
-                    </button>
-                  </div>
-                `}
-
-                \x3C!-- History toggle -->
-                <div>
-                  <button class="ag-history-trigger" onClick=${() => toggleHistory(course.id)}>
-                    <span>履歴 (${course.history.length})</span>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style=${ { transform: isHistoryOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' } }><path d="m6 9 6 6 6-6"/></svg>
-                  </button>
-
-                  ${isHistoryOpen && h`
-                    <div class="ag-history-panel">
-                      ${(!course.history || course.history.length === 0) ? h`
-                        <div style=${ { textAlign: 'center', fontSize: '0.7rem', color: '#3f3f46', padding: '0.5rem' } }>出欠履歴がありません</div>
-                      ` : course.history.map(item => {
-                        if (!item) return null;
-                        const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '不明';
-                        return h`
-                          <div key=${item.timestamp} class="ag-history-item">
-                            <span class=${`ag-history-badge ${item.type || 'late'}`}>
-                              ${item.type === 'late' ? '遅刻' : '欠席'} (${item.delta || 0})
-                            </span>
-                            <span style=${ { color: '#71717a', fontSize: '0.7rem' } }>${dateStr}</span>
-                            ${!course.isTimetableLinked && h`
-                              <button class="ag-history-undo-btn" onClick=${() => handleUndoHistoryItem(course.id, item.timestamp, item.delta)} title="このイベントを消去しカウンターを戻す">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                              </button>
-                            `}
-                          </div>
-                        `;
-                      })}
-                    </div>
-                  `}
-                </div>
-              </div>
-            `;
-          })}
-        </section>
-
-        \x3C!-- Add Course Form -->
-        <section class="ag-card">
-          <h2 class="ag-card-title" style=${ { color: '#10b981', borderBottom: '1px solid hsl(var(--border))', paddingBottom: '0.75rem', marginBottom: '1.25rem' } }>+ NEW_COURSE_REGISTRY</h2>
-          <form onSubmit=${handleAddCourse} class="ag-form-layout">
-            <div class="ag-form-row">
-              <input type="text" placeholder="授業名を入力 (例: 線形代数学)" class="ag-input" value=${newCourseName} onChange=${e => setNewCourseName(e.target.value)} required />
-              <input type="number" placeholder="単位" class="ag-input" min="1" max="10" value=${newCourseCredit} onChange=${e => setNewCourseCredit(e.target.value)} required />
-            </div>
-            
-            <div style=${ { display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' } }>
-              <div class="ag-radio-tabs" style=${ { width: '220px' } }>
-                <div class=${`ag-radio-tab ${termType === 'half' ? 'active' : ''}`} onClick=${() => setTermType('half')}>半期</div>
-                <div class=${`ag-radio-tab ${termType === 'full' ? 'active' : ''}`} onClick=${() => setTermType('full')}>通年</div>
-              </div>
-              
-              <button type="submit" class="ag-btn ag-btn-primary" style=${ { padding: '0.65rem 2rem' } }>科目を追加</button>
-            </div>
-          </form>
-        </section>
-
-        \x3C!-- System usage guide -->
-        <section class="ag-card" style=${ { fontSize: '0.8rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', flexWrap: 'wrap' } }>
-          <div>
-            <h4 style=${ { fontFamily: 'Orbitron', color: '#10b981', marginBottom: '0.5rem' } }>[FALLOUT_LINE]</h4>
-            <div style=${ { color: '#a1a1aa', lineHeight: '1.6' } }>
-              各科目の欠席・遅刻による減点は以下の基準で計算されます。
-              <div style=${ { display: 'flex', gap: '1rem', marginTop: '0.4rem', fontFamily: 'JetBrains Mono', fontSize: '0.75rem' } }>
-                <span style=${ { color: '#f59e0b' } }>遅刻: -1点</span>
-                <span style=${ { color: '#ef4444' } }>欠席: -2点</span>
-              </div>
-              <ul style=${ { listStyle: 'circle', paddingLeft: '1.25rem', marginTop: '0.5rem', fontSize: '0.75rem' } }>
-                <li><strong>半期科目</strong>: -11点で自動落単アウト</li>
-                <li><strong>通年科目</strong>: -21点で自動落単アウト</li>
-              </ul>
-            </div>
-          </div>
-          <div>
-            <h4 style=${ { fontFamily: 'Orbitron', color: '#3b82f6', marginBottom: '0.5rem' } }>[CLOUD_PROTOCOL]</h4>
-            <div style=${ { color: '#a1a1aa', lineHeight: '1.6', fontSize: '0.75rem' } }>
-              データはローカルストレージと jsonbin.io クラウドに即時同期されます。
-              右上の ⚙ 設定 から Blob ID を取得・入力すれば、スマートフォンや他のブラウザとの二重連携が可能です。
-            </div>
-          </div>
-        </section>
-
-        \x3C!-- Settings Modal Overlay -->
-        <div class=${`ag-overlay ${showConfig ? 'show' : ''}`} onClick=${(e) => e.target.classList.contains('ag-overlay') && setShowConfig(false)}>
-          <div class="ag-modal">
-            <div class="ag-modal-header">
-              <span style=${ { fontFamily: 'Orbitron', fontWeight: 'bold' } }>⚙️ SYSTEM CONFIGURATION</span>
-              <button style=${ { background: 'none', border: 'none', color: '#71717a', cursor: 'pointer', fontSize: '1.2rem' } } onClick=${() => setShowConfig(false)}>×</button>
-            </div>
-            
-            <div style=${ { display: 'flex', flexDirection: 'column', gap: '1.25rem' } }>
-              <div>
-                <label style=${ { fontSize: '0.7rem', color: '#71717a', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' } }>Current Connection Sync ID</label>
-                <div class="ag-blob-display">${blobId || '（未同期／ローカル保存のみ）'}</div>
-              </div>
-              
-              <div>
-                <label style=${ { fontSize: '0.7rem', color: '#71717a', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' } }>Apply Existing Sync ID</label>
-                <input type="text" id="ag-blob-input" class="ag-input" placeholder="接続IDを入力してロード" defaultValue=${blobId || ''} />
-              </div>
-
-              <div style=${ { borderTop: '1px solid hsl(var(--border))', paddingTop: '1rem' } }>
-                <span style=${ { fontSize: '0.7rem', color: '#71717a', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' } }>Data Backup & Purge</span>
-                <div style=${ { display: 'flex', gap: '0.5rem', flexWrap: 'wrap' } }>
-                  <button class="ag-btn" onClick=${handleExport}>📤 エクスポート</button>
-                  <label class="ag-btn" style=${ { cursor: 'pointer' } }>
-                    📥 インポート
-                    <input type="file" accept=".json" style=${ { display: 'none' } } onChange=${handleImport} />
-                  </label>
-                  <button class="ag-btn ag-btn-primary" style=${ { background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' } } onClick=${handleClearAll}>🗑️ 全データ削除</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="ag-modal-footer">
-              <button class="ag-btn" onClick=${() => setShowConfig(false)}>キャンセル</button>
-              <button class="ag-btn ag-btn-primary" onClick=${() => {
-                const val = document.getElementById('ag-blob-input').value;
-                handleApplySettings(val);
-              }}>適用</button>
-            </div>
-          </div>
-        </div>
-
-        \x3C!-- Toast Notification -->
-        <div class=${`ag-toast ${toastShow ? 'show' : ''}`}>
-          ${toastMsg}
-        </div>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        ${coursesHtml}
       </div>
     `;
   }
 
-  try {
-    ReactDOM.createRoot(document.getElementById('ag-root')).render(h`<${App} />`);
-  } catch(mountErr) {
-    console.error('MOUNT ERROR:', mountErr);
-    document.getElementById('ag-root').innerHTML = '<pre style="color:red;padding:2rem;font-size:14px;">MOUNT ERROR: ' + mountErr.message + '\n' + mountErr.stack + '</pre>';
-  }
-} catch(globalErr) {
-  console.error('GLOBAL SCRIPT ERROR:', globalErr);
-  var el = document.getElementById('ag-root');
-  if (el) el.innerHTML = '<pre style="color:red;padding:2rem;font-size:14px;">SCRIPT ERROR: ' + globalErr.message + '\n' + globalErr.stack + '</pre>';
-}
+  
+  window.agUpdateCourse = function(id, delta, actionType) {
+    const next = courses.map(c => {
+      if (c.id === id && !c.isTimetableLinked) {
+        return { ...c, current: Math.min(0, c.current + delta) };
+      }
+      return c;
+    });
+    saveAndSync(next);
+    showToast(actionType === 'undo' ? '数値を修正しました' : (actionType === 'late' ? '遅刻を記録しました' : '欠席を記録しました'));
+  };
+
+  window.agOpenAddModal = function() {
+    document.getElementById('ag-add-modal').classList.add('show');
+  };
+  window.agCloseAddModal = function() {
+    document.getElementById('ag-add-modal').classList.remove('show');
+  };
+  window.agAddCourseSubmit = function(e) {
+    e.preventDefault();
+    const name = document.getElementById('ag-input-name').value.trim();
+    const credit = Number(document.getElementById('ag-input-credit').value);
+    const type = document.getElementById('ag-input-type').value;
+    const customFail = Number(document.getElementById('ag-input-fail').value);
+    const weeklyLessons = Number(document.getElementById('ag-input-weekly').value);
+
+    if (!name) return;
+    const newCourse = { id: Date.now(), name, credit, type, customFail, weeklyLessons, current: 0, history: [], isTimetableLinked: false };
+    saveAndSync([...courses, newCourse]);
+    document.getElementById('ag-input-name').value = '';
+    agCloseAddModal();
+    showToast(name + ' を追加しました');
+  };
+
+  window.agOpenEditModal = function(id) {
+    const target = courses.find(c => String(c.id) === String(id));
+    if (!target) return;
+
+    document.getElementById('ag-edit-id').value = target.id;
+    document.getElementById('ag-edit-name').value = target.name;
+    document.getElementById('ag-edit-credit').value = target.credit || 2;
+    document.getElementById('ag-edit-type').value = target.type || 'half';
+    document.getElementById('ag-edit-fail').value = target.customFail || (target.type === 'full' ? -21 : -11);
+    document.getElementById('ag-edit-weekly').value = target.weeklyLessons || 1;
+
+    document.getElementById('ag-edit-modal').classList.add('show');
+  };
+  window.agCloseEditModal = function() {
+    document.getElementById('ag-edit-modal').classList.remove('show');
+  };
+  window.agEditCourseSubmit = function(e) {
+    e.preventDefault();
+    const id = document.getElementById('ag-edit-id').value;
+    const name = document.getElementById('ag-edit-name').value.trim();
+    const credit = Number(document.getElementById('ag-edit-credit').value);
+    const type = document.getElementById('ag-edit-type').value;
+    const customFail = Number(document.getElementById('ag-edit-fail').value);
+    const weeklyLessons = Number(document.getElementById('ag-edit-weekly').value);
+
+    const next = courses.map(c => {
+      if (String(c.id) === String(id)) {
+        return { ...c, name, credit, type, customFail, weeklyLessons };
+      }
+      return c;
+    });
+    saveAndSync(next);
+    agCloseEditModal();
+    showToast('科目設定を変更しました');
+  };
+
+  window.agDeleteCourseCurrent = function() {
+    const id = document.getElementById('ag-edit-id').value;
+    const target = courses.find(c => String(c.id) === String(id));
+    if (!target) return;
+    if (target.isTimetableLinked) {
+      showToast('時間割連携科目は時間割ページから削除してください');
+      return;
+    }
+    if (!confirm('科目「' + target.name + '」を削除しますか？')) return;
+    const next = courses.filter(c => String(c.id) !== String(id));
+    saveAndSync(next);
+    agCloseEditModal();
+    showToast('科目を削除しました');
+  };
+
+  window.agOpenConfigModal = function() {
+    document.getElementById('ag-config-blob-id').textContent = blobId || '未接続 (LOCAL)';
+    document.getElementById('ag-config-modal').classList.add('show');
+  };
+  window.agCloseConfigModal = function() {
+    document.getElementById('ag-config-modal').classList.remove('show');
+  };
+  window.agTriggerSync = function() {
+    showToast('同期状態: ' + (syncStatus === 'ok' ? 'クラウド同期済み' : 'ローカル保存中'));
+  };
+
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    courses = loadAndMergeCourses();
+    renderApp();
+  });
+  courses = loadAndMergeCourses();
+  renderApp();
 })();
 </script>
 
