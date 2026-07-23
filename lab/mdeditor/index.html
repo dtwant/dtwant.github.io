@@ -118,7 +118,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "79"
+    "wordCount": "125"
   }]
   </script>
 
@@ -756,7 +756,8 @@
   window.MathJax = {
     tex: { 
       inlineMath: [['$', '$'], ['\\(', '\\)']],
-      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
     },
     svg: { fontCache: 'local' },
     startup: {
@@ -799,7 +800,7 @@ $$
 F = m \frac{d^2 x}{dt^2}
 $$
 
-また、回路の抵抗値 $R$ はオームの法則 $V = IR$ により求められる。
+また、回路の抵抗値 $R$ はオームの法則 $V = IR$ により求められる。インライン積分 $\int f(x)dx$ は連続して文章と記述可能。
 
 ## 3. 実験方法および使用器具
 1. 電源装置を起動し、電圧を 5.0V に設定する。
@@ -1127,6 +1128,33 @@ textarea.ne-textarea {
 .ne-a4-paper code { color: #d63384 !important; background: #f6f8fa !important; padding: 2px 5px; border-radius: 4px; }
 
  
+mjx-container {
+  display: inline-block !important;
+  margin: 0 0.15em !important;
+  vertical-align: -0.18em !important;
+  line-height: normal !important;
+}
+mjx-container[display="true"] {
+  display: block !important;
+  margin: 1.2rem 0 !important;
+  text-align: center !important;
+  line-height: normal !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+mjx-container:not([display="true"]) {
+  display: inline-block !important;
+  margin: 0 0.15em !important;
+  vertical-align: -0.15em !important;
+}
+.ne-a4-paper mjx-container {
+  color: inherit !important;
+}
+.ne-a4-paper.dark-style mjx-container svg {
+  fill: #f5f5f7 !important;
+}
+
+ 
 .ne-footer-bar {
   background: rgba(18, 18, 20, 0.85);
   backdrop-filter: blur(30px);
@@ -1223,6 +1251,7 @@ textarea.ne-textarea {
         <option value="download-md">.mdファイルを保存</option>
         <option value="print">印刷 / PDF出力</option>
       </select>
+      <button class="ne-btn" style="color:var(--neon-pink); border-color:rgba(255,45,85,0.3); background:rgba(255,45,85,0.08);" onclick="if(history.length>1){history.back();}else{location.href='/lab/';}" title="Labポータルへ戻る">✕ EXIT</button>
     </div>
   </header>
 
@@ -1242,7 +1271,31 @@ textarea.ne-textarea {
         <button class="ne-btn" onclick="neApp.insert('~~', '~~')" title="取り消し線" style="padding: 3px 6px; font-size: 0.72rem;"><s>S</s></button>
         <button class="ne-btn" onclick="neApp.insert('## ', '')" style="padding: 3px 6px; font-size: 0.72rem;">H2</button>
         <button class="ne-btn" onclick="neApp.insert('### ', '')" style="padding: 3px 6px; font-size: 0.72rem;">H3</button>
-        <button class="ne-btn" onclick="neApp.insert('$$\n', '\n$$')" style="padding: 3px 6px; font-size: 0.72rem;">Math</button>
+
+        
+        <button class="ne-btn active" onclick="neApp.insert('$', '$')" title="インライン数式 ($...$)" style="padding: 3px 6px; font-size: 0.72rem;">$x$</button>
+        <button class="ne-btn active" onclick="neApp.insert('$$\n', '\n$$')" title="ディスプレイ数式 ($$...$$)" style="padding: 3px 6px; font-size: 0.72rem;">$$X$$</button>
+        
+        <select class="ne-select" style="padding: 3px 6px; font-size: 0.72rem;" onchange="neApp.insertMathSymbol(this.value); this.value='';">
+          <option value="">数式パレット ▾</option>
+          <option value="\int_{a}^{b} f(x) \, dx">∫ 積分 (\int_{a}^{b})</option>
+          <option value="\frac{d}{dx}">d/dx 微分 (\frac{d}{dx})</option>
+          <option value="\frac{\partial}{\partial x}">∂/∂x 偏微分 (\partial)</option>
+          <option value="\lim_{x \to \infty}">lim 極限 (\lim)</option>
+          <option value="\sum_{i=1}^{n}">∑ 和 (\sum)</option>
+          <option value="\frac{a}{b}">a/b 分数 (\frac)</option>
+          <option value="\sqrt{x}">√ 根号 (\sqrt)</option>
+          <option value="\vec{x}">x⃗ ベクトル (\vec)</option>
+          <option value="\begin{matrix} a & b \\ c & d \end{matrix}">2x2 行列 (matrix)</option>
+          <option value="\alpha">α アルファ</option>
+          <option value="\beta">β ベータ</option>
+          <option value="\theta">θ シータ</option>
+          <option value="\pi">π パイ</option>
+          <option value="\infty">∞ 無限大</option>
+          <option value="\pm">± プラスマイナス</option>
+          <option value="\Rightarrow">⇒ 帰結</option>
+        </select>
+
         <button class="ne-btn" onclick="neApp.insert('`', '`')" style="padding: 3px 6px; font-size: 0.72rem;">Code</button>
         <button class="ne-btn" onclick="neApp.insert('> ', '')" style="padding: 3px 6px; font-size: 0.72rem;">引用</button>
         <button class="ne-btn" onclick="neApp.insert('- ', '')" style="padding: 3px 6px; font-size: 0.72rem;">リスト</button>
@@ -1383,6 +1436,29 @@ var neApp = (function() {
     textarea.value = text.substring(0, start) + replacement + text.substring(end);
     textarea.focus();
     textarea.setSelectionRange(start + before.length, end + before.length);
+    saveSlot();
+  }
+
+  function insertMathSymbol(symbol) {
+    if (!symbol) return;
+    const textarea = document.getElementById('ne-input');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    
+    
+    const beforeText = text.substring(0, start);
+    const dollarCount = (beforeText.match(/\$/g) || []).length;
+    const isInsideMath = dollarCount % 2 === 1;
+
+    let insertion = symbol;
+    if (!isInsideMath && !symbol.startsWith('$')) {
+      insertion = '$' + symbol + '$';
+    }
+
+    textarea.value = text.substring(0, start) + insertion + text.substring(end);
+    textarea.focus();
+    textarea.setSelectionRange(start + insertion.length, start + insertion.length);
     saveSlot();
   }
 
@@ -1556,7 +1632,7 @@ var neApp = (function() {
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else setTimeout(init, 50);
 
-  return { insert, switchMobileView, toggleHistory, restoreHistory, handleExport, toggleFind, executeReplace, togglePaperStyle, toggleSparks };
+  return { insert, insertMathSymbol, switchMobileView, toggleHistory, restoreHistory, handleExport, toggleFind, executeReplace, togglePaperStyle, toggleSparks };
 })();
 </script>
 
