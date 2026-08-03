@@ -1396,7 +1396,7 @@
     <div class="wl-topbar">
       <div class="wl-app-title" id="wl-topbar-title">
         <div class="wl-logo-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#ffffff" stroke-width="2.2" fill="none"/></svg>
+          <svg viewBox="0 0 24 24" style="width:20px; height:20px; stroke:#ffffff !important; stroke-width:2.2; fill:none;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
         <div>飼育生体一覧 (Bio-Weight Monitor)</div>
       </div>
@@ -1718,7 +1718,7 @@ function render(){
       <button class="wl-btn wl-btn-primary" id="wl-btn-add-weight-active">＋ 体重を記録</button>
     `;
     document.getElementById('wl-btn-edit-active').onclick = () => openPetModal(selectedPetId);
-    document.getElementById('wl-btn-add-weight-active').onclick = () => openWeightModal();
+    document.getElementById('wl-btn-add-weight-active').onclick = () => openWeightModal(null);
 
     renderDetailView(vp, pet);
   }
@@ -1955,7 +1955,7 @@ function renderDetailView(container, pet){
             </div>
             <div style="display:flex; align-items:center; gap:12px;">
               <span style="font-size:0.75rem; color:var(--wl-text-2);">${esc(l.memo)}</span>
-              <button class="wl-btn wl-btn-danger" style="padding:3px 8px; font-size:0.7rem;" data-del-log="${l.id}">削除</button>
+              <button class="wl-btn" style="padding:3px 10px; font-size:0.75rem;" data-edit-log-id="${l.id}">✎ 編集</button>
             </div>
           </div>
         `).join('')}
@@ -1972,14 +1972,10 @@ function renderDetailView(container, pet){
   });
 
   
-  container.querySelectorAll('[data-del-log]').forEach(btn => {
+  container.querySelectorAll('[data-edit-log-id]').forEach(btn => {
     btn.onclick = () => {
-      const logId = btn.dataset.del-log;
-      if(confirm('この測定記録を削除しますか？')){
-        pet.logs = pet.logs.filter(l => l.id !== logId);
-        saveData();
-        renderDetailView(container, pet);
-      }
+      const logId = btn.getAttribute('data-edit-log-id');
+      openWeightModal(logId);
     };
   });
 
@@ -2049,7 +2045,6 @@ function openPetModal(petId){
   let selRgb = pet.colorRgb || '6, 182, 212';
 
   const ol = document.createElement('div'); ol.className = 'wl-overlay';
-  
   ol.style.setProperty('--card-hex', selHex);
   ol.style.setProperty('--card-rgb', selRgb);
 
@@ -2102,7 +2097,6 @@ function openPetModal(petId){
     };
   });
 
-  
   ol.querySelectorAll('#wl-color-grid .wl-color-opt').forEach(opt => {
     opt.onclick = () => {
       ol.querySelectorAll('#wl-color-grid .wl-color-opt').forEach(o => o.classList.remove('active'));
@@ -2110,7 +2104,6 @@ function openPetModal(petId){
       selHex = opt.dataset.hex;
       selRgb = opt.dataset.rgb;
 
-      
       ol.style.setProperty('--card-hex', selHex);
       ol.style.setProperty('--card-rgb', selRgb);
     };
@@ -2145,34 +2138,50 @@ function openPetModal(petId){
   }
 }
 
-function openWeightModal(){
+function openWeightModal(editLogId = null){
   const pet = data.pets.find(p => p.id === selectedPetId);
   if(!pet) return;
 
-  const latest = pet.logs[pet.logs.length - 1] || { weight: 50.0 };
+  const isEdit = !!editLogId;
+  const targetLog = isEdit ? (pet.logs || []).find(l => l.id === editLogId) : null;
+  const latestWeight = (pet.logs && pet.logs.length > 0) ? pet.logs[pet.logs.length - 1].weight : 50.0;
   const today = new Date().toISOString().split('T')[0];
+
+  const valWeight = targetLog ? targetLog.weight : latestWeight;
+  const valDate = targetLog ? targetLog.date : today;
+  const valMemo = targetLog ? (targetLog.memo || '') : '';
 
   const ol = document.createElement('div'); ol.className = 'wl-overlay';
   ol.innerHTML = `
     <div class="wl-modal">
-      <div class="wl-modal-title">⚖ ${esc(pet.name)} の体重を記録</div>
+      <div class="wl-modal-title">${isEdit ? '✎ 測定記録の編集' : '⚖ ' + esc(pet.name) + ' の体重を記録'}</div>
       
       <label>測定体重 (${pet.unit||'g'}) *</label>
-      <input type="number" step="0.1" id="wl-inp-w-val" value="${latest.weight || 50.0}" autoFocus>
+      <input type="number" step="0.1" id="wl-inp-w-val" value="${valWeight}" autoFocus>
 
       <label>測定日</label>
-      <input type="date" id="wl-inp-w-date" value="${today}">
+      <input type="date" id="wl-inp-w-date" value="${valDate}">
 
       <label>メモ (給餌状態・健康状態など)</label>
-      <input type="text" id="wl-inp-w-memo" placeholder="例: 脱皮前、排泄後、食いくつき良好">
+      <input type="text" id="wl-inp-w-memo" value="${esc(valMemo)}" placeholder="例: 脱皮前、排泄後、食いつき良好">
 
       <div class="wl-modal-ft">
+        ${isEdit ? '<button class="wl-btn wl-btn-danger" id="wl-modal-w-del" style="margin-right:auto;">この記録を削除</button>' : ''}
         <button class="wl-btn" id="wl-modal-w-cancel">キャンセル</button>
         <button class="wl-btn wl-btn-primary" id="wl-modal-w-save">記録を保存</button>
       </div>
     </div>
   `;
   document.body.appendChild(ol);
+
+  if (isEdit) {
+    document.getElementById('wl-modal-w-del').onclick = () => {
+      if (confirm('この測定記録を削除しますか？')) {
+        pet.logs = pet.logs.filter(l => l.id !== editLogId);
+        saveData(); render(); ol.remove();
+      }
+    };
+  }
 
   document.getElementById('wl-modal-w-cancel').onclick = () => ol.remove();
   document.getElementById('wl-modal-w-save').onclick = () => {
@@ -2183,14 +2192,22 @@ function openWeightModal(){
     if(!w || !d) return;
 
     if(!pet.logs) pet.logs = [];
-    const newLogs = [...pet.logs.filter(l => l.date !== d), {
-      id: uid(),
-      date: d,
-      weight: w,
-      memo: m
-    }].sort((a,b) => a.date.localeCompare(b.date));
 
-    pet.logs = newLogs;
+    if (isEdit) {
+      const idx = pet.logs.findIndex(l => l.id === editLogId);
+      if (idx !== -1) {
+        pet.logs[idx] = { id: editLogId, date: d, weight: w, memo: m };
+      }
+    } else {
+      pet.logs = [...pet.logs.filter(l => l.date !== d), {
+        id: uid(),
+        date: d,
+        weight: w,
+        memo: m
+      }];
+    }
+
+    pet.logs.sort((a,b) => a.date.localeCompare(b.date));
     saveData(); render(); ol.remove();
   };
 }
