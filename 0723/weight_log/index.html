@@ -1082,6 +1082,7 @@
   display: flex; align-items: center; justify-content: space-between;
   padding: 12px 0; margin-bottom: 24px;
   border-bottom: 1px solid var(--wl-border);
+  flex-wrap: wrap; gap: 10px;
 }
 .wl-app-title { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; }
 .wl-logo-icon {
@@ -1462,13 +1463,16 @@ function render(){
   const titleEl = document.getElementById('wl-topbar-title');
   const actionsEl = document.getElementById('wl-topbar-actions');
 
+  
+  const syncHtml = `<span class="wl-sync-badge ${document.getElementById('wl-sync-badge')?.className.split(' ').pop() || 'local'}" id="wl-sync-badge">${document.getElementById('wl-sync-badge')?.textContent || '◌ LOCAL'}</span><button class="wl-btn" onclick="wlSync(false)" style="font-size:0.7rem; padding:6px 10px;">⟳ SYNC</button><button class="wl-btn" onclick="wlOpenCfg()" style="font-size:0.7rem; padding:6px 10px;">⚙</button>`;
+
   if(viewMode === 'grid' || !selectedPetId){
     
     document.documentElement.style.setProperty('--wl-theme-rgb', '6, 182, 212');
     document.documentElement.style.setProperty('--wl-theme-hex', '#06b6d4');
 
     titleEl.innerHTML = `<div class="wl-logo-icon">🦎</div><div>飼育生体一覧 (${data.pets.length}匹)</div>`;
-    actionsEl.innerHTML = `<button class="wl-btn wl-btn-primary" id="wl-btn-add-pet-top">＋ 生き物を追加</button>`;
+    actionsEl.innerHTML = `${syncHtml}<button class="wl-btn wl-btn-primary" id="wl-btn-add-pet-top">＋ 生き物を追加</button>`;
     document.getElementById('wl-btn-add-pet-top').onclick = () => openPetModal(null);
 
     renderGridView(vp);
@@ -1484,7 +1488,7 @@ function render(){
     titleEl.innerHTML = `<button class="wl-btn" id="wl-btn-back">← 生体一覧に戻る</button>`;
     document.getElementById('wl-btn-back').onclick = () => { viewMode = 'grid'; render(); };
 
-    actionsEl.innerHTML = `
+    actionsEl.innerHTML = `${syncHtml}
       <button class="wl-btn" id="wl-btn-edit-active">✎ 編集</button>
       <button class="wl-btn wl-btn-primary" id="wl-btn-add-weight-active">＋ 体重を記録</button>
     `;
