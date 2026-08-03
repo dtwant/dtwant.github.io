@@ -1047,7 +1047,21 @@
   --wl-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.wl-root a, .wl-root button, .wl-root input { text-decoration: none !important; }
+ 
+.wl-root, .wl-root * {
+  box-sizing: border-box;
+  margin: 0; padding: 0;
+  text-decoration: none !important;
+  -webkit-text-decoration-line: none !important;
+  touch-action: manipulation;  
+}
+
+.wl-root a, .wl-root a:hover, .wl-root a:focus, .wl-root a:visited,
+.wl-root button, .wl-root input, .wl-root select {
+  text-decoration: none !important;
+  border-bottom-style: none;  
+  background-image: none !important;
+}
 
 .wl-root {
   position: fixed; inset: 0; margin: 0; padding: 0;
@@ -1056,7 +1070,6 @@
   overflow-y: auto; overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
-.wl-root * { box-sizing: border-box; margin: 0; padding: 0; text-decoration: none !important; }
 
 .wl-bg-glow {
   position: fixed; inset: 0; pointer-events: none; z-index: 0;
@@ -1069,7 +1082,7 @@
   content: ''; position: absolute; inset: 0;
   background-image:
     linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px) !important;
   background-size: 40px 40px;
   mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
@@ -1080,7 +1093,7 @@
  
 .wl-topbar {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 0; margin-bottom: 24px;
+  padding: 12px 0; margin-bottom: 20px;
   border-bottom: 1px solid var(--wl-border);
   flex-wrap: wrap; gap: 10px;
 }
@@ -1097,9 +1110,10 @@
 .wl-btn {
   padding: 9px 16px; border-radius: var(--wl-radius-sm);
   border: 1px solid var(--wl-border); background: rgba(255,255,255,0.03);
-  color: var(--wl-text); font-size: 0.8rem; font-weight: 600; font-family: inherit;
+  color: var(--wl-text); font-size: 0.85rem; font-weight: 600; font-family: inherit;
   cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   transition: all 0.15s var(--wl-ease); -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 .wl-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--wl-border-hover); }
 .wl-btn:active { transform: scale(0.96); }
@@ -1112,39 +1126,90 @@
 .wl-btn-danger:hover { background: rgba(244,63,94,0.25); }
 
  
+.wl-controls-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-bottom: 20px; flex-wrap: wrap;
+}
+.wl-search-box {
+  flex: 1; min-width: 200px; position: relative;
+}
+.wl-search-input {
+  width: 100%; padding: 8px 14px 8px 36px; border-radius: var(--wl-radius-sm);
+  border: 1px solid var(--wl-border); background: rgba(255,255,255,0.03);
+  color: var(--wl-text); font-size: 16px !important;  
+  font-family: inherit; outline: none; transition: all 0.15s;
+}
+.wl-search-input:focus { border-color: var(--wl-theme-hex); background: rgba(255,255,255,0.06); }
+.wl-search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 0.85rem; color: var(--wl-text-3); pointer-events: none;
+}
+.wl-view-toggles {
+  display: flex; gap: 4px; padding: 3px; background: rgba(0,0,0,0.4);
+  border-radius: var(--wl-radius-sm); border: 1px solid var(--wl-border);
+}
+.wl-view-btn {
+  padding: 6px 12px; font-size: 0.75rem; font-weight: 600; border-radius: var(--wl-radius-xs);
+  border: none; background: transparent; color: var(--wl-text-3); cursor: pointer; transition: all 0.15s;
+}
+.wl-view-btn.active { background: rgba(255,255,255,0.12); color: var(--wl-text); font-weight: 700; }
+
+ 
+.wl-species-group {
+  margin-bottom: 24px; border: 1px solid var(--wl-border); border-radius: var(--wl-radius);
+  background: rgba(255,255,255,0.015); overflow: hidden; transition: border-color 0.2s;
+}
+.wl-species-group:hover { border-color: var(--wl-border-hover); }
+.wl-group-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; background: rgba(255,255,255,0.025); cursor: pointer;
+  user-select: none; transition: background 0.15s;
+}
+.wl-group-header:hover { background: rgba(255,255,255,0.05); }
+.wl-group-title { display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 700; }
+.wl-group-count {
+  font-size: 0.75rem; padding: 2px 8px; border-radius: 10px;
+  background: rgba(255,255,255,0.08); color: var(--wl-text-2); font-family: var(--wl-font-mono);
+}
+.wl-group-chevron { font-size: 0.8rem; color: var(--wl-text-3); transition: transform 0.2s; }
+.wl-species-group.collapsed .wl-group-chevron { transform: rotate(-90deg); }
+.wl-species-group.collapsed .wl-group-body { display: none; }
+.wl-group-body { padding: 16px; border-top: 1px solid var(--wl-border); }
+
+ 
 .wl-creature-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;
 }
 .wl-creature-card {
-  padding: 20px; border-radius: var(--wl-radius);
+  padding: 18px; border-radius: var(--wl-radius-md);
   background: var(--wl-bg-card); border: 1px solid var(--wl-border);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
-  cursor: pointer; transition: all 0.25s var(--wl-ease);
-  display: flex; flex-direction: column; justify-content: space-between; gap: 16px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.3);
+  cursor: pointer; transition: all 0.2s var(--wl-ease);
+  display: flex; flex-direction: column; justify-content: space-between; gap: 14px;
   position: relative; overflow: hidden;
 }
 .wl-creature-card:hover {
-  transform: translateY(-4px); border-color: rgba(var(--card-rgb, 6, 182, 212), 0.5);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(var(--card-rgb, 6, 182, 212), 0.2);
+  transform: translateY(-3px); border-color: rgba(var(--card-rgb, 6, 182, 212), 0.5);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.4), 0 0 16px rgba(var(--card-rgb, 6, 182, 212), 0.18);
 }
 
-.wl-card-top { display: flex; align-items: center; gap: 14px; }
+.wl-card-top { display: flex; align-items: center; gap: 12px; }
 .wl-card-emoji {
-  width: 52px; height: 52px; border-radius: 50%;
+  width: 48px; height: 48px; border-radius: 50%;
   background: rgba(var(--card-rgb, 6, 182, 212), 0.15);
   border: 2px solid var(--card-hex, #06b6d4);
-  display: flex; align-items: center; justify-content: center; font-size: 1.8rem;
-  box-shadow: 0 0 16px rgba(var(--card-rgb, 6, 182, 212), 0.25);
+  display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+  box-shadow: 0 0 14px rgba(var(--card-rgb, 6, 182, 212), 0.22);
   flex-shrink: 0;
 }
-.wl-card-name { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
-.wl-card-species { font-size: 0.78rem; color: var(--wl-text-3); margin-top: 2px; }
+.wl-card-name { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; }
+.wl-card-species { font-size: 0.75rem; color: var(--wl-text-3); margin-top: 2px; }
 
 .wl-card-stats {
   display: flex; align-items: flex-end; justify-content: space-between;
-  padding-top: 14px; border-top: 1px solid var(--wl-border);
+  padding-top: 12px; border-top: 1px solid var(--wl-border);
 }
-.wl-stat-val { font-size: 1.6rem; font-weight: 800; font-family: var(--wl-font-mono); color: var(--card-hex, #06b6d4); }
+.wl-stat-val { font-size: 1.5rem; font-weight: 800; font-family: var(--wl-font-mono); color: var(--card-hex, #06b6d4); }
 .wl-stat-diff { font-size: 0.75rem; font-weight: 700; }
 
  
@@ -1204,12 +1269,14 @@
 .wl-modal-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.02em; }
 .wl-modal label { display: block; font-size: 0.72rem; font-weight: 600; color: var(--wl-text-2); margin-bottom: 4px; margin-top: 12px; }
 .wl-modal label:first-of-type { margin-top: 0; }
-.wl-modal input, .wl-modal select {
-  width: 100%; padding: 9px 12px; border-radius: var(--wl-radius-xs);
-  border: 1px solid var(--wl-border); background: rgba(255,255,255,0.03);
-  color: var(--wl-text); font-size: 0.85rem; font-family: inherit; outline: none;
+
+ 
+.wl-modal input, .wl-modal select, .wl-cfg-input {
+  width: 100%; padding: 10px 12px; border-radius: var(--wl-radius-xs);
+  border: 1px solid var(--wl-border); background: rgba(255,255,255,0.04);
+  color: var(--wl-text); font-size: 16px !important; font-family: inherit; outline: none;
 }
-.wl-modal input:focus { border-color: rgba(var(--wl-theme-rgb), 0.6); box-shadow: 0 0 0 3px rgba(var(--wl-theme-rgb), 0.15); }
+.wl-modal input:focus, .wl-cfg-input:focus { border-color: rgba(var(--wl-theme-rgb), 0.6); box-shadow: 0 0 0 3px rgba(var(--wl-theme-rgb), 0.15); }
 .wl-modal-ft { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--wl-border); }
 
  
@@ -1230,7 +1297,7 @@
 
  
 .wl-sync-badge {
-  font-size: 0.6rem; padding: 2px 8px; letter-spacing: 0.08em;
+  font-size: 0.65rem; padding: 3px 8px; letter-spacing: 0.08em;
   font-family: var(--wl-font-mono); border-radius: 3px; white-space: nowrap;
 }
 .wl-sync-badge.local { background: rgba(100,116,139,0.2); color: #94a3b8; }
@@ -1249,11 +1316,6 @@
 }
 .wl-cfg-title { font-size: 0.9rem; font-weight: 700; color: var(--wl-text); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--wl-border); }
 .wl-cfg-label { display: block; font-size: 0.65rem; color: var(--wl-text-3); font-family: var(--wl-font-mono); letter-spacing: 0.08em; margin-bottom: 0.3rem; text-transform: uppercase; }
-.wl-cfg-input {
-  width: 100%; padding: 0.5rem 0.7rem; background: rgba(255,255,255,0.04); border: 1px solid var(--wl-border);
-  border-radius: var(--wl-radius-xs); color: var(--wl-text); font-size: 0.8rem; font-family: var(--wl-font-mono); margin-bottom: 0.8rem;
-}
-.wl-cfg-input:focus { outline: none; border-color: var(--wl-theme-hex); }
 </style>
 
 <div class="wl-root">
@@ -1266,8 +1328,8 @@
       </div>
       <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;" id="wl-topbar-actions">
         <span class="wl-sync-badge local" id="wl-sync-badge">◌ LOCAL</span>
-        <button class="wl-btn" onclick="wlSync(false)" style="font-size:0.7rem; padding:6px 10px;">⟳ SYNC</button>
-        <button class="wl-btn" onclick="wlOpenCfg()" style="font-size:0.7rem; padding:6px 10px;">⚙</button>
+        <button class="wl-btn" onclick="wlSync(false)" style="font-size:0.75rem; padding:6px 10px;">⟳ SYNC</button>
+        <button class="wl-btn" onclick="wlOpenCfg()" style="font-size:0.75rem; padding:6px 10px;">⚙</button>
         <button class="wl-btn wl-btn-primary" id="wl-btn-new-pet">＋ 生き物を追加</button>
       </div>
     </div>
@@ -1313,6 +1375,9 @@ const COLORS = [
 let blobId = localStorage.getItem(BLOB_KEY) || null;
 let data = loadData();
 let viewMode = 'grid'; 
+let groupMode = localStorage.getItem('wl_group_mode') || 'species'; 
+let searchQuery = '';
+let collapsedGroups = {};
 let selectedPetId = null;
 let currentRange = 30;
 let chartObj = null;
@@ -1463,7 +1528,42 @@ function defaults(){
 }
 
 function uid(){ return Date.now().toString(36) + Math.random().toString(36).substr(2,6); }
-function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function esc(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+
+ 
+function selectPet(petId, pushState = true) {
+  selectedPetId = petId;
+  viewMode = petId ? 'detail' : 'grid';
+  if (pushState && petId) {
+    history.pushState({ petId }, '', `#pet-${petId}`);
+  }
+  render();
+}
+
+function goBackToGrid(fromHistory = false) {
+  viewMode = 'grid';
+  selectedPetId = null;
+  if (!fromHistory && location.hash.startsWith('#pet-')) {
+    history.back(); 
+    return;
+  }
+  render();
+}
+
+window.addEventListener('popstate', (e) => {
+  if (e.state && e.state.petId) {
+    selectPet(e.state.petId, false);
+  } else if (location.hash.startsWith('#pet-')) {
+    const id = location.hash.replace('#pet-', '');
+    if (data.pets.some(p => p.id === id)) {
+      selectPet(id, false);
+      return;
+    }
+    goBackToGrid(true);
+  } else {
+    goBackToGrid(true);
+  }
+});
 
 function render(){
   const vp = document.getElementById('wl-viewport');
@@ -1471,7 +1571,7 @@ function render(){
   const actionsEl = document.getElementById('wl-topbar-actions');
 
   
-  const syncHtml = `<span class="wl-sync-badge ${document.getElementById('wl-sync-badge')?.className.split(' ').pop() || 'local'}" id="wl-sync-badge">${document.getElementById('wl-sync-badge')?.textContent || '◌ LOCAL'}</span><button class="wl-btn" onclick="wlSync(false)" style="font-size:0.7rem; padding:6px 10px;">⟳ SYNC</button><button class="wl-btn" onclick="wlOpenCfg()" style="font-size:0.7rem; padding:6px 10px;">⚙</button>`;
+  const syncHtml = `<span class="wl-sync-badge ${document.getElementById('wl-sync-badge')?.className.split(' ').pop() || 'local'}" id="wl-sync-badge">${document.getElementById('wl-sync-badge')?.textContent || '◌ LOCAL'}</span><button class="wl-btn" onclick="wlSync(false)" style="font-size:0.75rem; padding:6px 10px;">⟳ SYNC</button><button class="wl-btn" onclick="wlOpenCfg()" style="font-size:0.75rem; padding:6px 10px;">⚙</button>`;
 
   if(viewMode === 'grid' || !selectedPetId){
     
@@ -1485,7 +1585,7 @@ function render(){
     renderGridView(vp);
   } else {
     const pet = data.pets.find(p => p.id === selectedPetId);
-    if(!pet){ viewMode = 'grid'; render(); return; }
+    if(!pet){ goBackToGrid(true); return; }
 
     const rgb = pet.colorRgb || '6, 182, 212';
     const hex = pet.colorHex || '#06b6d4';
@@ -1493,7 +1593,7 @@ function render(){
     document.documentElement.style.setProperty('--wl-theme-hex', hex);
 
     titleEl.innerHTML = `<button class="wl-btn" id="wl-btn-back">← 生体一覧に戻る</button>`;
-    document.getElementById('wl-btn-back').onclick = () => { viewMode = 'grid'; render(); };
+    document.getElementById('wl-btn-back').onclick = () => { goBackToGrid(false); };
 
     actionsEl.innerHTML = `${syncHtml}
       <button class="wl-btn" id="wl-btn-edit-active">✎ 編集</button>
@@ -1513,55 +1613,161 @@ function renderGridView(container){
       <div style="text-align:center; padding:80px 20px; color:var(--wl-text-3);">
         <div style="font-size:3.5rem; margin-bottom:12px;">🦎</div>
         <div style="font-size:1.1rem; font-weight:700; color:var(--wl-text);">飼育生体が登録されていません</div>
-        <div style="font-size:0.8rem; margin-top:6px;">右上または下のボタンから生き物（レオパ、猫、ハリネズミ等）を登録してください。</div>
+        <div style="font-size:0.85rem; margin-top:6px;">右上または下のボタンから生き物（レオパ、猫、ハリネズミ等）を登録してください。</div>
         <button class="wl-btn wl-btn-primary" style="margin-top:20px;" onclick="document.getElementById('wl-btn-add-pet-top').click()">＋ 生き物を追加する</button>
       </div>`;
     return;
   }
 
-  container.innerHTML = `
-    <div class="wl-creature-grid">
-      ${data.pets.map(p => {
-        const logs = p.logs || [];
-        const latest = logs[logs.length - 1] || { weight: 0 };
-        const prev = logs[logs.length - 2] || latest;
-        const diff = (latest.weight - prev.weight).toFixed(1);
-        const rgb = p.colorRgb || '6, 182, 212';
-        const hex = p.colorHex || '#06b6d4';
+  
+  const filteredPets = data.pets.filter(p => {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return (p.name || '').toLowerCase().includes(q) || (p.species || '').toLowerCase().includes(q);
+  });
 
-        return `
-          <div class="wl-creature-card" data-id="${p.id}" style="--card-rgb:${rgb}; --card-hex:${hex};">
-            <div class="wl-card-top">
-              <div class="wl-card-emoji">${p.emoji || '🐾'}</div>
-              <div>
-                <div class="wl-card-name">${esc(p.name)}</div>
-                <div class="wl-card-species">${esc(p.species || '種類未指定')}</div>
-              </div>
-            </div>
-
-            <div class="wl-card-stats">
-              <div>
-                <div style="font-size:0.65rem; color:var(--wl-text-3); font-weight:600;">最新測定体重</div>
-                <div class="wl-stat-val">${latest.weight || '-'} <span style="font-size:0.9rem;">${p.unit||'g'}</span></div>
-              </div>
-              <div style="text-align:right;">
-                <div style="font-size:0.65rem; color:var(--wl-text-3); font-weight:600;">前回比</div>
-                <div class="wl-stat-diff" style="color:${diff >= 0 ? '#10b981' : '#f43f5e'};">
-                  ${diff > 0 ? '+'+diff : diff} ${p.unit||'g'}
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('')}
+  
+  let html = `
+    <div class="wl-controls-bar">
+      <div class="wl-search-box">
+        <span class="wl-search-icon">🔍</span>
+        <input type="text" class="wl-search-input" id="wl-search-input" placeholder="生体名や種類で検索..." value="${esc(searchQuery)}">
+      </div>
+      <div class="wl-view-toggles">
+        <button class="wl-view-btn ${groupMode==='species'?'active':''}" id="wl-mode-species">📂 種類別まとめ</button>
+        <button class="wl-view-btn ${groupMode==='flat'?'active':''}" id="wl-mode-flat">📱 すべて表示</button>
+      </div>
     </div>
   `;
 
+  if (filteredPets.length === 0) {
+    html += `<div style="text-align:center; padding:40px 20px; color:var(--wl-text-3);">「${esc(searchQuery)}」に一致する生体が見つかりません。</div>`;
+    container.innerHTML = html;
+    bindControlEvents(container);
+    return;
+  }
+
+  if (groupMode === 'flat') {
+    
+    html += `<div class="wl-creature-grid">${filteredPets.map(p => renderPetCard(p)).join('')}</div>`;
+  } else {
+    
+    const groups = {};
+    filteredPets.forEach(p => {
+      const spec = (p.species && p.species.trim()) ? p.species.trim() : '種類未指定';
+      if (!groups[spec]) groups[spec] = [];
+      groups[spec].push(p);
+    });
+
+    Object.keys(groups).sort().forEach(specName => {
+      const groupPets = groups[specName];
+      const isCollapsed = !!collapsedGroups[specName];
+      const firstEmoji = groupPets[0]?.emoji || '🐾';
+
+      html += `
+        <div class="wl-species-group ${isCollapsed ? 'collapsed' : ''}" data-spec="${esc(specName)}">
+          <div class="wl-group-header">
+            <div class="wl-group-title">
+              <span>${firstEmoji}</span>
+              <span>${esc(specName)}</span>
+              <span class="wl-group-count">${groupPets.length}匹</span>
+            </div>
+            <div class="wl-group-chevron">▼</div>
+          </div>
+          <div class="wl-group-body">
+            <div class="wl-creature-grid">
+              ${groupPets.map(p => renderPetCard(p)).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  container.innerHTML = html;
+  bindControlEvents(container);
+}
+
+function renderPetCard(p) {
+  const logs = p.logs || [];
+  const latest = logs[logs.length - 1] || { weight: 0 };
+  const prev = logs[logs.length - 2] || latest;
+  const diff = (latest.weight - prev.weight).toFixed(1);
+  const rgb = p.colorRgb || '6, 182, 212';
+  const hex = p.colorHex || '#06b6d4';
+
+  return `
+    <div class="wl-creature-card" data-id="${p.id}" style="--card-rgb:${rgb}; --card-hex:${hex};">
+      <div class="wl-card-top">
+        <div class="wl-card-emoji">${p.emoji || '🐾'}</div>
+        <div>
+          <div class="wl-card-name">${esc(p.name)}</div>
+          <div class="wl-card-species">${esc(p.species || '種類未指定')}</div>
+        </div>
+      </div>
+
+      <div class="wl-card-stats">
+        <div>
+          <div style="font-size:0.65rem; color:var(--wl-text-3); font-weight:600;">最新測定体重</div>
+          <div class="wl-stat-val">${latest.weight || '-'} <span style="font-size:0.85rem;">${p.unit||'g'}</span></div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:0.65rem; color:var(--wl-text-3); font-weight:600;">前回比</div>
+          <div class="wl-stat-diff" style="color:${diff >= 0 ? '#10b981' : '#f43f5e'};">
+            ${diff > 0 ? '+'+diff : diff} ${p.unit||'g'}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function bindControlEvents(container) {
+  
+  const searchInput = container.querySelector('#wl-search-input');
+  if (searchInput) {
+    searchInput.oninput = (e) => {
+      searchQuery = e.target.value;
+      renderGridView(document.getElementById('wl-viewport'));
+      
+      const inp = document.getElementById('wl-search-input');
+      if (inp) {
+        inp.focus();
+        inp.setSelectionRange(searchQuery.length, searchQuery.length);
+      }
+    };
+  }
+
+  
+  const btnSpecies = container.querySelector('#wl-mode-species');
+  const btnFlat = container.querySelector('#wl-mode-flat');
+  if (btnSpecies && btnFlat) {
+    btnSpecies.onclick = () => {
+      groupMode = 'species';
+      localStorage.setItem('wl_group_mode', 'species');
+      renderGridView(document.getElementById('wl-viewport'));
+    };
+    btnFlat.onclick = () => {
+      groupMode = 'flat';
+      localStorage.setItem('wl_group_mode', 'flat');
+      renderGridView(document.getElementById('wl-viewport'));
+    };
+  }
+
+  
+  container.querySelectorAll('.wl-group-header').forEach(header => {
+    header.onclick = () => {
+      const group = header.closest('.wl-species-group');
+      const spec = group.dataset.spec;
+      group.classList.toggle('collapsed');
+      collapsedGroups[spec] = group.classList.contains('collapsed');
+    };
+  });
+
+  
   container.querySelectorAll('.wl-creature-card').forEach(card => {
     card.onclick = () => {
-      selectedPetId = card.dataset.id;
-      viewMode = 'detail';
-      render();
+      selectPet(card.dataset.id, true);
     };
   });
 }
@@ -1618,83 +1824,87 @@ function renderDetailView(container, pet){
           <button class="wl-tab-btn ${currentRange===365?'active':''}" data-r="365">全期間</button>
         </div>
       </div>
-      <div style="height:240px; position:relative;">
-        <canvas id="wl-canvas"></canvas>
+      <div style="position:relative; height:240px; width:100%;">
+        <canvas id="wl-chart-canvas"></canvas>
       </div>
     </div>
 
-    \x3C!-- History Log Table -->
+    \x3C!-- Logs History Card -->
     <div class="wl-card" style="margin-top:16px;">
-      <div style="font-size:1rem; font-weight:700; margin-bottom:12px;">測定履歴</div>
-      <div id="wl-pet-logs">
-        ${logs.length === 0 ? `<div style="padding:20px; text-align:center; color:var(--wl-text-3);">体重記録がまだありません。「＋ 体重を記録」から追加してください。</div>` : 
-          logs.slice().reverse().map(l => `
-            <div class="wl-log-item">
-              <div>
-                <div style="font-weight:600; font-size:0.9rem;">${l.date}</div>
-                ${l.memo ? `<div style="font-size:0.75rem; color:var(--wl-text-3);">${esc(l.memo)}</div>` : ''}
-              </div>
-              <div style="display:flex; align-items:center; gap:16px;">
-                <div style="font-family:var(--wl-font-mono); font-weight:700; font-size:1.1rem; color:var(--wl-theme-hex);">${l.weight} ${pet.unit||'g'}</div>
-                <button class="wl-btn wl-del-log-btn" data-id="${l.id}" style="padding:4px 8px; font-size:0.7rem;">✕</button>
-              </div>
+      <div class="wl-card-label" style="margin-bottom:12px;">測定履歴 (全 ${logs.length} 件)</div>
+      <div id="wl-logs-list">
+        ${logs.length === 0 ? '<div style="font-size:0.8rem; color:var(--wl-text-3); text-align:center; padding:20px;">まだデータがありません</div>' : ''}
+        ${[...logs].reverse().map(l => `
+          <div class="wl-log-item">
+            <div>
+              <span style="font-weight:700; font-family:var(--wl-font-mono); font-size:1rem;">${l.weight} ${pet.unit||'g'}</span>
+              <span style="font-size:0.75rem; color:var(--wl-text-3); margin-left:12px;">${l.date}</span>
             </div>
-          `).join('')
-        }
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style="font-size:0.75rem; color:var(--wl-text-2);">${esc(l.memo)}</span>
+              <button class="wl-btn wl-btn-danger" style="padding:3px 8px; font-size:0.7rem;" data-del-log="${l.id}">削除</button>
+            </div>
+          </div>
+        `).join('')}
       </div>
     </div>
   `;
 
-  document.querySelectorAll('#wl-chart-range-tabs .wl-tab-btn').forEach(btn => {
+  
+  container.querySelectorAll('#wl-chart-range-tabs .wl-tab-btn').forEach(btn => {
     btn.onclick = () => {
       currentRange = parseInt(btn.dataset.r);
-      render();
+      renderDetailView(container, pet);
     };
   });
 
-  document.querySelectorAll('.wl-del-log-btn').forEach(btn => {
+  
+  container.querySelectorAll('[data-del-log]').forEach(btn => {
     btn.onclick = () => {
+      const logId = btn.dataset.del-log;
       if(confirm('この測定記録を削除しますか？')){
-        pet.logs = pet.logs.filter(l => l.id !== btn.dataset.id);
-        saveData(); render();
+        pet.logs = pet.logs.filter(l => l.id !== logId);
+        saveData();
+        renderDetailView(container, pet);
       }
     };
   });
 
-  renderChart(pet);
+  
+  setTimeout(() => renderChart(pet), 20);
 }
 
 function renderChart(pet){
-  const canvas = document.getElementById('wl-canvas');
-  if(!canvas || !window.Chart) return;
+  const canvas = document.getElementById('wl-chart-canvas');
+  if(!canvas) return;
+  if(chartObj){ chartObj.destroy(); chartObj = null; }
+
+  const logs = (pet.logs || []).slice(-currentRange);
+  if(logs.length === 0) return;
+
   const ctx = canvas.getContext('2d');
-  if(chartObj) chartObj.destroy();
+  const themeHex = pet.colorHex || '#06b6d4';
+  const themeRgb = pet.colorRgb || '6, 182, 212';
 
-  const filtered = (pet.logs || []).slice(-currentRange);
-  const labels = filtered.map(l => l.date.substr(5));
-  const weights = filtered.map(l => l.weight);
-
-  const hex = pet.colorHex || '#06b6d4';
-  const rgb = pet.colorRgb || '6, 182, 212';
-
-  const bgGrad = ctx.createLinearGradient(0, 0, 0, 240);
-  bgGrad.addColorStop(0, `rgba(${rgb}, 0.35)`);
-  bgGrad.addColorStop(1, `rgba(${rgb}, 0)`);
+  const gradient = ctx.createLinearGradient(0, 0, 0, 240);
+  gradient.addColorStop(0, `rgba(${themeRgb}, 0.35)`);
+  gradient.addColorStop(1, `rgba(${themeRgb}, 0.0)`);
 
   chartObj = new Chart(ctx, {
     type: 'line',
     data: {
-      labels,
+      labels: logs.map(l => l.date),
       datasets: [{
         label: `体重 (${pet.unit||'g'})`,
-        data: weights,
-        borderColor: hex,
+        data: logs.map(l => l.weight),
+        borderColor: themeHex,
         borderWidth: 3,
-        backgroundColor: bgGrad,
+        backgroundColor: gradient,
         fill: true,
         tension: 0.35,
-        pointRadius: 5,
-        pointBackgroundColor: hex
+        pointBackgroundColor: themeHex,
+        pointRadius: 4,
+        pointHoverRadius: 7
       }]
     },
     options: {
@@ -1702,8 +1912,14 @@ function renderChart(pet){
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: 'rgba(255,255,255,0.4)', font: { family: 'JetBrains Mono' } } },
-        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: 'rgba(255,255,255,0.4)', font: { family: 'JetBrains Mono' } } }
+        x: {
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: 'rgba(255,255,255,0.4)', font: { family: 'JetBrains Mono', size: 10 } }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: 'rgba(255,255,255,0.4)', font: { family: 'JetBrains Mono', size: 10 } }
+        }
       }
     }
   });
@@ -1712,45 +1928,44 @@ function renderChart(pet){
  
 function openPetModal(petId){
   const isCreate = !petId;
-  const pet = isCreate ? { name:'', species:'', emoji:'🦎', colorHex:'#06b6d4', colorRgb:'6, 182, 212', unit:'g', logs:[] } : data.pets.find(p => p.id === petId);
+  const pet = isCreate ? { name:'', species:'', emoji:'🦎', colorHex:'#06b6d4', colorRgb:'6, 182, 212', unit:'g' } : data.pets.find(p => p.id === petId);
   if(!pet) return;
 
-  const ol = document.createElement('div'); ol.className = 'wl-overlay';
   let selEmoji = pet.emoji || '🦎';
   let selHex = pet.colorHex || '#06b6d4';
   let selRgb = pet.colorRgb || '6, 182, 212';
 
-  const emojiOpts = EMOJIS.map(e => `<div class="wl-choice-opt ${e === selEmoji ? 'active' : ''}" data-e="${e}">${e}</div>`).join('');
-  const colorOpts = COLORS.map(c => `<div class="wl-choice-opt ${c.hex === selHex ? 'active' : ''}" style="background:${c.hex}" data-hex="${c.hex}" data-rgb="${c.rgb}"></div>`).join('');
-
+  const ol = document.createElement('div'); ol.className = 'wl-overlay';
   ol.innerHTML = `
     <div class="wl-modal">
-      <div class="wl-modal-title">${isCreate ? '✨ 生き物を追加' : '✎ 生き物プロファイルを編集'}</div>
+      <div class="wl-modal-title">${isCreate ? '＋ 新しい生き物を登録' : '✎ 生体情報の編集'}</div>
 
-      <label>名前 *</label>
-      <input type="text" id="wl-form-pet-name" value="${esc(pet.name)}" placeholder="例: やまと, たま">
+      <label>名前 (必須) *</label>
+      <input type="text" id="wl-form-pet-name" value="${esc(pet.name)}" placeholder="例: やまと、レオパ太郎" autoFocus>
 
-      <label>種類 / 品種</label>
-      <input type="text" id="wl-form-pet-spec" value="${esc(pet.species||'')}" placeholder="例: レオパ, 猫, ハリネズミ">
-
-      <label>単位</label>
-      <select id="wl-form-pet-unit">
-        <option value="g" ${pet.unit==='g'?'selected':''}>g (グラム - 爬虫類・小動物)</option>
-        <option value="kg" ${pet.unit==='kg'?'selected':''}>kg (キログラム - 猫・犬など)</option>
-      </select>
+      <label>種類・分類 (例: レオパ、蛇、猫)</label>
+      <input type="text" id="wl-form-pet-spec" value="${esc(pet.species)}" placeholder="例: ヒョウモントカゲモドキ (レオパ)">
 
       <label>アイコン (絵文字)</label>
-      <div class="wl-choice-grid" id="wl-emoji-grid">${emojiOpts}</div>
+      <div class="wl-choice-grid" id="wl-emoji-grid">
+        ${EMOJIS.map(e => `<div class="wl-choice-opt ${e===selEmoji?'active':''}" data-e="${e}">${e}</div>`).join('')}
+      </div>
 
       <label>テーマカラー</label>
-      <div class="wl-choice-grid" id="wl-color-grid">${colorOpts}</div>
+      <div class="wl-choice-grid" id="wl-color-grid">
+        ${COLORS.map(c => `<div class="wl-choice-opt ${c.hex===selHex?'active':''}" data-hex="${c.hex}" data-rgb="${c.rgb}" style="background:${c.hex}; color:#000; font-size:0.8rem; font-weight:bold;">✓</div>`).join('')}
+      </div>
 
-      <div class="wl-modal-ft" style="justify-content:space-between;">
-        ${!isCreate ? `<button class="wl-btn wl-btn-danger" id="wl-btn-del-pet">削除</button>` : '<div></div>'}
-        <div style="display:flex; gap:8px;">
-          <button class="wl-btn" id="wl-modal-pet-cancel">キャンセル</button>
-          <button class="wl-btn wl-btn-primary" id="wl-modal-pet-save">${isCreate ? '登録' : '保存'}</button>
-        </div>
+      <label>体重の単位</label>
+      <select id="wl-form-pet-unit">
+        <option value="g" ${pet.unit==='g'?'selected':''}>グラム (g)</option>
+        <option value="kg" ${pet.unit==='kg'?'selected':''}>キログラム (kg)</option>
+      </select>
+
+      <div class="wl-modal-ft">
+        ${!isCreate ? '<button class="wl-btn wl-btn-danger" id="wl-btn-del-pet" style="margin-right:auto;">この生体を削除</button>' : ''}
+        <button class="wl-btn" id="wl-modal-pet-cancel">キャンセル</button>
+        <button class="wl-btn wl-btn-primary" id="wl-modal-pet-save">保存</button>
       </div>
     </div>
   `;
@@ -1784,21 +1999,20 @@ function openPetModal(petId){
     if(isCreate){
       const newPet = { id: uid(), name, species, unit, emoji: selEmoji, colorHex: selHex, colorRgb: selRgb, logs: [] };
       data.pets.push(newPet);
-      selectedPetId = newPet.id;
-      viewMode = 'detail';
+      selectPet(newPet.id, true);
     } else {
       Object.assign(pet, { name, species, unit, emoji: selEmoji, colorHex: selHex, colorRgb: selRgb });
+      render();
     }
-    saveData(); render(); ol.remove();
+    saveData(); ol.remove();
   };
 
   if(!isCreate){
     document.getElementById('wl-btn-del-pet').onclick = () => {
       if(confirm(`「${pet.name}」とその全ての測定データを削除しますか？`)){
         data.pets = data.pets.filter(p => p.id !== petId);
-        viewMode = 'grid';
-        selectedPetId = null;
-        saveData(); render(); ol.remove();
+        goBackToGrid(false);
+        saveData(); ol.remove();
       }
     };
   }
@@ -1855,6 +2069,13 @@ function openWeightModal(){
 }
 
  
+if (location.hash.startsWith('#pet-')) {
+  const hashId = location.hash.replace('#pet-', '');
+  if (data.pets.some(p => p.id === hashId)) {
+    selectedPetId = hashId;
+    viewMode = 'detail';
+  }
+}
 render();
 
 
