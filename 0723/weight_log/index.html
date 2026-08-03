@@ -1363,8 +1363,10 @@ window.wlSync = async function(silent) {
         method:'POST', headers:{...jbHdr(),'X-Bin-Name':'weight_log'}, body:JSON.stringify(data)
       });
       if (!res.ok) {
-        if (res.status===401||res.status===403) { setSyncBadge('err','✕ ERR'); if(!silent) alert('APIキーエラー'); return; }
-        throw new Error('create:'+res.status);
+        const errText = await res.text().catch(()=>'');
+        console.error('WL sync create error:', res.status, errText);
+        if (res.status===401||res.status===403) { setSyncBadge('err','✕ KEY ERR'); if(!silent) alert('APIキーエラー — ⚙でキーを確認してください'); return; }
+        throw new Error('create:'+res.status+' '+errText);
       }
       const j = await res.json(); blobId = j.metadata.id;
       try{localStorage.setItem(BLOB_KEY, blobId);}catch(e){}
@@ -1374,11 +1376,12 @@ window.wlSync = async function(silent) {
       const r = await fetch(`https://api.jsonbin.io/v3/b/${blobId}/latest`, { headers:{'X-Master-Key':getJbKey()}, cache:'no-store' });
       if (!r.ok) {
         if (r.status===404) {
+          console.warn('WL bin 404, recreating...');
           blobId=null; try{localStorage.removeItem(BLOB_KEY);}catch(e){}
           if(window.PWAConfigSync) await window.PWAConfigSync.syncAppBinId('weight_log',null);
           return await wlSync(silent);
         }
-        if (r.status===401||r.status===403) { setSyncBadge('err','✕ ERR'); return; }
+        if (r.status===401||r.status===403) { setSyncBadge('err','✕ KEY ERR'); if(!silent) alert('APIキーエラー'); return; }
         throw new Error('get:'+r.status);
       }
       const j = await r.json();
@@ -1388,7 +1391,11 @@ window.wlSync = async function(silent) {
       if (!p.ok) throw new Error('put:'+p.status);
       setSyncBadge('ok','◉ SYNCED'); if(!silent) alert('同期完了');
     }
-  } catch(e) { setSyncBadge('err','✕ ERR'); if(!silent) alert('同期失敗:'+e.message); }
+  } catch(e) {
+    console.error('WL sync error:', e);
+    setSyncBadge('err','✕ ERR');
+    if(!silent) alert('同期失敗: '+e.message);
+  }
 };
 
 function saveDataLocal(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(data)); }catch(e){} }
