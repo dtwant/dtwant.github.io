@@ -1913,14 +1913,33 @@ function renderGridView(container){
     return;
   }
 
+  
+  const getPetLastUpdated = (pet) => {
+    let maxDate = '';
+    if (pet.logs && pet.logs.length > 0) {
+      pet.logs.forEach(l => {
+        if (l.date && l.date > maxDate) maxDate = l.date;
+      });
+    }
+    if (pet.updatedAt && pet.updatedAt > maxDate) maxDate = pet.updatedAt;
+    return maxDate;
+  };
+
   if (groupMode === 'flat') {
     const sortedFlatPets = [...filteredPets].sort((a, b) => {
-      const getLatestW = (pet) => (pet.logs && pet.logs.length > 0) ? pet.logs[pet.logs.length - 1].weight : 0;
-      const getLatestDate = (pet) => (pet.logs && pet.logs.length > 0) ? pet.logs[pet.logs.length - 1].date : '';
+      const getLatestW = (pet) => {
+        if (!pet.logs || pet.logs.length === 0) return -1;
+        return pet.logs[pet.logs.length - 1].weight;
+      };
 
       if (sortModeFlat === 'created_desc') return data.pets.indexOf(b) - data.pets.indexOf(a);
       if (sortModeFlat === 'created_asc') return data.pets.indexOf(a) - data.pets.indexOf(b);
-      if (sortModeFlat === 'updated_desc') return getLatestDate(b).localeCompare(getLatestDate(a));
+      if (sortModeFlat === 'updated_desc') {
+        const dA = getPetLastUpdated(a);
+        const dB = getPetLastUpdated(b);
+        if (dA !== dB) return dB.localeCompare(dA);
+        return (a.name || '').localeCompare(b.name || '', 'ja');
+      }
       if (sortModeFlat === 'weight_desc') return getLatestW(b) - getLatestW(a);
       if (sortModeFlat === 'weight_asc') return getLatestW(a) - getLatestW(b);
       if (sortModeFlat === 'name_asc') return (a.name || '').localeCompare(b.name || '', 'ja');
@@ -1951,20 +1970,26 @@ function renderGridView(container){
         const getGroupLatestDate = (list) => {
           let maxD = '';
           list.forEach(p => {
-            if (p.logs && p.logs.length > 0) {
-              const d = p.logs[p.logs.length - 1].date;
-              if (d > maxD) maxD = d;
-            }
+            const d = getPetLastUpdated(p);
+            if (d > maxD) maxD = d;
           });
           return maxD;
         };
-        return getGroupLatestDate(groupsMap[b]).localeCompare(getGroupLatestDate(groupsMap[a]));
+        const gA = getGroupLatestDate(groupsMap[a]);
+        const gB = getGroupLatestDate(groupsMap[b]);
+        if (gA !== gB) return gB.localeCompare(gA);
+        return a.localeCompare(b, 'ja');
       }
       return 0;
     });
 
     keys.forEach(groupName => {
-      const groupPets = groupsMap[groupName];
+      let groupPets = [...groupsMap[groupName]];
+      
+      if (sortModeSpecies === 'updated_desc') {
+        groupPets.sort((a, b) => getPetLastUpdated(b).localeCompare(getPetLastUpdated(a)));
+      }
+
       const isCollapsed = !!collapsedGroups[groupName];
       const samplePet = groupPets[0];
       const iconId = groupMode === 'taxa' ? groupName : (samplePet?.emoji || groupName);
@@ -2465,11 +2490,11 @@ function openPetModal(petId){
     const unit = document.getElementById('wl-form-pet-unit').value;
 
     if(isCreate){
-      const newPet = { id: uid(), name, species, taxa: selTaxa, unit, emoji: selEmoji, colorHex: selHex, colorRgb: selRgb, logs: [] };
+      const newPet = { id: uid(), name, species, taxa: selTaxa, unit, emoji: selEmoji, colorHex: selHex, colorRgb: selRgb, logs: [], updatedAt: new Date().toISOString() };
       data.pets.push(newPet);
       selectPet(newPet.id, true);
     } else {
-      Object.assign(pet, { name, species, taxa: selTaxa, unit, emoji: selEmoji, colorHex: selHex, colorRgb: selRgb });
+      Object.assign(pet, { name, species, taxa: selTaxa, unit, emoji: selEmoji, colorHex: selHex, colorRgb: selRgb, updatedAt: new Date().toISOString() });
       render();
     }
     saveData(); ol.remove();
@@ -2557,6 +2582,7 @@ function openWeightModal(editLogId = null){
     }
 
     pet.logs.sort((a,b) => a.date.localeCompare(b.date));
+    pet.updatedAt = new Date().toISOString();
     saveData(); render(); ol.remove();
   };
 }
