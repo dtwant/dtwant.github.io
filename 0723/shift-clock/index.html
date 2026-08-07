@@ -15,7 +15,7 @@
   <title>SHIFT_CLOCK &middot; dt&#39;s world</title>
   <meta name="title" content="SHIFT_CLOCK &middot; dt&#39;s world" />
   
-  <meta name="description" content="SHIFT &amp; PAYROLL MANAGER" />
+  <meta name="description" content="打刻・外出・シフト・給与見込みを月単位で管理する勤務記録ツール" />
   
   
   
@@ -81,7 +81,7 @@
   <meta property="og:url" content="https://dtwant.github.io/0723/shift-clock/">
   <meta property="og:site_name" content="dt&#39;s world">
   <meta property="og:title" content="SHIFT_CLOCK">
-  <meta property="og:description" content="SHIFT &amp; PAYROLL MANAGER">
+  <meta property="og:description" content="打刻・外出・シフト・給与見込みを月単位で管理する勤務記録ツール">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="0723">
@@ -89,7 +89,7 @@
   
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="SHIFT_CLOCK">
-  <meta name="twitter:description" content="SHIFT &amp; PAYROLL MANAGER">
+  <meta name="twitter:description" content="打刻・外出・シフト・給与見込みを月単位で管理する勤務記録ツール">
 
     
   
@@ -101,7 +101,7 @@
     "articleSection": "Secret",
     "name": "SHIFT_CLOCK",
     "headline": "SHIFT_CLOCK",
-    "description": "SHIFT \u0026 PAYROLL MANAGER",
+    "description": "打刻・外出・シフト・給与見込みを月単位で管理する勤務記録ツール",
     
     "inLanguage": "en",
     "url" : "https:\/\/dtwant.github.io\/0723\/shift-clock\/",
@@ -118,7 +118,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "67"
+    "wordCount": "78"
   }]
   </script>
 
@@ -865,7 +865,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>67 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>78 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1209,6 +1209,19 @@
   .sc-btn-end:not(:disabled):hover { box-shadow: 0 8px 30px rgba(239,68,68,0.25); }
 
   .sc-punch-label { display: block; margin-top: 0.3rem; font-size: 0.55rem; opacity: 0.7; font-family: 'Zen Kaku Gothic New', sans-serif; letter-spacing: 0; }
+  .sc-flow-guide { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin:0 0 1rem; }
+  .sc-flow-step {
+    display:grid; grid-template-columns:24px minmax(0,1fr); gap:7px; align-items:center;
+    min-height:46px; padding:7px 9px; border:1px solid rgba(255,255,255,.07); border-radius:10px;
+    color:#64748b; background:rgba(255,255,255,.02); text-align:left;
+  }
+  .sc-flow-step b { display:grid; width:24px; height:24px; place-items:center; border:1px solid currentColor; border-radius:50%; font:700 .65rem/1 'JetBrains Mono',monospace; }
+  .sc-flow-step span { font-size:.68rem; font-weight:700; }
+  .sc-flow-guide[data-state="none"] .sc-flow-step[data-step="in"],
+  .sc-flow-guide[data-state="end"] .sc-flow-step[data-step="in"],
+  .sc-flow-guide[data-state="in"] .sc-flow-step[data-step="out"],
+  .sc-flow-guide[data-state="back"] .sc-flow-step[data-step="end"],
+  .sc-flow-guide[data-state="out"] .sc-flow-step[data-step="back"] { border-color:rgba(0,255,157,.42); color:#00ff9d; background:rgba(0,255,157,.09); box-shadow:0 0 18px rgba(0,255,157,.08); }
 
    
   .sc-month-nav {
@@ -1425,14 +1438,24 @@
     .sc-hdr-left { justify-content: space-between; }
     .sc-hdr-actions { justify-content: flex-end; }
     .sc-punch-btns { gap: 0.4rem; }
-    .sc-punch-btn { font-size: 0.6rem; padding: 0.7rem 0.2rem; }
-    .sc-punch-label { font-size: 0.45rem; }
+    .sc-punch-btn { min-height:60px; font-size:.75rem; padding:.7rem .3rem; }
+    .sc-punch-label { font-size:.62rem; }
+    .sc-flow-guide { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:5px; margin-inline:-.2rem; }
+    .sc-flow-step { display:flex; min-height:52px; justify-content:center; padding:6px 3px; }
+    .sc-flow-step b { width:22px; height:22px; flex:0 0 22px; }
+    .sc-flow-step span { font-size:.62rem; white-space:nowrap; }
     .sc-stat-val { font-size: 1.1rem; }
     .sc-clock { font-size: 2rem; }
-    .sc-cal-cell { min-height: 52px; }
+    .sc-cal-cell { min-height:58px; }
+    .sc-cal-dow span { font-size:.64rem; }
+    .sc-day-num { font-size:.72rem; }
+    .sc-day-info { font-size:.55rem; line-height:1.35; }
     .sc-day-info .pay { display: none; }
     .sc-cal-cell.has-shift::after { font-size: 0.45rem; }
     .sc-form-row { flex-direction: column; }
+    .sc-form-input, .sc-form-select { font-size:16px; min-height:44px; }
+    .sc-btn, .sc-btn-nav, .sc-modal-close, .sc-btn-save, .sc-btn-secondary, .sc-btn-danger { min-height:44px; }
+    .sc-wrap { padding-bottom:calc(.8rem + env(safe-area-inset-bottom)); }
   }
   @media (max-width: 360px) {
     .sc-wrap { padding: 0.5rem; }
@@ -1440,6 +1463,14 @@
     .sc-stats { gap: 0.3rem; }
     .sc-stat-val { font-size: 0.95rem; }
     .sc-cal-cell { min-height: 44px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #sc-root *, #sc-root *::before, #sc-root *::after,
+    .sc-overlay *, .sc-overlay *::before, .sc-overlay *::after {
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
   }
 </style>
 
@@ -1480,6 +1511,12 @@
       <div class="sc-clock" id="sc-clock">00:00:00</div>
       <div class="sc-clock-date" id="sc-clock-date"></div>
       <div class="sc-current-status" id="sc-current-info"></div>
+      <div class="sc-flow-guide" id="sc-flow-guide" data-state="none" aria-label="打刻の順序">
+        <div class="sc-flow-step" data-step="in"><b>1</b><span>出勤</span></div>
+        <div class="sc-flow-step" data-step="out"><b>2</b><span>外出</span></div>
+        <div class="sc-flow-step" data-step="back"><b>3</b><span>戻り</span></div>
+        <div class="sc-flow-step" data-step="end"><b>4</b><span>退勤</span></div>
+      </div>
       <div class="sc-punch-btns">
         <button class="sc-punch-btn sc-btn-in" id="sc-p-in" onclick="scPunch('in')">出勤<span class="sc-punch-label">CLOCK IN</span></button>
         <button class="sc-punch-btn sc-btn-out" id="sc-p-out" onclick="scPunch('out')" disabled>外出<span class="sc-punch-label">GO OUT</span></button>
@@ -1596,6 +1633,15 @@
       <label class="sc-form-label">JSONBin API Key（任意）</label>
       <input type="text" class="sc-form-input" id="sc-cfg-key" placeholder="デフォルトキーを使用" autocomplete="off">
     </div>
+    <div class="sc-form-group">
+      <label class="sc-form-label">LOCAL BACKUP</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+        <button class="sc-btn-secondary" type="button" onclick="scExportBackup()">⬇ JSON保存</button>
+        <button class="sc-btn-secondary" type="button" onclick="document.getElementById('sc-import-file').click()">⬆ JSON読込</button>
+        <input id="sc-import-file" type="file" accept="application/json,.json" hidden onchange="scImportBackup(event)">
+      </div>
+      <div class="sc-form-label" style="margin-top:.45rem;text-transform:none;line-height:1.5;">同期IDやAPIキーを含めず、勤務記録と時給設定だけを保存します。</div>
+    </div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
       <button class="sc-btn-danger" onclick="scPurge()">全データ消去</button>
       <button class="sc-btn-save" onclick="scApplyConfig()">APPLY</button>
@@ -1684,6 +1730,8 @@
 
   function updatePunchButtons() {
     const st = getCurrentStatus();
+    const guide = $('sc-flow-guide');
+    if (guide) guide.dataset.state = st;
     $('sc-p-in').disabled   = (st === 'in' || st === 'back');
     $('sc-p-out').disabled  = !(st === 'in' || st === 'back');
     $('sc-p-back').disabled = st !== 'out';
@@ -2067,6 +2115,42 @@
     save(); scCloseModal('sc-ov-config');
     renderStats(); renderCal(); updatePunchButtons();
     toast('全データを消去しました');
+  };
+
+  window.scExportBackup = function() {
+    try {
+      const payload = { app: 'ShiftClock', version: 1, exportedAt: new Date().toISOString(), data };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `shift-clock-backup-${todayKey()}.json`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      toast('バックアップを書き出しました');
+    } catch (e) { toast('書き出しに失敗しました', true); }
+  };
+
+  window.scImportBackup = function(event) {
+    const input = event && event.target;
+    const file = input && input.files && input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function() {
+      try {
+        const parsed = JSON.parse(String(reader.result || ''));
+        const incoming = parsed && parsed.app === 'ShiftClock' ? parsed.data : parsed;
+        if (!incoming || typeof incoming !== 'object' || !incoming.records || typeof incoming.records !== 'object') throw new Error('invalid');
+        if (!confirm('バックアップを現在の記録に統合します。既存記録は保持されます。よろしいですか？')) return;
+        data = mergeData(data, incoming);
+        save(); renderStats(); renderCal(); updatePunchButtons();
+        debouncedPush();
+        toast('バックアップを統合しました');
+      } catch (e) { toast('対応していないバックアップです', true); }
+      finally { if (input) input.value = ''; }
+    };
+    reader.onerror = function() { toast('ファイルを読み込めませんでした', true); if (input) input.value = ''; };
+    reader.readAsText(file);
   };
 
   window.scCloseModal = function(id) { $(id).classList.remove('open'); };

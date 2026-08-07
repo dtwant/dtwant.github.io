@@ -1445,6 +1445,9 @@
   letter-spacing: 0.12em;
 }
 .ms-empty-icon { font-size: 2.5rem; opacity: 0.25; }
+.ms-empty strong { color:var(--ms-text); font-family:var(--ms-font-jp); font-size:.9rem; letter-spacing:0; }
+.ms-empty span { max-width:28rem; color:var(--ms-muted); font-family:var(--ms-font-jp); font-size:.76rem; line-height:1.65; letter-spacing:0; text-align:center; }
+.ms-empty button { min-height:44px; margin-top:.25rem; padding:0 16px; border:1px solid rgba(0,255,229,.38); border-radius:10px; color:var(--ms-cyan); background:rgba(0,255,229,.08); font-weight:700; }
 
  
 .ms-fab {
@@ -1706,7 +1709,7 @@
   .ms-logo-sub { display:none; }
   .ms-logo-title { font-size:1.1rem; }
   .ms-header-right { width:100%; justify-content:space-between; gap: 0.75rem;}
-  .ms-hbtn { padding:0.4rem 0.8rem; font-size:0.55rem; }
+  .ms-hbtn { min-height:44px; padding:0.4rem 0.8rem; font-size:0.65rem; }
   .ms-hbtn.primary { display:none; }
   .ms-fab { display:flex; }
   .ms-stats {
@@ -1716,14 +1719,25 @@
   .ms-stat:nth-child(3),.ms-stat:nth-child(6) { border-right:none; }
   .ms-stat:nth-child(4),.ms-stat:nth-child(5),.ms-stat:nth-child(6) { border-bottom:none; }
   .ms-stat-num { font-size:1rem; }
-  .ms-stat-label { font-size:0.42rem; }
+  .ms-stat-label { font-size:0.62rem; }
   .ms-toolbar-row1 { padding:0.55rem 0.9rem 0.4rem; gap:0.4rem; }
   .ms-toolbar-row2 { padding:0 0.9rem 0.5rem; }
-  .ms-tab { font-size:0.5rem; padding:0.26rem 0.5rem; }
-  .ms-sort-sel { font-size:0.5rem; }
-  .ms-grid { grid-template-columns:repeat(3,1fr); gap:0.45rem; padding:0.6rem; padding-bottom:calc(4.5rem + env(safe-area-inset-bottom,0px)); }
-  .ms-card-body { padding:0.4rem 0.45rem 0.35rem; gap: 0.2rem; }
-  .ms-card-title { font-size:0.75rem; max-height: calc(1.35 * 0.75rem * 2); }
+  .ms-tab { min-height:44px; font-size:0.72rem; padding:0.4rem 0.75rem; }
+  .ms-sort-sel { min-height:40px; font-size:16px; }
+  .ms-input,.ms-textarea,.ms-select { font-size:16px !important; }
+  .ms-search { min-height:44px; font-size:16px !important; }
+  .ms-btn,.ms-modal-close { min-height:44px; }
+  .ms-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:0.7rem; padding:0.75rem; padding-bottom:calc(5rem + env(safe-area-inset-bottom,0px)); }
+  .ms-card { border-radius:12px; overflow:hidden; }
+  .ms-card-body { padding:0.65rem 0.7rem 0.6rem; gap:0.3rem; }
+  .ms-card-title { font-size:0.86rem; line-height:1.38; max-height:calc(1.38 * .86rem * 2); }
+  .ms-card-author { font-size:.72rem; }
+  .ms-card-tag { font-size:.58rem; padding:.16rem .36rem; }
+  .ms-card-note { font-size:.68rem; line-height:1.45; }
+  .ms-toolbar { position:sticky; top:0; z-index:20; background:rgba(4,7,12,.88); backdrop-filter:blur(18px) saturate(1.4); -webkit-backdrop-filter:blur(18px) saturate(1.4); }
+  .ms-card:active { transform:scale(.975); }
+  .ms-empty { padding:3.5rem 1.25rem; }
+  .ms-empty-icon { opacity:.7; }
   .ms-badge { font-size:0.4rem; padding:0.15rem 0.35rem; }
   .ms-overlay { align-items:flex-end; padding:0; }
   .ms-modal { max-width:100%; border-radius:12px 12px 0 0; border-bottom:none; animation:ms-sheet-in 0.25s cubic-bezier(0.32,0.72,0,1); padding-bottom:env(safe-area-inset-bottom,0px); }
@@ -1732,6 +1746,12 @@
   .ms-modal-header { position:relative; }
   .ms-row { grid-template-columns:1fr; gap:0.6rem; }
   .ms-toast { bottom:calc(4.5rem + env(safe-area-inset-bottom,0px)); right:1rem; left:1rem; text-align:center; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .ms-app *, .ms-app *::before, .ms-app *::after,
+  .ms-overlay *, .ms-overlay *::before, .ms-overlay *::after {
+    animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;
+  }
 }
 @media (max-width:380px) {
   .ms-logo-title { font-size:0.85rem; letter-spacing:0.12em; }
@@ -1742,7 +1762,7 @@
   .ms-overlay { align-items:center; padding:0.5rem; }
   .ms-modal { border-radius:4px; max-width:480px; }
   .ms-fab { bottom:0.75rem; right:0.75rem; width:46px; height:46px; font-size:1.4rem; }
-  .ms-grid { grid-template-columns:repeat(3,1fr); }
+  .ms-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 </style>
 <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
@@ -2349,7 +2369,7 @@ window.msRender=function(){
   });
   const grid=document.getElementById('ms-grid');
   if(!arr.length){
-    grid.innerHTML='<div class="ms-empty"><div class="ms-empty-icon">📚</div><div>NO MANGA FOUND</div></div>';
+    grid.innerHTML='<div class="ms-empty"><div class="ms-empty-icon">📚</div><strong>本棚はまだ空です</strong><span>最初の作品を登録すると、読書状況や巻数をここで管理できます。</span><button type="button" onclick="msOpenAdd()">最初の作品を追加</button></div>';
     return;
   }
   grid.innerHTML=arr.map((m,i)=>{
@@ -2532,6 +2552,7 @@ window.msSync=msSync;
 init();
 })();
 </script>
+
 <hr>
 <p><small>※ 記録はjsonbin.io経由でクラウド同期される. ステータスバッジが「SYNCED」ならオンライン同期中.</small></p>
 
@@ -2597,9 +2618,9 @@ init();
           
             <a
               class="flex text-right text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
-              href="/0723/1/">
+              href="/0723/feeding/">
               <span class="leading-6">
-                sec-1&ensp;<span class="inline-block rtl:rotate-180">&rarr;</span>
+                Feeding Log&ensp;<span class="inline-block rtl:rotate-180">&rarr;</span>
               </span>
             </a>
             

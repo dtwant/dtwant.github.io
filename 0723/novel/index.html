@@ -1537,17 +1537,23 @@
   }
   .ns-dialog {
     background:rgba(18,17,27,.97) !important; border:1px solid var(--ns-line) !important; border-radius:17px;
-    box-shadow:0 30px 100px rgba(0,0,0,.65); max-height:min(820px,calc(100dvh - 32px)); padding:0; overflow:hidden;
+    box-shadow:0 30px 100px rgba(0,0,0,.65); display:flex; flex-direction:column;
+    max-height:min(820px,calc(100dvh - 32px)); min-height:0; padding:0; overflow:hidden;
   }
+  .ns-modal[data-modal="book"] .ns-dialog { height:min(820px,calc(100dvh - 32px)); }
   .ns-dialog__head {
     background:rgba(255,255,255,.018); border-bottom:1px solid var(--ns-line) !important; margin:0;
-    padding:14px 16px; position:sticky; top:0; z-index:3;
+    flex:0 0 auto; padding:14px 16px; position:relative; z-index:3;
   }
   .ns-dialog__head h2 { font-size:.96rem; }
   .ns-close { color:var(--ns-muted); }
   .ns-close:hover { background:rgba(255,255,255,.06) !important; color:var(--ns-ink); }
-  .ns-form-grid,.ns-settings-content,.ns-scan-content { padding:15px 16px; }
-  .ns-form-grid { gap:10px; overflow-y:auto; }
+  .ns-form-grid,.ns-settings-content,.ns-scan-content {
+    min-height:0; overflow-y:auto; overscroll-behavior:contain; padding:15px 16px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .ns-form-grid { flex:1 1 auto; gap:10px; }
+  .ns-settings-content,.ns-scan-content { flex:1 1 auto; }
   .ns-field label { color:var(--ns-muted); font-size:.68rem; }
   .ns-field input,.ns-field select,.ns-field textarea,.ns-isbn-row > input {
     background:rgba(255,255,255,.035) !important; border-color:var(--ns-line) !important; border-radius:9px;
@@ -1561,7 +1567,7 @@
   .ns-check input { accent-color:var(--ns-accent); min-height:auto; width:18px; }
   .ns-dialog__foot {
     background:rgba(12,11,18,.96); border-top-color:var(--ns-line) !important; margin:0; padding:11px 16px;
-    position:sticky; bottom:0; z-index:3;
+    flex:0 0 auto; position:relative; z-index:3;
   }
   .ns-config-note { background:var(--ns-accent-soft) !important; color:var(--ns-muted); }
   .ns-config-note a { color:var(--ns-accent-strong) !important; }
@@ -1638,8 +1644,8 @@
     .ns-brand > div:last-child { min-width:0; }
     .ns-title { overflow:hidden; text-overflow:ellipsis; }
     .ns-header-actions .ns-button:not(.ns-button--primary) { display:none; }
-    .ns-header-actions .ns-sync { font-size:0; justify-content:center; min-height:34px; padding:0; width:34px; }
-    .ns-header-actions .ns-button--primary { font-size:0; height:38px; padding:0; width:42px; }
+    .ns-header-actions .ns-sync { justify-content:center; min-height:44px; min-width:72px; width:auto; padding:0 10px; font-size:.64rem; }
+    .ns-header-actions .ns-button--primary { font-size:0; height:44px; padding:0; width:44px; }
     .ns-header-actions .ns-button--primary::before { content:"＋"; font-size:1.2rem; }
     .ns-toolbar { padding-bottom:7px; }
     .ns-tab { font-size:.63rem; }
@@ -1658,8 +1664,11 @@
     .ns-book__actions .ns-button { flex:1; min-height:34px; }
     .ns-stat-grid { grid-template-columns:1fr 1fr; }
     .ns-dialog { align-self:flex-end; border-bottom:0 transparent none !important; border-radius:18px 18px 0 0; max-height:92dvh; max-width:100%; }
+    .ns-modal[data-modal="book"] .ns-dialog { height:92dvh; }
     .ns-modal { align-items:flex-end; padding:0; }
     .ns-form-grid { grid-template-columns:1fr; }
+    .ns-form-grid,.ns-settings-content,.ns-scan-content { scrollbar-width:none; }
+    .ns-form-grid::-webkit-scrollbar,.ns-settings-content::-webkit-scrollbar,.ns-scan-content::-webkit-scrollbar { display:none; }
     .ns-field--full { grid-column:auto; }
     .ns-isbn-row { align-items:stretch; }
     .ns-isbn-row .ns-button { flex:0 0 auto; }

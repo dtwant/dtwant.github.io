@@ -15,7 +15,7 @@
   <title>TASK_BOARD &middot; dt&#39;s world</title>
   <meta name="title" content="TASK_BOARD &middot; dt&#39;s world" />
   
-  <meta name="description" content="KANBAN MANAGER" />
+  <meta name="description" content="優先度・期限・サブタスクを段階別に整理するカンバンタスク管理" />
   
   
   
@@ -81,7 +81,7 @@
   <meta property="og:url" content="https://dtwant.github.io/0723/taskmanage/">
   <meta property="og:site_name" content="dt&#39;s world">
   <meta property="og:title" content="TASK_BOARD">
-  <meta property="og:description" content="KANBAN MANAGER">
+  <meta property="og:description" content="優先度・期限・サブタスクを段階別に整理するカンバンタスク管理">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="0723">
@@ -89,7 +89,7 @@
   
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="TASK_BOARD">
-  <meta name="twitter:description" content="KANBAN MANAGER">
+  <meta name="twitter:description" content="優先度・期限・サブタスクを段階別に整理するカンバンタスク管理">
 
     
   
@@ -101,7 +101,7 @@
     "articleSection": "Secret",
     "name": "TASK_BOARD",
     "headline": "TASK_BOARD",
-    "description": "KANBAN MANAGER",
+    "description": "優先度・期限・サブタスクを段階別に整理するカンバンタスク管理",
     
     "inLanguage": "en",
     "url" : "https:\/\/dtwant.github.io\/0723\/taskmanage\/",
@@ -1250,9 +1250,10 @@
 }
 .km-col-empty {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  padding:24px 12px; gap:6px; color:var(--text-4); font-size:0.72rem; font-weight:500; text-align:center;
+  padding:28px 12px; gap:7px; color:var(--text-3); font-size:0.75rem; font-weight:550; text-align:center;
 }
-.km-col-empty-icon { font-size:1.2rem; opacity:0.25; }
+.km-col-empty-icon { display:grid; width:42px; height:42px; place-items:center; border:1px solid rgba(255,255,255,.09); border-radius:13px; color:hsl(var(--ca)); background:rgba(255,255,255,.025); font-size:1rem; opacity:.8; }
+.km-col-empty small { max-width:15rem; color:var(--text-4); font-size:.64rem; line-height:1.55; }
 
 .km-col-ft { padding:5px 8px 8px; flex-shrink:0; }
 .km-add-btn {
@@ -1509,21 +1510,29 @@
   .km-modal { padding:16px; }
 }
 @media (max-width:480px) {
-  .km-topbar { padding:7px 10px; gap:6px; }
+  .km-topbar { display:grid; grid-template-columns:minmax(0,1fr) auto; padding:7px 10px; gap:6px; }
+  .km-topbar-left { min-width:0; overflow:hidden !important; }
+  .km-tb-link { display:none !important; }
   .km-logo-mark { width:24px; height:24px; font-size:0.6rem; }
   .km-app-title { font-size:0.82rem; }
-  .km-back-btn,.km-tb-btn { width:28px; height:28px; }
+  .km-back-btn,.km-tb-btn { width:44px; height:44px; }
   .km-tb-btn-primary span { display:none; }
-  .km-tb-btn-primary { width:28px; padding:0; justify-content:center; }
-  .km-sync-btn { min-width:28px; padding:0; }
+  .km-tb-btn-primary { width:44px; min-height:44px; padding:0; justify-content:center; }
+  .km-sync-btn { min-width:44px; min-height:44px; padding:0; }
   .km-sync-label { display:none; }
   .km-tb-btn svg { width:12px; height:12px; }
   .km-tab { padding:8px 10px; font-size:0.65rem; }
+  .km-tab { min-height:44px; scroll-snap-align:start; }
+  .km-tab-bar,.km-stats { scroll-snap-type:x proximity; }
+  .km-stats,.km-tab-inner { padding-right:40px; }
+  .km-tab-bar { position:relative; border-bottom:1px solid rgba(255,255,255,.055); }
+  .km-tab-bar::after { content:'›'; position:fixed; right:5px; margin-top:7px; display:grid; width:28px; height:30px; place-items:center; border:1px solid rgba(255,255,255,.08); border-radius:10px; color:var(--text-2); background:rgba(18,18,27,.92); pointer-events:none; }
   .km-card { padding:9px 10px; }
   .km-card-title { font-size:0.74rem; padding-right:38px; }
   .km-card-tag { font-size:0.55rem; }
   .km-modal { max-width:100%; border-radius:var(--radius) var(--radius) 0 0; }
   .km-overlay { align-items:flex-end; padding:0; }
+  .km-modal input,.km-modal textarea,.km-modal select { font-size:16px !important; }
 }
 @supports (padding:env(safe-area-inset-top)) {
   .km-topbar { padding-top:calc(10px + env(safe-area-inset-top)); }
@@ -1672,7 +1681,7 @@ function mkCol(col){
   list.className='km-col-list';
   list.dataset.col=col.id;
   if(tasks.length===0){
-    list.innerHTML=`<div class="km-col-empty"><div class="km-col-empty-icon">○</div><div>タスクなし</div></div>`;
+    list.innerHTML=`<div class="km-col-empty"><div class="km-col-empty-icon">＋</div><div>タスクはまだありません</div><small>下の「新規タスク」から、この列に最初の項目を追加できます。</small></div>`;
   }else{
     tasks.forEach(t=>list.appendChild(mkCard(t,col)));
   }

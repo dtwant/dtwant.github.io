@@ -15,7 +15,7 @@
   <title>Academic Report &middot; dt&#39;s world</title>
   <meta name="title" content="Academic Report &middot; dt&#39;s world" />
   
-  
+  <meta name="description" content="科目・試験・課題・成績推移を統合するアカデミックレポート" />
   
   
   
@@ -83,6 +83,7 @@
   <meta property="og:url" content="https://dtwant.github.io/0723/report-card/">
   <meta property="og:site_name" content="dt&#39;s world">
   <meta property="og:title" content="Academic Report">
+  <meta property="og:description" content="科目・試験・課題・成績推移を統合するアカデミックレポート">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="0723">
@@ -92,6 +93,7 @@
   
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Academic Report">
+  <meta name="twitter:description" content="科目・試験・課題・成績推移を統合するアカデミックレポート">
 
     
   
@@ -103,7 +105,7 @@
     "articleSection": "Secret",
     "name": "Academic Report",
     "headline": "Academic Report",
-    
+    "description": "科目・試験・課題・成績推移を統合するアカデミックレポート",
     
     "inLanguage": "en",
     "url" : "https:\/\/dtwant.github.io\/0723\/report-card\/",
@@ -2459,9 +2461,21 @@ input:disabled + .rc-slider {
     border-radius: 16px;
     padding: 24px;
   }
+  .rc-modal input,.rc-modal select,.rc-modal textarea,
+  .rc-drawer input,.rc-drawer select,.rc-drawer textarea { font-size:16px !important; }
+  .rc-modal button,.rc-drawer button,.rc-header button { min-height:44px; min-width:44px; }
+  .rc-modal-overlay { align-items:flex-end; padding:0; }
+  .rc-modal { width:100%; max-width:100%; max-height:92dvh; overflow-y:auto; border-radius:18px 18px 0 0; padding-bottom:calc(24px + env(safe-area-inset-bottom)); }
 
   .rc-section-title {
     font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .rc-app *, .rc-app *::before, .rc-app *::after,
+  .rc-modal-overlay *, .rc-drawer-overlay * {
+    animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;
   }
 }
 </style>
@@ -3955,7 +3969,7 @@ input:disabled + .rc-slider {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'X-Master-Key': JSONBIN_KEY
+        'X-Master-Key': getJsonbinKey()
       },
       body: JSON.stringify({ data: encryptedDataStr })
     })
@@ -3985,7 +3999,7 @@ input:disabled + .rc-slider {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'X-Master-Key': JSONBIN_KEY
+        'X-Master-Key': getJsonbinKey()
       },
       body: JSON.stringify({ data: encryptedPayloadStr })
     }).catch(e => {

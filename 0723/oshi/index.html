@@ -15,7 +15,7 @@
   <title>OSHI_DATABASE &middot; dt&#39;s world</title>
   <meta name="title" content="OSHI_DATABASE &middot; dt&#39;s world" />
   
-  
+  <meta name="description" content="プロフィール・画像・推し度・観察ログを集約する推し専用データベース" />
   
   
   
@@ -81,6 +81,7 @@
   <meta property="og:url" content="https://dtwant.github.io/0723/oshi/">
   <meta property="og:site_name" content="dt&#39;s world">
   <meta property="og:title" content="OSHI_DATABASE">
+  <meta property="og:description" content="プロフィール・画像・推し度・観察ログを集約する推し専用データベース">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="0723">
@@ -88,6 +89,7 @@
   
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="OSHI_DATABASE">
+  <meta name="twitter:description" content="プロフィール・画像・推し度・観察ログを集約する推し専用データベース">
 
     
   
@@ -99,7 +101,7 @@
     "articleSection": "Secret",
     "name": "OSHI_DATABASE",
     "headline": "OSHI_DATABASE",
-    
+    "description": "プロフィール・画像・推し度・観察ログを集約する推し専用データベース",
     
     "inLanguage": "en",
     "url" : "https:\/\/dtwant.github.io\/0723\/oshi\/",
@@ -116,7 +118,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "199"
+    "wordCount": "211"
   }]
   </script>
 
@@ -863,7 +865,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>199 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="0001-01-01T00:00:00&#43;00:00">1 January 0001</time><span class="px-2 text-primary-500">&middot;</span><span>211 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1459,6 +1461,20 @@ canvas#od-radar { max-width: 100%; height: auto; }
 .od-textarea { resize: vertical; min-height: 60px; }
 .od-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
 .od-select option { background: #090c1e; }
+.od-editor-stepper {
+  position:sticky; top:-1.2rem; z-index:5; display:grid; grid-template-columns:repeat(4,1fr); gap:5px;
+  margin:-1.2rem -1.2rem .2rem; padding:10px 1.2rem;
+  background:rgba(7,9,17,.94); border-bottom:1px solid var(--od-border);
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+}
+.od-editor-step {
+  min-height:42px; padding:5px 8px; border:1px solid rgba(255,255,255,.08); border-radius:9px;
+  color:var(--od-muted); background:rgba(255,255,255,.025); font-family:var(--od-font-ui); font-size:.58rem; font-weight:700; letter-spacing:.06em;
+}
+.od-editor-step.is-active { border-color:var(--od-neon); color:var(--od-neon); background:var(--od-neon-dim); box-shadow:0 0 16px var(--od-neon-dim); }
+.od-editor-pane { display:none; flex-direction:column; gap:1rem; }
+.od-editor-pane.is-active { display:flex; animation:od-modal-in .18s ease; }
+.od-editor-pane-intro { margin:0; color:var(--od-muted); font-size:.72rem; line-height:1.65; }
 
  
 .od-cf-row { display: flex; gap: 6px; align-items: center; }
@@ -1594,15 +1610,27 @@ canvas#od-radar { max-width: 100%; height: auto; }
 @media (max-width: 768px) {
   .od-sidebar { display: none; }
   .od-mobile-nav { display: block; }
-  #od-root { flex-direction: column; padding-bottom: 56px; }
-  .od-content { padding: 1rem; gap: 1rem; }
+  #od-root { flex-direction: column; padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
+  .od-content { padding: 1rem 1rem calc(2rem + env(safe-area-inset-bottom)); gap: 1rem; }
   .od-hero { grid-template-columns: 1fr; }
   .od-avatar-frame { max-width: 250px; margin: 0 auto; }
   .od-header { padding: 0.6rem 1rem; }
   .od-header-title { font-size: 0.95rem; }
   .od-info-grid { grid-template-columns: repeat(2, 1fr); }
-  .od-modal { max-width: 100%; max-height: 100vh; height: 100vh; border: none; border-radius: 0; }
-  .od-modal-body { padding: 1rem; }
+  .od-overlay { align-items:flex-end; padding:0; }
+  .od-modal { max-width: 100%; max-height: 94dvh; height: 94dvh; border-radius:14px 14px 0 0; border-bottom:0 transparent none !important; }
+  .od-modal-body { min-height:0; padding: 1rem; overscroll-behavior:contain; }
+  .od-modal-footer {
+    display:grid;
+    grid-template-columns:1fr 1fr 1.35fr;
+    gap:6px;
+    padding:.65rem .75rem calc(.65rem + env(safe-area-inset-bottom));
+  }
+  .od-modal-footer .od-btn { width:100%; min-width:0; min-height:44px; padding:.45rem .35rem; font-size:.54rem; }
+  .od-input,.od-textarea,.od-select,.od-tl-input { font-size:16px !important; }
+  .od-btn,.od-mobile-btn,.od-modal-close { min-height:44px; min-width:44px; }
+  .od-mobile-bar { min-height:64px; padding:8px 12px calc(8px + env(safe-area-inset-bottom)); }
+  #od-disp-name { font-size:clamp(1.15rem,7vw,1.6rem) !important; overflow-wrap:anywhere; }
   .od-row { grid-template-columns: 1fr; }
   .od-stats-inputs { grid-template-columns: repeat(3, 1fr); }
   .od-gallery-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); max-height: calc(100vh - 120px); }
@@ -1617,6 +1645,28 @@ canvas#od-radar { max-width: 100%; height: auto; }
   .od-avatar-frame { max-width: 200px; }
   .od-stats-inputs { grid-template-columns: repeat(2, 1fr); }
   .od-gallery-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 5px; }
+  .od-header { align-items:flex-start; padding:.65rem; }
+  .od-header-right { width:100%; gap:5px; overflow-x:auto; flex-wrap:nowrap; scrollbar-width:none; }
+  .od-header-right::-webkit-scrollbar { display:none; }
+  .od-header-right .od-btn.sm { padding:.4rem .65rem; font-size:.65rem; }
+  .od-status-badge { display:flex; min-height:44px; align-items:center; padding:0 .65rem; font-size:.62rem; white-space:nowrap; }
+  #od-edit-btn { min-height:44px; padding:.45rem .7rem; font-size:.66rem; }
+  .od-avatar-frame { max-width:min(180px,58vw); }
+  .od-modal-header { min-height:52px; padding:.75rem; }
+  .od-field label { font-size:.7rem; line-height:1.45; letter-spacing:.06em; }
+  .od-editor-stepper { top:-.75rem; margin:-.75rem -.75rem .2rem; padding:8px .75rem; overflow-x:auto; grid-template-columns:repeat(4,minmax(82px,1fr)); scrollbar-width:none; }
+  .od-editor-step { min-height:44px; font-size:.65rem; }
+  .od-cf-rm { width:44px; height:44px; }
+  #od-editor-overlay .od-modal-body { gap:.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #od-root *, #od-root *::before, #od-root *::after,
+  .od-overlay *, .od-overlay *::before, .od-overlay *::after {
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
 }
 </style>
 
@@ -1750,6 +1800,14 @@ canvas#od-radar { max-width: 100%; height: auto; }
         <button class="od-modal-close" onclick="OD.closeEditor()">&times;</button>
       </div>
       <div class="od-modal-body">
+        <nav class="od-editor-stepper" aria-label="編集項目">
+          <button type="button" class="od-editor-step is-active" data-od-editor-step="basic" onclick="OD.setEditorStep('basic')">1 基本</button>
+          <button type="button" class="od-editor-step" data-od-editor-step="analysis" onclick="OD.setEditorStep('analysis')">2 分析</button>
+          <button type="button" class="od-editor-step" data-od-editor-step="profile" onclick="OD.setEditorStep('profile')">3 詳細</button>
+          <button type="button" class="od-editor-step" data-od-editor-step="custom" onclick="OD.setEditorStep('custom')">4 自由項目</button>
+        </nav>
+        <section class="od-editor-pane is-active" data-od-editor-pane="basic">
+        <p class="od-editor-pane-intro">表示名、推し色、画像など、カードの基本情報を設定します。</p>
         <div class="od-row">
           <div class="od-field"><label>SUBJECT NAME (表示名)</label><input class="od-input" id="in-name" placeholder="例: 初音ミク"></div>
           <div class="od-field"><label>CODENAME / ALIAS (通称)</label><input class="od-input" id="in-codename" placeholder="例: CV01"></div>
@@ -1780,6 +1838,9 @@ canvas#od-radar { max-width: 100%; height: auto; }
           <label>TAGS タグ (カンマ区切り)</label>
           <input class="od-input" id="in-tags" placeholder="例: VTuber, 歌手, 推し">
         </div>
+        </section>
+        <section class="od-editor-pane" data-od-editor-pane="analysis">
+        <p class="od-editor-pane-intro">レーダーチャートに表示する5つの評価軸と数値を編集します。</p>
         <div class="od-field">
           <label>PARAMETERS レーダーチャート</label>
           <div class="od-stats-inputs">
@@ -1790,6 +1851,9 @@ canvas#od-radar { max-width: 100%; height: auto; }
             <div class="od-stat-col"><input class="od-input" id="in-l5" placeholder="項目名" style="font-size:0.65rem;padding:0.3rem;"><input type="number" class="od-input" id="in-s5" min="0" max="100" style="padding:0.3rem;"></div>
           </div>
         </div>
+        </section>
+        <section class="od-editor-pane" data-od-editor-pane="profile">
+        <p class="od-editor-pane-intro">年齢、所属、現在の状態など、プロフィールの補足情報です。</p>
         <div class="od-section-title" style="margin-top:0.5rem;">// PROFILE DATA (詳細)</div>
         <div class="od-row">
           <div class="od-field"><label>AGE / D.O.B (年齢・誕生日)</label><input class="od-input" id="in-age"></div>
@@ -1803,9 +1867,13 @@ canvas#od-radar { max-width: 100%; height: auto; }
           <div class="od-field"><label>STATUS (現在の状態)</label><input class="od-input" id="in-status" placeholder="ACTIVE / HIBERNATING"></div>
           <div class="od-field"><label>CLASSIFICATION (分類)</label><input class="od-input" id="in-class" placeholder="アイドル / 吸血鬼"></div>
         </div>
+        </section>
+        <section class="od-editor-pane" data-od-editor-pane="custom">
+        <p class="od-editor-pane-intro">決まった形式に収まらない情報を、好きな項目名で追加できます。</p>
         <div class="od-section-title" style="margin-top:0.5rem;">// CUSTOM FIELDS (カスタムフィールド)</div>
         <div id="od-cf-list" style="display:flex;flex-direction:column;gap:6px;"></div>
         <button class="od-btn sm" onclick="OD.addCFRow()">+ ADD FIELD</button>
+        </section>
       </div>
       <div class="od-modal-footer">
         <button class="od-btn danger" onclick="OD.deleteSubject()">PURGE (削除)</button>
@@ -2112,10 +2180,10 @@ canvas#od-radar { max-width: 100%; height: auto; }
 
       if (db.length === 0) {
         const s = newSubject();
-        s.name = 'UNKNOWN SUBJECT';
-        s.codename = 'NULL_POINTER';
+        s.name = '最初の推しを登録';
+        s.codename = 'NEW_SUBJECT';
         s.details = {age:'---',height:'---',faction:'---',threat:'---',status:'---',cls:'---'};
-        s.timeline = [{date: new Date().toISOString().slice(0,10), text: 'データベース初期化完了。'}];
+        s.timeline = [{date: new Date().toISOString().slice(0,10), text: 'EDIT RECORDからプロフィールを登録できます。'}];
         await idbPut(s);
         db.push(s);
       }
@@ -2257,7 +2325,7 @@ canvas#od-radar { max-width: 100%; height: auto; }
 
     
     const avatarEl = document.getElementById('od-disp-avatar');
-    avatarEl.src = s.avatarUrl || '';
+    avatarEl.src = s.avatarUrl || 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjY3Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDUwNTA4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IiMzMzQxNTUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTIiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5OTyBJTUFHRTwvdGV4dD48L3N2Zz4=';
     const glitchEl = document.getElementById('od-disp-glitch');
     glitchEl.style.backgroundImage = s.avatarUrl ? `url(${s.avatarUrl})` : 'none';
 
@@ -2295,7 +2363,7 @@ canvas#od-radar { max-width: 100%; height: auto; }
 
     
     const mt = document.getElementById('od-m-thumb');
-    if (mt) { mt.src = s.avatarUrl || ''; mt.style.borderColor = s.color; }
+    if (mt) { mt.src = s.avatarUrl || 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzExMSIvPjwvc3ZnPg=='; mt.style.borderColor = s.color; }
     const mn = document.getElementById('od-m-name');
     if (mn) mn.textContent = (s.name||'').substring(0,18);
   }
@@ -2387,6 +2455,18 @@ canvas#od-radar { max-width: 100%; height: auto; }
   
   
   
+  function setEditorStep(step) {
+    document.querySelectorAll('[data-od-editor-step]').forEach(button => {
+      const active = button.dataset.odEditorStep === step;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-current', active ? 'step' : 'false');
+    });
+    document.querySelectorAll('[data-od-editor-pane]').forEach(pane => {
+      pane.classList.toggle('is-active', pane.dataset.odEditorPane === step);
+    });
+    document.querySelector('#od-editor-overlay .od-modal-body')?.scrollTo({top:0, behavior:'smooth'});
+  }
+
   function openEditor(id) {
     let s;
     if (id && id !== 'new') {
@@ -2429,6 +2509,7 @@ canvas#od-radar { max-width: 100%; height: auto; }
     
     document.getElementById('od-editor-overlay')._editId = isEditorNew ? s.id : id;
 
+    setEditorStep('basic');
     document.getElementById('od-editor-overlay').classList.add('open');
     closeDrawer();
   }
@@ -2807,7 +2888,7 @@ canvas#od-radar { max-width: 100%; height: auto; }
   
   window.OD = {
     get currentId() { return currentId; },
-    openEditor, closeEditor, saveSubject, deleteSubject,
+    openEditor, closeEditor, saveSubject, deleteSubject, setEditorStep,
     addCFRow: (l,v) => addCFRow(l,v),
     openGallery, closeGallery, openUploadModal, closeUpload,
     submitGalleryImage, openViewer, closeViewer, navViewer, deleteGalleryImage,

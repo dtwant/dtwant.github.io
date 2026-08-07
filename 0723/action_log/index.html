@@ -15,7 +15,7 @@
   <title>ACTION_LOG &middot; dt&#39;s world</title>
   <meta name="title" content="ACTION_LOG &middot; dt&#39;s world" />
   
-  <meta name="description" content="NEON TASK CALENDAR" />
+  <meta name="description" content="日々のタスク達成・連続記録・ヒートマップを振り返る行動ログ" />
   
   
   
@@ -81,7 +81,7 @@
   <meta property="og:url" content="https://dtwant.github.io/0723/action_log/">
   <meta property="og:site_name" content="dt&#39;s world">
   <meta property="og:title" content="ACTION_LOG">
-  <meta property="og:description" content="NEON TASK CALENDAR">
+  <meta property="og:description" content="日々のタスク達成・連続記録・ヒートマップを振り返る行動ログ">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="0723">
@@ -89,7 +89,7 @@
   
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="ACTION_LOG">
-  <meta name="twitter:description" content="NEON TASK CALENDAR">
+  <meta name="twitter:description" content="日々のタスク達成・連続記録・ヒートマップを振り返る行動ログ">
 
     
   
@@ -101,7 +101,7 @@
     "articleSection": "Secret",
     "name": "ACTION_LOG",
     "headline": "ACTION_LOG",
-    "description": "NEON TASK CALENDAR",
+    "description": "日々のタスク達成・連続記録・ヒートマップを振り返る行動ログ",
     
     "inLanguage": "en",
     "url" : "https:\/\/dtwant.github.io\/0723\/action_log\/",
@@ -1076,6 +1076,31 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
+  .ntc-mobile-table { display: none; }
+
+  .ntc-empty-state {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    padding: 28px 18px;
+    color: rgb(161 161 170);
+    text-align: center;
+  }
+
+  .ntc-empty-state strong { color: rgb(244 244 245); font-size: 14px; }
+  .ntc-empty-state span { max-width: 30rem; font-size: 12px; line-height: 1.65; }
+  .ntc-empty-state button {
+    min-height: 44px;
+    margin-top: 4px;
+    padding: 0 16px;
+    border: 1px solid rgba(59, 130, 246, .48) !important;
+    border-radius: 11px;
+    color: rgb(191 219 254);
+    background: rgba(37, 99, 235, .16);
+    font-size: 13px;
+    font-weight: 750;
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(4px); }
     to { opacity: 1; transform: translateY(0); }
@@ -1083,6 +1108,106 @@
   @keyframes scaleIn {
     from { opacity: 0; transform: scale(0.97); }
     to { opacity: 1; transform: scale(1); }
+  }
+
+  #ntc-root button,
+  #ntc-root a {
+    text-decoration: none !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (max-width: 640px) {
+    #ntc-root > div > header {
+      display: grid !important;
+      flex-shrink: 0 !important;
+      grid-template-columns: minmax(0, 1fr) !important;
+      align-items: stretch !important;
+      gap: 8px !important;
+      padding: max(10px, env(safe-area-inset-top)) 10px 10px !important;
+      overflow: hidden !important;
+    }
+    #ntc-root > div > header > div:first-child {
+      width: 100%;
+      min-width: 0;
+      display:grid;
+      grid-template-columns:auto minmax(0,1fr);
+      gap:6px;
+      overflow:visible;
+    }
+    #ntc-root > div > header > div:first-child > h1 { align-self:center; text-align:right; }
+    #ntc-root > div > header > div:first-child > a { width:100%; justify-content:center; }
+    #ntc-root > div > header > div:last-child {
+      width: 100%;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+    #ntc-root > div > header button,
+    #ntc-root > div > header a { min-height: 44px !important; }
+    #ntc-root input,
+    #ntc-root select,
+    #ntc-root textarea { font-size: 16px !important; }
+    #ntc-root main { padding-left: 10px !important; padding-right: 10px !important; }
+    #ntc-root #ntc-main-tabs,
+    #ntc-root #ntc-view-tabs { display:grid; grid-auto-flow:column; grid-auto-columns:1fr; width:100%; }
+    #ntc-root #ntc-main-tabs button,
+    #ntc-root #ntc-view-tabs button,
+    #ntc-root #ntc-filter-bar button,
+    #ntc-root #ntc-prev,
+    #ntc-root #ntc-next,
+    #ntc-root #ntc-today-btn,
+    #ntc-root #ntc-month-label-btn { min-height:44px !important; }
+    #ntc-root #ntc-filter-bar { flex-wrap:nowrap; margin-inline:-10px; padding:0 10px 4px; overflow-x:auto; scrollbar-width:none; }
+    #ntc-root #ntc-filter-bar button { flex:0 0 auto; padding-inline:14px !important; }
+    #ntc-root #ntc-table-wrap { display:none; }
+    #ntc-root .ntc-mobile-table { display:grid; gap:8px; padding:8px; }
+    #ntc-root .ntc-mobile-day {
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.1) !important;
+      border-radius:13px;
+      background:rgba(10,10,12,.74);
+    }
+    #ntc-root .ntc-mobile-day[open] { border-color:rgba(59,130,246,.3) !important; background:rgba(24,24,27,.84); }
+    #ntc-root .ntc-mobile-day summary {
+      display:grid;
+      grid-template-columns:40px minmax(0,1fr) auto;
+      align-items:center;
+      min-height:52px;
+      padding:6px 12px;
+      cursor:pointer;
+      list-style:none;
+    }
+    #ntc-root .ntc-mobile-day summary::-webkit-details-marker { display:none; }
+    #ntc-root .ntc-day-number { color:#fafafa; font:800 16px/1 ui-monospace,monospace; }
+    #ntc-root .ntc-day-meta { color:#a1a1aa; font-size:12px; }
+    #ntc-root .ntc-day-score { color:#60a5fa; font:700 11px/1 ui-monospace,monospace; }
+    #ntc-root .ntc-mobile-day.is-today .ntc-day-number { color:#60a5fa; }
+    #ntc-root .ntc-mobile-actions { display:grid; gap:7px; padding:0 9px 10px; }
+    #ntc-root .ntc-mobile-task {
+      display:grid;
+      grid-template-columns:4px minmax(0,1fr) auto;
+      align-items:center;
+      gap:10px;
+      min-height:48px;
+      padding:6px 12px 6px 8px;
+      border:1px solid rgba(255,255,255,.09) !important;
+      border-radius:11px;
+      color:#e4e4e7;
+      background:rgba(255,255,255,.035);
+      text-align:left;
+    }
+    #ntc-root .ntc-mobile-task .ntc-task-color { align-self:stretch; border-radius:99px; }
+    #ntc-root .ntc-mobile-task .ntc-task-name { overflow:hidden; font-size:14px; font-weight:650; text-overflow:ellipsis; white-space:nowrap; }
+    #ntc-root .ntc-mobile-task .ntc-task-value { min-width:36px; font-size:19px; text-align:center; }
+    #ntc-root .ntc-mobile-task[data-v=""] .ntc-task-value { color:#71717a; font-size:15px; }
+    #ntc-root .ntc-mobile-list-link { min-height:44px; border:0 !important; color:#a1a1aa; background:transparent; font-size:12px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #ntc-root *, #ntc-root *::before, #ntc-root *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+    }
   }
 </style>
 
@@ -1246,6 +1371,7 @@
             <div class="overflow-x-auto w-full" id="ntc-table-wrap">
               <table class="w-full border-collapse text-center table-fixed min-w-max" id="ntc-table"></table>
             </div>
+            <div class="ntc-mobile-table" id="ntc-mobile-table" aria-live="polite"></div>
           </div>
         </div>
 
@@ -1614,7 +1740,7 @@ async function createNewBin() {
     syncOk = true;
   } catch (e) {
     syncOk = false;
-    toast('⚠️ ONLINE LINK FAILED');
+    
   }
   isSyncing = false;
   updateSyncBadge();
@@ -1997,17 +2123,66 @@ function renderTable() {
   const td = new Date();
   const isCurrentMonth = td.getFullYear() === currentYear && td.getMonth() + 1 === currentMonth;
   const alertIds = getAlertTaskIds();
+  const mobileTable = $('ntc-mobile-table');
 
   tableEl.replaceChildren();
+  if (mobileTable) mobileTable.replaceChildren();
 
   if (!tasks.length) {
     const tr = document.createElement('tr');
     const tdCell = document.createElement('td');
-    tdCell.className = 'py-16 text-zinc-500 font-medium text-xs font-mono';
-    tdCell.textContent = 'NO_ACTIVE_TASKS';
+    tdCell.className = 'py-8 text-zinc-500 font-medium text-xs font-mono';
+    tdCell.innerHTML = '<div class="ntc-empty-state"><strong>記録するタスクがありません</strong><span>最初にタスクを追加すると、日ごとの達成状況をここで記録できます。</span><button type="button" data-ntc-open-config>タスクを追加</button></div>';
     tr.appendChild(tdCell);
     tableEl.appendChild(tr);
+    if (mobileTable) {
+      mobileTable.innerHTML = '<div class="ntc-empty-state"><strong>記録するタスクがありません</strong><span>最初にタスクを追加すると、日ごとの達成状況をここで記録できます。</span><button type="button" data-ntc-open-config>タスクを追加</button></div>';
+    }
+    document.querySelectorAll('#ntc-root [data-ntc-open-config]').forEach(button => {
+      button.addEventListener('click', () => $('ntc-main-tabs').querySelector('[data-tab="manage"]').click());
+    });
     return;
+  }
+
+  if (mobileTable) {
+    for (let d = 1; d <= days; d++) {
+      const dow = getDayOfWeek(currentYear, currentMonth, d);
+      const isToday = isCurrentMonth && d === td.getDate();
+      const completed = tasks.filter(t => ['🔪', '🍑'].includes((mRec[t.id] || {})[String(d)])).length;
+      const card = document.createElement('details');
+      card.className = `ntc-mobile-day${isToday ? ' is-today' : ''}`;
+      card.open = isToday;
+      const dayNames = ['日', '月', '火', '水', '木', '金', '土'];
+      card.innerHTML = `<summary><span class="ntc-day-number">${d}</span><span class="ntc-day-meta">${dayNames[dow]}曜日${isToday ? ' · 今日' : ''}</span><span class="ntc-day-score">${completed}/${tasks.length}</span></summary>`;
+      const actions = document.createElement('div');
+      actions.className = 'ntc-mobile-actions';
+      tasks.forEach(t => {
+        const val = (mRec[t.id] || {})[String(d)] || '';
+        const safeColor = /^#[0-9a-f]{3,8}$/i.test(t.color || '') ? t.color : '#3b82f6';
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ntc-mobile-task';
+        button.dataset.v = val;
+        button.innerHTML = `<span class="ntc-task-color" style="background:${safeColor}"></span><span class="ntc-task-name"></span><span class="ntc-task-value">${val || '○'}</span>`;
+        button.querySelector('.ntc-task-name').textContent = t.name;
+        button.setAttribute('aria-label', `${d}日 ${t.name}: ${val || '未記録'}。押すと状態を変更`);
+        button.addEventListener('click', () => toggleCell(t.id, d, val));
+        button.addEventListener('contextmenu', event => { event.preventDefault(); openMemo(t.id, d, t.name); });
+        let pressTimer = null;
+        button.addEventListener('touchstart', () => { pressTimer = setTimeout(() => openMemo(t.id, d, t.name), 650); }, {passive:true});
+        button.addEventListener('touchend', () => clearTimeout(pressTimer));
+        button.addEventListener('touchmove', () => clearTimeout(pressTimer));
+        actions.appendChild(button);
+      });
+      const listButton = document.createElement('button');
+      listButton.type = 'button';
+      listButton.className = 'ntc-mobile-list-link';
+      listButton.textContent = 'この日の詳細・メモを開く';
+      listButton.addEventListener('click', () => openList(currentYear, currentMonth, d));
+      actions.appendChild(listButton);
+      card.appendChild(actions);
+      mobileTable.appendChild(card);
+    }
   }
 
   

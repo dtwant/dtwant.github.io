@@ -772,6 +772,31 @@ body { padding: 0 !important; background-color: var(--bg-dark) !important; color
 
 /* --- 5. HEX GRID --- */
 .hex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+.hub-tool { min-width:0; position:relative; }
+.hub-tool[hidden] { display:none !important; }
+.hub-tool .hex-tile { height:100%; }
+.hub-tool-controls { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.65rem; margin:0 0 .8rem; }
+.hub-tool-search { align-items:center; background:rgba(9,12,18,.82); border:1px solid rgba(255,255,255,.10) !important; border-top:1px solid rgba(255,255,255,.10) !important; border-right:1px solid rgba(255,255,255,.10) !important; border-bottom:1px solid rgba(255,255,255,.10) !important; border-left:1px solid rgba(255,255,255,.10) !important; border-radius:14px; box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 10px 28px rgba(0,0,0,.28); display:flex; gap:.6rem; min-height:48px; padding:0 .8rem; transition:border-color .2s ease,box-shadow .2s ease; }
+.hub-tool-search:focus-within { border-color:rgba(0,255,102,.48) !important; box-shadow:0 0 0 3px rgba(0,255,102,.10),0 12px 32px rgba(0,0,0,.35); }
+.hub-tool-search > span { color:var(--cmd-green); font-size:1.1rem; }
+.hub-tool-search input { background:transparent !important; border:0 transparent none !important; color:#f5f5f7 !important; flex:1; font:600 16px/1.3 'JetBrains Mono',monospace; min-width:0; outline:0; }
+.hub-tool-search input::placeholder { color:rgba(230,240,235,.42); }
+.hub-tool-search button { align-items:center; background:rgba(255,255,255,.05) !important; border:1px solid rgba(255,255,255,.08) !important; border-top:1px solid rgba(255,255,255,.08) !important; border-right:1px solid rgba(255,255,255,.08) !important; border-bottom:1px solid rgba(255,255,255,.08) !important; border-left:1px solid rgba(255,255,255,.08) !important; border-radius:50%; color:rgba(255,255,255,.7); cursor:pointer; display:flex; font-size:1rem; height:30px; justify-content:center; padding:0; width:30px; }
+.hub-tool-filter { align-items:center; background:rgba(188,19,254,.08) !important; border:1px solid rgba(188,19,254,.28) !important; border-top:1px solid rgba(188,19,254,.28) !important; border-right:1px solid rgba(188,19,254,.28) !important; border-bottom:1px solid rgba(188,19,254,.28) !important; border-left:1px solid rgba(188,19,254,.28) !important; border-radius:14px; color:rgba(240,226,248,.75); cursor:pointer; display:flex; font:700 .72rem/1 'Orbitron',sans-serif; gap:.4rem; justify-content:center; min-height:48px; padding:0 1rem; text-decoration:none !important; transition:all .2s ease; }
+.hub-tool-filter[aria-pressed="true"] { background:rgba(188,19,254,.18) !important; border-color:rgba(210,112,255,.62) !important; color:#fff; box-shadow:0 0 20px rgba(188,19,254,.18); }
+.hub-tool-filter:active,.hub-tool-favorite:active,.hub-tool-recent-chip:active { transform:scale(.94); transition:transform 60ms ease-out; }
+.hub-tool-results { color:rgba(200,220,200,.45); font:600 .58rem/1.4 'Orbitron',sans-serif; letter-spacing:.12em; margin:0 0 .7rem .2rem; }
+.hub-tool-favorite { align-items:center; background:rgba(8,9,15,.9) !important; border:1px solid rgba(255,255,255,.12) !important; border-top:1px solid rgba(255,255,255,.12) !important; border-right:1px solid rgba(255,255,255,.12) !important; border-bottom:1px solid rgba(255,255,255,.12) !important; border-left:1px solid rgba(255,255,255,.12) !important; border-radius:50%; color:rgba(255,255,255,.58); cursor:pointer; display:flex; font-size:1.05rem; height:40px; justify-content:center; padding:0; position:absolute; right:8px; text-decoration:none !important; top:8px; width:40px; z-index:5; }
+.hub-tool-favorite[aria-pressed="true"] { background:rgba(255,170,0,.14) !important; border-color:rgba(255,190,70,.55) !important; color:#ffd166; box-shadow:0 0 18px rgba(255,170,0,.2); }
+.hub-tool-recent { background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.018)) !important; border:1px solid rgba(255,255,255,.08) !important; border-top:1px solid rgba(255,255,255,.08) !important; border-right:1px solid rgba(255,255,255,.08) !important; border-bottom:1px solid rgba(255,255,255,.08) !important; border-left:1px solid rgba(255,255,255,.08) !important; border-radius:14px; margin:0 0 .8rem; padding:.75rem; }
+.hub-tool-recent-label { color:rgba(0,255,102,.55); font:700 .56rem/1 'Orbitron',sans-serif; letter-spacing:.14em; margin-bottom:.55rem; }
+.hub-tool-recent-list { display:flex; gap:.45rem; overflow-x:auto; scrollbar-width:none; scroll-snap-type:x proximity; }
+.hub-tool-recent-list::-webkit-scrollbar { display:none; }
+.hub-tool-recent-chip { align-items:center; background:rgba(255,255,255,.035) !important; border:1px solid rgba(255,255,255,.09) !important; border-top:1px solid rgba(255,255,255,.09) !important; border-right:1px solid rgba(255,255,255,.09) !important; border-bottom:1px solid rgba(255,255,255,.09) !important; border-left:1px solid rgba(255,255,255,.09) !important; border-radius:10px; color:rgba(255,255,255,.78) !important; display:flex; flex:0 0 auto; font:600 .68rem/1 'JetBrains Mono',monospace; min-height:40px; padding:0 .75rem; scroll-snap-align:start; text-decoration:none !important; }
+.hub-tool-empty { align-items:center; border:1px dashed rgba(255,255,255,.13) !important; border-radius:16px; color:rgba(255,255,255,.55); display:flex; flex-direction:column; gap:.35rem; min-height:180px; justify-content:center; padding:1.5rem; text-align:center; }
+.hub-tool-empty > span { color:var(--cmd-purple); font-size:2rem; }
+.hub-tool-empty strong { color:rgba(255,255,255,.88); font-size:.88rem; }
+.hub-tool-empty small { font-size:.7rem; }
 .hex-tile {
   display: block;
   text-decoration: none !important;
@@ -951,6 +976,7 @@ body { padding: 0 !important; background-color: var(--bg-dark) !important; color
 #pattern-svg polyline, #pattern-svg line { stroke: var(--neon-cyan); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 8px var(--neon-cyan)); transition: stroke 0.3s; }
 .pattern-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); z-index: 2; }
 .node-wrap { display: flex; justify-content: center; align-items: center; cursor: crosshair; }
+.node-wrap:focus-visible { outline: 2px solid var(--neon-cyan); outline-offset: -10px; border-radius: 50%; }
 .node-hitbox { position: absolute; width: 100%; height: 100%; top: 0; left: 0; }
 .node { width: 14px; height: 14px; background: rgba(0,243,255,0.2); border: 1px solid var(--neon-cyan); box-shadow: 0 0 5px rgba(0,243,255,0.5); transform: rotate(45deg); transition: all 0.2s; pointer-events: none; }
 .node-wrap.active .node { background: var(--neon-cyan); transform: rotate(45deg) scale(1.8); box-shadow: 0 0 15px var(--neon-cyan); }
@@ -1069,9 +1095,14 @@ body { padding: 0 !important; background-color: var(--bg-dark) !important; color
   .hex-index { font-size: 0.5rem; }
   .hex-status { font-size: 0.48rem; }
   .hex-inner { min-height: 48px; gap: 0.2rem; }
+  .hub-tool-controls { grid-template-columns:1fr; }
+  .hub-tool-filter { width:100%; }
+  .hub-tool-favorite { height:44px; width:44px; }
+  .hex-desc { -webkit-line-clamp:3; color:rgba(225,235,230,.62); font-size:.74rem; }
   .profile-compact .p-name { font-size: 0.85rem; }
-  .cyber-table th, .cyber-table td { font-size: 0.52rem; padding: 0.25rem 0.1rem; }
+  .cyber-table th, .cyber-table td { font-size: 11px; line-height: 1.35; padding: 0.35rem 0.12rem; }
   .tt-header { font-size: 0.65rem; }
+  .lock-container { width:calc(100% - 20px); padding:3rem 1rem calc(1rem + env(safe-area-inset-bottom)); }
 }
 @media (max-width: 360px) {
   .hex-grid { grid-template-columns: 1fr; gap: 0.5rem; }
@@ -1386,18 +1417,18 @@ body { padding: 0 !important; background-color: var(--bg-dark) !important; color
 <line id="dynamic-line" x1="0" y1="0" x2="0" y2="0" style="display:none;"></line>
 </svg>
 <div class="pattern-grid" id="pattern-grid">
-<div class="node-wrap" data-id="1"><div class="node"></div></div>
-<div class="node-wrap" data-id="2"><div class="node"></div></div>
-<div class="node-wrap" data-id="3"><div class="node"></div></div>
-<div class="node-wrap" data-id="4"><div class="node"></div></div>
-<div class="node-wrap" data-id="5"><div class="node"></div></div>
-<div class="node-wrap" data-id="6"><div class="node"></div></div>
-<div class="node-wrap" data-id="7"><div class="node"></div></div>
-<div class="node-wrap" data-id="8"><div class="node"></div></div>
-<div class="node-wrap" data-id="9"><div class="node"></div></div>
+<div class="node-wrap" data-id="1" role="button" tabindex="0" aria-label="パターンノード 1"><div class="node"></div></div>
+<div class="node-wrap" data-id="2" role="button" tabindex="0" aria-label="パターンノード 2"><div class="node"></div></div>
+<div class="node-wrap" data-id="3" role="button" tabindex="0" aria-label="パターンノード 3"><div class="node"></div></div>
+<div class="node-wrap" data-id="4" role="button" tabindex="0" aria-label="パターンノード 4"><div class="node"></div></div>
+<div class="node-wrap" data-id="5" role="button" tabindex="0" aria-label="パターンノード 5"><div class="node"></div></div>
+<div class="node-wrap" data-id="6" role="button" tabindex="0" aria-label="パターンノード 6"><div class="node"></div></div>
+<div class="node-wrap" data-id="7" role="button" tabindex="0" aria-label="パターンノード 7"><div class="node"></div></div>
+<div class="node-wrap" data-id="8" role="button" tabindex="0" aria-label="パターンノード 8"><div class="node"></div></div>
+<div class="node-wrap" data-id="9" role="button" tabindex="0" aria-label="パターンノード 9"><div class="node"></div></div>
 </div>
 </div>
-<div class="error-msg" id="error-msg">ACCESS DENIED. INVALID PATTERN.</div>
+<div class="error-msg" id="error-msg" role="status" aria-live="polite">ACCESS DENIED. INVALID PATTERN.</div>
 </div>
 </div>
 <!-- SVG: LIQUID GLASS REFRACTION FILTER -->
@@ -1493,150 +1524,221 @@ body { padding: 0 !important; background-color: var(--bg-dark) !important; color
   
   
   
-  <div class="hex-grid" data-count="13">
+  <div class="hub-tool-controls" aria-label="ツールの検索と絞り込み">
+    <label class="hub-tool-search">
+      <span aria-hidden="true">⌕</span>
+      <input id="hub-tool-search" type="search" inputmode="search" autocomplete="off" placeholder="ツールを検索" aria-label="ツールを検索">
+      <button id="hub-tool-search-clear" type="button" aria-label="検索をクリア" hidden>×</button>
+    </label>
+    <button class="hub-tool-filter" id="hub-tool-favorites-filter" type="button" aria-pressed="false"><span aria-hidden="true">☆</span> お気に入り</button>
+  </div>
+  <div class="hub-tool-recent" id="hub-tool-recent" hidden>
+    <div class="hub-tool-recent-label">RECENTLY USED</div>
+    <div class="hub-tool-recent-list" id="hub-tool-recent-list"></div>
+  </div>
+  <div class="hub-tool-results" id="hub-tool-results" role="status" aria-live="polite">15 MODULES</div>
+  <div class="hex-grid" data-count="15">
   
-    <a href="/0723/taskmanage/" class="hex-tile" style="--i: 0">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">01</span>
-        <span class="hex-title">TASK_BOARD</span>
-        
-        <span class="hex-desc">KANBAN MANAGER</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="TASK_BOARD" data-tool-desc="優先度・期限・サブタスクを段階別に整理するカンバンタスク管理" data-tool-path="/0723/taskmanage/">
+      <a href="/0723/taskmanage/" class="hex-tile" style="--i: 0">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">01</span>
+          <span class="hex-title">TASK_BOARD</span>
+          <span class="hex-desc">優先度・期限・サブタスクを段階別に整理するカンバンタスク管理</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="TASK_BOARDをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
-    <a href="/0723/oshi/" class="hex-tile" style="--i: 1">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">02</span>
-        <span class="hex-title">OSHI_DATABASE</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="OSHI_DATABASE" data-tool-desc="プロフィール・画像・推し度・観察ログを集約する推し専用データベース" data-tool-path="/0723/oshi/">
+      <a href="/0723/oshi/" class="hex-tile" style="--i: 1">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">02</span>
+          <span class="hex-title">OSHI_DATABASE</span>
+          <span class="hex-desc">プロフィール・画像・推し度・観察ログを集約する推し専用データベース</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="OSHI_DATABASEをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
-    <a href="/0723/calendar/" class="hex-tile" style="--i: 2">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">03</span>
-        <span class="hex-title">CHRONO_GRID</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="CHRONO_GRID" data-tool-desc="授業・予定・出欠・添付資料を月表示で管理するスクールカレンダー" data-tool-path="/0723/calendar/">
+      <a href="/0723/calendar/" class="hex-tile" style="--i: 2">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">03</span>
+          <span class="hex-title">CHRONO_GRID</span>
+          <span class="hex-desc">授業・予定・出欠・添付資料を月表示で管理するスクールカレンダー</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="CHRONO_GRIDをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
-    <a href="/0723/payment/" class="hex-tile" style="--i: 3">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">04</span>
-        <span class="hex-title">PAYMENT_TRACKER</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="PAYMENT_TRACKER" data-tool-desc="支払い・予算・サブスクリプションを月単位で把握する家計管理ツール" data-tool-path="/0723/payment/">
+      <a href="/0723/payment/" class="hex-tile" style="--i: 3">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">04</span>
+          <span class="hex-title">PAYMENT_TRACKER</span>
+          <span class="hex-desc">支払い・予算・サブスクリプションを月単位で把握する家計管理ツール</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="PAYMENT_TRACKERをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
-    <a href="/0723/action_log/" class="hex-tile" style="--i: 4">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">05</span>
-        <span class="hex-title">ACTION_LOG</span>
-        
-        <span class="hex-desc">NEON TASK CALENDAR</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="ACTION_LOG" data-tool-desc="日々のタスク達成・連続記録・ヒートマップを振り返る行動ログ" data-tool-path="/0723/action_log/">
+      <a href="/0723/action_log/" class="hex-tile" style="--i: 4">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">05</span>
+          <span class="hex-title">ACTION_LOG</span>
+          <span class="hex-desc">日々のタスク達成・連続記録・ヒートマップを振り返る行動ログ</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="ACTION_LOGをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
-    <a href="/0723/weight_log/" class="hex-tile" style="--i: 5">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">06</span>
-        <span class="hex-title">WEIGHT_LOG</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="WEIGHT_LOG" data-tool-desc="複数の生体と測定履歴をグラフで追跡する体重モニター" data-tool-path="/0723/weight_log/">
+      <a href="/0723/weight_log/" class="hex-tile" style="--i: 5">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">06</span>
+          <span class="hex-title">WEIGHT_LOG</span>
+          <span class="hex-desc">複数の生体と測定履歴をグラフで追跡する体重モニター</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="WEIGHT_LOGをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
-    <a href="/0723/shift-clock/" class="hex-tile" style="--i: 6">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">07</span>
-        <span class="hex-title">SHIFT_CLOCK</span>
-        
-        <span class="hex-desc">SHIFT &amp; PAYROLL MANAGER</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="SHIFT_CLOCK" data-tool-desc="打刻・外出・シフト・給与見込みを月単位で管理する勤務記録ツール" data-tool-path="/0723/shift-clock/">
+      <a href="/0723/shift-clock/" class="hex-tile" style="--i: 6">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">07</span>
+          <span class="hex-title">SHIFT_CLOCK</span>
+          <span class="hex-desc">打刻・外出・シフト・給与見込みを月単位で管理する勤務記録ツール</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="SHIFT_CLOCKをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
-    <a href="/0723/vocal-range/" class="hex-tile" style="--i: 7">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">08</span>
-        <span class="hex-title">VOCAL_RANGE</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="VOCAL_RANGE" data-tool-desc="楽曲ごとの音域・キー・歌唱状態・カバー記録を管理するボーカル台帳" data-tool-path="/0723/vocal-range/">
+      <a href="/0723/vocal-range/" class="hex-tile" style="--i: 7">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">08</span>
+          <span class="hex-title">VOCAL_RANGE</span>
+          <span class="hex-desc">楽曲ごとの音域・キー・歌唱状態・カバー記録を管理するボーカル台帳</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="VOCAL_RANGEをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
-    <a href="/0723/focus-lab/" class="hex-tile" style="--i: 8">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">09</span>
-        <span class="hex-title">FOCUS_LAB</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="FOCUS_LAB" data-tool-desc="タイマー・集中タスク・週間ログをまとめるパーソナル集中環境" data-tool-path="/0723/focus-lab/">
+      <a href="/0723/focus-lab/" class="hex-tile" style="--i: 8">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">09</span>
+          <span class="hex-title">FOCUS_LAB</span>
+          <span class="hex-desc">タイマー・集中タスク・週間ログをまとめるパーソナル集中環境</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="FOCUS_LABをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
-    <a href="/0723/feeding/" class="hex-tile" style="--i: 9">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">10</span>
-        <span class="hex-title">Feeding Log</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="Academic Report" data-tool-desc="科目・試験・課題・成績推移を統合するアカデミックレポート" data-tool-path="/0723/report-card/">
+      <a href="/0723/report-card/" class="hex-tile" style="--i: 9">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">10</span>
+          <span class="hex-title">Academic Report</span>
+          <span class="hex-desc">科目・試験・課題・成績推移を統合するアカデミックレポート</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="Academic Reportをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
-    <a href="/0723/manga/" class="hex-tile" style="--i: 10">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">11</span>
-        <span class="hex-title">MANGA_SHELF</span>
-        
-        <span class="hex-desc">読了・読中・積読・未読を管理するパーソナル漫画トラッカー。評価・タグ・メモを記録 …</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="Feeding Log" data-tool-desc="複数の生体の給餌・メモ・予定・連続記録を管理する飼育ログ" data-tool-path="/0723/feeding/">
+      <a href="/0723/feeding/" class="hex-tile" style="--i: 10">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">11</span>
+          <span class="hex-title">Feeding Log</span>
+          <span class="hex-desc">複数の生体の給餌・メモ・予定・連続記録を管理する飼育ログ</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="Feeding Logをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
-    <a href="/0723/movie/" class="hex-tile" style="--i: 11">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">12</span>
-        <span class="hex-title">MOVIE_SHELF</span>
-        
-        <span class="hex-desc">鑑賞済・観たい・未視聴を管理するパーソナル映画トラッカー。評価・タグ・メモを記録 …</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="MANGA_SHELF" data-tool-desc="読了・読中・積読・未読を管理するパーソナル漫画トラッカー。評価・タグ・メモを記録し、jsonbin.io によるクラウド同期を行う。" data-tool-path="/0723/manga/">
+      <a href="/0723/manga/" class="hex-tile" style="--i: 11">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">12</span>
+          <span class="hex-title">MANGA_SHELF</span>
+          <span class="hex-desc">読了・読中・積読・未読を管理するパーソナル漫画トラッカー。評価・タグ・メモを記録し、jsonbin.io によるクラウド同期を行う。</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="MANGA_SHELFをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
-    <a href="/0723/novel/" class="hex-tile" style="--i: 12">
-      <div class="hex-inner">
-        <div class="hex-scanline"></div>
-        <span class="hex-index">13</span>
-        <span class="hex-title">NOVEL_SHELF</span>
-        
-        <span class="hex-desc">ISBNスキャン・自動書誌検索・読書進捗・お気に入り・タグ・統計・端末間同期を備 …</span>
-        
-        <span class="hex-status">● ONLINE</span>
-      </div>
-    </a>
+    <article class="hub-tool" data-tool-title="MOVIE_SHELF" data-tool-desc="鑑賞済・観たい・未視聴を管理するパーソナル映画トラッカー。評価・タグ・メモを記録し、jsonbin.io によるクラウド同期を行う。" data-tool-path="/0723/movie/">
+      <a href="/0723/movie/" class="hex-tile" style="--i: 12">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">13</span>
+          <span class="hex-title">MOVIE_SHELF</span>
+          <span class="hex-desc">鑑賞済・観たい・未視聴を管理するパーソナル映画トラッカー。評価・タグ・メモを記録し、jsonbin.io によるクラウド同期を行う。</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="MOVIE_SHELFをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
   
+    <article class="hub-tool" data-tool-title="NOVEL_SHELF" data-tool-desc="ISBNスキャン・自動書誌検索・読書進捗・お気に入り・タグ・統計・端末間同期を備えた、スマホ中心のパーソナル小説＆書籍トラッカー。" data-tool-path="/0723/novel/">
+      <a href="/0723/novel/" class="hex-tile" style="--i: 13">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">14</span>
+          <span class="hex-title">NOVEL_SHELF</span>
+          <span class="hex-desc">ISBNスキャン・自動書誌検索・読書進捗・お気に入り・タグ・統計・端末間同期を備えた、スマホ中心のパーソナル小説＆書籍トラッカー。</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="NOVEL_SHELFをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
+  
+    <article class="hub-tool" data-tool-title="Secret Diary" data-tool-desc="気分・習慣・写真・振り返りを安全に残すプライベート日記" data-tool-path="/0723/diary/">
+      <a href="/0723/diary/" class="hex-tile" style="--i: 14">
+        <div class="hex-inner">
+          <div class="hex-scanline"></div>
+          <span class="hex-index">15</span>
+          <span class="hex-title">Secret Diary</span>
+          <span class="hex-desc">気分・習慣・写真・振り返りを安全に残すプライベート日記</span>
+          <span class="hex-status">● ONLINE</span>
+        </div>
+      </a>
+      <button class="hub-tool-favorite" type="button" aria-label="Secret Diaryをお気に入りに追加" aria-pressed="false">☆</button>
+    </article>
+  
+  </div>
+  <div class="hub-tool-empty" id="hub-tool-empty" hidden>
+    <span aria-hidden="true">⌕</span>
+    <strong>一致するツールがありません</strong>
+    <small>検索語またはお気に入り条件を変更してください</small>
   </div>
 
 </div>
@@ -1652,10 +1754,6 @@ body { padding: 0 !important; background-color: var(--bg-dark) !important; color
   
   
   
-  
-  <a href="/0723/1/" class="encrypted-link" style="margin-bottom: 1.5rem;">
-  > DECRYPT FILE: sec-1 2025-12-24
-  </a>
   
 
 </div>
@@ -1790,6 +1888,18 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('touchmove', (e) => { if(!isDrawing) return; e.preventDefault(); handleMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
   window.addEventListener('touchend', () => { if (isDrawing) checkPattern(); });
 
+  grid.addEventListener('keydown', (e) => {
+    const nodeWrap = e.target.closest('.node-wrap');
+    if (!nodeWrap) return;
+    if (e.key === 'Escape') { e.preventDefault(); isDrawing = false; resetPattern(); return; }
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    if (currentPath.length === 0) resetPattern();
+    isDrawing = true;
+    addNode(nodeWrap);
+    if (currentPath.length >= SECRET_PATTERN.length) checkPattern();
+  });
+
   const resetPattern = () => {
     currentPath = []; pointsStr = "";
     pathEl.setAttribute('points', "");
@@ -1834,6 +1944,80 @@ document.addEventListener('DOMContentLoaded', () => {
       tile.style.transform = 'scale(1)';
     }, 300 + i * 100);
   });
+
+  // Tool discovery: search, favorites, and recently opened modules.
+  const toolCards = Array.from(document.querySelectorAll('.hub-tool'));
+  const toolSearch = document.getElementById('hub-tool-search');
+  const toolSearchClear = document.getElementById('hub-tool-search-clear');
+  const favoritesFilter = document.getElementById('hub-tool-favorites-filter');
+  const toolResults = document.getElementById('hub-tool-results');
+  const toolEmpty = document.getElementById('hub-tool-empty');
+  const recentBox = document.getElementById('hub-tool-recent');
+  const recentList = document.getElementById('hub-tool-recent-list');
+  const FAVORITES_KEY = 'dt_0723_tool_favorites_v1';
+  const RECENTS_KEY = 'dt_0723_tool_recents_v1';
+  const readList = key => { try { const value = JSON.parse(localStorage.getItem(key) || '[]'); return Array.isArray(value) ? value : []; } catch (_) { return []; } };
+  let favoritePaths = readList(FAVORITES_KEY);
+  let recentPaths = readList(RECENTS_KEY);
+
+  const updateFavoriteButtons = () => {
+    toolCards.forEach(card => {
+      const button = card.querySelector('.hub-tool-favorite');
+      const active = favoritePaths.includes(card.dataset.toolPath);
+      button.setAttribute('aria-pressed', String(active));
+      button.textContent = active ? '★' : '☆';
+      button.setAttribute('aria-label', `${card.dataset.toolTitle}をお気に入りから${active ? '外す' : '追加'}`);
+    });
+  };
+  const renderRecentTools = () => {
+    if (!recentList || !recentBox) return;
+    recentList.innerHTML = '';
+    recentPaths.slice(0, 4).forEach(path => {
+      const card = toolCards.find(item => item.dataset.toolPath === path);
+      if (!card) return;
+      const link = document.createElement('a');
+      link.className = 'hub-tool-recent-chip';
+      link.href = path;
+      link.textContent = card.dataset.toolTitle;
+      recentList.appendChild(link);
+    });
+    recentBox.hidden = recentList.children.length === 0;
+  };
+  const filterTools = () => {
+    const query = (toolSearch?.value || '').trim().toLocaleLowerCase('ja');
+    const favoritesOnly = favoritesFilter?.getAttribute('aria-pressed') === 'true';
+    let visible = 0;
+    toolCards.forEach(card => {
+      const haystack = `${card.dataset.toolTitle} ${card.dataset.toolDesc}`.toLocaleLowerCase('ja');
+      const show = (!query || haystack.includes(query)) && (!favoritesOnly || favoritePaths.includes(card.dataset.toolPath));
+      card.hidden = !show;
+      if (show) visible++;
+    });
+    if (toolResults) toolResults.textContent = `${visible} / ${toolCards.length} MODULES`;
+    if (toolEmpty) toolEmpty.hidden = visible !== 0;
+    if (toolSearchClear) toolSearchClear.hidden = !query;
+  };
+  toolCards.forEach(card => {
+    card.querySelector('.hub-tool-favorite')?.addEventListener('click', () => {
+      const path = card.dataset.toolPath;
+      favoritePaths = favoritePaths.includes(path) ? favoritePaths.filter(item => item !== path) : [path, ...favoritePaths];
+      try { localStorage.setItem(FAVORITES_KEY, JSON.stringify(favoritePaths)); } catch (_) {}
+      updateFavoriteButtons(); filterTools();
+    });
+    card.querySelector('.hex-tile')?.addEventListener('click', () => {
+      recentPaths = [card.dataset.toolPath, ...recentPaths.filter(item => item !== card.dataset.toolPath)].slice(0, 6);
+      try { localStorage.setItem(RECENTS_KEY, JSON.stringify(recentPaths)); } catch (_) {}
+    });
+  });
+  toolSearch?.addEventListener('input', filterTools);
+  toolSearchClear?.addEventListener('click', () => { toolSearch.value = ''; filterTools(); toolSearch.focus(); });
+  favoritesFilter?.addEventListener('click', () => {
+    const active = favoritesFilter.getAttribute('aria-pressed') !== 'true';
+    favoritesFilter.setAttribute('aria-pressed', String(active));
+    favoritesFilter.querySelector('span').textContent = active ? '★' : '☆';
+    filterTools();
+  });
+  updateFavoriteButtons(); renderRecentTools(); filterTools();
 
   // Glitch text effect on zone labels (safe version that preserves child HTML/spans)
   document.querySelectorAll('.zone-label, .cmd-title, th').forEach(target => {

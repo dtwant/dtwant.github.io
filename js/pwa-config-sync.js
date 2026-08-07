@@ -26,7 +26,8 @@
     attendance: 'dt_attendance_blob',
     weight_log: 'dt_weight_log_bin_id',
     shift_clock: 'dt_shift_clock_blob',
-    taskmanage: 'dt_taskmanage_blob'
+    taskmanage: 'dt_taskmanage_blob',
+    focus_lab: 'dt_focus_lab_blob'
   };
 
   // デフォルトのマスターAPIキー (公開されてもデータ破壊は起きないよう基本的には個人の読み書き用)

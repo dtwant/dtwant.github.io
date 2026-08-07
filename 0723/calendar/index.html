@@ -15,7 +15,7 @@
   <title>CHRONO_GRID &middot; dt&#39;s world</title>
   <meta name="title" content="CHRONO_GRID &middot; dt&#39;s world" />
   
-  
+  <meta name="description" content="授業・予定・出欠・添付資料を月表示で管理するスクールカレンダー" />
   
   
   
@@ -81,6 +81,7 @@
   <meta property="og:url" content="https://dtwant.github.io/0723/calendar/">
   <meta property="og:site_name" content="dt&#39;s world">
   <meta property="og:title" content="CHRONO_GRID">
+  <meta property="og:description" content="授業・予定・出欠・添付資料を月表示で管理するスクールカレンダー">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="0723">
@@ -88,6 +89,7 @@
   
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="CHRONO_GRID">
+  <meta name="twitter:description" content="授業・予定・出欠・添付資料を月表示で管理するスクールカレンダー">
 
     
   
@@ -99,7 +101,7 @@
     "articleSection": "Secret",
     "name": "CHRONO_GRID",
     "headline": "CHRONO_GRID",
-    
+    "description": "授業・予定・出欠・添付資料を月表示で管理するスクールカレンダー",
     
     "inLanguage": "en",
     "url" : "https:\/\/dtwant.github.io\/0723\/calendar\/",
@@ -1145,6 +1147,8 @@
     text-shadow: 0 0 20px rgba(0,243,255,0.5);
   }
   .cg-hdr-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+  .cg-gh-grid { display:flex; gap:.5rem; margin-top:.5rem; }
+  .cg-gh-grid > div { flex:1; min-width:0; }
 
   .cg-sync-badge {
     font-size: 0.6rem; padding: 0.2rem 0.6rem; letter-spacing: 0.08em;
@@ -1760,6 +1764,12 @@
   @media (max-width: 480px) {
     .cg-wrap { padding: 0.75rem 0.35rem; }
     .cg-header { margin-bottom: 1rem; padding-bottom: 0.75rem; }
+    .cg-header > div:first-child { display:grid !important; grid-template-columns:1fr !important; align-items:stretch !important; }
+    .cg-header > div:first-child > div:first-child { justify-content:space-between; min-width:0; }
+    .cg-hdr-actions { display:grid; grid-template-columns:minmax(0,1fr) repeat(3,auto); width:100%; gap:6px; }
+    .cg-sync-badge { display:flex; align-items:center; min-height:44px; padding-inline:10px; border:1px solid rgba(255,255,255,.1); border-radius:9px; }
+    .cg-header > div:last-child { display:flex !important; flex-wrap:nowrap !important; margin-inline:-.35rem; padding:0 .35rem 4px; overflow-x:auto; scrollbar-width:none; }
+    .cg-header > div:last-child .cg-btn { flex:0 0 auto; padding-inline:12px !important; font-size:.7rem !important; }
     .cg-title { font-size: 1.15rem; }
     .cg-stats { grid-template-columns: repeat(4, 1fr); gap: 4px; }
     .cg-stat-card { padding: 0.5rem 0.2rem; border-radius: 4px; }
@@ -1792,6 +1802,21 @@
     .cg-fm-thumb { width: 36px; height: 36px; font-size: 1.2rem; }
     .cg-fm-name { font-size: 0.75rem; }
     .cg-fm-open { padding: 5px 8px; font-size: 0.62rem; }
+    .cg-input,.cg-time-input,.cg-modal input,.cg-modal select,.cg-modal textarea { font-size:16px !important; }
+    .cg-btn,.cg-btn-nav,.cg-btn-add,.cg-stog,.cg-modal button { min-height:44px; }
+    .cg-wrap { padding-top:max(.75rem, env(safe-area-inset-top)); padding-bottom:calc(.75rem + env(safe-area-inset-bottom)); }
+    .cg-overlay { align-items:flex-end; padding:0; }
+    .cg-modal { width:100%; max-width:100%; max-height:92dvh; overflow-y:auto; border-radius:14px 14px 0 0; padding-bottom:calc(1.25rem + env(safe-area-inset-bottom)); }
+    .cg-gh-grid { display:grid; grid-template-columns:1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cg-root *, .cg-root *::before, .cg-root *::after,
+    .cg-overlay *, .cg-overlay *::before, .cg-overlay *::after {
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
   }
 
    
@@ -2000,7 +2025,7 @@
     <div style="margin-bottom:1rem;">
       <label class="cg-section-label" style="margin-top:0">GitHub PAT (Personal Access Token)</label>
       <input type="password" class="cg-input" id="cg-gh-pat" placeholder="ghp_xxxxxxxxxxxx">
-      <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+      <div class="cg-gh-grid">
         <div style="flex:1;">
           <label class="cg-section-label" style="margin-top:0">Repo Owner</label>
           <input type="text" class="cg-input" id="cg-gh-owner" value="dtwant">
@@ -3167,6 +3192,7 @@
   init();
 })();
 </script>
+
 
           
           

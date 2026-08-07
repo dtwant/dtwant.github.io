@@ -15,7 +15,7 @@
   <title>Feeding Log &middot; dt&#39;s world</title>
   <meta name="title" content="Feeding Log &middot; dt&#39;s world" />
   
-  
+  <meta name="description" content="複数の生体の給餌・メモ・予定・連続記録を管理する飼育ログ" />
   
   
   
@@ -83,6 +83,7 @@
   <meta property="og:url" content="https://dtwant.github.io/0723/feeding/">
   <meta property="og:site_name" content="dt&#39;s world">
   <meta property="og:title" content="Feeding Log">
+  <meta property="og:description" content="複数の生体の給餌・メモ・予定・連続記録を管理する飼育ログ">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="0723">
@@ -92,6 +93,7 @@
   
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Feeding Log">
+  <meta name="twitter:description" content="複数の生体の給餌・メモ・予定・連続記録を管理する飼育ログ">
 
     
   
@@ -103,7 +105,7 @@
     "articleSection": "Secret",
     "name": "Feeding Log",
     "headline": "Feeding Log",
-    
+    "description": "複数の生体の給餌・メモ・予定・連続記録を管理する飼育ログ",
     
     "inLanguage": "en",
     "url" : "https:\/\/dtwant.github.io\/0723\/feeding\/",
@@ -1779,6 +1781,36 @@
     border-radius: 2px;
     font-style: normal;
   }
+
+  @media (max-width: 640px) {
+    .fl-root { padding-top:max(1rem, env(safe-area-inset-top)); padding-bottom:calc(1rem + env(safe-area-inset-bottom)); }
+    .fl-input,.fl-modal input,.fl-modal textarea { font-size:16px !important; }
+    .fl-header button,.fl-tab,.fl-month-btn,.fl-today-btn,.fl-export-btn,.fl-submit,.fl-modal-btn,.fl-animal-btn { min-height:44px; }
+    .fl-modal-overlay { align-items:flex-end; padding:0; }
+    .fl-modal { max-height:90dvh; overflow-y:auto; border-radius:14px 14px 0 0; padding:1.25rem 1rem calc(1rem + env(safe-area-inset-bottom)); }
+    .fl-toast { bottom:calc(16px + env(safe-area-inset-bottom)); width:calc(100vw - 24px); max-width:420px; text-align:center; }
+    .fl-form { padding:1rem; border-radius:14px; background:linear-gradient(145deg,rgba(16,185,129,.07),rgba(255,255,255,.025)); }
+    .fl-form-title { margin-bottom:1rem; font-size:.72rem; letter-spacing:.08em; }
+    .fl-form-row { display:grid; grid-template-columns:1fr; gap:.8rem; }
+    .fl-input-group { min-width:0; }
+    .fl-input-label { margin-bottom:.4rem; color:#a7f3d0; font-size:.72rem; line-height:1.5; }
+    .fl-emoji-grid { grid-template-columns:repeat(5,1fr); gap:7px; }
+    .fl-emoji-btn { min-height:44px; }
+    .fl-submit { position:sticky; bottom:calc(8px + env(safe-area-inset-bottom)); z-index:4; width:100%; margin-top:1rem; border-radius:11px; box-shadow:0 14px 36px rgba(0,0,0,.4); }
+    .fl-record-empty { display:grid; justify-items:center; gap:8px; padding:28px 16px; color:#94a3b8; text-align:center; }
+    .fl-record-empty strong { color:#ecfdf5; font-size:1rem; }
+    .fl-record-empty span { max-width:27rem; font-size:.78rem; line-height:1.65; }
+    .fl-record-empty button { min-height:44px; margin-top:4px; padding:0 16px; border:1px solid rgba(16,185,129,.45); border-radius:10px; color:#a7f3d0; background:rgba(16,185,129,.12); font-weight:700; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fl-root *, .fl-root *::before, .fl-root *::after,
+    .fl-modal-overlay *, .fl-modal-overlay *::before, .fl-modal-overlay *::after {
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+  }
 </style>
 
 <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
@@ -1798,7 +1830,7 @@
   <div class="fl-scanline"></div>
   <header class="fl-header">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-      <button onclick="window.location.href='/'" style="background: transparent; border: 1px solid #10b981; color: #10b981; padding: 0.2rem 0.5rem; font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: bold; cursor: pointer; border-radius: 3px; white-space: nowrap; margin-top: 0.3rem;">◀ EXIT</button>
+      <button onclick="window.location.href='/0723/'" style="background: transparent; border: 1px solid #10b981; color: #10b981; padding: 0.2rem 0.5rem; font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: bold; cursor: pointer; border-radius: 3px; white-space: nowrap; margin-top: 0.3rem;">◀ EXIT</button>
       <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
         <div class="fl-title" style="margin-bottom: 0.1rem;">FEEDING_LOG</div>
         <div class="fl-desc">> BIO-MONITOR: ACTIVE</div>
@@ -2119,7 +2151,7 @@
       } catch(e) {
         console.error('[FEEDING_LOG] createNewBin failed:', e);
         syncOk = false;
-        toast('✗ Bin作成に失敗しました');
+        
       }
       isSyncing = false;
       updateSyncBadge();
@@ -2395,7 +2427,8 @@
 
       if (animals.length === 0) {
         tableEl.innerHTML =
-          '<tr><td style="padding:2rem;color:#555;text-align:center;font-family:JetBrains Mono,monospace;">生体を「🐾 生体管理」タブから登録してください</td></tr>';
+          '<tr><td><div class="fl-record-empty"><strong>記録する生体がまだいません</strong><span>名前と給餌間隔を登録すると、今日の給餌をすぐ記録できます。</span><button type="button" id="fl-empty-add">生体を登録する</button></div></td></tr>';
+        document.getElementById('fl-empty-add')?.addEventListener('click', () => document.getElementById('fl-tab-manage')?.click());
         return;
       }
 
@@ -3271,6 +3304,7 @@
     fetchFromBlob();
   })();
 </script>
+
 <hr>
 <p><small>※ 記録はJSONBlob経由でクラウド同期される. ステータスバッジが「SYNCED」ならオンライン同期中.</small></p>
 
