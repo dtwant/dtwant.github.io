@@ -1021,6 +1021,7 @@
 
         <div class="article-content max-w-prose mb-20">
           
+<script src="/js/pwa-config-sync.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -1408,6 +1409,31 @@
 .km-tb-btn-primary:active { transform:scale(0.92); }
 
  
+.km-sync-btn {
+  width:auto; min-width:72px; padding:0 9px; gap:6px;
+  font-family:'JetBrains Mono',monospace; font-size:0.58rem;
+  letter-spacing:0.04em; white-space:nowrap;
+}
+.km-sync-dot {
+  width:6px; height:6px; border-radius:50%; flex-shrink:0;
+  background:var(--text-4); transition:all 0.2s var(--ease);
+}
+.km-sync-btn[data-state="ok"] { color:hsl(var(--c5)) !important; border-color:hsla(var(--c5),0.3) !important; }
+.km-sync-btn[data-state="ok"] .km-sync-dot { background:hsl(var(--c5)); box-shadow:0 0 8px hsla(var(--c5),0.7); }
+.km-sync-btn[data-state="busy"] { color:hsl(var(--c3)) !important; border-color:hsla(var(--c3),0.3) !important; }
+.km-sync-btn[data-state="busy"] .km-sync-dot { background:hsl(var(--c3)); animation:km-sync-pulse 0.9s ease-in-out infinite; }
+.km-sync-btn[data-state="error"] { color:hsl(var(--c1)) !important; border-color:hsla(var(--c1),0.3) !important; }
+.km-sync-btn[data-state="error"] .km-sync-dot { background:hsl(var(--c1)); }
+@keyframes km-sync-pulse { 50% { opacity:0.35; transform:scale(0.72); } }
+.km-sync-note {
+  margin-top:10px; padding:10px 12px; border-radius:var(--radius-sm);
+  border:1px solid var(--border) !important; background:rgba(255,255,255,0.025);
+  color:var(--text-3); font-size:0.67rem; line-height:1.6;
+}
+.km-sync-note a { color:hsl(var(--c0)) !important; }
+.km-btn-danger { color:hsl(var(--c1)) !important; border-color:hsla(var(--c1),0.28) !important; margin-right:auto; }
+
+ 
 .km-overlay {
   position:fixed; inset:0;
   background:rgba(0,0,0,0.55);
@@ -1487,6 +1513,10 @@
   .km-logo-mark { width:24px; height:24px; font-size:0.6rem; }
   .km-app-title { font-size:0.82rem; }
   .km-back-btn,.km-tb-btn { width:28px; height:28px; }
+  .km-tb-btn-primary span { display:none; }
+  .km-tb-btn-primary { width:28px; padding:0; justify-content:center; }
+  .km-sync-btn { min-width:28px; padding:0; }
+  .km-sync-label { display:none; }
   .km-tb-btn svg { width:12px; height:12px; }
   .km-tab { padding:8px 10px; font-size:0.65rem; }
   .km-card { padding:9px 10px; }
@@ -1515,6 +1545,12 @@
         <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         <span>新規タスク</span>
       </button>
+      <button class="km-tb-btn km-sync-btn" id="km-btn-sync" data-state="local" title="クラウド同期を実行">
+        <span class="km-sync-dot"></span><span class="km-sync-label">LOCAL</span>
+      </button>
+      <button class="km-tb-btn" id="km-btn-sync-settings" title="同期設定">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6v.2h-4V21a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 00.3-1.9A1.7 1.7 0 003 14H2.8v-4H3a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 009 4.6 1.7 1.7 0 0010 3v-.2h4V3a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 00-.3 1.9 1.7 1.7 0 001.6 1h.2v4H21a1.7 1.7 0 00-1.6 1z"/></svg>
+      </button>
       <button class="km-tb-btn" id="km-btn-export" title="JSONエクスポート">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </button>
@@ -1527,9 +1563,6 @@
   <div class="km-tab-bar" id="km-tab-bar"><div class="km-tab-inner" id="km-tab-inner"></div></div>
   <div class="km-board-wrap"><div class="km-board" id="km-board"></div></div>
   <div class="km-toast" id="km-toast"></div>
-</div>-inner"></div></div>
-  <div class="km-board-wrap"><div class="km-board" id="km-board"></div></div>
-  <div class="km-toast" id="km-toast"></div>
 </div>
 <input type="file" id="km-file" accept=".json" style="display:none">
 
@@ -1537,6 +1570,10 @@
 (function(){
 'use strict';
 const STORE_KEY='km_kanban_v3';
+const LOCAL_UPDATED_KEY='km_kanban_v3_updated_at';
+const BLOB_KEY='dt_taskmanage_blob';
+const APP_KEY='taskmanage';
+const JB_CREATE='https://api.jsonbin.io/v3/b';
 const HOLD_MS=300;
 const COLS=[
   {id:'want',  title:'やりたい',  ci:0,hsl:'220 75% 62%'},
@@ -1548,11 +1585,23 @@ const COLS=[
 ];
 
 let data=load(), drag=null, holdTmr=null;
+let blobId=localStorage.getItem(BLOB_KEY)||'';
+let localUpdatedAt=Number(localStorage.getItem(LOCAL_UPDATED_KEY))||0;
+let syncBusy=false, pushTimer=null, applyingRemote=false;
 let activeTab=COLS[0].id;
 let isMobile=()=>window.innerWidth<=768;
 
 function load(){try{const r=localStorage.getItem(STORE_KEY);if(r)return JSON.parse(r);}catch(e){}return defaults();}
-function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data));}catch(e){}}
+function save(){
+  try{
+    localStorage.setItem(STORE_KEY,JSON.stringify(data));
+    if(!applyingRemote){
+      localUpdatedAt=Date.now();
+      localStorage.setItem(LOCAL_UPDATED_KEY,String(localUpdatedAt));
+    }
+  }catch(e){}
+  if(!applyingRemote)scheduleCloudPush();
+}
 function defaults(){
   const d={sections:[{id:uid(),name:'日々のタスク',collapsed:false}],columns:{}};
   COLS.forEach(c=>d.columns[c.id]=[]);
@@ -2104,6 +2153,254 @@ function openEdit(tid, colId){
 function closeEdit(){const ol=document.getElementById('km-edit-ol');if(ol)ol.remove();}
 
  
+function getJsonBinKey(){
+  return window.PWAConfigSync
+    ? window.PWAConfigSync.getApiKey()
+    : '$2a$10$C0Z.Fl3F.BCvUaC5rHVt3OD6aYt8SXRkmXExr3mfmtCrGdDzG8Aae';
+}
+
+function jsonBinHeaders(){
+  return {'X-Master-Key':getJsonBinKey(),'Content-Type':'application/json'};
+}
+
+function setSyncState(state,label){
+  const btn=document.getElementById('km-btn-sync');
+  if(!btn)return;
+  btn.dataset.state=state;
+  const text=btn.querySelector('.km-sync-label');
+  if(text)text.textContent=label;
+  const titles={
+    local:'ローカル保存中 — 押すとクラウド同期を開始',
+    busy:'クラウドと同期しています',
+    ok:'クラウド同期済み — 押すと再同期',
+    error:'同期に失敗しました — 押すと再試行'
+  };
+  btn.title=titles[state]||'クラウド同期';
+}
+
+function normalizeCloudData(candidate){
+  if(!candidate||typeof candidate!=='object'||!candidate.columns)return null;
+  const normalized={...candidate,columns:{...candidate.columns}};
+  COLS.forEach(c=>{
+    normalized.columns[c.id]=Array.isArray(candidate.columns[c.id])?candidate.columns[c.id]:[];
+  });
+  if(!Array.isArray(normalized.sections))normalized.sections=[];
+  return normalized;
+}
+
+function unpackCloudRecord(record){
+  const wrapped=record&&record.data&&record.data.columns;
+  const remoteData=normalizeCloudData(wrapped?record.data:record);
+  if(!remoteData)return null;
+  const rawTime=wrapped?record.updatedAt:record.updatedAt;
+  const parsedTime=typeof rawTime==='number'?rawTime:Date.parse(rawTime||'');
+  return {data:remoteData,updatedAt:Number.isFinite(parsedTime)?parsedTime:0};
+}
+
+function makeCloudPayload(){
+  return {
+    app:'dt-world-task-board',
+    schemaVersion:1,
+    updatedAt:localUpdatedAt||Date.now(),
+    data
+  };
+}
+
+async function registerSharedBinId(id){
+  if(!window.PWAConfigSync)return;
+  if(id){
+    await window.PWAConfigSync.syncAppBinId(APP_KEY,id);
+    return;
+  }
+  window.PWAConfigSync.setCachedBinId(APP_KEY,null);
+  if(window.PWAConfigSync.getMasterBinId()){
+    try{await window.PWAConfigSync.pushMasterConfig();}catch(e){console.warn('Task board master config update failed:',e);}
+  }
+}
+
+async function persistBlobId(id){
+  blobId=(id||'').trim();
+  try{
+    if(blobId)localStorage.setItem(BLOB_KEY,blobId);
+    else localStorage.removeItem(BLOB_KEY);
+  }catch(e){}
+  await registerSharedBinId(blobId);
+}
+
+async function putCloudData(){
+  const response=await fetch(`https://api.jsonbin.io/v3/b/${encodeURIComponent(blobId)}`,{
+    method:'PUT',headers:jsonBinHeaders(),body:JSON.stringify(makeCloudPayload())
+  });
+  if(!response.ok)throw new Error(`put:${response.status}`);
+}
+
+async function createCloudBin(){
+  if(!localUpdatedAt){
+    localUpdatedAt=Date.now();
+    try{localStorage.setItem(LOCAL_UPDATED_KEY,String(localUpdatedAt));}catch(e){}
+  }
+  const response=await fetch(JB_CREATE,{
+    method:'POST',
+    headers:{...jsonBinHeaders(),'X-Bin-Name':'dt_task_board','X-Bin-Private':'true'},
+    body:JSON.stringify(makeCloudPayload())
+  });
+  if(!response.ok)throw new Error(`create:${response.status}`);
+  const result=await response.json();
+  const newId=result&&result.metadata&&result.metadata.id;
+  if(!newId)throw new Error('create:no-id');
+  await persistBlobId(newId);
+  return newId;
+}
+
+function applyRemoteData(remote){
+  applyingRemote=true;
+  data=remote.data;
+  localUpdatedAt=remote.updatedAt||Date.now();
+  try{
+    localStorage.setItem(STORE_KEY,JSON.stringify(data));
+    localStorage.setItem(LOCAL_UPDATED_KEY,String(localUpdatedAt));
+  }catch(e){}
+  applyingRemote=false;
+  render();
+}
+
+async function kmSync(silent=false,options={}){
+  if(syncBusy)return;
+  syncBusy=true;
+  clearTimeout(pushTimer);
+  setSyncState('busy','SYNC…');
+  try{
+    if(window.PWAConfigSync){
+      const sharedId=await window.PWAConfigSync.syncAppBinId(APP_KEY,blobId);
+      if(sharedId&&sharedId!==blobId){
+        blobId=sharedId;
+        localStorage.setItem(BLOB_KEY,blobId);
+      }
+    }
+
+    if(!blobId){
+      await createCloudBin();
+      setSyncState('ok','SYNCED');
+      if(!silent)toast('クラウド同期を開始しました');
+      return;
+    }
+
+    const response=await fetch(`https://api.jsonbin.io/v3/b/${encodeURIComponent(blobId)}/latest`,{
+      headers:{'X-Master-Key':getJsonBinKey()},cache:'no-store'
+    });
+    if(!response.ok)throw new Error(`get:${response.status}`);
+    const result=await response.json();
+    const remote=unpackCloudRecord(result.record||result);
+    if(!remote)throw new Error('get:invalid-data');
+
+    const forcePull=Boolean(options.forcePull);
+    if(forcePull||remote.updatedAt>localUpdatedAt||(remote.updatedAt===0&&localUpdatedAt===0)){
+      applyRemoteData(remote);
+      if(!silent)toast('クラウドのタスクを反映しました');
+    }else if(localUpdatedAt>remote.updatedAt){
+      await putCloudData();
+      if(!silent)toast('最新のタスクをクラウドへ保存しました');
+    }else if(!silent){
+      toast('タスクは最新です');
+    }
+    setSyncState('ok','SYNCED');
+  }catch(error){
+    console.error('Task board sync failed:',error);
+    setSyncState('error','ERROR');
+    if(!silent){
+      const authError=/:(401|403)$/.test(error.message);
+      toast(authError?'APIキーを同期設定で確認してください':'クラウド同期に失敗しました');
+    }
+  }finally{
+    syncBusy=false;
+  }
+}
+
+async function pushCloudData(){
+  if(!blobId||syncBusy)return;
+  syncBusy=true;
+  setSyncState('busy','SAVING');
+  try{
+    await putCloudData();
+    setSyncState('ok','SYNCED');
+  }catch(error){
+    console.error('Task board auto-save failed:',error);
+    setSyncState('error','ERROR');
+  }finally{
+    syncBusy=false;
+  }
+}
+
+function scheduleCloudPush(){
+  if(!blobId)return;
+  setSyncState('busy','PENDING');
+  clearTimeout(pushTimer);
+  pushTimer=setTimeout(pushCloudData,1200);
+}
+
+function closeSyncSettings(){
+  const overlay=document.getElementById('km-sync-ol');
+  if(overlay)overlay.remove();
+}
+
+function openSyncSettings(){
+  closeSyncSettings();
+  const overlay=document.createElement('div');
+  overlay.className='km-overlay';
+  overlay.id='km-sync-ol';
+  overlay.innerHTML=`<div class="km-modal">
+    <div class="km-modal-title">☁ 端末間同期</div>
+    <label for="km-sync-bin-input">JSONBin Bin ID</label>
+    <input type="text" id="km-sync-bin-input" placeholder="空欄なら初回同期時に自動作成" autocomplete="off">
+    <div class="km-sync-note">
+      同じ Bin ID を設定した端末間でタスクボードを同期します。APIキーと全ツールの接続IDは
+      <a href="/project-x/sync-settings/">Sync Settings</a> で一括管理できます。
+    </div>
+    <div class="km-modal-ft">
+      <button class="km-btn-ghost km-btn-danger" id="km-sync-disconnect">接続解除</button>
+      <button class="km-btn-ghost" id="km-sync-cancel">閉じる</button>
+      <button class="km-btn-primary" id="km-sync-apply" style="--ca:220 75% 62%">適用して同期</button>
+    </div>
+  </div>`;
+  document.getElementById('km-app').appendChild(overlay);
+  const input=document.getElementById('km-sync-bin-input');
+  input.value=blobId;
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeSyncSettings();});
+  document.getElementById('km-sync-cancel').onclick=closeSyncSettings;
+  document.getElementById('km-sync-disconnect').onclick=async()=>{
+    await persistBlobId('');
+    closeSyncSettings();
+    setSyncState('local','LOCAL');
+    toast('同期接続を解除しました（ローカルデータは保持）');
+  };
+  document.getElementById('km-sync-apply').onclick=async()=>{
+    const nextId=input.value.trim();
+    const changed=nextId!==blobId;
+    await persistBlobId(nextId);
+    closeSyncSettings();
+    await kmSync(false,{forcePull:changed&&Boolean(nextId)});
+  };
+  requestAnimationFrame(()=>input.focus());
+}
+
+async function initCloudSync(){
+  try{
+    if(window.PWAConfigSync){
+      const sharedId=await window.PWAConfigSync.syncAppBinId(APP_KEY,blobId);
+      if(sharedId&&sharedId!==blobId){
+        blobId=sharedId;
+        localStorage.setItem(BLOB_KEY,blobId);
+      }
+    }
+    if(blobId)await kmSync(true);
+    else setSyncState('local','LOCAL');
+  }catch(error){
+    console.error('Task board sync initialization failed:',error);
+    setSyncState('error','ERROR');
+  }
+}
+
+ 
 function exportData(){
   const json=JSON.stringify(data,null,2);
   const blob=new Blob([json],{type:'application/json'});
@@ -2134,10 +2431,12 @@ $board.addEventListener('click',e=>{
 });
 
 document.getElementById('km-btn-create').addEventListener('click', () => openEdit(null, activeTab || 'want'));
+document.getElementById('km-btn-sync').addEventListener('click',()=>kmSync(false));
+document.getElementById('km-btn-sync-settings').addEventListener('click',openSyncSettings);
 document.getElementById('km-btn-export').addEventListener('click',exportData);
 document.getElementById('km-btn-import').addEventListener('click',()=>document.getElementById('km-file').click());
 document.getElementById('km-file').addEventListener('change',e=>{if(e.target.files[0]){importData(e.target.files[0]);e.target.value='';}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEdit();closeAdd();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEdit();closeSyncSettings();closeAdd();}});
 
 window.addEventListener('resize',()=>{
   if(isMobile())applyMobileTab();
@@ -2146,6 +2445,7 @@ window.addEventListener('resize',()=>{
 
  
 render();
+initCloudSync();
 })();
 </script>
 
