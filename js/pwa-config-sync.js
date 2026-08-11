@@ -27,7 +27,9 @@
     weight_log: 'dt_weight_log_bin_id',
     shift_clock: 'dt_shift_clock_blob',
     taskmanage: 'dt_taskmanage_blob',
-    focus_lab: 'dt_focus_lab_blob'
+    focus_lab: 'dt_focus_lab_blob',
+    // Math Memoは既存ツールと衝突しない追加名前空間
+    math_memo: 'dt_math_memo_blob'
   };
 
   // デフォルトのマスターAPIキー (公開されてもデータ破壊は起きないよう基本的には個人の読み書き用)
