@@ -350,7 +350,9 @@
   if (channel) channel.addEventListener('message', (event) => { if (!event.data || event.data.source === deviceId() || event.data.type !== 'state') return; const incoming = normalizeState(event.data.state); if (String(incoming.updatedAt) > String(state.updatedAt)) { state = incoming; dirtySinceRemote = false; localStorage.setItem(STORE_KEY, JSON.stringify(state)); renderAll(); showToast('別のタブから更新しました'); } });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
 
-  setMode('split'); renderAll();
+  // A two-pane split is useful on desktop, but becomes a long, misleading stack on phones.
+  // Compact screens start in the editor and keep Preview one tap away.
+  setMode(window.matchMedia && window.matchMedia('(max-width: 600px)').matches ? 'edit' : 'split'); renderAll();
   const initialBin = cachedBin(); if (els.syncInput) els.syncInput.value = initialBin || '';
   if (initialBin) { setSyncState('busy', '同期を確認しています…'); syncNow({ create: false }); } else setSyncState('local', 'この端末に保存されています');
   startPolling();
