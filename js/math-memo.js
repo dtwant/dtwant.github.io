@@ -161,14 +161,37 @@
       });
     });
   }
-  async function typeset() {
-    if (!window.MathJax || !els.preview) return;
+  async function waitForMathJax(timeout = 15000) {
+    const deadline = Date.now() + timeout;
+    while (Date.now() < deadline) {
+      if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') return window.MathJax;
+      await new Promise(resolve => window.setTimeout(resolve, 50));
+    }
+    return null;
+  }
+  async function typeset({ required = false } = {}) {
+    if (!els.preview) return false;
+    const hasMath = Boolean(els.preview.querySelector('.mm-display-math'));
+    if (!hasMath) return true;
+    const mathJax = await waitForMathJax(required ? 15000 : 3000);
+    if (!mathJax) {
+      if (els.previewStatus) els.previewStatus.textContent = '数式を読み込めませんでした';
+      if (required) throw new Error('MathJax is not ready');
+      return false;
+    }
     try {
-      if (window.MathJax.startup && window.MathJax.startup.promise) await window.MathJax.startup.promise;
-      if (typeof window.MathJax.typesetClear === 'function') window.MathJax.typesetClear([els.preview]);
-      if (typeof window.MathJax.typesetPromise === 'function') await window.MathJax.typesetPromise([els.preview]);
+      if (mathJax.startup && mathJax.startup.promise) await mathJax.startup.promise;
+      if (typeof mathJax.typesetClear === 'function') mathJax.typesetClear([els.preview]);
+      await mathJax.typesetPromise([els.preview]);
+      const rendered = Boolean(els.preview.querySelector('.mm-display-math mjx-container'));
+      if (!rendered && required) throw new Error('MathJax produced no rendered formula');
       if (els.previewStatus) els.previewStatus.textContent = 'プレビューは最新です';
-    } catch (_) { if (els.previewStatus) els.previewStatus.textContent = '数式の一部を確認してください'; }
+      return rendered;
+    } catch (error) {
+      if (els.previewStatus) els.previewStatus.textContent = '数式の一部を確認してください';
+      if (required) throw error;
+      return false;
+    }
   }
   function renderPreview() {
     const doc = activeDoc(); if (!doc || !els.preview) return;
@@ -373,8 +396,44 @@
   async function prepareRenderedPreview() {
     renderPreview();
     clearTimeout(previewTimer);
-    await typeset();
+    await typeset({ required: true });
     await document.fonts?.ready;
+  }
+
+  async function rasterizeMathForPdf(stage) {
+    const containers = [...stage.querySelectorAll('mjx-container')];
+    if (!containers.length) return;
+    await Promise.all(containers.map(async (container) => {
+      const svg = container.querySelector('svg');
+      if (!svg) throw new Error('MathJax SVG is missing');
+      const svgRect = svg.getBoundingClientRect();
+      const serialized = new XMLSerializer().serializeToString(svg.cloneNode(true));
+      const image = new Image();
+      image.decoding = 'sync';
+      image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(serialized)}`;
+      if (typeof image.decode === 'function') await image.decode();
+      else await new Promise((resolve, reject) => { image.onload = resolve; image.onerror = reject; });
+      const pixelRatio = Math.min(2, Math.max(1, 1600 / Math.max(svgRect.width, 1)));
+      const raster = document.createElement('canvas');
+      raster.width = Math.max(1, Math.round((image.naturalWidth || svgRect.width) * pixelRatio));
+      raster.height = Math.max(1, Math.round((image.naturalHeight || svgRect.height) * pixelRatio));
+      const context = raster.getContext('2d', { alpha: true });
+      if (!context) throw new Error('MathJax raster canvas is unavailable');
+      context.drawImage(image, 0, 0, raster.width, raster.height);
+      const replacement = document.createElement('img');
+      replacement.className = 'mm-pdf-math-image';
+      replacement.src = raster.toDataURL('image/png');
+      replacement.alt = '数式';
+      replacement.decoding = 'sync';
+      replacement.style.width = `${Math.max(svgRect.width, 1)}px`;
+      replacement.style.height = `${Math.max(svgRect.height, 1)}px`;
+      replacement.style.maxWidth = '100%';
+      replacement.style.verticalAlign = 'middle';
+      container.replaceWith(replacement);
+      raster.width = 1;
+      raster.height = 1;
+    }));
+    root.dataset.mmPdfMathRasterized = String(containers.length);
   }
 
   async function exportPdf() {
@@ -399,6 +458,7 @@
       article.querySelector('[data-mm-preview]')?.removeAttribute('data-mm-preview');
       stage.appendChild(article);
       document.body.appendChild(stage);
+      await rasterizeMathForPdf(stage);
 
       const stageHeight = Math.max(stage.scrollHeight, stage.getBoundingClientRect().height, 1);
       // Keep the bitmap below mobile browser canvas limits. Long documents
