@@ -12,6 +12,10 @@
   const DEVICE_KEY = 'dt_math_memo_device_id';
   const CHANNEL_NAME = 'dt_0723_math_memo';
   const BIN_URL = 'https://api.jsonbin.io/v3/b';
+  const HTML2CANVAS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+  const HTML2CANVAS_INTEGRITY = 'sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==';
+  const JSPDF_URL = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js';
+  const JSPDF_INTEGRITY = 'sha512-plOdviVmws4Y3JAvbnpfKb2hVxKM1lCwsi3vmElYRj+tiDLffZ4FVUj5a8vyKJ9pIgl8JCAHEJ4D1iUKBecswg==';
   const now = () => new Date().toISOString();
   const uid = (prefix) => {
     const random = (window.crypto && typeof window.crypto.randomUUID === 'function')
@@ -77,6 +81,7 @@
   let syncTimer = 0;
   let syncInFlight = false;
   let dirtySinceRemote = false;
+  let pdfLibraryPromise = null;
   let channel = null;
   try { channel = new BroadcastChannel(CHANNEL_NAME); } catch (_) { channel = null; }
 
@@ -293,6 +298,191 @@
   function openDialog(name) { const dialog = root.querySelector(`[data-mm-dialog="${name}"]`); if (dialog && typeof dialog.showModal === 'function') dialog.showModal(); }
   function closeDialogs() { root.querySelectorAll('dialog[open]').forEach((dialog) => dialog.close()); }
 
+  function loadExternalScript(id, source, integrity) {
+    const existing = document.getElementById(id);
+    if (existing) {
+      if (existing.dataset.loaded === 'true') return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        existing.addEventListener('load', resolve, { once: true });
+        existing.addEventListener('error', reject, { once: true });
+      });
+    }
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.id = id;
+      script.src = source;
+      script.integrity = integrity;
+      script.crossOrigin = 'anonymous';
+      script.referrerPolicy = 'no-referrer';
+      script.onload = () => { script.dataset.loaded = 'true'; resolve(); };
+      script.onerror = () => reject(new Error(`${id} failed to load`));
+      document.head.appendChild(script);
+    });
+  }
+
+  function ensurePdfLibrary() {
+    if (window.html2canvas && window.jspdf?.jsPDF) return Promise.resolve({ html2canvas: window.html2canvas, jsPDF: window.jspdf.jsPDF });
+    if (pdfLibraryPromise) return pdfLibraryPromise;
+    pdfLibraryPromise = Promise.race([
+      Promise.all([
+        loadExternalScript('mm-html2canvas', HTML2CANVAS_URL, HTML2CANVAS_INTEGRITY),
+        loadExternalScript('mm-jspdf', JSPDF_URL, JSPDF_INTEGRITY)
+      ]).then(() => {
+        if (!window.html2canvas || !window.jspdf?.jsPDF) throw new Error('PDF libraries unavailable');
+        return { html2canvas: window.html2canvas, jsPDF: window.jspdf.jsPDF };
+      }),
+      new Promise((_, reject) => window.setTimeout(() => reject(new Error('PDF library timeout')), 20_000))
+    ]).catch((error) => {
+      pdfLibraryPromise = null;
+      throw error;
+    });
+    return pdfLibraryPromise;
+  }
+
+  function setPdfProgress(open, title = 'PDFを作成しています', copy = '数式と本文をA4へ整形しています。') {
+    const overlay = root.querySelector('[data-mm-progress]');
+    if (!overlay) return;
+    overlay.dataset.open = String(open);
+    overlay.setAttribute('aria-hidden', String(!open));
+    const titleNode = overlay.querySelector('[data-mm-progress-title]');
+    const copyNode = overlay.querySelector('[data-mm-progress-copy]');
+    if (titleNode) titleNode.textContent = title;
+    if (copyNode) copyNode.textContent = copy;
+  }
+
+  function canvasContainsInk(canvas) {
+    const probe = document.createElement('canvas');
+    probe.width = 128;
+    probe.height = Math.min(256, Math.max(64, Math.round(canvas.height * probe.width / Math.max(canvas.width, 1))));
+    const context = probe.getContext('2d', { alpha: false, willReadFrequently: true });
+    if (!context) return true;
+    context.fillStyle = '#fff';
+    context.fillRect(0, 0, probe.width, probe.height);
+    context.drawImage(canvas, 0, 0, probe.width, probe.height);
+    const pixels = context.getImageData(0, 0, probe.width, probe.height).data;
+    let ink = 0;
+    for (let index = 0; index < pixels.length; index += 4) {
+      if (pixels[index] < 244 || pixels[index + 1] < 244 || pixels[index + 2] < 244) {
+        ink += 1;
+        if (ink >= 5) return true;
+      }
+    }
+    return false;
+  }
+
+  async function prepareRenderedPreview() {
+    renderPreview();
+    clearTimeout(previewTimer);
+    await typeset();
+    await document.fonts?.ready;
+  }
+
+  async function exportPdf() {
+    const doc = activeDoc();
+    if (!doc) return;
+    closeDialogs();
+    setPdfProgress(true);
+    let stage;
+    let canvas;
+    try {
+      await prepareRenderedPreview();
+      const { html2canvas, jsPDF } = await ensurePdfLibrary();
+      stage = document.createElement('div');
+      stage.className = 'mm-pdf-stage';
+      stage.setAttribute('aria-hidden', 'true');
+      const article = document.createElement('article');
+      article.className = 'mm-pdf-document';
+      const title = document.createElement('h1');
+      title.className = 'mm-pdf-title';
+      title.textContent = doc.title || '無題のメモ';
+      article.append(title, els.preview.cloneNode(true));
+      article.querySelector('[data-mm-preview]')?.removeAttribute('data-mm-preview');
+      stage.appendChild(article);
+      document.body.appendChild(stage);
+
+      const stageHeight = Math.max(stage.scrollHeight, stage.getBoundingClientRect().height, 1);
+      // Keep the bitmap below mobile browser canvas limits. Long documents
+      // trade a little resolution for reliability instead of freezing/crashing.
+      const stageWidth = Math.max(stage.scrollWidth, stage.getBoundingClientRect().width, 1);
+      const scale = Math.min(1.45, Math.max(.68, 22_000 / stageHeight), Math.max(.68, 8_000 / stageWidth));
+      canvas = await html2canvas(stage, {
+        scale,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: Math.ceil(stage.getBoundingClientRect().width),
+        windowHeight: Math.min(24_000, Math.ceil(stageHeight))
+      });
+      if (!canvas.width || !canvas.height) throw new Error('PDF canvas is empty');
+      if (!canvasContainsInk(canvas)) throw new Error('PDF canvas contains no visible content');
+
+      const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait', compress: true });
+      pdf.setProperties({ title: doc.title || 'Math Memo', creator: 'dt world Math Memo' });
+      const imageWidthMm = 190;
+      const imageHeightMm = 275;
+      const pagePixelHeight = Math.max(1, Math.floor(canvas.width * imageHeightMm / imageWidthMm));
+      const pageCount = Math.max(1, Math.ceil(canvas.height / pagePixelHeight));
+
+      for (let pageIndex = 0; pageIndex < pageCount; pageIndex += 1) {
+        if (pageIndex > 0) pdf.addPage('a4', 'portrait');
+        const sourceY = pageIndex * pagePixelHeight;
+        const segmentHeight = Math.min(pagePixelHeight, canvas.height - sourceY);
+        const pageCanvas = document.createElement('canvas');
+        pageCanvas.width = canvas.width;
+        pageCanvas.height = segmentHeight;
+        const context = pageCanvas.getContext('2d', { alpha: false });
+        if (!context) throw new Error('PDF page canvas unavailable');
+        context.fillStyle = '#fff';
+        context.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+        context.drawImage(canvas, 0, sourceY, canvas.width, segmentHeight, 0, 0, canvas.width, segmentHeight);
+        const renderedHeightMm = segmentHeight * imageWidthMm / canvas.width;
+        pdf.addImage(pageCanvas.toDataURL('image/jpeg', .94), 'JPEG', 10, 10, imageWidthMm, renderedHeightMm, undefined, 'FAST');
+        pdf.setFontSize(8);
+        pdf.setTextColor(128, 133, 143);
+        pdf.text(`${pageIndex + 1} / ${pageCount}`, 105, 292, { align: 'center' });
+        pageCanvas.width = 1;
+        pageCanvas.height = 1;
+      }
+      pdf.save(currentFilename('pdf'));
+      showToast('PDFを保存しました');
+    } catch (error) {
+      console.error('Math Memo PDF export failed:', error);
+      showToast('PDFを作成できませんでした。「印刷でPDF」をお試しください');
+    } finally {
+      if (canvas) { canvas.width = 1; canvas.height = 1; }
+      stage?.remove();
+      setPdfProgress(false);
+    }
+  }
+
+  function printableHtml(doc) {
+    const title = escapeHtml(doc.title || 'Math Memo');
+    return `<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>@page{size:A4 portrait;margin:16mm}*{box-sizing:border-box}body{max-width:210mm;margin:0 auto;padding:16mm;color:#18191c;background:#fff;font:400 16px/1.8 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;overflow-wrap:anywhere}h1,h2,h3,h4{color:#11151b;break-after:avoid}body>h1{margin-top:0;padding-bottom:.65rem;border-bottom:2px solid #262c35}img,svg,mjx-container{max-width:100%;height:auto}table{width:100%;border-collapse:collapse;break-inside:avoid}th,td{padding:.5rem;border:1px solid #cfd5de}th{background:#f0f2f5}pre,blockquote,.mm-display-math,.mm-callout{break-inside:avoid}pre{padding:1rem;white-space:pre-wrap;background:#f4f6f8;border:1px solid #d9dee6;border-radius:8px}blockquote{padding:.65rem .9rem;background:#f3f6fa;border-left:3px solid #557cca}.mm-display-math{text-align:center;overflow:visible}.mm-callout{padding:.8rem .95rem;background:#f1f6fa;border:1px solid #b9d6df;border-radius:10px}@media print{body{padding:0}}</style></head><body><h1>${title}</h1>${els.preview.innerHTML}</body></html>`;
+  }
+
+  async function printDocument() {
+    const doc = activeDoc();
+    if (!doc) return;
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) { showToast('ポップアップを許可して、もう一度お試しください'); return; }
+    printWindow.opener = null;
+    try {
+      await prepareRenderedPreview();
+      printWindow.document.open();
+      printWindow.document.write(printableHtml(doc));
+      printWindow.document.close();
+      const printWhenReady = () => { printWindow.focus(); printWindow.print(); };
+      if (printWindow.document.readyState === 'complete') window.setTimeout(printWhenReady, 250);
+      else printWindow.addEventListener('load', () => window.setTimeout(printWhenReady, 250), { once: true });
+    } catch (error) {
+      printWindow.close();
+      console.error('Math Memo print export failed:', error);
+      showToast('印刷画面を開けませんでした');
+    }
+  }
+
   function importFile(file) {
     if (!file) return;
     const reader = new FileReader();
@@ -325,7 +515,8 @@
       if (action === 'export-md') { const doc = activeDoc(); download(currentFilename('md'), doc ? doc.body : '', 'text/markdown;charset=utf-8'); showToast('Markdownを書き出しました'); closeDialogs(); }
       if (action === 'export-json') { download('math-memo-backup.json', JSON.stringify(state, null, 2), 'application/json;charset=utf-8'); showToast('JSONバックアップを書き出しました'); closeDialogs(); }
       if (action === 'copy') { const doc = activeDoc(); copyText(doc ? doc.body : ''); closeDialogs(); }
-      if (action === 'print') { closeDialogs(); setTimeout(() => window.print(), 40); }
+      if (action === 'export-pdf') exportPdf();
+      if (action === 'print') { closeDialogs(); printDocument(); }
       if (action === 'import') { const input = root.querySelector('[data-mm-import-input]'); if (input) input.click(); }
       if (action === 'search-clear' && els.search) { els.search.value = ''; renderList(); els.search.focus(); }
     }
