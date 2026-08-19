@@ -120,7 +120,7 @@
     "keywords": ["archive"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "12"
+    "wordCount": "15"
   }]
   </script>
 
@@ -747,11 +747,11 @@
 }
 
 .ba-root {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
   background: radial-gradient(circle at 50% 0%, #041221 0%, var(--ba-bg) 70%);
   z-index: 999990; overflow-y: auto; overflow-x: hidden;
   font-family: 'Zen Kaku Gothic New', sans-serif; color: var(--ba-text);
-  letter-spacing: 0.04em; line-height: 1.6; box-sizing: border-box;
+  letter-spacing: 0.02em; line-height: 1.6; box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
   perspective: 1000px;
 }
@@ -809,11 +809,11 @@
   letter-spacing: 3px; margin: 0; text-shadow: 0 0 20px var(--ba-cyan-glow);
 }
 .ba-title strong { font-weight: 900; color: var(--ba-cyan); }
-.ba-header-right { display: flex; align-items: center; gap: 1rem; }
+.ba-header-right { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: flex-end; }
 
  
 .ba-sync {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 4px 12px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; min-height: 40px; padding: 4px 12px;
   border-radius: 20px; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;
   background: rgba(0,0,0,0.5); backdrop-filter: var(--glass-blur); border: 1px solid;
 }
@@ -822,12 +822,23 @@
 .ba-sync-on::before { background: var(--ba-cyan); }
 .ba-sync-off { color: var(--ba-amber); border-color: rgba(255,158,0,0.3); }
 .ba-sync-off::before { background: var(--ba-amber); }
+.ba-sync-local { color: var(--ba-text); border-color: rgba(226,241,248,0.25); }
+.ba-sync-local::before { background: var(--ba-cyan); }
 .ba-sync-err { color: var(--ba-pink); border-color: rgba(255,10,120,0.3); }
 .ba-sync-err::before { background: var(--ba-pink); }
 
+.ba-sync-action {
+  min-height: 44px; padding: 8px 14px; border: 1px solid rgba(14,245,194,0.45);
+  background: rgba(14,245,194,0.08); color: var(--ba-cyan); border-radius: 4px;
+  font: 700 0.7rem/1 'JetBrains Mono', monospace; letter-spacing: 1px; cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.ba-sync-action:hover:not(:disabled) { background: var(--ba-cyan); color: var(--ba-bg); border-color: var(--ba-cyan); }
+.ba-sync-action:disabled { cursor: wait; opacity: 0.55; }
+
 .ba-exit {
   background: transparent; border: 1px solid var(--ba-dim); color: var(--ba-text);
-  padding: 8px 20px; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; letter-spacing: 2px;
+  min-height: 44px; padding: 8px 20px; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; letter-spacing: 2px;
   cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 4px;
 }
 .ba-exit:hover { background: var(--ba-text); color: var(--ba-bg); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
@@ -866,7 +877,7 @@
 .ba-tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
 .ba-tab {
   background: var(--ba-surface); border: 1px solid transparent; color: var(--ba-dim);
-  padding: 0.8rem 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700;
+  min-height: 44px; padding: 0.7rem 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700;
   cursor: pointer; letter-spacing: 1px; transition: all 0.3s; border-radius: 20px; backdrop-filter: var(--glass-blur);
 }
 .ba-tab:hover { color: var(--ba-text); background: rgba(255,255,255,0.05); }
@@ -897,7 +908,7 @@
     inset -3px -3px 10px rgba(0, 0, 0, 0.65),
     0 12px 36px rgba(2, 2, 8, 0.55);
 
-  border-radius: 12px;
+  border-radius: 12px; padding: 0; width: 100%; text-align: left; color: var(--ba-text); font: inherit;
   cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s, border-color 0.4s;
   position: relative; overflow: hidden;
   display: flex; flex-direction: column; transform-style: preserve-3d;
@@ -907,7 +918,7 @@
   opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 2;
 }
 .ba-card:hover {
-  transform: translateY(-8px) rotateX(2deg) rotateY(-2deg);
+  transform: translateY(-4px) rotateX(1deg) rotateY(-1deg);
   border-color: var(--ba-cyan); box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(14,245,194,0.2);
 }
 .ba-card:hover::before { opacity: 1; animation: shimmer 2s linear infinite; }
@@ -923,11 +934,14 @@
 
 .ba-card-noimg {
   width: 100%; height: 100%; background: radial-gradient(circle at center, #0a111a, #020408);
-  display: flex; align-items: center; justify-content: center; color: rgba(14,245,194,0.2);
+  min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.35rem; color: rgba(14,245,194,0.65);
   font-family: 'Orbitron', sans-serif; font-size: 0.7rem; letter-spacing: 4px;
 }
+.ba-card-noimg small { color: var(--ba-dim); font: 0.7rem/1.4 'Zen Kaku Gothic New', sans-serif; letter-spacing: 0.04em; }
 
 .ba-card-body { padding: 1.2rem; display: flex; flex-direction: column; flex-grow: 1; position: relative; z-index: 3; }
+.ba-card-primary { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.7rem; }
+.ba-card-primary .ba-card-badge { flex-shrink: 0; }
 .ba-card-cat {
   font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 2px;
   margin-bottom: 0.6rem; display: flex; align-items: center; gap: 8px; text-transform: uppercase;
@@ -936,9 +950,15 @@
 
 .ba-card-name { font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 2px; line-height: 1.3; }
 .ba-card-name span { font-weight: 400; font-size: 0.85rem; color: var(--ba-cyan); margin-left: 4px; }
-.ba-card-sci { font-family: 'EB Garamond', serif; font-size: 1rem; color: var(--ba-dim); font-style: italic; margin-bottom: 1rem; }
+.ba-card-meta { display: flex; flex-wrap: wrap; gap: 0.35rem 0.7rem; align-items: baseline; padding-bottom: 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.ba-card-sci { font-family: 'EB Garamond', serif; font-size: 1rem; color: var(--ba-dim); font-style: italic; }
+.ba-card-category { font: 0.62rem/1.4 'JetBrains Mono', monospace; color: var(--ba-dim); letter-spacing: 0.08em; }
 
 .ba-card-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; }
+.ba-card-log { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; padding-top: 0.9rem; }
+.ba-card-log-label, .ba-card-updated { color: var(--ba-dim); font: 0.58rem/1.3 'JetBrains Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+.ba-card-log-text { max-width: 15rem; overflow: hidden; color: var(--ba-text); font-size: 0.75rem; text-overflow: ellipsis; white-space: nowrap; }
+.ba-card-updated { padding-top: 0.9rem; text-align: right; white-space: nowrap; }
 .ba-card-badge {
   font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 700;
   padding: 4px 10px; border-radius: 4px; letter-spacing: 1px; border: 1px solid;
@@ -952,12 +972,13 @@
   font-family: 'Orbitron', sans-serif; letter-spacing: 4px; font-size: 0.9rem;
   border: 1px dashed var(--ba-border); border-radius: 12px; background: rgba(0,0,0,0.2);
 }
+.ba-empty-action { margin-top: 1rem; }
 
  
 .ba-modal-overlay {
   position: fixed; inset: 0; background: rgba(1,4,9,0.85); backdrop-filter: blur(8px);
   z-index: 999995; display: flex; align-items: center; justify-content: center;
-  padding: 2rem 1rem; overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  padding: max(2rem, env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-right, 0px)) max(2rem, env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-left, 0px)); overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity 0.3s;
 }
 .ba-modal-overlay.show { opacity: 1; pointer-events: all; }
 
@@ -966,7 +987,7 @@
   width: 100%; max-width: 680px; position: relative; overflow: hidden;
   box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 30px 60px rgba(0,0,0,0.8), 0 0 40px rgba(14,245,194,0.1);
   transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  max-height: 90vh; display: flex; flex-direction: column;
+  max-height: calc(100dvh - 2rem); display: flex; flex-direction: column;
 }
 .ba-modal-overlay.show .ba-modal { transform: scale(1) translateY(0); }
 
@@ -978,7 +999,7 @@
 .ba-modal-title { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; color: var(--ba-text); letter-spacing: 2px; display: flex; align-items: center; gap: 8px; }
 .ba-modal-title::before { content: ''; width: 8px; height: 8px; background: var(--ba-cyan); border-radius: 50%; box-shadow: 0 0 10px var(--ba-cyan); }
 .ba-modal-close {
-  background: rgba(255,255,255,0.05); border: none; color: var(--ba-dim); width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.05); border: none; color: var(--ba-dim); width: 48px; height: 48px; border-radius: 50%;
   font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
 }
 .ba-modal-close:hover { background: rgba(255,10,120,0.1); color: var(--ba-pink); transform: rotate(90deg); }
@@ -989,7 +1010,8 @@
 
  
 .ba-detail-img { width: 100%; height: 300px; object-fit: cover; border-bottom: 1px solid var(--ba-border); display: block; }
-.ba-detail-noimg { width: 100%; height: 200px; background: repeating-linear-gradient(45deg, #040a12, #040a12 10px, #020509 10px, #020509 20px); display: flex; align-items: center; justify-content: center; color: rgba(14,245,194,0.3); font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 4px; border-bottom: 1px solid var(--ba-border); }
+.ba-detail-noimg { width: 100%; height: 200px; background: repeating-linear-gradient(45deg, #040a12, #040a12 10px, #020509 10px, #020509 20px); display: flex; flex-direction: column; gap: 0.4rem; align-items: center; justify-content: center; color: rgba(14,245,194,0.7); font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 4px; border-bottom: 1px solid var(--ba-border); }
+.ba-detail-noimg span { color: var(--ba-dim); font: 0.75rem/1.4 'Zen Kaku Gothic New', sans-serif; letter-spacing: 0.04em; }
 
 .ba-detail-content-wrap { padding: 2rem; }
 .ba-detail-header { margin-bottom: 2rem; position: relative; }
@@ -1006,7 +1028,7 @@
 
  
 .ba-btn {
-  padding: 0.7rem 1.2rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700;
+  min-height: 44px; padding: 0.7rem 1.2rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700;
   cursor: pointer; letter-spacing: 1px; transition: all 0.2s; border-radius: 6px; text-transform: uppercase;
   display: flex; align-items: center; justify-content: center; gap: 8px;
 }
@@ -1061,10 +1083,9 @@
 .ba-img-picker img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 .ba-img-remove {
   position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border: 1px solid var(--ba-pink); color: var(--ba-pink);
-  width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
-  z-index: 2; opacity: 0; transition: all 0.2s; backdrop-filter: blur(4px);
+  width: 44px; height: 44px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  z-index: 2; opacity: 1; transition: all 0.2s; backdrop-filter: blur(4px);
 }
-.ba-img-picker:hover .ba-img-remove { opacity: 1; }
 .ba-img-remove:hover { background: var(--ba-pink); color: #fff; }
 
  
@@ -1078,7 +1099,7 @@
 
  
 .ba-toast {
-  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+  position: fixed; bottom: calc(30px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%) translateY(100px);
   background: var(--ba-surface); border: 1px solid var(--ba-cyan); color: var(--ba-cyan);
   padding: 1rem 2rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700;
   border-radius: 30px; z-index: 9999999; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -1092,6 +1113,7 @@
 @media(max-width: 768px) {
   .ba-wrap { padding: 1.5rem 1rem 3rem; }
   .ba-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .ba-title { max-width: 100%; font-size: 1.6rem; letter-spacing: 1.2px; line-height: 1.15; overflow-wrap: anywhere; }
   .ba-header-right { width: 100%; justify-content: space-between; }
   .ba-stats { grid-template-columns: 1fr; gap: 0.5rem; margin-bottom: 1.5rem; }
   .ba-stat { padding: 0.8rem; flex-direction: row; justify-content: space-between; }
@@ -1102,6 +1124,20 @@
   .ba-detail-actions { flex-direction: column; }
   .ba-log-actions { opacity: 1; }
   .ba-form-container-wrap { padding: 1.5rem; }
+  .ba-sync { flex: 1 1 auto; }
+  .ba-sync-action { flex: 1 1 auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ba-root *, .ba-root *::before, .ba-root *::after {
+    animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important; scroll-behavior: auto !important;
+  }
+  .ba-root::before { animation: none !important; opacity: 0.75; }
+  .ba-card:hover, .ba-card.archived:hover { transform: none; }
+  .ba-card:hover .ba-card-img { transform: none; }
+  .ba-card:hover::before { animation: none !important; opacity: 0; }
+  .ba-scanlines { opacity: 0.25; }
 }
 </style>
 
@@ -1116,44 +1152,45 @@
 <h1 class="ba-title">BIOME_ARCHIVE</h1>
 </div>
 <div class="ba-header-right">
-<div class="ba-sync ba-sync-off" id="ba-sync">LOCAL</div>
-<button class="ba-exit" onclick="history.back()">EXIT</button>
+<div class="ba-sync ba-sync-local" id="ba-sync" role="status" aria-live="polite">ローカル保存中 / クラウド未接続</div>
+<button class="ba-sync-action" id="ba-sync-action" type="button" aria-label="クラウド接続">クラウド接続</button>
+<button class="ba-exit" type="button" aria-label="前の画面に戻る" onclick="history.back()">EXIT</button>
 </div>
 </header>
 <div class="ba-stats" id="ba-stats"></div>
-<div class="ba-tabs">
-<button class="ba-tab active" data-tab="list">📋 一覧</button>
-<button class="ba-tab" data-tab="add">＋ 登録</button>
+<div class="ba-tabs" role="tablist" aria-label="Biome Archiveの表示切り替え">
+<button id="ba-tab-list" class="ba-tab active" role="tab" aria-selected="true" aria-controls="ba-panel-list" tabindex="0" data-tab="list" type="button">📋 一覧</button>
+<button id="ba-tab-add" class="ba-tab" role="tab" aria-selected="false" aria-controls="ba-panel-add" tabindex="-1" data-tab="add" type="button">＋ 登録</button>
 </div>
-<div class="ba-panel active" id="ba-panel-list">
+<div class="ba-panel active" id="ba-panel-list" role="tabpanel" aria-labelledby="ba-tab-list">
 <div class="ba-cards" id="ba-cards"></div>
 </div>
-<div class="ba-panel" id="ba-panel-add">
+<div class="ba-panel" id="ba-panel-add" role="tabpanel" aria-labelledby="ba-tab-add" hidden>
 <div id="ba-form-container"></div>
 </div>
 </div>
 </div>
 <div class="ba-toast" id="ba-toast"></div>
-<div class="ba-modal-overlay" id="ba-detail-overlay">
+<div class="ba-modal-overlay" id="ba-detail-overlay" role="dialog" aria-modal="true" aria-label="生体詳細" aria-hidden="true">
 <div class="ba-modal" style="max-width:560px">
 <div id="ba-detail-content"></div>
 </div>
 </div>
-<div class="ba-modal-overlay" id="ba-form-overlay">
+<div class="ba-modal-overlay" id="ba-form-overlay" role="dialog" aria-modal="true" aria-labelledby="ba-form-title" aria-hidden="true">
 <div class="ba-modal">
-<div class="ba-modal-head"><div class="ba-modal-title" id="ba-form-title">REGISTER</div><button class="ba-modal-close" id="ba-form-close">✕</button></div>
+<div class="ba-modal-head"><div class="ba-modal-title" id="ba-form-title">REGISTER</div><button type="button" class="ba-modal-close" id="ba-form-close" aria-label="登録フォームを閉じる">✕</button></div>
 <div class="ba-modal-body" id="ba-form-body"></div>
 </div>
 </div>
-<div class="ba-modal-overlay" id="ba-confirm-overlay">
+<div class="ba-modal-overlay" id="ba-confirm-overlay" role="dialog" aria-modal="true" aria-label="削除確認" aria-hidden="true">
 <div class="ba-modal" style="max-width:380px">
-<div class="ba-modal-head"><div class="ba-modal-title">CONFIRM</div></div>
+<div class="ba-modal-head"><div class="ba-modal-title">CONFIRM</div><button type="button" class="ba-modal-close" id="ba-confirm-close" aria-label="確認ダイアログを閉じる">✕</button></div>
 <div class="ba-modal-body ba-confirm" id="ba-confirm-body"></div>
 </div>
 </div>
-<div class="ba-modal-overlay" id="ba-log-overlay">
+<div class="ba-modal-overlay" id="ba-log-overlay" role="dialog" aria-modal="true" aria-labelledby="ba-log-title" aria-hidden="true">
 <div class="ba-modal" style="max-width:440px">
-<div class="ba-modal-head"><div class="ba-modal-title" id="ba-log-title">ADD LOG</div><button class="ba-modal-close" id="ba-log-close">✕</button></div>
+<div class="ba-modal-head"><div class="ba-modal-title" id="ba-log-title">ADD LOG</div><button type="button" class="ba-modal-close" id="ba-log-close" aria-label="ログフォームを閉じる">✕</button></div>
 <div class="ba-modal-body" id="ba-log-body"></div>
 </div>
 </div>
@@ -1174,38 +1211,39 @@ const toast=(msg)=>{const t=$('ba-toast');t.textContent=msg;t.classList.add('sho
 
 
 const hdrs=()=>({'X-Master-Key':JSONBIN_KEY,'Content-Type':'application/json'});
-async function fetchData(){
+async function fetchData(explicit=false){
   try{
     isSyncing=true;updateSync();
-    if(!BIN_ID){await createBin();return}
+    if(!BIN_ID){loadLocal();syncOk=false;return}
     const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':JSONBIN_KEY},cache:'no-store'});
-    if(r.status===404){await createBin();return}
+    if(r.status===404){BIN_ID='';localStorage.removeItem(LS_BIN);loadLocal();syncOk=false;if(explicit)toast('クラウドBinが見つかりません。ローカルデータを保持しました。');return}
     if(!r.ok)throw new Error(r.status);
     const j=await r.json();const v=j.record||{};
     data={categories:v.categories||{},entities:v.entities||{},logs:v.logs||{}};
     saveLocal();syncOk=true;
-  }catch(e){console.error('[BA] fetch fail:',e);loadLocal();syncOk=false}
-  isSyncing=false;updateSync();render();
+  }catch(e){console.error('[BA] fetch fail:',e);loadLocal();syncOk=false;if(explicit)toast('クラウド同期に失敗しました。ローカル保存は継続しています。')}
+  finally{isSyncing=false;updateSync();render()}
 }
 async function createBin(){
+  isSyncing=true;updateSync();
   try{
     const r=await fetch('https://api.jsonbin.io/v3/b',{method:'POST',headers:{...hdrs(),'X-Bin-Name':'biome_archive'},body:JSON.stringify(data)});
     if(!r.ok)throw new Error(r.status);
     const j=await r.json();BIN_ID=j.metadata.id;localStorage.setItem(LS_BIN,BIN_ID);
-    syncOk=true;toast('✓ Bin作成完了');
-  }catch(e){console.error('[BA] create fail:',e);syncOk=false;toast('✗ Bin作成失敗')}
-  isSyncing=false;updateSync();render();
+    syncOk=true;toast('✓ クラウド接続完了');
+  }catch(e){console.error('[BA] create fail:',e);syncOk=false;toast('クラウド接続に失敗しました。ローカル保存は継続しています。')}
+  finally{isSyncing=false;updateSync();render()}
 }
 let pushTimer=null;
 function pushData(){
   saveLocal();clearTimeout(pushTimer);
   pushTimer=setTimeout(async()=>{
     if(!JSONBIN_KEY)return;
+    if(!BIN_ID){updateSync();return}
     try{
       isSyncing=true;updateSync();
-      if(!BIN_ID){await createBin();return}
       const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:hdrs(),body:JSON.stringify(data)});
-      if(r.status===404){await createBin();return}
+      if(r.status===404){BIN_ID='';localStorage.removeItem(LS_BIN);throw new Error('404')}
       if(!r.ok)throw new Error(r.status);
       syncOk=true;
     }catch(e){console.error('[BA] push fail:',e);syncOk=false}
@@ -1216,10 +1254,14 @@ function saveLocal(){try{localStorage.setItem(LS_DATA,JSON.stringify(data))}catc
 function loadLocal(){try{const s=localStorage.getItem(LS_DATA);if(s)data=JSON.parse(s)}catch(e){}}
 function updateSync(){
   const el=$('ba-sync');
-  if(isSyncing){el.className='ba-sync ba-sync-off';el.textContent='SYNCING...'}
-  else if(syncOk){el.className='ba-sync ba-sync-on';el.textContent='● SYNCED'}
-  else{el.className='ba-sync ba-sync-err';el.textContent='✗ LOCAL'}
+  const action=$('ba-sync-action');
+  if(isSyncing){el.className='ba-sync ba-sync-off';el.textContent='クラウド同期中';action.textContent='処理中';action.disabled=true;action.setAttribute('aria-busy','true')}
+  else if(syncOk){el.className='ba-sync ba-sync-on';el.textContent='● クラウド同期済み';action.textContent='同期';action.disabled=false;action.removeAttribute('aria-busy')}
+  else if(BIN_ID){el.className='ba-sync ba-sync-err';el.textContent='クラウド同期エラー';action.textContent='再接続';action.disabled=false;action.removeAttribute('aria-busy')}
+  else{el.className='ba-sync ba-sync-local';el.textContent='ローカル保存中 / クラウド未接続';action.textContent='クラウド接続';action.disabled=false;action.removeAttribute('aria-busy')}
 }
+
+$('ba-sync-action').onclick=()=>BIN_ID?fetchData(true):createBin();
 
 
 function compressImg(file,maxW=800,quality=0.7){
@@ -1264,8 +1306,33 @@ function updateLog(eid,lid,updates){const arr=data.logs[eid]||[];const i=arr.fin
 function deleteLog(eid,lid){if(data.logs[eid])data.logs[eid]=data.logs[eid].filter(l=>l.id!==lid);pushData()}
 
 
-function showModal(id){$(id).classList.add('show')}
-function hideModal(id){$(id).classList.remove('show')}
+let activeModalId='';
+const modalReturnFocus=new Map();
+function showModal(id){
+  const modal=$(id);if(!modal)return;
+  modalReturnFocus.set(id,document.activeElement);
+  activeModalId=id;
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden','false');
+  requestAnimationFrame(()=>{
+    const target=modal.querySelector('input:not([type="hidden"]),textarea,select,button:not(.ba-modal-close),[tabindex="0"]')||modal.querySelector('.ba-modal-close');
+    target?.focus();
+  });
+}
+function hideModal(id){
+  const modal=$(id);if(!modal)return;
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden','true');
+  if(activeModalId===id){
+    activeModalId='';
+    const restore=modalReturnFocus.get(id);
+    modalReturnFocus.delete(id);
+    if(restore&&restore.isConnected)requestAnimationFrame(()=>restore.focus());
+  }
+}
+document.addEventListener('keydown',ev=>{
+  if(ev.key==='Escape'&&activeModalId){ev.preventDefault();hideModal(activeModalId)}
+});
 function showConfirm(msg,onYes){
   $('ba-confirm-body').innerHTML=`<div class="ba-confirm-text">${msg}</div><div class="ba-confirm-btns"><button class="ba-btn ba-btn-del" id="ba-cfm-yes">DELETE</button><button class="ba-btn ba-btn-edit" id="ba-cfm-no">CANCEL</button></div>`;
   showModal('ba-confirm-overlay');
@@ -1274,13 +1341,31 @@ function showConfirm(msg,onYes){
 }
 
 
-document.querySelectorAll('.ba-tab').forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    document.querySelectorAll('.ba-tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.ba-panel').forEach(p=>p.classList.remove('active'));
-    tab.classList.add('active');
-    $('ba-panel-'+tab.dataset.tab).classList.add('active');
-    if(tab.dataset.tab==='add')renderForm();
+const baTabs=[...document.querySelectorAll('.ba-tab')];
+function activateTab(tab,shouldFocus=false){
+  baTabs.forEach(t=>{
+    const selected=t===tab;
+    t.classList.toggle('active',selected);
+    t.setAttribute('aria-selected',String(selected));
+    t.tabIndex=selected?0:-1;
+    const panel=$('ba-panel-'+t.dataset.tab);
+    panel.classList.toggle('active',selected);
+    panel.hidden=!selected;
+  });
+  if(shouldFocus)tab.focus();
+  if(tab.dataset.tab==='add')renderForm();
+}
+baTabs.forEach(tab=>{
+  tab.addEventListener('click',()=>activateTab(tab));
+  tab.addEventListener('keydown',ev=>{
+    const index=baTabs.indexOf(tab);
+    let nextIndex=index;
+    if(ev.key==='ArrowRight')nextIndex=(index+1)%baTabs.length;
+    else if(ev.key==='ArrowLeft')nextIndex=(index-1+baTabs.length)%baTabs.length;
+    else if(ev.key==='Home')nextIndex=0;
+    else if(ev.key==='End')nextIndex=baTabs.length-1;
+    else return;
+    ev.preventDefault();activateTab(baTabs[nextIndex],true);
   });
 });
 
@@ -1300,19 +1385,33 @@ function renderStats(){
 function renderCards(){
   const container=$('ba-cards');
   const ents=Object.values(data.entities).sort((a,b)=>(a.status==='ACTIVE'?0:1)-(b.status==='ACTIVE'?0:1)||(b.createdAt||0)-(a.createdAt||0));
-  if(ents.length===0){container.innerHTML='<div class="ba-empty">/// NO ENTITIES REGISTERED ///</div>';return}
+  if(ents.length===0){container.innerHTML='<div class="ba-empty"><div>/// NO ENTITIES REGISTERED ///</div><button type="button" class="ba-btn ba-btn-primary ba-empty-action" onclick="document.querySelector(\'[data-tab=add]\')?.click()">＋ 登録する</button></div>';return}
   container.innerHTML=ents.map(e=>{
     const cat=data.categories[e.category]||{name:'UNKNOWN',color:'#666'};
     const isDead=e.status==='DECEASED';
-    const imgHtml=e.image?`<img class="ba-card-img" src="${e.image}" alt="${e.name}" style="${isDead?'filter:grayscale(.8) sepia(.2);opacity:.5':''}">`:`<div class="ba-card-noimg">NO_DATA</div>`;
-    return `<div class="ba-card ${isDead?'archived':''}" data-id="${e.id}">
-      ${imgHtml}
+    const logs=(data.logs[e.id]||[]).slice().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    const latestLog=logs[0];
+    const latestText=latestLog?.content?escHtml(String(latestLog.content).replace(/\s+/g,' ').slice(0,72)):'ログなし';
+    const updatedAt=latestLog?.date||e.dateAcquired||'—';
+    const imageContent=e.image?`<img class="ba-card-img" src="${e.image}" alt="${escHtml(e.name)}" style="${isDead?'filter:grayscale(.8) sepia(.2);opacity:.5':''}">`:`<div class="ba-card-noimg"><strong>画像未登録</strong><small>詳細から写真を追加</small></div>`;
+    return `<button type="button" class="ba-card ${isDead?'archived':''}" data-id="${e.id}" aria-label="${escHtml(e.name)}の詳細を見る">
+      <div class="ba-card-img-wrap">${imageContent}</div>
       <div class="ba-card-body">
-        <div class="ba-card-cat" style="color:${cat.color}"><span class="ba-card-cat-dot" style="background:${cat.color}"></span>${cat.name.split('//')[0].trim()}</div>
-        <div class="ba-card-name">${e.name}${e.nickname?` <span style="font-weight:400;font-size:.8rem;color:var(--ba-dim)">"${e.nickname}"</span>`:''}</div>
-        <div class="ba-card-sci">${e.scientific||'—'}</div>
-        <div class="ba-card-badge ${isDead?'ba-badge-dead':'ba-badge-active'}">${isDead?'ARCHIVED':'OBSERVING'}</div>
-      </div></div>`;
+        <div class="ba-card-primary">
+          <div>
+            <div class="ba-card-name">${escHtml(e.name)}${e.nickname?` <span>"${escHtml(e.nickname)}"</span>`:''}</div>
+          </div>
+          <div class="ba-card-badge ${isDead?'ba-badge-dead':'ba-badge-active'}">${isDead?'ARCHIVED':'OBSERVING'}</div>
+        </div>
+        <div class="ba-card-meta">
+          <div class="ba-card-sci">${escHtml(e.scientific||'—')}</div>
+          <div class="ba-card-category"><span class="ba-card-cat-dot" style="background:${cat.color}"></span>${escHtml(cat.name.split('//')[0].trim())}</div>
+        </div>
+        <div class="ba-card-footer">
+          <div class="ba-card-log"><span class="ba-card-log-label">最新ログ</span><span class="ba-card-log-text">${latestText}</span></div>
+          <div class="ba-card-updated">更新 ${escHtml(updatedAt)}</div>
+        </div>
+      </div></button>`;
   }).join('');
   container.querySelectorAll('.ba-card').forEach(card=>{
     card.addEventListener('click',()=>showDetail(card.dataset.id));
@@ -1326,14 +1425,14 @@ function showDetail(id){
   const isDead=e.status==='DECEASED';
   const logs=(data.logs[id]||[]).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
   const imgStyle=isDead?'filter:grayscale(.8) sepia(.2);opacity:.5':'';
-  const imgHtml=e.image?`<img class="ba-detail-img" src="${e.image}" style="${imgStyle}">`:`<div class="ba-detail-noimg">NO_VISUAL_DATA</div>`;
+  const imgHtml=e.image?`<img class="ba-detail-img" src="${e.image}" alt="${escHtml(e.name)}" style="${imgStyle}">`:`<div class="ba-detail-noimg"><strong>画像未登録</strong><span>編集から写真を追加できます</span></div>`;
   let logHtml=logs.map(l=>{
     const lt=LOG_TYPES[l.type]||LOG_TYPES.memo;
     return `<div class="ba-log-entry"><div class="ba-log-meta"><span class="ba-log-date">${l.date}</span><span class="ba-log-type" style="border-color:${lt.color};color:${lt.color}">${lt.icon} ${lt.label}</span></div><div class="ba-log-text">${escHtml(l.content)}</div><div class="ba-log-actions"><button class="ba-log-btn" data-eid="${id}" data-lid="${l.id}" data-action="edit-log">編集</button><button class="ba-log-btn del" data-eid="${id}" data-lid="${l.id}" data-action="del-log">削除</button></div></div>`;
   }).join('');
 
   $('ba-detail-content').innerHTML=`
-    <div class="ba-modal-head"><div class="ba-modal-title">ENTITY_DETAIL</div><button class="ba-modal-close" onclick="document.getElementById('ba-detail-overlay').classList.remove('show')">✕</button></div>
+    <div class="ba-modal-head"><div class="ba-modal-title">ENTITY_DETAIL</div><button type="button" class="ba-modal-close" id="ba-detail-close" aria-label="詳細を閉じる">✕</button></div>
     ${imgHtml}
     <div class="ba-detail-info">
       <div class="ba-card-badge ${isDead?'ba-badge-dead':'ba-badge-active'}" style="margin-bottom:.8rem">${isDead?'ARCHIVED':'OBSERVING'}</div>
@@ -1354,6 +1453,7 @@ function showDetail(id){
       <div class="ba-timeline" id="ba-timeline">${logHtml||'<div style="color:var(--ba-dim);font-size:.8rem;padding:.5rem">ログなし</div>'}</div>
     </div>`;
   showModal('ba-detail-overlay');
+  $('ba-detail-close').onclick=()=>hideModal('ba-detail-overlay');
   $('ba-d-edit').onclick=()=>{hideModal('ba-detail-overlay');showEntityForm(id)};
   $('ba-d-del').onclick=()=>showConfirm(`"${e.name}" を削除しますか？`,()=>{deleteEntity(id);hideModal('ba-detail-overlay');render();toast('削除しました')});
   $('ba-d-archive').onclick=()=>{updateEntity(id,isDead?{status:'ACTIVE',dateLost:''}:{status:'DECEASED',dateLost:new Date().toISOString().slice(0,10)});hideModal('ba-detail-overlay');render();toast(isDead?'復帰しました':'記録終了しました')};
@@ -1374,7 +1474,7 @@ function showEntityForm(editId){
   $('ba-form-body').innerHTML=`
     <div class="ba-form-group"><label class="ba-form-label">画像</label>
       <div class="ba-img-picker" id="ba-fp"><input type="file" accept="image/*" id="ba-fi" style="display:none">
-        ${formImgData?`<img src="${formImgData}"><button type="button" class="ba-img-remove" id="ba-fr">✕</button>`:'<div class="ba-img-picker-icon">📷</div><div class="ba-img-picker-text">TAP TO SELECT</div>'}
+        ${formImgData?`<img src="${formImgData}"><button type="button" class="ba-img-remove" id="ba-fr" aria-label="画像を削除">✕</button>`:'<div class="ba-img-picker-icon">📷</div><div class="ba-img-picker-text">写真を追加</div>'}
       </div>
     </div>
     <div class="ba-form-row">
@@ -1393,10 +1493,10 @@ function showEntityForm(editId){
   fi.onchange=async ev=>{
     const f=ev.target.files[0];if(!f)return;
     formImgData=await compressImg(f);
-    fp.innerHTML=`<img src="${formImgData}"><button type="button" class="ba-img-remove" id="ba-fr">✕</button>`;
-    $('ba-fr').onclick=ev2=>{ev2.stopPropagation();formImgData='';fp.innerHTML='<div class="ba-img-picker-icon">📷</div><div class="ba-img-picker-text">TAP TO SELECT</div>'};
+    fp.innerHTML=`<img src="${formImgData}"><button type="button" class="ba-img-remove" id="ba-fr" aria-label="画像を削除">✕</button>`;
+    $('ba-fr').onclick=ev2=>{ev2.stopPropagation();formImgData='';fp.innerHTML='<div class="ba-img-picker-icon">📷</div><div class="ba-img-picker-text">写真を追加</div>'};
   };
-  if($('ba-fr'))$('ba-fr').onclick=ev=>{ev.stopPropagation();formImgData='';fp.innerHTML='<div class="ba-img-picker-icon">📷</div><div class="ba-img-picker-text">TAP TO SELECT</div>'};
+  if($('ba-fr'))$('ba-fr').onclick=ev=>{ev.stopPropagation();formImgData='';fp.innerHTML='<div class="ba-img-picker-icon">📷</div><div class="ba-img-picker-text">写真を追加</div>'};
   $('ba-fsave').onclick=()=>{
     const name=$('ba-fn').value.trim();if(!name){toast('名前を入力してください');return}
     const obj={name,nickname:$('ba-fnn').value.trim(),scientific:$('ba-fs').value.trim(),category:$('ba-fc').value,dateAcquired:$('ba-fd').value,image:formImgData,status:e.status||'ACTIVE',dateLost:e.dateLost||''};
@@ -1405,6 +1505,7 @@ function showEntityForm(editId){
   };
 }
 $('ba-form-close').onclick=()=>hideModal('ba-form-overlay');
+$('ba-confirm-close').onclick=()=>hideModal('ba-confirm-overlay');
 
 
 function showLogForm(eid,editLog){
@@ -1440,7 +1541,7 @@ function renderForm(){
     <div style="font-family:'Orbitron',sans-serif;font-size:.8rem;color:var(--ba-cyan);letter-spacing:1.5px;margin-bottom:1.2rem">REGISTER_NEW_ENTITY</div>
     <div class="ba-form-group"><label class="ba-form-label">画像</label>
       <div class="ba-img-picker" id="ba-fp2"><input type="file" accept="image/*" id="ba-fi2" style="display:none">
-        <div class="ba-img-picker-icon">📷</div><div class="ba-img-picker-text">TAP TO SELECT</div>
+        <div class="ba-img-picker-icon">📷</div><div class="ba-img-picker-text">写真を追加</div>
       </div>
     </div>
     <div class="ba-form-row">
@@ -1460,7 +1561,7 @@ function renderForm(){
   fi2.onchange=async ev=>{
     const f=ev.target.files[0];if(!f)return;
     imgData2=await compressImg(f);
-    fp2.innerHTML=`<img src="${imgData2}"><button type="button" class="ba-img-remove" onclick="event.stopPropagation();this.parentElement.innerHTML='<div class=ba-img-picker-icon>📷</div><div class=ba-img-picker-text>TAP TO SELECT</div>';"><input type="file" accept="image/*" id="ba-fi2" style="display:none">✕</button>`;
+    fp2.innerHTML=`<img src="${imgData2}"><button type="button" class="ba-img-remove" aria-label="画像を削除" onclick="event.stopPropagation();this.parentElement.innerHTML='<div class=ba-img-picker-icon>📷</div><div class=ba-img-picker-text>写真を追加</div>';"><input type="file" accept="image/*" id="ba-fi2" style="display:none">✕</button>`;
   };
   $('ba-fsave2').onclick=()=>{
     const name=$('ba-fn2').value.trim();if(!name){toast('名前を入力してください');return}
@@ -1484,6 +1585,7 @@ fetchData();
 })();
 
 </script>
+
 
     </section>
     <footer class="pt-8">

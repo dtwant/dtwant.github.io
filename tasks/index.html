@@ -733,9 +733,7 @@
 
 <style>
  
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap');
-
-:root {
+.tl-root {
   --background: 240 10% 3.9%;
   --foreground: 0 0% 98%;
   --card: 240 10% 4.9%;
@@ -767,7 +765,7 @@
  
 .tl-root {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
   margin: 0; padding: 0;
   background: hsl(var(--background));
   color: hsl(var(--foreground));
@@ -822,29 +820,30 @@
   white-space: nowrap; border-radius: var(--radius); font-size: 0.875rem; font-weight: 500;
   border: none; cursor: pointer; transition: all 0.15s ease;
   font-family: inherit; text-decoration: none;
+  min-height: 44px;
   -webkit-tap-highlight-color: transparent;
 }
 .tl-btn:disabled { pointer-events: none; opacity: 0.5; }
 .tl-btn-default {
   background: hsl(var(--primary)); color: hsl(var(--primary-foreground));
-  padding: 0.5rem 1rem; height: 2.25rem;
+  padding: 0.5rem 1rem; height: 44px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 .tl-btn-default:hover { opacity: 0.9; }
 .tl-btn-outline {
   border: 1px solid hsl(var(--border)); background: transparent; color: hsl(var(--foreground));
-  padding: 0.5rem 1rem; height: 2.25rem;
+  padding: 0.5rem 1rem; height: 44px;
 }
 .tl-btn-outline:hover { background: hsl(var(--accent)); color: hsl(var(--accent-foreground)); }
 .tl-btn-ghost {
   background: transparent; color: hsl(var(--foreground));
-  padding: 0.5rem 1rem; height: 2.25rem;
+  padding: 0.5rem 1rem; height: 44px;
 }
 .tl-btn-ghost:hover { background: hsl(var(--accent)); color: hsl(var(--accent-foreground)); }
-.tl-btn-sm { height: 2rem; padding: 0.25rem 0.75rem; font-size: 0.8rem; border-radius: var(--radius); }
+.tl-btn-sm { height: 44px; padding: 0.25rem 0.75rem; font-size: 0.8rem; border-radius: var(--radius); }
 .tl-btn-lg { height: 2.75rem; padding: 0.5rem 2rem; font-size: 1rem; border-radius: var(--radius); }
-.tl-btn-icon { width: 2.25rem; height: 2.25rem; padding: 0; }
-.tl-btn-icon.sm { width: 2rem; height: 2rem; }
+.tl-btn-icon { width: 44px; height: 44px; padding: 0; }
+.tl-btn-icon.sm { width: 44px; height: 44px; }
 
  
 .tl-card {
@@ -865,7 +864,7 @@
   border: 1px solid hsl(var(--input)); background: transparent;
   padding: 0.5rem 0.75rem; font-size: 0.875rem; font-family: inherit;
   color: hsl(var(--foreground)); transition: all 0.15s;
-  height: 2.25rem;
+  min-height: 44px;
 }
 .tl-input::placeholder { color: hsl(var(--muted-foreground)); }
 .tl-input:focus { outline: none; border-color: hsl(var(--ring)); box-shadow: 0 0 0 2px hsla(var(--ring), 0.15); }
@@ -875,7 +874,7 @@
   border: 1px solid hsl(var(--input)); background: hsl(var(--background));
   padding: 0.5rem 0.75rem; font-size: 0.875rem; font-family: inherit;
   color: hsl(var(--foreground)); transition: all 0.15s;
-  height: 2.25rem; cursor: pointer;
+  min-height: 44px; cursor: pointer;
   -webkit-appearance: none; appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 0.75rem center;
@@ -923,6 +922,7 @@
   padding: 0.375rem 0.75rem; font-size: 0.8rem; font-weight: 500;
   background: transparent; border: none; color: hsl(var(--muted-foreground));
   cursor: pointer; transition: all 0.15s; font-family: inherit;
+  min-height: 44px;
 }
 .tl-tabs-trigger:hover { color: hsl(var(--foreground)); }
 .tl-tabs-trigger.active {
@@ -946,7 +946,7 @@
   box-shadow: 0 16px 70px rgba(0,0,0,0.6);
   transform: scale(0.95) translateY(10px);
   transition: transform 0.2s ease;
-  max-height: 90vh; display: flex; flex-direction: column;
+  max-height: calc(100dvh - 2rem); display: flex; flex-direction: column;
   position: relative;
 }
 .tl-overlay.open .tl-dialog { transform: scale(1) translateY(0); }
@@ -962,9 +962,9 @@
   padding: 0 1.5rem 1.5rem; flex-wrap: wrap;
 }
 .tl-dialog-close {
-  position: absolute; top: 1rem; right: 1rem;
+  position: absolute; top: 0.75rem; right: 0.75rem;
   background: transparent; border: none; color: hsl(var(--muted-foreground));
-  cursor: pointer; width: 1.5rem; height: 1.5rem;
+  cursor: pointer; width: 44px; height: 44px;
   display: flex; align-items: center; justify-content: center;
   border-radius: var(--radius); transition: all 0.15s;
 }
@@ -978,7 +978,10 @@
 
  
 .tl-toast-container {
-  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 1000020;
+  position: fixed;
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  right: calc(1.5rem + env(safe-area-inset-right, 0px));
+  z-index: 1000020;
   display: flex; flex-direction: column; gap: 0.5rem;
   pointer-events: none; max-width: 380px;
 }
@@ -1045,11 +1048,12 @@
 }
 
 .tl-check {
-  width: 1.25rem; height: 1.25rem; border-radius: calc(var(--radius) - 2px);
+  width: 44px; height: 44px; min-width: 44px; min-height: 44px;
+  border-radius: calc(var(--radius) - 2px);
   border: 1px solid hsl(var(--input)); background: transparent;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: all 0.15s; color: transparent; flex-shrink: 0;
-  margin-top: 0.15rem;
+  margin-top: 0; font: inherit; font-size: 1rem;
 }
 .tl-check:hover { border-color: hsl(var(--ring)); }
 .tl-check.checked {
@@ -1078,8 +1082,8 @@
   white-space: pre-wrap; word-break: break-all;
 }
 
-.tl-item-actions { display: flex; gap: 0.25rem; opacity: 0.4; transition: opacity 0.15s; flex-shrink: 0; }
-.tl-item:hover .tl-item-actions { opacity: 1; }
+.tl-item-actions { display: flex; gap: 0.25rem; opacity: 1; flex-shrink: 0; }
+.tl-item-actions .tl-btn-icon.sm { font-size: 0.62rem; letter-spacing: 0.02em; }
 
  
 .tl-header {
@@ -1108,6 +1112,16 @@
 .tl-sync-ok { background: hsla(142.1, 76.2%, 36.3%, 0.1); color: hsl(142.1, 76.2%, 36.3%); border: 1px solid hsla(142.1, 76.2%, 36.3%, 0.2); }
 .tl-sync-busy { background: hsla(47.9, 95.8%, 53.1%, 0.1); color: hsl(47.9, 95.8%, 53.1%); border: 1px solid hsla(47.9, 95.8%, 53.1%, 0.2); }
 .tl-sync-err { background: hsla(346.8, 77.2%, 49.8%, 0.1); color: hsl(346.8, 77.2%, 49.8%); border: 1px solid hsla(346.8, 77.2%, 49.8%, 0.2); }
+.tl-storage-status {
+  flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 0.45rem 0.8rem;
+  align-items: center; padding: 0.65rem 0.8rem;
+  border: 1px solid hsl(var(--border)); border-radius: var(--radius);
+  background: hsla(var(--card), 0.7); color: hsl(var(--muted-foreground));
+  font-size: 0.75rem; line-height: 1.4;
+}
+.tl-storage-status strong { color: hsl(142.1, 76.2%, 56%); font-weight: 600; }
+.tl-storage-status .tl-storage-cloud-error { color: hsl(var(--primary)); }
+.tl-storage-status .tl-storage-cloud-ok { color: hsl(142.1, 76.2%, 56%); }
 
  
 .tl-toolbar {
@@ -1154,6 +1168,40 @@
   font-size: 0.75rem; color: hsl(var(--primary)); letter-spacing: 0.3em;
   margin-bottom: 1.5rem; text-transform: uppercase;
 }
+.tl-lock-description {
+  width: 100%; max-width: 290px; margin: 0 0 1rem;
+  color: hsl(var(--muted-foreground)); font-size: 0.875rem; line-height: 1.6;
+}
+.tl-lock-input-label {
+  width: 100%; margin-bottom: 0.4rem;
+  color: hsl(var(--foreground)); font-size: 0.8125rem; font-weight: 600;
+  text-align: left;
+}
+.tl-lock-input {
+  width: 100%; height: 3rem; padding: 0.5rem 0.75rem;
+  border-top: 1px solid hsl(var(--border)) !important;
+  border-right: 1px solid hsl(var(--border)) !important;
+  border-bottom: 1px solid hsl(var(--border)) !important;
+  border-left: 1px solid hsl(var(--border)) !important;
+  border-radius: var(--radius); background: rgba(255,255,255,0.03);
+  color: hsl(var(--foreground)); font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem; letter-spacing: 0.45em; text-align: center;
+}
+.tl-lock-input::placeholder { color: hsl(var(--muted-foreground)); opacity: 0.7; }
+.tl-lock-input:focus {
+  outline: 2px solid hsl(var(--ring)); outline-offset: 2px;
+  border-color: hsl(var(--ring)) !important;
+  box-shadow: 0 0 0 3px hsla(var(--ring), 0.16);
+}
+.tl-lock-input[aria-invalid="true"] {
+  border-color: hsl(var(--primary)) !important;
+}
+.tl-lock-status {
+  width: 100%; min-height: 2.4rem; margin: 0.75rem 0 1.25rem;
+  color: hsl(var(--muted-foreground)); font-size: 0.8125rem; line-height: 1.5;
+}
+.tl-lock-status.error { color: hsl(var(--primary)); }
+.tl-lock-status.success { color: hsl(var(--priority-c)); }
 .tl-lock-dots {
   display: flex; gap: 0.75rem; margin-bottom: 2rem;
 }
@@ -1202,6 +1250,8 @@
   color: hsl(var(--muted-foreground)); margin-top: 1rem;
 }
 .tl-empty-icon { font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.4; }
+.tl-empty-description { max-width: 34rem; margin: 0.4rem auto 0; line-height: 1.6; }
+.tl-empty-actions { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.25rem; }
 
  
 .tl-text-foreground { color: hsl(var(--foreground)); }
@@ -1241,9 +1291,10 @@
   .tl-stat-value { font-size: 1.25rem; }
   
   .tl-toolbar { flex-direction: column; align-items: stretch; gap: 0.5rem; margin-bottom: 0.75rem; }
-  .tl-toolbar-right { width: 100%; }
-  .tl-search-wrap { flex: 1; }
+  .tl-toolbar-right { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .tl-search-wrap { flex: 1; grid-column: 1 / -1; }
   .tl-search-input { width: 100%; }
+  .tl-toolbar-right .tl-select { width: 100%; }
   .tl-tabs-list { width: 100%; display: flex; }
   .tl-tabs-trigger { flex: 1; }
   
@@ -1252,7 +1303,708 @@
   
   .tl-field-row { grid-template-columns: 1fr; }
   .tl-dialog { max-width: 95vw; }
-  .tl-toast-container { left: 1rem; right: 1rem; bottom: 1rem; max-width: none; }
+  .tl-toast-container {
+    left: calc(1rem + env(safe-area-inset-left, 0px));
+    right: calc(1rem + env(safe-area-inset-right, 0px));
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); max-width: none;
+  }
+}
+
+ 
+.tl-root {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 96%;
+  --card: 240 4% 11%;
+  --card-foreground: 0 0% 96%;
+  --popover: 240 4% 11%;
+  --popover-foreground: 0 0% 96%;
+  --primary: 211 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 4% 16%;
+  --secondary-foreground: 0 0% 96%;
+  --muted: 240 4% 14%;
+  --muted-foreground: 240 4% 67%;
+  --accent: 240 4% 19%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 3 100% 59%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 100% / 0.12;
+  --input: 0 0% 100% / 0.16;
+  --ring: 211 100% 55%;
+  --radius: 14px;
+  --priority-s: 211 100% 62%;
+  --priority-a: 29 100% 58%;
+  --priority-b: 46 100% 55%;
+  --priority-c: 142 69% 52%;
+}
+
+.tl-root {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", "Yu Gothic", sans-serif;
+  background: #000;
+  color: #f5f5f7;
+  letter-spacing: 0;
+}
+.tl-root * { text-shadow: none !important; }
+.tl-root button,
+.tl-root a,
+.tl-root label,
+.tl-root .active {
+  text-decoration: none !important;
+  -webkit-text-decoration: none !important;
+}
+.tl-root button:focus-visible,
+.tl-root a:focus-visible,
+.tl-root input:focus-visible,
+.tl-root select:focus-visible,
+.tl-root textarea:focus-visible {
+  outline: 3px solid hsla(var(--ring), 0.45) !important;
+  outline-offset: 2px;
+}
+.tl-bg { background: #000; }
+.tl-bg::after { display: none; }
+.tl-container {
+  max-width: 920px;
+  padding: max(24px, env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) calc(72px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px));
+}
+.tl-title {
+  font-family: inherit;
+  font-size: clamp(1.55rem, 4vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+.tl-logo-sub {
+  font-family: inherit;
+  color: #8e8e93;
+  letter-spacing: 0.02em;
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+.tl-header {
+  margin-bottom: 1.35rem;
+  padding: 0 0 1rem;
+  border-bottom: 0;
+  align-items: flex-start;
+}
+.tl-header-actions { gap: 0.45rem; }
+.tl-btn {
+  min-height: 44px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease, transform 80ms ease-out;
+}
+.tl-btn:active { transform: scale(0.97); }
+.tl-btn-default {
+  background: #0a84ff;
+  color: #fff;
+  box-shadow: none;
+}
+.tl-btn-default:hover { background: #409cff; opacity: 1; }
+.tl-btn-outline {
+  border-color: rgba(255,255,255,0.14);
+  background: #1c1c1e;
+  color: #f5f5f7;
+}
+.tl-btn-outline:hover { background: #2c2c2e; color: #fff; }
+.tl-btn-ghost { color: #8e8e93; }
+.tl-btn-ghost:hover { background: #2c2c2e; color: #f5f5f7; }
+.tl-btn-danger { min-width: 44px; padding-inline: 1rem; background: #ff453a; color: #fff; }
+.tl-btn-danger:hover { background: #ff6961; }
+.tl-btn-sm { height: 44px; padding-inline: 0.85rem; }
+.tl-btn-icon.sm { width: 44px; height: 44px; padding: 0; }
+.tl-delete-action { color: #ff453a !important; }
+.tl-delete-action:hover { color: #ff6961 !important; }
+.tl-sync-indicator {
+  min-height: 30px;
+  padding: 0.25rem 0.55rem;
+  border: 0;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  background: #1c1c1e;
+  color: #8e8e93;
+}
+.tl-sync-ok { background: rgba(48,209,88,0.16); color: #30d158; }
+.tl-sync-busy { background: rgba(255,214,10,0.16); color: #ffd60a; }
+.tl-sync-err { background: rgba(255,69,58,0.16); color: #ff453a; }
+.tl-storage-status {
+  margin-top: 0.8rem;
+  padding: 0.72rem 0.85rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  background: #1c1c1e;
+  color: #a1a1a6;
+  font-size: 0.78rem;
+}
+.tl-storage-status strong { color: #30d158; }
+.tl-storage-status .tl-storage-cloud-error { color: #ff9f0a; }
+.tl-storage-status .tl-storage-cloud-ok { color: #30d158; }
+.tl-stats-grid { gap: 0.65rem; margin-bottom: 1.15rem; }
+.tl-stat-card {
+  min-height: 82px;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 16px;
+  background: #1c1c1e;
+  box-shadow: none;
+}
+.tl-stat-card:hover { border-color: rgba(255,255,255,0.14); }
+.tl-stat-label { color: #8e8e93; font-size: 0.75rem; }
+.tl-stat-value { font-family: inherit; font-size: 1.45rem; letter-spacing: -0.03em; }
+.tl-text-primary { color: #0a84ff; }
+.tl-text-warning { color: #ffd60a; }
+.tl-text-success { color: #30d158; }
+.tl-toolbar { margin-bottom: 0.9rem; gap: 0.7rem; }
+.tl-tabs-list {
+  padding: 0.2rem;
+  gap: 0.15rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  background: #1c1c1e;
+}
+.tl-tabs-trigger {
+  min-height: 40px;
+  border-radius: 9px;
+  padding-inline: 0.8rem;
+  color: #8e8e93;
+  font-size: 0.84rem;
+}
+.tl-tabs-trigger:hover { color: #f5f5f7; background: #2c2c2e; }
+.tl-tabs-trigger.active {
+  background: #636366;
+  color: #fff;
+  box-shadow: none;
+  text-decoration: none !important;
+}
+.tl-toolbar-right { gap: 0.45rem; }
+.tl-input,
+.tl-select,
+.tl-textarea {
+  min-height: 44px;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  border-radius: 12px;
+  background: #1c1c1e;
+  color: #f5f5f7;
+  font-family: inherit;
+  font-size: 16px;
+}
+.tl-input::placeholder,
+.tl-textarea::placeholder { color: #8e8e93; }
+.tl-input:focus,
+.tl-select:focus,
+.tl-textarea:focus { border-color: #0a84ff !important; box-shadow: 0 0 0 3px rgba(10,132,255,0.22); }
+.tl-search-icon { color: #8e8e93; }
+.tl-list-container { display: grid; gap: 0.65rem; }
+.tl-item {
+  gap: 0.8rem;
+  padding: 0.8rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-left-width: 3px;
+  border-radius: 16px;
+  background: #1c1c1e;
+  box-shadow: none;
+  transition: background-color 150ms ease, border-color 150ms ease, transform 80ms ease-out;
+}
+.tl-item:hover { border-color: rgba(255,255,255,0.18); background: #242426; transform: none; box-shadow: none; }
+.tl-item:active { transform: scale(0.995); }
+.tl-item.completed { opacity: 0.58; }
+.tl-item.completed .tl-item-name { color: #8e8e93; }
+.tl-check {
+  width: 44px; height: 44px; min-width: 44px; min-height: 44px;
+  border-radius: 50%;
+  border: 2px solid #636366;
+  background: transparent;
+  color: transparent;
+}
+.tl-check:hover { border-color: #0a84ff; background: rgba(10,132,255,0.12); }
+.tl-check.checked { background: #30d158; border-color: #30d158; color: #fff; }
+.tl-item-info { gap: 0.35rem; }
+.tl-item-name { font-size: 0.98rem; font-weight: 600; letter-spacing: -0.01em; }
+.tl-item-due { font-family: inherit; color: #8e8e93; }
+.tl-due-overdue { color: #ff453a !important; }
+.tl-due-soon { color: #ffd60a !important; }
+.tl-item-memo { border-left: 0; border-radius: 10px; background: #2c2c2e; color: #a1a1a6; padding: 0.55rem 0.65rem; }
+.tl-item-actions { gap: 0.2rem; }
+.tl-badge { border: 0; padding: 0.25rem 0.55rem; background: #2c2c2e; color: #a1a1a6; }
+.tl-badge-s { background: rgba(10,132,255,0.16); color: #64b5ff; }
+.tl-badge-a { background: rgba(255,159,10,0.16); color: #ff9f0a; }
+.tl-badge-b { background: rgba(255,214,10,0.16); color: #ffd60a; }
+.tl-badge-c { background: rgba(48,209,88,0.16); color: #30d158; }
+.tl-empty {
+  padding: 2.5rem 1rem;
+  border: 1px dashed rgba(255,255,255,0.16);
+  border-radius: 16px;
+  background: #1c1c1e;
+}
+.tl-empty-icon { opacity: 0.65; }
+.tl-empty-actions { gap: 0.55rem; }
+.tl-separator { background: rgba(255,255,255,0.1); }
+.tl-config-blob { border: 1px solid rgba(255,255,255,0.1); background: #2c2c2e; color: #64b5ff; }
+.tl-danger-title { color: #ff453a; }
+.tl-overlay {
+  background: rgba(0,0,0,0.68);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.tl-dialog {
+  max-width: 480px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 18px;
+  background: #1c1c1e;
+  box-shadow: 0 20px 70px rgba(0,0,0,0.5);
+}
+.tl-dialog-header { padding: 1.35rem 1.35rem 0; }
+.tl-dialog-title { font-size: 1.12rem; letter-spacing: -0.02em; }
+.tl-dialog-description { color: #a1a1a6; line-height: 1.55; }
+.tl-dialog-body { padding: 1.35rem; }
+.tl-dialog-footer { padding: 0 1.35rem 1.35rem; }
+.tl-dialog-close { color: #8e8e93; }
+.tl-dialog-close:hover { background: #2c2c2e; color: #f5f5f7; }
+.tl-dialog-symbol {
+  display: grid; place-items: center; width: 42px; height: 42px; margin-bottom: 0.8rem;
+  border-radius: 50%; background: rgba(255,69,58,0.16); color: #ff453a; font-weight: 700;
+}
+.tl-toast-container { max-width: 390px; }
+.tl-toast {
+  min-height: 44px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 13px;
+  background: rgba(44,44,46,0.96);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+.tl-toast-success { border-left: 3px solid #30d158; }
+.tl-toast-error { border-left: 3px solid #ff453a; }
+.tl-toast-info { border-left: 3px solid #0a84ff; }
+.tl-lock-wrap { background: rgba(0,0,0,0.94); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); }
+.tl-lock-box { border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; background: #1c1c1e; box-shadow: 0 20px 70px rgba(0,0,0,0.5); }
+.tl-lock-box::before { display: none; }
+.tl-lock-title { font-family: inherit; color: #f5f5f7; letter-spacing: -0.02em; font-size: 1.05rem; text-transform: none; }
+.tl-lock-description, .tl-lock-status { color: #a1a1a6; }
+.tl-lock-status.error { color: #ff453a; }
+.tl-lock-status.success { color: #30d158; }
+.tl-lock-input { border-radius: 12px; background: #2c2c2e; font-family: inherit; letter-spacing: 0.38em; }
+.tl-lock-dot { border-color: #636366; }
+.tl-lock-dot.filled { background: #0a84ff; border-color: #0a84ff; box-shadow: none; }
+.tl-lock-grid { gap: 0.6rem; }
+.tl-lock-key { min-height: 48px; height: 48px; border: 0; border-radius: 14px; background: #2c2c2e; font-family: inherit; }
+.tl-lock-key:hover { background: #3a3a3c; }
+.tl-lock-key:active { transform: scale(0.96); background: #48484a; }
+
+@media (max-width: 768px) {
+  .tl-container { padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px)); }
+  .tl-header-actions { display: grid; grid-template-columns: auto 1fr auto; width: 100%; }
+  .tl-header-actions .tl-btn-default { grid-column: 1 / -1; }
+  .tl-toolbar-right { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .tl-item { padding: 0.72rem; }
+  .tl-item-header { flex-wrap: wrap; }
+  .tl-dialog { max-width: calc(100vw - 24px); }
+}
+@media (max-width: 480px) {
+  .tl-container { padding-top: max(16px, env(safe-area-inset-top, 0px)); }
+  .tl-title { font-size: 1.45rem; }
+  .tl-logo-sub { font-size: 0.72rem; }
+  .tl-header-actions { grid-template-columns: 1fr 1fr; }
+  .tl-header-actions .tl-sync-indicator { grid-column: 1 / -1; order: -1; justify-content: center; }
+  .tl-header-actions .tl-btn { width: 100%; }
+  .tl-stats-grid { gap: 0.5rem; }
+  .tl-stat-card { min-height: 76px; }
+  .tl-tabs-trigger { padding-inline: 0.45rem; font-size: 0.78rem; }
+  .tl-item-info { min-width: 0; }
+  .tl-item-actions { flex-direction: column; }
+  .tl-overlay { align-items: flex-end; padding: 0; }
+  .tl-dialog,
+  .tl-confirm-dialog { max-width: 100%; border-radius: 18px 18px 0 0; border-bottom: 0; }
+  .tl-confirm-dialog::before {
+    content: ""; display: block; width: 36px; height: 4px; margin: 8px auto 0;
+    border-radius: 999px; background: #636366;
+  }
+  .tl-dialog-footer { flex-direction: column-reverse; }
+  .tl-dialog-footer .tl-btn { width: 100%; }
+  .tl-toast-container { left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tl-root *, .tl-root *::before, .tl-root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .tl-root .tl-btn:active,
+  .tl-root .tl-lock-key:active,
+  .tl-root .tl-item:active { transform: none !important; }
+}
+</style>
+
+<style>
+ 
+.tl-root {
+  --tl-bg: #050506;
+  --tl-surface: rgba(255, 255, 255, 0.055);
+  --tl-surface-raised: rgba(255, 255, 255, 0.085);
+  --tl-glass: rgba(28, 28, 30, 0.68);
+  --tl-glass-strong: rgba(44, 44, 46, 0.78);
+  --tl-line: rgba(255, 255, 255, 0.115);
+  --tl-line-soft: rgba(255, 255, 255, 0.075);
+  --tl-text: #f5f5f7;
+  --tl-text-secondary: #a1a1a6;
+  --tl-text-tertiary: #8e8e93;
+  --tl-blue: #0a84ff;
+  --tl-green: #30d158;
+  --tl-yellow: #ffd60a;
+  --tl-red: #ff453a;
+  --tl-radius-lg: 24px;
+  --tl-radius-md: 18px;
+  --tl-radius-sm: 13px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Hiragino Sans", "Yu Gothic", sans-serif !important;
+  background: var(--tl-bg) !important;
+  color: var(--tl-text) !important;
+  letter-spacing: -0.012em;
+}
+
+.tl-root,
+.tl-root * { -webkit-font-smoothing: antialiased; }
+.tl-root button,
+.tl-root a,
+.tl-root label,
+.tl-root .active {
+  font-family: inherit;
+  text-decoration: none !important;
+  -webkit-text-decoration: none !important;
+}
+.tl-root button,
+.tl-root input,
+.tl-root select,
+.tl-root textarea { -webkit-tap-highlight-color: transparent; }
+.tl-root button:focus-visible,
+.tl-root input:focus-visible,
+.tl-root select:focus-visible,
+.tl-root textarea:focus-visible {
+  outline: 3px solid rgba(10, 132, 255, 0.62) !important;
+  outline-offset: 3px;
+}
+
+.tl-root .tl-bg {
+  background:
+    radial-gradient(ellipse 70% 45% at 7% -8%, rgba(10, 132, 255, 0.17), transparent 68%),
+    radial-gradient(ellipse 60% 48% at 100% 100%, rgba(48, 209, 88, 0.075), transparent 70%),
+    #050506 !important;
+}
+.tl-root .tl-bg::before {
+  content: "";
+  position: absolute;
+  width: 26rem;
+  height: 26rem;
+  top: 12%;
+  right: -15rem;
+  border-radius: 50%;
+  background: rgba(94, 92, 230, 0.11);
+  filter: blur(80px);
+}
+.tl-root .tl-bg::after { display: none !important; }
+.tl-root .tl-container {
+  max-width: 960px;
+  padding: max(14px, env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(72px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+}
+
+ 
+.tl-root .tl-nav {
+  position: sticky;
+  top: max(10px, env(safe-area-inset-top, 0px));
+  z-index: 4;
+  display: grid;
+  grid-template-columns: minmax(44px, 1fr) auto minmax(44px, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  margin: 0 auto 26px;
+  padding: 8px 10px;
+  border-radius: 22px;
+}
+.tl-root .tl-glass {
+  background: linear-gradient(135deg, rgba(255,255,255,0.13), rgba(255,255,255,0.045) 45%, rgba(255,255,255,0.07)) !important;
+  border-top: 1px solid var(--tl-line) !important;
+  border-right: 1px solid var(--tl-line) !important;
+  border-bottom: 1px solid var(--tl-line) !important;
+  border-left: 1px solid var(--tl-line) !important;
+  box-shadow: 0 18px 50px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
+  -webkit-backdrop-filter: blur(28px) saturate(1.45);
+  backdrop-filter: blur(28px) saturate(1.45);
+}
+.tl-root .tl-nav-leading { display: flex; align-items: center; justify-content: flex-start; }
+.tl-root .tl-logo { align-items: center; justify-content: center; min-width: 0; }
+.tl-root .tl-title {
+  font-family: inherit;
+  font-size: clamp(1.05rem, 3vw, 1.18rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.tl-root .tl-logo-sub { display: none; }
+.tl-root .tl-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  min-width: 0;
+}
+.tl-root .tl-nav-icon,
+.tl-root .tl-add-button {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+}
+.tl-root .tl-nav-icon {
+  color: var(--tl-text-secondary);
+  background: transparent !important;
+  border-top: 1px solid transparent !important;
+  border-right: 1px solid transparent !important;
+  border-bottom: 1px solid transparent !important;
+  border-left: 1px solid transparent !important;
+}
+.tl-root .tl-nav-icon:hover { color: var(--tl-text); background: rgba(255,255,255,0.09) !important; }
+.tl-root .tl-add-button {
+  background: var(--tl-blue) !important;
+  color: #fff !important;
+  border-top: 1px solid rgba(255,255,255,0.24) !important;
+  border-right: 1px solid rgba(255,255,255,0.24) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.24) !important;
+  border-left: 1px solid rgba(255,255,255,0.24) !important;
+  box-shadow: 0 8px 20px rgba(10,132,255,0.28), inset 0 1px 0 rgba(255,255,255,0.28);
+}
+.tl-root .tl-add-button:hover { background: #409cff !important; }
+.tl-root .tl-sync-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  margin-right: 1px;
+  padding: 0 7px;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--tl-text-tertiary);
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.tl-root .tl-sync-dot,
+.tl-root .tl-status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: var(--tl-text-tertiary);
+  box-shadow: 0 0 0 3px rgba(142,142,147,0.12);
+}
+.tl-root .tl-sync-ok .tl-sync-dot { background: var(--tl-green); box-shadow: 0 0 0 3px rgba(48,209,88,0.13); }
+.tl-root .tl-sync-busy .tl-sync-dot { background: var(--tl-yellow); box-shadow: 0 0 0 3px rgba(255,214,10,0.13); }
+.tl-root .tl-sync-err .tl-sync-dot { background: var(--tl-red); box-shadow: 0 0 0 3px rgba(255,69,58,0.13); }
+.tl-root .tl-sync-ok { color: var(--tl-green); }
+.tl-root .tl-sync-busy { color: var(--tl-yellow); }
+.tl-root .tl-sync-err { color: var(--tl-red); }
+.tl-root .tl-storage-status {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  min-height: 28px;
+  margin: -3px 0 0;
+  padding: 0 8px 3px;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--tl-text-tertiary);
+  font-size: 0.72rem;
+  text-align: center;
+}
+.tl-root .tl-storage-local { display: inline-flex; align-items: center; gap: 7px; color: var(--tl-text-secondary); }
+.tl-root .tl-status-dot { width: 6px; height: 6px; flex-basis: 6px; background: var(--tl-green); box-shadow: 0 0 0 3px rgba(48,209,88,0.1); }
+.tl-root .tl-storage-cloud-error { color: #ff9f0a !important; }
+.tl-root .tl-storage-cloud-ok { color: var(--tl-green) !important; }
+
+ 
+.tl-root .tl-stats-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; max-width: 780px; margin: 0 auto 22px; }
+.tl-root .tl-stat-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+  padding: 15px 10px;
+  border-radius: var(--tl-radius-md);
+  background: var(--tl-surface) !important;
+  border-top: 1px solid var(--tl-line-soft) !important;
+  border-right: 1px solid var(--tl-line-soft) !important;
+  border-bottom: 1px solid var(--tl-line-soft) !important;
+  border-left: 1px solid var(--tl-line-soft) !important;
+  box-shadow: none;
+  text-align: center;
+}
+.tl-root .tl-stat-label { color: var(--tl-text-tertiary); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.01em; }
+.tl-root .tl-stat-value { font-family: inherit; font-size: 1.55rem; font-weight: 700; letter-spacing: -0.045em; }
+.tl-root .tl-toolbar { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 10px; max-width: 780px; margin: 0 auto 16px; }
+.tl-root .tl-tabs-list { display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: 17px; }
+.tl-root .tl-tabs-trigger {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 13px;
+  border-top: 1px solid transparent !important;
+  border-right: 1px solid transparent !important;
+  border-bottom: 1px solid transparent !important;
+  border-left: 1px solid transparent !important;
+  color: var(--tl-text-tertiary);
+  font-size: 0.76rem;
+  font-weight: 650;
+}
+.tl-root .tl-tabs-trigger:hover { color: var(--tl-text); background: rgba(255,255,255,0.07); }
+.tl-root .tl-tabs-trigger.active {
+  color: var(--tl-text);
+  background: rgba(255,255,255,0.16) !important;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.1);
+  text-decoration: none !important;
+}
+.tl-root .tl-toolbar-right { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(105px, 1fr) minmax(105px, 1fr); gap: 5px; align-items: center; padding: 4px; border-radius: 17px; }
+.tl-root .tl-search-wrap { min-width: 0; }
+.tl-root .tl-search-icon { left: 12px; color: var(--tl-text-tertiary); display: inline-flex; }
+.tl-root .tl-search-icon svg { width: 17px; height: 17px; }
+.tl-root .tl-input,
+.tl-root .tl-select,
+.tl-root .tl-textarea {
+  min-height: 44px;
+  border-top: 1px solid transparent !important;
+  border-right: 1px solid transparent !important;
+  border-bottom: 1px solid transparent !important;
+  border-left: 1px solid transparent !important;
+  border-radius: 13px;
+  background: rgba(0,0,0,0.16) !important;
+  color: var(--tl-text);
+  font-family: inherit;
+  font-size: 16px;
+}
+.tl-root .tl-input:focus,
+.tl-root .tl-select:focus,
+.tl-root .tl-textarea:focus { border-color: rgba(10,132,255,0.75) !important; box-shadow: 0 0 0 3px rgba(10,132,255,0.18); }
+.tl-root .tl-input::placeholder,
+.tl-root .tl-textarea::placeholder { color: var(--tl-text-tertiary); }
+
+.tl-root .tl-list-container { display: grid; gap: 11px; width: min(100%, 700px); margin-inline: auto; }
+.tl-root .tl-item {
+  display: grid;
+  justify-items: center;
+  gap: 9px;
+  padding: 20px 18px 15px;
+  border-radius: var(--tl-radius-lg);
+  background: rgba(255,255,255,0.048) !important;
+  border-top: 1px solid var(--tl-line-soft) !important;
+  border-right: 1px solid var(--tl-line-soft) !important;
+  border-bottom: 1px solid var(--tl-line-soft) !important;
+  border-left: 1px solid var(--tl-line-soft) !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  text-align: center;
+  transition: transform 120ms ease-out, background-color 150ms ease, border-color 150ms ease;
+}
+.tl-root .tl-item-s { box-shadow: inset 0 2px 0 #bf5af2, 0 8px 25px rgba(0,0,0,0.12); }
+.tl-root .tl-item-a { box-shadow: inset 0 2px 0 #ff9f0a, 0 8px 25px rgba(0,0,0,0.12); }
+.tl-root .tl-item-b { box-shadow: inset 0 2px 0 #ffd60a, 0 8px 25px rgba(0,0,0,0.12); }
+.tl-root .tl-item-c { box-shadow: inset 0 2px 0 #30d158, 0 8px 25px rgba(0,0,0,0.12); }
+.tl-root .tl-item:hover { transform: translateY(-1px); background: rgba(255,255,255,0.07) !important; }
+.tl-root .tl-item.completed { opacity: 0.56; }
+.tl-root .tl-check {
+  width: 48px; height: 48px; min-width: 48px; min-height: 48px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  border-top: 2px solid #636366 !important;
+  border-right: 2px solid #636366 !important;
+  border-bottom: 2px solid #636366 !important;
+  border-left: 2px solid #636366 !important;
+  background: transparent;
+  color: transparent;
+}
+.tl-root .tl-check svg { width: 22px; height: 22px; opacity: 0; }
+.tl-root .tl-check:hover { border-color: var(--tl-blue) !important; background: rgba(10,132,255,0.12); }
+.tl-root .tl-check.checked { background: var(--tl-green); border-color: var(--tl-green) !important; color: #fff; }
+.tl-root .tl-check.checked svg { opacity: 1; }
+.tl-root .tl-item-info { align-items: center; width: 100%; gap: 7px; text-align: center; }
+.tl-root .tl-item-header { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.tl-root .tl-item-name { color: var(--tl-text); font-size: 1.02rem; font-weight: 650; line-height: 1.35; word-break: break-word; }
+.tl-root .tl-item-due { justify-content: center; color: var(--tl-text-tertiary); font-family: inherit; font-size: 0.74rem; }
+.tl-root .tl-item-memo { width: min(100%, 560px); padding: 9px 12px; border: 0; border-radius: 12px; background: rgba(255,255,255,0.055); color: var(--tl-text-secondary); text-align: center; white-space: pre-wrap; }
+.tl-root .tl-badge { padding: 5px 10px; border: 0; border-radius: 999px; background: rgba(255,255,255,0.08); color: var(--tl-text-secondary); font-size: 0.68rem; }
+.tl-root .tl-badge-s { background: rgba(191,90,242,0.15); color: #d9a7ff; }
+.tl-root .tl-badge-a { background: rgba(255,159,10,0.15); color: #ffb340; }
+.tl-root .tl-badge-b { background: rgba(255,214,10,0.14); color: #ffe16b; }
+.tl-root .tl-badge-c { background: rgba(48,209,88,0.14); color: #76e596; }
+.tl-root .tl-item-actions { display: flex; flex-direction: row; justify-content: center; gap: 4px; width: 100%; opacity: 1; }
+.tl-root .tl-item-actions .tl-btn { color: var(--tl-text-tertiary); }
+.tl-root .tl-item-actions .tl-btn:hover { color: var(--tl-text); background: rgba(255,255,255,0.08); }
+.tl-root .tl-delete-action:hover { color: var(--tl-red) !important; }
+
+.tl-root .tl-empty { width: 100%; padding: 42px 20px; border-radius: var(--tl-radius-lg); background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.16); text-align: center; }
+.tl-root .tl-empty-icon { margin-bottom: 10px; color: var(--tl-text-tertiary); font-size: 2.4rem; }
+.tl-root .tl-empty-description { max-width: 30rem; margin: 8px auto 0; line-height: 1.55; }
+.tl-root .tl-empty-actions { margin-top: 20px; }
+
+ 
+.tl-root .tl-overlay { background: rgba(0,0,0,0.62); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
+.tl-root .tl-dialog { border-radius: 28px; background: rgba(28,28,30,0.82) !important; border-color: var(--tl-line) !important; box-shadow: 0 24px 80px rgba(0,0,0,0.55); }
+.tl-root .tl-dialog-header { align-items: center; padding: 24px 28px 0; text-align: center; }
+.tl-root .tl-dialog-title { font-size: 1.12rem; letter-spacing: -0.025em; }
+.tl-root .tl-dialog-description { color: var(--tl-text-secondary); line-height: 1.55; }
+.tl-root .tl-dialog-body { padding: 22px 28px; }
+.tl-root .tl-dialog-footer { justify-content: center; padding: 0 28px 24px; }
+.tl-root .tl-dialog-close { top: 14px; right: 14px; border-radius: 50%; color: var(--tl-text-tertiary); }
+.tl-root .tl-dialog-close:hover { background: rgba(255,255,255,0.1); color: var(--tl-text); }
+.tl-root .tl-dialog-close svg { width: 18px; height: 18px; }
+.tl-root .tl-btn {
+  min-height: 44px;
+  border-radius: 13px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 650;
+  transition: transform 80ms ease-out, background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+.tl-root .tl-btn:active { transform: scale(0.97); }
+.tl-root .tl-btn-outline { background: rgba(255,255,255,0.07) !important; color: var(--tl-text) !important; border-color: rgba(255,255,255,0.13) !important; }
+.tl-root .tl-btn-outline:hover { background: rgba(255,255,255,0.13) !important; }
+.tl-root .tl-btn-default { background: var(--tl-blue) !important; color: #fff !important; }
+.tl-root .tl-btn-danger { background: var(--tl-red) !important; color: #fff !important; }
+.tl-root .tl-dialog-footer .tl-btn { min-width: 116px; }
+.tl-root .tl-toast { background: rgba(44,44,46,0.88); border-color: var(--tl-line); -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px); }
+
+@media (max-width: 700px) {
+  .tl-root .tl-container { padding-inline: max(12px, env(safe-area-inset-left, 0px)) max(12px, env(safe-area-inset-right, 0px)); }
+  .tl-root .tl-nav { grid-template-columns: 44px minmax(0, 1fr) auto; gap: 5px; margin-bottom: 20px; padding-inline: 6px; }
+  .tl-root .tl-header-actions { gap: 0; }
+  .tl-root .tl-sync-indicator { padding-inline: 3px; }
+  .tl-root .tl-sync-indicator > span:last-child { display: none; }
+  .tl-root .tl-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .tl-root .tl-stat-card { min-height: 78px; }
+  .tl-root .tl-toolbar { grid-template-columns: 1fr; gap: 8px; }
+  .tl-root .tl-tabs-list { justify-content: center; }
+  .tl-root .tl-tabs-trigger { flex: 1; padding-inline: 8px; }
+  .tl-root .tl-toolbar-right { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .tl-root .tl-search-wrap { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+  .tl-root .tl-nav { top: max(6px, env(safe-area-inset-top, 0px)); }
+  .tl-root .tl-title { font-size: 1.06rem; }
+  .tl-root .tl-item { padding-inline: 14px; }
+  .tl-root .tl-dialog { max-width: 100%; border-radius: 28px 28px 0 0; }
+  .tl-root .tl-dialog-footer { flex-direction: column-reverse; gap: 8px; }
+  .tl-root .tl-dialog-footer .tl-btn { width: 100%; }
+  .tl-root .tl-overlay { align-items: flex-end; padding: 0; }
+  .tl-root .tl-toast-container { left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tl-root *, .tl-root *::before, .tl-root *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  .tl-root .tl-btn:active, .tl-root .tl-item:active { transform: none !important; }
 }
 </style>
 
@@ -1266,6 +2018,20 @@
 (function() {
   const { useState, useEffect, useRef, useMemo } = React;
   const html = htm.bind(React.createElement);
+
+  const Icon = ({ name }) => {
+    const common = { viewBox: '0 0 24 24', width: '20', height: '20', fill: 'none', stroke: 'currentColor', strokeWidth: '1.9', strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': 'true', focusable: 'false' };
+    if (name === 'back') return html`<svg ...${common}><path d="m15 18-6-6 6-6" /></svg>`;
+    if (name === 'sync') return html`<svg ...${common}><path d="M20 11a8 8 0 0 0-14.9-3M4 5v4h4" /><path d="M4 13a8 8 0 0 0 14.9 3M20 19v-4h-4" /></svg>`;
+    if (name === 'settings') return html`<svg ...${common}><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" /><path d="m19.4 15 .1.1a1.8 1.8 0 0 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3.1 1.3v.2a1.8 1.8 0 0 1-3.6 0v-.2a1.8 1.8 0 0 0-3.1-1.3l-.1.1a1.8 1.8 0 1 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-1.3-3.1h-.2a1.8 1.8 0 0 1 0-3.6h.2a1.8 1.8 0 0 0 1.3-3.1l-.1-.1A1.8 1.8 0 1 1 7 1.6l.1.1a1.8 1.8 0 0 0 3.1-1.3V.2a1.8 1.8 0 0 1 3.6 0v.2a1.8 1.8 0 0 0 3.1 1.3l.1-.1a1.8 1.8 0 1 1 2.5 2.5l-.1.1a1.8 1.8 0 0 0 1.3 3.1h.2a1.8 1.8 0 0 1 0 3.6h-.2a1.8 1.8 0 0 0-1.3 3.1Z" /></svg>`;
+    if (name === 'add') return html`<svg ...${common}><path d="M12 5v14M5 12h14" /></svg>`;
+    if (name === 'check') return html`<svg ...${common}><path d="m5 12 4 4L19 6" /></svg>`;
+    if (name === 'edit') return html`<svg ...${common}><path d="m13.5 6.5 4 4M4 20l3.8-.8L19 8a2.8 2.8 0 0 0-4-4L3.8 15.2 3 19l1 1Z" /></svg>`;
+    if (name === 'trash') return html`<svg ...${common}><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></svg>`;
+    if (name === 'search') return html`<svg ...${common}><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4" /></svg>`;
+    if (name === 'close') return html`<svg ...${common}><path d="m6 6 12 12M18 6 6 18" /></svg>`;
+    return null;
+  };
 
   
   
@@ -1344,6 +2110,7 @@
     const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem('tl_unlocked') === 'true');
     const [pinCode, setPinCode] = useState('');
     const [pinError, setPinError] = useState(false);
+    const [pinStatus, setPinStatus] = useState('idle'); 
 
     
     const [tasks, setTasks] = useState([]);
@@ -1351,6 +2118,7 @@
     
     
     const [syncStatus, setSyncStatus] = useState('local'); 
+    const [localSaveStatus, setLocalSaveStatus] = useState('ok'); 
     
     
     const [statusFilter, setStatusFilter] = useState('active'); 
@@ -1362,6 +2130,7 @@
     const [isConfigOpen, setIsConfigOpen] = useState(false);
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [editTask, setEditTask] = useState(null); 
+    const [pendingDeleteTask, setPendingDeleteTask] = useState(null);
     
     
     const [newObj, setNewObj] = useState('');
@@ -1377,6 +2146,10 @@
 
     
     const searchInputRef = useRef(null);
+    const pinInputRef = useRef(null);
+    const pinVerifyTimerRef = useRef(null);
+    const deleteCancelRef = useRef(null);
+    const deleteOriginRef = useRef(null);
 
     
     const addToast = (msg, type = 'info') => {
@@ -1463,32 +2236,48 @@
     
     const verifyPin = (code) => {
       if (code === PASS_CODE) {
+        setPinStatus('success');
+        setPinError(false);
         setUnlocked(true);
         sessionStorage.setItem('tl_unlocked', 'true');
-        addToast('ACCESS GRANTED', 'success');
+        addToast('ロックを解除しました', 'success');
       } else {
         setPinError(true);
-        addToast('ACCESS DENIED', 'error');
+        setPinStatus('error');
+        addToast('PINが正しくありません', 'error');
         setTimeout(() => {
           setPinCode('');
           setPinError(false);
+          setPinStatus('idle');
+          pinInputRef.current?.focus();
         }, 800);
       }
+    };
+
+    const schedulePinVerification = (code) => {
+      if (pinVerifyTimerRef.current) clearTimeout(pinVerifyTimerRef.current);
+      pinVerifyTimerRef.current = setTimeout(() => {
+        pinVerifyTimerRef.current = null;
+        verifyPin(code);
+      }, 150);
     };
 
     
     const handlePinPress = (val) => {
       if (pinError) return;
       if (val === 'clear') {
+        if (pinVerifyTimerRef.current) clearTimeout(pinVerifyTimerRef.current);
         setPinCode('');
+        setPinStatus('idle');
       } else if (val === 'back') {
+        if (pinVerifyTimerRef.current) clearTimeout(pinVerifyTimerRef.current);
         setPinCode(prev => prev.slice(0, -1));
       } else {
         if (pinCode.length < 4) {
           const newCode = pinCode + val;
           setPinCode(newCode);
           if (newCode.length === 4) {
-            setTimeout(() => verifyPin(newCode), 150);
+            schedulePinVerification(newCode);
           }
         }
       }
@@ -1496,26 +2285,43 @@
 
     
     useEffect(() => {
-      if (unlocked) return;
-      const handlePhysKey = (e) => {
-        if (e.key >= '0' && e.key <= '9') {
-          handlePinPress(e.key);
-        } else if (e.key === 'Backspace') {
-          handlePinPress('back');
-        } else if (e.key === 'Escape') {
-          handlePinPress('clear');
-        }
-      };
-      window.addEventListener('keydown', handlePhysKey);
-      return () => window.removeEventListener('keydown', handlePhysKey);
-    }, [pinCode, unlocked, pinError]);
+      if (unlocked) return undefined;
+      const frame = window.requestAnimationFrame(() => pinInputRef.current?.focus());
+      return () => window.cancelAnimationFrame(frame);
+    }, [unlocked]);
+
+    useEffect(() => () => {
+      if (pinVerifyTimerRef.current) clearTimeout(pinVerifyTimerRef.current);
+    }, []);
+
+    const handlePinInput = (event) => {
+      if (pinError) return;
+      const rawValue = event.currentTarget?.value || '';
+      const nextCode = rawValue.replace(/\D/g, '').slice(0, 4);
+      setPinCode(nextCode);
+      if (nextCode.length === 4) {
+        schedulePinVerification(nextCode);
+      } else {
+        setPinStatus('idle');
+      }
+    };
+
+    const handlePinKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        handlePinPress('clear');
+      }
+    };
 
     
     const saveLocal = (updatedTasks) => {
       setTasks(updatedTasks);
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedTasks));
-      } catch(e) {}
+        setLocalSaveStatus('ok');
+      } catch(e) {
+        setLocalSaveStatus('error');
+      }
     };
 
     
@@ -1539,7 +2345,7 @@
             await window.PWAConfigSync.syncAppBinId('tasklist', currentBlobId);
           }
           setSyncStatus('ok');
-          if (!silent) addToast('CLOUD STORAGE SYNCED', 'success');
+          if (!silent) addToast('クラウドに保存しました', 'success');
         } else {
           
           const r = await fetch(binUrl(currentBlobId), { headers: { 'X-Master-Key': getJbKey() }, cache: 'no-store' });
@@ -1547,7 +2353,7 @@
             if ([400, 401, 403, 404, 422].includes(r.status)) {
               setBlobId(null);
               localStorage.removeItem(BLOB_KEY);
-              if (!silent) addToast('INVALID BLOB ID: RE-SYNCING...', 'error');
+              if (!silent) addToast('同期IDが無効です。再接続します', 'error');
               return syncCloud(silent);
             }
             throw new Error(`get: ${r.status}`);
@@ -1568,11 +2374,11 @@
           });
           if (!p.ok) throw new Error(`put: ${p.status}`);
           setSyncStatus('ok');
-          if (!silent) addToast('SYNC COMPLETE', 'success');
+          if (!silent) addToast('同期しました', 'success');
         }
       } catch(e) {
         setSyncStatus('err');
-        if (!silent) addToast('SYNC FAILURE', 'error');
+        if (!silent) addToast('同期できませんでした。端末の保存は継続しています', 'error');
         console.error(e);
       }
     };
@@ -1611,28 +2417,97 @@
       return Object.values(byId);
     };
 
+    const clearListFilters = () => {
+      setStatusFilter('all');
+      setPriorityFilter('all');
+      setSearchQuery('');
+    };
+
+    const loadInitialTasks = () => {
+      if (!Array.isArray(INITIAL_YAML) || INITIAL_YAML.length === 0) {
+        addToast('初期データがありません', 'error');
+        return;
+      }
+      const initialTasks = INITIAL_YAML.map((t, i) => ({
+        id: Date.now() + i,
+        task: String(t.task || ''),
+        priority: t.priority || 'B',
+        due: String(t.due || ''),
+        done: !!t.done,
+        note: String(t.note || ''),
+        createdAt: Date.now() - (INITIAL_YAML.length - i) * 1000
+      }));
+      const merged = mergeTasks(tasks, initialTasks);
+      saveLocal(merged);
+      pushToCloud(merged);
+      clearListFilters();
+      addToast('初期データを読み込みました', 'success');
+    };
+
     
     const toggleTask = (id) => {
       const updated = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
       saveLocal(updated);
       pushToCloud(updated);
-      addToast(updated.find(t => t.id === id).done ? 'TASK COMPLETED' : 'TASK REVERTED');
+      addToast(updated.find(t => t.id === id).done ? 'タスクを完了にしました' : '未完了に戻しました');
     };
 
     
     const deleteTask = (id) => {
-      if (!confirm('CONFIRM DELETION?')) return;
       const updated = tasks.filter(t => t.id !== id);
       saveLocal(updated);
       pushToCloud(updated);
-      addToast('TASK DELETED', 'info');
+      addToast('タスクを削除しました', 'info');
     };
+
+    const restoreDeleteFocus = () => {
+      window.requestAnimationFrame(() => {
+        if (deleteOriginRef.current?.isConnected) {
+          deleteOriginRef.current.focus();
+        } else {
+          document.querySelector('.tl-tabs-trigger')?.focus();
+        }
+      });
+    };
+
+    const requestDeleteTask = (task) => {
+      deleteOriginRef.current = document.activeElement;
+      setPendingDeleteTask({ id: task.id, task: task.task });
+    };
+
+    const cancelDeleteTask = () => {
+      setPendingDeleteTask(null);
+      restoreDeleteFocus();
+    };
+
+    const confirmDeleteTask = () => {
+      if (!pendingDeleteTask) return;
+      deleteTask(pendingDeleteTask.id);
+      setPendingDeleteTask(null);
+      restoreDeleteFocus();
+    };
+
+    useEffect(() => {
+      if (!pendingDeleteTask) return undefined;
+      const frame = window.requestAnimationFrame(() => deleteCancelRef.current?.focus());
+      const handleDeleteKeyDown = (event) => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          cancelDeleteTask();
+        }
+      };
+      document.addEventListener('keydown', handleDeleteKeyDown);
+      return () => {
+        window.cancelAnimationFrame(frame);
+        document.removeEventListener('keydown', handleDeleteKeyDown);
+      };
+    }, [pendingDeleteTask]);
 
     
     const handleCreateTask = (e) => {
       if (e) e.preventDefault();
       if (!newObj.trim()) {
-        addToast('OBJECTIVE IS REQUIRED', 'error');
+        addToast('タスク名を入力してください', 'error');
         return;
       }
       const newTask = {
@@ -1655,21 +2530,21 @@
       setNewNote('');
       setIsAddOpen(false);
       
-      addToast('TASK DEPLOYED', 'success');
+      addToast('タスクを追加しました', 'success');
     };
 
     
     const handleSaveEdit = (e) => {
       if (e) e.preventDefault();
       if (!editTask.task.trim()) {
-        addToast('OBJECTIVE IS REQUIRED', 'error');
+        addToast('タスク名を入力してください', 'error');
         return;
       }
       const updated = tasks.map(t => t.id === editTask.id ? editTask : t);
       saveLocal(updated);
       pushToCloud(updated);
       setEditTask(null);
-      addToast('TASK UPDATED', 'success');
+      addToast('タスクを更新しました', 'success');
     };
 
     
@@ -1687,7 +2562,7 @@
           await window.PWAConfigSync.syncAppBinId('tasklist', nextBlobId);
         }
         setIsConfigOpen(false);
-        addToast('SYSTEM CONFIG UPDATED', 'success');
+        addToast('設定を保存しました', 'success');
         
         
         setTimeout(() => {
@@ -1704,7 +2579,7 @@
         saveLocal([]);
         pushToCloud([]);
         setIsConfigOpen(false);
-        addToast('SYSTEM WIPED CLEAN', 'error');
+        addToast('すべてのタスクを削除しました', 'error');
       }
     };
 
@@ -1715,7 +2590,7 @@
       a.href = URL.createObjectURL(blob);
       a.download = `tasks_backup_${new Date().toISOString().slice(0, 10)}.json`;
       a.click();
-      addToast('EXPORT COMPLETED', 'success');
+      addToast('バックアップを書き出しました', 'success');
     };
 
     
@@ -1730,7 +2605,7 @@
           const imported = Array.isArray(data.tasks) ? data.tasks : Array.isArray(data) ? data : [];
           
           if (imported.length === 0) {
-            addToast('NO VALID TASKS FOUND IN FILE', 'error');
+            addToast('読み込めるタスクがありません', 'error');
             return;
           }
           
@@ -1747,9 +2622,9 @@
           const merged = mergeTasks(tasks, sanitized);
           saveLocal(merged);
           pushToCloud(merged);
-          addToast(`IMPORTED ${sanitized.length} TASKS`, 'success');
+          addToast(`${sanitized.length}件のタスクを読み込みました`, 'success');
         } catch(err) {
-          addToast('IMPORT FAILED: INVALID FILE FORMAT', 'error');
+          addToast('ファイル形式を確認してください', 'error');
         }
       };
       reader.readAsText(file);
@@ -1841,22 +2716,53 @@
       return items;
     };
 
+    const hasTaskFilters = statusFilter !== 'all' || priorityFilter !== 'all';
+    const localStatusText = localSaveStatus === 'error'
+      ? 'Local save failed'
+      : 'Saved locally';
+
     if (!unlocked) {
       
+      const pinStatusText = pinStatus === 'error'
+        ? 'PINが正しくありません。もう一度入力してください。'
+        : pinStatus === 'success'
+          ? 'PINを確認しました。タスク管理を開きます。'
+          : `4桁のPINを入力してください。${pinCode.length}/4桁入力済み。`;
+
       return html`
-        <div class="tl-lock-wrap">
+        <div class="tl-lock-wrap" role="dialog" aria-modal="true" aria-labelledby="tl-lock-title" aria-describedby="tl-lock-description">
           <div class="tl-lock-box">
-            <div class="tl-lock-title">Mission Control Gate</div>
-            <div class="tl-lock-dots">
+            <div id="tl-lock-title" class="tl-lock-title">タスク管理</div>
+            <p id="tl-lock-description" class="tl-lock-description">タスク管理を開くには、4桁のPINを入力してください。</p>
+            <label class="tl-lock-input-label" for="tl-pin-input">4桁のPIN</label>
+            <input
+              ref=${pinInputRef}
+              id="tl-pin-input"
+              class="tl-lock-input"
+              type="password"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              maxlength="4"
+              autocomplete="off"
+              aria-label="4桁のPIN"
+              aria-describedby="tl-pin-status"
+              aria-invalid=${pinError ? 'true' : 'false'}
+              value=${pinCode}
+              placeholder="••••"
+              onInput=${handlePinInput}
+              onKeyDown=${handlePinKeyDown}
+            />
+            <div class="tl-lock-status ${pinStatus}" id="tl-pin-status" data-tl-pin-status role="status" aria-live="polite">${pinStatusText}</div>
+            <div class="tl-lock-dots" role="group" aria-label=${`PIN入力状況 ${pinCode.length}/4桁`}>
               ${renderLockDots()}
             </div>
             <div class="tl-lock-grid">
               ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => html`
-                <button key=${num} class="tl-lock-key" onClick=${() => handlePinPress(String(num))}>${num}</button>
+                <button type="button" key=${num} class="tl-lock-key" aria-label=${`${num}を入力`} onClick=${() => handlePinPress(String(num))}>${num}</button>
               `)}
-              <button class="tl-lock-key fn" onClick=${() => handlePinPress('clear')}>CLR</button>
-              <button class="tl-lock-key" onClick=${() => handlePinPress('0')}>0</button>
-              <button class="tl-lock-key fn" onClick=${() => handlePinPress('back')}>DEL</button>
+              <button type="button" class="tl-lock-key fn" data-pin-action="clear" aria-label="PINをすべて消去" onClick=${() => handlePinPress('clear')}>消去</button>
+              <button type="button" class="tl-lock-key" aria-label="0を入力" onClick=${() => handlePinPress('0')}>0</button>
+              <button type="button" class="tl-lock-key fn" data-pin-action="back" aria-label="最後の数字を削除" onClick=${() => handlePinPress('back')}>⌫</button>
             </div>
           </div>
           \x3C!-- Toast notification layer inside lock screen -->
@@ -1875,78 +2781,92 @@
     return html`
       <div class="tl-container">
         \x3C!-- Header -->
-        <header class="tl-header">
+        <header class="tl-header tl-nav tl-glass" data-tl-nav>
+          <div class="tl-nav-leading">
+            <button type="button" class="tl-btn tl-btn-ghost tl-btn-icon tl-nav-icon" data-tl-action="back" aria-label="前の画面に戻る" title="Back" onClick=${() => window.history.back()}>${Icon({ name: 'back' })}</button>
+          </div>
           <div class="tl-logo">
-            <h1 class="tl-title">_MISSION_CONTROL</h1>
-            <span class="tl-logo-sub">SYS: ACTIVE TASK LOGGER</span>
+            <h1 class="tl-title" data-tl-nav-title>Tasks</h1>
           </div>
           <div class="tl-header-actions">
-            <button class="tl-btn tl-btn-outline tl-btn-sm" onClick=${() => window.history.back()}>◀ EXIT</button>
-            <span class="tl-sync-indicator tl-sync-${syncStatus === 'busy' ? 'busy' : syncStatus === 'err' ? 'err' : blobId ? 'ok' : 'local'}">
-              ${syncStatus === 'busy' ? '◌ SYNCING' : syncStatus === 'err' ? '✕ SYNC ERR' : blobId ? '◉ CLOUD' : '○ LOCAL'}
+            <span class="tl-sync-indicator tl-sync-${syncStatus === 'busy' ? 'busy' : syncStatus === 'err' ? 'err' : blobId ? 'ok' : 'local'}" data-tl-sync-state role="status" aria-live="polite">
+              <span class="tl-sync-dot" aria-hidden="true"></span>
+              <span>${syncStatus === 'busy' ? 'Syncing' : syncStatus === 'err' ? 'Sync error' : blobId ? 'Cloud' : 'Local'}</span>
             </span>
-            <button class="tl-btn tl-btn-outline tl-btn-sm" onClick=${() => syncCloud(false)} title="Force Synchronize">⟳ SYNC</button>
-            <button class="tl-btn tl-btn-outline tl-btn-sm" onClick=${() => { setConfigBlobInput(blobId || ''); setIsConfigOpen(true); }} title="System Config">⚙ CONFIG</button>
-            <button class="tl-btn tl-btn-default tl-btn-sm" onClick=${() => setIsAddOpen(true)}>+ DEPLOY</button>
+            <button type="button" class="tl-btn tl-btn-ghost tl-btn-icon tl-nav-icon" data-tl-action="sync" aria-label="今すぐ同期" title="Sync" onClick=${() => syncCloud(false)}>${Icon({ name: 'sync' })}</button>
+            <button type="button" class="tl-btn tl-btn-ghost tl-btn-icon tl-nav-icon" data-tl-action="settings" aria-label="設定を開く" title="Settings" onClick=${() => { setConfigBlobInput(blobId || ''); setIsConfigOpen(true); }}>${Icon({ name: 'settings' })}</button>
+            <button type="button" class="tl-btn tl-btn-default tl-btn-icon tl-add-button" data-tl-action="add" aria-label="タスクを追加" title="Add task" onClick=${() => setIsAddOpen(true)}>${Icon({ name: 'add' })}</button>
+          </div>
+          <div class="tl-storage-status" role="status" aria-live="polite">
+            <span class="tl-storage-local"><span class="tl-status-dot" aria-hidden="true"></span><strong>${localStatusText}</strong></span>
+            ${localSaveStatus === 'error' && html`<span class="tl-storage-cloud-error">Device storage is unavailable.</span>`}
+            ${syncStatus === 'err'
+              ? html`<span class="tl-storage-cloud-error">Cloud sync is unavailable. Local tasks are safe.</span>`
+              : syncStatus === 'busy'
+                ? html`<span>Syncing cloud. Local edits stay available.</span>`
+                : blobId
+                  ? html`<span class="tl-storage-cloud-ok">Cloud connected.</span>`
+                  : html`<span>Local only. You can keep editing.</span>`}
           </div>
         </header>
 
         \x3C!-- Stats Dashboard -->
         <div class="tl-stats-grid">
           <div class="tl-stat-card">
-            <span class="tl-stat-label">Pending</span>
+            <span class="tl-stat-label">Open</span>
             <span class="tl-stat-value tl-text-foreground">${stats.pending}</span>
           </div>
           <div class="tl-stat-card">
-            <span class="tl-stat-label">Rank S/A</span>
-            <span class="tl-stat-value tl-text-primary">${stats.priority}</span>
+            <span class="tl-stat-label">Priority</span>
+            <span class="tl-stat-value tl-text-primary">${stats.priorityS}</span>
           </div>
           <div class="tl-stat-card">
-            <span class="tl-stat-label">Soon / Overdue</span>
+            <span class="tl-stat-label">Due soon</span>
             <span class="tl-stat-value tl-text-warning">${stats.soon}</span>
           </div>
           <div class="tl-stat-card">
-            <span class="tl-stat-label">Completed</span>
+            <span class="tl-stat-label">Done</span>
             <span class="tl-stat-value tl-text-success">${stats.completed}</span>
           </div>
         </div>
 
         \x3C!-- Toolbar controls -->
         <div class="tl-toolbar">
-          <div class="tl-tabs-list">
-            <button class="tl-tabs-trigger ${statusFilter === 'active' ? 'active' : ''}" onClick=${() => setStatusFilter('active')}>Active</button>
-            <button class="tl-tabs-trigger ${statusFilter === 'completed' ? 'active' : ''}" onClick=${() => setStatusFilter('completed')}>Completed</button>
-            <button class="tl-tabs-trigger ${statusFilter === 'all' ? 'active' : ''}" onClick=${() => setStatusFilter('all')}>All Objects</button>
+          <div class="tl-tabs-list tl-glass" role="tablist" aria-label="Task status">
+            <button type="button" class="tl-tabs-trigger ${statusFilter === 'active' ? 'active' : ''}" role="tab" aria-selected=${statusFilter === 'active' ? 'true' : 'false'} onClick=${() => setStatusFilter('active')}>Open</button>
+            <button type="button" class="tl-tabs-trigger ${statusFilter === 'completed' ? 'active' : ''}" role="tab" aria-selected=${statusFilter === 'completed' ? 'true' : 'false'} onClick=${() => setStatusFilter('completed')}>Done</button>
+            <button type="button" class="tl-tabs-trigger ${statusFilter === 'all' ? 'active' : ''}" role="tab" aria-selected=${statusFilter === 'all' ? 'true' : 'false'} onClick=${() => setStatusFilter('all')}>All</button>
           </div>
 
-          <div class="tl-toolbar-right">
+          <div class="tl-toolbar-right tl-glass">
             \x3C!-- Search -->
             <div class="tl-search-wrap">
-              <span class="tl-search-icon">🔍</span>
+              <span class="tl-search-icon" aria-hidden="true">${Icon({ name: 'search' })}</span>
               <input 
                 ref=${searchInputRef}
                 type="text" 
                 class="tl-input tl-search-input" 
-                placeholder="Search Objectives (/) ..." 
+                aria-label="タスクを検索"
+                placeholder="Search tasks · /"
                 value=${searchQuery} 
                 onChange=${e => setSearchQuery(e.target.value)}
               />
             </div>
 
             \x3C!-- Priority filter -->
-            <select class="tl-select tl-w-100" value=${priorityFilter} onChange=${e => setPriorityFilter(e.target.value)}>
-              <option value="all">All Ranks</option>
-              <option value="S">Rank S</option>
-              <option value="A">Rank A</option>
-              <option value="B">Rank B</option>
-              <option value="C">Rank C</option>
+            <select class="tl-select tl-w-100" aria-label="Priority filter" value=${priorityFilter} onChange=${e => setPriorityFilter(e.target.value)}>
+              <option value="all">All</option>
+              <option value="S">S</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
             </select>
 
             \x3C!-- Sorting -->
-            <select class="tl-select tl-w-110" value=${sortKey} onChange=${e => setSortKey(e.target.value)}>
-              <option value="priority">Priority Rank</option>
-              <option value="due">Due Date</option>
-              <option value="created">Created Date</option>
+            <select class="tl-select tl-w-110" aria-label="Sort tasks" value=${sortKey} onChange=${e => setSortKey(e.target.value)}>
+              <option value="priority">Priority</option>
+              <option value="due">Due</option>
+              <option value="created">Created</option>
             </select>
           </div>
         </div>
@@ -1955,28 +2875,51 @@
         <div class="tl-list-container tl-mt-4">
           ${processedTasks.length === 0 ? html`
             <div class="tl-empty">
-              <div class="tl-empty-icon">📂</div>
-              <div class="tl-text-sm">NO DATA DETECTED IN MONITOR</div>
-              <div class="tl-text-xs tl-text-muted tl-mt-1">Adjust search filters or click + DEPLOY to create an objective.</div>
+              <div class="tl-empty-icon" aria-hidden="true">○</div>
+              <div class="tl-text-sm">No tasks found</div>
+              <div class="tl-text-xs tl-text-muted tl-empty-description">
+                ${tasks.length === 0
+                  ? 'Start with a new task or load your starter list.'
+                  : 'Try clearing a filter or search term.'}
+              </div>
+              <div class="tl-empty-actions">
+                <button type="button" class="tl-btn tl-btn-default" aria-label="タスクを追加" onClick=${() => setIsAddOpen(true)}>${Icon({ name: 'add' })}<span>Add task</span></button>
+                ${tasks.length > 0 && hasTaskFilters && html`
+                  <button type="button" class="tl-btn tl-btn-outline" onClick=${clearListFilters}>Clear filters</button>
+                `}
+                ${searchQuery && html`
+                  <button type="button" class="tl-btn tl-btn-outline" onClick=${() => setSearchQuery('')}>Clear search</button>
+                `}
+                ${tasks.length === 0 && Array.isArray(INITIAL_YAML) && INITIAL_YAML.length > 0 && html`
+                  <button type="button" class="tl-btn tl-btn-outline" onClick=${loadInitialTasks}>Load starter tasks</button>
+                `}
+              </div>
             </div>
           ` : processedTasks.map(t => {
             const dueStatus = getDueStatus(t.due);
             return html`
-              <div key=${t.id} class="tl-item tl-item-${(t.priority || 'B').toLowerCase()} ${t.done ? 'completed' : ''} tl-mb-2">
+              <div key=${t.id} class="tl-item tl-card-content tl-item-${(t.priority || 'B').toLowerCase()} ${t.done ? 'completed' : ''} tl-mb-2">
                 \x3C!-- Checked toggle -->
-                <div class="tl-check ${t.done ? 'checked' : ''}" onClick=${() => toggleTask(t.id)}>
-                  ✓
-                </div>
+                <button
+                  type="button"
+                  class="tl-check ${t.done ? 'checked' : ''}"
+                  role="checkbox"
+                  aria-checked=${t.done ? 'true' : 'false'}
+                  aria-label=${`タスク「${t.task}」を${t.done ? '未完了に戻す' : '完了にする'}`}
+                  onClick=${() => toggleTask(t.id)}
+                >
+                  ${Icon({ name: 'check' })}
+                </button>
                 
                 <div class="tl-item-info">
                   <div class="tl-item-header">
                     <span class="tl-item-name">${t.task}</span>
-                    <span class="tl-badge tl-badge-${(t.priority || 'B').toLowerCase()}">RANK ${t.priority || 'B'}</span>
+                    <span class="tl-badge tl-badge-${(t.priority || 'B').toLowerCase()}">Priority ${t.priority || 'B'}</span>
                   </div>
 
                   ${t.due && html`
                     <div class="tl-item-due ${dueStatus.className}">
-                      📅 ${dueStatus.label}
+                      ${dueStatus.label}
                     </div>
                   `}
 
@@ -1986,8 +2929,8 @@
                 </div>
 
                 <div class="tl-item-actions">
-                  <button class="tl-btn tl-btn-ghost tl-btn-icon sm" onClick=${() => setEditTask({ ...t })} title="Edit Task">✏️</button>
-                  <button class="tl-btn tl-btn-ghost tl-btn-icon sm" style=${ { color: 'hsl(346.8, 77.2%, 49.8%)' } } onClick=${() => deleteTask(t.id)} title="Delete Task">✕</button>
+                  <button type="button" class="tl-btn tl-btn-ghost tl-btn-icon sm" aria-label=${`タスク「${t.task}」を編集`} onClick=${() => setEditTask({ ...t })} title="Edit task">${Icon({ name: 'edit' })}</button>
+                  <button type="button" class="tl-btn tl-btn-ghost tl-btn-icon sm tl-delete-action" aria-label=${`タスク「${t.task}」を削除`} onClick=${() => requestDeleteTask(t)} title="Delete Task">${Icon({ name: 'trash' })}</button>
                 </div>
               </div>
             `;
@@ -1997,20 +2940,20 @@
         \x3C!-- ADD TASK DIALOG (DEPLOY OVERLAY) -->
         <div class="tl-overlay ${isAddOpen ? 'open' : ''}">
           <div class="tl-dialog">
-            <button class="tl-dialog-close" onClick=${() => setIsAddOpen(false)}>✕</button>
+            <button type="button" class="tl-dialog-close" aria-label="タスク追加ダイアログを閉じる" onClick=${() => setIsAddOpen(false)}>${Icon({ name: 'close' })}</button>
             <div class="tl-dialog-header">
-              <h2 class="tl-dialog-title">Deploy New Objective</h2>
-              <p class="tl-dialog-description">Deploy a new task object to the system log.</p>
+              <h2 class="tl-dialog-title">Add task</h2>
+              <p class="tl-dialog-description">Capture something you want to do later.</p>
             </div>
             
             <form onSubmit=${handleCreateTask}>
               <div class="tl-dialog-body">
                 <div class="cn-field tl-mb-4">
-                  <label class="tl-label">Objective Description</label>
+                  <label class="tl-label">Title</label>
                   <input 
                     type="text" 
                     className="tl-input" 
-                    placeholder="Enter objective task..." 
+                    placeholder="e.g. Submit the report"
                     required 
                     value=${newObj} 
                     onChange=${e => setNewObj(e.target.value)}
@@ -2019,7 +2962,7 @@
 
                 <div class="tl-field-row tl-mb-4">
                   <div>
-                    <label class="tl-label">Deadline / Due Info</label>
+                    <label class="tl-label">Due (optional)</label>
                     <input 
                       type="text" 
                       className="tl-input" 
@@ -2029,21 +2972,21 @@
                     />
                   </div>
                   <div>
-                    <label class="tl-label">Priority Rank</label>
+                    <label class="tl-label">Priority</label>
                     <select className="tl-select" value=${newPri} onChange=${e => setNewPri(e.target.value)}>
-                      <option value="S">S (Critical)</option>
-                      <option value="A">A (High)</option>
-                      <option value="B">B (Medium)</option>
-                      <option value="C">C (Low)</option>
+                      <option value="S">S · Highest</option>
+                      <option value="A">A · High</option>
+                      <option value="B">B · Normal</option>
+                      <option value="C">C · Low</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="cn-field">
-                  <label class="tl-label">Notes & Guidelines</label>
+                  <label class="tl-label">Note (optional)</label>
                   <textarea 
                     className="tl-textarea" 
-                    placeholder="Add descriptive guides or subtasks..." 
+                    placeholder="Add context or steps"
                     value=${newNote} 
                     onChange=${e => setNewNote(e.target.value)}
                   />
@@ -2052,7 +2995,7 @@
               
               <div class="tl-dialog-footer">
                 <button type="button" class="tl-btn tl-btn-outline" onClick=${() => setIsAddOpen(false)}>Cancel</button>
-                <button type="submit" class="tl-btn tl-btn-default">Deploy</button>
+                <button type="submit" class="tl-btn tl-btn-default">Add task</button>
               </div>
             </form>
           </div>
@@ -2062,16 +3005,16 @@
         <div class="tl-overlay ${editTask ? 'open' : ''}">
           ${editTask && html`
             <div class="tl-dialog">
-              <button class="tl-dialog-close" onClick=${() => setEditTask(null)}>✕</button>
+              <button type="button" class="tl-dialog-close" aria-label="タスク編集ダイアログを閉じる" onClick=${() => setEditTask(null)}>${Icon({ name: 'close' })}</button>
               <div class="tl-dialog-header">
-                <h2 class="tl-dialog-title">Modify Objective</h2>
-                <p class="tl-dialog-description">Modify task metadata parameters.</p>
+                <h2 class="tl-dialog-title">Edit task</h2>
+                <p class="tl-dialog-description">Update the task details.</p>
               </div>
               
               <form onSubmit=${handleSaveEdit}>
                 <div class="tl-dialog-body">
                   <div class="cn-field tl-mb-4">
-                    <label class="tl-label">Objective Description</label>
+                    <label class="tl-label">Title</label>
                     <input 
                       type="text" 
                       className="tl-input" 
@@ -2083,7 +3026,7 @@
 
                   <div class="tl-field-row tl-mb-4">
                     <div>
-                      <label class="tl-label">Deadline / Due Info</label>
+                    <label class="tl-label">Due (optional)</label>
                       <input 
                         type="text" 
                         className="tl-input" 
@@ -2092,18 +3035,18 @@
                       />
                     </div>
                     <div>
-                      <label class="tl-label">Priority Rank</label>
+                    <label class="tl-label">Priority</label>
                       <select className="tl-select" value=${editTask.priority} onChange=${e => setEditTask({ ...editTask, priority: e.target.value })}>
-                        <option value="S">S (Critical)</option>
-                        <option value="A">A (High)</option>
-                        <option value="B">B (Medium)</option>
-                        <option value="C">C (Low)</option>
+                        <option value="S">S · Highest</option>
+                        <option value="A">A · High</option>
+                        <option value="B">B · Normal</option>
+                        <option value="C">C · Low</option>
                       </select>
                     </div>
                   </div>
 
                   <div class="cn-field">
-                    <label class="tl-label">Notes & Guidelines</label>
+                    <label class="tl-label">Note (optional)</label>
                     <textarea 
                       className="tl-textarea" 
                       value=${editTask.note} 
@@ -2114,7 +3057,7 @@
                 
                 <div class="tl-dialog-footer">
                   <button type="button" class="tl-btn tl-btn-outline" onClick=${() => setEditTask(null)}>Cancel</button>
-                  <button type="submit" class="tl-btn tl-btn-default">Save Changes</button>
+                  <button type="submit" class="tl-btn tl-btn-default">Save</button>
                 </div>
               </form>
             </div>
@@ -2124,30 +3067,30 @@
         \x3C!-- CONFIG / SETTINGS DIALOG -->
         <div class="tl-overlay ${isConfigOpen ? 'open' : ''}">
           <div class="tl-dialog">
-            <button class="tl-dialog-close" onClick=${() => setIsConfigOpen(false)}>✕</button>
+            <button type="button" class="tl-dialog-close" aria-label="設定ダイアログを閉じる" onClick=${() => setIsConfigOpen(false)}>${Icon({ name: 'close' })}</button>
             <div class="tl-dialog-header">
-              <h2 class="tl-dialog-title">System Configuration</h2>
-              <p class="tl-dialog-description">Cloud sync, imports, exports, and settings.</p>
+              <h2 class="tl-dialog-title">Settings</h2>
+              <p class="tl-dialog-description">Sync and backups.</p>
             </div>
 
             <div class="tl-dialog-body">
               \x3C!-- Sync Segment -->
-              <h3 class="tl-font-semibold tl-text-sm tl-mb-1">Cloud Sync Synchronization</h3>
+              <h3 class="tl-font-semibold tl-text-sm tl-mb-1">Cloud sync</h3>
               <p class="tl-text-xs tl-text-muted tl-mb-3">
-                Share tasks with multiple devices. Your Blob ID is automatically created on first sync. Apply it on another device to restore.
+                Share tasks across devices. Local tasks remain available if cloud sync is offline.
               </p>
               
-              <div class="tl-label tl-fs-sm">Active Sync Blob ID</div>
+              <div class="tl-label tl-fs-sm">Current sync ID</div>
               <div class="tl-mono tl-text-xs tl-config-blob">
-                ${blobId || 'Local Storage Only (No Active Blob)'}
+                ${blobId || 'Local only · cloud not connected'}
               </div>
 
               <div class="cn-field tl-mb-6">
-                <label class="tl-label">Apply Existing Blob ID</label>
+                <label class="tl-label">Paste an existing sync ID</label>
                 <input 
                   type="text" 
                   className="tl-input" 
-                  placeholder="Paste external Blob ID here..." 
+                  placeholder="Paste sync ID"
                   value=${configBlobInput}
                   onChange=${e => setConfigBlobInput(e.target.value)}
                 />
@@ -2156,11 +3099,11 @@
               <div class="tl-separator"></div>
 
               \x3C!-- Data Management -->
-              <h3 class="tl-font-semibold tl-text-sm tl-mb-3">Backup & Recovery</h3>
+              <h3 class="tl-font-semibold tl-text-sm tl-mb-3">Backup</h3>
               <div class="tl-flex-wrap-gap">
-                <button class="tl-btn tl-btn-outline" onClick=${handleExport}>📤 EXPORT DATA</button>
+                <button class="tl-btn tl-btn-outline" onClick=${handleExport}>Export</button>
                 <label class="tl-btn tl-btn-outline" style=${ { cursor: 'pointer' } }>
-                  📥 IMPORT DATA
+                  Import
                   <input type="file" accept=".json" style=${ { display: 'none' } } onChange=${handleImport} />
                 </label>
               </div>
@@ -2168,19 +3111,36 @@
               <div class="tl-separator"></div>
 
               \x3C!-- Destructive wipe -->
-              <h3 class="tl-font-semibold tl-text-sm tl-danger-title">Danger Zone</h3>
+              <h3 class="tl-font-semibold tl-text-sm tl-danger-title">Delete all tasks</h3>
               <p class="tl-text-xs tl-text-muted tl-mb-3">
-                Completely erase all objectives database on this browser session.
+                Remove every task saved on this device.
               </p>
-              <button class="tl-btn tl-btn-danger" onClick=${handleWipeAll}>WIPE DATABASE</button>
+              <button class="tl-btn tl-btn-danger" onClick=${handleWipeAll}>Delete all</button>
             </div>
 
             <div class="tl-dialog-footer">
               <button class="tl-btn tl-btn-outline" onClick=${() => setIsConfigOpen(false)}>Cancel</button>
-              <button class="tl-btn tl-btn-default" onClick=${handleApplyConfig}>Apply Changes</button>
+              <button class="tl-btn tl-btn-default" onClick=${handleApplyConfig}>Save</button>
             </div>
           </div>
         </div>
+
+        \x3C!-- DELETE CONFIRMATION -->
+        ${pendingDeleteTask && html`
+          <div class="tl-overlay open tl-delete-overlay" onClick=${event => event.target === event.currentTarget && cancelDeleteTask()}>
+            <div class="tl-dialog tl-confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="tl-delete-title" aria-describedby="tl-delete-description">
+              <div class="tl-dialog-header">
+                <span class="tl-dialog-symbol" aria-hidden="true">!</span>
+                <h2 class="tl-dialog-title" id="tl-delete-title">Delete task?</h2>
+                <p class="tl-dialog-description" id="tl-delete-description">Remove “${pendingDeleteTask.task}” from this device. This can’t be undone.</p>
+              </div>
+              <div class="tl-dialog-footer">
+                <button type="button" class="tl-btn tl-btn-outline" data-tl-delete-cancel ref=${deleteCancelRef} onClick=${cancelDeleteTask}>Cancel</button>
+                <button type="button" class="tl-btn tl-btn-danger" data-tl-delete-confirm onClick=${confirmDeleteTask}>Delete</button>
+              </div>
+            </div>
+          </div>
+        `}
 
         \x3C!-- Toast Notification Layer -->
         <div class="tl-toast-container">
