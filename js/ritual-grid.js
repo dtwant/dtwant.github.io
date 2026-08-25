@@ -281,6 +281,13 @@ import {
 
   function fixedHeaderHtml() { return '<tr><th class="rg-day-col" scope="col"><span class="rg-col-name">DAY</span><span class="rg-col-sub">日付</span></th><th class="rg-main-col" scope="col"><span class="rg-col-name">MAIN</span><span class="rg-col-sub">主担当</span></th></tr>'; }
 
+  function taskHeaderSpacerHtml(tasks) {
+    const emptyTask = tasks.length ? '' : '<th class="rg-empty-task-col" aria-hidden="true"></th>';
+    return `<tr><th class="rg-day-spacer" aria-hidden="true"></th><th class="rg-main-spacer" aria-hidden="true"></th>${tasks.map(() => '<th class="rg-task-spacer" aria-hidden="true"></th>').join('')}${emptyTask}</tr>`;
+  }
+
+  function fixedHeaderSpacerHtml() { return '<tr><th class="rg-day-spacer" aria-hidden="true"></th><th class="rg-main-spacer" aria-hidden="true"></th></tr>'; }
+
   function renderMatrix() {
     if (!els.matrix) return;
     const tasks = visibleTasks();
@@ -305,7 +312,9 @@ import {
       body += '</tr>';
       fixedBody += `<tr><th class="rg-day-col rg-day-cell ${key === today ? 'is-today' : ''} ${weekday === 0 || weekday === 6 ? 'is-weekend' : ''}" scope="row" data-rg-day="${key}" tabindex="0" role="button" aria-label="${escapeHtml(dayLabel)}"><span class="rg-day-number">${day}</span><span class="rg-day-week">${WEEKDAYS[weekday]}</span></th>${statusCellHtml(key, 'main', recordFor(key, 'main')?.value || '')}</tr>`;
     }
-    els.matrix.innerHTML = `<table class="rg-matrix-table rg-scroll-table ${tasks.length ? '' : 'is-empty'}" aria-label="${viewYear}年${viewMonth}月のタスク記録"><colgroup><col class="rg-day-spacer"><col class="rg-main-spacer">${tasks.map(() => '<col class="rg-task-col">').join('')}${tasks.length ? '' : '<col class="rg-empty-task-col">'}</colgroup><thead>${taskHeaderHtml(tasks)}</thead><tbody>${body}</tbody></table><div class="rg-fixed-rail"><table class="rg-matrix-table rg-fixed-table" aria-label="${viewYear}年${viewMonth}月の日付とMAIN"><colgroup><col class="rg-day-col"><col class="rg-main-col"></colgroup><thead>${fixedHeaderHtml()}</thead><tbody>${fixedBody}</tbody></table></div>`;
+    const taskColumns = tasks.map(() => '<col class="rg-task-col">').join('');
+    const emptyTaskColumn = tasks.length ? '' : '<col class="rg-empty-task-col">';
+    els.matrix.innerHTML = `<table class="rg-matrix-table rg-scroll-table ${tasks.length ? '' : 'is-empty'}" aria-label="${viewYear}年${viewMonth}月のタスク記録"><colgroup><col class="rg-day-spacer"><col class="rg-main-spacer">${taskColumns}${emptyTaskColumn}</colgroup><thead aria-hidden="true">${taskHeaderSpacerHtml(tasks)}</thead><tbody>${body}</tbody></table><div class="rg-fixed-rail"><table class="rg-matrix-table rg-fixed-table" aria-label="${viewYear}年${viewMonth}月の日付とMAIN"><colgroup><col class="rg-day-col"><col class="rg-main-col"></colgroup><thead aria-hidden="true">${fixedHeaderSpacerHtml()}</thead><tbody>${fixedBody}</tbody></table></div><div class="rg-task-head-rail"><table class="rg-matrix-table rg-head-table rg-task-head-table" aria-label="タスク列の固定見出し"><colgroup><col class="rg-day-spacer"><col class="rg-main-spacer">${taskColumns}${emptyTaskColumn}</colgroup><thead>${taskHeaderHtml(tasks)}</thead></table></div><div class="rg-corner-rail"><table class="rg-matrix-table rg-head-table rg-corner-table" aria-label="日付とMAINの固定見出し"><colgroup><col class="rg-day-col"><col class="rg-main-col"></colgroup><thead>${fixedHeaderHtml()}</thead></table></div>`;
     els.month.textContent = `${viewYear}年 ${viewMonth}月`;
     els.month.setAttribute('aria-label', `${viewYear}年${viewMonth}月。タップで今月へ戻る`);
     $$('[data-rg-day]').forEach((cell) => cell.addEventListener('keydown', (event) => {
