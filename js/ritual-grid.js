@@ -302,9 +302,6 @@ import {
     els.matrix.innerHTML = `<table class="rg-matrix-table ${tasks.length ? '' : 'is-empty'}" aria-label="${viewYear}年${viewMonth}月のRITUAL GRID"><colgroup><col class="rg-day-col"><col class="rg-main-col">${tasks.map(() => '<col class="rg-task-col">').join('')}${tasks.length ? '' : '<col class="rg-empty-task-col">'}</colgroup><thead>${headerHtml(tasks)}</thead><tbody>${body}</tbody></table>`;
     els.month.textContent = `${viewYear}年 ${viewMonth}月`;
     els.month.setAttribute('aria-label', `${viewYear}年${viewMonth}月。タップで今月へ戻る`);
-    const syncFixedColumns = () => { const offset = `${els.matrix.scrollLeft}px`; els.matrix.querySelectorAll('.rg-day-col, .rg-main-col').forEach((cell) => cell.style.setProperty('--rg-fixed-x', offset)); };
-    els.matrix.addEventListener('scroll', syncFixedColumns, { passive: true });
-    syncFixedColumns();
     $$('[data-rg-day]').forEach((cell) => cell.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openDate(cell.dataset.rgDay, cell); }
     }));
