@@ -29,7 +29,8 @@
     taskmanage: 'dt_taskmanage_blob',
     focus_lab: 'dt_focus_lab_blob',
     // Math Memoは既存ツールと衝突しない追加名前空間
-    math_memo: 'dt_math_memo_blob'
+    math_memo: 'dt_math_memo_blob',
+    ritual_grid: 'dt_ritual_grid_bin_id'
   };
 
   // デフォルトのマスターAPIキー (公開されてもデータ破壊は起きないよう基本的には個人の読み書き用)
