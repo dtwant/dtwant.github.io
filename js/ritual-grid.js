@@ -274,10 +274,12 @@ import {
     return `<td class="rg-status-cell ${columnClass} ${extraClass}" data-rg-status-cell data-rg-date="${day}" data-rg-column="${escapeHtml(columnId)}" data-rg-value="${value || ''}" tabindex="0" role="button" aria-label="${escapeHtml(label)}" title="${hasMemo(memo) ? 'メモあり。長押しで編集' : '長押しでメモを編集'}"><span class="rg-status-glyph" data-rg-value="${value || ''}" aria-hidden="true">${glyph}</span>${hasMemo(memo) ? '<span class="rg-memo-dot" aria-hidden="true"></span>' : ''}</td>`;
   }
 
-  function headerHtml(tasks) {
+  function taskHeaderHtml(tasks) {
     const emptyTask = tasks.length ? '' : '<th class="rg-empty-task-col rg-empty-task-head" scope="col"><button type="button" data-rg-action="add-task" aria-label="タスクを追加"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg><span>TASK</span></button></th>';
-    return `<tr><th class="rg-day-col" scope="col"><span class="rg-col-name">DAY</span><span class="rg-col-sub">日付</span></th><th class="rg-main-col" scope="col"><span class="rg-col-name">MAIN</span><span class="rg-col-sub">主担当</span></th>${tasks.map((task) => `<th class="rg-task-col" scope="col" title="${escapeHtml(task.name)}"><span class="rg-col-name">${escapeHtml(task.name)}</span><span class="rg-col-sub">TASK</span></th>`).join('')}${emptyTask}</tr>`;
+    return `<tr><th class="rg-day-spacer" aria-hidden="true"></th><th class="rg-main-spacer" aria-hidden="true"></th>${tasks.map((task) => `<th class="rg-task-col" scope="col" title="${escapeHtml(task.name)}"><span class="rg-col-name">${escapeHtml(task.name)}</span><span class="rg-col-sub">TASK</span></th>`).join('')}${emptyTask}</tr>`;
   }
+
+  function fixedHeaderHtml() { return '<tr><th class="rg-day-col" scope="col"><span class="rg-col-name">DAY</span><span class="rg-col-sub">日付</span></th><th class="rg-main-col" scope="col"><span class="rg-col-name">MAIN</span><span class="rg-col-sub">主担当</span></th></tr>'; }
 
   function renderMatrix() {
     if (!els.matrix) return;
@@ -288,18 +290,22 @@ import {
     const days = daysInMonth(viewYear, viewMonth);
     const today = localToday();
     let body = '';
+    let fixedBody = '';
     for (let day = 1; day <= days; day += 1) {
-      if (day === 15) body += `<tr class="rg-mid-header" aria-label="中央ヘッダー">${headerHtml(tasks).replace(/^<tr>|<\/tr>$/g, '')}</tr>`;
+      if (day === 15) {
+        body += `<tr class="rg-mid-header" aria-label="中央ヘッダー">${taskHeaderHtml(tasks).replace(/^<tr>|<\/tr>$/g, '')}</tr>`;
+        fixedBody += `<tr class="rg-fixed-mid-header" aria-label="固定列の中央ヘッダー">${fixedHeaderHtml().replace(/^<tr>|<\/tr>$/g, '')}</tr>`;
+      }
       const key = dateKey(viewYear, viewMonth, day);
       const weekday = new Date(viewYear, viewMonth - 1, day).getDay();
       const dayLabel = `${dateLabel(key)}の日付詳細を開く`;
-      body += `<tr><th class="rg-day-col rg-day-cell ${key === today ? 'is-today' : ''} ${weekday === 0 || weekday === 6 ? 'is-weekend' : ''}" scope="row" data-rg-day="${key}" tabindex="0" role="button" aria-label="${escapeHtml(dayLabel)}"><span class="rg-day-number">${day}</span><span class="rg-day-week">${WEEKDAYS[weekday]}</span></th>`;
-      body += statusCellHtml(key, 'main', recordFor(key, 'main')?.value || '');
+      body += '<tr><th class="rg-day-spacer" aria-hidden="true"></th><td class="rg-main-spacer" aria-hidden="true"></td>';
       tasks.forEach((task) => { const disabled = !taskActiveOn(task, key); body += statusCellHtml(key, task.id, recordFor(key, task.id)?.value || '', disabled ? 'is-disabled' : ''); });
       if (!tasks.length) body += '<td class="rg-empty-task-col" aria-hidden="true"></td>';
       body += '</tr>';
+      fixedBody += `<tr><th class="rg-day-col rg-day-cell ${key === today ? 'is-today' : ''} ${weekday === 0 || weekday === 6 ? 'is-weekend' : ''}" scope="row" data-rg-day="${key}" tabindex="0" role="button" aria-label="${escapeHtml(dayLabel)}"><span class="rg-day-number">${day}</span><span class="rg-day-week">${WEEKDAYS[weekday]}</span></th>${statusCellHtml(key, 'main', recordFor(key, 'main')?.value || '')}</tr>`;
     }
-    els.matrix.innerHTML = `<table class="rg-matrix-table ${tasks.length ? '' : 'is-empty'}" aria-label="${viewYear}年${viewMonth}月のRITUAL GRID"><colgroup><col class="rg-day-col"><col class="rg-main-col">${tasks.map(() => '<col class="rg-task-col">').join('')}${tasks.length ? '' : '<col class="rg-empty-task-col">'}</colgroup><thead>${headerHtml(tasks)}</thead><tbody>${body}</tbody></table>`;
+    els.matrix.innerHTML = `<table class="rg-matrix-table rg-scroll-table ${tasks.length ? '' : 'is-empty'}" aria-label="${viewYear}年${viewMonth}月のタスク記録"><colgroup><col class="rg-day-spacer"><col class="rg-main-spacer">${tasks.map(() => '<col class="rg-task-col">').join('')}${tasks.length ? '' : '<col class="rg-empty-task-col">'}</colgroup><thead>${taskHeaderHtml(tasks)}</thead><tbody>${body}</tbody></table><div class="rg-fixed-rail"><table class="rg-matrix-table rg-fixed-table" aria-label="${viewYear}年${viewMonth}月の日付とMAIN"><colgroup><col class="rg-day-col"><col class="rg-main-col"></colgroup><thead>${fixedHeaderHtml()}</thead><tbody>${fixedBody}</tbody></table></div>`;
     els.month.textContent = `${viewYear}年 ${viewMonth}月`;
     els.month.setAttribute('aria-label', `${viewYear}年${viewMonth}月。タップで今月へ戻る`);
     $$('[data-rg-day]').forEach((cell) => cell.addEventListener('keydown', (event) => {
