@@ -19,7 +19,9 @@
             ...options,
             credentials: 'include',
             signal: controller ? controller.signal : undefined,
-            headers: { Accept: 'application/json', ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...(options.headers || {}) }
+            // Keep JSON in the body, but use a CORS-safelisted content type so
+            // Cloudflare Access does not block a preflight OPTIONS request.
+            headers: { Accept: 'application/json', ...(options.body ? { 'Content-Type': 'text/plain;charset=UTF-8' } : {}), ...(options.headers || {}) }
           });
           let data = null;
           try { data = await response.json(); } catch (_) { data = null; }
