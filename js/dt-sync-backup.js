@@ -3,7 +3,7 @@
  *
  * This file is deliberately independent from the JSONBin provider.  It only
  * reads browser storage and creates a portable snapshot for the staged D1
- * migration.  Credentials are never included in a snapshot.
+ * migration. Known authentication metadata is never included in a snapshot.
  */
 (function (root) {
   'use strict';
@@ -22,6 +22,7 @@
     /(?:^|[_-])(?:jb|gh)[_-](?:key|pat)(?:$|[_-])/i,
     /(?:^|[_-])(?:pin[_-]?hash|password|passphrase|auth[_-]?token|secret[_-]?key)(?:$|[_-])/i
   ];
+  const CREDENTIAL_INDEXEDDB_DATABASE_NAMES = new Set(['firebaselocalstoragedb']);
 
   function isObject(value) {
     return value !== null && typeof value === 'object';
@@ -40,6 +41,10 @@
   function isPrivateDataKey(key) {
     const value = String(key || '');
     return PRIVATE_DATA_KEY_PATTERNS.some(pattern => pattern.test(value));
+  }
+
+  function isCredentialIndexedDBDatabase(name) {
+    return CREDENTIAL_INDEXEDDB_DATABASE_NAMES.has(String(name || '').trim().toLowerCase());
   }
 
   function encodeStorageValue(raw) {
@@ -187,21 +192,36 @@
 
   async function collectIndexedDB(indexedDB) {
     if (!indexedDB || typeof indexedDB.databases !== 'function') {
-      return { supported: false, databases: [], errors: ['indexedDB_enumeration_unavailable'] };
+      return {
+        supported: false,
+        databases: [],
+        skippedCredentialIndexedDBDatabases: 0,
+        errors: ['indexedDB_enumeration_unavailable']
+      };
     }
 
     let databaseInfos;
     try {
       databaseInfos = await indexedDB.databases();
     } catch (_) {
-      return { supported: false, databases: [], errors: ['indexedDB_enumeration_failed'] };
+      return {
+        supported: false,
+        databases: [],
+        skippedCredentialIndexedDBDatabases: 0,
+        errors: ['indexedDB_enumeration_failed']
+      };
     }
 
     const databases = [];
     const errors = [];
+    let skippedCredentialIndexedDBDatabases = 0;
     for (const info of databaseInfos || []) {
       const name = info && info.name;
       if (!name) continue;
+      if (isCredentialIndexedDBDatabase(name)) {
+        skippedCredentialIndexedDBDatabases += 1;
+        continue;
+      }
       let db;
       try {
         db = await openDatabase(indexedDB, name);
@@ -233,7 +253,7 @@
       }
     }
 
-    return { supported: true, databases, errors };
+    return { supported: true, databases, skippedCredentialIndexedDBDatabases, errors };
   }
 
   function buildSnapshot({
@@ -259,6 +279,7 @@
           : 0,
         redactedLocalStorageKeys: local.redactedLocalStorageKeys,
         skippedSensitiveLocalStorageKeys: local.skippedSensitiveLocalStorageKeys,
+        skippedCredentialIndexedDBDatabases: Number(indexedDB.skippedCredentialIndexedDBDatabases) || 0,
         readWarnings: [...local.errors, ...(indexedDB.errors || [])]
       }
     };
@@ -285,6 +306,13 @@
       }
     }
     if (isObject(value.indexedDB) && !Array.isArray(value.indexedDB.databases)) errors.push('indexedDB.databases is invalid');
+    if (isObject(value.indexedDB) && Array.isArray(value.indexedDB.databases)) {
+      for (const database of value.indexedDB.databases) {
+        if (isCredentialIndexedDBDatabase(database && database.name)) {
+          errors.push('credential IndexedDB database is present');
+        }
+      }
+    }
 
     // Do not scan application payloads recursively: a user's record may
     // legitimately contain a field named "password". Storage/config keys are
