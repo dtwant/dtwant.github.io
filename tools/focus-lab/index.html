@@ -1924,6 +1924,23 @@
     if (detail) detail.textContent = message;
   }
 
+  function focusSyncFailureMessage(reason) {
+    const messages = {
+      http_401: '同期キーがWorkerに拒否されました。Sync Settingsで同じキーを保存してください。',
+      http_403: '同期APIへのアクセスが拒否されました。Worker URLとAccess設定を確認してください。',
+      http_404: '同期APIが見つかりません。Worker URLを確認してください。',
+      timeout: '同期先の応答がタイムアウトしました。通信状態を確認してください。',
+      network: '同期先に接続できませんでした。通信状態とWorker URLを確認してください。',
+      not_configured: 'Worker URLと同期キーをSync Settingsで保存してください。',
+      empty_remote: 'D1に同期対象の原本がありません。',
+      invalid_remote: 'D1から想定外の応答を受け取りました。',
+      backup_failed: '同期前バックアップを作成できませんでした。',
+      storage_error: '端末への保存に失敗しました。',
+      invalid_local: '端末側のFocus Labデータを確認できませんでした。'
+    };
+    return `${messages[reason] || 'D1同期に失敗しました。'} ローカルデータは保持されています。`;
+  }
+
   function focusSyncPayload() {
     const payload = window.FocusLabSync?.forSync?.(state) || {
       ...state,
@@ -2407,7 +2424,7 @@
   if (focusBridge && localStorage.getItem(focusProviderKey) === 'd1') {
     focusBridge.queueSync({ delayMs: 0 }).then((result) => {
       if (!result.ok && result.reason !== 'conflict') {
-        setFocusSyncStatus('error', 'D1同期を確認できませんでした。ローカルデータは保持されています');
+        setFocusSyncStatus('error', focusSyncFailureMessage(result.reason));
       }
     });
   } else {
