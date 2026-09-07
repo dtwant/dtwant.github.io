@@ -66,6 +66,12 @@
       getMigrationPreview() {
         return requestJson('/v1/migration/preview');
       },
+      createMigrationCandidate() {
+        return requestJson('/v1/migration/candidates', { method: 'POST', body: '{}' });
+      },
+      listMigrationCandidates() {
+        return requestJson('/v1/migration/candidates');
+      },
       pushChanges,
       importSnapshot(snapshot, appKey) {
         return requestJson('/v1/import/snapshot', { method: 'POST', body: JSON.stringify({ appKey, snapshot }) });
