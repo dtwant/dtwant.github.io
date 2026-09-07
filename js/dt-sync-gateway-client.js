@@ -63,6 +63,9 @@
 
     return {
       getSnapshot,
+      getMigrationPreview() {
+        return requestJson('/v1/migration/preview');
+      },
       pushChanges,
       importSnapshot(snapshot, appKey) {
         return requestJson('/v1/import/snapshot', { method: 'POST', body: JSON.stringify({ appKey, snapshot }) });
