@@ -9,6 +9,7 @@
 
   const BACKUP_PREFIX = 'dt_d1_pre_cutover_backup_';
   const CREDENTIAL_KEY = /^(?:dt_sync_gateway_key|shared_jsonbin_api_key)$/i;
+  const D1_METADATA_KEY = /^dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup)_/i;
   const CONNECTION_KEY = /(?:^|_)(?:bin_id|blob|blob_id|sync_blob|sync_key|device_id|import_backup|recovery_v\d+)$/i;
   const TOOL_PATTERNS = [
     ['manga', /^ms_/i], ['novel', /^ns_/i], ['movie', /^mt_/i],
@@ -48,7 +49,7 @@
     const special = SPECIAL_KEYS.find(([pattern]) => pattern.test(value));
     if (special) return special[1];
     const tool = TOOL_PATTERNS.find(([, pattern]) => pattern.test(value));
-    if (!tool || CREDENTIAL_KEY.test(value) || CONNECTION_KEY.test(value)) return null;
+    if (!tool || CREDENTIAL_KEY.test(value) || D1_METADATA_KEY.test(value) || CONNECTION_KEY.test(value)) return null;
     return tool[0];
   }
 
@@ -273,13 +274,18 @@
     db.close();
   }
 
-  async function applyCandidateApp(candidate, { appKey, storage = root.localStorage, indexedDB = root.indexedDB } = {}) {
+  async function applyCandidateApp(candidate, { appKey, storage = root.localStorage, indexedDB = root.indexedDB, onlyIfEmpty = false } = {}) {
     if (!candidate || candidate.status !== 'ready' || !Array.isArray(candidate.entries) || !candidate.entries.length) {
       throw new Error('candidate_not_ready');
     }
     if (!appKey || !storage || typeof storage.getItem !== 'function' || typeof storage.setItem !== 'function') throw new Error('storage_unavailable');
     const entries = candidate.entries.filter(entry => entry && (entry.kind === 'localStorage' || entry.kind === 'indexedDB'));
     if (entries.length !== candidate.entries.length || !entries.length) throw new Error('candidate_invalid');
+    if (onlyIfEmpty) {
+      const existingLocal = collectLocalStorageEntries(storage, appKey);
+      const existingIndexed = await collectIndexedDBEntries(indexedDB, appKey);
+      if (existingLocal.length || existingIndexed.length) throw new Error('local_data_exists');
+    }
     const backupKey = await saveSafetyBackup(storage, appKey, entries, indexedDB);
     let localApplied = 0;
     let indexedApplied = 0;
