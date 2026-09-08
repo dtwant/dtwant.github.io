@@ -189,31 +189,50 @@
         if (!queuedTimer) queuedDirty = true;
         return queuedPromise;
       }
+
+      let followUpUsed = false;
+      let resolveQueued = null;
+      const run = async () => {
+        queuedTimer = null;
+        let result;
+        try {
+          result = await syncNow();
+        } catch (_) {
+          result = { ok: false, reason: 'network' };
+        }
+
+        if (!result.ok && !['conflict', 'local_changed', 'local_only'].includes(result.reason)) {
+          setStatus('error', result.reason || 'network');
+        }
+
+        const shouldRepeat = queuedDirty;
+        queuedDirty = false;
+        if (shouldRepeat && !followUpUsed) {
+          followUpUsed = true;
+          schedule();
+          return;
+        }
+
+        const resolve = resolveQueued;
+        queuedPromise = null;
+        resolveQueued = null;
+        resolve(result);
+
+        // A continuously changing app (for example, the running timer) may
+        // have another save waiting. Keep syncing it in the background, but
+        // do not keep the original UI promise pending forever.
+        if (shouldRepeat) queueSync({ delayMs: delay });
+      };
+      const schedule = () => {
+        if (typeof root.setTimeout === 'function') {
+          queuedTimer = root.setTimeout(run, delay);
+        } else {
+          run();
+        }
+      };
       queuedPromise = new Promise((resolve) => {
-        const schedule = (run) => {
-          if (typeof root.setTimeout === 'function') {
-            queuedTimer = root.setTimeout(run, delay);
-          } else {
-            run();
-          }
-        };
-        const run = async () => {
-          queuedTimer = null;
-          let result;
-          try {
-            result = await syncNow();
-          } catch (_) {
-            result = { ok: false, reason: 'network' };
-          }
-          if (queuedDirty) {
-            queuedDirty = false;
-            schedule(run);
-            return;
-          }
-          queuedPromise = null;
-          resolve(result);
-        };
-        schedule(run);
+        resolveQueued = resolve;
+        schedule();
       });
       return queuedPromise;
     }

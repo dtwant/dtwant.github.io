@@ -1907,9 +1907,9 @@
   let state = loadState();
   let timerInterval = null;
 
-  const saveState = () => {
+  const saveState = ({ queueSync = true } = {}) => {
     try { localStorage.setItem(storageKey, JSON.stringify(state)); } catch(e) {}
-    if (!suppressFocusPush && focusBridge && localStorage.getItem(focusProviderKey) === 'd1') {
+    if (queueSync && !suppressFocusPush && focusBridge && localStorage.getItem(focusProviderKey) === 'd1') {
       focusBridge.queueSync().catch(() => setFocusSyncStatus('error', '同期できませんでした。ローカルデータは保持されています'));
     }
   };
@@ -1975,7 +1975,7 @@
       createClient: window.DTSyncGatewayClient.createLive,
       merge: window.FocusLabSync.merge,
       preparePayload: window.FocusLabSync.forSync,
-      onStatus: ({ kind, detail }) => setFocusSyncStatus(kind, detail),
+      onStatus: ({ kind, detail }) => setFocusSyncStatus(kind, kind === 'error' ? focusSyncFailureMessage(detail) : detail),
       onApplied: (value) => {
         mergeFocusState(value);
         render();
@@ -2208,7 +2208,7 @@
           completeSession();
         }
       }
-      saveState();
+      saveState({ queueSync: false });
       render();
     }, 1000);
 
@@ -2423,7 +2423,7 @@
   render();
   if (focusBridge && localStorage.getItem(focusProviderKey) === 'd1') {
     focusBridge.queueSync({ delayMs: 0 }).then((result) => {
-      if (!result.ok && result.reason !== 'conflict') {
+      if (!result.ok && !['conflict', 'local_changed'].includes(result.reason)) {
         setFocusSyncStatus('error', focusSyncFailureMessage(result.reason));
       }
     });
