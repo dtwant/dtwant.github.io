@@ -1,9 +1,10 @@
 /* Opt-in D1 live synchronizer for migrated tools.
  *
  * D1 is used as the live transport only after a tool explicitly opts in.
- * Every record keeps the last successful local/remote baseline. That makes
- * the direction of a change observable: pull remote-only changes, push
- * local-only changes, and preserve both sides when both changed.
+ * Every record keeps the last successful local/remote baseline. Remote-only
+ * changes are pulled, local-only changes are pushed, and when both changed
+ * the value with the newer updatedAt wins. Equal or unavailable timestamps
+ * remain reviewable conflicts.
  */
 (function (root) {
   'use strict';
@@ -31,7 +32,9 @@
   ];
   const STATE_PREFIX = 'dt_d1_sync_state_';
   const CONFLICT_PREFIX = 'dt_d1_sync_conflict_';
-  const RUNTIME_METADATA_KEY = /^dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup)_/i;
+  const LOCAL_UPDATED_PREFIX = 'dt_d1_local_updated_';
+  const RUNTIME_METADATA_KEY = /^dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup|local_updated)_/i;
+  let suppressLocalTracking = false;
 
   function appKeyFromPath(pathname) {
     return PATHS.find(([pattern]) => pattern.test(String(pathname || '')))?.[1] || null;
@@ -51,6 +54,34 @@
     return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, '0')).join('');
   }
 
+  function timestampMs(value) {
+    if (typeof value === 'number' && Number.isFinite(value)) return value;
+    if (typeof value !== 'string' || !value.trim()) return null;
+    const parsed = Date.parse(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  function normalizedTimestamp(value) {
+    const parsed = timestampMs(value);
+    if (parsed === null) return null;
+    return typeof value === 'string' ? value : new Date(parsed).toISOString();
+  }
+
+  function latestWins(local, remote) {
+    const localAt = timestampMs(local?.updatedAt);
+    const remoteAt = timestampMs(remote?.updatedAt);
+    if (localAt === null || remoteAt === null) return null;
+    if (localAt > remoteAt) {
+      return {
+        action: 'push',
+        expectedRevision: Number.isInteger(remote?.revision) ? remote.revision : null,
+        reason: 'local_newer'
+      };
+    }
+    if (remoteAt > localAt) return { action: 'pull', reason: 'remote_newer' };
+    return { action: 'conflict', reason: 'same_timestamp' };
+  }
+
   function classifyRecord({ local, remote, previous }) {
     const localHash = local?.hash ?? null;
     const remoteHash = remote?.hash ?? null;
@@ -59,6 +90,8 @@
     if (!previous) {
       if (localHash === null && remoteHash !== null) return { action: 'pull' };
       if (localHash !== null && remoteHash === null) return { action: 'push', expectedRevision: null };
+      const latest = latestWins(local, remote);
+      if (latest) return latest;
       return { action: 'conflict', reason: 'baseline_missing' };
     }
 
@@ -75,7 +108,11 @@
         expectedRevision: Number.isInteger(remote?.revision) ? remote.revision : null
       };
     }
-    if (localChanged && remoteChanged) return { action: 'conflict', reason: 'both_changed' };
+    if (localChanged && remoteChanged) {
+      const latest = latestWins(local, remote);
+      if (latest) return latest;
+      return { action: 'conflict', reason: 'both_changed' };
+    }
     return { action: 'conflict', reason: 'baseline_mismatch' };
   }
 
@@ -94,6 +131,81 @@
         updatedAt: new Date().toISOString()
       }));
     } catch (_) { /* sync remains safe if metadata storage is unavailable */ }
+  }
+
+  function readLocalUpdatedAt(storage, appKey, recordKey, payload) {
+    try {
+      const parsed = JSON.parse(storage.getItem(`${LOCAL_UPDATED_PREFIX}${appKey}`) || '');
+      const stored = normalizedTimestamp(parsed?.[recordKey]);
+      if (stored) return stored;
+    } catch (_) { /* fall through to a timestamp embedded in the payload */ }
+    if (payload?.kind === 'localStorage' && payload.entry?.encoding === 'json' && typeof payload.entry.raw === 'string') {
+      try {
+        const value = JSON.parse(payload.entry.raw);
+        const timestamps = [];
+        const visit = (current, seen = new Set()) => {
+          if (!current || typeof current !== 'object' || seen.has(current)) return;
+          seen.add(current);
+          for (const [key, value] of Object.entries(current)) {
+            if (/^(?:updatedAt|updated_at|modifiedAt|modified_at)$/i.test(key)) {
+              const timestamp = normalizedTimestamp(value);
+              if (timestamp) timestamps.push(timestamp);
+            } else {
+              visit(value, seen);
+            }
+          }
+        };
+        visit(value);
+        timestamps.sort((left, right) => timestampMs(right) - timestampMs(left));
+        return timestamps[0] || null;
+      } catch (_) { /* invalid payload is handled by the normal hash path */ }
+    }
+    if (payload?.kind === 'indexedDB') {
+      const timestamps = [];
+      const visit = (current, seen = new Set()) => {
+        if (!current || typeof current !== 'object' || seen.has(current)) return;
+        seen.add(current);
+        for (const [key, value] of Object.entries(current)) {
+          if (/^(?:updatedAt|updated_at|modifiedAt|modified_at)$/i.test(key)) {
+            const timestamp = normalizedTimestamp(value);
+            if (timestamp) timestamps.push(timestamp);
+          } else {
+            visit(value, seen);
+          }
+        }
+      };
+      visit(payload.entry?.value);
+      timestamps.sort((left, right) => timestampMs(right) - timestampMs(left));
+      return timestamps[0] || null;
+    }
+    return null;
+  }
+
+  function writeLocalUpdatedAt(storage, appKey, recordKey, updatedAt) {
+    const timestamp = normalizedTimestamp(updatedAt);
+    if (!timestamp) return;
+    const key = `${LOCAL_UPDATED_PREFIX}${appKey}`;
+    let parsed = {};
+    try {
+      const current = JSON.parse(storage.getItem(key) || '{}');
+      if (current && typeof current === 'object' && !Array.isArray(current)) parsed = current;
+    } catch (_) { /* replace malformed metadata with the new timestamp */ }
+    parsed[recordKey] = timestamp;
+    try { storage.setItem(key, JSON.stringify(parsed)); } catch (_) {}
+  }
+
+  function trackLocalStorageMutation(storage, key, updatedAt, originalSetItem) {
+    if (suppressLocalTracking || !storage || RUNTIME_METADATA_KEY.test(String(key || ''))) return;
+    const appKey = root.DTSyncCutover?.classifyLocalKey?.(key);
+    if (!appKey || storage.getItem(`dt_sync_provider_${appKey}`) !== 'd1') return;
+    const metadataKey = `${LOCAL_UPDATED_PREFIX}${appKey}`;
+    let parsed = {};
+    try {
+      const current = JSON.parse(storage.getItem(metadataKey) || '{}');
+      if (current && typeof current === 'object' && !Array.isArray(current)) parsed = current;
+    } catch (_) {}
+    parsed[`localStorage:${key}`] = normalizedTimestamp(updatedAt) || new Date().toISOString();
+    try { originalSetItem.call(storage, metadataKey, JSON.stringify(parsed)); } catch (_) {}
   }
 
   function writeConflictState(storage, appKey, conflicts) {
@@ -142,6 +254,35 @@
     };
   }
 
+  function preCutoverPayload(storage, appKey, recordKey) {
+    try {
+      const backup = JSON.parse(storage.getItem(`dt_d1_pre_cutover_backup_${appKey}`) || '');
+      if (backup?.schema !== 'dt-world-d1-pre-cutover-backup' || backup.version !== 1) return null;
+      if (recordKey.startsWith('localStorage:')) {
+        const key = recordKey.slice('localStorage:'.length);
+        const saved = (backup.local || []).find(item => item?.key === key && item.exists && typeof item.raw === 'string');
+        if (!saved) return null;
+        let encoding = 'text';
+        try { JSON.parse(saved.raw); encoding = 'json'; } catch (_) {}
+        return wrapperForLocal({ recordKey, entry: { encoding, raw: saved.raw } });
+      }
+      if (!recordKey.startsWith('indexedDB:')) return null;
+      for (const saved of backup.indexed || []) {
+        if (!saved?.exists || !saved.database?.name || !saved.store?.name || !saved.dump?.records) continue;
+        const prefix = `indexedDB:${saved.database.name}/${saved.store.name}/`;
+        const record = saved.dump.records.find(item => `${prefix}${stableStringify(item.key)}` === recordKey);
+        if (record) {
+          return wrapperForIndexedDB({
+            database: saved.database,
+            store: { name: saved.store.name, keyPath: saved.dump.keyPath ?? null },
+            entry: record
+          });
+        }
+      }
+    } catch (_) { /* invalid or unavailable backup is not a baseline */ }
+    return null;
+  }
+
   function candidateEntryForRemote(record) {
     // D1 keeps deletions as tombstones.  Never turn one back into a live local
     // value; the record must be reviewed as a conflict instead.
@@ -184,6 +325,7 @@
     const previous = readSyncState(storage, appKey);
     const recordKeys = new Set([...remote.keys(), ...current.keys(), ...Object.keys(previous.records || {})]);
     const pullEntries = [];
+    const pullUpdatedAt = new Map();
     const pushChanges = [];
     const conflicts = [];
     const nextRecords = { ...(previous.records || {}) };
@@ -191,12 +333,25 @@
     for (const recordKey of recordKeys) {
       const local = current.get(recordKey);
       const remoteRecord = remote.get(recordKey);
-      const localDescriptor = local ? { hash: await sha256(local.payload) } : null;
+      const localDescriptor = local ? {
+        hash: await sha256(local.payload),
+        updatedAt: readLocalUpdatedAt(storage, appKey, recordKey, local.payload)
+      } : null;
       const remoteDescriptor = remoteRecord ? {
         hash: remoteRecord.payloadHash || await sha256(remoteRecord.payload),
-        revision: remoteRecord.revision
+        revision: remoteRecord.revision,
+        updatedAt: normalizedTimestamp(remoteRecord.updatedAt)
       } : null;
-      const decision = classifyRecord({ local: localDescriptor, remote: remoteDescriptor, previous: previous.records?.[recordKey] || null });
+      let previousRecord = previous.records?.[recordKey] || null;
+      if (!previousRecord) {
+        const cutoverPayload = preCutoverPayload(storage, appKey, recordKey);
+        if (cutoverPayload && localDescriptor && localDescriptor.hash === await sha256(cutoverPayload)) {
+          // The cutover backup proves this device has not changed this record
+          // since migration. D1 may therefore be pulled without guessing.
+          previousRecord = { localHash: localDescriptor.hash, remoteHash: localDescriptor.hash };
+        }
+      }
+      const decision = classifyRecord({ local: localDescriptor, remote: remoteDescriptor, previous: previousRecord });
 
       if (decision.action === 'conflict') {
         conflicts.push({ recordKey, reason: decision.reason });
@@ -209,6 +364,7 @@
           continue;
         }
         pullEntries.push(entry);
+        if (remoteDescriptor.updatedAt) pullUpdatedAt.set(recordKey, remoteDescriptor.updatedAt);
         nextRecords[recordKey] = {
           localHash: remoteDescriptor.hash,
           remoteHash: remoteDescriptor.hash,
@@ -221,8 +377,9 @@
           conflicts.push({ recordKey, reason: 'local_record_missing' });
           continue;
         }
+        const updatedAt = localDescriptor.updatedAt || new Date().toISOString();
         pushChanges.push({
-          recordKey, payload: local.payload, updatedAt: new Date().toISOString(),
+          recordKey, payload: local.payload, updatedAt,
           expectedRevision: decision.expectedRevision,
           source: `device:${settings.deviceId}`
         });
@@ -237,16 +394,26 @@
       }
     }
 
-    if (pullEntries.length) {
+    const applyRemoteEntries = async (entries) => {
+      if (!entries.length) return true;
       try {
+        suppressLocalTracking = true;
         await root.DTSyncCutover.applyCandidateApp(
-          { status: 'ready', entries: pullEntries },
+          { status: 'ready', entries },
           { appKey, storage, indexedDB: root.indexedDB }
         );
+        return true;
       } catch (_) {
-        return { ok: false, reason: 'apply_failed' };
+        return false;
+      } finally {
+        suppressLocalTracking = false;
       }
+    };
+
+    if (!await applyRemoteEntries(pullEntries)) {
+      return { ok: false, reason: 'apply_failed' };
     }
+    for (const [recordKey, updatedAt] of pullUpdatedAt) writeLocalUpdatedAt(storage, appKey, recordKey, updatedAt);
 
     const pushResults = [];
     for (let offset = 0; offset < pushChanges.length; offset += 100) {
@@ -261,10 +428,41 @@
     for (const batch of pushResults) {
       for (const result of Array.isArray(batch.results) ? batch.results : []) pushResultByKey.set(result.recordKey, result);
     }
+    const stalePullEntries = [];
+    const stalePullUpdatedAt = new Map();
+    let pushedCount = 0;
     for (const change of pushChanges) {
       const result = pushResultByKey.get(change.recordKey);
       if (!result || result.status === 'conflict') {
         conflicts.push({ recordKey: change.recordKey, reason: 'remote_revision_conflict' });
+        continue;
+      }
+      if (result.status === 'stale') {
+        const entry = candidateEntryForRemote({
+          recordKey: result.recordKey || change.recordKey,
+          payload: result.payload,
+          payloadHash: result.payloadHash,
+          revision: result.revision,
+          updatedAt: result.updatedAt,
+          deletedAt: result.deletedAt
+        });
+        if (!entry) {
+          conflicts.push({ recordKey: change.recordKey, reason: 'stale_remote_record_invalid' });
+          continue;
+        }
+        const currentNow = await collectCurrent(storage, appKey);
+        const currentEntry = currentNow.get(change.recordKey);
+        if (!currentEntry || await sha256(currentEntry.payload) !== await sha256(change.payload)) {
+          conflicts.push({ recordKey: change.recordKey, reason: 'local_changed_during_sync' });
+          continue;
+        }
+        stalePullEntries.push(entry);
+        if (result.updatedAt) stalePullUpdatedAt.set(change.recordKey, normalizedTimestamp(result.updatedAt));
+        nextRecords[change.recordKey] = {
+          localHash: result.payloadHash || await sha256(result.payload),
+          remoteHash: result.payloadHash || await sha256(result.payload),
+          remoteRevision: result.revision
+        };
         continue;
       }
       const revision = Number.isInteger(result.revision)
@@ -272,15 +470,22 @@
         : (Number.isInteger(change.expectedRevision) ? change.expectedRevision + 1 : 1);
       const hash = await sha256(change.payload);
       nextRecords[change.recordKey] = { localHash: hash, remoteHash: hash, remoteRevision: revision };
+      pushedCount += 1;
     }
+
+    if (!await applyRemoteEntries(stalePullEntries)) {
+      return { ok: false, reason: 'apply_failed' };
+    }
+    for (const [recordKey, updatedAt] of stalePullUpdatedAt) writeLocalUpdatedAt(storage, appKey, recordKey, updatedAt);
 
     writeSyncState(storage, appKey, nextRecords);
     writeConflictState(storage, appKey, conflicts);
-    const changed = pullEntries.length + pushChanges.length;
+    const pulledCount = pullEntries.length + stalePullEntries.length;
+    const changed = pulledCount + pushedCount;
     if (conflicts.length) return { ok: true, status: 'conflict', changed, conflicts };
-    if (pullEntries.length && pushChanges.length) return { ok: true, status: 'synced', changed };
-    if (pullEntries.length) return { ok: true, status: 'pulled', changed: pullEntries.length };
-    if (pushChanges.length) return { ok: true, status: 'pushed', changed: pushChanges.length };
+    if (pulledCount && pushedCount) return { ok: true, status: 'synced', changed };
+    if (pulledCount) return { ok: true, status: 'pulled', changed: pulledCount };
+    if (pushedCount) return { ok: true, status: 'pushed', changed: pushedCount };
     return { ok: true, status: 'unchanged', changed: 0 };
   }
 
@@ -354,7 +559,10 @@
       const originalSetItem = storagePrototype.setItem;
       storagePrototype.setItem = function (key, value) {
         const result = originalSetItem.call(this, key, value);
-        if (this === root.localStorage && shouldScheduleStorageKey(key)) schedule();
+        if (this === root.localStorage) {
+          trackLocalStorageMutation(this, key, new Date().toISOString(), originalSetItem);
+          if (shouldScheduleStorageKey(key)) schedule();
+        }
         return result;
       };
       Object.defineProperty(storagePrototype, '__dtD1RuntimePatched', { value: true });
@@ -368,6 +576,7 @@
       appKey,
       syncNow: run,
       syncAll: run,
+      syncApp: key => syncApp(key, root.localStorage),
       enabledAppKeys: () => enabledAppKeys(root.localStorage),
       isEnabled: key => root.localStorage?.getItem(`dt_sync_provider_${key}`) === 'd1'
     };
