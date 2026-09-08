@@ -22,6 +22,13 @@
     [/\/0723\/oshi(?:\/|$)/, 'oshi'], [/\/lab\/heatmap(?:\/|$)/, 'habit_heatmap'],
     [/(?:^|\/)biome(?:-dashboard)?(?:\/|$)/, 'biome_archive']
   ];
+  const LIVE_APP_KEYS = [
+    'manga', 'novel', 'movie', 'feeding', 'timetable', 'diary',
+    'task_calendar', 'calendar', 'report_card', 'deadline', 'tasklist',
+    'payment', 'vocal_range', 'library', 'attendance', 'weight_log',
+    'shift_clock', 'taskmanage', 'math_memo', 'ritual_grid', 'oshi',
+    'habit_heatmap', 'biome_archive'
+  ];
   const STATE_PREFIX = 'dt_d1_sync_state_';
   const CONFLICT_PREFIX = 'dt_d1_sync_conflict_';
   const RUNTIME_METADATA_KEY = /^dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup)_/i;
@@ -109,6 +116,11 @@
     const syncKey = storage.getItem('dt_sync_gateway_key') || '';
     if (provider !== 'd1' || !/^https:\/\/[^\s/]+(?:\/[^\s]*)?$/.test(baseUrl) || syncKey.length < 32) return null;
     return { baseUrl, syncKey, deviceId: storage.getItem('dt_sync_device_id') || 'browser' };
+  }
+
+  function enabledAppKeys(storage = root.localStorage) {
+    if (!storage) return [];
+    return LIVE_APP_KEYS.filter(appKey => config(appKey, storage));
   }
 
   function localEntries(storage, appKey) {
@@ -272,6 +284,21 @@
     return { ok: true, status: 'unchanged', changed: 0 };
   }
 
+  async function syncEnabledApps(storage = root.localStorage) {
+    const results = [];
+    for (const appKey of enabledAppKeys(storage)) {
+      let result;
+      try {
+        result = await syncApp(appKey, storage);
+      } catch (_) {
+        result = { ok: false, reason: 'network' };
+      }
+      results.push({ appKey, ...result });
+      dispatchStatus(appKey, result);
+    }
+    return results;
+  }
+
   function shouldBlockLegacyJsonBin(requestUrl, appKey, storage = root.localStorage) {
     return /^https:\/\/api\.jsonbin\.(?:io|org)\//i.test(String(requestUrl || ''))
       && storage?.getItem(`dt_sync_provider_${appKey}`) === 'd1';
@@ -302,8 +329,8 @@
 
   function start() {
     const appKey = appKeyFromPath(root.location?.pathname);
-    if (!appKey || appKey === 'focus_lab' || !root.localStorage) return;
-    installLegacyJsonBinGuard(appKey);
+    if (!root.localStorage) return;
+    if (appKey && appKey !== 'focus_lab') installLegacyJsonBinGuard(appKey);
     let timer = null;
     let running = false;
     const schedule = () => {
@@ -311,12 +338,13 @@
       timer = root.setTimeout(run, 1200);
     };
     async function run() {
-      if (running || !config(appKey, root.localStorage)) return;
+      if (running || !enabledAppKeys(root.localStorage).length) return [];
       running = true;
       try {
-        dispatchStatus(appKey, await syncApp(appKey));
+        return await syncEnabledApps(root.localStorage);
       } catch (_) {
-        dispatchStatus(appKey, { ok: false, reason: 'network' });
+        // A single tool must not prevent the remaining tools from syncing.
+        return [];
       } finally {
         running = false;
       }
@@ -332,19 +360,21 @@
       Object.defineProperty(storagePrototype, '__dtD1RuntimePatched', { value: true });
     }
     root.setTimeout(run, 2500);
-    root.setInterval(run, 15000);
+    root.setInterval(run, 60000);
     root.document?.addEventListener?.('visibilitychange', () => {
       if (root.document.visibilityState === 'visible') run();
     });
     root.DTD1Runtime = {
       appKey,
       syncNow: run,
+      syncAll: run,
+      enabledAppKeys: () => enabledAppKeys(root.localStorage),
       isEnabled: key => root.localStorage?.getItem(`dt_sync_provider_${key}`) === 'd1'
     };
   }
 
-  root.DTSyncRuntimeCore = { stableStringify, classifyRecord, shouldBlockLegacyJsonBin, shouldScheduleStorageKey };
-  root.DTD1Runtime = root.DTD1Runtime || { appKeyFromPath, syncApp, classifyRecord };
+  root.DTSyncRuntimeCore = { stableStringify, classifyRecord, enabledAppKeys, shouldBlockLegacyJsonBin, shouldScheduleStorageKey };
+  root.DTD1Runtime = root.DTD1Runtime || { appKeyFromPath, syncApp, syncEnabledApps, classifyRecord, enabledAppKeys };
   if (typeof root.addEventListener === 'function') {
     if (root.document?.readyState === 'loading') root.addEventListener('DOMContentLoaded', start, { once: true });
     else start();
