@@ -101,21 +101,38 @@
       let lastReason = 'network';
       for (let attempt = 0; attempt <= retries; attempt += 1) {
         const controller = typeof AbortController === 'function' ? new AbortController() : null;
-        const timer = controller ? root.setTimeout(() => controller.abort(), timeoutMs) : null;
+        let timer = null;
+        const deadline = new Promise((_, reject) => {
+          if (typeof root.setTimeout === 'function') {
+            timer = root.setTimeout(() => {
+              if (controller) controller.abort();
+              const error = new Error('sync request timed out');
+              error.name = 'AbortError';
+              reject(error);
+            }, timeoutMs);
+          }
+        });
         try {
-          const response = await fetchImpl(`${endpoint}${path}`, {
-            ...options,
-            credentials: 'omit',
-            signal: controller ? controller.signal : undefined,
-            headers: {
-              Accept: 'application/json',
-              'X-DT-Sync-Key': appSyncKey,
-              ...(options.body ? { 'Content-Type': 'text/plain;charset=UTF-8' } : {}),
-              ...(options.headers || {})
-            }
-          });
-          let data = null;
-          try { data = await response.json(); } catch (_) { data = null; }
+          const request = (async () => {
+            const response = await fetchImpl(`${endpoint}${path}`, {
+              ...options,
+              credentials: 'omit',
+              signal: controller ? controller.signal : undefined,
+              headers: {
+                Accept: 'application/json',
+                'X-DT-Sync-Key': appSyncKey,
+                ...(options.body ? { 'Content-Type': 'text/plain;charset=UTF-8' } : {}),
+                ...(options.headers || {})
+              }
+            });
+            let data = null;
+            try { data = await response.json(); } catch (_) { data = null; }
+            return { response, data };
+          })();
+          // A fetch implementation may reject after the deadline has already
+          // won the race. Consume that late rejection so timeout stays stable.
+          request.catch(() => {});
+          const { response, data } = await Promise.race([request, deadline]);
           if (response.ok) return { ok: true, data };
           lastReason = `http_${response.status}`;
           if (response.status < 500 || attempt >= retries) return { ok: false, reason: lastReason, data: null };
