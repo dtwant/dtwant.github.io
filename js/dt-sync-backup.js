@@ -17,6 +17,7 @@
     /^dt_vault_(data|folders)$/i
   ];
   const CREDENTIAL_KEY_PATTERNS = [
+    /^dt_sync_gateway_key$/i,
     /^shared_jsonbin_api_key$/i,
     /(?:^|[_-])(api|access|master)[_-]?key(?:$|[_-])/i,
     /(?:^|[_-])(?:jb|gh)[_-](?:key|pat)(?:$|[_-])/i,
