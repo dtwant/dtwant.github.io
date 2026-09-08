@@ -76,6 +76,18 @@
         if (!candidateId) return Promise.resolve({ ok: false, reason: 'invalid_candidate', data: null });
         return requestJson(`/v1/migration/candidates/${encodeURIComponent(candidateId)}/promote-focus-lab`, { method: 'POST', body: '{}' });
       },
+      getMigrationCandidateApp(candidateId, appKey) {
+        if (!candidateId || !APP_KEY.test(String(appKey || ''))) {
+          return Promise.resolve({ ok: false, reason: 'invalid_candidate_app', data: null });
+        }
+        return requestJson(`/v1/migration/candidates/${encodeURIComponent(candidateId)}/apps/${encodeURIComponent(appKey)}`);
+      },
+      promoteMigrationCandidateApp(candidateId, appKey) {
+        if (!candidateId || !APP_KEY.test(String(appKey || ''))) {
+          return Promise.resolve({ ok: false, reason: 'invalid_candidate_app', data: null });
+        }
+        return requestJson(`/v1/migration/candidates/${encodeURIComponent(candidateId)}/apps/${encodeURIComponent(appKey)}/promote`, { method: 'POST', body: '{}' });
+      },
       pushChanges,
       importSnapshot(snapshot, appKey) {
         return requestJson('/v1/import/snapshot', { method: 'POST', body: JSON.stringify({ appKey, snapshot }) });
