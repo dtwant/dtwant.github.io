@@ -34,6 +34,11 @@
   const INDEXED_DB_TOOLS = new Map([
     ['secretdiarydb', 'diary'], ['sd_report_db', 'report_card'], ['dt_oshi_db', 'oshi']
   ]);
+  const KNOWN_DATABASES = new Map([
+    ['diary', ['secretdiarydb']],
+    ['report_card', ['sd_report_db']],
+    ['oshi', ['dt_oshi_db']]
+  ]);
 
   function isObject(value) { return value !== null && typeof value === 'object'; }
 
@@ -172,6 +177,33 @@
     });
   }
 
+  function openDatabaseIfPresent(indexedDB, name) {
+    if (!indexedDB || typeof indexedDB.open !== 'function') throw new Error('indexeddb_unavailable');
+    return new Promise((resolve, reject) => {
+      let createdDuringProbe = false;
+      const request = indexedDB.open(name);
+      request.onupgradeneeded = () => {
+        createdDuringProbe = true;
+        try { request.transaction?.abort(); } catch (_) {}
+      };
+      request.onsuccess = () => {
+        if (createdDuringProbe) {
+          request.result.close();
+          resolve(null);
+          return;
+        }
+        resolve(request.result);
+      };
+      request.onerror = () => {
+        if (createdDuringProbe || request.error?.name === 'AbortError') {
+          resolve(null);
+          return;
+        }
+        reject(request.error || new Error('indexeddb_open_failed'));
+      };
+    });
+  }
+
   async function readStore(db, storeName) {
     const transaction = db.transaction(storeName, 'readonly');
     const store = transaction.objectStore(storeName);
@@ -186,12 +218,24 @@
 
   async function collectIndexedDBEntries(indexedDB, appKey) {
     const entries = [];
-    if (!indexedDB || typeof indexedDB.databases !== 'function') return entries;
-    const infos = await indexedDB.databases();
-    for (const info of infos || []) {
-      const name = info?.name;
-      if (classifyDatabase(name) !== appKey || !name) continue;
-      const db = await openExistingDatabase(indexedDB, name);
+    if (!indexedDB || typeof indexedDB.open !== 'function') return entries;
+    let names = null;
+    if (typeof indexedDB.databases === 'function') {
+      try {
+        names = (await indexedDB.databases() || [])
+          .map(info => info?.name)
+          .filter(name => classifyDatabase(name) === appKey && name);
+      } catch (_) {
+        names = null;
+      }
+    }
+    const probeOnly = names === null;
+    if (probeOnly) names = KNOWN_DATABASES.get(appKey) || [];
+    for (const name of names) {
+      const db = probeOnly
+        ? await openDatabaseIfPresent(indexedDB, name)
+        : await openExistingDatabase(indexedDB, name);
+      if (!db) continue;
       const storeNames = Array.from(db.objectStoreNames || []);
       for (const storeName of storeNames) {
         const dump = await readStore(db, storeName);
@@ -234,16 +278,25 @@
     }
     const indexed = [];
     const dbNames = new Set(candidateEntries.filter(entry => entry.kind === 'indexedDB').map(entry => entry.database.name));
-    const knownDatabases = typeof indexedDB?.databases === 'function'
-      ? new Set((await indexedDB.databases() || []).map(info => info?.name).filter(Boolean))
-      : null;
+    let knownDatabases = null;
+    if (typeof indexedDB?.databases === 'function') {
+      try {
+        knownDatabases = new Set((await indexedDB.databases() || []).map(info => info?.name).filter(Boolean));
+      } catch (_) {
+        knownDatabases = null;
+      }
+    }
     for (const name of dbNames) {
       const stores = new Set(candidateEntries.filter(entry => entry.kind === 'indexedDB' && entry.database.name === name).map(entry => entry.store.name));
       if (knownDatabases && !knownDatabases.has(name)) {
         indexed.push({ database: { name, version: 0 }, stores: [], exists: false });
         continue;
       }
-      const db = await openExistingDatabase(indexedDB, name);
+      const db = knownDatabases ? await openExistingDatabase(indexedDB, name) : await openDatabaseIfPresent(indexedDB, name);
+      if (!db) {
+        for (const storeName of stores) indexed.push({ database: { name, version: 0 }, store: { name: storeName }, exists: false });
+        continue;
+      }
       for (const storeName of stores) {
         if (!db.objectStoreNames.contains(storeName)) {
           indexed.push({ database: { name, version: db.version }, store: { name: storeName }, exists: false });
