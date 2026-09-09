@@ -116,6 +116,16 @@
     return { action: 'conflict', reason: 'baseline_mismatch' };
   }
 
+  function explicitResolutionDecision({ local, remote, previous }) {
+    const resolutionAt = timestampMs(remote?.resolutionAt);
+    const previousRevision = previous?.remoteRevision;
+    if (resolutionAt === null || !Number.isInteger(remote?.revision) || !Number.isInteger(previousRevision)) return null;
+    if (remote.revision <= previousRevision) return null;
+    const localAt = timestampMs(local?.updatedAt);
+    if (localAt !== null && localAt > resolutionAt) return null;
+    return { action: 'pull', reason: 'explicit_resolution' };
+  }
+
   function readSyncState(storage, appKey) {
     try {
       const parsed = JSON.parse(storage.getItem(`${STATE_PREFIX}${appKey}`) || '');
@@ -340,7 +350,9 @@
       const remoteDescriptor = remoteRecord ? {
         hash: remoteRecord.payloadHash || await sha256(remoteRecord.payload),
         revision: remoteRecord.revision,
-        updatedAt: normalizedTimestamp(remoteRecord.updatedAt)
+        updatedAt: normalizedTimestamp(remoteRecord.updatedAt),
+        resolutionAt: normalizedTimestamp(remoteRecord.resolutionAt),
+        resolutionSource: remoteRecord.resolutionSource || null
       } : null;
       let previousRecord = previous.records?.[recordKey] || null;
       if (!previousRecord) {
@@ -351,7 +363,8 @@
           previousRecord = { localHash: localDescriptor.hash, remoteHash: localDescriptor.hash };
         }
       }
-      const decision = classifyRecord({ local: localDescriptor, remote: remoteDescriptor, previous: previousRecord });
+      const decision = explicitResolutionDecision({ local: localDescriptor, remote: remoteDescriptor, previous: previousRecord })
+        || classifyRecord({ local: localDescriptor, remote: remoteDescriptor, previous: previousRecord });
 
       if (decision.action === 'conflict') {
         conflicts.push({ recordKey, reason: decision.reason });
@@ -381,7 +394,10 @@
         pushChanges.push({
           recordKey, payload: local.payload, updatedAt,
           expectedRevision: decision.expectedRevision,
-          source: `device:${settings.deviceId}`
+          // The D1 schema intentionally accepts only the source categories
+          // used by the migration envelope. The device id is already carried
+          // separately in the request and must not be put in this field.
+          source: 'unknown'
         });
         continue;
       }
@@ -489,6 +505,79 @@
     return { ok: true, status: 'unchanged', changed: 0 };
   }
 
+  function readConflictState(storage, appKey) {
+    try {
+      const parsed = JSON.parse(storage.getItem(`${CONFLICT_PREFIX}${appKey}`) || '');
+      if (parsed?.version === 1 && Array.isArray(parsed.conflicts)) return parsed;
+    } catch (_) { /* invalid metadata is treated as no pending conflict list */ }
+    return { version: 1, appKey, conflicts: [] };
+  }
+
+  async function resolveConflicts(appKey, source, storage = root.localStorage) {
+    const settings = config(appKey, storage);
+    if (!settings || !root.DTSyncGatewayClient?.createLive) return { ok: false, reason: 'not_enabled' };
+    if (!['pc', 'smartphone'].includes(source)) return { ok: false, reason: 'invalid_resolution_source' };
+    const pending = readConflictState(storage, appKey).conflicts;
+    if (!pending.length) return { ok: true, status: 'unchanged', changed: 0, conflicts: [] };
+
+    const client = root.DTSyncGatewayClient.createLive({ baseUrl: settings.baseUrl, syncKey: settings.syncKey, timeoutMs: 7000, retries: 1 });
+    const remoteResult = await client.getSnapshot(appKey);
+    if (!remoteResult.ok) return remoteResult;
+    const remote = new Map((remoteResult.data.records || []).map(record => [record.recordKey, record]));
+    const current = await collectCurrent(storage, appKey);
+    const records = [];
+    const unresolved = [];
+    for (const conflict of pending) {
+      const local = current.get(conflict.recordKey);
+      const remoteRecord = remote.get(conflict.recordKey);
+      if (!local || !remoteRecord || remoteRecord.deletedAt || !Number.isInteger(remoteRecord.revision)) {
+        unresolved.push(conflict);
+        continue;
+      }
+      records.push({ recordKey: conflict.recordKey, payload: local.payload, expectedRevision: remoteRecord.revision });
+    }
+    if (!records.length) return { ok: true, status: 'conflict', changed: 0, conflicts: pending };
+
+    const resolution = await client.resolveRecords(appKey, records, { source });
+    if (!resolution.ok) return resolution;
+    const responseByKey = new Map((resolution.data?.results || []).map(result => [result.recordKey, result]));
+    const resolvedKeys = new Set();
+    for (const record of records) {
+      if (responseByKey.get(record.recordKey)?.status === 'resolved') resolvedKeys.add(record.recordKey);
+      else unresolved.push(pending.find(conflict => conflict.recordKey === record.recordKey) || { recordKey: record.recordKey, reason: 'resolution_conflict' });
+    }
+
+    if (resolvedKeys.size) {
+      const after = await collectCurrent(storage, appKey);
+      for (const record of records) {
+        if (!resolvedKeys.has(record.recordKey)) continue;
+        const currentAfter = after.get(record.recordKey);
+        if (!currentAfter || await sha256(currentAfter.payload) !== await sha256(record.payload)) {
+          unresolved.push({ recordKey: record.recordKey, reason: 'local_changed_during_resolution' });
+          resolvedKeys.delete(record.recordKey);
+        }
+      }
+    }
+
+    const previous = readSyncState(storage, appKey);
+    const nextRecords = { ...(previous.records || {}) };
+    for (const record of records) {
+      if (!resolvedKeys.has(record.recordKey)) continue;
+      const result = responseByKey.get(record.recordKey);
+      const hash = await sha256(record.payload);
+      nextRecords[record.recordKey] = {
+        localHash: hash,
+        remoteHash: result.payloadHash || hash,
+        remoteRevision: result.revision
+      };
+    }
+    writeSyncState(storage, appKey, nextRecords);
+    writeConflictState(storage, appKey, unresolved);
+    const changed = resolvedKeys.size;
+    if (unresolved.length) return { ok: true, status: 'conflict', changed, conflicts: unresolved };
+    return { ok: true, status: 'resolved', changed, conflicts: [] };
+  }
+
   async function syncEnabledApps(storage = root.localStorage) {
     const results = [];
     for (const appKey of enabledAppKeys(storage)) {
@@ -577,13 +666,15 @@
       syncNow: run,
       syncAll: run,
       syncApp: key => syncApp(key, root.localStorage),
+      resolveConflicts: (key, source) => resolveConflicts(key, source, root.localStorage),
+      pendingConflicts: key => readConflictState(root.localStorage, key).conflicts,
       enabledAppKeys: () => enabledAppKeys(root.localStorage),
       isEnabled: key => root.localStorage?.getItem(`dt_sync_provider_${key}`) === 'd1'
     };
   }
 
-  root.DTSyncRuntimeCore = { stableStringify, classifyRecord, enabledAppKeys, shouldBlockLegacyJsonBin, shouldScheduleStorageKey };
-  root.DTD1Runtime = root.DTD1Runtime || { appKeyFromPath, syncApp, syncEnabledApps, classifyRecord, enabledAppKeys };
+  root.DTSyncRuntimeCore = { stableStringify, classifyRecord, explicitResolutionDecision, enabledAppKeys, shouldBlockLegacyJsonBin, shouldScheduleStorageKey };
+  root.DTD1Runtime = root.DTD1Runtime || { appKeyFromPath, syncApp, syncEnabledApps, classifyRecord, resolveConflicts, pendingConflicts: (key, storage = root.localStorage) => readConflictState(storage, key).conflicts, enabledAppKeys };
   if (typeof root.addEventListener === 'function') {
     if (root.document?.readyState === 'loading') root.addEventListener('DOMContentLoaded', start, { once: true });
     else start();

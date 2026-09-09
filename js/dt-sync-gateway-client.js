@@ -184,7 +184,20 @@
       });
     }
 
-    return { getSnapshot, pushChanges };
+    async function resolveRecords(appKey, records, { source } = {}) {
+      if (!APP_KEY.test(String(appKey || ''))) return { ok: false, reason: 'invalid_app', data: null };
+      if (!Array.isArray(records) || records.length === 0) return { ok: false, reason: 'resolution_records_required', data: null };
+      if (!['pc', 'smartphone'].includes(source)) return { ok: false, reason: 'invalid_resolution_source', data: null };
+      if (records.some((record) => !record || !Object.prototype.hasOwnProperty.call(record, 'expectedRevision'))) {
+        return { ok: false, reason: 'expected_revision_required', data: null };
+      }
+      return requestJson(`/v1/apps/${encodeURIComponent(appKey)}/resolve`, {
+        method: 'POST',
+        body: JSON.stringify({ source, records })
+      });
+    }
+
+    return { getSnapshot, pushChanges, resolveRecords };
   }
 
   root.DTSyncGatewayClient = { create, createLive };
