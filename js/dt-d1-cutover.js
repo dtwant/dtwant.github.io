@@ -229,9 +229,15 @@
         names = null;
       }
     }
-    const probeOnly = names === null;
-    if (probeOnly) names = KNOWN_DATABASES.get(appKey) || [];
-    for (const name of names) {
+    const candidates = new Map();
+    for (const name of names || []) candidates.set(name, false);
+    // Some mobile implementations expose databases() but omit databases
+    // created by an installed PWA (or return an empty list). Add only the
+    // small, app-specific allowlist as non-creating probes in that case.
+    for (const name of KNOWN_DATABASES.get(appKey) || []) {
+      if (!candidates.has(name)) candidates.set(name, true);
+    }
+    for (const [name, probeOnly] of candidates) {
       const db = probeOnly
         ? await openDatabaseIfPresent(indexedDB, name)
         : await openExistingDatabase(indexedDB, name);

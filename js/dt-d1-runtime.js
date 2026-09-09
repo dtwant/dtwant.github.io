@@ -527,24 +527,45 @@
     const current = await collectCurrent(storage, appKey);
     const records = [];
     const unresolved = [];
+    const sourceSnapshotKeys = [];
     for (const conflict of pending) {
       const local = current.get(conflict.recordKey);
       const remoteRecord = remote.get(conflict.recordKey);
-      if (!local || !remoteRecord || remoteRecord.deletedAt || !Number.isInteger(remoteRecord.revision)) {
+      if (!remoteRecord || remoteRecord.deletedAt || !Number.isInteger(remoteRecord.revision)) {
         unresolved.push(conflict);
+        continue;
+      }
+      if (!local) {
+        sourceSnapshotKeys.push(conflict.recordKey);
         continue;
       }
       records.push({ recordKey: conflict.recordKey, payload: local.payload, expectedRevision: remoteRecord.revision });
     }
-    if (!records.length) return { ok: true, status: 'conflict', changed: 0, conflicts: pending };
+    if (!records.length && !sourceSnapshotKeys.length) return { ok: true, status: 'conflict', changed: 0, conflicts: pending };
 
-    const resolution = await client.resolveRecords(appKey, records, { source });
-    if (!resolution.ok) return resolution;
-    const responseByKey = new Map((resolution.data?.results || []).map(result => [result.recordKey, result]));
+    const responseByKey = new Map();
+    if (records.length) {
+      const resolution = await client.resolveRecords(appKey, records, { source });
+      if (!resolution.ok) return resolution;
+      for (const result of resolution.data?.results || []) responseByKey.set(result.recordKey, result);
+    }
+    if (sourceSnapshotKeys.length) {
+      if (typeof client.resolveFromSourceSnapshot !== 'function') {
+        unresolved.push(...sourceSnapshotKeys.map(recordKey => ({ recordKey, reason: 'local_record_missing' })));
+      } else {
+        const sourceResolution = await client.resolveFromSourceSnapshot(appKey, source, sourceSnapshotKeys);
+        if (!sourceResolution.ok) return sourceResolution;
+        for (const result of sourceResolution.data?.results || []) responseByKey.set(result.recordKey, result);
+      }
+    }
     const resolvedKeys = new Set();
     for (const record of records) {
       if (responseByKey.get(record.recordKey)?.status === 'resolved') resolvedKeys.add(record.recordKey);
       else unresolved.push(pending.find(conflict => conflict.recordKey === record.recordKey) || { recordKey: record.recordKey, reason: 'resolution_conflict' });
+    }
+    for (const recordKey of sourceSnapshotKeys) {
+      if (responseByKey.get(recordKey)?.status === 'resolved') resolvedKeys.add(recordKey);
+      else unresolved.push(pending.find(conflict => conflict.recordKey === recordKey) || { recordKey, reason: 'resolution_conflict' });
     }
 
     if (resolvedKeys.size) {
@@ -568,6 +589,16 @@
       nextRecords[record.recordKey] = {
         localHash: hash,
         remoteHash: result.payloadHash || hash,
+        remoteRevision: result.revision
+      };
+    }
+    for (const recordKey of sourceSnapshotKeys) {
+      if (!resolvedKeys.has(recordKey)) continue;
+      const result = responseByKey.get(recordKey);
+      if (!result?.payloadHash || !Number.isInteger(result.revision)) continue;
+      nextRecords[recordKey] = {
+        localHash: null,
+        remoteHash: result.payloadHash,
         remoteRevision: result.revision
       };
     }
