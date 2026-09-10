@@ -1,5 +1,8 @@
 // DtSync グローバルオブジェクト (jsonbin.io スマートマージ同期)
 window.DtSync = (() => {
+  const APP_KEY = 'timetable';
+  const d1Enabled = () => window.DTD1Runtime?.isEnabled?.(APP_KEY)
+    || localStorage.getItem(`dt_sync_provider_${APP_KEY}`) === 'd1';
   const BACKUP_KEY = 'dt_subject_progress_data_backup';
   const BLOB_KEY = 'dt_timetable_sync_blob'; // localStorage に保存するBlob IDキー
   
@@ -233,6 +236,8 @@ window.DtSync = (() => {
 
   // 同期処理の中核
   async function syncProcess() {
+    if (d1Enabled()) return window.DTD1Runtime?.syncAppNow?.(APP_KEY)
+      || { ok: false, reason: 'd1_runtime_unavailable' };
     if (!blobId) return;
     
     log("CONNECTING TO CLOUD ARCHIVE...");
@@ -315,6 +320,10 @@ window.DtSync = (() => {
   let autoSyncInterval = null;
   function startAutoSync(customInterval) {
     if (autoSyncInterval) clearInterval(autoSyncInterval);
+    if (d1Enabled()) {
+      autoSyncInterval = null;
+      return;
+    }
     const interval = customInterval || 180000;
     autoSyncInterval = setInterval(() => {
       syncProcess();
@@ -776,6 +785,15 @@ window.DtSync = (() => {
     if (options) {
       if (options.storageKey) config.storageKey = options.storageKey;
       if (options.onSyncComplete) config.onSyncComplete = options.onSyncComplete;
+    }
+
+    // D1 is the sole live transport after cutover. Do not let the legacy
+    // initializer create a new JSONBin vault or start its 3-minute poller.
+    if (d1Enabled()) {
+      injectSyncPanelHTML();
+      updateUI();
+      window.DTD1Runtime?.syncAppNow?.(APP_KEY);
+      return;
     }
     
     if (window.PWAConfigSync) {

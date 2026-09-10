@@ -16,6 +16,7 @@
   const HTML2CANVAS_INTEGRITY = 'sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==';
   const JSPDF_URL = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js';
   const JSPDF_INTEGRITY = 'sha512-plOdviVmws4Y3JAvbnpfKb2hVxKM1lCwsi3vmElYRj+tiDLffZ4FVUj5a8vyKJ9pIgl8JCAHEJ4D1iUKBecswg==';
+  const d1Enabled = () => window.DTD1Runtime?.isEnabled?.(APP_KEY) || localStorage.getItem(`dt_sync_provider_${APP_KEY}`) === 'd1';
   const now = () => new Date().toISOString();
   const uid = (prefix) => {
     const random = (window.crypto && typeof window.crypto.randomUUID === 'function')
@@ -285,6 +286,10 @@
     localStorage.setItem(STORE_KEY, JSON.stringify(state)); renderAll();
   }
   async function pushRemote() {
+    if (d1Enabled()) {
+      window.DTD1Runtime?.syncAppNow?.(APP_KEY);
+      return false;
+    }
     const id = cachedBin(); if (!id || syncInFlight) return false;
     syncInFlight = true; setSyncState('busy', '同期しています…');
     try {
@@ -293,8 +298,15 @@
       dirtySinceRemote = false; setSyncState('online', '端末間同期済み'); if (els.syncTime) els.syncTime.textContent = `最終 ${formatDate(now())}`; return true;
     } catch (_) { setSyncState('error', '同期できません。ローカル保存は継続中'); return false; } finally { syncInFlight = false; }
   }
-  function schedulePush() { clearTimeout(pushTimer); pushTimer = setTimeout(() => { if (cachedBin()) pushRemote(); }, 720); }
+  function schedulePush() {
+    clearTimeout(pushTimer);
+    pushTimer = setTimeout(() => {
+      if (d1Enabled()) window.DTD1Runtime?.syncAppNow?.(APP_KEY);
+      else if (cachedBin()) pushRemote();
+    }, 720);
+  }
   async function syncNow({ create = true } = {}) {
+    if (d1Enabled()) return window.DTD1Runtime?.syncAppNow?.(APP_KEY) || false;
     if (syncInFlight) return false;
     setSyncState('busy', 'ほかの端末のメモを確認しています…');
     try {
@@ -312,8 +324,12 @@
       showToast('端末間同期を完了しました'); return true;
     } catch (_) { setSyncState('error', '同期できませんでした。ローカルデータは保持されています'); showToast('同期に失敗しました。設定と通信を確認してください'); return false; }
   }
-  async function poll() { if (document.hidden || syncInFlight) return; const id = cachedBin(); if (!id) return; try { const remote = await fetchRemote(id); if (String(remote.updatedAt) > String(state.updatedAt)) mergeRemote(remote); setSyncState('online', '端末間同期済み'); } catch (_) { /* transient network errors should not interrupt editing */ } }
-  function startPolling() { clearInterval(syncTimer); syncTimer = setInterval(poll, 4500); }
+  async function poll() {
+    if (d1Enabled() || document.hidden || syncInFlight) return;
+    const id = cachedBin(); if (!id) return;
+    try { const remote = await fetchRemote(id); if (String(remote.updatedAt) > String(state.updatedAt)) mergeRemote(remote); setSyncState('online', '端末間同期済み'); } catch (_) { /* transient network errors should not interrupt editing */ }
+  }
+  function startPolling() { clearInterval(syncTimer); if (!d1Enabled()) syncTimer = setInterval(poll, 4500); }
 
   function download(filename, content, type) { const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([content], { type })); link.download = filename; document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(link.href), 500); }
   function currentFilename(extension) { return `${(activeDoc() && activeDoc().title || 'math-memo').replace(/[^\p{L}\p{N}_-]+/gu, '-').replace(/^-|-$/g, '') || 'math-memo'}.${extension}`; }
@@ -605,6 +621,8 @@
   // Compact screens start in the editor and keep Preview one tap away.
   setMode(window.matchMedia && window.matchMedia('(max-width: 600px)').matches ? 'edit' : 'split'); renderAll();
   const initialBin = cachedBin(); if (els.syncInput) els.syncInput.value = initialBin || '';
-  if (initialBin) { setSyncState('busy', '同期を確認しています…'); syncNow({ create: false }); } else setSyncState('local', 'この端末に保存されています');
+  if (d1Enabled()) setSyncState('online', 'D1同期済み');
+  else if (initialBin) { setSyncState('busy', '同期を確認しています…'); syncNow({ create: false }); }
+  else setSyncState('local', 'この端末に保存されています');
   startPolling();
 })();

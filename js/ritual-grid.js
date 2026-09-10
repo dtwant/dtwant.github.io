@@ -19,6 +19,7 @@ import {
   const IMPORT_BACKUP_KEY = 'dt_ritual_grid_import_backup';
   const RECOVERY_KEY = 'dt_ritual_grid_recovery_v1';
   const APP_KEY = 'ritual_grid';
+  const d1Enabled = () => window.DTD1Runtime?.isEnabled?.(APP_KEY) || localStorage.getItem(`dt_sync_provider_${APP_KEY}`) === 'd1';
   const CHANNEL_NAME = 'dt_ritual_grid_channel';
   const BIN_URL = 'https://api.jsonbin.io/v3/b';
   const HOLD_MS = 850;
@@ -187,6 +188,10 @@ import {
   }
 
   async function pushRemote() {
+    if (d1Enabled()) {
+      window.DTD1Runtime?.syncAppNow?.(APP_KEY);
+      return;
+    }
     const id = binId();
     if (!id || !dirtySinceRemote) return;
     setSyncState('syncing', 'SYNCING');
@@ -204,6 +209,9 @@ import {
   }
 
   async function fetchRemote() {
+    if (d1Enabled()) {
+      return window.DTD1Runtime?.syncAppNow?.(APP_KEY) || false;
+    }
     const id = binId();
     if (!id) { setSyncState('local', 'LOCAL ONLY'); return; }
     setSyncState('syncing', 'SYNCING');
@@ -218,9 +226,14 @@ import {
     } catch (error) { console.warn('RITUAL GRID fetch failed', error); setSyncState('error', 'SYNC ERROR'); }
   }
 
-  function manualSync() { if (!binId()) { setView('settings'); showToast('先に「接続して同期」を選んでください。'); return; } enqueue(async () => { await fetchRemote(); if (dirtySinceRemote) await pushRemote(); }); }
+  function manualSync() {
+    if (d1Enabled()) { window.DTD1Runtime?.syncAppNow?.(APP_KEY); return; }
+    if (!binId()) { setView('settings'); showToast('先に「接続して同期」を選んでください。'); return; }
+    enqueue(async () => { await fetchRemote(); if (dirtySinceRemote) await pushRemote(); });
+  }
 
   async function connectSync() {
+    if (d1Enabled()) { manualSync(); return; }
     if (binId()) { manualSync(); return; }
     setSyncState('syncing', 'CONNECTING');
     try {
@@ -502,10 +515,20 @@ import {
   els.taskList?.addEventListener('drop', (event) => { event.preventDefault(); const target = event.target.closest('[data-rg-task-row]'); const sourceId = event.dataTransfer.getData('text/plain'); if (!target || !sourceId || target.dataset.rgTaskRow === sourceId) return; const tasks = sortedTasks({ includeArchived: true }); const source = tasks.findIndex((task) => task.id === sourceId); const destination = tasks.findIndex((task) => task.id === target.dataset.rgTaskRow); if (source < 0 || destination < 0) return; const [moved] = tasks.splice(source, 1); tasks.splice(destination, 0, moved); const stamp = timestamp(); tasks.forEach((task, index) => { task.order = index; task.updatedAt = stamp; task.updatedBy = currentDevice; }); state.updatedAt = stamp; persistLocal(); renderTasks(); });
 
   if (channel) channel.addEventListener('message', (event) => { if (event.data?.type !== 'state' || event.data.source === currentDevice) return; if (isEditorOpen()) pendingRemote = mergeStates(state, event.data.state); else applyRemote(event.data.state); });
-  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && binId()) manualSync(); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+    if (d1Enabled()) manualSync();
+    else if (binId()) manualSync();
+  });
 
-  function startPolling() { clearInterval(pollTimer); pollTimer = window.setInterval(() => { if (document.visibilityState === 'visible' && binId()) enqueue(fetchRemote); }, 4500); }
+  function startPolling() {
+    clearInterval(pollTimer);
+    if (!d1Enabled()) pollTimer = window.setInterval(() => { if (document.visibilityState === 'visible' && binId()) enqueue(fetchRemote); }, 4500);
+  }
 
   window.RitualGridTest = { getState: () => clone(state), openMemo: (day, columnId) => openMemo(day, columnId, null), cycleValue, hasMemo };
-  renderAll(); startPolling(); if (binId()) enqueue(fetchRemote); else setSyncState('local', 'LOCAL ONLY');
+  renderAll(); startPolling();
+  if (d1Enabled()) setSyncState('synced', 'D1同期済み');
+  else if (binId()) enqueue(fetchRemote);
+  else setSyncState('local', 'LOCAL ONLY');
 })();

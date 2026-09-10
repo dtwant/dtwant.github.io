@@ -2507,6 +2507,7 @@
   }
 
   async function syncWithCloud(options = {}) {
+    if (window.DTD1LegacySync?.isDisabled('report_card')) return false;
     const binId = state.syncConfig.binId;
     if (!state.syncConfig.syncEnabled || !isJsonBinId(binId)) return false;
     if (hasBlockingDataDialog()) {
@@ -2552,6 +2553,7 @@
   }
 
   function scheduleBackgroundSync() {
+    if (window.DTD1LegacySync?.isDisabled('report_card')) return;
     if (!state.syncConfig.syncEnabled || !isJsonBinId(state.syncConfig.binId)) return;
     clearTimeout(state.syncTimer);
     state.syncTimer = setTimeout(() => {
@@ -2560,6 +2562,7 @@
   }
 
   async function manualSync() {
+    if (window.DTD1LegacySync?.isDisabled('report_card')) return false;
     clearTimeout(state.syncTimer);
     return enqueueSync(async () => {
       if (isJsonBinId(state.syncConfig.binId) && !state.syncConfig.syncEnabled && state.syncConfig.disconnected !== true) {
