@@ -230,10 +230,11 @@
   
 
   
-  <script src="/js/dt-sync-gateway-client.js?v=20260909-d1-live-runtime"></script>
-  <script src="/js/dt-d1-cutover.js?v=20260909-d1-live-runtime"></script>
-  <script src="/js/dt-d1-onboarding.js?v=20260909-d1-live-runtime"></script>
-  <script src="/js/dt-d1-runtime.js?v=20260909-d1-live-runtime"></script>
+  <script src="/js/dt-sync-gateway-client.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-cutover.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-onboarding.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-runtime.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-tool-bridge.js?v=20260910-d1-canonical-runtime-v4"></script>
 </head>
 
 
@@ -1193,10 +1194,15 @@ let data={categories:{},entities:{},logs:{}};
 let syncOk=false,isSyncing=false;
 const $=id=>document.getElementById(id);
 const toast=(msg)=>{const t=$('ba-toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)};
+const d1Enabled=()=>globalThis.DTD1LegacySync?.isDisabled?.('biome_archive')
+  || localStorage.getItem('dt_sync_provider_biome_archive')==='d1';
 
 
 const hdrs=()=>({'X-Master-Key':JSONBIN_KEY,'Content-Type':'application/json'});
 async function fetchData(explicit=false){
+  if(d1Enabled()){
+    loadLocal();syncOk=true;isSyncing=false;updateSync();render();return;
+  }
   try{
     isSyncing=true;updateSync();
     if(!BIN_ID){loadLocal();syncOk=false;return}
@@ -1210,6 +1216,9 @@ async function fetchData(explicit=false){
   finally{isSyncing=false;updateSync();render()}
 }
 async function createBin(){
+  if(d1Enabled()){
+    loadLocal();syncOk=true;isSyncing=false;updateSync();render();return;
+  }
   isSyncing=true;updateSync();
   try{
     const r=await fetch('https://api.jsonbin.io/v3/b',{method:'POST',headers:{...hdrs(),'X-Bin-Name':'biome_archive'},body:JSON.stringify(data)});
@@ -1221,8 +1230,13 @@ async function createBin(){
 }
 let pushTimer=null;
 function pushData(){
-  saveLocal();clearTimeout(pushTimer);
+  saveLocal();
+  if(d1Enabled()){
+    syncOk=true;isSyncing=false;updateSync();return;
+  }
+  clearTimeout(pushTimer);
   pushTimer=setTimeout(async()=>{
+    if(d1Enabled()){syncOk=true;isSyncing=false;updateSync();return}
     if(!JSONBIN_KEY)return;
     if(!BIN_ID){updateSync();return}
     try{

@@ -233,10 +233,11 @@
   
 
   
-  <script src="/js/dt-sync-gateway-client.js?v=20260909-d1-live-runtime"></script>
-  <script src="/js/dt-d1-cutover.js?v=20260909-d1-live-runtime"></script>
-  <script src="/js/dt-d1-onboarding.js?v=20260909-d1-live-runtime"></script>
-  <script src="/js/dt-d1-runtime.js?v=20260909-d1-live-runtime"></script>
+  <script src="/js/dt-sync-gateway-client.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-cutover.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-onboarding.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-runtime.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-tool-bridge.js?v=20260910-d1-canonical-runtime-v4"></script>
 </head>
 
 
@@ -2323,6 +2324,7 @@
 
     
     const syncCloud = async (silent = false, customBlobId = null) => {
+      if (window.DTD1LegacySync?.isDisabled('tasklist')) return;
       setSyncStatus('busy');
       let currentBlobId = customBlobId !== null ? customBlobId : blobId;
       try {
@@ -2381,6 +2383,7 @@
     };
 
     const pushToCloud = async (currentTasks) => {
+      if (window.DTD1LegacySync?.isDisabled('tasklist')) return;
       if (!blobId) return;
       try {
         const p = await fetch(binPut(blobId), {

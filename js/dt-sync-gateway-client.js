@@ -27,7 +27,7 @@
           try { data = await response.json(); } catch (_) { data = null; }
           if (response.ok) return { ok: true, data };
           lastReason = `http_${response.status}`;
-          if (response.status < 500 || attempt >= retries) return { ok: false, reason: lastReason, data: null };
+          if (response.status < 500 || attempt >= retries) return { ok: false, reason: lastReason, statusCode: response.status, data: null };
         } catch (error) {
           lastReason = error && error.name === 'AbortError' ? 'timeout' : 'network';
           if (attempt >= retries) return { ok: false, reason: lastReason, data: null };
@@ -35,7 +35,7 @@
           if (timer) root.clearTimeout(timer);
         }
       }
-      return { ok: false, reason: lastReason, data: null };
+      return { ok: false, reason: lastReason, statusCode: null, data: null };
     }
 
     async function getSnapshot(appKey) {
@@ -128,7 +128,10 @@
           const request = (async () => {
             const response = await fetchImpl(`${endpoint}${path}`, {
               ...options,
-              credentials: 'omit',
+              // Live routes are behind Cloudflare Access in the default
+              // deployment. Include the Access session cookie; the D1 sync
+              // key remains the application-level authorization.
+              credentials: 'include',
               signal: controller ? controller.signal : undefined,
               headers: {
                 Accept: 'application/json',
@@ -147,7 +150,7 @@
           const { response, data } = await Promise.race([request, deadline]);
           if (response.ok) return { ok: true, data };
           lastReason = `http_${response.status}`;
-          if (response.status < 500 || attempt >= retries) return { ok: false, reason: lastReason, data: null };
+          if (response.status < 500 || attempt >= retries) return { ok: false, reason: lastReason, statusCode: response.status, data: null };
         } catch (error) {
           lastReason = error && error.name === 'AbortError' ? 'timeout' : 'network';
           if (attempt >= retries) return { ok: false, reason: lastReason, data: null };
@@ -155,7 +158,7 @@
           if (timer) root.clearTimeout(timer);
         }
       }
-      return { ok: false, reason: lastReason, data: null };
+      return { ok: false, reason: lastReason, statusCode: null, data: null };
     }
 
     async function getSnapshot(appKey) {

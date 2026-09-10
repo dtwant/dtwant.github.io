@@ -33,8 +33,13 @@
   const STATE_PREFIX = 'dt_d1_sync_state_';
   const CONFLICT_PREFIX = 'dt_d1_sync_conflict_';
   const LOCAL_UPDATED_PREFIX = 'dt_d1_local_updated_';
-  const RUNTIME_METADATA_KEY = /^dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup|local_updated)_/i;
+  const FORCE_PULL_PREFIX = 'dt_d1_force_pull_';
+  const RUNTIME_STARTED_KEY = '__dtD1RuntimeStarted';
+  const RUNTIME_METADATA_KEY = /^(?:dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup|local_updated|force_pull)_|dt_sync_provider_|dt_sync_gateway_(?:url|key)$|dt_sync_device_id$)/i;
+  const LIFECYCLE_SYNC_EVENTS = new Set(['pageshow', 'focus', 'visibilitychange']);
   let suppressLocalTracking = false;
+  const patchedStorageInstances = new WeakSet();
+  const patchedStoragePrototypes = new WeakSet();
 
   function appKeyFromPath(pathname) {
     return PATHS.find(([pattern]) => pattern.test(String(pathname || '')))?.[1] || null;
@@ -232,6 +237,29 @@
     } catch (_) { /* local and D1 payloads are still left untouched */ }
   }
 
+  function readForcePullState(storage, appKey) {
+    try {
+      const parsed = JSON.parse(storage.getItem(`${FORCE_PULL_PREFIX}${appKey}`) || '');
+      if (parsed?.version === 1 && parsed.records && typeof parsed.records === 'object') return parsed;
+    } catch (_) { /* invalid metadata is treated as no forced pull */ }
+    return { version: 1, appKey, records: {} };
+  }
+
+  function writeForcePullState(storage, appKey, records) {
+    const key = `${FORCE_PULL_PREFIX}${appKey}`;
+    const validRecords = Object.fromEntries(Object.entries(records || {}).filter(([, revision]) => Number.isInteger(revision)));
+    try {
+      if (!Object.keys(validRecords).length) {
+        storage.removeItem(key);
+        return;
+      }
+      storage.setItem(key, JSON.stringify({
+        schema: 'dt-world-d1-force-pull', version: 1, appKey, records: validRecords,
+        updatedAt: new Date().toISOString()
+      }));
+    } catch (_) { /* a forced pull is retried on the next run */ }
+  }
+
   function config(appKey, storage) {
     const provider = storage.getItem(`dt_sync_provider_${appKey}`);
     const baseUrl = storage.getItem('dt_sync_gateway_url') || '';
@@ -243,6 +271,13 @@
   function enabledAppKeys(storage = root.localStorage) {
     if (!storage) return [];
     return LIVE_APP_KEYS.filter(appKey => config(appKey, storage));
+  }
+
+  // Normal tool pages run only their own app. Sync Settings is the explicit
+  // all-tools entry point and invokes the same runtime without an app key.
+  function automaticAppKeys(appKey, storage = root.localStorage) {
+    if (!appKey) return [];
+    return config(appKey, storage) ? [appKey] : [];
   }
 
   function localEntries(storage, appKey) {
@@ -293,6 +328,25 @@
     return null;
   }
 
+  function preCutoverRecordWasAbsent(storage, appKey, recordKey) {
+    try {
+      const backup = JSON.parse(storage.getItem(`dt_d1_pre_cutover_backup_${appKey}`) || '');
+      if (backup?.schema !== 'dt-world-d1-pre-cutover-backup' || backup.version !== 1) return false;
+      if (recordKey.startsWith('localStorage:')) {
+        const key = recordKey.slice('localStorage:'.length);
+        const saved = (backup.local || []).find(item => item?.key === key);
+        return Boolean(saved && saved.exists === false);
+      }
+      if (!recordKey.startsWith('indexedDB:')) return false;
+      for (const saved of backup.indexed || []) {
+        if (saved?.exists !== false || !saved.database?.name || !saved.store?.name) continue;
+        const prefix = `indexedDB:${saved.database.name}/${saved.store.name}/`;
+        if (recordKey.startsWith(prefix)) return true;
+      }
+    } catch (_) { /* invalid or unavailable backup is not a cutover marker */ }
+    return false;
+  }
+
   function candidateEntryForRemote(record) {
     // D1 keeps deletions as tombstones.  Never turn one back into a live local
     // value; the record must be reviewed as a conflict instead.
@@ -333,6 +387,8 @@
     const remote = new Map((remoteResult.data.records || []).map(record => [record.recordKey, record]));
     const current = await collectCurrent(storage, appKey);
     const previous = readSyncState(storage, appKey);
+    const forcePull = readForcePullState(storage, appKey);
+    const remainingForcePull = { ...(forcePull.records || {}) };
     const recordKeys = new Set([...remote.keys(), ...current.keys(), ...Object.keys(previous.records || {})]);
     const pullEntries = [];
     const pullUpdatedAt = new Map();
@@ -357,14 +413,49 @@
       let previousRecord = previous.records?.[recordKey] || null;
       if (!previousRecord) {
         const cutoverPayload = preCutoverPayload(storage, appKey, recordKey);
-        if (cutoverPayload && localDescriptor && localDescriptor.hash === await sha256(cutoverPayload)) {
-          // The cutover backup proves this device has not changed this record
-          // since migration. D1 may therefore be pulled without guessing.
-          previousRecord = { localHash: localDescriptor.hash, remoteHash: localDescriptor.hash };
+        if (cutoverPayload) {
+          const cutoverHash = await sha256(cutoverPayload);
+          if (localDescriptor?.hash === cutoverHash) {
+            // The cutover backup proves this device has not changed this
+            // record since migration. D1 may therefore be pulled safely.
+            previousRecord = { localHash: cutoverHash, remoteHash: cutoverHash };
+          } else if (remoteDescriptor?.hash) {
+            // A different local value was written after migration. Treat the
+            // promoted D1 value as the baseline so this device's edit can be
+            // pushed instead of being mistaken for an unresolved first sync.
+            previousRecord = { localHash: remoteDescriptor.hash, remoteHash: remoteDescriptor.hash, remoteRevision: remoteDescriptor.revision };
+          }
+        } else if (localDescriptor && remoteDescriptor?.hash && preCutoverRecordWasAbsent(storage, appKey, recordKey)) {
+          // The safe cutover backup records missing local records explicitly.
+          // If this device was empty at cutover, then a now-present local
+          // record came from the promoted candidate. Use that D1 value as the
+          // baseline so an edit made afterwards can be pushed even when the
+          // tool has no embedded updatedAt field.
+          previousRecord = {
+            localHash: remoteDescriptor.hash,
+            remoteHash: remoteDescriptor.hash,
+            remoteRevision: remoteDescriptor.revision
+          };
         }
       }
-      const decision = explicitResolutionDecision({ local: localDescriptor, remote: remoteDescriptor, previous: previousRecord })
-        || classifyRecord({ local: localDescriptor, remote: remoteDescriptor, previous: previousRecord });
+      const resolvedDecision = explicitResolutionDecision({ local: localDescriptor, remote: remoteDescriptor, previous: previousRecord });
+      if (!resolvedDecision && localDescriptor && previousRecord && localDescriptor.updatedAt === null
+        && localDescriptor.hash !== (previousRecord.localHash ?? null)) {
+        // Some PWAs do not expose an application timestamp. A hash change
+        // after the last baseline is still a definite local edit; stamp it at
+        // observation time so a simultaneous remote edit can be resolved by
+        // the requested latest-wins rule.
+        localDescriptor.updatedAt = new Date().toISOString();
+        writeLocalUpdatedAt(storage, appKey, recordKey, localDescriptor.updatedAt);
+      }
+      const forcedRevision = remainingForcePull[recordKey];
+      const decision = Number.isInteger(forcedRevision)
+        && remoteRecord
+        && Number.isInteger(remoteRecord.revision)
+        && remoteRecord.revision >= forcedRevision
+        ? { action: 'pull', reason: 'forced_resolution' }
+        : resolvedDecision
+          || classifyRecord({ local: localDescriptor, remote: remoteDescriptor, previous: previousRecord });
 
       if (decision.action === 'conflict') {
         conflicts.push({ recordKey, reason: decision.reason });
@@ -378,6 +469,7 @@
         }
         pullEntries.push(entry);
         if (remoteDescriptor.updatedAt) pullUpdatedAt.set(recordKey, remoteDescriptor.updatedAt);
+        delete remainingForcePull[recordKey];
         nextRecords[recordKey] = {
           localHash: remoteDescriptor.hash,
           remoteHash: remoteDescriptor.hash,
@@ -495,6 +587,7 @@
     for (const [recordKey, updatedAt] of stalePullUpdatedAt) writeLocalUpdatedAt(storage, appKey, recordKey, updatedAt);
 
     writeSyncState(storage, appKey, nextRecords);
+    writeForcePullState(storage, appKey, remainingForcePull);
     writeConflictState(storage, appKey, conflicts);
     const pulledCount = pullEntries.length + stalePullEntries.length;
     const changed = pulledCount + pushedCount;
@@ -524,88 +617,48 @@
     const remoteResult = await client.getSnapshot(appKey);
     if (!remoteResult.ok) return remoteResult;
     const remote = new Map((remoteResult.data.records || []).map(record => [record.recordKey, record]));
-    const current = await collectCurrent(storage, appKey);
-    const records = [];
     const unresolved = [];
     const sourceSnapshotKeys = [];
     for (const conflict of pending) {
-      const local = current.get(conflict.recordKey);
       const remoteRecord = remote.get(conflict.recordKey);
       if (!remoteRecord || remoteRecord.deletedAt || !Number.isInteger(remoteRecord.revision)) {
         unresolved.push(conflict);
         continue;
       }
-      // Report Card is an IndexedDB application.  The Sync Settings page may
-      // not be able to read the exact PWA database (especially on mobile), so
-      // explicit PC/smartphone resolution must use the immutable migration
-      // snapshot selected by the user instead of accidentally resolving with
-      // a partial database dump from the current browser.
-      if (appKey === 'report_card') {
-        sourceSnapshotKeys.push(conflict.recordKey);
-        continue;
-      }
-      if (!local) {
-        sourceSnapshotKeys.push(conflict.recordKey);
-        continue;
-      }
-      records.push({ recordKey: conflict.recordKey, payload: local.payload, expectedRevision: remoteRecord.revision });
+      // The Sync Settings page cannot safely read the other device's current
+      // storage.  Always resolve from the immutable PC/smartphone migration
+      // snapshot so selecting "PC" really means PC on either device.  This
+      // also prevents a phone-side local value from silently winning when the
+      // user explicitly chose the PC source.
+      sourceSnapshotKeys.push(conflict.recordKey);
     }
-    if (!records.length && !sourceSnapshotKeys.length) return { ok: true, status: 'conflict', changed: 0, conflicts: pending };
+    if (!sourceSnapshotKeys.length) return { ok: true, status: 'conflict', changed: 0, conflicts: pending };
 
     const responseByKey = new Map();
-    if (records.length) {
-      const resolution = await client.resolveRecords(appKey, records, { source });
-      if (!resolution.ok) return resolution;
-      for (const result of resolution.data?.results || []) responseByKey.set(result.recordKey, result);
-    }
-    if (sourceSnapshotKeys.length) {
-      if (typeof client.resolveFromSourceSnapshot !== 'function') {
-        unresolved.push(...sourceSnapshotKeys.map(recordKey => ({ recordKey, reason: 'local_record_missing' })));
-      } else {
-        const sourceResolution = await client.resolveFromSourceSnapshot(appKey, source, sourceSnapshotKeys);
-        if (!sourceResolution.ok) return sourceResolution;
-        for (const result of sourceResolution.data?.results || []) responseByKey.set(result.recordKey, result);
-      }
+    if (typeof client.resolveFromSourceSnapshot !== 'function') {
+      unresolved.push(...sourceSnapshotKeys.map(recordKey => ({ recordKey, reason: 'source_snapshot_unavailable' })));
+    } else {
+      const sourceResolution = await client.resolveFromSourceSnapshot(appKey, source, sourceSnapshotKeys);
+      if (!sourceResolution.ok) return sourceResolution;
+      for (const result of sourceResolution.data?.results || []) responseByKey.set(result.recordKey, result);
     }
     const resolvedKeys = new Set();
-    for (const record of records) {
-      if (responseByKey.get(record.recordKey)?.status === 'resolved') resolvedKeys.add(record.recordKey);
-      else unresolved.push(pending.find(conflict => conflict.recordKey === record.recordKey) || { recordKey: record.recordKey, reason: 'resolution_conflict' });
-    }
     for (const recordKey of sourceSnapshotKeys) {
       if (responseByKey.get(recordKey)?.status === 'resolved') {
         resolvedKeys.add(recordKey);
       } else {
         const response = responseByKey.get(recordKey);
-        const reason = response?.status === 'unavailable' ? 'source_snapshot_unavailable' : 'resolution_conflict';
+        const reason = response?.status === 'unavailable'
+          ? (response.reason === 'source_snapshot_missing' ? 'source_snapshot_missing' : 'source_snapshot_unavailable')
+          : 'resolution_conflict';
         unresolved.push(pending.find(conflict => conflict.recordKey === recordKey) || { recordKey, reason });
-      }
-    }
-
-    if (resolvedKeys.size) {
-      const after = await collectCurrent(storage, appKey);
-      for (const record of records) {
-        if (!resolvedKeys.has(record.recordKey)) continue;
-        const currentAfter = after.get(record.recordKey);
-        if (!currentAfter || await sha256(currentAfter.payload) !== await sha256(record.payload)) {
-          unresolved.push({ recordKey: record.recordKey, reason: 'local_changed_during_resolution' });
-          resolvedKeys.delete(record.recordKey);
-        }
       }
     }
 
     const previous = readSyncState(storage, appKey);
     const nextRecords = { ...(previous.records || {}) };
-    for (const record of records) {
-      if (!resolvedKeys.has(record.recordKey)) continue;
-      const result = responseByKey.get(record.recordKey);
-      const hash = await sha256(record.payload);
-      nextRecords[record.recordKey] = {
-        localHash: hash,
-        remoteHash: result.payloadHash || hash,
-        remoteRevision: result.revision
-      };
-    }
+    const forcePull = readForcePullState(storage, appKey);
+    const nextForcePull = { ...(forcePull.records || {}) };
     for (const recordKey of sourceSnapshotKeys) {
       if (!resolvedKeys.has(recordKey)) continue;
       const result = responseByKey.get(recordKey);
@@ -615,8 +668,10 @@
         remoteHash: result.payloadHash,
         remoteRevision: result.revision
       };
+      nextForcePull[recordKey] = result.revision;
     }
     writeSyncState(storage, appKey, nextRecords);
+    writeForcePullState(storage, appKey, nextForcePull);
     writeConflictState(storage, appKey, unresolved);
     const changed = resolvedKeys.size;
     if (unresolved.length) return { ok: true, status: 'conflict', changed, conflicts: unresolved };
@@ -628,24 +683,64 @@
     for (const appKey of enabledAppKeys(storage)) {
       let result;
       try {
-        result = await syncApp(appKey, storage);
-      } catch (_) {
-        result = { ok: false, reason: 'network' };
+        result = await syncAppNow(appKey, storage);
+      } catch (error) {
+        result = normalizeRuntimeError(error);
       }
       results.push({ appKey, ...result });
-      dispatchStatus(appKey, result);
-      schedulePageReloadAfterPull(appKey, result);
     }
     return results;
   }
 
   function shouldBlockLegacyJsonBin(requestUrl, appKey, storage = root.localStorage) {
     return /^https:\/\/api\.jsonbin\.(?:io|org)\//i.test(String(requestUrl || ''))
-      && storage?.getItem(`dt_sync_provider_${appKey}`) === 'd1';
+      && isLegacySyncDisabled(appKey, storage);
+  }
+
+  function isLegacySyncDisabled(appKey, storage = root.localStorage) {
+    // The provider switch is the cutover boundary. A half-configured D1 tool
+    // must remain local rather than silently falling back to a legacy cloud
+    // write that was not reviewed during migration.
+    return Boolean(appKey) && storage?.getItem(`dt_sync_provider_${appKey}`) === 'd1';
+  }
+
+  function legacyLocalRecord(appKey, storage) {
+    try {
+      const entries = root.DTSyncCutover?.collectLocalStorageEntries?.(storage, appKey) || [];
+      for (const entry of entries) {
+        if (entry?.entry?.encoding !== 'json' || typeof entry.entry.raw !== 'string') continue;
+        const value = JSON.parse(entry.entry.raw);
+        if (value && typeof value === 'object' && !Array.isArray(value)) return value;
+      }
+    } catch (_) { /* the compatibility response must remain harmless */ }
+    return {};
+  }
+
+  function legacyJsonBinResponse(appKey, storage, options = {}) {
+    const method = String(options?.method || 'GET').toUpperCase();
+    const localRecord = legacyLocalRecord(appKey, storage);
+    const binIdKey = root.PWAConfigSync?.APP_KEYS_MAP?.[appKey];
+    const binId = binIdKey ? storage?.getItem(binIdKey) || '' : '';
+    const body = method === 'POST'
+      ? { metadata: { id: binId }, record: localRecord }
+      : { record: localRecord };
+    const serialized = JSON.stringify(body);
+    return {
+      ok: true,
+      status: 200,
+      headers: { get: name => String(name).toLowerCase() === 'content-type' ? 'application/json' : null },
+      json: async () => JSON.parse(serialized),
+      text: async () => serialized
+    };
   }
 
   function shouldScheduleStorageKey(key) {
     return !RUNTIME_METADATA_KEY.test(String(key || ''));
+  }
+
+  function shouldSyncOnLifecycle(eventName, visibilityState = 'visible') {
+    return LIFECYCLE_SYNC_EVENTS.has(String(eventName || ''))
+      && String(visibilityState || 'visible') !== 'hidden';
   }
 
   function installLegacyJsonBinGuard(appKey) {
@@ -654,7 +749,10 @@
     const guardedFetch = function (input, options) {
       const requestUrl = typeof input === 'string' ? input : input?.url || '';
       if (shouldBlockLegacyJsonBin(requestUrl, appKey)) {
-        return Promise.reject(new Error('d1_provider_active'));
+        // Legacy tools still contain JSONBin code. Return a local-only,
+        // successful compatibility response so their old error badges do not
+        // mask D1. The actual cross-device operation is syncAppNow.
+        return Promise.resolve(legacyJsonBinResponse(appKey, root.localStorage, options));
       }
       return originalFetch(input, options);
     };
@@ -665,6 +763,34 @@
   function dispatchStatus(appKey, result) {
     if (typeof root.dispatchEvent !== 'function' || typeof root.CustomEvent !== 'function') return;
     root.dispatchEvent(new root.CustomEvent('dt-d1-sync-status', { detail: { appKey, ...result } }));
+  }
+
+  function normalizeRuntimeError(error) {
+    const candidate = typeof error?.reason === 'string' ? error.reason
+      : typeof error?.code === 'string' ? error.code
+        : typeof error?.message === 'string' ? error.message : '';
+    const reason = /^[a-z][a-z0-9_-]{1,63}$/.test(candidate) ? candidate : 'runtime_error';
+    const statusCode = Number.isInteger(error?.statusCode) ? error.statusCode : null;
+    return { ok: false, reason, statusCode };
+  }
+
+  const appRunLocks = new Map();
+  async function syncAppNow(appKey, storage = root.localStorage) {
+    if (appRunLocks.has(appKey)) return appRunLocks.get(appKey);
+    const task = (async () => {
+      dispatchStatus(appKey, { ok: true, status: 'syncing', changed: 0, pulled: 0, pushed: 0 });
+      let result;
+      try {
+        result = await syncApp(appKey, storage);
+      } catch (error) {
+        result = normalizeRuntimeError(error);
+      }
+      dispatchStatus(appKey, result);
+      schedulePageReloadAfterPull(appKey, result);
+      return result;
+    })();
+    appRunLocks.set(appKey, task);
+    try { return await task; } finally { appRunLocks.delete(appKey); }
   }
 
   function shouldReloadAfterPull(appKey, result, pathname = root.location?.pathname) {
@@ -685,60 +811,167 @@
     }, 0);
   }
 
+  function installIndexedDBMutationTracking(schedule) {
+    const prototype = root.IDBObjectStore?.prototype;
+    if (!prototype || prototype.__dtD1MutationTracked) return;
+    for (const method of ['add', 'put', 'delete', 'clear']) {
+      if (typeof prototype[method] !== 'function') continue;
+      const original = prototype[method];
+      const wrapped = function (...args) {
+        const request = original.apply(this, args);
+        if (!suppressLocalTracking) schedule();
+        return request;
+      };
+      try { prototype[method] = wrapped; } catch (_) { /* a locked prototype is still safe */ }
+    }
+    try { Object.defineProperty(prototype, '__dtD1MutationTracked', { value: true }); } catch (_) {}
+  }
+
+  function storagePrototypeFor(storage = root.localStorage) {
+    // A standalone PWA/WebView can expose its Storage object from a different
+    // realm, where window.Storage.prototype is not the prototype actually used
+    // by localStorage. Prefer the instance prototype and fall back to the
+    // window constructor for ordinary browsers and test doubles.
+    try {
+      const instancePrototype = storage && Object.getPrototypeOf(storage);
+      if (instancePrototype && typeof instancePrototype.setItem === 'function') return instancePrototype;
+    } catch (_) { /* fall through to the window constructor */ }
+    const constructorPrototype = root.Storage?.prototype;
+    return constructorPrototype && typeof constructorPrototype.setItem === 'function'
+      ? constructorPrototype
+      : null;
+  }
+
+  function installStorageMutationTracking(storage, schedule) {
+    if (!storage || typeof storage.setItem !== 'function') return false;
+    if (patchedStorageInstances.has(storage)) return true;
+
+    const originalInstanceSetItem = storage.setItem;
+    const wrapSetItem = (originalSetItem) => function (key, value) {
+      const result = originalSetItem.call(this, key, value);
+      if (this === storage) {
+        trackLocalStorageMutation(this, key, new Date().toISOString(), originalSetItem);
+        if (shouldScheduleStorageKey(key)) schedule();
+      }
+      return result;
+    };
+
+    // Installed PWAs/WebViews can expose a Storage instance whose prototype
+    // is from a separate realm, or whose prototype is not writable. Prefer an
+    // instance-local wrapper so one locked prototype cannot abort runtime
+    // startup for the entire tool.
+    try {
+      Object.defineProperty(storage, 'setItem', {
+        configurable: true,
+        enumerable: false,
+        writable: true,
+        value: wrapSetItem(originalInstanceSetItem)
+      });
+      patchedStorageInstances.add(storage);
+      return true;
+    } catch (_) { /* use the prototype fallback below */ }
+
+    const prototype = storagePrototypeFor(storage);
+    if (!prototype || patchedStoragePrototypes.has(prototype) || typeof prototype.setItem !== 'function') return false;
+    const originalPrototypeSetItem = prototype.setItem;
+    const wrapped = wrapSetItem(originalPrototypeSetItem);
+    try {
+      const descriptor = Object.getOwnPropertyDescriptor(prototype, 'setItem');
+      if (descriptor && descriptor.configurable === false && descriptor.writable === false) return false;
+      Object.defineProperty(prototype, 'setItem', {
+        ...(descriptor || {}),
+        configurable: descriptor?.configurable ?? true,
+        writable: true,
+        value: wrapped
+      });
+      patchedStoragePrototypes.add(prototype);
+      return true;
+    } catch (_) {
+      try {
+        prototype.setItem = wrapped;
+        patchedStoragePrototypes.add(prototype);
+        return true;
+      } catch (_) {
+        return false;
+      }
+    }
+  }
+
   function start() {
     const appKey = appKeyFromPath(root.location?.pathname);
     if (!root.localStorage) return;
+    if (root[RUNTIME_STARTED_KEY]) return root.DTD1Runtime;
+    root[RUNTIME_STARTED_KEY] = true;
     if (appKey && appKey !== 'focus_lab') installLegacyJsonBinGuard(appKey);
     let timer = null;
     let running = false;
     const schedule = () => {
-      if (timer) root.clearTimeout(timer);
+      if (timer || typeof root.setTimeout !== 'function') return;
       timer = root.setTimeout(run, 1200);
     };
     async function run() {
-      if (running || !enabledAppKeys(root.localStorage).length) return [];
+      timer = null;
+      const keys = appKey
+        ? automaticAppKeys(appKey, root.localStorage)
+        : enabledAppKeys(root.localStorage);
+      if (running || !keys.length) return [];
       running = true;
       try {
-        return await syncEnabledApps(root.localStorage);
-      } catch (_) {
+        const results = [];
+        for (const key of keys) {
+          let result;
+          try {
+            result = await syncAppNow(key, root.localStorage);
+          } catch (error) {
+            result = normalizeRuntimeError(error);
+          }
+          results.push({ appKey: key, ...result });
+        }
+        return results;
+      } catch (error) {
         // A single tool must not prevent the remaining tools from syncing.
-        return [];
+        // Keep the actual safe error code so the UI can tell a storage failure
+        // from a network or Access failure.
+        return [{ appKey: appKey || 'unknown', ...normalizeRuntimeError(error) }];
       } finally {
         running = false;
       }
     }
-    const storagePrototype = root.Storage?.prototype;
-    if (storagePrototype && !storagePrototype.__dtD1RuntimePatched) {
-      const originalSetItem = storagePrototype.setItem;
-      storagePrototype.setItem = function (key, value) {
-        const result = originalSetItem.call(this, key, value);
-        if (this === root.localStorage) {
-          trackLocalStorageMutation(this, key, new Date().toISOString(), originalSetItem);
-          if (shouldScheduleStorageKey(key)) schedule();
-        }
-        return result;
-      };
-      Object.defineProperty(storagePrototype, '__dtD1RuntimePatched', { value: true });
-    }
+    installStorageMutationTracking(root.localStorage, schedule);
+    installIndexedDBMutationTracking(schedule);
     root.setTimeout(run, 2500);
-    root.setInterval(run, 60000);
-    root.document?.addEventListener?.('visibilitychange', () => {
-      if (root.document.visibilityState === 'visible') run();
-    });
+    // A normal tool page keeps its one app fresh while it is open. Sync
+    // Settings is an explicit control surface, so it must not generate a
+    // 23-tool request burst every few seconds in the background.
+    if (appKey && typeof root.setInterval === 'function') root.setInterval(run, 15000);
+    const lifecycleSync = (event) => {
+      const visibilityState = root.document?.visibilityState || 'visible';
+      if (shouldSyncOnLifecycle(event?.type, visibilityState)) schedule();
+    };
+    root.document?.addEventListener?.('visibilitychange', lifecycleSync);
+    root.addEventListener?.('pageshow', lifecycleSync);
+    root.addEventListener?.('focus', lifecycleSync);
     root.DTD1Runtime = {
       appKey,
       syncNow: run,
       syncAll: run,
       syncApp: key => syncApp(key, root.localStorage),
+      syncAppNow: key => syncAppNow(key, root.localStorage),
       resolveConflicts: (key, source) => resolveConflicts(key, source, root.localStorage),
       pendingConflicts: key => readConflictState(root.localStorage, key).conflicts,
       enabledAppKeys: () => enabledAppKeys(root.localStorage),
+      isLegacySyncDisabled: key => isLegacySyncDisabled(key, root.localStorage),
       isEnabled: key => root.localStorage?.getItem(`dt_sync_provider_${key}`) === 'd1'
     };
   }
 
-  root.DTSyncRuntimeCore = { stableStringify, classifyRecord, explicitResolutionDecision, enabledAppKeys, shouldBlockLegacyJsonBin, shouldScheduleStorageKey, shouldReloadAfterPull };
+  root.DTSyncRuntimeCore = { appKeyFromPath, stableStringify, classifyRecord, explicitResolutionDecision, normalizeRuntimeError, enabledAppKeys, automaticAppKeys, isLegacySyncDisabled, shouldBlockLegacyJsonBin, shouldScheduleStorageKey, shouldSyncOnLifecycle, shouldReloadAfterPull };
   root.DTD1Runtime = root.DTD1Runtime || { appKeyFromPath, syncApp, syncEnabledApps, classifyRecord, resolveConflicts, pendingConflicts: (key, storage = root.localStorage) => readConflictState(storage, key).conflicts, enabledAppKeys };
+  // Legacy shortcodes remain responsible for rendering their UI, but their
+  // JSONBin routines must stop at the provider cutover boundary.
+  root.DTD1LegacySync = {
+    isDisabled: (appKey) => isLegacySyncDisabled(appKey, root.localStorage)
+  };
   const initialAppKey = appKeyFromPath(root.location?.pathname);
   if (initialAppKey && initialAppKey !== 'focus_lab' && root.localStorage) installLegacyJsonBinGuard(initialAppKey);
   if (typeof root.addEventListener === 'function') {

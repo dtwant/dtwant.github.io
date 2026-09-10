@@ -231,10 +231,11 @@
   
 
   
-  <script src="/js/dt-sync-gateway-client.js?v=20260909-d1-live-runtime"></script>
-  <script src="/js/dt-d1-cutover.js?v=20260909-d1-live-runtime"></script>
-  <script src="/js/dt-d1-onboarding.js?v=20260909-d1-live-runtime"></script>
-  <script src="/js/dt-d1-runtime.js?v=20260909-d1-live-runtime"></script>
+  <script src="/js/dt-sync-gateway-client.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-cutover.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-onboarding.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-runtime.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-tool-bridge.js?v=20260910-d1-canonical-runtime-v4"></script>
 </head>
 
 
@@ -4711,6 +4712,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
  
 async function pushBlob(silent = true) {
+  if(window.DTD1LegacySync?.isDisabled('library')) return;
   if(!blobId) return;
   try {
     const res = await fetch(binUrl(), {
@@ -4739,6 +4741,7 @@ const binUrl = () => `https://api.openbd.jp/v3/b` ? `https://api.jsonbin.io/v3/b
 const binLatest = () => `${binUrl()}/latest`;
 
 window.bsSync = async function(silent = false) {
+  if(window.DTD1LegacySync?.isDisabled('library')) return;
   if(!silent) setSyncStatus('busy', '◌ SYNCING…');
   try {
     if(!blobId) {

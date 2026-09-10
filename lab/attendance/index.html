@@ -228,10 +228,11 @@
   
 
   
-  <script src="/js/dt-sync-gateway-client.js?v=20260909-d1-live-runtime"></script>
-  <script src="/js/dt-d1-cutover.js?v=20260909-d1-live-runtime"></script>
-  <script src="/js/dt-d1-onboarding.js?v=20260909-d1-live-runtime"></script>
-  <script src="/js/dt-d1-runtime.js?v=20260909-d1-live-runtime"></script>
+  <script src="/js/dt-sync-gateway-client.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-cutover.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-onboarding.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-runtime.js?v=20260910-d1-canonical-runtime-v4"></script>
+  <script src="/js/dt-d1-tool-bridge.js?v=20260910-d1-canonical-runtime-v4"></script>
 </head>
 <style>
        
@@ -1442,6 +1443,7 @@ select option,
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(nextCourses)); } catch(e) {}
     renderApp();
 
+    if (window.DTD1LegacySync?.isDisabled('attendance')) return;
     if (!blobId) return;
     fetch('https://api.jsonbin.io/v3/b/' + blobId, {
       method: 'PUT',
@@ -1686,6 +1688,7 @@ select option,
   renderApp();
 })();
 </script>
+
 
     </main>
   </body>
