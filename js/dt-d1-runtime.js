@@ -498,11 +498,11 @@
     writeConflictState(storage, appKey, conflicts);
     const pulledCount = pullEntries.length + stalePullEntries.length;
     const changed = pulledCount + pushedCount;
-    if (conflicts.length) return { ok: true, status: 'conflict', changed, conflicts };
-    if (pulledCount && pushedCount) return { ok: true, status: 'synced', changed };
-    if (pulledCount) return { ok: true, status: 'pulled', changed: pulledCount };
-    if (pushedCount) return { ok: true, status: 'pushed', changed: pushedCount };
-    return { ok: true, status: 'unchanged', changed: 0 };
+    if (conflicts.length) return { ok: true, status: 'conflict', changed, pulled: pulledCount, pushed: pushedCount, conflicts };
+    if (pulledCount && pushedCount) return { ok: true, status: 'synced', changed, pulled: pulledCount, pushed: pushedCount };
+    if (pulledCount) return { ok: true, status: 'pulled', changed: pulledCount, pulled: pulledCount, pushed: 0 };
+    if (pushedCount) return { ok: true, status: 'pushed', changed: pushedCount, pulled: 0, pushed: pushedCount };
+    return { ok: true, status: 'unchanged', changed: 0, pulled: 0, pushed: 0 };
   }
 
   function readConflictState(storage, appKey) {
@@ -535,6 +535,15 @@
         unresolved.push(conflict);
         continue;
       }
+      // Report Card is an IndexedDB application.  The Sync Settings page may
+      // not be able to read the exact PWA database (especially on mobile), so
+      // explicit PC/smartphone resolution must use the immutable migration
+      // snapshot selected by the user instead of accidentally resolving with
+      // a partial database dump from the current browser.
+      if (appKey === 'report_card') {
+        sourceSnapshotKeys.push(conflict.recordKey);
+        continue;
+      }
       if (!local) {
         sourceSnapshotKeys.push(conflict.recordKey);
         continue;
@@ -564,8 +573,13 @@
       else unresolved.push(pending.find(conflict => conflict.recordKey === record.recordKey) || { recordKey: record.recordKey, reason: 'resolution_conflict' });
     }
     for (const recordKey of sourceSnapshotKeys) {
-      if (responseByKey.get(recordKey)?.status === 'resolved') resolvedKeys.add(recordKey);
-      else unresolved.push(pending.find(conflict => conflict.recordKey === recordKey) || { recordKey, reason: 'resolution_conflict' });
+      if (responseByKey.get(recordKey)?.status === 'resolved') {
+        resolvedKeys.add(recordKey);
+      } else {
+        const response = responseByKey.get(recordKey);
+        const reason = response?.status === 'unavailable' ? 'source_snapshot_unavailable' : 'resolution_conflict';
+        unresolved.push(pending.find(conflict => conflict.recordKey === recordKey) || { recordKey, reason });
+      }
     }
 
     if (resolvedKeys.size) {
@@ -620,6 +634,7 @@
       }
       results.push({ appKey, ...result });
       dispatchStatus(appKey, result);
+      schedulePageReloadAfterPull(appKey, result);
     }
     return results;
   }
@@ -650,6 +665,24 @@
   function dispatchStatus(appKey, result) {
     if (typeof root.dispatchEvent !== 'function' || typeof root.CustomEvent !== 'function') return;
     root.dispatchEvent(new root.CustomEvent('dt-d1-sync-status', { detail: { appKey, ...result } }));
+  }
+
+  function shouldReloadAfterPull(appKey, result, pathname = root.location?.pathname) {
+    const pulled = Number(result?.pulled);
+    return result?.ok === true
+      && Number.isFinite(pulled)
+      && pulled > 0
+      && appKeyFromPath(pathname) === appKey;
+  }
+
+  let pageReloadScheduled = false;
+  function schedulePageReloadAfterPull(appKey, result) {
+    if (pageReloadScheduled || !shouldReloadAfterPull(appKey, result)) return;
+    if (typeof root.setTimeout !== 'function' || typeof root.location?.reload !== 'function') return;
+    pageReloadScheduled = true;
+    root.setTimeout(() => {
+      try { root.location.reload(); } catch (_) { pageReloadScheduled = false; }
+    }, 0);
   }
 
   function start() {
@@ -704,8 +737,10 @@
     };
   }
 
-  root.DTSyncRuntimeCore = { stableStringify, classifyRecord, explicitResolutionDecision, enabledAppKeys, shouldBlockLegacyJsonBin, shouldScheduleStorageKey };
+  root.DTSyncRuntimeCore = { stableStringify, classifyRecord, explicitResolutionDecision, enabledAppKeys, shouldBlockLegacyJsonBin, shouldScheduleStorageKey, shouldReloadAfterPull };
   root.DTD1Runtime = root.DTD1Runtime || { appKeyFromPath, syncApp, syncEnabledApps, classifyRecord, resolveConflicts, pendingConflicts: (key, storage = root.localStorage) => readConflictState(storage, key).conflicts, enabledAppKeys };
+  const initialAppKey = appKeyFromPath(root.location?.pathname);
+  if (initialAppKey && initialAppKey !== 'focus_lab' && root.localStorage) installLegacyJsonBinGuard(initialAppKey);
   if (typeof root.addEventListener === 'function') {
     if (root.document?.readyState === 'loading') root.addEventListener('DOMContentLoaded', start, { once: true });
     else start();
