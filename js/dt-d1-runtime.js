@@ -121,6 +121,139 @@
     return { action: 'conflict', reason: 'baseline_mismatch' };
   }
 
+  function calendarPayloadValue(payload) {
+    if (!payload || payload.schema !== 'dt-world-d1-record' || payload.version !== 1
+      || payload.kind !== 'localStorage' || payload.key !== 'dt_chrono_grid_v1'
+      || payload.entry?.encoding !== 'json' || typeof payload.entry.raw !== 'string') return null;
+    try {
+      const value = JSON.parse(payload.entry.raw);
+      return value && typeof value === 'object' && !Array.isArray(value) ? value : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function calendarValueTimestamp(value) {
+    return timestampMs(value);
+  }
+
+  function mergeCalendarMap(localMap, remoteMap, localTs, remoteTs) {
+    const merged = {};
+    const mergedTs = {};
+    const keys = new Set([...Object.keys(localMap || {}), ...Object.keys(remoteMap || {})]);
+    for (const key of keys) {
+      const hasLocal = Object.prototype.hasOwnProperty.call(localMap || {}, key);
+      const hasRemote = Object.prototype.hasOwnProperty.call(remoteMap || {}, key);
+      if (!hasLocal && !hasRemote) continue;
+      if (!hasLocal) {
+        merged[key] = remoteMap[key];
+        if (Object.prototype.hasOwnProperty.call(remoteTs || {}, key)) mergedTs[key] = remoteTs[key];
+        continue;
+      }
+      if (!hasRemote) {
+        merged[key] = localMap[key];
+        if (Object.prototype.hasOwnProperty.call(localTs || {}, key)) mergedTs[key] = localTs[key];
+        continue;
+      }
+
+      const localValue = localMap[key];
+      const remoteValue = remoteMap[key];
+      const localTimestamp = calendarValueTimestamp(localTs?.[key]);
+      const remoteTimestamp = calendarValueTimestamp(remoteTs?.[key]);
+      if (stableStringify(localValue) === stableStringify(remoteValue)) {
+        merged[key] = localValue;
+        if (remoteTimestamp !== null && (localTimestamp === null || remoteTimestamp > localTimestamp)) {
+          mergedTs[key] = remoteTs[key];
+        } else if (localTimestamp !== null) {
+          mergedTs[key] = localTs[key];
+        } else if (Object.prototype.hasOwnProperty.call(localTs || {}, key)) {
+          mergedTs[key] = localTs[key];
+        } else if (Object.prototype.hasOwnProperty.call(remoteTs || {}, key)) {
+          mergedTs[key] = remoteTs[key];
+        }
+        continue;
+      }
+      if (localTimestamp === null || remoteTimestamp === null || localTimestamp === remoteTimestamp) {
+        return { ok: false, reason: 'calendar_field_conflict' };
+      }
+      if (localTimestamp > remoteTimestamp) {
+        merged[key] = localValue;
+        if (Object.prototype.hasOwnProperty.call(localTs || {}, key)) mergedTs[key] = localTs[key];
+      } else {
+        merged[key] = remoteValue;
+        if (Object.prototype.hasOwnProperty.call(remoteTs || {}, key)) mergedTs[key] = remoteTs[key];
+      }
+    }
+    return { ok: true, values: merged, timestamps: mergedTs };
+  }
+
+  function eventTimestamp(event) {
+    return Math.max(
+      calendarValueTimestamp(event?.updatedAt) ?? -Infinity,
+      calendarValueTimestamp(event?.addedAt) ?? -Infinity
+    );
+  }
+
+  function mergeCalendarEvents(localEvents, remoteEvents) {
+    const merged = {};
+    const dates = new Set([...Object.keys(localEvents || {}), ...Object.keys(remoteEvents || {})]);
+    for (const date of dates) {
+      const localList = Array.isArray(localEvents?.[date]) ? localEvents[date] : [];
+      const remoteList = Array.isArray(remoteEvents?.[date]) ? remoteEvents[date] : [];
+      const byId = new Map();
+      const withoutId = [];
+      for (const event of [...localList, ...remoteList]) {
+        if (!event || typeof event !== 'object') continue;
+        if (!event.id) {
+          if (!withoutId.some(existing => stableStringify(existing) === stableStringify(event))) withoutId.push(event);
+          continue;
+        }
+        const existing = byId.get(event.id);
+        if (!existing) {
+          byId.set(event.id, event);
+          continue;
+        }
+        if (stableStringify(existing) === stableStringify(event)) continue;
+        const existingAt = eventTimestamp(existing);
+        const eventAt = eventTimestamp(event);
+        if (existingAt === -Infinity || eventAt === -Infinity || existingAt === eventAt) {
+          return { ok: false, reason: 'calendar_event_conflict' };
+        }
+        if (eventAt > existingAt) byId.set(event.id, event);
+      }
+      const events = [...byId.values(), ...withoutId];
+      if (events.length) merged[date] = events;
+    }
+    return { ok: true, values: merged };
+  }
+
+  function mergeCalendarPayloads(localPayload, remotePayload) {
+    const local = calendarPayloadValue(localPayload);
+    const remote = calendarPayloadValue(remotePayload);
+    if (!local || !remote) return { ok: false, reason: 'invalid_calendar_payload' };
+
+    const attendance = mergeCalendarMap(
+      local.attendance || {}, remote.attendance || {},
+      local.attendance_ts || {}, remote.attendance_ts || {}
+    );
+    if (!attendance.ok) return attendance;
+    const events = mergeCalendarEvents(local.events || {}, remote.events || {});
+    if (!events.ok) return events;
+
+    const merged = { ...remote, ...local,
+      attendance: attendance.values,
+      attendance_ts: attendance.timestamps,
+      events: events.values
+    };
+    return {
+      ok: true,
+      payload: {
+        ...localPayload,
+        entry: { ...localPayload.entry, raw: JSON.stringify(merged) }
+      }
+    };
+  }
+
   function explicitResolutionDecision({ local, remote, previous }) {
     const resolutionAt = timestampMs(remote?.resolutionAt);
     const previousRevision = previous?.remoteRevision;
@@ -393,6 +526,7 @@
     const pullEntries = [];
     const pullUpdatedAt = new Map();
     const pushChanges = [];
+    const mergedCalendarEntries = [];
     const conflicts = [];
     const nextRecords = { ...(previous.records || {}) };
 
@@ -458,6 +592,23 @@
           || classifyRecord({ local: localDescriptor, remote: remoteDescriptor, previous: previousRecord });
 
       if (decision.action === 'conflict') {
+        if (appKey === 'calendar' && local && remoteRecord) {
+          const merged = mergeCalendarPayloads(local.payload, remoteRecord.payload);
+          if (merged.ok) {
+            const entry = candidateEntryForRemote({ recordKey, payload: merged.payload });
+            if (entry) {
+              mergedCalendarEntries.push(entry);
+              pushChanges.push({
+                recordKey,
+                payload: merged.payload,
+                updatedAt: new Date().toISOString(),
+                expectedRevision: remoteDescriptor?.revision,
+                source: 'unknown'
+              });
+              continue;
+            }
+          }
+        }
         conflicts.push({ recordKey, reason: decision.reason });
         continue;
       }
@@ -519,6 +670,9 @@
     };
 
     if (!await applyRemoteEntries(pullEntries)) {
+      return { ok: false, reason: 'apply_failed' };
+    }
+    if (!await applyRemoteEntries(mergedCalendarEntries)) {
       return { ok: false, reason: 'apply_failed' };
     }
     for (const [recordKey, updatedAt] of pullUpdatedAt) writeLocalUpdatedAt(storage, appKey, recordKey, updatedAt);
@@ -965,7 +1119,7 @@
     };
   }
 
-  root.DTSyncRuntimeCore = { appKeyFromPath, stableStringify, classifyRecord, explicitResolutionDecision, normalizeRuntimeError, enabledAppKeys, automaticAppKeys, isLegacySyncDisabled, shouldBlockLegacyJsonBin, shouldScheduleStorageKey, shouldSyncOnLifecycle, shouldReloadAfterPull };
+  root.DTSyncRuntimeCore = { appKeyFromPath, stableStringify, classifyRecord, mergeCalendarPayloads, explicitResolutionDecision, normalizeRuntimeError, enabledAppKeys, automaticAppKeys, isLegacySyncDisabled, shouldBlockLegacyJsonBin, shouldScheduleStorageKey, shouldSyncOnLifecycle, shouldReloadAfterPull };
   root.DTD1Runtime = root.DTD1Runtime || { appKeyFromPath, syncApp, syncEnabledApps, classifyRecord, resolveConflicts, pendingConflicts: (key, storage = root.localStorage) => readConflictState(storage, key).conflicts, enabledAppKeys };
   // Legacy shortcodes remain responsible for rendering their UI, but their
   // JSONBin routines must stop at the provider cutover boundary.

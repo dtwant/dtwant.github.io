@@ -75,6 +75,14 @@
   function statusLabel(detail) {
     if (!detail || detail.status === 'local') return 'D1未同期';
     if (detail.ok === false) return labels[detail.reason] || labels.error;
+    const changed = Number(detail.changed) || 0;
+    const pushed = Number(detail.pushed) || 0;
+    const pulled = Number(detail.pulled) || 0;
+    if (detail.status === 'pushed') return `D1反映済み / 送信${pushed || changed}件`;
+    if (detail.status === 'pulled') return `D1反映済み / 受信${pulled || changed}件`;
+    if (detail.status === 'synced') return `D1反映済み / 送信${pushed}件・受信${pulled}件`;
+    if (detail.status === 'unchanged') return 'D1確認済み / 変更なし';
+    if (detail.status === 'conflict') return `D1競合確認 (${detail.conflicts?.length || 0}件)`;
     return labels[detail.status] || 'D1同期状態不明';
   }
 
@@ -196,7 +204,7 @@
     refreshStatuses();
   }
 
-  root.DTD1LegacyBridge = { isEnabled, syncApp, refreshStatuses, normalizeLegacyStatusNode };
+  root.DTD1LegacyBridge = { isEnabled, syncApp, refreshStatuses, normalizeLegacyStatusNode, statusLabel };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
   else install();
 })(typeof window !== 'undefined' ? window : globalThis);
