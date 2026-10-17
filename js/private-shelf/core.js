@@ -1,5 +1,18 @@
 const MAX_URL = 8192;
 
+export function thumbnailUrl(value) {
+  if (!value) return '';
+  try {
+    const url = new URL(value);
+    if (url.protocol !== 'https:' || url.username || url.password || url.href.length > MAX_URL || url.hostname === 'localhost' || url.hostname.endsWith('.local') || /^[\d.]+$/.test(url.hostname) || url.hostname.includes(':')) return '';
+    return url.href;
+  } catch { return ''; }
+}
+
+export function creatorLabel(book) {
+  return (book.authors?.length ? book.authors : book.circles || []).join(' / ');
+}
+
 export function validateBook(input) {
   try {
     const url = new URL(String(input?.url || '').trim());
@@ -8,7 +21,9 @@ export function validateBook(input) {
     if (url.href.length > MAX_URL) return { ok: false, error: 'URL is too long' };
     if (!String(input?.title || '').trim()) return { ok: false, error: 'title is required' };
     const authors = Array.isArray(input?.authors) ? input.authors.map((v) => String(v).trim()).filter(Boolean) : [];
-    if (!authors.length) return { ok: false, error: 'author is required' };
+    const circles = Array.isArray(input?.circles) ? input.circles.map(v => String(v).trim()).filter(Boolean) : [];
+    if (!authors.length && !circles.length) return { ok: false, error: 'author or circle is required' };
+    if (input.thumbnailUrl && !thumbnailUrl(input.thumbnailUrl)) return { ok: false, error: 'thumbnail URL is invalid' };
     return { ok: true };
   } catch (_) {
     return { ok: false, error: 'URL is invalid' };
@@ -19,12 +34,13 @@ export function normalizeBook(input, now = new Date().toISOString()) {
   const check = validateBook(input);
   if (!check.ok) throw new Error(check.error);
   const parsed = new URL(String(input.url).trim());
-  const authors = [...new Set(input.authors.map((v) => String(v).trim()).filter(Boolean))];
+  const authors = [...new Set((input.authors || []).map((v) => String(v).trim()).filter(Boolean))];
+  const circles = [...new Set((input.circles || []).map(v => String(v).trim()).filter(Boolean))];
   const tags = [...new Set((input.tags || []).map((v) => String(v).trim()).filter(Boolean))];
   return {
     ...input,
     id: input.id || crypto.randomUUID(), url: parsed.href, urlKey: parsed.href,
-    title: String(input.title).trim(), authors, tags, favorite: Boolean(input.favorite),
+    title: String(input.title).trim(), authors, circles, thumbnailUrl: thumbnailUrl(input.thumbnailUrl), tags, favorite: Boolean(input.favorite),
     createdAt: input.createdAt || now, updatedAt: now, deletedAt: input.deletedAt || null,
   };
 }
@@ -67,7 +83,7 @@ export function filterBooks(books, query) {
   const fold = value => String(value).normalize('NFKC').toLocaleLowerCase();
   const terms = fold(query || '').trim().split(/\s+/).filter(Boolean);
   if (!terms.length) return [...books];
-  return books.filter((book) => terms.every((term) => fold([book.title, ...(book.authors || []), ...(book.tags || [])].join('\u0000')).includes(term)));
+  return books.filter((book) => terms.every((term) => fold([book.title, ...(book.authors || []), ...(book.circles || []), ...(book.tags || [])].join('\u0000')).includes(term)));
 }
 
 // Validate the complete backup before returning a new state. Never replace the current shelf.
@@ -75,12 +91,13 @@ export function mergeBackup(current, incoming) {
   const validDate = value => typeof value === 'string' && Number.isFinite(Date.parse(value));
   if (incoming?.schema !== 'dt-private-shelf' || incoming.version !== 1 || !Array.isArray(incoming.books)) throw new Error('本棚のバックアップではありません。');
   for (const book of incoming.books) {
+    if (book?.circles !== undefined && (!Array.isArray(book.circles) || !book.circles.every(v => typeof v === 'string'))) throw new Error('サークルデータが正しくありません。');
     if (!book || typeof book.id !== 'string' || !book.id || !Array.isArray(book.authors) || !Array.isArray(book.tags) || ![...book.authors, ...book.tags].every(v => typeof v === 'string') || !validateBook(book).ok || !validDate(book.createdAt) || !validDate(book.updatedAt) || (book.deletedAt !== null && !validDate(book.deletedAt))) throw new Error('作品データが正しくありません。');
   }
   for (const key of ['openEvents', 'recent', 'vocabulary']) if (incoming[key] !== undefined && !Array.isArray(incoming[key])) throw new Error('バックアップの形式が正しくありません。');
   for (const event of incoming.openEvents || []) if (!event || typeof event.id !== 'string' || typeof event.bookId !== 'string' || !validDate(event.openedAt) || !validDate(event.updatedAt) || (event.deletedAt !== null && !validDate(event.deletedAt))) throw new Error('閲覧記録が正しくありません。');
   for (const item of incoming.recent || []) if (!item || typeof item.bookId !== 'string' || !validDate(item.openedAt)) throw new Error('履歴が正しくありません。');
-  for (const item of incoming.vocabulary || []) if (!item || !['author', 'tag'].includes(item.kind) || typeof item.label !== 'string' || typeof item.id !== 'string') throw new Error('候補データが正しくありません。');
+  for (const item of incoming.vocabulary || []) if (!item || !['author', 'circle', 'tag'].includes(item.kind) || typeof item.label !== 'string' || typeof item.id !== 'string') throw new Error('候補データが正しくありません。');
   const merge = (first, second) => {
     const byId = new Map(first.map(item => [item.id, item]));
     for (const item of second) {
