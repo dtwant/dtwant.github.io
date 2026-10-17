@@ -1,4 +1,4 @@
-import { addOpenEvent, filterBooks, mergeBackup, normalizeBook, rankBooks, recentBooks } from './core.js';
+import { addOpenEvent, creatorLabel, filterBooks, mergeBackup, normalizeBook, rankBooks, recentBooks, thumbnailUrl } from './core.js';
 import { exportState, loadState, saveState } from './store.js';
 
 const root = document.querySelector('[data-private-shelf]');
@@ -40,11 +40,27 @@ async function commit(next) {
   state = next;
 }
 function tone(book) { return [...book.id].reduce((sum, c) => sum + c.codePointAt(0), 0) % 5; }
+// Shelf metadata is fetched through the user's own sync Worker; the key never leaves this request header.
+async function fetchMetadata(url) {
+  let base = '', key = '';
+  try { base = localStorage.getItem('dt_sync_gateway_url') || ''; key = localStorage.getItem('dt_sync_gateway_key') || ''; } catch {}
+  if (!/^https:\/\/[^\s/]+(?:\/[^\s]*)?$/.test(base) || key.length < 32) throw new Error('metadata_not_configured');
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 15000);
+  try {
+    const response = await fetch(`${base.replace(/\/+$/, '')}/v1/private-shelf/metadata`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-DT-Sync-Key': key }, body: JSON.stringify({ url }), signal: controller.signal, cache: 'no-store', credentials: 'omit' });
+    const data = await response.json().catch(() => null);
+    if (!response.ok) throw new Error(response.status === 401 ? 'unauthorized' : data?.error || 'metadata_unavailable');
+    const names = value => Array.isArray(value) ? value.filter(v => typeof v === 'string').map(v => v.trim().slice(0, 100)).filter(Boolean).slice(0, 10) : [];
+    return { title: typeof data?.title === 'string' ? data.title.trim().slice(0, 200) : '', authors: names(data?.authors), circles: names(data?.circles), thumbnailUrl: thumbnailUrl(data?.thumbnailUrl) };
+  } finally { clearTimeout(timer); }
+}
 function card(book) {
+  const thumb = thumbnailUrl(book.thumbnailUrl);
   return `<article class="ps-card">
     <button class="ps-card-open" data-open="${esc(book.id)}" aria-label="${esc(book.title)}を読む">
-      <span class="ps-cover ps-tone-${tone(book)}"><span class="ps-cover-rule"></span><span class="ps-cover-title">${esc(book.title)}</span><span class="ps-cover-bottom">${esc(book.authors.join(' / '))}</span></span>
-      <span class="ps-book-title">${esc(book.title)}</span><span class="ps-author">${esc(book.authors.join(' / '))}</span>
+      <span class="ps-cover ps-tone-${tone(book)}"><span class="ps-cover-rule"></span><span class="ps-cover-title">${esc(book.title)}</span><span class="ps-cover-bottom">${esc(creatorLabel(book))}</span>${thumb ? `<img class="ps-thumbnail" src="${esc(thumb)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : ''}</span>
+      <span class="ps-book-title">${esc(book.title)}</span><span class="ps-author">${esc(creatorLabel(book))}</span>
     </button>
     <div class="ps-card-actions"><span class="ps-card-tag">${esc(book.tags[0] || 'タグなし')}</span><button class="ps-icon-button ps-fav${book.favorite ? ' is-favorite' : ''}" data-fav="${esc(book.id)}" aria-label="${esc(book.title)}のお気に入り" aria-pressed="${book.favorite}">${icon('heart')}</button><button class="ps-icon-button" data-edit="${esc(book.id)}" aria-label="${esc(book.title)}を編集">${icon('more')}</button></div>
   </article>`;
@@ -65,7 +81,7 @@ function render() {
     const since = period === 'week' ? now.getTime() - 7 * 86400000 : period === 'month' ? new Date(now.getFullYear(), now.getMonth(), 1).getTime() : null;
     const rows = rankBooks(state, { since });
     let rank = 0;
-    $('#ps-results').innerHTML = `<p class="ps-intro">つい開いてしまう、あなたの定番。</p><div class="ps-period" aria-label="集計期間">${[['all', 'すべて'], ['month', '今月'], ['week', '7日間']].map(([key, label]) => `<button data-period="${key}" aria-pressed="${period === key}">${label}</button>`).join('')}</div><p class="ps-ranking-note">作品を開いた回数で集計</p>${rows.length ? `<div class="ps-ranking">${rows.map((row, i) => { if (!i || row.count !== rows[i - 1].count) rank = i + 1; return `<button class="ps-rank-row" data-open="${esc(row.book.id)}"><b class="ps-rank-number">${String(rank).padStart(2, '0')}</b><span class="ps-rank-book ps-tone-${tone(row.book)}" aria-hidden="true">${icon('shelf')}</span><span class="ps-rank-info"><strong>${esc(row.book.title)}</strong><small>${esc(row.book.authors.join(' / '))}</small></span><span class="ps-rank-count">${row.count}<small>回</small></span></button>`; }).join('')}</div>` : empty('まだ記録はありません', '本棚から作品を開くと、ここに並びます。')}`;
+    $('#ps-results').innerHTML = `<p class="ps-intro">つい開いてしまう、あなたの定番。</p><div class="ps-period" aria-label="集計期間">${[['all', 'すべて'], ['month', '今月'], ['week', '7日間']].map(([key, label]) => `<button data-period="${key}" aria-pressed="${period === key}">${label}</button>`).join('')}</div><p class="ps-ranking-note">作品を開いた回数で集計</p>${rows.length ? `<div class="ps-ranking">${rows.map((row, i) => { if (!i || row.count !== rows[i - 1].count) rank = i + 1; return `<button class="ps-rank-row" data-open="${esc(row.book.id)}"><b class="ps-rank-number">${String(rank).padStart(2, '0')}</b><span class="ps-rank-book ps-tone-${tone(row.book)}" aria-hidden="true">${icon('shelf')}</span><span class="ps-rank-info"><strong>${esc(row.book.title)}</strong><small>${esc(creatorLabel(row.book))}</small></span><span class="ps-rank-count">${row.count}<small>回</small></span></button>`; }).join('')}</div>` : empty('まだ記録はありません', '本棚から作品を開くと、ここに並びます。')}`;
     return;
   }
   if (!liveBooks().length) {
@@ -74,7 +90,7 @@ function render() {
   }
   const recent = view === 'shelf' && !query && !tag ? recentBooks(state).slice(0, 6) : [];
   const tags = [...new Set(liveBooks().flatMap(b => b.tags))].sort((a, b) => a.localeCompare(b, 'ja'));
-  $('#ps-results').innerHTML = `${recent.length ? `<section class="ps-recent-section"><div class="ps-section-head"><h2>最近読んだ作品</h2><span>最新${recent.length}件</span></div><div class="ps-recent">${recent.map((b, i) => `<button class="ps-recent-item" data-open="${esc(b.id)}"><span class="ps-recent-cover ps-tone-${tone(b)}">${String(i + 1).padStart(2, '0')}</span><span><strong>${esc(b.title)}</strong><small>${esc(b.authors.join(' / '))}</small></span></button>`).join('')}</div></section>` : ''}
+  $('#ps-results').innerHTML = `${recent.length ? `<section class="ps-recent-section"><div class="ps-section-head"><h2>最近読んだ作品</h2><span>最新${recent.length}件</span></div><div class="ps-recent">${recent.map((b, i) => `<button class="ps-recent-item" data-open="${esc(b.id)}"><span class="ps-recent-cover ps-tone-${tone(b)}">${String(i + 1).padStart(2, '0')}</span><span><strong>${esc(b.title)}</strong><small>${esc(creatorLabel(b))}</small></span></button>`).join('')}</div></section>` : ''}
     ${tags.length ? `<div class="ps-tags" aria-label="タグで絞り込み"><button data-tag="" aria-pressed="${!tag}">すべて</button>${tags.map(t => `<button data-tag="${esc(t)}" aria-pressed="${tag === t}">${esc(t)}</button>`).join('')}</div>` : ''}
     <div class="ps-section-head ps-library-head"><h2>${query || tag ? '検索結果' : view === 'favorites' ? 'お気に入り' : 'すべての作品'}<span class="ps-total">${books.length}</span></h2><select id="ps-sort" aria-label="並び順"><option value="new" ${sort === 'new' ? 'selected' : ''}>追加した順</option><option value="title" ${sort === 'title' ? 'selected' : ''}>タイトル順</option></select></div>
     ${books.length ? `<div class="ps-grid">${books.map(card).join('')}</div>` : empty(view === 'favorites' && !query && !tag ? '好きな作品を、すぐ手元に。' : '作品が見つかりません', view === 'favorites' && !query && !tag ? '作品のハートを押すと、ここに集まります。' : '別の言葉やタグで探してみてください。')}`;
@@ -94,9 +110,10 @@ function showSheet(html) {
 function openForm(book = null) {
   const split = value => value.split(/[,、\n]/).map(v => v.trim()).filter(Boolean);
   showSheet(`<form id="ps-form" class="ps-sheet"><header class="ps-sheet-head"><div><p class="ps-eyebrow">${book ? 'EDIT BOOK' : 'ADD TO SHELF'}</p><h2 id="ps-sheet-title">${book ? '作品を編集' : '本棚に追加'}</h2></div><button type="button" class="ps-icon-button" data-cancel aria-label="閉じる">${icon('close')}</button></header><div class="ps-sheet-body">
-    <label for="ps-url">作品のURL <small>必須</small></label><div class="ps-url-row"><input id="ps-url" name="url" type="url" required placeholder="https://…" value="${esc(book?.url || '')}" autocomplete="off"><button type="button" id="ps-paste">貼付け</button></div>
+    <label for="ps-url">作品のURL <small>必須</small></label><div class="ps-url-row"><input id="ps-url" name="url" type="url" required placeholder="https://…" value="${esc(book?.url || '')}" autocomplete="off"><button type="button" id="ps-paste">貼付け</button><button type="button" id="ps-fetch">取得</button></div><p class="ps-field-hint" id="ps-fetch-status" role="status" hidden></p>
     <label for="ps-title">タイトル <small>必須</small></label><input id="ps-title" name="title" required maxlength="200" value="${esc(book?.title || '')}" placeholder="作品名を入力">
-    <label for="ps-authors">著者 <small>必須</small></label><input id="ps-authors" name="authors" required value="${esc(book?.authors.join(', ') || '')}" placeholder="名前を入力すると候補が出ます" autocomplete="off"><div class="ps-suggestions" id="ps-authors-suggestions"></div>
+    <label for="ps-authors">著者 <small>著者かサークルのどちらか必須</small></label><input id="ps-authors" name="authors" value="${esc(book?.authors.join(', ') || '')}" placeholder="名前を入力すると候補が出ます" autocomplete="off"><div class="ps-suggestions" id="ps-authors-suggestions"></div>
+    <label for="ps-circles">サークル <small>著者かサークルのどちらか必須</small></label><input id="ps-circles" name="circles" value="${esc((book?.circles || []).join(', '))}" placeholder="サークル名" autocomplete="off">
     <label for="ps-tags">タグ <small>任意</small></label><input id="ps-tags" name="tags" value="${esc(book?.tags.join(', ') || '')}" placeholder="恋愛、あとで読む…" autocomplete="off"><div class="ps-suggestions" id="ps-tags-suggestions"></div><p class="ps-field-hint">著者・タグは「、」か「,」で複数追加できます。</p>
     <p class="ps-error" role="alert" hidden></p>${book ? '<button type="button" class="ps-danger" id="ps-delete">この作品を削除</button>' : ''}</div><footer class="ps-sheet-footer"><button type="button" class="ps-secondary" data-cancel>キャンセル</button><button type="submit" class="ps-primary" data-save>${book ? '変更を保存' : '本棚に追加'}</button></footer></form>`);
   const form = $('#ps-form');
@@ -124,6 +141,28 @@ function openForm(book = null) {
     };
   }
   $('#ps-paste').onclick = async () => { try { form.elements.url.value = await navigator.clipboard.readText(); } catch { toast('URL欄を長押しして貼り付けてください'); form.elements.url.focus(); } };
+  let fetched = null;
+  $('#ps-fetch').onclick = async () => {
+    const button = $('#ps-fetch'), status = $('#ps-fetch-status');
+    const url = form.elements.url.value.trim();
+    if (button.disabled) return;
+    if (!url) { status.textContent = '先に作品のURLを入力してください。'; status.hidden = false; form.elements.url.focus(); return; }
+    button.disabled = true; button.textContent = '取得中'; status.textContent = '作品情報を取得しています…'; status.hidden = false;
+    try {
+      const meta = await fetchMetadata(url);
+      if (!form.isConnected) return;
+      // Fill only fields that are still empty so manual input is never overwritten.
+      const fill = (name, value) => { if (value && !form.elements[name].value.trim()) form.elements[name].value = value; };
+      fill('title', meta.title);
+      fill('authors', meta.authors.join(', '));
+      fill('circles', meta.circles.join(', '));
+      fetched = { url, thumbnailUrl: meta.thumbnailUrl };
+      status.textContent = '取得しました。空欄の項目だけ補完しています。';
+    } catch (err) {
+      if (!form.isConnected) return;
+      status.textContent = { metadata_not_configured: '同期設定が未設定のため自動取得できません。手入力で登録できます。', unsupported_metadata_url: 'このURLは自動取得に対応していません。手入力で登録できます。', unauthorized: '同期キーが無効なため自動取得できません。手入力で登録できます。' }[err.message] || '作品情報を取得できませんでした。手入力で登録できます。';
+    } finally { button.disabled = false; button.textContent = '取得'; }
+  };
   if (book) $('#ps-delete').onclick = async () => {
     if (busy || !confirm(`「${book.title}」を本棚から削除しますか？`)) return;
     busy = true;
@@ -139,7 +178,8 @@ function openForm(book = null) {
     const error = $('.ps-error'); error.hidden = true;
     busy = true; form.querySelector('[data-save]').disabled = true;
     try {
-      const next = normalizeBook({ ...book, url: data.get('url'), title: data.get('title'), authors: split(data.get('authors')), tags: split(data.get('tags')) });
+      const thumb = fetched && fetched.url === String(data.get('url')).trim() && fetched.thumbnailUrl && !book?.thumbnailUrl ? fetched.thumbnailUrl : book?.thumbnailUrl || '';
+      const next = normalizeBook({ ...book, url: data.get('url'), title: data.get('title'), authors: split(data.get('authors')), circles: split(data.get('circles')), tags: split(data.get('tags')), thumbnailUrl: thumb });
       if (state.books.some(b => !b.deletedAt && b.id !== next.id && b.urlKey === next.urlKey)) throw new Error('このURLはすでに本棚にあります。');
       const vocabulary = [...(state.vocabulary || [])];
       for (const [kind, labels] of [['author', [...(book?.authors || []), ...next.authors]], ['tag', [...(book?.tags || []), ...next.tags]]]) {
@@ -152,7 +192,7 @@ function openForm(book = null) {
       if (!book) { view = 'shelf'; query = ''; tag = ''; sort = 'new'; $('#ps-search').value = ''; $('.ps-content').scrollTop = 0; }
       render(); closeSheet(); toast(book ? '変更を保存しました' : '本棚に追加しました');
     } catch (err) {
-      error.textContent = err.message.includes('URL') ? 'URLを確認してください。同じURLの重複登録はできません。' : '保存できませんでした。タイトル・著者と端末の空き容量を確認してください。';
+      error.textContent = err.message === 'author or circle is required' ? '著者かサークルのどちらかを入力してください。' : err.message.includes('URL') ? 'URLを確認してください。同じURLの重複登録はできません。' : '保存できませんでした。タイトル・著者と端末の空き容量を確認してください。';
       error.hidden = false; error.scrollIntoView({ block: 'nearest' });
     } finally { busy = false; form.querySelector('[data-save]').disabled = false; }
   };
@@ -220,6 +260,8 @@ root.addEventListener('click', async e => {
   }
 });
 root.addEventListener('change', e => { if (e.target.id === 'ps-sort') { sort = e.target.value; render(); } });
+// A cover that fails to load is removed so the generated text cover underneath stays visible.
+root.addEventListener('error', e => { if (e.target instanceof HTMLImageElement && e.target.classList.contains('ps-thumbnail')) e.target.remove(); }, true);
 $('#ps-search').addEventListener('input', e => { query = e.target.value; render(); });
 $('#ps-clear').onclick = () => { query = ''; $('#ps-search').value = ''; render(); $('#ps-search').focus(); };
 $('#ps-add').onclick = () => openForm();
