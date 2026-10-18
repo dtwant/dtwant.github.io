@@ -10,7 +10,7 @@ export function thumbnailUrl(value) {
 }
 
 export function creatorLabel(book) {
-  return (book.authors?.length ? book.authors : book.circles || []).join(' / ');
+  return [...new Set([...(book.authors || []), ...(book.circles || [])])].join(' / ');
 }
 
 export function validateBook(input) {
@@ -22,7 +22,7 @@ export function validateBook(input) {
     if (!String(input?.title || '').trim()) return { ok: false, error: 'title is required' };
     const authors = Array.isArray(input?.authors) ? input.authors.map((v) => String(v).trim()).filter(Boolean) : [];
     const circles = Array.isArray(input?.circles) ? input.circles.map(v => String(v).trim()).filter(Boolean) : [];
-    if (!authors.length && !circles.length) return { ok: false, error: 'author or circle is required' };
+    if (!authors.length) return { ok: false, error: 'author is required' };
     if (input.thumbnailUrl && !thumbnailUrl(input.thumbnailUrl)) return { ok: false, error: 'thumbnail URL is invalid' };
     return { ok: true };
   } catch (_) {

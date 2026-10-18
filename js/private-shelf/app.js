@@ -112,8 +112,8 @@ function openForm(book = null) {
   showSheet(`<form id="ps-form" class="ps-sheet"><header class="ps-sheet-head"><div><p class="ps-eyebrow">${book ? 'EDIT BOOK' : 'ADD TO SHELF'}</p><h2 id="ps-sheet-title">${book ? '作品を編集' : '本棚に追加'}</h2></div><button type="button" class="ps-icon-button" data-cancel aria-label="閉じる">${icon('close')}</button></header><div class="ps-sheet-body">
     <label for="ps-url">作品のURL <small>必須</small></label><div class="ps-url-row"><input id="ps-url" name="url" type="url" required placeholder="https://…" value="${esc(book?.url || '')}" autocomplete="off"><button type="button" id="ps-paste">貼付け</button><button type="button" id="ps-fetch">取得</button></div><p class="ps-field-hint" id="ps-fetch-status" role="status" hidden></p>
     <label for="ps-title">タイトル <small>必須</small></label><input id="ps-title" name="title" required maxlength="200" value="${esc(book?.title || '')}" placeholder="作品名を入力">
-    <label for="ps-authors">著者 <small>著者かサークルのどちらか必須</small></label><input id="ps-authors" name="authors" value="${esc(book?.authors.join(', ') || '')}" placeholder="名前を入力すると候補が出ます" autocomplete="off"><div class="ps-suggestions" id="ps-authors-suggestions"></div>
-    <label for="ps-circles">サークル <small>著者かサークルのどちらか必須</small></label><input id="ps-circles" name="circles" value="${esc((book?.circles || []).join(', '))}" placeholder="サークル名" autocomplete="off">
+    <label for="ps-authors">著者 <small>必須</small></label><input id="ps-authors" name="authors" required value="${esc(book?.authors.join(', ') || '')}" placeholder="名前を入力すると候補が出ます" autocomplete="off"><div class="ps-suggestions" id="ps-authors-suggestions"></div>
+    <label for="ps-circles">サークル <small>任意</small></label><input id="ps-circles" name="circles" value="${esc((book?.circles || []).join(', '))}" placeholder="サークル名" autocomplete="off"><div class="ps-suggestions" id="ps-circles-suggestions"></div>
     <label for="ps-tags">タグ <small>任意</small></label><input id="ps-tags" name="tags" value="${esc(book?.tags.join(', ') || '')}" placeholder="恋愛、あとで読む…" autocomplete="off"><div class="ps-suggestions" id="ps-tags-suggestions"></div><p class="ps-field-hint">著者・タグは「、」か「,」で複数追加できます。</p>
     <p class="ps-error" role="alert" hidden></p>${book ? '<button type="button" class="ps-danger" id="ps-delete">この作品を削除</button>' : ''}</div><footer class="ps-sheet-footer"><button type="button" class="ps-secondary" data-cancel>キャンセル</button><button type="submit" class="ps-primary" data-save>${book ? '変更を保存' : '本棚に追加'}</button></footer></form>`);
   const form = $('#ps-form');
@@ -122,12 +122,12 @@ function openForm(book = null) {
   form.querySelectorAll('[data-cancel]').forEach(b => b.onclick = cancel);
   $('#ps-dialog').oncancel = e => { e.preventDefault(); cancel(); };
   form.querySelector('[data-cancel]').focus();
-  for (const field of ['authors', 'tags']) {
+  for (const field of ['authors', 'circles', 'tags']) {
     const input = form.elements[field];
     const suggestions = () => {
       const terms = input.value.split(/[,、\n]/);
       const prefix = terms.pop().trim().normalize('NFKC').toLocaleLowerCase();
-      const kind = field === 'authors' ? 'author' : 'tag';
+      const kind = field === 'authors' ? 'author' : field === 'circles' ? 'circle' : 'tag';
       const values = [...new Set([...state.books.flatMap(b => b[field] || []), ...(state.vocabulary || []).filter(v => v.kind === kind).map(v => v.label)])];
       $(`#ps-${field}-suggestions`).innerHTML = prefix ? values.filter(v => v.normalize('NFKC').toLocaleLowerCase().includes(prefix) && !terms.map(t => t.trim()).includes(v)).slice(0, 6).map(v => `<button type="button" data-suggest="${field}" data-value="${esc(v)}">${esc(v)}</button>`).join('') : '';
     };
@@ -182,7 +182,7 @@ function openForm(book = null) {
       const next = normalizeBook({ ...book, url: data.get('url'), title: data.get('title'), authors: split(data.get('authors')), circles: split(data.get('circles')), tags: split(data.get('tags')), thumbnailUrl: thumb });
       if (state.books.some(b => !b.deletedAt && b.id !== next.id && b.urlKey === next.urlKey)) throw new Error('このURLはすでに本棚にあります。');
       const vocabulary = [...(state.vocabulary || [])];
-      for (const [kind, labels] of [['author', [...(book?.authors || []), ...next.authors]], ['tag', [...(book?.tags || []), ...next.tags]]]) {
+      for (const [kind, labels] of [['author', [...(book?.authors || []), ...next.authors]], ['circle', [...(book?.circles || []), ...next.circles]], ['tag', [...(book?.tags || []), ...next.tags]]]) {
         for (const label of labels) {
           const normalized = label.trim().normalize('NFKC').toLocaleLowerCase().replace(/\s+/g, ' ');
           if (!vocabulary.some(v => v.kind === kind && v.normalized === normalized)) vocabulary.push({ id: crypto.randomUUID(), kind, label, normalized, createdAt: next.updatedAt });
@@ -192,7 +192,7 @@ function openForm(book = null) {
       if (!book) { view = 'shelf'; query = ''; tag = ''; sort = 'new'; $('#ps-search').value = ''; $('.ps-content').scrollTop = 0; }
       render(); closeSheet(); toast(book ? '変更を保存しました' : '本棚に追加しました');
     } catch (err) {
-      error.textContent = err.message === 'author or circle is required' ? '著者かサークルのどちらかを入力してください。' : err.message.includes('URL') ? 'URLを確認してください。同じURLの重複登録はできません。' : '保存できませんでした。タイトル・著者と端末の空き容量を確認してください。';
+      error.textContent = err.message === 'author is required' ? '著者を入力してください。自動取得できない場合は手入力で補えます。' : err.message.includes('URL') ? 'URLを確認してください。同じURLの重複登録はできません。' : '保存できませんでした。タイトル・著者と端末の空き容量を確認してください。';
       error.hidden = false; error.scrollIntoView({ block: 'nearest' });
     } finally { busy = false; form.querySelector('[data-save]').disabled = false; }
   };
