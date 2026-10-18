@@ -48,7 +48,10 @@ async function fetchMetadata(url) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 15000);
   try {
-    const response = await fetch(`${base.replace(/\/+$/, '')}/v1/private-shelf/metadata`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-DT-Sync-Key': key }, body: JSON.stringify({ url }), signal: controller.signal, cache: 'no-store', credentials: 'omit' });
+    // Keep this under the existing public D1 app path. The Worker host is
+    // protected by Access; this path is the deliberate browser-facing bypass
+    // and is still guarded by X-DT-Sync-Key inside the Worker.
+    const response = await fetch(`${base.replace(/\/+$/, '')}/v1/apps/private-shelf/metadata`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-DT-Sync-Key': key }, body: JSON.stringify({ url }), signal: controller.signal, cache: 'no-store', credentials: 'omit' });
     const data = await response.json().catch(() => null);
     if (!response.ok) throw new Error(response.status === 401 ? 'unauthorized' : data?.error || 'metadata_unavailable');
     const names = value => Array.isArray(value) ? value.filter(v => typeof v === 'string').map(v => v.trim().slice(0, 100)).filter(Boolean).slice(0, 10) : [];
