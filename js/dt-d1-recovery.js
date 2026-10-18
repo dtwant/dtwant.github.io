@@ -7,6 +7,7 @@
   const HOLD_PREFIX = 'dt_d1_recovery_hold_';
   const SCHEMA = 'dt-world-d1-pre-cutover-backup';
   const RECOVERY_SCHEMA = 'dt-world-d1-recovery-backup';
+  const EXPORT_SCHEMA = 'dt-world-d1-recovery-export';
 
   function isObject(value) {
     return value !== null && typeof value === 'object';
@@ -55,6 +56,39 @@
       });
     }
     return backups.sort((left, right) => String(right.createdAt).localeCompare(String(left.createdAt)));
+  }
+
+  function parseRecoveryExport(raw) {
+    let value;
+    try { value = typeof raw === 'string' ? JSON.parse(raw) : raw; } catch (_) { return null; }
+    if (!isObject(value) || value.schema !== EXPORT_SCHEMA || value.version !== 1 || !Array.isArray(value.backups)) return null;
+    const backups = [];
+    for (const item of value.backups) {
+      const backup = parsePreCutoverBackup(item?.backup);
+      if (!backup) continue;
+      backups.push({ backupKey: typeof item.backupKey === 'string' ? item.backupKey : '', backup });
+    }
+    return backups.length ? { ...value, backups } : null;
+  }
+
+  function importRecoveryExport(storage, exportInput, now = new Date()) {
+    if (!storage || typeof storage.getItem !== 'function' || typeof storage.setItem !== 'function') {
+      throw recoveryError('recovery_import_storage_unavailable');
+    }
+    const parsed = parseRecoveryExport(exportInput);
+    if (!parsed) throw recoveryError('recovery_import_invalid_file');
+    const timestamp = Date.parse(now instanceof Date ? now.toISOString() : new Date(now).toISOString());
+    const suffix = Number.isFinite(timestamp) ? timestamp : Date.now();
+    const imported = [];
+    for (const item of parsed.backups) {
+      const appKey = item.backup.appKey;
+      let key = `${PRE_CUTOVER_PREFIX}${appKey}_import_${suffix}`;
+      let counter = 1;
+      while (storage.getItem(key) !== null) key = `${PRE_CUTOVER_PREFIX}${appKey}_import_${suffix}_${counter++}`;
+      storage.setItem(key, JSON.stringify(item.backup));
+      imported.push({ ...item, backupKey: key });
+    }
+    return imported;
   }
 
   function backupEntries(backup) {
@@ -125,6 +159,7 @@
     storage = root.localStorage,
     indexedDB = root.indexedDB,
     cutover = root.DTSyncCutover,
+    sourceBackupKey = '',
     now = new Date()
   } = {}) {
     if (!storage || typeof storage.getItem !== 'function' || typeof storage.setItem !== 'function') throw recoveryError('storage_unavailable');
@@ -159,7 +194,7 @@
     } catch (error) {
       throw recoveryError('recovery_safety_backup_failed', error);
     }
-    const sourceBackupKey = `${PRE_CUTOVER_PREFIX}${appKey}`;
+    const sourceKey = sourceBackupKey || `${PRE_CUTOVER_PREFIX}${appKey}`;
     // Set the hold before writing any app data. Mutation observers may schedule
     // a runtime sync, but the runtime will see this marker and refuse to pull
     // the stale live value back over the restored data.
@@ -169,7 +204,7 @@
         version: 1,
         appKey,
         createdAt: new Date(now).toISOString(),
-        sourceBackupKey,
+        sourceBackupKey: sourceKey,
         recoveryBackupKey,
         reason: 'restored_pre_cutover'
       }));
@@ -185,7 +220,7 @@
     } catch (error) {
       throw recoveryError('recovery_apply_failed', error);
     }
-    return { ...applied, ok: true, appKey, sourceBackupKey, recoveryBackupKey, restoredFrom: backup.createdAt };
+    return { ...applied, ok: true, appKey, sourceBackupKey: sourceKey, recoveryBackupKey, restoredFrom: backup.createdAt };
   }
 
   function isRecoveryHeld(storage = root.localStorage, appKey = '') {
@@ -204,6 +239,8 @@
     HOLD_PREFIX,
     parsePreCutoverBackup,
     listPreCutoverBackups,
+    parseRecoveryExport,
+    importRecoveryExport,
     backupEntries,
     saveRecoveryBackup,
     restorePreCutoverBackup,
