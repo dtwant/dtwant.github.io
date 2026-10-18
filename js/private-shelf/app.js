@@ -1,4 +1,4 @@
-import { addOpenEvent, creatorLabel, filterBooks, mergeBackup, normalizeBook, rankBooks, recentBooks, thumbnailUrl } from './core.js';
+import { addOpenEvent, creatorLabel, filterBooks, filterBooksByTag, groupBooksByAuthor, mergeBackup, normalizeBook, rankBooks, recentBooks, thumbnailUrl } from './core.js';
 import { exportState, loadState, saveState } from './store.js';
 
 const root = document.querySelector('[data-private-shelf]');
@@ -75,13 +75,20 @@ function card(book) {
 function empty(title, description, action = '') {
   return `<div class="ps-empty"><span class="ps-empty-icon">${icon(view === 'favorites' ? 'heart' : 'shelf')}</span><h2>${title}</h2><p>${description}</p>${action}</div>`;
 }
+function libraryGrid(books) {
+  return `<div class="ps-grid ps-grid-${columns}">${books.map(card).join('')}</div>`;
+}
+function authorSections(books) {
+  const groups = groupBooksByAuthor(books);
+  return groups.map((group, index) => `<section class="ps-author-group" aria-labelledby="ps-author-${index}"><div class="ps-author-group-head"><h3 id="ps-author-${index}">${esc(group.author)}</h3><span>${group.books.length}作品</span></div>${libraryGrid(group.books)}</section>`).join('');
+}
 function render() {
   $('.ps-content').setAttribute('aria-label', titles[view]);
   root.querySelectorAll('[data-view]').forEach(el => { el.classList.toggle('is-active', el.dataset.view === view); el.setAttribute('aria-current', el.dataset.view === view ? 'page' : 'false'); });
   $('.ps-search-wrap').hidden = view === 'ranking';
   $('#ps-clear').hidden = !query;
   let books = filterBooks(liveBooks().filter(b => view !== 'favorites' || b.favorite), query);
-  if (tag) books = books.filter(b => b.tags.includes(tag));
+  books = filterBooksByTag(books, tag);
   books.sort(sort === 'title' ? (a, b) => a.title.localeCompare(b.title, 'ja') : (a, b) => b.createdAt.localeCompare(a.createdAt));
   if (view === 'ranking') {
     const now = new Date();
@@ -98,9 +105,9 @@ function render() {
   const recent = view === 'shelf' && !query && !tag ? recentBooks(state).slice(0, 6) : [];
   const tags = [...new Set(liveBooks().flatMap(b => b.tags))].sort((a, b) => a.localeCompare(b, 'ja'));
   $('#ps-results').innerHTML = `${recent.length ? `<section class="ps-recent-section"><div class="ps-section-head"><h2>最近読んだ作品</h2><span>最新${recent.length}件</span></div><div class="ps-recent">${recent.map((b, i) => `<button class="ps-recent-item" data-open="${esc(b.id)}"><span class="ps-recent-cover ps-tone-${tone(b)}">${String(i + 1).padStart(2, '0')}</span><span><strong>${esc(b.title)}</strong><small>${esc(creatorLabel(b))}</small></span></button>`).join('')}</div></section>` : ''}
-    ${tags.length ? `<div class="ps-tags" aria-label="タグで絞り込み"><button data-tag="" aria-pressed="${!tag}">すべて</button>${tags.map(t => `<button data-tag="${esc(t)}" aria-pressed="${tag === t}">${esc(t)}</button>`).join('')}</div>` : ''}
-    <div class="ps-section-head ps-library-head"><h2>${query || tag ? '検索結果' : view === 'favorites' ? 'お気に入り' : 'すべての作品'}<span class="ps-total">${books.length}</span></h2><select id="ps-sort" aria-label="並び順"><option value="new" ${sort === 'new' ? 'selected' : ''}>追加した順</option><option value="title" ${sort === 'title' ? 'selected' : ''}>タイトル順</option></select></div>
-    ${books.length ? `<div class="ps-grid ps-grid-${columns}">${books.map(card).join('')}</div>` : empty(view === 'favorites' && !query && !tag ? '好きな作品を、すぐ手元に。' : '作品が見つかりません', view === 'favorites' && !query && !tag ? '作品のハートを押すと、ここに集まります。' : '別の言葉やタグで探してみてください。')}`;
+    ${tags.length ? `<section class="ps-tag-filter" aria-label="タグで絞り込み"><div class="ps-section-head"><h2>タグで絞り込み</h2><span>${tag ? `選択中: ${esc(tag)}` : 'すべて'}</span></div><div class="ps-tags"><button data-tag="" aria-pressed="${!tag}">すべて</button>${tags.map(t => `<button data-tag="${esc(t)}" aria-pressed="${tag === t}">${esc(t)}</button>`).join('')}</div></section>` : ''}
+    <div class="ps-section-head ps-library-head"><h2>${query || tag ? '検索結果' : view === 'favorites' ? 'お気に入り' : 'すべての作品'}<span class="ps-total">${books.length}</span></h2><select id="ps-sort" aria-label="並び順"><option value="new" ${sort === 'new' ? 'selected' : ''}>追加した順</option><option value="title" ${sort === 'title' ? 'selected' : ''}>タイトル順</option><option value="author" ${sort === 'author' ? 'selected' : ''}>作者順</option></select></div>
+    ${books.length ? sort === 'author' ? authorSections(books) : libraryGrid(books) : empty(view === 'favorites' && !query && !tag ? '好きな作品を、すぐ手元に。' : '作品が見つかりません', view === 'favorites' && !query && !tag ? '作品のハートを押すと、ここに集まります。' : '別の言葉やタグで探してみてください。')}`;
 }
 function closeSheet() {
   $('#ps-dialog').close();

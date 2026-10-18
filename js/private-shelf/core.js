@@ -86,6 +86,23 @@ export function filterBooks(books, query) {
   return books.filter((book) => terms.every((term) => fold([book.title, ...(book.authors || []), ...(book.circles || []), ...(book.tags || [])].join('\u0000')).includes(term)));
 }
 
+export function filterBooksByTag(books, tag) {
+  const target = String(tag || '').trim();
+  return target ? books.filter(book => (book.tags || []).includes(target)) : [...books];
+}
+
+export function groupBooksByAuthor(books) {
+  const groups = new Map();
+  for (const book of books) {
+    const author = String(book.authors?.[0] || '').trim() || '作者未設定';
+    if (!groups.has(author)) groups.set(author, []);
+    groups.get(author).push(book);
+  }
+  return [...groups.entries()]
+    .sort(([a], [b]) => a === '作者未設定' ? -1 : b === '作者未設定' ? 1 : a.localeCompare(b, 'ja'))
+    .map(([author, groupedBooks]) => ({ author, books: groupedBooks }));
+}
+
 // Validate the complete backup before returning a new state. Never replace the current shelf.
 export function mergeBackup(current, incoming) {
   const validDate = value => typeof value === 'string' && Number.isFinite(Date.parse(value));
