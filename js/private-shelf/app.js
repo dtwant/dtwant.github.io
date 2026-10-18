@@ -25,7 +25,11 @@ $('#ps-settings').innerHTML = icon('more');
 $('#ps-search-icon').innerHTML = icon('search');
 
 let state = await loadState();
-let view = 'shelf', query = '', tag = '', sort = 'new', period = 'all';
+const COLUMNS_KEY = 'dt_private_shelf_columns_v1';
+function savedColumns() {
+  try { return localStorage.getItem(COLUMNS_KEY) === '3' ? 3 : 2; } catch { return 2; }
+}
+let view = 'shelf', query = '', tag = '', sort = 'new', period = 'all', columns = savedColumns();
 let busy = false, openLock = false, toastTimer, returnFocus;
 const titles = { shelf: '本棚', search: '作品を探す', favorites: 'お気に入り', ranking: 'よく読む作品' };
 const liveBooks = () => state.books.filter(b => !b.deletedAt);
@@ -96,7 +100,7 @@ function render() {
   $('#ps-results').innerHTML = `${recent.length ? `<section class="ps-recent-section"><div class="ps-section-head"><h2>最近読んだ作品</h2><span>最新${recent.length}件</span></div><div class="ps-recent">${recent.map((b, i) => `<button class="ps-recent-item" data-open="${esc(b.id)}"><span class="ps-recent-cover ps-tone-${tone(b)}">${String(i + 1).padStart(2, '0')}</span><span><strong>${esc(b.title)}</strong><small>${esc(creatorLabel(b))}</small></span></button>`).join('')}</div></section>` : ''}
     ${tags.length ? `<div class="ps-tags" aria-label="タグで絞り込み"><button data-tag="" aria-pressed="${!tag}">すべて</button>${tags.map(t => `<button data-tag="${esc(t)}" aria-pressed="${tag === t}">${esc(t)}</button>`).join('')}</div>` : ''}
     <div class="ps-section-head ps-library-head"><h2>${query || tag ? '検索結果' : view === 'favorites' ? 'お気に入り' : 'すべての作品'}<span class="ps-total">${books.length}</span></h2><select id="ps-sort" aria-label="並び順"><option value="new" ${sort === 'new' ? 'selected' : ''}>追加した順</option><option value="title" ${sort === 'title' ? 'selected' : ''}>タイトル順</option></select></div>
-    ${books.length ? `<div class="ps-grid">${books.map(card).join('')}</div>` : empty(view === 'favorites' && !query && !tag ? '好きな作品を、すぐ手元に。' : '作品が見つかりません', view === 'favorites' && !query && !tag ? '作品のハートを押すと、ここに集まります。' : '別の言葉やタグで探してみてください。')}`;
+    ${books.length ? `<div class="ps-grid ps-grid-${columns}">${books.map(card).join('')}</div>` : empty(view === 'favorites' && !query && !tag ? '好きな作品を、すぐ手元に。' : '作品が見つかりません', view === 'favorites' && !query && !tag ? '作品のハートを押すと、ここに集まります。' : '別の言葉やタグで探してみてください。')}`;
 }
 function closeSheet() {
   $('#ps-dialog').close();
@@ -201,7 +205,7 @@ function openForm(book = null) {
   };
 }
 function settings() {
-  showSheet(`<section class="ps-sheet"><header class="ps-sheet-head"><h2 id="ps-sheet-title">本棚の設定</h2><button class="ps-icon-button" data-cancel aria-label="閉じる">${icon('close')}</button></header><div class="ps-sheet-body"><h3>バックアップ</h3><p class="ps-field-hint">作品はこの端末に保存されます。</p><button class="ps-settings-action" id="ps-export">JSONバックアップを書き出す ${icon('arrow')}</button><button class="ps-settings-action" id="ps-import">バックアップを読み込む ${icon('arrow')}</button><input type="file" id="ps-import-file" accept="application/json,.json" hidden><p class="ps-field-hint" id="ps-import-status" role="status"></p><button class="ps-primary" id="ps-import-confirm" hidden>この内容を本棚に取り込む</button><a class="ps-settings-action" href="/0723/">本棚を閉じる ${icon('arrow')}</a></div></section>`);
+  showSheet(`<section class="ps-sheet"><header class="ps-sheet-head"><h2 id="ps-sheet-title">本棚の設定</h2><button class="ps-icon-button" data-cancel aria-label="閉じる">${icon('close')}</button></header><div class="ps-sheet-body"><h3>表示</h3><p class="ps-field-hint">作品カードの列数</p><div class="ps-column-toggle" role="group" aria-label="本棚の列数"><button type="button" data-columns="2" aria-pressed="${columns === 2}">2列</button><button type="button" data-columns="3" aria-pressed="${columns === 3}">3列</button></div><h3>バックアップ</h3><p class="ps-field-hint">作品はこの端末に保存されます。</p><button class="ps-settings-action" id="ps-export">JSONバックアップを書き出す ${icon('arrow')}</button><button class="ps-settings-action" id="ps-import">バックアップを読み込む ${icon('arrow')}</button><input type="file" id="ps-import-file" accept="application/json,.json" hidden><p class="ps-field-hint" id="ps-import-status" role="status"></p><button class="ps-primary" id="ps-import-confirm" hidden>この内容を本棚に取り込む</button><a class="ps-settings-action" href="/0723/">本棚を閉じる ${icon('arrow')}</a></div></section>`);
   $('[data-cancel]').onclick = () => { if (!busy) closeSheet(); };
   $('#ps-dialog').oncancel = e => { if (busy) e.preventDefault(); };
   $('#ps-export').onclick = () => exportState(state);
@@ -249,6 +253,13 @@ root.addEventListener('click', async e => {
     if (view === 'search') $('#ps-search').focus(); return;
   }
   if ('tag' in button.dataset) { tag = button.dataset.tag; render(); return; }
+  if (button.dataset.columns) {
+    columns = button.dataset.columns === '3' ? 3 : 2;
+    try { localStorage.setItem(COLUMNS_KEY, String(columns)); } catch {}
+    root.querySelectorAll('[data-columns]').forEach(item => item.setAttribute('aria-pressed', String(Number(item.dataset.columns) === columns)));
+    render();
+    return;
+  }
   if (button.dataset.period) { period = button.dataset.period; render(); return; }
   if (button.dataset.edit) return openForm(liveBooks().find(b => b.id === button.dataset.edit));
   if ('add' in button.dataset) return openForm();

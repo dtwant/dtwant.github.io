@@ -123,9 +123,19 @@ body.ps-page > :not(.ps-root):not(script):not(style):not(link) { display: none !
 .ps-danger { color: #ffb5ab !important; font-size: 12px !important; margin-top: 16px; }
 .ps-error { color: #ffb5ab !important; font-size: 12px; margin-top: 12px !important; }
 .ps-settings-action { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 56px; text-align: left; margin-top: 12px; font-size: 13px !important; }
+.ps-column-toggle { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; margin: 4px 0 26px; }
+.ps-column-toggle button { min-height: 46px; border-radius: 10px; border-color: var(--ps-line) !important; color: var(--ps-muted); }
+.ps-column-toggle button[aria-pressed="true"] { background: var(--ps-accent); border-color: var(--ps-accent) !important; color: #172016; font-weight: 600; }
 .ps-toast { position: fixed; z-index: 5; bottom: calc(90px + env(safe-area-inset-bottom)); left: 20px; right: 20px; padding: 13px 16px; border-radius: 12px; background: #d9e9ac; color: #172016; box-shadow: 0 8px 30px #0006; font-size: 13px; text-align: center; pointer-events: none; }
 @media (min-width: 600px) { .ps-topbar,.ps-content,.ps-dock { padding-left: max(24px, calc((100vw - 700px)/2)); padding-right: max(24px, calc((100vw - 700px)/2)); } .ps-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
 @media (max-width: 350px) { .ps-content { padding-left: 16px; padding-right: 16px; } .ps-recent,.ps-tags { margin-left: -16px; margin-right: -16px; padding-left: 16px; padding-right: 16px; } .ps-cover { min-height: 152px; padding-left: 14px; } .ps-cover-title { font-size: 19px; } .ps-grid { gap: 18px 10px; } .ps-dock { padding-left: 4px; padding-right: 4px; } .ps-card-tag { font-size: 9px; } }
+.ps-grid.ps-grid-2 { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.ps-grid.ps-grid-3 { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.ps-grid.ps-grid-3 .ps-cover { min-height: 0; padding: 14px 11px 17px; }
+.ps-grid.ps-grid-3 .ps-cover-rule { top: 12px; width: 16px; }
+.ps-grid.ps-grid-3 .ps-cover-title { font-size: 17px; line-height: 1.42; }
+.ps-grid.ps-grid-3 .ps-cover-bottom { left: 11px; right: 8px; bottom: 10px; font-size: 8px; }
+@media (max-width: 350px) { .ps-grid.ps-grid-3 .ps-cover { padding: 12px 9px 14px; } .ps-grid.ps-grid-3 .ps-cover-rule { top: 10px; } .ps-grid.ps-grid-3 .ps-cover-title { font-size: 14px; line-height: 1.45; } .ps-grid.ps-grid-3 .ps-cover-bottom { left: 9px; right: 7px; bottom: 8px; font-size: 7px; } }
 @media (prefers-reduced-motion: reduce) { .ps-root *, .ps-root *::before, .ps-root *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 /* Metadata fetch and cover thumbnails (additive only). */
 #ps-fetch { flex: 0 0 56px; border-radius: 10px; background: #303c31; font-size: 12px; }
