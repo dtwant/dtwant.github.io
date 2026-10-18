@@ -50,6 +50,115 @@
     biome_archive: ['#ba-sync-action']
   };
 
+  // These selectors only affect the visible legacy configuration surface.
+  // The underlying storage keys and compatibility code remain available for
+  // recovery, but a D1-enabled app must not present JSONBin as its owner.
+  const LEGACY_SYNC_UI = {
+    manga: {
+      roots: ['#ms-overlay-settings'],
+      selectors: ['#ms-blob-id-input', '#ms-blob-id-display', '#ms-sync-detail'],
+      markers: ['JSONBIN', 'jsonbin.io', 'EXISTING BLOB ID', 'Blob ID']
+    },
+    novel: {
+      roots: ['.ns-modal[data-modal="settings"]'],
+      selectors: ['[data-role="sync-key"]', '[data-role="sync-bin"]'],
+      markers: ['JSONBin', 'Bin ID', '専用Bin', '共通マスター']
+    },
+    movie: {
+      roots: ['#mt-overlay-settings'],
+      selectors: ['#mt-blob-id-input', '#mt-blob-id-display'],
+      markers: ['JSONBIN', 'jsonbin.io', 'EXISTING BLOB ID', 'Blob ID']
+    },
+    feeding: {
+      roots: ['#fl-sync-settings-overlay'],
+      selectors: ['#fl-sync-bin-id'],
+      markers: ['CURRENT BIN ID', '接続ID']
+    },
+    timetable: {
+      roots: ['#cyber-sync-panel'],
+      selectors: ['#sync-key-input', '#btn-sync-generate', '#btn-sync-link', '#btn-sync-connect', '#btn-sync-disconnect'],
+      markers: ['jsonbin.io', 'APIキー', '同期キー']
+    },
+    diary: {
+      roots: ['#sd-tab-settings'],
+      selectors: ['#sd-gaman-sync-copy-key-btn', '#sd-gaman-sync-key-input', '#sd-gaman-sync-save-btn', '#sd-gaman-sync-status'],
+      markers: ['同期キー', '他の端末やブラウザと同期']
+    },
+    task_calendar: {
+      roots: ['#ntc-cfg-overlay'],
+      selectors: ['#ntc-cfg-binid'],
+      markers: ['JSONBIN', 'Bin ID', 'MASTER KEY']
+    },
+    calendar: {
+      roots: ['#cg-ov-settings'],
+      selectors: ['#cg-blob-input', '#cg-jbkey-input', '#cg-old-bin-id', '#cg-old-api-key', '#cg-migrate-area'],
+      markers: ['JSONBIN', '旧 Bin ID', '旧 API Key', 'APIキー']
+    },
+    report_card: {
+      roots: ['#rc-settings-modal'],
+      selectors: ['#rc-sync-now-btn', '#rc-sync-copy-key-btn', '#rc-sync-key-input', '#rc-sync-connect-btn', '#rc-sync-disconnect-btn'],
+      markers: ['端末間同期', '同期キー', 'クラウド送信']
+    },
+    deadline: {
+      roots: ['#dm-config-modal'],
+      selectors: ['#dm-config-blob-id'],
+      markers: ['接続 BIN ID', 'Bin ID']
+    },
+    tasklist: {
+      roots: ['.tl-dialog'],
+      selectors: ['[placeholder*="sync ID"]', '[placeholder*="同期ID"]'],
+      markers: ['Cloud sync', 'Current sync ID', 'Paste an existing sync ID']
+    },
+    payment: {
+      roots: ['.cn-dialog'],
+      selectors: ['[placeholder="Bin ID を入力"]'],
+      markers: ['JSONBin', 'Bin ID', 'クラウド同期']
+    },
+    vocal_range: {
+      roots: ['#vr-m-cfg'],
+      selectors: ['#cfg-blob', '#cfg-bid'],
+      markers: ['クラウド同期', 'JSONBin', 'Bin ID']
+    },
+    library: {
+      roots: ['#bs-overlay-settings'],
+      selectors: ['#bs-blob-input', '#bs-jbkey-input'],
+      markers: ['JSONBIN', 'Bin ID', 'API KEY']
+    },
+    attendance: {
+      roots: ['#ag-config-modal'],
+      selectors: ['#ag-config-blob-id'],
+      markers: ['接続 BIN ID', 'Bin ID']
+    },
+    weight_log: {
+      roots: ['#wl-cfg-overlay'],
+      selectors: ['#wl-cfg-bin', '#wl-cfg-key'],
+      markers: ['JSONBin', 'Bin ID', 'API Key']
+    },
+    shift_clock: {
+      roots: ['#sc-ov-config'],
+      selectors: ['#sc-cfg-bin', '#sc-cfg-key'],
+      markers: ['JSONBin', 'Bin ID', 'API Key']
+    },
+    taskmanage: {
+      roots: ['#km-sync-ol'],
+      selectors: ['#km-btn-sync-settings', '#km-sync-bin-input'],
+      markers: ['JSONBin', 'Bin ID', 'APIキー']
+    },
+    math_memo: {
+      roots: ['[data-mm-dialog="sync"]'],
+      selectors: ['[data-mm-bin-input]', '[data-mm-action="sync-open"]'],
+      markers: ['Bin ID', '同期キー']
+    },
+    ritual_grid: {
+      roots: ['[data-rg-settings-panel]'],
+      selectors: ['[data-rg-action="connect-sync"]', '[data-rg-action="disconnect-sync"]'],
+      markers: ['端末間同期', '接続して同期']
+    },
+    oshi: { roots: [], selectors: [], markers: [] },
+    habit_heatmap: { roots: [], selectors: [], markers: [] },
+    biome_archive: { roots: [], selectors: ['#ba-sync-action'], markers: [] }
+  };
+
   const labels = {
     syncing: 'D1同期中', synced: 'D1同期済み', pulled: 'D1同期済み', pushed: 'D1同期済み',
     unchanged: 'D1同期済み', conflict: 'D1競合確認', resolved: 'D1同期済み',
@@ -100,6 +209,55 @@
   function nodesFor(appKey) {
     const selectors = STATUS_TARGETS[appKey] || [];
     return selectors.flatMap((selector) => [...document.querySelectorAll(selector)]);
+  }
+
+  function hideLegacyNode(node) {
+    if (!node || node.classList?.contains('dt-d1-only-notice') || node.dataset?.dtD1LegacyHidden === 'true') return;
+    const target = node.closest?.('label, .cn-field, .tl-field, .ms-field, .mt-field, .bs-field, .sc-form-group') || node;
+    if (target.dataset) target.dataset.dtD1LegacyHidden = 'true';
+    target.hidden = true;
+    target.setAttribute?.('aria-hidden', 'true');
+    if (target.style) target.style.display = 'none';
+  }
+
+  function addD1Notice(root) {
+    if (!root || root.querySelector?.('.dt-d1-only-notice')) return;
+    const notice = document.createElement('p');
+    notice.className = 'dt-d1-only-notice';
+    notice.setAttribute('role', 'status');
+    notice.style.cssText = 'margin:0 0 12px;padding:10px 12px;border:1px solid rgba(56,189,248,.35);border-radius:10px;background:rgba(14,116,144,.12);color:#bae6fd;font-size:12px;line-height:1.5;';
+    notice.innerHTML = 'このツールの同期先はCloudflare D1です。URL・同期キー・端末間同期は <a href="/project-x/sync-settings/" style="color:inherit;text-decoration:underline;font-weight:700;">Sync Settings</a> で管理します。';
+    root.insertBefore(notice, root.firstChild || null);
+  }
+
+  function hasMarker(node, markers) {
+    const value = `${node.id || ''} ${node.getAttribute?.('placeholder') || ''} ${node.textContent || ''}`;
+    return markers.some((marker) => value.toLowerCase().includes(String(marker).toLowerCase()));
+  }
+
+  function hideLegacySyncUi() {
+    if (!document?.querySelectorAll) return;
+    for (const [appKey, rule] of Object.entries(LEGACY_SYNC_UI)) {
+      if (!isEnabled(appKey)) continue;
+      const roots = rule.roots
+        .flatMap((selector) => [...document.querySelectorAll(selector)])
+        .filter((rootNode) => !rule.markers.length
+          || hasMarker(rootNode, rule.markers)
+          || rule.selectors.some((selector) => rootNode.querySelector?.(selector)));
+      for (const selector of rule.selectors) {
+        for (const node of document.querySelectorAll(selector)) hideLegacyNode(node);
+      }
+      for (const rootNode of roots) {
+        addD1Notice(rootNode);
+        if (!rule.markers.length || !rootNode.querySelectorAll) continue;
+        for (const node of rootNode.querySelectorAll('label,p,h2,h3,h4,span,div,input,button')) {
+          if (node.classList?.contains('dt-d1-only-notice')) continue;
+          if (!hasMarker(node, rule.markers)) continue;
+          const markedChild = [...(node.children || [])].some((child) => hasMarker(child, rule.markers));
+          if (!markedChild) hideLegacyNode(node);
+        }
+      }
+    }
   }
 
   function stateFor(detail) {
@@ -156,6 +314,7 @@
     if (refreshing) return;
     refreshing = true;
     try {
+      hideLegacySyncUi();
       for (const appKey of Object.keys(STATUS_TARGETS)) {
         if (isEnabled(appKey)) renderStatus(appKey, statusByApp.get(appKey) || { ok: true, status: 'syncing' });
       }
@@ -204,7 +363,7 @@
     refreshStatuses();
   }
 
-  root.DTD1LegacyBridge = { isEnabled, syncApp, refreshStatuses, normalizeLegacyStatusNode, statusLabel };
+  root.DTD1LegacyBridge = { isEnabled, syncApp, refreshStatuses, normalizeLegacyStatusNode, statusLabel, hideLegacySyncUi };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
   else install();
 })(typeof window !== 'undefined' ? window : globalThis);

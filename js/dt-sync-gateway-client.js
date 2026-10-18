@@ -1,4 +1,9 @@
-/* Opt-in browser client for the Cloudflare Access-protected sync gateway. */
+/* Opt-in browser client for the D1 sync gateway.
+ *
+ * Management/migration requests use the Access session. Live app sync uses
+ * only the dedicated X-DT-Sync-Key so an expired Access session does not stop
+ * ordinary device synchronization.
+ */
 (function (root) {
   'use strict';
 
@@ -128,10 +133,11 @@
           const request = (async () => {
             const response = await fetchImpl(`${endpoint}${path}`, {
               ...options,
-              // Live routes are behind Cloudflare Access in the default
-              // deployment. Include the Access session cookie; the D1 sync
-              // key remains the application-level authorization.
-              credentials: 'include',
+              // Live routes are intentionally bypassed at the Access layer
+              // and authorized by X-DT-Sync-Key in the Worker. Do not send an
+              // Access cookie: ordinary synchronization must survive an
+              // expired Cloudflare login and avoid credentialed CORS.
+              credentials: 'omit',
               signal: controller ? controller.signal : undefined,
               headers: {
                 Accept: 'application/json',

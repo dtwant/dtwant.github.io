@@ -1093,11 +1093,10 @@
     }
     installStorageMutationTracking(root.localStorage, schedule);
     installIndexedDBMutationTracking(schedule);
+    // D1 synchronization is event-driven only. A page left open must not
+    // create a recurring request stream; local writes and lifecycle events
+    // above are the explicit synchronization triggers.
     root.setTimeout(run, 2500);
-    // A normal tool page keeps its one app fresh while it is open. Sync
-    // Settings is an explicit control surface, so it must not generate a
-    // 23-tool request burst every few seconds in the background.
-    if (appKey && typeof root.setInterval === 'function') root.setInterval(run, 15000);
     const lifecycleSync = (event) => {
       const visibilityState = root.document?.visibilityState || 'visible';
       if (shouldSyncOnLifecycle(event?.type, visibilityState)) schedule();
