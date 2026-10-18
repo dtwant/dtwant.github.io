@@ -8,6 +8,7 @@
   'use strict';
 
   const BACKUP_PREFIX = 'dt_d1_pre_cutover_backup_';
+  const MAX_CANDIDATE_AGE_MS = 24 * 60 * 60 * 1000;
   const CREDENTIAL_KEY = /^(?:dt_sync_gateway_key|shared_jsonbin_api_key)$/i;
   const D1_METADATA_KEY = /^dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup)_/i;
   const CONNECTION_KEY = /(?:^|_)(?:bin_id|blob|blob_id|sync_blob|sync_key|device_id|import_backup|recovery_v\d+)$/i;
@@ -60,6 +61,13 @@
 
   function classifyDatabase(name) {
     return INDEXED_DB_TOOLS.get(String(name || '').toLowerCase()) || null;
+  }
+
+  function isCandidateFresh(candidate, now = new Date()) {
+    const createdAt = Date.parse(String(candidate?.createdAt || ''));
+    const nowAt = now instanceof Date ? now.getTime() : Date.parse(String(now || ''));
+    if (!Number.isFinite(createdAt) || !Number.isFinite(nowAt) || createdAt > nowAt) return false;
+    return nowAt - createdAt <= MAX_CANDIDATE_AGE_MS;
   }
 
   function bytesToBase64(bytes) {
@@ -365,6 +373,8 @@
 
   root.DTSyncCutover = {
     BACKUP_PREFIX,
+    MAX_CANDIDATE_AGE_MS,
+    isCandidateFresh,
     stableStringify,
     serialize,
     deserialize,

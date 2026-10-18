@@ -164,6 +164,7 @@
     unchanged: 'D1同期済み', conflict: 'D1競合確認', resolved: 'D1同期済み',
     error: 'D1同期エラー', network: 'D1同期エラー', timeout: 'D1同期エラー',
     runtime_error: 'D1実行エラー', worker_unavailable: 'D1 Worker未接続',
+    recovery_hold: '復元保留中（D1未同期）',
     d1_runtime_unavailable: 'D1ランタイム未読込', indexeddb_unavailable: '端末DBを読めません',
     apply_failed: '端末への反映失敗', source_snapshot_missing: '選択原本に対象なし',
     source_snapshot_unavailable: '選択原本を確認できません',
@@ -198,6 +199,7 @@
   function statusDetail(detail) {
     if (!detail) return 'D1同期を確認しています';
     if (detail.ok === false) {
+      if (detail.reason === 'recovery_hold') return '復元した端末データを確認するまでD1同期を保留しています';
       const status = Number.isInteger(detail.statusCode) ? ` (HTTP ${detail.statusCode})` : '';
       return `D1同期エラー: ${detail.reason || 'unknown'}${status}`;
     }

@@ -34,8 +34,9 @@
   const CONFLICT_PREFIX = 'dt_d1_sync_conflict_';
   const LOCAL_UPDATED_PREFIX = 'dt_d1_local_updated_';
   const FORCE_PULL_PREFIX = 'dt_d1_force_pull_';
+  const RECOVERY_HOLD_PREFIX = 'dt_d1_recovery_hold_';
   const RUNTIME_STARTED_KEY = '__dtD1RuntimeStarted';
-  const RUNTIME_METADATA_KEY = /^(?:dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup|local_updated|force_pull)_|dt_sync_provider_|dt_sync_gateway_(?:url|key)$|dt_sync_device_id$)/i;
+  const RUNTIME_METADATA_KEY = /^(?:dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup|recovery_backup|recovery_hold|local_updated|force_pull)_|dt_sync_provider_|dt_sync_gateway_(?:url|key)$|dt_sync_device_id$)/i;
   const LIFECYCLE_SYNC_EVENTS = new Set(['pageshow', 'focus', 'visibilitychange']);
   let suppressLocalTracking = false;
   const patchedStorageInstances = new WeakSet();
@@ -413,6 +414,10 @@
     return config(appKey, storage) ? [appKey] : [];
   }
 
+  function isRecoveryHeld(storage, appKey) {
+    return Boolean(appKey && storage?.getItem(`${RECOVERY_HOLD_PREFIX}${appKey}`));
+  }
+
   function localEntries(storage, appKey) {
     if (root.DTSyncCutover?.collectLocalStorageEntries) return root.DTSyncCutover.collectLocalStorageEntries(storage, appKey);
     return [];
@@ -513,6 +518,7 @@
   async function syncApp(appKey, storage = root.localStorage) {
     const settings = config(appKey, storage);
     if (!settings || !root.DTSyncGatewayClient?.createLive) return { ok: false, reason: 'not_enabled' };
+    if (isRecoveryHeld(storage, appKey)) return { ok: false, reason: 'recovery_hold' };
     const client = root.DTSyncGatewayClient.createLive({ baseUrl: settings.baseUrl, syncKey: settings.syncKey, timeoutMs: 7000, retries: 1 });
     const remoteResult = await client.getSnapshot(appKey);
     if (!remoteResult.ok) return remoteResult;
@@ -1114,11 +1120,12 @@
       pendingConflicts: key => readConflictState(root.localStorage, key).conflicts,
       enabledAppKeys: () => enabledAppKeys(root.localStorage),
       isLegacySyncDisabled: key => isLegacySyncDisabled(key, root.localStorage),
+      isRecoveryHeld: key => isRecoveryHeld(root.localStorage, key),
       isEnabled: key => root.localStorage?.getItem(`dt_sync_provider_${key}`) === 'd1'
     };
   }
 
-  root.DTSyncRuntimeCore = { appKeyFromPath, stableStringify, classifyRecord, mergeCalendarPayloads, explicitResolutionDecision, normalizeRuntimeError, enabledAppKeys, automaticAppKeys, isLegacySyncDisabled, shouldBlockLegacyJsonBin, shouldScheduleStorageKey, shouldSyncOnLifecycle, shouldReloadAfterPull };
+  root.DTSyncRuntimeCore = { appKeyFromPath, stableStringify, classifyRecord, mergeCalendarPayloads, explicitResolutionDecision, normalizeRuntimeError, enabledAppKeys, automaticAppKeys, isLegacySyncDisabled, isRecoveryHeld, shouldBlockLegacyJsonBin, shouldScheduleStorageKey, shouldSyncOnLifecycle, shouldReloadAfterPull };
   root.DTD1Runtime = root.DTD1Runtime || { appKeyFromPath, syncApp, syncEnabledApps, classifyRecord, resolveConflicts, pendingConflicts: (key, storage = root.localStorage) => readConflictState(storage, key).conflicts, enabledAppKeys };
   // Legacy shortcodes remain responsible for rendering their UI, but their
   // JSONBin routines must stop at the provider cutover boundary.
