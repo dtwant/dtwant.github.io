@@ -174,7 +174,10 @@ function openForm(book = null) {
       status.textContent = '取得しました。空欄の項目だけ補完しています。';
     } catch (err) {
       if (!form.isConnected) return;
-      status.textContent = { metadata_not_configured: '同期設定が未設定のため自動取得できません。手入力で登録できます。', unsupported_metadata_url: 'このURLは自動取得に対応していません。手入力で登録できます。', unauthorized: '同期キーが無効なため自動取得できません。手入力で登録できます。' }[err.message] || '作品情報を取得できませんでした。手入力で登録できます。';
+      const message = { metadata_not_configured: '同期設定が未設定のため自動取得できません。手入力で登録できます。', unsupported_metadata_url: 'このURLは自動取得に対応していません。手入力で登録できます。', unauthorized: '同期キーが無効なため自動取得できません。手入力で登録できます。' }[err.message] || '作品情報を取得できませんでした。手入力で登録できます。';
+      status.innerHTML = err.message === 'metadata_not_configured'
+        ? `${esc(message)} <a class="ps-inline-link" href="/project-x/sync-settings/">同期設定を開く</a>`
+        : esc(message);
     } finally { button.disabled = false; button.textContent = '取得'; }
   };
   if (book) $('#ps-delete').onclick = async () => {
