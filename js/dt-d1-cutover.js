@@ -224,15 +224,21 @@
     return { keyPath: store.keyPath ?? null, records };
   }
 
-  async function collectIndexedDBEntries(indexedDB, appKey) {
+  async function collectIndexedDBEntries(indexedDB, appKey, options = {}) {
     const entries = [];
     if (!indexedDB || typeof indexedDB.open !== 'function') return entries;
+    const requestedNames = options?.databaseNames instanceof Set
+      ? options.databaseNames
+      : Array.isArray(options?.databaseNames)
+        ? new Set(options.databaseNames)
+        : null;
     let names = null;
     if (typeof indexedDB.databases === 'function') {
       try {
         names = (await indexedDB.databases() || [])
           .map(info => info?.name)
-          .filter(name => classifyDatabase(name) === appKey && name);
+          .filter(name => classifyDatabase(name) === appKey && name
+            && (!requestedNames || requestedNames.has(name)));
       } catch (_) {
         names = null;
       }
@@ -242,7 +248,8 @@
     // Some mobile implementations expose databases() but omit databases
     // created by an installed PWA (or return an empty list). Add only the
     // small, app-specific allowlist as non-creating probes in that case.
-    for (const name of KNOWN_DATABASES.get(appKey) || []) {
+    for (const name of (requestedNames || KNOWN_DATABASES.get(appKey) || [])) {
+      if (requestedNames && !requestedNames.has(name)) continue;
       if (!candidates.has(name)) candidates.set(name, true);
     }
     for (const [name, probeOnly] of candidates) {

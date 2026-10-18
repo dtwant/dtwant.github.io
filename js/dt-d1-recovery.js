@@ -89,6 +89,20 @@
     return entries;
   }
 
+  function recoveryError(code, cause) {
+    const error = new Error(code);
+    error.code = code;
+    if (cause && typeof cause === 'object' && cause.name) error.causeName = cause.name;
+    return error;
+  }
+
+  function indexedDatabaseNames(backup) {
+    return [...new Set((backup?.indexed || [])
+      .filter(item => item?.exists && Array.isArray(item.dump?.records))
+      .map(item => item.database?.name)
+      .filter(Boolean))];
+  }
+
   async function saveRecoveryBackup(storage, appKey, entries, now = new Date()) {
     const timestamp = now instanceof Date ? now.toISOString() : new Date(now).toISOString();
     const suffix = String(Date.parse(timestamp));
@@ -113,37 +127,64 @@
     cutover = root.DTSyncCutover,
     now = new Date()
   } = {}) {
-    if (!storage || typeof storage.getItem !== 'function' || typeof storage.setItem !== 'function') throw new Error('storage_unavailable');
+    if (!storage || typeof storage.getItem !== 'function' || typeof storage.setItem !== 'function') throw recoveryError('storage_unavailable');
     if (!cutover || typeof cutover.applyCandidateApp !== 'function'
-      || typeof cutover.collectLocalStorageEntries !== 'function') throw new Error('cutover_module_unavailable');
+      || typeof cutover.collectLocalStorageEntries !== 'function') throw recoveryError('cutover_module_unavailable');
     const backup = parsePreCutoverBackup(backupInput, appKey);
-    if (!backup) throw new Error('invalid_pre_cutover_backup');
+    if (!backup) throw recoveryError('invalid_pre_cutover_backup');
     const entries = backupEntries(backup);
-    if (!entries.length) throw new Error('backup_empty');
+    if (!entries.length) throw recoveryError('backup_empty');
 
-    const current = cutover.collectLocalStorageEntries(storage, appKey);
-    if (typeof cutover.collectIndexedDBEntries === 'function') {
-      const indexed = await cutover.collectIndexedDBEntries(indexedDB, appKey);
-      current.push(...indexed);
+    let current;
+    try {
+      current = cutover.collectLocalStorageEntries(storage, appKey);
+    } catch (error) {
+      throw recoveryError('recovery_current_localstorage_failed', error);
     }
-    const recoveryBackupKey = await saveRecoveryBackup(storage, appKey, current, now);
+    // A localStorage-only backup does not need an IndexedDB probe. This is
+    // important for installed mobile PWAs, where probing unrelated databases
+    // can fail even though the app's localStorage is healthy.
+    const databaseNames = indexedDatabaseNames(backup);
+    if (databaseNames.length && typeof cutover.collectIndexedDBEntries === 'function') {
+      try {
+        const indexed = await cutover.collectIndexedDBEntries(indexedDB, appKey, { databaseNames });
+        current.push(...indexed);
+      } catch (error) {
+        throw recoveryError('recovery_current_indexeddb_failed', error);
+      }
+    }
+    let recoveryBackupKey;
+    try {
+      recoveryBackupKey = await saveRecoveryBackup(storage, appKey, current, now);
+    } catch (error) {
+      throw recoveryError('recovery_safety_backup_failed', error);
+    }
     const sourceBackupKey = `${PRE_CUTOVER_PREFIX}${appKey}`;
     // Set the hold before writing any app data. Mutation observers may schedule
     // a runtime sync, but the runtime will see this marker and refuse to pull
     // the stale live value back over the restored data.
-    storage.setItem(`${HOLD_PREFIX}${appKey}`, JSON.stringify({
-      schema: 'dt-world-d1-recovery-hold',
-      version: 1,
-      appKey,
-      createdAt: new Date(now).toISOString(),
-      sourceBackupKey,
-      recoveryBackupKey,
-      reason: 'restored_pre_cutover'
-    }));
-    const applied = await cutover.applyCandidateApp(
-      { status: 'ready', entries },
-      { appKey, storage, indexedDB }
-    );
+    try {
+      storage.setItem(`${HOLD_PREFIX}${appKey}`, JSON.stringify({
+        schema: 'dt-world-d1-recovery-hold',
+        version: 1,
+        appKey,
+        createdAt: new Date(now).toISOString(),
+        sourceBackupKey,
+        recoveryBackupKey,
+        reason: 'restored_pre_cutover'
+      }));
+    } catch (error) {
+      throw recoveryError('recovery_hold_save_failed', error);
+    }
+    let applied;
+    try {
+      applied = await cutover.applyCandidateApp(
+        { status: 'ready', entries },
+        { appKey, storage, indexedDB }
+      );
+    } catch (error) {
+      throw recoveryError('recovery_apply_failed', error);
+    }
     return { ...applied, ok: true, appKey, sourceBackupKey, recoveryBackupKey, restoredFrom: backup.createdAt };
   }
 
