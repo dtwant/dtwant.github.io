@@ -1,3 +1,5 @@
+/* D1 migration note (2026-10-20): legacy Bin helpers remain read-compatible
+ * for recovery, while normal transport is owned by dt-d1-runtime.js. */
 import {
   cycleValue,
   memoKey,

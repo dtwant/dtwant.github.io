@@ -1,4 +1,7 @@
-/* Math Memo: local-first Markdown notes with centered TeX and additive JSONBin sync. */
+/* Math Memo: local-first Markdown notes with centered TeX and D1 sync.
+ * JSONBin constants below are legacy recovery compatibility only; the D1
+ * runtime blocks their network path after the 2026-10-20 cutover.
+ */
 (function () {
   'use strict';
 

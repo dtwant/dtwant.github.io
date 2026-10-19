@@ -1,11 +1,15 @@
 /**
- * PWA Config Sync Manager
- * LocalStorageとJSONBinのマスターBinを利用して、同一Origin内の複数PWA間でAPIキーや各Bin IDを同期します。
+ * Legacy PWA config compatibility reader.
+ *
+ * D1 migration history: 2026-10-20. This file is no longer loaded by the
+ * /0723/ tools. Its local getters remain for recovery/inspection only; the
+ * JSONBin master is never read or written after the D1 cutover.
  */
 (function () {
   const MASTER_BIN_KEY = 'shared_master_bin_id';
   const API_KEY_KEY = 'shared_jsonbin_api_key';
   const BINS_CACHE_KEY = 'shared_pwa_bins_cache';
+  const LEGACY_MASTER_RETIRED = true;
   const LIVE_D1_APP_KEYS = [
     'manga', 'novel', 'movie', 'feeding', 'timetable', 'diary',
     'task_calendar', 'calendar', 'report_card', 'deadline', 'tasklist',
@@ -41,7 +45,7 @@
   };
 
   // デフォルトのマスターAPIキー (公開されてもデータ破壊は起きないよう基本的には個人の読み書き用)
-  const DEFAULT_API_KEY = '$2a$10$C0Z.Fl3F.BCvUaC5rHVt3OD6aYt8SXRkmXExr3mfmtCrGdDzG8Aae';
+  const DEFAULT_API_KEY = '';
 
   function d1Enabled(appKey) {
     return localStorage.getItem(`dt_sync_provider_${appKey}`) === 'd1';
@@ -127,7 +131,7 @@
       // D1 is the live transport after a tool cutover. The legacy master is
       // intentionally left intact for recovery, but must not be read because
       // it can restore stale Bin IDs and make the old UI report an error.
-      if (hasD1EnabledTool()) return this.getBinsMap();
+      if (LEGACY_MASTER_RETIRED || hasD1EnabledTool()) return this.getBinsMap();
       const masterBinId = this.getMasterBinId();
       const apiKey = this.getApiKey();
       if (!masterBinId) return null;
@@ -171,7 +175,7 @@
     // ローカルのキャッシュをリモートのマスターBinに保存する
     async pushMasterConfig() {
       // Never mutate the legacy master as a side effect of a D1-enabled tool.
-      if (hasD1EnabledTool()) return this.getMasterBinId();
+      if (LEGACY_MASTER_RETIRED || hasD1EnabledTool()) return this.getMasterBinId();
       const masterBinId = this.getMasterBinId();
       const apiKey = this.getApiKey();
       const bins = this.getBinsMap();
@@ -225,7 +229,7 @@
 
       // D1 owns the live connection for this tool. Keep the legacy ID
       // available for recovery, but do not fetch or update the JSONBin master.
-      if (d1Enabled(appKey)) {
+      if (LEGACY_MASTER_RETIRED || d1Enabled(appKey)) {
         const value = typeof currentBinId === 'string' ? currentBinId.trim() : '';
         return value || cached || currentBinId;
       }

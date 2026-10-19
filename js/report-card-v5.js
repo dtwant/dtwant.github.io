@@ -1,3 +1,9 @@
+/*
+ * Report Card D1 migration note (2026-10-20): the old JSONBin routines and
+ * local schema are retained only so existing records/backups remain readable.
+ * The D1 runtime blocks the legacy network path and the 0723 bridge removes
+ * its configuration controls from the normal UI.
+ */
 (() => {
   'use strict';
 

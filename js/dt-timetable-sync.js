@@ -1,4 +1,5 @@
-// DtSync グローバルオブジェクト (jsonbin.io スマートマージ同期)
+// DtSync legacy compatibility object. Normal 0723 sync is owned by D1;
+// these helpers are retained only for recovery/old local data inspection.
 window.DtSync = (() => {
   const APP_KEY = 'timetable';
   const d1Enabled = () => window.DTD1Runtime?.isEnabled?.(APP_KEY)
@@ -7,7 +8,7 @@ window.DtSync = (() => {
   const BLOB_KEY = 'dt_timetable_sync_blob'; // localStorage に保存するBlob IDキー
   
   // Chrono Grid と共通の jsonbin.io マスターキーを取得、無ければデフォルト
-  const JB_KEY_DEFAULT = '$2a$10$C0Z.Fl3F.BCvUaC5rHVt3OD6aYt8SXRkmXExr3mfmtCrGdDzG8Aae';
+  const JB_KEY_DEFAULT = '';
   
   function getJbKey() {
     // 優先度: PWAConfigSync(shared_jsonbin_api_key) → cg_jb_key(カレンダー) → デフォルト
