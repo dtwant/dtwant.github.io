@@ -1,6 +1,13 @@
-/* Keep legacy tool controls attached to the D1 owner after a safe cutover. */
+/*
+ * D1 migration history: 2026-10-20
+ * JSONBin configuration controls are retired from normal 0723 use. The
+ * storage keys and recovery snapshots remain intentionally untouched so that
+ * migration/recovery can be performed without deleting user data.
+ */
 (function (root) {
   'use strict';
+
+  const LEGACY_UI_RETIRED = true;
 
   const STATUS_TARGETS = {
     manga: ['#ms-sync'],
@@ -50,9 +57,9 @@
     biome_archive: ['#ba-sync-action']
   };
 
-  // These selectors only affect the visible legacy configuration surface.
-  // The underlying storage keys and compatibility code remain available for
-  // recovery, but a D1-enabled app must not present JSONBin as its owner.
+  // These selectors remove the retired configuration surface even when a
+  // device has lost its per-tool D1 flag. This prevents a stale/new device
+  // from presenting JSONBin as an available owner again.
   const LEGACY_SYNC_UI = {
     manga: {
       roots: ['#ms-overlay-settings'],
@@ -240,7 +247,7 @@
   function hideLegacySyncUi() {
     if (!document?.querySelectorAll) return;
     for (const [appKey, rule] of Object.entries(LEGACY_SYNC_UI)) {
-      if (!isEnabled(appKey)) continue;
+      if (!LEGACY_UI_RETIRED && !isEnabled(appKey)) continue;
       const roots = rule.roots
         .flatMap((selector) => [...document.querySelectorAll(selector)])
         .filter((rootNode) => !rule.markers.length

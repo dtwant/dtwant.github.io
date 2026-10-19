@@ -36,6 +36,9 @@
   const FORCE_PULL_PREFIX = 'dt_d1_force_pull_';
   const RECOVERY_HOLD_PREFIX = 'dt_d1_recovery_hold_';
   const RUNTIME_STARTED_KEY = '__dtD1RuntimeStarted';
+  // D1 migration history: 2026-10-20. JSONBin remains readable only through
+  // explicit recovery tooling; normal tool execution must never contact it.
+  const LEGACY_JSONBIN_RETIRED = true;
   const RUNTIME_METADATA_KEY = /^(?:dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup|recovery_backup|recovery_hold|local_updated|force_pull)_|dt_sync_provider_|dt_sync_gateway_(?:url|key)$|dt_sync_device_id$)/i;
   const LIFECYCLE_SYNC_EVENTS = new Set(['pageshow', 'focus', 'visibilitychange']);
   let suppressLocalTracking = false;
@@ -854,7 +857,7 @@
 
   function shouldBlockLegacyJsonBin(requestUrl, appKey, storage = root.localStorage) {
     return /^https:\/\/api\.jsonbin\.(?:io|org)\//i.test(String(requestUrl || ''))
-      && isLegacySyncDisabled(appKey, storage);
+      && LEGACY_JSONBIN_RETIRED && Boolean(appKey);
   }
 
   function isLegacySyncDisabled(appKey, storage = root.localStorage) {
