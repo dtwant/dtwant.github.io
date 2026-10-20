@@ -35,11 +35,12 @@
   const LOCAL_UPDATED_PREFIX = 'dt_d1_local_updated_';
   const FORCE_PULL_PREFIX = 'dt_d1_force_pull_';
   const RECOVERY_HOLD_PREFIX = 'dt_d1_recovery_hold_';
+  const PENDING_PREFIX = 'dt_d1_pending_';
   const RUNTIME_STARTED_KEY = '__dtD1RuntimeStarted';
   // D1 migration history: 2026-10-20. JSONBin remains readable only through
   // explicit recovery tooling; normal tool execution must never contact it.
   const LEGACY_JSONBIN_RETIRED = true;
-  const RUNTIME_METADATA_KEY = /^(?:dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup|recovery_backup|recovery_hold|local_updated|force_pull)_|dt_sync_provider_|dt_sync_gateway_(?:url|key)$|dt_sync_device_id$)/i;
+  const RUNTIME_METADATA_KEY = /^(?:dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup|recovery_backup|recovery_hold|local_updated|force_pull|pending|runtime_backup)_|dt_sync_provider_|dt_sync_gateway_(?:url|key)$|dt_sync_device_id$)/i;
   const LIFECYCLE_SYNC_EVENTS = new Set(['pageshow', 'focus', 'visibilitychange']);
   let suppressLocalTracking = false;
   const patchedStorageInstances = new WeakSet();
@@ -352,6 +353,57 @@
     try { storage.setItem(key, JSON.stringify(parsed)); } catch (_) {}
   }
 
+  function indexedDBStoreIdentity(store) {
+    const databaseName = String(store?.transaction?.db?.name || '');
+    const storeName = String(store?.name || '');
+    if (!databaseName || !storeName) return null;
+    const appKey = root.DTSyncCutover?.classifyDatabase?.(databaseName) || null;
+    if (!appKey) return null;
+    return {
+      appKey,
+      prefix: `indexedDB:${databaseName}/${storeName}/`
+    };
+  }
+
+  function indexedDBKeyFromValue(store, value) {
+    const keyPath = store?.keyPath;
+    if (typeof keyPath === 'string' && keyPath) {
+      return keyPath.split('.').reduce((current, part) => current == null ? undefined : current[part], value);
+    }
+    if (Array.isArray(keyPath)) {
+      return keyPath.map(path => String(path).split('.').reduce((current, part) => current == null ? undefined : current[part], value));
+    }
+    return undefined;
+  }
+
+  function trackIndexedDBMutation(storage, store, method, args, request) {
+    if (suppressLocalTracking || !storage) return;
+    const identity = indexedDBStoreIdentity(store);
+    if (!identity || storage.getItem(`dt_sync_provider_${identity.appKey}`) !== 'd1') return;
+    const updatedAt = new Date().toISOString();
+
+    // clear() has no key in its request. Mark every previously synchronized
+    // record in this store with the same deletion timestamp so the next run
+    // emits tombstones instead of treating the records as unexplained loss.
+    if (method === 'clear') {
+      const state = readSyncState(storage, identity.appKey);
+      for (const recordKey of Object.keys(state.records || {})) {
+        if (recordKey.startsWith(identity.prefix)) writeLocalUpdatedAt(storage, identity.appKey, recordKey, updatedAt);
+      }
+      return;
+    }
+
+    let key = method === 'delete' ? args[0] : request?.result;
+    if (key === undefined && method !== 'delete') key = args.length > 1 ? args[1] : indexedDBKeyFromValue(store, args[0]);
+    if (key === undefined) return;
+    const serialized = root.DTSyncCutover?.serialize?.(key);
+    if (serialized && typeof serialized.then === 'function') {
+      serialized.then(value => writeLocalUpdatedAt(storage, identity.appKey, `${identity.prefix}${stableStringify(value)}`, updatedAt)).catch(() => {});
+      return;
+    }
+    writeLocalUpdatedAt(storage, identity.appKey, `${identity.prefix}${stableStringify(serialized === undefined ? key : serialized)}`, updatedAt);
+  }
+
   function generateDeviceId() {
     try {
       if (typeof root.crypto?.randomUUID === 'function') {
@@ -429,6 +481,36 @@
     } catch (_) { /* a forced pull is retried on the next run */ }
   }
 
+  function readPendingChanges(storage, appKey) {
+    try {
+      const parsed = JSON.parse(storage.getItem(`${PENDING_PREFIX}${appKey}`) || '');
+      if (parsed?.version === 1 && Array.isArray(parsed.changes)) return parsed;
+    } catch (_) { /* invalid pending data is ignored; local data remains authoritative */ }
+    return { version: 1, appKey, changes: [] };
+  }
+
+  function writePendingChanges(storage, appKey, changes) {
+    const valid = (changes || []).filter(change => change && typeof change.recordKey === 'string' && change.payload);
+    const key = `${PENDING_PREFIX}${appKey}`;
+    try {
+      if (!valid.length) {
+        storage.removeItem(key);
+        return;
+      }
+      storage.setItem(key, JSON.stringify({
+        schema: 'dt-world-d1-pending-changes', version: 1, appKey,
+        changes: valid, updatedAt: new Date().toISOString()
+      }));
+    } catch (_) { /* the sync result remains an error; never discard local data */ }
+  }
+
+  function clearPendingChanges(storage, appKey, acceptedRecordKeys = []) {
+    const pending = readPendingChanges(storage, appKey);
+    if (!pending.changes.length) return;
+    const accepted = new Set(acceptedRecordKeys);
+    writePendingChanges(storage, appKey, pending.changes.filter(change => !accepted.has(change.recordKey)));
+  }
+
   function config(appKey, storage) {
     const provider = storage.getItem(`dt_sync_provider_${appKey}`);
     const baseUrl = storage.getItem('dt_sync_gateway_url') || '';
@@ -469,6 +551,28 @@
     return {
       schema: 'dt-world-d1-record', version: 1, kind: 'indexedDB',
       database: entry.database, store: entry.store, entry: entry.entry
+    };
+  }
+
+  function tombstonePayload(recordKey) {
+    if (recordKey.startsWith('localStorage:')) {
+      return {
+        schema: 'dt-world-d1-tombstone', version: 1, kind: 'localStorage',
+        key: recordKey.slice('localStorage:'.length)
+      };
+    }
+    if (!recordKey.startsWith('indexedDB:')) return null;
+    const value = recordKey.slice('indexedDB:'.length);
+    const firstSlash = value.indexOf('/');
+    const secondSlash = value.indexOf('/', firstSlash + 1);
+    if (firstSlash <= 0 || secondSlash <= firstSlash + 1) return null;
+    let key;
+    try { key = JSON.parse(value.slice(secondSlash + 1)); } catch (_) { return null; }
+    return {
+      schema: 'dt-world-d1-tombstone', version: 1, kind: 'indexedDB',
+      database: { name: value.slice(0, firstSlash) },
+      store: { name: value.slice(firstSlash + 1, secondSlash) },
+      key
     };
   }
 
@@ -521,17 +625,30 @@
   }
 
   function candidateEntryForRemote(record) {
-    // D1 keeps deletions as tombstones.  Never turn one back into a live local
-    // value; the record must be reviewed as a conflict instead.
-    if (record?.deletedAt) return null;
     const payload = record?.payload;
-    if (!record || typeof record.recordKey !== 'string' || !payload || payload.schema !== 'dt-world-d1-record' || payload.version !== 1) return null;
+    if (!record || typeof record.recordKey !== 'string' || !payload || typeof payload !== 'object') return null;
+    const deleted = Boolean(record.deletedAt);
+    if (payload.schema === 'dt-world-d1-tombstone' && payload.version === 1) {
+      if (payload.kind === 'localStorage' && typeof payload.key === 'string') {
+        return { recordKey: record.recordKey, kind: 'localStorage', deletedAt: record.deletedAt, entry: { encoding: 'text', raw: '' } };
+      }
+      if (payload.kind === 'indexedDB' && payload.database?.name && payload.store?.name
+        && Object.prototype.hasOwnProperty.call(payload, 'key')) {
+        return {
+          recordKey: record.recordKey, kind: 'indexedDB', deletedAt: record.deletedAt,
+          database: payload.database, store: payload.store,
+          entry: { key: payload.key, value: null }
+        };
+      }
+      return null;
+    }
+    if (payload.schema !== 'dt-world-d1-record' || payload.version !== 1) return null;
     if (payload.kind === 'localStorage' && typeof payload.key === 'string' && payload.entry && ['json', 'text'].includes(payload.entry.encoding) && typeof payload.entry.raw === 'string') {
-      return { recordKey: record.recordKey, kind: 'localStorage', entry: { encoding: payload.entry.encoding, raw: payload.entry.raw } };
+      return { recordKey: record.recordKey, kind: 'localStorage', deletedAt: deleted ? record.deletedAt : null, entry: { encoding: payload.entry.encoding, raw: payload.entry.raw } };
     }
     if (payload.kind === 'indexedDB' && payload.database?.name && payload.store?.name && payload.entry && Object.prototype.hasOwnProperty.call(payload.entry, 'key')) {
       return {
-        recordKey: record.recordKey, kind: 'indexedDB',
+        recordKey: record.recordKey, kind: 'indexedDB', deletedAt: deleted ? record.deletedAt : null,
         database: payload.database, store: payload.store,
         entry: { key: payload.entry.key, value: payload.entry.value }
       };
@@ -574,11 +691,37 @@
     for (const recordKey of recordKeys) {
       const local = current.get(recordKey);
       const remoteRecord = remote.get(recordKey);
+      let previousRecord = previous.records?.[recordKey] || null;
+      if (!previousRecord) {
+        const cutoverPayload = preCutoverPayload(storage, appKey, recordKey);
+        if (cutoverPayload) {
+          const cutoverHash = await sha256(cutoverPayload);
+          const localPayload = local?.payload || null;
+          const localHash = localPayload ? await sha256(localPayload) : null;
+          if (localHash === cutoverHash) {
+            previousRecord = { localHash: cutoverHash, remoteHash: cutoverHash };
+          } else if (remote?.get(recordKey)?.payloadHash) {
+            previousRecord = {
+              localHash: remote.get(recordKey).payloadHash,
+              remoteHash: remote.get(recordKey).payloadHash,
+              remoteRevision: remote.get(recordKey).revision
+            };
+          }
+        } else if (local && remote?.get(recordKey)?.payloadHash && preCutoverRecordWasAbsent(storage, appKey, recordKey)) {
+          previousRecord = {
+            localHash: remote.get(recordKey).payloadHash,
+            remoteHash: remote.get(recordKey).payloadHash,
+            remoteRevision: remote.get(recordKey).revision
+          };
+        }
+      }
       const localDescriptor = local ? {
         hash: await sha256(local.payload),
         updatedAt: readLocalUpdatedAt(storage, appKey, recordKey, local.payload),
         updatedAtSource: readStoredLocalUpdatedAt(storage, appKey, recordKey) ? 'metadata' : 'payload'
-      } : null;
+      } : previousRecord && readStoredLocalUpdatedAt(storage, appKey, recordKey)
+        ? { hash: null, updatedAt: readStoredLocalUpdatedAt(storage, appKey, recordKey), updatedAtSource: 'metadata' }
+        : null;
       const remoteDescriptor = remoteRecord ? {
         hash: remoteRecord.payloadHash || await sha256(remoteRecord.payload),
         revision: remoteRecord.revision,
@@ -586,34 +729,6 @@
         resolutionAt: normalizedTimestamp(remoteRecord.resolutionAt),
         resolutionSource: remoteRecord.resolutionSource || null
       } : null;
-      let previousRecord = previous.records?.[recordKey] || null;
-      if (!previousRecord) {
-        const cutoverPayload = preCutoverPayload(storage, appKey, recordKey);
-        if (cutoverPayload) {
-          const cutoverHash = await sha256(cutoverPayload);
-          if (localDescriptor?.hash === cutoverHash) {
-            // The cutover backup proves this device has not changed this
-            // record since migration. D1 may therefore be pulled safely.
-            previousRecord = { localHash: cutoverHash, remoteHash: cutoverHash };
-          } else if (remoteDescriptor?.hash) {
-            // A different local value was written after migration. Treat the
-            // promoted D1 value as the baseline so this device's edit can be
-            // pushed instead of being mistaken for an unresolved first sync.
-            previousRecord = { localHash: remoteDescriptor.hash, remoteHash: remoteDescriptor.hash, remoteRevision: remoteDescriptor.revision };
-          }
-        } else if (localDescriptor && remoteDescriptor?.hash && preCutoverRecordWasAbsent(storage, appKey, recordKey)) {
-          // The safe cutover backup records missing local records explicitly.
-          // If this device was empty at cutover, then a now-present local
-          // record came from the promoted candidate. Use that D1 value as the
-          // baseline so an edit made afterwards can be pushed even when the
-          // tool has no embedded updatedAt field.
-          previousRecord = {
-            localHash: remoteDescriptor.hash,
-            remoteHash: remoteDescriptor.hash,
-            remoteRevision: remoteDescriptor.revision
-          };
-        }
-      }
       const localChangedSinceBaseline = Boolean(localDescriptor && previousRecord
         && localDescriptor.hash !== (previousRecord.localHash ?? null));
       if (localChangedSinceBaseline && localDescriptor.updatedAtSource === 'metadata') {
@@ -627,7 +742,7 @@
         writeLocalUpdatedAt(storage, appKey, recordKey, localDescriptor.updatedAt);
       }
       const resolvedDecision = explicitResolutionDecision({ local: localDescriptor, remote: remoteDescriptor, previous: previousRecord });
-      if (!resolvedDecision && localChangedSinceBaseline && localDescriptor.updatedAt === null) {
+      if (!resolvedDecision && local && localChangedSinceBaseline && localDescriptor.updatedAt === null) {
         // Some PWAs do not expose an application timestamp. A hash change
         // after the last baseline is still a definite local edit; stamp it at
         // observation time so a simultaneous remote edit can be resolved by
@@ -635,8 +750,26 @@
         localDescriptor.updatedAt = new Date().toISOString();
         writeLocalUpdatedAt(storage, appKey, recordKey, localDescriptor.updatedAt);
       }
+      const localDeletedSinceBaseline = Boolean(
+        !local
+        && previousRecord
+        && previousRecord.localHash !== null
+        && localDescriptor?.hash === null
+        && localDescriptor.updatedAt
+        && (!remoteDescriptor || remoteDescriptor.hash === (previousRecord.remoteHash ?? null))
+      );
+      const remoteDeletedSinceBaseline = Boolean(
+        remoteRecord?.deletedAt
+        && previousRecord
+        && localDescriptor?.hash === (previousRecord.localHash ?? null)
+        && remoteDescriptor?.hash === (previousRecord.remoteHash ?? null)
+      );
       const forcedRevision = remainingForcePull[recordKey];
-      const decision = Number.isInteger(forcedRevision)
+      const decision = localDeletedSinceBaseline
+        ? { action: 'push', expectedRevision: remoteDescriptor?.revision ?? null, deleted: true, reason: 'local_deleted' }
+        : remoteDeletedSinceBaseline
+        ? { action: 'pull', reason: 'remote_deleted' }
+        : Number.isInteger(forcedRevision)
         && remoteRecord
         && Number.isInteger(remoteRecord.revision)
         && remoteRecord.revision >= forcedRevision
@@ -683,6 +816,18 @@
       }
       if (decision.action === 'push') {
         if (!local) {
+          const deletedPayload = decision.deleted ? tombstonePayload(recordKey) : null;
+          if (deletedPayload && localDescriptor?.updatedAt) {
+            pushChanges.push({
+              recordKey,
+              payload: deletedPayload,
+              updatedAt: localDescriptor.updatedAt,
+              deletedAt: localDescriptor.updatedAt,
+              expectedRevision: decision.expectedRevision,
+              source: 'unknown'
+            });
+            continue;
+          }
           conflicts.push({ recordKey, reason: 'local_record_missing' });
           continue;
         }
@@ -709,6 +854,10 @@
     const applyRemoteEntries = async (entries) => {
       if (!entries.length) return true;
       try {
+        if (root.DTSyncCutover?.saveRuntimeBackup && !applyRemoteEntries.backupSaved) {
+          await root.DTSyncCutover.saveRuntimeBackup(storage, appKey, root.indexedDB, 'remote-apply');
+          applyRemoteEntries.backupSaved = true;
+        }
         suppressLocalTracking = true;
         await root.DTSyncCutover.applyCandidateApp(
           { status: 'ready', entries },
@@ -730,12 +879,18 @@
     }
     for (const [recordKey, updatedAt] of pullUpdatedAt) writeLocalUpdatedAt(storage, appKey, recordKey, updatedAt);
 
+    const pendingBeforePush = readPendingChanges(storage, appKey).changes;
     const pushResults = [];
     for (let offset = 0; offset < pushChanges.length; offset += 100) {
       const result = await client.pushChanges(appKey, pushChanges.slice(offset, offset + 100), {
         deviceId: settings.deviceId, clientVersion: 'dt-d1-runtime-v2'
       });
-      if (!result.ok) return result;
+      if (!result.ok) {
+        const byRecordKey = new Map();
+        for (const change of [...pendingBeforePush, ...pushChanges]) byRecordKey.set(change.recordKey, change);
+        writePendingChanges(storage, appKey, [...byRecordKey.values()]);
+        return result;
+      }
       pushResults.push(result.data || {});
     }
 
@@ -746,6 +901,7 @@
     const stalePullEntries = [];
     const stalePullUpdatedAt = new Map();
     let pushedCount = 0;
+    const acceptedPushKeys = [];
     for (const change of pushChanges) {
       const result = pushResultByKey.get(change.recordKey);
       if (!result || result.status === 'conflict') {
@@ -778,6 +934,7 @@
           remoteHash: result.payloadHash || await sha256(result.payload),
           remoteRevision: result.revision
         };
+        acceptedPushKeys.push(change.recordKey);
         continue;
       }
       const revision = Number.isInteger(result.revision)
@@ -786,6 +943,7 @@
       const hash = await sha256(change.payload);
       nextRecords[change.recordKey] = { localHash: hash, remoteHash: hash, remoteRevision: revision };
       pushedCount += 1;
+      acceptedPushKeys.push(change.recordKey);
     }
 
     if (!await applyRemoteEntries(stalePullEntries)) {
@@ -794,6 +952,7 @@
     for (const [recordKey, updatedAt] of stalePullUpdatedAt) writeLocalUpdatedAt(storage, appKey, recordKey, updatedAt);
 
     writeSyncState(storage, appKey, nextRecords);
+    clearPendingChanges(storage, appKey, acceptedPushKeys);
     writeForcePullState(storage, appKey, remainingForcePull);
     writeConflictState(storage, appKey, conflicts);
     const pulledCount = pullEntries.length + stalePullEntries.length;
@@ -1026,7 +1185,20 @@
       const original = prototype[method];
       const wrapped = function (...args) {
         const request = original.apply(this, args);
-        if (!suppressLocalTracking) schedule();
+        const notify = () => {
+          if (!suppressLocalTracking) {
+            trackIndexedDBMutation(root.localStorage, this, method, args, request);
+            schedule();
+          }
+        };
+        if (request && typeof request.addEventListener === 'function') request.addEventListener('success', notify, { once: true });
+        else if (request && 'onsuccess' in request) {
+          const previous = request.onsuccess;
+          request.onsuccess = function (...eventArgs) {
+            if (typeof previous === 'function') previous.apply(this, eventArgs);
+            notify();
+          };
+        } else if (!suppressLocalTracking) schedule();
         return request;
       };
       try { prototype[method] = wrapped; } catch (_) { /* a locked prototype is still safe */ }
@@ -1054,6 +1226,8 @@
     if (patchedStorageInstances.has(storage)) return true;
 
     const originalInstanceSetItem = storage.setItem;
+    const originalInstanceRemoveItem = typeof storage.removeItem === 'function' ? storage.removeItem : null;
+    const originalInstanceClear = typeof storage.clear === 'function' ? storage.clear : null;
     const wrapSetItem = (originalSetItem) => function (key, value) {
       const result = originalSetItem.call(this, key, value);
       if (this === storage) {
@@ -1062,18 +1236,43 @@
       }
       return result;
     };
+    const wrapRemoveItem = (originalRemoveItem, originalSetItem) => function (key) {
+      const result = originalRemoveItem.call(this, key);
+      if (this === storage) {
+        trackLocalStorageMutation(this, key, new Date().toISOString(), originalSetItem);
+        if (shouldScheduleStorageKey(key)) schedule();
+      }
+      return result;
+    };
+    const wrapClear = (originalClear, originalSetItem) => function () {
+      const keys = [];
+      if (this === storage) {
+        for (let index = 0; index < Number(this.length) || 0; index += 1) {
+          const key = this.key(index);
+          if (key !== null) keys.push(key);
+        }
+      }
+      const result = originalClear.call(this);
+      if (this === storage) {
+        const updatedAt = new Date().toISOString();
+        for (const key of keys) trackLocalStorageMutation(this, key, updatedAt, originalSetItem);
+        if (keys.some(shouldScheduleStorageKey)) schedule();
+      }
+      return result;
+    };
+
+    const defineInstanceMethod = (name, value) => Object.defineProperty(storage, name, {
+      configurable: true, enumerable: false, writable: true, value
+    });
 
     // Installed PWAs/WebViews can expose a Storage instance whose prototype
     // is from a separate realm, or whose prototype is not writable. Prefer an
     // instance-local wrapper so one locked prototype cannot abort runtime
     // startup for the entire tool.
     try {
-      Object.defineProperty(storage, 'setItem', {
-        configurable: true,
-        enumerable: false,
-        writable: true,
-        value: wrapSetItem(originalInstanceSetItem)
-      });
+      defineInstanceMethod('setItem', wrapSetItem(originalInstanceSetItem));
+      if (originalInstanceRemoveItem) defineInstanceMethod('removeItem', wrapRemoveItem(originalInstanceRemoveItem, originalInstanceSetItem));
+      if (originalInstanceClear) defineInstanceMethod('clear', wrapClear(originalInstanceClear, originalInstanceSetItem));
       patchedStorageInstances.add(storage);
       return true;
     } catch (_) { /* use the prototype fallback below */ }
@@ -1081,6 +1280,8 @@
     const prototype = storagePrototypeFor(storage);
     if (!prototype || patchedStoragePrototypes.has(prototype) || typeof prototype.setItem !== 'function') return false;
     const originalPrototypeSetItem = prototype.setItem;
+    const originalPrototypeRemoveItem = typeof prototype.removeItem === 'function' ? prototype.removeItem : null;
+    const originalPrototypeClear = typeof prototype.clear === 'function' ? prototype.clear : null;
     const wrapped = wrapSetItem(originalPrototypeSetItem);
     try {
       const descriptor = Object.getOwnPropertyDescriptor(prototype, 'setItem');
@@ -1090,6 +1291,12 @@
         configurable: descriptor?.configurable ?? true,
         writable: true,
         value: wrapped
+      });
+      if (originalPrototypeRemoveItem) Object.defineProperty(prototype, 'removeItem', {
+        configurable: true, writable: true, value: wrapRemoveItem(originalPrototypeRemoveItem, originalPrototypeSetItem)
+      });
+      if (originalPrototypeClear) Object.defineProperty(prototype, 'clear', {
+        configurable: true, writable: true, value: wrapClear(originalPrototypeClear, originalPrototypeSetItem)
       });
       patchedStoragePrototypes.add(prototype);
       return true;

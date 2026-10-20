@@ -193,6 +193,16 @@
       });
     }
 
+    async function createDailyBackup(appKey, backupDay, { deviceId = 'browser' } = {}) {
+      if (!APP_KEY.test(String(appKey || ''))) return { ok: false, reason: 'invalid_app', data: null };
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(String(backupDay || ''))) return { ok: false, reason: 'invalid_backup_day', data: null };
+      if (!/^[A-Za-z0-9_-]{1,128}$/.test(String(deviceId || ''))) return { ok: false, reason: 'invalid_device', data: null };
+      return requestJson(`/v1/apps/${encodeURIComponent(appKey)}/daily-backup`, {
+        method: 'POST',
+        body: JSON.stringify({ backupDay, deviceId })
+      });
+    }
+
     async function resolveRecords(appKey, records, { source } = {}) {
       if (!APP_KEY.test(String(appKey || ''))) return { ok: false, reason: 'invalid_app', data: null };
       if (!Array.isArray(records) || records.length === 0) return { ok: false, reason: 'resolution_records_required', data: null };
@@ -216,7 +226,7 @@
       });
     }
 
-    return { getSnapshot, pushChanges, resolveRecords, resolveFromSourceSnapshot };
+    return { getSnapshot, pushChanges, createDailyBackup, resolveRecords, resolveFromSourceSnapshot };
   }
 
   root.DTSyncGatewayClient = { create, createLive };

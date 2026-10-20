@@ -8,6 +8,7 @@
   'use strict';
 
   const BACKUP_PREFIX = 'dt_d1_pre_cutover_backup_';
+  const RUNTIME_BACKUP_PREFIX = 'dt_d1_runtime_backup_';
   const MAX_CANDIDATE_AGE_MS = 24 * 60 * 60 * 1000;
   const CREDENTIAL_KEY = /^(?:dt_sync_gateway_key|shared_jsonbin_api_key)$/i;
   const D1_METADATA_KEY = /^dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup)_/i;
@@ -40,6 +41,24 @@
     ['report_card', ['sd_report_db']],
     ['oshi', ['dt_oshi_db']]
   ]);
+
+  function indexedDBRecordKey(record) {
+    return record && Object.prototype.hasOwnProperty.call(record, 'key') ? record.key : null;
+  }
+
+  function isIndexedDBMetadataRecord(appKey, databaseName, storeName, record) {
+    const key = String(indexedDBRecordKey(record) ?? '');
+    if (appKey === 'diary' && String(storeName || '').toLowerCase() === 'settings') {
+      return key === 'sd_gaman_sync_key' || /(?:^|_)(?:bin_id|blob|blob_id|sync_key|device_id|api_key)$/i.test(key);
+    }
+    if (appKey === 'report_card' && String(storeName || '').toLowerCase() === 'settings') {
+      return key === 'sync_config' || key === 'sd_academic_sync_key' || /(?:^|_)(?:bin_id|blob|blob_id|sync_key|device_id|api_key)$/i.test(key);
+    }
+    if (appKey === 'oshi') {
+      return /(?:^|_)(?:bin_id|blob|blob_id|sync_key|device_id|api_key)$/i.test(key);
+    }
+    return false;
+  }
 
   function isObject(value) { return value !== null && typeof value === 'object'; }
 
@@ -244,13 +263,20 @@
       }
     }
     const candidates = new Map();
-    for (const name of names || []) candidates.set(name, false);
+    const candidateNames = new Set();
+    for (const name of names || []) {
+      candidates.set(name, false);
+      candidateNames.add(String(name).toLowerCase());
+    }
     // Some mobile implementations expose databases() but omit databases
     // created by an installed PWA (or return an empty list). Add only the
     // small, app-specific allowlist as non-creating probes in that case.
     for (const name of (requestedNames || KNOWN_DATABASES.get(appKey) || [])) {
       if (requestedNames && !requestedNames.has(name)) continue;
-      if (!candidates.has(name)) candidates.set(name, true);
+      if (!candidateNames.has(String(name).toLowerCase())) {
+        candidates.set(name, true);
+        candidateNames.add(String(name).toLowerCase());
+      }
     }
     for (const [name, probeOnly] of candidates) {
       const db = probeOnly
@@ -260,7 +286,7 @@
       const storeNames = Array.from(db.objectStoreNames || []);
       for (const storeName of storeNames) {
         const dump = await readStore(db, storeName);
-        for (const record of dump.records) entries.push({
+        for (const record of dump.records.filter(item => !isIndexedDBMetadataRecord(appKey, name, storeName, item))) entries.push({
           recordKey: `indexedDB:${name}/${storeName}/${stableStringify(record.key)}`,
           kind: 'indexedDB',
           database: { name, version: db.version },
@@ -288,9 +314,7 @@
     return entries;
   }
 
-  async function saveSafetyBackup(storage, appKey, candidateEntries, indexedDB) {
-    const backupKey = `${BACKUP_PREFIX}${appKey}`;
-    if (storage.getItem(backupKey) !== null) return backupKey;
+  async function captureBackupPayload(storage, appKey, candidateEntries, indexedDB, schema, reason = null) {
     const local = [];
     for (const candidate of candidateEntries.filter(entry => entry.kind === 'localStorage')) {
       const key = candidate.recordKey.slice('localStorage:'.length);
@@ -327,8 +351,40 @@
       }
       db.close();
     }
-    const payload = { schema: 'dt-world-d1-pre-cutover-backup', version: 1, appKey, createdAt: new Date().toISOString(), local, indexed };
+    const payload = { schema, version: 1, appKey, createdAt: new Date().toISOString(), local, indexed };
+    if (reason) payload.reason = reason;
+    return payload;
+  }
+
+  async function saveSafetyBackup(storage, appKey, candidateEntries, indexedDB) {
+    const backupKey = `${BACKUP_PREFIX}${appKey}`;
+    if (storage.getItem(backupKey) !== null) return backupKey;
+    const payload = await captureBackupPayload(storage, appKey, candidateEntries, indexedDB, 'dt-world-d1-pre-cutover-backup');
     storage.setItem(backupKey, JSON.stringify(payload));
+    return backupKey;
+  }
+
+  async function saveRuntimeBackup(storage, appKey, indexedDB, reason = 'remote-apply') {
+    const currentEntries = [
+      ...collectLocalStorageEntries(storage, appKey),
+      ...await collectIndexedDBEntries(indexedDB, appKey)
+    ];
+    const backupKey = `${RUNTIME_BACKUP_PREFIX}${appKey}_${Date.now()}`;
+    const payload = await captureBackupPayload(
+      storage, appKey, currentEntries, indexedDB, 'dt-world-d1-runtime-backup', reason
+    );
+    storage.setItem(backupKey, JSON.stringify(payload));
+
+    const keys = [];
+    for (let index = 0; index < Number(storage.length) || 0; index += 1) {
+      const key = storage.key(index);
+      if (!key || !key.startsWith(`${RUNTIME_BACKUP_PREFIX}${appKey}_`)) continue;
+      let createdAt = '';
+      try { createdAt = JSON.parse(storage.getItem(key) || '{}').createdAt || ''; } catch (_) {}
+      keys.push({ key, createdAt });
+    }
+    keys.sort((left, right) => String(right.createdAt).localeCompare(String(left.createdAt)) || right.key.localeCompare(left.key));
+    for (const item of keys.slice(2)) storage.removeItem(item.key);
     return backupKey;
   }
 
@@ -344,6 +400,19 @@
       transaction.oncomplete = resolve;
       transaction.onerror = () => reject(transaction.error || new Error('indexeddb_write_failed'));
       transaction.onabort = () => reject(transaction.error || new Error('indexeddb_write_aborted'));
+    });
+    db.close();
+  }
+
+  async function removeIndexedEntry(indexedDB, entry) {
+    const db = await openDatabase(indexedDB, entry.database.name, entry.store);
+    const transaction = db.transaction(entry.store.name, 'readwrite');
+    const store = transaction.objectStore(entry.store.name);
+    store.delete(deserialize(entry.entry.key));
+    await new Promise((resolve, reject) => {
+      transaction.oncomplete = resolve;
+      transaction.onerror = () => reject(transaction.error || new Error('indexeddb_delete_failed'));
+      transaction.onabort = () => reject(transaction.error || new Error('indexeddb_delete_aborted'));
     });
     db.close();
   }
@@ -367,11 +436,13 @@
       if (entry.kind === 'localStorage') {
         const key = entry.recordKey.startsWith('localStorage:') ? entry.recordKey.slice('localStorage:'.length) : '';
         if (!key || typeof entry.entry?.raw !== 'string' || CREDENTIAL_KEY.test(key) || CONNECTION_KEY.test(key)) throw new Error('candidate_invalid');
-        storage.setItem(key, entry.entry.raw);
+        if (entry.deletedAt) storage.removeItem(key);
+        else storage.setItem(key, entry.entry.raw);
         localApplied += 1;
       } else {
         if (!indexedDB) throw new Error('indexeddb_unavailable');
-        await applyIndexedEntry(indexedDB, entry);
+        if (entry.deletedAt) await removeIndexedEntry(indexedDB, entry);
+        else await applyIndexedEntry(indexedDB, entry);
         indexedApplied += 1;
       }
     }
@@ -380,6 +451,7 @@
 
   root.DTSyncCutover = {
     BACKUP_PREFIX,
+    RUNTIME_BACKUP_PREFIX,
     MAX_CANDIDATE_AGE_MS,
     isCandidateFresh,
     stableStringify,
@@ -389,6 +461,8 @@
     classifyDatabase,
     collectLocalStorageEntries,
     collectIndexedDBEntries,
+    isIndexedDBMetadataRecord,
+    saveRuntimeBackup,
     applyCandidateApp
   };
 })(typeof window !== 'undefined' ? window : globalThis);
