@@ -103,7 +103,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "143"
+    "wordCount": "156"
   }]
   </script>
 
@@ -1154,6 +1154,72 @@ body {
   box-shadow: 0 0 12px rgba(139,92,246,0.4);
 }
 
+.bs-field-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  overflow-x: auto;
+  margin: -0.5rem 0 1.5rem;
+  padding: 0.25rem 0 0.45rem;
+  scrollbar-width: none;
+}
+.bs-field-filter-row::-webkit-scrollbar { display: none; }
+.bs-field-filter-label {
+  flex: 0 0 auto;
+  color: var(--neon-cyan);
+  font: 700 0.58rem/1 var(--font-ui);
+  letter-spacing: 0.08em;
+}
+.bs-field-chip {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgba(0,243,255,0.2);
+  color: #7f91a6;
+  background: rgba(0,0,0,0.35);
+  font: 600 0.62rem/1 var(--font-jp);
+  cursor: pointer;
+}
+.bs-field-chip.active,
+.bs-field-chip:hover {
+  border-color: var(--neon-cyan);
+  color: #fff;
+  background: rgba(0,243,255,0.12);
+}
+.bs-field-group {
+  margin: 0 0 1.5rem;
+  border: 1px solid rgba(0,243,255,0.16);
+  background: rgba(5,5,12,0.22);
+}
+.bs-field-group-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.65rem 0.8rem;
+  border-bottom: 1px solid rgba(0,243,255,0.14);
+  color: var(--neon-cyan);
+  font: 700 0.78rem/1.2 var(--font-jp);
+}
+.bs-field-group-count {
+  color: #64748b;
+  font: 500 0.58rem/1 var(--font-ui);
+}
+.bs-field-group-body { padding: 0.8rem; }
+.book-field {
+  display: inline-flex;
+  align-self: flex-start;
+  max-width: 100%;
+  margin: 0.1rem 0 0.35rem;
+  padding: 0.18rem 0.4rem;
+  border: 1px solid rgba(0,243,255,0.22);
+  color: #82a9b5;
+  font: 600 0.52rem/1.2 var(--font-jp);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
  
 .book-grid {
   display: grid;
@@ -1625,51 +1691,141 @@ body {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(4, 3, 8, 0.95);
+  background:
+    radial-gradient(circle at 48% 30%, rgba(0, 243, 255, 0.1), transparent 34%),
+    rgba(4, 3, 8, 0.97);
   z-index: 100000;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(12px);
-  perspective: 1200px;
+  backdrop-filter: blur(18px) saturate(115%);
+  -webkit-backdrop-filter: blur(18px) saturate(115%);
+  perspective: 1400px;
+  isolation: isolate;
 }
-.bs-3d-rotator-overlay.open { display: flex; }
+.bs-3d-rotator-overlay.open {
+  display: flex;
+}
+
+body.bs-rotator-open { overflow: hidden !important; }
+
+.bs-rotator-close {
+  position: fixed;
+  top: max(0.75rem, env(safe-area-inset-top, 0px));
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(12, 10, 22, 0.88);
+  color: #dbe7ef;
+  font: 700 0.68rem/1 var(--font-jp);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: inset 0 1px rgba(255,255,255,0.08), 0 12px 30px rgba(1, 3, 12, 0.35);
+}
+.bs-rotator-close:hover,
+.bs-rotator-close:focus-visible {
+  border-color: rgba(0, 243, 255, 0.64);
+  color: #fff;
+  outline: none;
+}
+.bs-rotator-close:active { transform: translateY(1px); }
 
 .bs-rotator-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(280px, 1.08fr) minmax(260px, 0.92fr);
   align-items: center;
-  gap: 2rem;
+  gap: clamp(2rem, 6vw, 5rem);
+  width: min(100%, 860px);
+  min-height: min(720px, calc(100dvh - 2rem));
+  padding: clamp(1rem, 3vw, 2.25rem);
+  box-sizing: border-box;
+}
+
+.bs-3d-rotator-overlay.open .bs-rotator-container {
+  animation: bs-rotator-enter 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes bs-rotator-enter {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.bs-rotator-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
   width: 100%;
-  max-width: 600px;
+  min-height: 460px;
+  perspective: 1400px;
+}
+
+.bs-rotator-stage::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  width: min(76%, 310px);
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(0, 16, 27, 0.72);
+  filter: blur(16px);
+  transform: translateX(-50%);
+  pointer-events: none;
 }
 
  
 .hero-book-3d {
+  --book-width: 230px;
+  --book-height: 330px;
+  --book-depth: 26px;
+  --book-half-depth: 13px;
+  --bs-rot-x: 8deg;
+  --bs-rot-y: -16deg;
   position: relative;
-  width: 220px;
-  height: 300px;
+  width: var(--book-width);
+  height: var(--book-height);
   transform-style: preserve-3d;
-  transform: rotateX(15deg) rotateY(-20deg);
-  transition: transform 0.1s ease;
+  transform: rotateX(var(--bs-rot-x)) rotateY(var(--bs-rot-y));
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
   cursor: grab;
   z-index: 10;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
-.hero-book-3d:active { cursor: grabbing; }
+.hero-book-3d.is-dragging,
+.hero-book-3d:active {
+  cursor: grabbing;
+  transition: none;
+}
 
 .hero-book-face {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
   backface-visibility: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+  box-sizing: border-box;
+  box-shadow: 0 18px 45px rgba(1, 3, 12, 0.58);
 }
 
 .hero-book-front {
-  background: #111;
-  transform: translateZ(12px);  
-  border: 1px solid rgba(255,255,255,0.1);
+  background: #0b0d15;
+  transform: translateZ(var(--book-half-depth));
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 3px 7px 7px 3px;
   overflow: hidden;
   position: relative;
+  box-shadow:
+    inset 1px 0 rgba(255,255,255,0.14),
+    inset -3px 0 8px rgba(0,0,0,0.24),
+    0 22px 55px rgba(1,3,12,0.62);
 }
 .hero-book-front img {
   position: absolute !important;
@@ -1681,35 +1837,94 @@ body {
   max-height: none !important;
   object-fit: cover !important;
   display: block !important;
+  z-index: 2;
+}
+
+.bs-rotator-cover-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.35rem 1.1rem 1.25rem 1.3rem;
+  background:
+    radial-gradient(circle at 88% 8%, rgba(0,243,255,0.18), transparent 34%),
+    linear-gradient(155deg, #15182a 0%, #0a0d18 58%, #070911 100%);
+  color: #eef9fb;
+  text-align: left;
+}
+.bs-rotator-cover-fallback::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0.55rem;
+  width: 1px;
+  background: rgba(0,243,255,0.36);
+}
+.bs-cover-fallback-field {
+  color: #75dce3;
+  font: 700 0.62rem/1.3 var(--font-jp);
+}
+.bs-cover-fallback-title {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #f4fbfc;
+  font: 800 1.2rem/1.45 var(--font-jp);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+}
+.bs-cover-fallback-author {
+  color: #91a6b4;
+  font: 600 0.67rem/1.5 var(--font-jp);
 }
 
 .hero-book-back {
-  background: #181622;
-  transform: rotateY(180deg) translateZ(12px);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: linear-gradient(150deg, #181b2b, #0d101d);
+  transform: rotateY(180deg) translateZ(var(--book-half-depth));
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 7px 3px 3px 7px;
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
+  padding: 1.35rem;
   justify-content: space-between;
-  color: #c0c0d0;
+  color: #c9d8e0;
+  overflow: hidden;
+}
+.hero-book-back-label {
+  color: #78dce3;
+  font: 700 0.62rem/1.3 var(--font-jp);
 }
 .hero-book-back-text {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  line-height: 1.5;
+  display: -webkit-box;
+  overflow: hidden;
+  color: #d9e4e9;
+  font-family: var(--font-jp);
+  font-size: 0.72rem;
+  line-height: 1.7;
   white-space: pre-wrap;
   border-left: 2px solid var(--neon-cyan);
   padding-left: 0.75rem;
   margin-top: 1rem;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 9;
+}
+.hero-book-back-footer {
+  display: grid;
+  gap: 0.35rem;
+  color: #8497a6;
+  font: 600 0.62rem/1.35 var(--font-jp);
+  text-align: right;
 }
 
 .hero-book-spine {
   position: absolute;
   top: 0; left: 0;
-  width: 24px;  
+  width: var(--book-depth);
   height: 100%;
-  background: #110e1a;
-  transform: rotateY(-90deg) translateZ(12px);
+  background: linear-gradient(90deg, #090b13, #1b2032 48%, #0b0d17);
+  transform: rotateY(-90deg) translateZ(var(--book-half-depth));
   border-left: 1px solid rgba(255,255,255,0.1);
   border-right: 1px solid rgba(0,0,0,0.4);
   display: flex;
@@ -1727,43 +1942,159 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 250px;
+  max-height: calc(var(--book-height) - 34px);
 }
 
  
 .hero-book-side {
   position: absolute;
   top: 0; right: 0;
-  width: 24px; height: 100%;
+  width: var(--book-depth); height: 100%;
   background: linear-gradient(90deg, #eaeae6, #d9d9d3, #eaeae6);
-  transform: rotateY(90deg) translateZ(208px);  
+  transform: rotateY(90deg) translateZ(calc(var(--book-width) - var(--book-half-depth)));
   background-image: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
 }
 .hero-book-top {
   position: absolute;
   top: 0; left: 0;
-  width: 100%; height: 24px;
+  width: 100%; height: var(--book-depth);
   background: #d9d9d3;
-  transform: rotateX(90deg) translateZ(12px);
+  transform: rotateX(90deg) translateZ(var(--book-half-depth));
   background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
 }
 .hero-book-bottom {
   position: absolute;
   bottom: 0; left: 0;
-  width: 100%; height: 24px;
+  width: 100%; height: var(--book-depth);
   background: #d9d9d3;
-  transform: rotateX(-90deg) translateZ(288px);  
+  transform: rotateX(-90deg) translateZ(calc(var(--book-height) - var(--book-half-depth)));
   background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
 }
 
 .bs-rotator-meta {
-  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
   color: #fff;
   z-index: 20;
 }
-.bs-rotator-title { font-family: var(--font-jp); font-size: 1.35rem; font-weight: 700; color: #fff; text-shadow: 0 0 10px rgba(0,243,255,0.4); margin-bottom: 0.5rem; }
-.bs-rotator-author { font-size: 0.85rem; color: var(--neon-cyan); margin-bottom: 0.5rem; }
-.bs-rotator-instruction { font-size: 0.65rem; color: #64748b; font-family: var(--font-ui); letter-spacing: 0.1em; }
+.bs-rotator-details {
+  padding: clamp(1rem, 3vw, 1.4rem);
+  border: 1px solid rgba(0,243,255,0.18);
+  border-radius: 18px;
+  background: rgba(11, 12, 24, 0.72);
+  box-shadow: inset 0 1px rgba(255,255,255,0.06), 0 22px 54px rgba(1,3,12,0.32);
+}
+.bs-rotator-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+.bs-rotator-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0.32rem 0.58rem;
+  border: 1px solid rgba(0,243,255,0.26);
+  border-radius: 8px;
+  color: #9fe4e8;
+  background: rgba(0,243,255,0.06);
+  font: 700 0.64rem/1.2 var(--font-jp);
+}
+.bs-rotator-title {
+  margin: 0 0 0.5rem;
+  color: #f3f8fa;
+  font-family: var(--font-jp);
+  font-size: clamp(1.15rem, 3vw, 1.45rem);
+  font-weight: 800;
+  line-height: 1.42;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+.bs-rotator-author {
+  margin: 0;
+  color: #8fdde2;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+.bs-rotator-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.85rem;
+  margin-top: 0.85rem;
+  color: #9badb8;
+  font: 600 0.68rem/1.45 var(--font-jp);
+}
+.bs-rotator-instruction {
+  margin: 1rem 0 0;
+  color: #728694;
+  font-size: 0.67rem;
+  line-height: 1.5;
+  font-family: var(--font-jp);
+}
+.bs-rotator-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.bs-rotator-actions .bs-btn {
+  width: 100%;
+  min-height: 46px;
+  padding-inline: 0.8rem;
+  color: #cad8df;
+}
+.bs-rotator-actions .bs-btn-edit {
+  border-color: rgba(250,204,21,0.56);
+  color: #f7d865;
+}
+
+@media (max-width: 720px) {
+  .bs-3d-rotator-overlay {
+    align-items: flex-start;
+  }
+  .bs-rotator-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.35rem;
+    width: min(100%, 440px);
+    min-height: 100%;
+    padding: 2.9rem 0 0.5rem;
+  }
+  .bs-rotator-stage {
+    min-height: min(47dvh, 380px);
+  }
+  .hero-book-3d {
+    --book-width: 184px;
+    --book-height: 266px;
+    --book-depth: 24px;
+    --book-half-depth: 12px;
+  }
+  .bs-rotator-details {
+    margin-top: 0;
+    padding: 1rem;
+    border-radius: 16px;
+  }
+  .bs-rotator-title {
+    font-size: 1.12rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .bs-rotator-stage { min-height: 310px; }
+  .hero-book-3d {
+    --book-width: 164px;
+    --book-height: 238px;
+  }
+  .bs-rotator-details { padding: 0.85rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bs-3d-rotator-overlay.open .bs-rotator-container { animation: none; }
+  .hero-book-3d { transition: none; }
+}
 
  
 .bs-overlay {
@@ -1869,6 +2200,73 @@ body {
   margin-top: 0.5rem;
   white-space: pre-wrap;
   word-break: break-all;
+}
+
+.bs-camera-modal { max-width: 520px; }
+.bs-camera-body { gap: 0.8rem; }
+.bs-camera-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: #7f91a6;
+  font: 600 0.62rem/1.3 var(--font-ui);
+}
+.bs-camera-status span:first-child { color: var(--neon-cyan); }
+.bs-camera-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 220px;
+  overflow: hidden;
+  background: #020307;
+  border-top: 1px solid rgba(0,243,255,0.35);
+  border-right: 1px solid rgba(0,243,255,0.35);
+  border-bottom: 1px solid rgba(0,243,255,0.35);
+  border-left: 1px solid rgba(0,243,255,0.35);
+}
+.bs-camera-viewport video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+.bs-camera-frame {
+  position: absolute;
+  inset: 16% 8%;
+  border: 2px solid rgba(0,255,65,0.85);
+  box-shadow: 0 0 0 999px rgba(0,0,0,0.28), 0 0 18px rgba(0,255,65,0.26);
+  pointer-events: none;
+}
+.bs-camera-frame span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background: var(--neon-green);
+  box-shadow: 0 0 10px var(--neon-green);
+}
+.bs-camera-message {
+  min-height: 2.8em;
+  margin: 0;
+  color: #c5d7e2;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+.bs-camera-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+.bs-camera-manual {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0,243,255,0.15);
+}
+.bs-camera-manual label {
+  color: #7f91a6;
+  font: 600 0.62rem/1.2 var(--font-jp);
 }
 
 .bs-field { display: flex; flex-direction: column; gap: 0.35rem; }
@@ -2283,20 +2681,6 @@ body {
   .book-3d-spine-title { font-size: 0.52rem !important; max-height: 110px !important; }
   
    
-  .hero-book-3d {
-    transform: scale(0.7) rotateX(15deg) rotateY(-20deg) !important;
-    transform-origin: center center !important;
-    width: 220px !important;
-    height: 300px !important;
-  }
-  .hero-book-side {
-    transform: rotateY(90deg) translateZ(208px) !important;
-  }
-  .hero-book-bottom {
-    transform: rotateX(-90deg) translateZ(288px) !important;
-  }
-
-   
   .bs-search-box {
     min-width: 0 !important;
     width: 100% !important;
@@ -2370,17 +2754,6 @@ body {
   }
 
    
-  .hero-book-3d {
-    transform: scale(0.55) rotateX(15deg) rotateY(-20deg) !important;
-  }
-  .bs-rotator-title {
-    font-size: 1rem !important;
-  }
-  .bs-rotator-author {
-    font-size: 0.7rem !important;
-  }
-
-   
   .bs-vt-btn {
     font-size: 0.5rem !important;
     padding: 0.3rem 0.5rem !important;
@@ -2411,9 +2784,13 @@ body {
 #bs-app-root.dt-ui .bs-list-item,
 #bs-app-root.dt-ui .bs-view-toggle,
 #bs-app-root.dt-ui .bs-3d-row,
+#bs-app-root.dt-ui .bs-field-group,
+#bs-app-root.dt-ui .book-field,
 .bs-overlay.dt-ui .bs-modal,
 .bs-overlay.dt-ui .bs-scanner-panel,
 .bs-overlay.dt-ui .bs-scanner-log,
+.bs-overlay.dt-ui .bs-camera-viewport,
+.bs-overlay.dt-ui .bs-camera-manual,
 .bs-overlay.dt-ui .bs-cover-preview-box,
 .bs-overlay.dt-ui .bs-detail-cover,
 .bs-overlay.dt-ui .bs-detail-comment,
@@ -2452,6 +2829,7 @@ body {
 #bs-app-root.dt-ui .bs-btn-cyber,
 #bs-app-root.dt-ui .bs-vt-btn,
 #bs-app-root.dt-ui .bs-tag-chip,
+#bs-app-root.dt-ui .bs-field-chip,
 .bs-overlay.dt-ui .bs-btn,
 .bs-overlay.dt-ui .bs-modal-close,
 .bs-overlay.dt-ui .bs-star-btn,
@@ -2628,6 +3006,14 @@ body {
   border-right-color: hsl(263 80% 65% / 0.22) !important;
   border-bottom-color: hsl(263 80% 65% / 0.22) !important;
   border-left-color: hsl(263 80% 65% / 0.22) !important;
+  font-size: 0.7rem !important;
+}
+
+#bs-app-root.dt-ui .bs-field-chip {
+  border-top-color: hsl(var(--dt-accent) / 0.22) !important;
+  border-right-color: hsl(var(--dt-accent) / 0.22) !important;
+  border-bottom-color: hsl(var(--dt-accent) / 0.22) !important;
+  border-left-color: hsl(var(--dt-accent) / 0.22) !important;
   font-size: 0.7rem !important;
 }
 
@@ -2881,10 +3267,6 @@ body {
   overscroll-behavior: contain;
 }
 
-.bs-3d-rotator-overlay.dt-ui .bs-rotator-container {
-  min-height: min-content;
-}
-
 @media (max-width: 768px) {
   #bs-app-root.dt-ui {
     width: calc(100vw - 24px) !important;
@@ -3085,10 +3467,6 @@ body {
     word-break: normal !important;
   }
 
-  .bs-3d-rotator-overlay.dt-ui .bs-rotator-container {
-    gap: 1.1rem;
-  }
-
   .bs-3d-rotator-overlay.dt-ui .bs-rotator-instruction {
     max-width: 18rem;
     line-height: 1.55;
@@ -3217,6 +3595,7 @@ body {
       <select class="bs-select-cyber" id="bs-sort" onchange="bsRender()">
         <option value="title">タイトル順</option>
         <option value="author">著者順</option>
+        <option value="field">分野ごと</option>
         <option value="rating">評価（★）順</option>
         <option value="added">登録順</option>
         <option value="updated" selected>更新順</option>
@@ -3233,6 +3612,7 @@ body {
 
   
   <div class="bs-tag-filter-row" id="bs-tag-filters"></div>
+  <div class="bs-field-filter-row" id="bs-field-filters" aria-label="分野で絞り込み"></div>
 
   
   <div class="bookshelf-container" id="bs-sec-owned">
@@ -3252,27 +3632,39 @@ body {
 <div class="bs-toast dt-ui" id="bs-toast" role="status" aria-live="polite"></div>
 
 
-<div class="bs-3d-rotator-overlay dt-ui" id="bs-rotator-overlay" role="dialog" aria-modal="true" aria-label="3D書籍ビュー" onclick="bsCloseRotator()">
+<div class="bs-3d-rotator-overlay dt-ui" id="bs-rotator-overlay" role="dialog" aria-modal="true" aria-labelledby="bs-rot-title" aria-describedby="bs-rotator-help" tabindex="-1" onclick="bsRotatorBackdropClick(event)" onkeydown="bsRotatorKeydown(event)">
+  <button class="bs-rotator-close" type="button" aria-label="一冊表示を閉じる" onclick="event.stopPropagation(); bsCloseRotator()"><span aria-hidden="true">×</span><span>閉じる</span></button>
   <div class="bs-rotator-container" onclick="event.stopPropagation()">
-    <div class="hero-book-3d" id="bs-hero-book" 
-         onmousedown="bsRotateStart(event)" 
-         onmousemove="bsRotateMove(event)" 
-         onmouseup="bsRotateEnd()"
-         onmouseleave="bsRotateEnd()"
-         ontouchstart="bsRotateStart(event)"
-         ontouchmove="bsRotateMove(event)"
-         ontouchend="bsRotateEnd()">
-      
+    <div class="bs-rotator-stage">
+      <div class="hero-book-3d" id="bs-hero-book"
+           onmousedown="bsRotateStart(event)"
+           onmousemove="bsRotateMove(event)"
+           onmouseup="bsRotateEnd()"
+           onmouseleave="bsRotateEnd()"
+           ontouchstart="bsRotateStart(event)"
+           ontouchmove="bsRotateMove(event)"
+           ontouchend="bsRotateEnd()"
+           ontouchcancel="bsRotateEnd()">
+        
+      </div>
     </div>
-    <div class="bs-rotator-meta">
-      <div class="bs-rotator-title" id="bs-rot-title">Book Title</div>
-      <div class="bs-rotator-author" id="bs-rot-author">Author Name</div>
-      <div class="bs-rotator-instruction">本をドラッグして回転 / 余白をクリックして戻る</div>
-    </div>
-    <div style="display:flex; gap:1rem;">
-      <button class="bs-btn bs-btn-edit" id="bs-rot-edit-btn" onclick="bsEditFromRotator()">✎ 編集する</button>
-      <button class="bs-btn" onclick="bsCloseRotator()">✕ 閉じる</button>
-    </div>
+    <section class="bs-rotator-meta bs-rotator-details">
+      <div class="bs-rotator-badges">
+        <span class="bs-rotator-badge" id="bs-rot-status">ステータス</span>
+        <span class="bs-rotator-badge" id="bs-rot-field">未分類</span>
+      </div>
+      <h2 class="bs-rotator-title" id="bs-rot-title">書名</h2>
+      <p class="bs-rotator-author" id="bs-rot-author">著者</p>
+      <div class="bs-rotator-facts">
+        <span id="bs-rot-rating">未評価</span>
+        <span id="bs-rot-publisher" hidden></span>
+      </div>
+      <p class="bs-rotator-instruction" id="bs-rotator-help">ドラッグで回転。矢印キーでも向きを変えられます。</p>
+      <div class="bs-rotator-actions">
+        <button class="bs-btn bs-btn-edit" type="button" id="bs-rot-edit-btn" onclick="bsEditFromRotator()">編集</button>
+        <button class="bs-btn" type="button" onclick="bsCloseRotator()">閉じる</button>
+      </div>
+    </section>
   </div>
 </div>
 
@@ -3329,6 +3721,7 @@ body {
         <div class="bs-scanner-row">
           <input type="text" class="bs-input bs-scanner-input" id="bs-scanner-isbn" placeholder="ISBNコードまたは書籍名を入力...">
           <button class="bs-btn" type="button" style="border-color:var(--neon-cyan); color:var(--neon-cyan);" onclick="bsSearchISBN()">SCAN</button>
+          <button class="bs-btn" type="button" style="border-color:var(--neon-green); color:var(--neon-green);" onclick="bsOpenScanner()" aria-label="カメラでISBNを読み取る">カメラ</button>
         </div>
         <div class="bs-scanner-log" id="bs-scanner-log">> Waiting for scan sequence...</div>
       </div>
@@ -3341,6 +3734,11 @@ body {
       <div class="bs-field">
         <label>著者名 (AUTHOR)</label>
         <input type="text" class="bs-input" id="bs-f-author" placeholder="著者名">
+      </div>
+      <div class="bs-field">
+        <label for="bs-f-field">分野 (FIELD)</label>
+        <input type="text" class="bs-input" id="bs-f-field" list="bs-field-options" placeholder="数学一般、解析…">
+        <datalist id="bs-field-options"></datalist>
       </div>
       <div class="bs-field">
         <label>出版社 (PUBLISHER)</label>
@@ -3412,6 +3810,35 @@ body {
 </div>
 
 
+<div class="bs-overlay dt-ui" id="bs-overlay-scanner" role="dialog" aria-modal="true" aria-labelledby="bs-scanner-title">
+  <div class="bs-modal bs-camera-modal">
+    <div class="bs-modal-header">
+      <span id="bs-scanner-title">ISBNをカメラで読み取る</span>
+      <button class="bs-modal-close" type="button" aria-label="カメラを閉じる" onclick="bsCloseScanner()">✕</button>
+    </div>
+    <div class="bs-modal-body bs-camera-body">
+      <div class="bs-camera-status"><span id="bs-camera-engine" data-state="loading">ZXing 準備中</span><span>ISBN / EAN-13</span></div>
+      <div class="bs-camera-viewport" id="bs-camera-wrap" data-state="loading">
+        <video id="bs-camera-video" autoplay playsinline muted></video>
+        <div class="bs-camera-frame" aria-hidden="true"><span></span></div>
+      </div>
+      <p class="bs-camera-message" id="bs-camera-message" aria-live="polite">認識エンジンを準備しています…</p>
+      <div class="bs-camera-actions">
+        <button class="bs-btn" type="button" id="bs-camera-torch" onclick="bsToggleTorch()" aria-pressed="false" hidden>ライト</button>
+        <button class="bs-btn" type="button" onclick="bsRestartScanner()">再試行</button>
+      </div>
+      <div class="bs-camera-manual">
+        <label for="bs-camera-manual-isbn">番号から検索</label>
+        <div class="bs-scanner-row">
+          <input class="bs-input" id="bs-camera-manual-isbn" type="text" inputmode="numeric" autocomplete="off" placeholder="ISBNを手入力">
+          <button class="bs-btn" type="button" onclick="bsUseManualScannerISBN()">検索</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="bs-overlay dt-ui" id="bs-overlay-detail" role="dialog" aria-modal="true" aria-labelledby="bs-detail-title-label">
   <div class="bs-modal">
     <div class="bs-modal-header">
@@ -3454,12 +3881,23 @@ let formTags = [];
 let formRating = 0;
 let viewMode = localStorage.getItem('dt_library_view_mode') || 'grid';
 let activeTagFilter = null;
+let activeFieldFilter = null;
 let sortDir = 'desc';
 
 let toastTimer = null;
 let searchTimer = null;
 let syncRetries = 0;
 const MAX_SYNC_RETRIES = 2;
+const ZXING_URL = 'https://unpkg.com/@zxing/browser@0.2.1';
+let cameraStream = null;
+let nativeDetector = null;
+let scannerControls = null;
+let scannerReader = null;
+let scannerSession = 0;
+let scannerActive = false;
+let scannerEngineName = 'ZXing';
+let torchOn = false;
+let scannerLastFocus = null;
 
  
 let isRotating = false;
@@ -3468,6 +3906,9 @@ let rotStartY = 0;
 let rotX = 15;
 let rotY = -20;
 let rotatorBookId = null;
+let rotatorLastFocus = null;
+let rotatorDidDrag = false;
+let rotatorSuppressBackdropUntil = 0;
 
  
 function formatSeriesTitle(title) {
@@ -3515,6 +3956,47 @@ function formatSeriesTitle(title) {
   }
 
   return t;
+}
+
+ 
+function normalizeAuthorNamePart(value) {
+  let text = String(value == null ? '' : value).normalize('NFKC').trim();
+  if (!text) return '';
+
+  
+  text = text.replace(/[（(][^（）()]*?(?:18|19|20)\d{2}[^（）()]*[）)]/g, ' ');
+  text = text.replace(/(?:[、,，;；/|]\s*|\s+)(?:18|19|20)\d{2}(?:\s*[-–—]\s*(?:(?:18|19|20)\d{2})?)?\s*$/g, '');
+  text = text.replace(/\s+/g, ' ').trim();
+  return text;
+}
+
+function normalizeAuthorNames(value) {
+  const source = Array.isArray(value) ? value : [value];
+  const names = [];
+  source.forEach((item) => {
+    const text = String(item == null ? '' : item).normalize('NFKC').trim();
+    if (!text) return;
+    text.split(/[、,，;；/|]+/).forEach((part) => {
+      const name = normalizeAuthorNamePart(part);
+      if (!name || /^(?:18|19|20)\d{2}(?:\s*[-–—]\s*(?:(?:18|19|20)\d{2})?)?$/.test(name)) return;
+      if (!names.includes(name)) names.push(name);
+    });
+  });
+  return names.join('、');
+}
+
+function normalizeField(value) {
+  const field = String(value == null ? '' : value).normalize('NFKC').trim();
+  return field || '未分類';
+}
+
+function normalizeLibraryBook(raw) {
+  const source = raw && typeof raw === 'object' ? raw : {};
+  const normalized = Object.assign({}, source);
+  normalized.title = String(source.title == null ? '' : source.title).trim();
+  normalized.author = normalizeAuthorNames(source.author || source.authors || '');
+  normalized.field = normalizeField(source.field);
+  return normalized;
 }
 
  
@@ -3651,10 +4133,11 @@ function mergeAndDeduplicate(arr1, arr2) {
   const map = new Map();
   
   
-  const cleanArr1 = (arr1 || []).filter(b => b && b.title && !b.title.includes('\uFFFD') && !(b.author || '').includes('\uFFFD'));
-  const cleanArr2 = (arr2 || []).filter(b => b && b.title && !b.title.includes('\uFFFD') && !(b.author || '').includes('\uFFFD'));
+  const cleanArr1 = (arr1 || []).map(normalizeLibraryBook).filter(b => b && b.title && !b.title.includes('\uFFFD') && !(b.author || '').includes('\uFFFD'));
+  const cleanArr2 = (arr2 || []).map(normalizeLibraryBook).filter(b => b && b.title && !b.title.includes('\uFFFD') && !(b.author || '').includes('\uFFFD'));
 
-  [...cleanArr1, ...cleanArr2].forEach(b => {
+  [...cleanArr1, ...cleanArr2].forEach(rawBook => {
+    const b = normalizeLibraryBook(rawBook);
     if(!b || !b.title) return;
     
     
@@ -3694,13 +4177,15 @@ function mergeAndDeduplicate(arr1, arr2) {
         link: existing.link || b.link || '',
         rating: existing.rating || b.rating || 0,
         tags: (existing.tags && existing.tags.length) ? existing.tags : (b.tags || []),
-        status: existing.status || b.status || 'done'
+        status: existing.status || b.status || 'done',
+        field: normalizeField(existing.field && existing.field !== '未分類' ? existing.field : b.field)
       };
       map.set(mergeKey, mergedBook);
     }
   });
   
-  return Array.from(map.values()).map(b => {
+  return Array.from(map.values()).map(rawBook => {
+    const b = normalizeLibraryBook(rawBook);
     b.title = formatSeriesTitle(b.title); 
     b.id = calcBookId(b.title, b.author, b.isbn); 
     b.createdAt = b.createdAt || Date.now();
@@ -3777,6 +4262,199 @@ function esc(s) {
   d.textContent = s;
   return d.innerHTML;
 }
+
+ 
+function bsSetScannerState(state, engine, message) {
+  const engineNode = document.getElementById('bs-camera-engine');
+  const cameraNode = document.getElementById('bs-camera-wrap');
+  const messageNode = document.getElementById('bs-camera-message');
+  if (engineNode) { engineNode.dataset.state = state; engineNode.textContent = engine; }
+  if (cameraNode) cameraNode.dataset.state = state;
+  if (messageNode) messageNode.textContent = message;
+}
+
+function bsStopCamera() {
+  scannerSession += 1;
+  scannerActive = false;
+  nativeDetector = null;
+  torchOn = false;
+  if (scannerControls && typeof scannerControls.stop === 'function') {
+    try { scannerControls.stop(); } catch (error) {   }
+  }
+  scannerControls = null;
+  scannerReader = null;
+  if (cameraStream && cameraStream.getTracks) cameraStream.getTracks().forEach((track) => track.stop());
+  cameraStream = null;
+  const video = document.getElementById('bs-camera-video');
+  if (video && video.srcObject) {
+    try { video.srcObject.getTracks().forEach((track) => track.stop()); } catch (error) {   }
+    video.srcObject = null;
+  }
+  const torch = document.getElementById('bs-camera-torch');
+  if (torch) {
+    torch.hidden = true;
+    torch.setAttribute('aria-pressed', 'false');
+    torch.textContent = 'ライト';
+  }
+}
+
+function bsLoadZXing() {
+  if (window.ZXingBrowser && window.ZXingBrowser.BrowserMultiFormatReader) return Promise.resolve(window.ZXingBrowser);
+  if (window.__libraryShelfZXing) return window.__libraryShelfZXing;
+  let loaderScript = null;
+  window.__libraryShelfZXing = new Promise((resolve, reject) => {
+    let script = document.querySelector('script[data-library-zxing]');
+    if (!script) {
+      script = document.createElement('script');
+      script.src = ZXING_URL;
+      script.async = true;
+      script.crossOrigin = 'anonymous';
+      script.dataset.libraryZxing = 'true';
+      document.head.appendChild(script);
+    }
+    loaderScript = script;
+    const timer = window.setTimeout(() => reject(new Error('ZXing load timeout')), 12000);
+    function loaded() {
+      window.clearTimeout(timer);
+      if (window.ZXingBrowser && window.ZXingBrowser.BrowserMultiFormatReader) resolve(window.ZXingBrowser);
+      else reject(new Error('ZXing unavailable'));
+    }
+    function failed() { window.clearTimeout(timer); reject(new Error('ZXing load failed')); }
+    script.addEventListener('load', loaded, { once: true });
+    script.addEventListener('error', failed, { once: true });
+  }).catch((error) => {
+    window.__libraryShelfZXing = null;
+    if (loaderScript && !window.ZXingBrowser) loaderScript.remove();
+    throw error;
+  });
+  return window.__libraryShelfZXing;
+}
+
+function bsDetectedISBN(raw, session) {
+  const isbn = String(raw || '').replace(/\D/g, '');
+  if (!scannerActive || session !== scannerSession) return;
+  if (!/^(978|979)\d{10}$/.test(isbn)) {
+    bsSetScannerState('active', scannerEngineName + ' 認識中', '書籍用ISBNではありません。978 または 979 で始まるコードを映してください。');
+    return;
+  }
+  bsSetScannerState('active', '読み取り完了', 'ISBN ' + isbn + ' を認識しました。');
+  if (navigator.vibrate) navigator.vibrate([35, 35, 60]);
+  document.getElementById('bs-scanner-isbn').value = isbn;
+  document.getElementById('bs-camera-manual-isbn').value = isbn;
+  bsCloseScanner();
+  bsSearchISBN();
+}
+
+function bsScanNativeFrame(session) {
+  if (!scannerActive || !nativeDetector || session !== scannerSession) return;
+  const video = document.getElementById('bs-camera-video');
+  nativeDetector.detect(video).then((codes) => {
+    if (codes && codes.length) bsDetectedISBN(codes[0].rawValue, session);
+  }).catch(() => {   }).finally(() => {
+    if (scannerActive && session === scannerSession) window.setTimeout(() => bsScanNativeFrame(session), 180);
+  });
+}
+
+async function bsStartNativeScanner(video, session) {
+  if (!('BarcodeDetector' in window)) throw new Error('no scanner engine');
+  cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
+  if (!scannerActive || session !== scannerSession) { cameraStream.getTracks().forEach((track) => track.stop()); return; }
+  video.srcObject = cameraStream;
+  await video.play();
+  nativeDetector = new BarcodeDetector({ formats: ['ean_13'] });
+  scannerEngineName = '標準認識';
+  bsSetScannerState('active', '標準認識で動作中', 'ISBNバーコードを枠に合わせてください。');
+  bsScanNativeFrame(session);
+}
+
+async function bsStartCamera() {
+  bsStopCamera();
+  const session = scannerSession;
+  const video = document.getElementById('bs-camera-video');
+  scannerActive = true;
+  bsSetScannerState('loading', 'ZXing 準備中', '認識エンジンを準備しています…');
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    scannerActive = false;
+    bsSetScannerState('error', 'カメラ非対応', 'このブラウザではカメラを利用できません。ISBNを手入力してください。');
+    return;
+  }
+  try {
+    const zxing = await bsLoadZXing();
+    if (!scannerActive || session !== scannerSession) return;
+    scannerEngineName = 'ZXing';
+    scannerReader = new zxing.BrowserMultiFormatReader(undefined, { delayBetweenScanAttempts: 180, delayBetweenScanSuccess: 450, tryPlayVideoTimeout: 8000 });
+    scannerReader.possibleFormats = [zxing.BarcodeFormat.EAN_13];
+    scannerControls = await scannerReader.decodeFromConstraints({
+      audio: false,
+      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }
+    }, video, (result) => {
+      if (result) bsDetectedISBN(typeof result.getText === 'function' ? result.getText() : result.text, session);
+    });
+    if (!scannerActive || session !== scannerSession) { scannerControls.stop(); return; }
+    cameraStream = video.srcObject;
+    const torch = document.getElementById('bs-camera-torch');
+    if (scannerControls.switchTorch && torch) torch.hidden = false;
+    bsSetScannerState('active', 'ZXing 認識中', 'ISBNバーコードを枠に合わせてください。');
+  } catch (error) {
+    if (!scannerActive || session !== scannerSession) return;
+    let fallbackError = null;
+    let permissionError = error && (error.name === 'NotAllowedError' || error.name === 'SecurityError');
+    if (!permissionError) {
+      try {
+        await bsStartNativeScanner(video, session);
+        return;
+      } catch (nativeError) { fallbackError = nativeError; }
+    }
+    scannerActive = false;
+    permissionError = permissionError || (fallbackError && (fallbackError.name === 'NotAllowedError' || fallbackError.name === 'SecurityError'));
+    bsSetScannerState('error', permissionError ? 'カメラ許可が必要' : 'スキャンを開始できません', permissionError ? 'ブラウザのカメラ許可をオンにして、再試行してください。' : '自動認識を開始できませんでした。通信状態を確認するかISBNを手入力してください。');
+  }
+}
+
+window.bsOpenScanner = function() {
+  scannerLastFocus = document.activeElement;
+  document.getElementById('bs-overlay-scanner').classList.add('open');
+  bsStartCamera();
+};
+
+window.bsCloseScanner = function() {
+  bsStopCamera();
+  const overlay = document.getElementById('bs-overlay-scanner');
+  if (overlay) overlay.classList.remove('open');
+  if (scannerLastFocus && typeof scannerLastFocus.focus === 'function') scannerLastFocus.focus();
+};
+
+window.bsRestartScanner = function() {
+  if (!document.getElementById('bs-overlay-scanner').classList.contains('open')) return;
+  bsStartCamera();
+};
+
+window.bsToggleTorch = async function() {
+  const button = document.getElementById('bs-camera-torch');
+  if (!scannerControls || typeof scannerControls.switchTorch !== 'function') {
+    toast('この端末ではライトを操作できません。', 'info');
+    return;
+  }
+  try {
+    torchOn = !torchOn;
+    await scannerControls.switchTorch(torchOn);
+    button.setAttribute('aria-pressed', String(torchOn));
+    button.textContent = torchOn ? 'ライトOFF' : 'ライト';
+  } catch (error) {
+    torchOn = false;
+    button.setAttribute('aria-pressed', 'false');
+    button.textContent = 'ライト';
+    toast('ライトを切り替えられませんでした。', 'info');
+  }
+};
+
+window.bsUseManualScannerISBN = function() {
+  const value = document.getElementById('bs-camera-manual-isbn').value.trim();
+  if (!value) return;
+  document.getElementById('bs-scanner-isbn').value = value;
+  bsCloseScanner();
+  bsSearchISBN();
+};
 
  
 window.bsSearchDebounced = function() {
@@ -3880,6 +4558,23 @@ window.bsSetView = function(mode) {
 
  
 const STATUS_LABEL = {done:'読了', reading:'読中', backlog:'積読', wishlist:'欲しい'};
+const FIELD_PRESETS = [
+  '数学一般', '基礎', '解析', '線形代数', '代数学',
+  '幾何学', '位相', '確率・統計', '数論', '応用数学',
+  '物理一般', '力学', '電磁気学', '熱力学・統計力学', '量子力学',
+  '相対論', '光学', '流体力学', '物性', '素粒子・原子核',
+  '情報', '自然科学', 'その他', '未分類'
+];
+const DEPRECATED_FIELD_LABELS = new Set(['数学', '物理', '人文・社会', '小説']);
+
+function renderFieldOptions() {
+  const datalist = document.getElementById('bs-field-options');
+  if (!datalist) return;
+  datalist.innerHTML = FIELD_PRESETS
+    .filter((field) => field !== '未分類')
+    .map((field) => `<option value="${esc(field)}"></option>`)
+    .join('');
+}
 
 function animateValue(el, target) {
   const current = parseInt(el.textContent) || 0;
@@ -3950,6 +4645,33 @@ function renderTagFilterChips() {
   ).join('');
 }
 
+function getAllFields() {
+  const fields = new Set(FIELD_PRESETS);
+  db.forEach((book) => {
+    const field = normalizeField(book.field);
+    if (!DEPRECATED_FIELD_LABELS.has(field)) fields.add(field);
+  });
+  return Array.from(fields);
+}
+
+window.bsToggleFieldFilter = function(field) {
+  const value = String(field || '').trim() ? normalizeField(field) : null;
+  activeFieldFilter = activeFieldFilter === value ? null : value;
+  bsRender();
+};
+
+function renderFieldFilterChips() {
+  const el = document.getElementById('bs-field-filters');
+  if (!el) return;
+  const chips = ['すべて'].concat(getAllFields());
+  el.innerHTML = `<span class="bs-field-filter-label">分野</span>` + chips.map((field) => {
+    const isAll = field === 'すべて';
+    const active = isAll ? !activeFieldFilter : activeFieldFilter === field;
+    const value = isAll ? '' : field;
+    return `<button class="bs-field-chip${active ? ' active' : ''}" type="button" onclick="bsToggleFieldFilter('${esc(value).replace(/'/g, "\\'")}')">${esc(field)}</button>`;
+  }).join('');
+}
+
 window.bsToggleSortDir = function() {
   sortDir = (sortDir === 'desc') ? 'asc' : 'desc';
   const btn = document.getElementById('bs-sort-dir-btn');
@@ -3971,6 +4693,11 @@ function getSortedBooks(arr) {
     }
     if(sort === 'author') {
       cmp = (a.author || '').localeCompare(b.author || '', 'ja');
+      return isAsc ? cmp : -cmp;
+    }
+    if(sort === 'field') {
+      cmp = normalizeField(a.field).localeCompare(normalizeField(b.field), 'ja');
+      if (cmp === 0) cmp = (a.title || '').localeCompare(b.title || '', 'ja');
       return isAsc ? cmp : -cmp;
     }
     if(sort === 'rating') {
@@ -4000,6 +4727,7 @@ function renderStars(rating) {
 window.bsRender = function() {
   updateDashboardMetrics();
   renderTagFilterChips();
+  renderFieldFilterChips();
 
   const query = (document.getElementById('bs-search').value || '').trim().toLowerCase();
 
@@ -4013,12 +4741,19 @@ window.bsRender = function() {
     wish = filterFn(wish);
   }
 
+  if(activeFieldFilter) {
+    const filterFn = arr => arr.filter(b => normalizeField(b.field) === activeFieldFilter);
+    owned = filterFn(owned);
+    wish = filterFn(wish);
+  }
+
   
   if(query) {
     const searchFn = arr => arr.filter(b => 
       b.title.toLowerCase().includes(query) ||
       (b.author || '').toLowerCase().includes(query) ||
       (b.publisher || '').toLowerCase().includes(query) ||
+      normalizeField(b.field).toLowerCase().includes(query) ||
       (b.tags || []).some(t => t.toLowerCase().includes(query))
     );
     owned = searchFn(owned);
@@ -4036,7 +4771,11 @@ window.bsRender = function() {
   const bodyOwned = document.getElementById('bs-body-owned');
   const bodyWish = document.getElementById('bs-body-wishlist');
 
-  if(viewMode === '3d') {
+  const grouped = document.getElementById('bs-sort').value === 'field';
+  if (grouped) {
+    renderGroupedLayout(bodyOwned, owned, false);
+    renderGroupedLayout(bodyWish, wish, true);
+  } else if(viewMode === '3d') {
     render3DShelf(bodyOwned, owned, 'LIBRARY_CORE');
     render3DShelf(bodyWish, wish, 'WISHLIST_QUEUE', true);
   } else if(viewMode === 'list') {
@@ -4049,9 +4788,9 @@ window.bsRender = function() {
 };
 
 function emptyShelfMarkup(isWish) {
-  const hasFilter = !!((document.getElementById('bs-search')?.value || '').trim() || activeTagFilter);
+  const hasFilter = !!((document.getElementById('bs-search')?.value || '').trim() || activeTagFilter || activeFieldFilter);
   const title = hasFilter ? '条件に一致する本がありません' : (isWish ? '読みたい本を追加しましょう' : '最初の一冊を追加しましょう');
-  const copy = hasFilter ? '検索語やタグを変更すると、別の本が見つかるかもしれません。' : 'ISBN・書名検索にも対応しています。登録したデータはこの端末に保存されます。';
+  const copy = hasFilter ? '検索語・タグ・分野を変更すると、別の本が見つかるかもしれません。' : 'ISBN・書名検索にも対応しています。登録したデータはこの端末に保存されます。';
   const status = isWish ? 'wishlist' : 'done';
   return `<div class="bs-empty">
     <span class="bs-empty-icon" aria-hidden="true">${hasFilter ? '⌕' : '＋'}</span>
@@ -4084,6 +4823,7 @@ function renderGridLayout(target, books, isWish) {
         <div class="book-info">
           <div class="book-title">${esc(b.title)}</div>
           <div class="book-author">${esc(b.author)}</div>
+          <span class="book-field">${esc(normalizeField(b.field))}</span>
           ${b.publisher ? `<div class="book-publisher">${esc(b.publisher)}</div>` : ''}
           ${starsHtml}
           ${tagsHtml}
@@ -4114,7 +4854,7 @@ function renderListLayout(target, books, isWish) {
         <div class="bs-list-thumb">${thumbHtml}</div>
         <div class="bs-list-info">
           <div class="bs-list-title">${esc(b.title)}</div>
-          <div class="bs-list-sub">${esc(b.author)}${b.publisher ? ' · ' + esc(b.publisher) : ''}</div>
+          <div class="bs-list-sub">${esc(b.author)}${b.publisher ? ' · ' + esc(b.publisher) : ''} · ${esc(normalizeField(b.field))}</div>
         </div>
         <div style="display:flex; align-items:center; gap:0.5rem; flex-shrink:0;">
           ${starsHtml}
@@ -4124,6 +4864,39 @@ function renderListLayout(target, books, isWish) {
       </div>
     `;
   }).join('') + `</div>`;
+}
+
+function groupBooksByField(books) {
+  const groups = new Map();
+  books.forEach((book) => {
+    const field = normalizeField(book.field);
+    if (!groups.has(field)) groups.set(field, []);
+    groups.get(field).push(book);
+  });
+  return Array.from(groups.entries()).map(([field, items]) => ({ field, books: items }));
+}
+
+function renderGroupedLayout(target, books, isWish) {
+  if (!books.length) {
+    target.innerHTML = emptyShelfMarkup(isWish);
+    return;
+  }
+  const groups = groupBooksByField(books);
+  target.innerHTML = groups.map((group, index) => `
+    <section class="bs-field-group" aria-labelledby="bs-field-group-${isWish ? 'wish' : 'owned'}-${index}">
+      <h4 class="bs-field-group-title" id="bs-field-group-${isWish ? 'wish' : 'owned'}-${index}">
+        ${esc(group.field)} <span class="bs-field-group-count">${group.books.length}冊</span>
+      </h4>
+      <div class="bs-field-group-body" data-field-group-body="${index}"></div>
+    </section>
+  `).join('');
+  const bodies = Array.from(target.querySelectorAll('[data-field-group-body]'));
+  groups.forEach((group, index) => {
+    const body = bodies[index];
+    if (viewMode === '3d') render3DShelf(body, group.books, group.field, isWish);
+    else if (viewMode === 'list') renderListLayout(body, group.books, isWish);
+    else renderGridLayout(body, group.books, isWish);
+  });
 }
 
  
@@ -4178,55 +4951,95 @@ function render3DShelf(target, books, segmentLabel, isWish = false) {
 }
 
  
+function updateRotatorTransform() {
+  const node = document.getElementById('bs-hero-book');
+  if (!node) return;
+  node.style.setProperty('--bs-rot-x', `${rotX}deg`);
+  node.style.setProperty('--bs-rot-y', `${rotY}deg`);
+}
+
 window.bsOpenRotator = function(id) {
   const b = db.find(x => x.id === id);
   if(!b) return;
-  
+
   rotatorBookId = id;
-  rotX = 15;
-  rotY = -20;
-  
-  const coverHtml = b.image 
-    ? `<img src="${esc(b.image)}" alt="">`
-    : `<div class="img-null" style="font-size:1rem">${b.status==='wishlist'?'WISHLIST':'NO IMAGE'}</div>`;
-  const ratingStars = b.rating > 0 ? renderStars(b.rating) : 'Unrated';
-  const pubInfo = b.publisher ? `<div style="font-size:0.55rem; color:#475569; text-transform:uppercase; margin-top:0.5rem;">PUB_ID // ${esc(b.publisher)}</div>` : '';
+  rotatorLastFocus = document.activeElement;
+  rotX = 8;
+  rotY = -16;
+
+  const field = normalizeField(b.field);
+  const author = b.author || '著者未登録';
+  const status = STATUS_LABEL[b.status] || '未設定';
+  const rating = Number(b.rating) || 0;
+  const ratingText = rating > 0 ? `★ ${rating.toFixed(1)}` : '未評価';
+  const publisherText = b.publisher ? `出版社 ${b.publisher}` : '';
+  const coverHtml = `
+    <div class="bs-rotator-cover-fallback">
+      <span class="bs-cover-fallback-field">${esc(field)}</span>
+      <strong class="bs-cover-fallback-title">${esc(b.title)}</strong>
+      <span class="bs-cover-fallback-author">${esc(author)}</span>
+    </div>
+    ${b.image ? `<img src="${esc(b.image)}" alt="${esc(b.title)}の表紙" decoding="async" onerror="this.remove()">` : ''}
+  `;
 
   document.getElementById('bs-rot-title').textContent = b.title;
-  document.getElementById('bs-rot-author').textContent = b.author || 'Unknown Author';
-  
+  document.getElementById('bs-rot-author').textContent = author;
+  const statusNode = document.getElementById('bs-rot-status');
+  statusNode.textContent = status;
+  statusNode.dataset.status = b.status || '';
+  document.getElementById('bs-rot-field').textContent = field;
+  document.getElementById('bs-rot-rating').textContent = ratingText;
+  const publisherNode = document.getElementById('bs-rot-publisher');
+  publisherNode.textContent = publisherText;
+  publisherNode.hidden = !publisherText;
+
   const rotatorNode = document.getElementById('bs-hero-book');
   rotatorNode.innerHTML = `
-    \x3C!-- Front Face -->
     <div class="hero-book-face hero-book-front">
       ${coverHtml}
     </div>
-    \x3C!-- Spine -->
     <div class="hero-book-face hero-book-spine">
       <div class="hero-book-spine-title">${esc(b.title)}</div>
     </div>
-    \x3C!-- Back Face -->
     <div class="hero-book-face hero-book-back">
-      <div style="font-size:0.6rem; font-family:var(--font-ui); color:var(--neon-cyan)">DAT_RECORD // BACK_COVER</div>
-      <div class="hero-book-back-text">${b.comment ? esc(b.comment) : '(No commentary logged in database)'}</div>
-      <div style="text-align:right;">
-        <span style="font-size:0.75rem; color:var(--neon-yellow);">${ratingStars}</span>
-        ${pubInfo}
+      <div class="hero-book-back-label">メモ</div>
+      <div class="hero-book-back-text">${b.comment ? esc(b.comment) : 'メモはありません'}</div>
+      <div class="hero-book-back-footer">
+        <span>${esc(ratingText)}</span>
+        ${b.publisher ? `<span>${esc(b.publisher)}</span>` : ''}
       </div>
     </div>
-    \x3C!-- 3D Borders -->
     <div class="hero-book-side"></div>
     <div class="hero-book-top"></div>
     <div class="hero-book-bottom"></div>
   `;
-  
-  rotatorNode.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-  document.getElementById('bs-rotator-overlay').classList.add('open');
+
+  updateRotatorTransform();
+  const overlay = document.getElementById('bs-rotator-overlay');
+  overlay.classList.add('open');
+  document.body.classList.add('bs-rotator-open');
+  requestAnimationFrame(() => overlay.querySelector('.bs-rotator-close')?.focus());
 };
 
 window.bsCloseRotator = function() {
-  document.getElementById('bs-rotator-overlay').classList.remove('open');
+  const overlay = document.getElementById('bs-rotator-overlay');
+  if (!overlay.classList.contains('open')) return;
+  overlay.classList.remove('open');
+  document.body.classList.remove('bs-rotator-open');
+  document.getElementById('bs-hero-book')?.classList.remove('is-dragging');
+  isRotating = false;
   rotatorBookId = null;
+  if (rotatorLastFocus && typeof rotatorLastFocus.focus === 'function') rotatorLastFocus.focus();
+  rotatorLastFocus = null;
+};
+
+window.bsRotatorBackdropClick = function(e) {
+  if (e.target !== e.currentTarget) return;
+  if (performance.now() < rotatorSuppressBackdropUntil) {
+    rotatorDidDrag = false;
+    return;
+  }
+  bsCloseRotator();
 };
 
 window.bsEditFromRotator = function() {
@@ -4238,20 +5051,25 @@ window.bsEditFromRotator = function() {
 
  
 window.bsRotateStart = function(e) {
+  if (e.cancelable) e.preventDefault();
   isRotating = true;
+  rotatorDidDrag = false;
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
   const clientY = e.touches ? e.touches[0].clientY : e.clientY;
   rotStartX = clientX;
   rotStartY = clientY;
+  document.getElementById('bs-hero-book')?.classList.add('is-dragging');
 };
 
 window.bsRotateMove = function(e) {
   if(!isRotating) return;
+  if (e.cancelable) e.preventDefault();
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
   const clientY = e.touches ? e.touches[0].clientY : e.clientY;
   
   const deltaX = clientX - rotStartX;
   const deltaY = clientY - rotStartY;
+  if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) rotatorDidDrag = true;
   
   rotY += deltaX * 0.5;
   rotX -= deltaY * 0.5;
@@ -4261,12 +5079,30 @@ window.bsRotateMove = function(e) {
   
   rotStartX = clientX;
   rotStartY = clientY;
-  
-  document.getElementById('bs-hero-book').style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+
+  updateRotatorTransform();
 };
 
 window.bsRotateEnd = function() {
   isRotating = false;
+  document.getElementById('bs-hero-book')?.classList.remove('is-dragging');
+  if (rotatorDidDrag) rotatorSuppressBackdropUntil = performance.now() + 350;
+  window.setTimeout(() => { rotatorDidDrag = false; }, 360);
+};
+
+window.bsRotatorKeydown = function(e) {
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    bsCloseRotator();
+    return;
+  }
+  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+  e.preventDefault();
+  if (e.key === 'ArrowLeft') rotY -= 12;
+  if (e.key === 'ArrowRight') rotY += 12;
+  if (e.key === 'ArrowUp') rotX = Math.max(-60, rotX - 8);
+  if (e.key === 'ArrowDown') rotX = Math.min(60, rotX + 8);
+  updateRotatorTransform();
 };
 
 
@@ -4359,7 +5195,7 @@ function autoInjectBookData(info, source, queriedIsbn) {
   
   if (source === 'openbd') {
     fTitle.value = formatSeriesTitle(info.title || '');
-    fAuthor.value = info.author || '';
+    fAuthor.value = normalizeAuthorNames(info.author || '');
     fPublisher.value = info.publisher || '';
     if(info.cover) {
       fImage.value = info.cover;
@@ -4382,7 +5218,7 @@ function autoInjectBookData(info, source, queriedIsbn) {
     }
     
     fTitle.value = formatSeriesTitle(rawTitle);
-    fAuthor.value = info.authors ? info.authors.join(', ') : '';
+    fAuthor.value = normalizeAuthorNames(info.authors || []);
     fPublisher.value = info.publisher || '';
     
     if (info.imageLinks && (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail)) {
@@ -4497,9 +5333,10 @@ function renderFormTagSuggestions() {
  
 window.bsOpenAdd = function(status) {
   document.getElementById('bs-edit-id').value = '';
-  document.getElementById('bs-f-title').value = '';
-  document.getElementById('bs-f-author').value = '';
-  document.getElementById('bs-f-publisher').value = '';
+      document.getElementById('bs-f-title').value = '';
+      document.getElementById('bs-f-author').value = '';
+      document.getElementById('bs-f-field').value = '';
+      document.getElementById('bs-f-publisher').value = '';
   document.getElementById('bs-f-image').value = '';
   document.getElementById('bs-f-image-file-name').textContent = '';
   document.getElementById('bs-f-status').value = status || 'done';
@@ -4530,6 +5367,7 @@ function openEditForm(book) {
   document.getElementById('bs-edit-id').value = book.id;
   document.getElementById('bs-f-title').value = book.title;
   document.getElementById('bs-f-author').value = book.author || '';
+  document.getElementById('bs-f-field').value = normalizeField(book.field) === '未分類' ? '' : normalizeField(book.field);
   document.getElementById('bs-f-publisher').value = book.publisher || '';
   document.getElementById('bs-f-image').value = book.image || '';
   document.getElementById('bs-f-image-file-name').textContent = '';
@@ -4568,7 +5406,8 @@ window.bsSave = function() {
   
   const originalId = document.getElementById('bs-edit-id').value;
   const originalBook = db.find(m => m.id === originalId);
-  const author = document.getElementById('bs-f-author').value.trim();
+  const author = normalizeAuthorNames(document.getElementById('bs-f-author').value);
+  const field = normalizeField(document.getElementById('bs-f-field').value);
   const publisher = document.getElementById('bs-f-publisher').value.trim();
   const image = document.getElementById('bs-f-image').value.trim();
   const status = document.getElementById('bs-f-status').value;
@@ -4592,6 +5431,7 @@ window.bsSave = function() {
     id: id,
     title: title,
     author: author,
+    field: field,
     publisher: publisher,
     image: image,
     status: status,
@@ -4650,9 +5490,10 @@ window.bsOpenDetail = function(id) {
   document.getElementById('bs-detail-body').innerHTML = `
     <div class="bs-detail-cover-row">
       <div class="bs-detail-cover">${coverHtml}</div>
-      <div class="bs-detail-meta">
-        <div class="bs-detail-title">${esc(b.title)}</div>
-        <div class="bs-detail-author" style="font-family:var(--font-mono);">${esc(b.author || 'Unknown Author')}</div>
+        <div class="bs-detail-meta">
+          <div class="bs-detail-title">${esc(b.title)}</div>
+          <div class="bs-detail-author" style="font-family:var(--font-mono);">${esc(b.author || 'Unknown Author')}</div>
+          <div class="book-field">${esc(normalizeField(b.field))}</div>
         ${b.publisher ? `<div class="bs-detail-publisher" style="font-size:0.6rem; color:#475569; letter-spacing:1px; text-transform:uppercase;">PUB_ID // ${esc(b.publisher)}</div>` : ''}
         <span class="bs-detail-status s-${b.status}" style="display:inline-block; border:1px solid; padding:0.2rem 0.6rem; font-size:0.55rem; font-family:var(--font-ui); font-weight:700; margin-top:0.25rem;">${statusLabel}</span>
         ${starsHtml}
@@ -4690,12 +5531,13 @@ window.bsDeleteFromDetail = function() {
 
  
 document.addEventListener('keydown', function(e) {
-  if(e.key === 'Escape') {
-    bsCloseForm();
-    bsCloseDetail();
-    bsCloseSettings();
-    bsCloseRotator();
-  }
+      if(e.key === 'Escape') {
+        bsCloseForm();
+        bsCloseDetail();
+        bsCloseSettings();
+        bsCloseRotator();
+        bsCloseScanner();
+      }
 });
 
 
@@ -4807,6 +5649,7 @@ window.bsSync = async function(silent = false) {
  
 async function initApp() {
   initializeDatabase();
+  renderFieldOptions();
   blobId = SHORTCODE_BLOB || localStorage.getItem(LS_BLOB) || null;
   if (window.PWAConfigSync) {
     blobId = await window.PWAConfigSync.syncAppBinId('library', blobId);
