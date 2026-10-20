@@ -285,12 +285,18 @@
     } catch (_) { /* sync remains safe if metadata storage is unavailable */ }
   }
 
-  function readLocalUpdatedAt(storage, appKey, recordKey, payload) {
+  function readStoredLocalUpdatedAt(storage, appKey, recordKey) {
     try {
       const parsed = JSON.parse(storage.getItem(`${LOCAL_UPDATED_PREFIX}${appKey}`) || '');
       const stored = normalizedTimestamp(parsed?.[recordKey]);
       if (stored) return stored;
     } catch (_) { /* fall through to a timestamp embedded in the payload */ }
+    return null;
+  }
+
+  function readLocalUpdatedAt(storage, appKey, recordKey, payload) {
+    const stored = readStoredLocalUpdatedAt(storage, appKey, recordKey);
+    if (stored) return stored;
     if (payload?.kind === 'localStorage' && payload.entry?.encoding === 'json' && typeof payload.entry.raw === 'string') {
       try {
         const value = JSON.parse(payload.entry.raw);
@@ -344,6 +350,32 @@
     } catch (_) { /* replace malformed metadata with the new timestamp */ }
     parsed[recordKey] = timestamp;
     try { storage.setItem(key, JSON.stringify(parsed)); } catch (_) {}
+  }
+
+  function generateDeviceId() {
+    try {
+      if (typeof root.crypto?.randomUUID === 'function') {
+        const id = root.crypto.randomUUID();
+        if (/^[A-Za-z0-9_-]{16,128}$/.test(id)) return id;
+      }
+    } catch (_) { /* fall through to the Web Crypto byte fallback */ }
+    try {
+      if (typeof root.crypto?.getRandomValues === 'function') {
+        const bytes = new Uint8Array(16);
+        root.crypto.getRandomValues(bytes);
+        const id = [...bytes].map(byte => byte.toString(16).padStart(2, '0')).join('');
+        if (/^[A-Za-z0-9_-]{16,128}$/.test(id)) return id;
+      }
+    } catch (_) { /* fall through to the non-cryptographic last resort */ }
+    return `device-${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+  }
+
+  function ensureDeviceId(storage) {
+    const existing = storage?.getItem?.('dt_sync_device_id') || '';
+    if (existing !== 'browser' && /^[A-Za-z0-9_-]{16,128}$/.test(existing)) return existing;
+    const generated = generateDeviceId();
+    try { storage.setItem('dt_sync_device_id', generated); } catch (_) { /* keep the in-memory ID for this request */ }
+    return generated;
   }
 
   function trackLocalStorageMutation(storage, key, updatedAt, originalSetItem) {
@@ -402,7 +434,7 @@
     const baseUrl = storage.getItem('dt_sync_gateway_url') || '';
     const syncKey = storage.getItem('dt_sync_gateway_key') || '';
     if (provider !== 'd1' || !/^https:\/\/[^\s/]+(?:\/[^\s]*)?$/.test(baseUrl) || syncKey.length < 32) return null;
-    return { baseUrl, syncKey, deviceId: storage.getItem('dt_sync_device_id') || 'browser' };
+    return { baseUrl, syncKey, deviceId: ensureDeviceId(storage) };
   }
 
   function enabledAppKeys(storage = root.localStorage) {
@@ -544,7 +576,8 @@
       const remoteRecord = remote.get(recordKey);
       const localDescriptor = local ? {
         hash: await sha256(local.payload),
-        updatedAt: readLocalUpdatedAt(storage, appKey, recordKey, local.payload)
+        updatedAt: readLocalUpdatedAt(storage, appKey, recordKey, local.payload),
+        updatedAtSource: readStoredLocalUpdatedAt(storage, appKey, recordKey) ? 'metadata' : 'payload'
       } : null;
       const remoteDescriptor = remoteRecord ? {
         hash: remoteRecord.payloadHash || await sha256(remoteRecord.payload),
@@ -581,9 +614,20 @@
           };
         }
       }
+      const localChangedSinceBaseline = Boolean(localDescriptor && previousRecord
+        && localDescriptor.hash !== (previousRecord.localHash ?? null));
+      if (localChangedSinceBaseline && localDescriptor.updatedAtSource === 'metadata') {
+        // The local timestamp can survive a cutover or an older browser
+        // session even after the payload changes. Once the hash proves a
+        // local edit happened after the last baseline, the observation time
+        // is the only safe timestamp for latest-wins ordering. This also
+        // lets a phone retry a previously rejected push without remaining
+        // stuck behind a stale timestamp.
+        localDescriptor.updatedAt = new Date().toISOString();
+        writeLocalUpdatedAt(storage, appKey, recordKey, localDescriptor.updatedAt);
+      }
       const resolvedDecision = explicitResolutionDecision({ local: localDescriptor, remote: remoteDescriptor, previous: previousRecord });
-      if (!resolvedDecision && localDescriptor && previousRecord && localDescriptor.updatedAt === null
-        && localDescriptor.hash !== (previousRecord.localHash ?? null)) {
+      if (!resolvedDecision && localChangedSinceBaseline && localDescriptor.updatedAt === null) {
         // Some PWAs do not expose an application timestamp. A hash change
         // after the last baseline is still a definite local edit; stamp it at
         // observation time so a simultaneous remote edit can be resolved by
