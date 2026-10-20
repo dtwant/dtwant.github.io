@@ -1112,16 +1112,29 @@
     if (appKey && appKey !== 'focus_lab') installLegacyJsonBinGuard(appKey);
     let timer = null;
     let running = false;
+    let pendingRun = false;
     const schedule = () => {
+      if (running) {
+        // A local edit can happen while the initial snapshot or a push is in
+        // flight (for example, a phone user ticking the Feeding Log checklist
+        // immediately after opening the PWA). Do not start a concurrent run,
+        // but remember the edit and retry after the active run completes.
+        pendingRun = true;
+        return;
+      }
       if (timer || typeof root.setTimeout !== 'function') return;
       timer = root.setTimeout(run, 1200);
     };
     async function run() {
       timer = null;
+      if (running) {
+        pendingRun = true;
+        return [];
+      }
       const keys = appKey
         ? automaticAppKeys(appKey, root.localStorage)
         : enabledAppKeys(root.localStorage);
-      if (running || !keys.length) return [];
+      if (!keys.length) return [];
       running = true;
       try {
         const results = [];
@@ -1142,6 +1155,10 @@
         return [{ appKey: appKey || 'unknown', ...normalizeRuntimeError(error) }];
       } finally {
         running = false;
+        if (pendingRun) {
+          pendingRun = false;
+          schedule();
+        }
       }
     }
     installStorageMutationTracking(root.localStorage, schedule);
