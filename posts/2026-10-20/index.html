@@ -113,7 +113,7 @@
     "keywords": ["math","integral","proof"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "188"
+    "wordCount": "199"
   }]
   </script>
 
@@ -864,7 +864,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2026-10-20T00:00:00&#43;09:00">2026年10月20日</time><span class="px-2 text-primary-500">&middot;</span><span>188 文字</span><span class="px-2 text-primary-500">&middot;</span><span title="読むのに必要な時間">1 分</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="2026-10-20T00:00:00&#43;09:00">2026年10月20日</time><span class="px-2 text-primary-500">&middot;</span><span>199 文字</span><span class="px-2 text-primary-500">&middot;</span><span title="読むのに必要な時間">1 分</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -1185,36 +1185,47 @@
         <div class="article-content max-w-prose mb-20">
           <p>以下の等式を証明する.</p>
 <blockquote>
-$$\int_{0}^{\pi}\arctan\left(\frac{\ln\sin x}{x}\right)\,dx=-\pi\arctan\left(\frac{2\ln 2}{\pi}\right)$$</blockquote>
+$$\int_{0}^{\pi}\arctan\left(\frac{\ln\sin x}{x}\right)\mathrm{d}x=-\pi\arctan\left(\frac{2\ln 2}{\pi}\right)$$</blockquote>
 <hr class="neon">
 
 <details>
-<summary>無言ver.</summary>
+<summary>Silent ver.</summary>
 <div>
-<p>$a(x)=-\ln\sin x$ とおき, $K(s)=\displaystyle\int_{0}^{\pi}(a(x)+ix)^{-s},dx$ とする.</p>
 $$
+a(x)=-\ln\sin x,\qquad
+K(s)=\int_{0}^{\pi}(a(x)+ix)^{-s}\mathrm{d}x
+$$$$
 \begin{aligned}
 I
-&=-\int_{0}^{\pi}\arctan\frac{a(x)}{x}\,dx \\
-&=-\frac{\pi^2}{2}+\int_{0}^{\pi}\arctan\frac{x}{a(x)}\,dx \\
+&=-\int_{0}^{\pi}\arctan\frac{a(x)}{x}\mathrm{d}x \\
+&=-\frac{\pi^2}{2}+\int_{0}^{\pi}\arctan\frac{x}{a(x)}\mathrm{d}x \\
 &=-\frac{\pi^2}{2}-\Im K'(0)
 \end{aligned}
+\qquad\left(a(x)=-\ln\sin x\right)
 $$$$
 \begin{aligned}
 \Im K(s)
-&=-\frac{1}{\Gamma(s)}\int_{0}^{\infty}t^{s-1}\int_{0}^{\pi}\sin^t x\sin(tx)\,dx\,dt \\
-&=-\frac{\pi}{\Gamma(s)}\int_{0}^{\infty}t^{s-1}2^{-t}\sin\frac{\pi t}{2}\,dt \\
+&=-\frac{1}{\Gamma(s)}\int_{0}^{\infty}t^{s-1}\int_{0}^{\pi}\sin^t x\sin(tx)\mathrm{d}x\,\mathrm{d}t \\
+&=-\frac{\pi}{\Gamma(s)}\int_{0}^{\infty}t^{s-1}2^{-t}\sin\frac{\pi t}{2}\mathrm{d}t \\
 &=-\Im\frac{\pi}{\left(\ln2-\frac{\pi i}{2}\right)^s}.
 \end{aligned}
-$$<p>ここで $\theta=\arctan\dfrac{\pi}{2\ln2}$ とおくと</p>
-$$
+\qquad\left(e^{-t a(x)}=\sin^t x\right)
+$$$$
+\int_{0}^{\pi}\sin^t x\sin(tx)\mathrm{d}x
+=\frac{\pi}{2^t}\sin\frac{\pi t}{2}
+\qquad\left(u=t+1,\ v=t,\ B(t+1,1)=\frac{1}{t+1}\right)
+$$$$
+\lambda=\ln2-\frac{\pi i}{2},\qquad
+\theta=\arctan\frac{\pi}{2\ln2}
+$$$$
 \begin{aligned}
 \Im K'(0)
 &=-\Im\left.\frac{d}{ds}\frac{\pi}{\left(\ln2-\frac{\pi i}{2}\right)^s}\right|_{s=0} \\
 &=-\pi\theta.
 \end{aligned}
-$$<p>したがって</p>
-$$
+\qquad\left(\lambda=\ln2-\frac{\pi i}{2},\quad
+\ln\lambda=\ln|\lambda|-i\theta\right)
+$$$$
 I=-\frac{\pi^2}{2}+\pi\arctan\frac{\pi}{2\ln2}
 =-\pi\arctan\frac{2\ln2}{\pi}.
 $$</div>
@@ -1231,56 +1242,54 @@ $$<p>である. 求める積分を $I$ とすると,</p>
 $$
 \begin{aligned}
 I
-&=-\int_{0}^{\pi}\arctan\frac{a(x)}{x}\,dx \\
-&=-\frac{\pi^2}{2}+\int_{0}^{\pi}\arctan\frac{x}{a(x)}\,dx.
+&=-\int_{0}^{\pi}\arctan\frac{a(x)}{x}\mathrm{d}x \\
+&=-\frac{\pi^2}{2}+\int_{0}^{\pi}\arctan\frac{x}{a(x)}\mathrm{d}x.
 \end{aligned}
 $$<p>残りの積分を複素対数から求める. まず</p>
 $$
-K(s)=\int_{0}^{\pi}(a(x)+ix)^{-s}\,dx
+K(s)=\int_{0}^{\pi}(a(x)+ix)^{-s}\mathrm{d}x
 $$<p>とおく. $\Re s&gt;0$ ではラプラス変換の表示</p>
 $$
-z^{-s}=\frac{1}{\Gamma(s)}\int_{0}^{\infty}t^{s-1}e^{-zt}\,dt \qquad (\Re z>0)
+z^{-s}=\frac{1}{\Gamma(s)}\int_{0}^{\infty}t^{s-1}e^{-zt}\mathrm{d}t \qquad (\Re z>0)
 $$<p>を用いることができるので,</p>
 $$
 \begin{aligned}
 K(s)
 &=\frac{1}{\Gamma(s)}\int_{0}^{\infty}t^{s-1}
-  \int_{0}^{\pi}e^{-t(a(x)+ix)}\,dx\,dt \\
+  \int_{0}^{\pi}e^{-t(a(x)+ix)}\mathrm{d}x\,\mathrm{d}t \\
 &=\frac{1}{\Gamma(s)}\int_{0}^{\infty}t^{s-1}
-  \int_{0}^{\pi}\sin^t x\,e^{-itx}\,dx\,dt.
+  \int_{0}^{\pi}\sin^t x\,e^{-itx}\mathrm{d}x\,\mathrm{d}t.
 \end{aligned}
 $$<p>したがって虚部を取ると,</p>
 $$
 \Im K(s)
 =-\frac{1}{\Gamma(s)}\int_{0}^{\infty}t^{s-1}
-  \int_{0}^{\pi}\sin^t x\sin(tx)\,dx\,dt.
+  \int_{0}^{\pi}\sin^t x\sin(tx)\mathrm{d}x\,\mathrm{d}t.
 $$<p>ここで, ベータ関数を用いた公式</p>
-<blockquote>
 $$
-> \int_{0}^{\pi}\sin^{u-1}x\sin(vx)\,dx
-> =\frac{\pi\sin\frac{\pi v}{2}}
-> {2^{u-1}uB\left(\frac{u+v+1}{2},\frac{u-v+1}{2}\right)}
-> $$</blockquote>
-<p>に $u=t+1,\ v=t$ を代入する. $B(t+1,1)=1/(t+1)$ であるから,</p>
+\int_{0}^{\pi}\sin^{u-1}x\sin(vx)\mathrm{d}x
+=\frac{\pi\sin\frac{\pi v}{2}}
+{2^{u-1}uB\left(\frac{u+v+1}{2},\frac{u-v+1}{2}\right)}
+$$<p>に $u=t+1,\ v=t$ を代入する. $B(t+1,1)=1/(t+1)$ であるから,</p>
 $$
-\int_{0}^{\pi}\sin^t x\sin(tx)\,dx
+\int_{0}^{\pi}\sin^t x\sin(tx)\mathrm{d}x
 =\frac{\pi}{2^t}\sin\frac{\pi t}{2}.
 $$<p>よって</p>
 $$
 \begin{aligned}
 \Im K(s)
 &=-\frac{\pi}{\Gamma(s)}\int_{0}^{\infty}
-  t^{s-1}e^{-t\ln2}\sin\frac{\pi t}{2}\,dt \\
+  t^{s-1}e^{-t\ln2}\sin\frac{\pi t}{2}\mathrm{d}t \\
 &=-\Im\frac{\pi}{\Gamma(s)}\int_{0}^{\infty}
-  t^{s-1}e^{-\left(\ln2-\frac{\pi i}{2}\right)t}\,dt \\
+  t^{s-1}e^{-\left(\ln2-\frac{\pi i}{2}\right)t}\mathrm{d}t \\
 &=-\Im\frac{\pi}{\left(\ln2-\frac{\pi i}{2}\right)^s}.
 \end{aligned}
 $$<p>$s=0$ の近傍へ連続的に延長して微分する. $K&rsquo;(0)$ は</p>
 $$
-K'(0)=-\int_{0}^{\pi}\ln(a(x)+ix)\,dx
+K'(0)=-\int_{0}^{\pi}\ln(a(x)+ix)\mathrm{d}x
 $$<p>を満たすので,</p>
 $$
-\int_{0}^{\pi}\arctan\frac{x}{a(x)}\,dx=-\Im K'(0)
+\int_{0}^{\pi}\arctan\frac{x}{a(x)}\mathrm{d}x=-\Im K'(0)
 $$<p>である.</p>
 <p>ここで</p>
 $$
