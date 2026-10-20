@@ -1161,6 +1161,13 @@
         }
       }
     }
+    const notifyLocalChange = (requestedAppKey) => {
+      const normalized = String(requestedAppKey || '').trim();
+      if (normalized && !LIVE_APP_KEYS.includes(normalized)) return false;
+      if (appKey && normalized && normalized !== appKey) return false;
+      schedule();
+      return true;
+    };
     installStorageMutationTracking(root.localStorage, schedule);
     installIndexedDBMutationTracking(schedule);
     // D1 synchronization is event-driven only. A page left open must not
@@ -1174,6 +1181,12 @@
     root.document?.addEventListener?.('visibilitychange', lifecycleSync);
     root.addEventListener?.('pageshow', lifecycleSync);
     root.addEventListener?.('focus', lifecycleSync);
+    // Some installed PWAs expose a Storage object that cannot be wrapped from
+    // the runtime realm. Tools can explicitly notify us after their own save;
+    // this remains event-driven and does not create a polling request stream.
+    root.addEventListener?.('dt-d1-local-change', event => {
+      notifyLocalChange(event?.detail?.appKey);
+    });
     root.DTD1Runtime = {
       appKey,
       syncNow: run,
@@ -1185,7 +1198,8 @@
       enabledAppKeys: () => enabledAppKeys(root.localStorage),
       isLegacySyncDisabled: key => isLegacySyncDisabled(key, root.localStorage),
       isRecoveryHeld: key => isRecoveryHeld(root.localStorage, key),
-      isEnabled: key => root.localStorage?.getItem(`dt_sync_provider_${key}`) === 'd1'
+      isEnabled: key => root.localStorage?.getItem(`dt_sync_provider_${key}`) === 'd1',
+      notifyLocalChange
     };
   }
 
