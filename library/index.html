@@ -4686,7 +4686,7 @@ const FIELD_PRESETS = [
   '素粒子物理学', '原子核物理学', '宇宙物理学・宇宙論',
   '固体物理学（凝縮系物理）', '強相関電子系・量子相転移', 'トポロジカル物性',
   'ソフトマター・生体物理', '量子光学・アト秒科学', '非線形物理・カオス', '数理物理学',
-  '情報', '自然科学', 'その他', '未分類'
+  '情報', '自然科学', '資格', 'その他', '未分類'
 ];
 const DEPRECATED_FIELD_LABELS = new Set(['数学', '物理', '人文・社会', '小説']);
 
@@ -4698,8 +4698,7 @@ function getFieldSuggestions(query = '') {
   const value = String(query || '').normalize('NFKC').trim().toLocaleLowerCase('ja');
   return FIELD_PRESETS
     .filter((field) => field !== '未分類')
-    .filter((field) => !value || field.toLocaleLowerCase('ja').includes(value))
-    .slice(0, 18);
+    .filter((field) => !value || field.toLocaleLowerCase('ja').includes(value));
 }
 
 function setFieldPickerOpen(open) {
