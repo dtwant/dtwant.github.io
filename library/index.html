@@ -1582,6 +1582,9 @@ body {
   gap: 0.8rem;
   transform-style: preserve-3d;
 }
+.bs-3d-row.bs-3d-row-spread {
+  justify-content: space-between;
+}
 .bs-3d-row::before {
   content: '';
   position: absolute;
@@ -1969,7 +1972,7 @@ body.bs-rotator-open { overflow: hidden !important; }
   bottom: 0; left: 0;
   width: 100%; height: var(--book-depth);
   background: #d9d9d3;
-  transform: rotateX(-90deg) translateZ(calc(var(--book-height) - var(--book-half-depth)));
+  transform: rotateX(-90deg) translateZ(var(--book-half-depth));
   background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
 }
 
@@ -5095,7 +5098,7 @@ function render3DShelf(target, books, segmentLabel, isWish = false) {
 
     rowsHtml += `
       <div class="bs-3d-row-scroller" aria-label="${esc(segmentLabel)} 棚 ${i + 1}">
-        <div class="bs-3d-row ${isWish?'row-wishlist':''}">
+        <div class="bs-3d-row ${isWish?'row-wishlist':''}${shelfBooks.length > 1 ? ' bs-3d-row-spread' : ''}">
           <div class="bs-3d-row-label">${segmentLabel}_S0${i+1}</div>
           ${shelfHtml}
         </div>
