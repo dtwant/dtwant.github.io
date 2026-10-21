@@ -103,7 +103,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "156"
+    "wordCount": "157"
   }]
   </script>
 
@@ -1617,6 +1617,8 @@ body {
 .book-3d {
   position: relative;
   width: 26px;  
+  flex: 0 0 26px;
+  min-width: 0 !important;
   height: 170px;
   margin-bottom: 2px;
   transform-style: preserve-3d;
@@ -2270,6 +2272,71 @@ body.bs-rotator-open { overflow: hidden !important; }
 }
 
 .bs-field { display: flex; flex-direction: column; gap: 0.35rem; }
+.bs-field-input-row {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 0.45rem;
+}
+.bs-field-input-row > .bs-input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.bs-field-toggle {
+  flex: 0 0 auto;
+  min-width: 58px !important;
+  padding-inline: 0.55rem !important;
+  color: var(--neon-cyan) !important;
+  border-color: rgba(0,243,255,0.42) !important;
+  white-space: nowrap;
+}
+.bs-field-toggle[aria-expanded="true"] {
+  color: #061016 !important;
+  background: var(--neon-cyan) !important;
+}
+.bs-field-picker {
+  position: absolute;
+  z-index: 12;
+  top: calc(100% + 0.45rem);
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  border: 1px solid rgba(0,243,255,0.34);
+  border-radius: 12px;
+  background: rgba(9, 9, 22, 0.98);
+  box-shadow: 0 18px 36px rgba(0,0,0,0.55), inset 0 1px rgba(255,255,255,0.08);
+}
+.bs-field-picker[hidden] { display: none; }
+.bs-field-option {
+  min-width: 0;
+  min-height: 44px;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid rgba(0,243,255,0.18);
+  border-radius: 9px;
+  background: rgba(0,0,0,0.28);
+  color: #c9e3e7;
+  font: 600 0.68rem/1.35 var(--font-jp);
+  text-align: left;
+  cursor: pointer;
+}
+.bs-field-option:hover,
+.bs-field-option:focus-visible {
+  border-color: var(--neon-cyan);
+  color: #fff;
+  background: rgba(0,243,255,0.12);
+  outline: none;
+}
+.bs-field-picker-empty {
+  grid-column: 1 / -1;
+  padding: 0.75rem;
+  color: #7f91a6;
+  font-size: 0.72rem;
+}
 .bs-field label {
   font-family: var(--font-ui);
   font-size: 0.52rem;
@@ -2677,7 +2744,12 @@ body.bs-rotator-open { overflow: hidden !important; }
 
    
   .bs-3d-row { padding: 0 0.6rem !important; gap: 0.3rem !important; height: 200px !important; }
-  .book-3d { width: 22px !important; height: 150px !important; }
+  .book-3d {
+    width: 30px !important;
+    flex: 0 0 30px;
+    min-width: 30px !important;
+    height: 170px !important;
+  }
   .book-3d-spine-title { font-size: 0.52rem !important; max-height: 110px !important; }
   
    
@@ -2775,6 +2847,19 @@ body.bs-rotator-open { overflow: hidden !important; }
   width: min(calc(100% - 1rem), 1200px);
   max-width: 1200px !important;
   color: var(--dt-text);
+}
+
+ 
+#bs-app-root.dt-ui .book-3d {
+  min-width: 0 !important;
+}
+
+@media (max-width: 600px) {
+  #bs-app-root.dt-ui .book-3d {
+    min-width: 30px !important;
+    width: 30px !important;
+    flex-basis: 30px;
+  }
 }
 
 #bs-app-root.dt-ui .bs-toolbar,
@@ -3471,6 +3556,11 @@ body.bs-rotator-open { overflow: hidden !important; }
     max-width: 18rem;
     line-height: 1.55;
   }
+
+  .bs-field-picker {
+    grid-template-columns: 1fr;
+    max-height: 190px;
+  }
 }
 
 @media (max-width: 350px) {
@@ -3737,8 +3827,11 @@ body.bs-rotator-open { overflow: hidden !important; }
       </div>
       <div class="bs-field">
         <label for="bs-f-field">分野 (FIELD)</label>
-        <input type="text" class="bs-input" id="bs-f-field" list="bs-field-options" placeholder="数学一般、解析…">
-        <datalist id="bs-field-options"></datalist>
+        <div class="bs-field-input-row bs-field-picker-wrap">
+          <input type="text" class="bs-input" id="bs-f-field" autocomplete="off" aria-autocomplete="list" aria-controls="bs-field-picker" aria-expanded="false" placeholder="数学一般、線形・多重線形代数…" onfocus="bsOpenFieldPicker()" oninput="bsFilterFieldSuggestions(this.value)">
+          <button class="bs-btn bs-field-toggle" id="bs-field-toggle" type="button" aria-label="分野候補を開く" aria-controls="bs-field-picker" aria-expanded="false" onclick="bsToggleFieldPicker(event)">候補</button>
+          <div class="bs-field-picker" id="bs-field-picker" role="listbox" hidden></div>
+        </div>
       </div>
       <div class="bs-field">
         <label>出版社 (PUBLISHER)</label>
@@ -3776,7 +3869,7 @@ body.bs-rotator-open { overflow: hidden !important; }
               <label class="bs-btn" style="display:inline-block;cursor:pointer;">📁 ローカルファイル選択
                 <input type="file" id="bs-f-image-file" accept="image/*" style="display:none" onchange="bsHandleFile(this)">
               </label>
-              <button class="bs-btn" type="button" style="border-color:var(--neon-green); color:var(--neon-green);" onclick="bsSearchCoverByISBN()">🔍 ISBNで画像検索</button>
+              <button class="bs-btn" type="button" style="border-color:var(--neon-green); color:var(--neon-green);" onclick="bsSearchCoverByTitle()">🔍 書名で画像検索</button>
               <span id="bs-f-image-file-name" style="font-size:0.55rem;color:#475569;"></span>
             </div>
           </div>
@@ -4559,22 +4652,83 @@ window.bsSetView = function(mode) {
  
 const STATUS_LABEL = {done:'読了', reading:'読中', backlog:'積読', wishlist:'欲しい'};
 const FIELD_PRESETS = [
-  '数学一般', '基礎', '解析', '線形代数', '代数学',
-  '幾何学', '位相', '確率・統計', '数論', '応用数学',
-  '物理一般', '力学', '電磁気学', '熱力学・統計力学', '量子力学',
-  '相対論', '光学', '流体力学', '物性', '素粒子・原子核',
+  '数学一般',
+  '線形・多重線形代数', '抽象代数学', '可換環論・代数幾何学',
+  '数論（代数的数論）', '表現論', '圏論・ホモロジー代数',
+  '位相幾何学（トポロジー）', '微分トポロジー', '微分幾何学',
+  '複素幾何学', '非可換幾何学',
+  '実解析・測度論', '関数解析学', '複素解析（複素関数論）',
+  '微分方程式論', '調和解析', '力学系・エルゴード理論', '解析的数論',
+  '数学基礎論', '離散数学・組合せ論', '確率論・数理統計学', '数値解析・最適化',
+  '物理一般',
+  '古典力学・解析力学', '電磁気学・連続体力学', '熱・統計力学',
+  '量子力学', '相対性理論', '場の量子論',
+  '素粒子物理学', '原子核物理学', '宇宙物理学・宇宙論',
+  '固体物理学（凝縮系物理）', '強相関電子系・量子相転移', 'トポロジカル物性',
+  'ソフトマター・生体物理', '量子光学・アト秒科学', '非線形物理・カオス', '数理物理学',
   '情報', '自然科学', 'その他', '未分類'
 ];
 const DEPRECATED_FIELD_LABELS = new Set(['数学', '物理', '人文・社会', '小説']);
 
 function renderFieldOptions() {
-  const datalist = document.getElementById('bs-field-options');
-  if (!datalist) return;
-  datalist.innerHTML = FIELD_PRESETS
-    .filter((field) => field !== '未分類')
-    .map((field) => `<option value="${esc(field)}"></option>`)
-    .join('');
+  renderFieldPicker('');
 }
+
+function getFieldSuggestions(query = '') {
+  const value = String(query || '').normalize('NFKC').trim().toLocaleLowerCase('ja');
+  return FIELD_PRESETS
+    .filter((field) => field !== '未分類')
+    .filter((field) => !value || field.toLocaleLowerCase('ja').includes(value))
+    .slice(0, 18);
+}
+
+function setFieldPickerOpen(open) {
+  const picker = document.getElementById('bs-field-picker');
+  const input = document.getElementById('bs-f-field');
+  const toggle = document.getElementById('bs-field-toggle');
+  if (!picker || !input || !toggle) return;
+  picker.hidden = !open;
+  input.setAttribute('aria-expanded', String(open));
+  toggle.setAttribute('aria-expanded', String(open));
+}
+
+function renderFieldPicker(query = '') {
+  const picker = document.getElementById('bs-field-picker');
+  if (!picker) return;
+  const suggestions = getFieldSuggestions(query);
+  picker.innerHTML = suggestions.length
+    ? suggestions.map((field) => `<button class="bs-field-option" type="button" role="option" onclick="bsPickField('${esc(field).replace(/'/g, "\\'")}')">${esc(field)}</button>`).join('')
+    : '<div class="bs-field-picker-empty">一致する分野がありません</div>';
+}
+
+window.bsOpenFieldPicker = function() {
+  const input = document.getElementById('bs-f-field');
+  renderFieldPicker(input?.value || '');
+  setFieldPickerOpen(true);
+};
+
+window.bsToggleFieldPicker = function(event) {
+  event?.preventDefault();
+  event?.stopPropagation();
+  const picker = document.getElementById('bs-field-picker');
+  if (!picker) return;
+  if (picker.hidden) window.bsOpenFieldPicker();
+  else setFieldPickerOpen(false);
+};
+
+window.bsFilterFieldSuggestions = function(query) {
+  renderFieldPicker(query);
+  setFieldPickerOpen(true);
+};
+
+window.bsPickField = function(value) {
+  const input = document.getElementById('bs-f-field');
+  if (!input) return;
+  input.value = value;
+  input.dispatchEvent(new Event('change', { bubbles: true }));
+  setFieldPickerOpen(false);
+  input.focus();
+};
 
 function animateValue(el, target) {
   const current = parseInt(el.textContent) || 0;
@@ -4911,7 +5065,7 @@ function render3DShelf(target, books, segmentLabel, isWish = false) {
   const isMobile = window.innerWidth <= 480;
   
   
-  const bookFootprint = isMobile ? 26 : 38;
+  const bookFootprint = isMobile ? 40 : 38;
   const sidePadding = isMobile ? 20 : 64;
   const availableWidth = containerWidth - sidePadding;
   
@@ -4940,9 +5094,11 @@ function render3DShelf(target, books, segmentLabel, isWish = false) {
     }).join('');
 
     rowsHtml += `
-      <div class="bs-3d-row ${isWish?'row-wishlist':''}">
-        <div class="bs-3d-row-label">${segmentLabel}_S0${i+1}</div>
-        ${shelfHtml}
+      <div class="bs-3d-row-scroller" aria-label="${esc(segmentLabel)} 棚 ${i + 1}">
+        <div class="bs-3d-row ${isWish?'row-wishlist':''}">
+          <div class="bs-3d-row-label">${segmentLabel}_S0${i+1}</div>
+          ${shelfHtml}
+        </div>
       </div>
     `;
   }
@@ -5275,14 +5431,14 @@ window.bsHandleFile = function(input) {
   reader.readAsDataURL(file);
 };
 
-window.bsSearchCoverByISBN = function() {
-  const isbnVal = (document.getElementById('bs-scanner-isbn').value || '').trim();
+window.bsSearchCoverByTitle = function() {
   const titleVal = (document.getElementById('bs-f-title').value || '').trim();
-  const query = isbnVal || titleVal;
-  if (!query) {
-    toast('ISBNまたは書名を先に入力してください。', 'err');
+  const authorVal = (document.getElementById('bs-f-author').value || '').trim();
+  if (!titleVal) {
+    toast('書名を先に入力してください。', 'err');
     return;
   }
+  const query = [titleVal, authorVal].filter(Boolean).join(' ');
   const searchUrl = 'https://www.google.com/search?tbm=isch&q='
     + encodeURIComponent(query + ' 表紙');
   window.open(searchUrl, '_blank', 'noopener,noreferrer');
@@ -5352,6 +5508,7 @@ window.bsOpenAdd = function(status) {
   if(warnNode) warnNode.style.display = 'none';
   
   formTags = [];
+  setFieldPickerOpen(false);
   bsSetFormRating(0);
   renderFormTags();
   renderFormTagSuggestions();
@@ -5384,6 +5541,7 @@ function openEditForm(book) {
   if(warnNode) warnNode.style.display = 'none';
   
   formTags = [...(book.tags || [])];
+  setFieldPickerOpen(false);
   bsSetFormRating(book.rating || 0);
   renderFormTags();
   renderFormTagSuggestions();
@@ -5548,6 +5706,9 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       bsAddFormTag();
     }
+  });
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.bs-field-picker-wrap')) setFieldPickerOpen(false);
   });
 });
 
