@@ -364,6 +364,51 @@
     return backupKey;
   }
 
+  function isQuotaError(error) {
+    return error?.name === 'QuotaExceededError'
+      || error?.code === 22
+      || error?.code === 1014
+      || /quota/i.test(String(error?.message || ''));
+  }
+
+  function runtimeBackupItems(storage, appKey) {
+    const prefix = `${RUNTIME_BACKUP_PREFIX}${appKey}_`;
+    const items = [];
+    for (let index = 0; index < Number(storage.length) || 0; index += 1) {
+      const key = storage.key(index);
+      if (!key || !key.startsWith(prefix)) continue;
+      let createdAt = '';
+      try { createdAt = JSON.parse(storage.getItem(key) || '{}').createdAt || ''; } catch (_) {}
+      items.push({ key, createdAt });
+    }
+    items.sort((left, right) => String(left.createdAt).localeCompare(String(right.createdAt)) || left.key.localeCompare(right.key));
+    return items;
+  }
+
+  function writeRuntimeBackup(storage, appKey, backupKey, serialized) {
+    try {
+      storage.setItem(backupKey, serialized);
+      return;
+    } catch (error) {
+      if (!isQuotaError(error)) throw error;
+      // A runtime backup is a generated safety copy, not live application
+      // data. Remove only older generated copies until the new copy fits.
+      // Keep the current local data, pre-cutover backup, and all other apps.
+      let lastError = error;
+      for (const item of runtimeBackupItems(storage, appKey)) {
+        storage.removeItem(item.key);
+        try {
+          storage.setItem(backupKey, serialized);
+          return;
+        } catch (retryError) {
+          if (!isQuotaError(retryError)) throw retryError;
+          lastError = retryError;
+        }
+      }
+      throw lastError;
+    }
+  }
+
   async function saveRuntimeBackup(storage, appKey, indexedDB, reason = 'remote-apply') {
     const currentEntries = [
       ...collectLocalStorageEntries(storage, appKey),
@@ -373,17 +418,9 @@
     const payload = await captureBackupPayload(
       storage, appKey, currentEntries, indexedDB, 'dt-world-d1-runtime-backup', reason
     );
-    storage.setItem(backupKey, JSON.stringify(payload));
+    writeRuntimeBackup(storage, appKey, backupKey, JSON.stringify(payload));
 
-    const keys = [];
-    for (let index = 0; index < Number(storage.length) || 0; index += 1) {
-      const key = storage.key(index);
-      if (!key || !key.startsWith(`${RUNTIME_BACKUP_PREFIX}${appKey}_`)) continue;
-      let createdAt = '';
-      try { createdAt = JSON.parse(storage.getItem(key) || '{}').createdAt || ''; } catch (_) {}
-      keys.push({ key, createdAt });
-    }
-    keys.sort((left, right) => String(right.createdAt).localeCompare(String(left.createdAt)) || right.key.localeCompare(left.key));
+    const keys = runtimeBackupItems(storage, appKey).reverse();
     for (const item of keys.slice(2)) storage.removeItem(item.key);
     return backupKey;
   }
