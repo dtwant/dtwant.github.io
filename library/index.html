@@ -103,7 +103,7 @@
 
 
     "mainEntityOfPage": "true",
-    "wordCount": "157"
+    "wordCount": "166"
   }]
   </script>
 
@@ -2297,6 +2297,24 @@ body.bs-rotator-open { overflow: hidden !important; }
   color: #061016 !important;
   background: var(--neon-cyan) !important;
 }
+.bs-field-guide-toggle {
+  flex: 0 0 auto;
+  width: 44px;
+  min-width: 44px !important;
+  min-height: 44px;
+  padding: 0 !important;
+  border-color: rgba(250,204,21,0.52) !important;
+  color: var(--neon-yellow) !important;
+  font: 900 1rem/1 var(--font-ui) !important;
+  letter-spacing: 0 !important;
+}
+.bs-field-guide-toggle:hover,
+.bs-field-guide-toggle:focus-visible {
+  border-color: var(--neon-yellow) !important;
+  color: #171000 !important;
+  background: var(--neon-yellow) !important;
+  box-shadow: 0 0 14px rgba(250,204,21,0.35);
+}
 .bs-field-picker {
   position: absolute;
   z-index: 12;
@@ -2337,6 +2355,87 @@ body.bs-rotator-open { overflow: hidden !important; }
 .bs-field-picker-empty {
   grid-column: 1 / -1;
   padding: 0.75rem;
+  color: #7f91a6;
+  font-size: 0.72rem;
+}
+.bs-field-guide-modal { max-width: 980px; }
+.bs-field-guide-intro {
+  margin: 0;
+  color: #c5d7e2;
+  font-size: 0.76rem;
+  line-height: 1.7;
+}
+.bs-field-guide-rule {
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  border-left: 3px solid var(--neon-yellow);
+  background: rgba(250,204,21,0.06);
+  color: #d9e2e8;
+  font-size: 0.7rem;
+  line-height: 1.65;
+}
+.bs-field-guide-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.bs-field-guide-entry {
+  min-width: 0;
+  padding: 0.9rem;
+  border: 1px solid rgba(0,243,255,0.18);
+  background: rgba(0,0,0,0.28);
+}
+.bs-field-guide-entry-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.55rem;
+}
+.bs-field-guide-entry-title {
+  color: var(--neon-cyan);
+  font: 800 0.82rem/1.35 var(--font-jp);
+}
+.bs-field-guide-group {
+  flex: 0 0 auto;
+  padding: 0.18rem 0.4rem;
+  border: 1px solid rgba(250,204,21,0.32);
+  color: var(--neon-yellow);
+  font: 700 0.52rem/1.2 var(--font-ui);
+  white-space: nowrap;
+}
+.bs-field-guide-definition,
+.bs-field-guide-boundary {
+  margin: 0.45rem 0 0;
+  color: #c5d7e2;
+  font-size: 0.68rem;
+  line-height: 1.65;
+}
+.bs-field-guide-label {
+  color: #7f91a6;
+  font: 700 0.52rem/1.2 var(--font-ui);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.bs-field-guide-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.45rem;
+}
+.bs-field-guide-example {
+  max-width: 100%;
+  padding: 0.22rem 0.4rem;
+  border: 1px solid rgba(139,92,246,0.3);
+  color: #c9b9ff;
+  font-size: 0.62rem;
+  line-height: 1.4;
+}
+.bs-field-guide-boundary {
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.bs-field-guide-empty {
   color: #7f91a6;
   font-size: 0.72rem;
 }
@@ -3589,6 +3688,11 @@ body.bs-rotator-open { overflow: hidden !important; }
   }
 }
 
+@media (max-width: 700px) {
+  .bs-field-guide-modal { max-width: calc(100vw - 1rem); }
+  .bs-field-guide-list { grid-template-columns: 1fr; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   #bs-app-root.dt-ui *,
   #bs-app-root.dt-ui *::before,
@@ -3833,6 +3937,7 @@ body.bs-rotator-open { overflow: hidden !important; }
         <div class="bs-field-input-row bs-field-picker-wrap">
           <input type="text" class="bs-input" id="bs-f-field" autocomplete="off" aria-autocomplete="list" aria-controls="bs-field-picker" aria-expanded="false" placeholder="数学一般、線形・多重線形代数…" onfocus="bsOpenFieldPicker()" oninput="bsFilterFieldSuggestions(this.value)">
           <button class="bs-btn bs-field-toggle" id="bs-field-toggle" type="button" aria-label="分野候補を開く" aria-controls="bs-field-picker" aria-expanded="false" onclick="bsToggleFieldPicker(event)">候補</button>
+          <button class="bs-btn bs-field-guide-toggle" id="bs-field-guide-toggle" type="button" aria-label="分野ガイドを開く" aria-controls="bs-overlay-field-guide" aria-haspopup="dialog" title="分野ガイド" onclick="bsOpenFieldGuide(event)">!</button>
           <div class="bs-field-picker" id="bs-field-picker" role="listbox" hidden></div>
         </div>
       </div>
@@ -3901,6 +4006,21 @@ body.bs-rotator-open { overflow: hidden !important; }
       <button class="bs-btn bs-btn-del" id="bs-del-btn" onclick="bsDelete()" style="margin-right:auto;display:none">🗑 DEACCESSION</button>
       <button class="bs-btn" onclick="bsCloseForm()">CANCEL</button>
       <button class="bs-btn bs-btn-save" onclick="bsSave()">SAVE SYSTEM DATA</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="bs-overlay dt-ui" id="bs-overlay-field-guide" role="dialog" aria-modal="true" aria-labelledby="bs-field-guide-title" tabindex="-1" onclick="bsFieldGuideBackdropClick(event)" onkeydown="bsFieldGuideKeydown(event)">
+  <div class="bs-modal bs-field-guide-modal">
+    <div class="bs-modal-header">
+      <span id="bs-field-guide-title">FIELD GUIDE // 分野ガイド</span>
+      <button class="bs-modal-close" type="button" aria-label="分野ガイドを閉じる" onclick="bsCloseFieldGuide()">✕</button>
+    </div>
+    <div class="bs-modal-body">
+      <p class="bs-field-guide-intro">このLibraryでは、書名の主題に一番近い分野を1つ選びます。複数分野にまたがる本は、主役になっている理論・対象を優先してください。下の例は現在の蔵書から選んだ判断用の目印です。</p>
+      <p class="bs-field-guide-rule"><strong>迷ったときの順番：</strong>数学そのものの構造なら数学、物理現象を数式で扱う本なら物理、数学を物理・工学へ使う本なら <strong>物理数学</strong>、計算機・資格・プログラミングが主題なら情報または資格。</p>
+      <div class="bs-field-guide-list" id="bs-field-guide-list"></div>
     </div>
   </div>
 </div>
@@ -4778,6 +4898,7 @@ const FIELD_PRESETS = [
   '微分方程式論', '調和解析', '力学系・エルゴード理論', '解析的数論',
   '数学基礎論', '離散数学・組合せ論', '確率論・数理統計学', '数値解析・最適化',
   '物理一般',
+  '物理数学',
   '古典力学・解析力学', '電磁気学・連続体力学', '熱・統計力学',
   '量子力学', '相対性理論', '場の量子論',
   '素粒子物理学', '原子核物理学', '宇宙物理学・宇宙論',
@@ -4786,6 +4907,287 @@ const FIELD_PRESETS = [
   '情報', '自然科学', '資格', 'その他', '未分類'
 ];
 const DEPRECATED_FIELD_LABELS = new Set(['数学', '物理', '人文・社会', '小説']);
+
+
+
+const FIELD_GUIDE = {
+  '数学一般': {
+    group: '数学 / 入門',
+    definition: '数学全体の見取り図、複数分野を横断する入門書、数学の学び方や一般的な演習を扱う分野です。',
+    examples: ['数学のかんどころ 3 知っておきたい幾何の定理', '数学のかんどころ 4 大学数学の基礎', '数検1級をめざせ'],
+    boundary: '主題が線形代数・解析・幾何などに絞れるなら専門分野へ。物理への応用が中心なら物理数学です。'
+  },
+  '線形・多重線形代数': {
+    group: '数学 / 代数学',
+    definition: 'ベクトル空間、行列、線形写像、固有値、テンソルなど、線形構造を調べます。',
+    examples: ['数学のかんどころ 2 理系のための行列・行列式', '線形代数30講', '固有値問題30講'],
+    boundary: 'ベクトル解析は解析または物理数学、テンソル解析は幾何・物理への応用が主なら物理数学に寄せます。'
+  },
+  '抽象代数学': {
+    group: '数学 / 代数学',
+    definition: '群、環、体、加群など、演算と対称性を抽象的な構造として研究します。',
+    examples: ['数学のかんどころ 16 群論', '群論への30講', '代数学 1 群論入門'],
+    boundary: '可換環や多項式の幾何が中心なら可換環論・代数幾何学、表現を行列で調べるなら表現論です。'
+  },
+  '可換環論・代数幾何学': {
+    group: '数学 / 代数学・幾何学',
+    definition: '可換環、イデアル、素スペクトル、多項式の零点集合やスキームを扱います。',
+    examples: ['数学のかんどころ 32 可換環論の勘どころ', '数学のかんどころ 12 平面代数曲線'],
+    boundary: '群・体・環の一般理論だけなら抽象代数学、整数や素数の性質が中心なら数論です。'
+  },
+  '数論（代数的数論）': {
+    group: '数学 / 数論',
+    definition: '整数、素数、合同式、代数体、楕円曲線、ゼータ関数など数の構造を研究します。',
+    examples: ['ベルヌーイ数とゼータ関数', '数学のかんどころ 43 ゼータ関数と整数の花', 'オイラーのゼータ関数論'],
+    boundary: 'ゼータ関数を複素解析の道具で扱うなら解析的数論、環や体の構造が主なら可換環論・代数幾何学です。'
+  },
+  '表現論': {
+    group: '数学 / 代数学',
+    definition: '群やリー代数などの抽象構造を、行列や線形作用素として表現し、その対称性を調べます。',
+    examples: ['群の表現を扱う本'],
+    boundary: '表現を使わず群そのものを学ぶ本は抽象代数学、量子系の状態や観測量が主なら量子力学です。'
+  },
+  '圏論・ホモロジー代数': {
+    group: '数学 / 構造',
+    definition: '対象と射の関係、関手、自然変換、完全系列、導来構造など、数学的構造の関係を扱います。',
+    examples: ['圏論の地平線', '圏論によるトポロジー'],
+    boundary: '空間の連続変形や不変量が主なら位相幾何学、環や加群の演算が主なら抽象代数学です。'
+  },
+  '位相幾何学（トポロジー）': {
+    group: '数学 / 幾何学',
+    definition: '開集合、連続性、コンパクト性、連結性、基本群など、連続変形で保たれる性質を研究します。',
+    examples: ['数学のかんどころ 20 絵ときトポロジー', '位相への30講', '手を動かしてまなぶ集合と位相'],
+    boundary: '滑らかな構造や微分同相が主なら微分トポロジー、群・ホモロジーを代数的に計算する本も主題に応じてここへ置きます。'
+  },
+  '微分トポロジー': {
+    group: '数学 / 幾何学',
+    definition: '滑らかな多様体、写像の横断性、モース理論、微分同相や特性類などを扱います。',
+    examples: ['微分トポロジー講義'],
+    boundary: '曲率・接続・測地線など計量が主なら微分幾何学、連続性だけなら位相幾何学です。'
+  },
+  '微分幾何学': {
+    group: '数学 / 幾何学',
+    definition: '多様体上の接ベクトル、計量、接続、曲率、測地線など、滑らかな空間の局所構造を研究します。',
+    examples: ['数学のかんどころ 30 ウォーミングアップ微分幾何', '復刻版 ベクトル解析からの幾何学入門'],
+    boundary: '計量や曲率を使わず多様体の大域的な滑らかさを調べるなら微分トポロジーです。'
+  },
+  '複素幾何学': {
+    group: '数学 / 幾何学',
+    definition: '複素多様体、正則構造、ケーラー構造、複素多様体上の幾何を扱います。',
+    examples: ['複素多様体・ケーラー幾何の本'],
+    boundary: '正則関数の微積分が中心なら複素解析、代数多様体やスキームが主なら可換環論・代数幾何学です。'
+  },
+  '非可換幾何学': {
+    group: '数学 / 幾何学',
+    definition: '座標環が可換でない空間を、作用素環や環の構造から幾何学的に研究します。',
+    examples: ['非可換トーラス・作用素環の幾何'],
+    boundary: '作用素そのものの解析が主なら関数解析学、一般の環の構造が主なら抽象代数学です。'
+  },
+  '実解析・測度論': {
+    group: '数学 / 解析学',
+    definition: '極限、測度、ルベーグ積分、関数の収束や可積分性など、実数上の解析の基礎を扱います。',
+    examples: ['ルベーグ積分30講', 'ルベーグ積分入門', '解析概論'],
+    boundary: '無限次元空間や作用素が主なら関数解析、周波数分解が主なら調和解析です。'
+  },
+  '関数解析学': {
+    group: '数学 / 解析学',
+    definition: 'バナッハ空間・ヒルベルト空間、線形作用素、スペクトル、超関数など無限次元の解析を扱います。',
+    examples: ['工学のための関数解析', '関数解析入門のためのフーリエ変換・ラプラス変換', '関数論演習'],
+    boundary: '関数そのものの正則性なら実解析・複素解析、物理量を作用素として扱うなら物理数学や量子力学です。'
+  },
+  '複素解析（複素関数論）': {
+    group: '数学 / 解析学',
+    definition: '複素数上の正則関数、コーシーの積分公式、留数、解析接続、リーマン面などを研究します。',
+    examples: ['複素函数論', 'リーマンに学ぶ複素関数論', '数学のかんどころ 37 有理型関数'],
+    boundary: '複素多様体の構造が主なら複素幾何学、物理への応用を体系的に扱うなら物理数学です。'
+  },
+  '微分方程式論': {
+    group: '数学 / 解析学',
+    definition: '常微分方程式・偏微分方程式の解の存在、正則性、境界値問題、安定性などを扱います。',
+    examples: ['微分方程式と解法', '基礎から学ぶ 微分方程式', '手を動かしてまなぶ 偏微分方程式'],
+    boundary: '物理モデルの運動法則が主なら対応する物理分野、フーリエ・ラプラス変換が主なら調和解析または物理数学です。'
+  },
+  '調和解析': {
+    group: '数学 / 解析学',
+    definition: 'フーリエ級数・フーリエ変換、ラプラス変換、ウェーブレット、周波数分解を扱います。',
+    examples: ['フーリエ解析入門', '手を動かしてまなぶフーリエ解析・ラプラス変換', 'ベクトル解析'],
+    boundary: '変換を物理現象の計算道具として使う本は物理数学、PDEの理論が主なら微分方程式論です。'
+  },
+  '力学系・エルゴード理論': {
+    group: '数学 / 解析学',
+    definition: '写像や微分方程式の時間発展、軌道、カオス、測度保存、長時間平均を研究します。',
+    examples: ['力学系・カオス・エルゴード理論の本'],
+    boundary: '非線形現象の物理モデルや実験が主なら非線形物理・カオス、確率的時間発展が主なら確率論です。'
+  },
+  '解析的数論': {
+    group: '数学 / 数論・解析',
+    definition: '複素解析、フーリエ解析、調和解析などを使って素数やゼータ関数を研究します。',
+    examples: ['シリーズ ゼータの現在 ゼータへの招待', 'オイラーのゼータ関数論'],
+    boundary: '整数環・代数体の構造が主なら数論（代数的数論）、正則関数一般の理論なら複素解析です。'
+  },
+  '数学基礎論': {
+    group: '数学 / 基礎論',
+    definition: '集合、論理、公理系、証明、計算可能性、数学の基礎づけを扱います。',
+    examples: ['集合への30講', '数学の真髄 論理・写像', '基幹講座 数学 集合・論理と位相'],
+    boundary: '位相空間の性質や連続性が主なら位相幾何学、抽象的な構造間の関係が主なら圏論です。'
+  },
+  '離散数学・組合せ論': {
+    group: '数学 / 離散数学',
+    definition: 'グラフ、組合せ、離散構造、アルゴリズム、符号など、連続でない対象を扱います。',
+    examples: ['離散数学・組合せ論の入門書'],
+    boundary: '計算機での実装やプログラミングが主なら情報、確率的な数え上げが主なら確率論です。'
+  },
+  '確率論・数理統計学': {
+    group: '数学 / 確率・統計',
+    definition: '確率空間、確率変数、確率過程、推定、検定、確率微分方程式などを扱います。',
+    examples: ['詳解確率と統計演習', '数学のかんどころ 26 確率微分方程式入門'],
+    boundary: 'ランダムな物理系のモデルが主なら統計力学、データ処理・機械学習の実装が主なら情報です。'
+  },
+  '数値解析・最適化': {
+    group: '数学 / 計算数学',
+    definition: '数値計算、誤差評価、数値線形代数、有限要素法、最適化など、計算で近似解を求める理論を扱います。',
+    examples: ['サイエンスライブラリ理工系の数学 15 数値計算', '計算物理学 コンピューターで解く凝縮系の物理'],
+    boundary: 'アルゴリズムやソフトウェアの実装が主なら情報、物理モデルの理解が主なら物理数学です。'
+  },
+  '物理一般': {
+    group: '物理 / 入門',
+    definition: '力学・電磁気・熱・量子など特定分野に絞らない、物理学全体の入門や概説です。',
+    examples: ['新・物理入門', '理論物理への道標'],
+    boundary: '章の中心が一分野に明確に絞れるなら、その物理分野を選びます。数学の入門書は数学一般です。'
+  },
+  '物理数学': {
+    group: '物理 / 数理ツール',
+    definition: '物理学で使う数学を、変換・特殊関数・複素解析・微分方程式・ベクトル解析などの道具としてまとめて扱います。',
+    examples: ['基礎物理数学 3 特殊関数と積分方程式', '工学系学生のための数学物理学演習', '物理学レクチャーコース 物理数学', '詳解 物理応用数学演習'],
+    boundary: '数学理論そのものの証明が主なら数学の専門分野、特定の物理現象や法則が主なら対応する物理分野です。'
+  },
+  '古典力学・解析力学': {
+    group: '物理 / 力学',
+    definition: 'ニュートン、ラグランジュ、ハミルトン形式、変分原理、剛体や連成系の運動を扱います。',
+    examples: ['物理学レクチャーコース 解析力学', 'フロー式物理演習シリーズ 17 解析力学', 'ファインマン物理学 I 力学'],
+    boundary: '計算手法としての微分方程式だけなら微分方程式論、量子化や状態ベクトルが主なら量子力学です。'
+  },
+  '電磁気学・連続体力学': {
+    group: '物理 / 場・連続体',
+    definition: 'マクスウェル方程式、電磁場、電気回路、流体・弾性体などの連続体を扱います。',
+    examples: ['電磁気学の基礎 I', 'マクスウェル方程式から始める電磁気学', '電磁気学30講'],
+    boundary: '電磁気の数学的道具が主なら物理数学、材料中の電子状態が主なら固体物理学です。'
+  },
+  '熱・統計力学': {
+    group: '物理 / 多体系',
+    definition: '熱力学、アンサンブル、エントロピー、相転移、ゆらぎなど、多数の粒子の集団現象を扱います。',
+    examples: ['熱・統計力学の入門書'],
+    boundary: '物質の電子構造や磁性が主なら固体物理学、確率の一般理論が主なら確率論です。'
+  },
+  '量子力学': {
+    group: '物理 / 量子',
+    definition: '状態ベクトル、演算子、固有値、測定、波動関数、散乱など量子系の基本法則を扱います。',
+    examples: ['入門 現代の量子力学', '工学系のための量子力学', '現代工学のための量子力学の数理入門'],
+    boundary: '量子場や粒子の生成消滅が主なら場の量子論、物質のバンドや磁性が主なら固体物理学です。'
+  },
+  '相対性理論': {
+    group: '物理 / 時空',
+    definition: '特殊相対論・一般相対論、時空の幾何、重力場、アインシュタイン方程式を扱います。',
+    examples: ['物理学レクチャーコース 相対性理論', '基幹講座 物理学 相対論'],
+    boundary: '時空の数学的構造だけを研究するなら微分幾何学、宇宙全体の進化が主なら宇宙物理学・宇宙論です。'
+  },
+  '場の量子論': {
+    group: '物理 / 量子場',
+    definition: '量子力学と特殊相対論を統合し、場の量子化、粒子の生成消滅、くりこみ、ゲージ理論を扱います。',
+    examples: ['場の量子論・ゲージ理論の入門書'],
+    boundary: '粒子の現象論や標準模型が主なら素粒子物理学、数学的構造だけなら数理物理です。'
+  },
+  '素粒子物理学': {
+    group: '物理 / 素粒子・原子核',
+    definition: 'クォーク、レプトン、標準模型、ニュートリノ、基本相互作用などを実験・現象論の視点で扱います。',
+    examples: ['物理学レクチャーコース 素粒子物理学'],
+    boundary: '場の形式やくりこみの理論が主なら場の量子論、原子核の構造や反応が主なら原子核物理学です。'
+  },
+  '原子核物理学': {
+    group: '物理 / 素粒子・原子核',
+    definition: '原子核の構造、核力、放射性崩壊、核反応、核分裂・核融合を扱います。',
+    examples: ['原子核物理学の入門書'],
+    boundary: 'クォークや標準模型が主なら素粒子物理学、核融合炉など工学的応用が主なら自然科学・応用寄りにします。'
+  },
+  '宇宙物理学・宇宙論': {
+    group: '物理 / 宇宙',
+    definition: '恒星、銀河、ブラックホール、宇宙の起源・進化・大規模構造を扱います。',
+    examples: ['宇宙物理学・宇宙論の入門書'],
+    boundary: '重力理論の数式が主なら相対性理論、観測機器やデータ処理が主なら情報・自然科学寄りです。'
+  },
+  '固体物理学（凝縮系物理）': {
+    group: '物理 / 物性',
+    definition: '結晶、バンド、半導体、格子振動、磁性など、固体や凝縮系の物性を扱います。',
+    examples: ['フロー式物理演習シリーズ 計算物理学 コンピューターで解く凝縮系の物理'],
+    boundary: '電子相関や量子相転移が主なら強相関電子系・量子相転移、トポロジーによる保護状態が主ならトポロジカル物性です。'
+  },
+  '強相関電子系・量子相転移': {
+    group: '物理 / 物性',
+    definition: '電子間相互作用が強い系、モット転移、量子臨界現象、フラストレーションなどを扱います。',
+    examples: ['強相関電子系・量子相転移の専門書'],
+    boundary: '通常の結晶・半導体の物性なら固体物理学、位相で保護される状態が主ならトポロジカル物性です。'
+  },
+  'トポロジカル物性': {
+    group: '物理 / 物性',
+    definition: 'ベリー位相、トポロジカル絶縁体、量子ホール効果など、位相に保護された物性を扱います。',
+    examples: ['トポロジカル物性の入門書'],
+    boundary: '数学としての空間の位相が主なら位相幾何学、物質中の電子状態・実験が主ならこちらです。'
+  },
+  'ソフトマター・生体物理': {
+    group: '物理 / 物性・生命',
+    definition: '高分子、液晶、コロイド、生体膜など、熱ゆらぎと柔らかい構造が作る現象を扱います。',
+    examples: ['ソフトマター・生体物理の入門書'],
+    boundary: '生物の分類や飼育が主なら自然科学、相転移や統計的集団現象の理論が主なら熱・統計力学です。'
+  },
+  '量子光学・アト秒科学': {
+    group: '物理 / 光・量子',
+    definition: '光子と物質の相互作用、レーザー、量子コヒーレンス、超短パルスやアト秒現象を扱います。',
+    examples: ['量子光学・アト秒科学の専門書'],
+    boundary: '光学の数学的手法が主なら物理数学、固体中の光応答が主なら固体物理学です。'
+  },
+  '非線形物理・カオス': {
+    group: '物理 / 複雑系',
+    definition: '非線形方程式、分岐、ソリトン、パターン形成、初期値鋭敏性などを扱います。',
+    examples: ['非線形物理・カオスの入門書'],
+    boundary: '抽象力学系の定理が主なら力学系・エルゴード理論、物理現象のモデルや実験が主ならこちらです。'
+  },
+  '数理物理学': {
+    group: '物理 / 数学との境界',
+    definition: '物理モデルを数学的に厳密化・解析し、可積分系、共形場理論、ランダム行列などを研究します。',
+    examples: ['数理物理学の専門書'],
+    boundary: '物理で使う計算道具の整理なら物理数学、具体的な実験・現象の説明が主なら対応する物理分野です。'
+  },
+  '情報': {
+    group: '情報 / 計算',
+    definition: 'プログラミング、計算機、アルゴリズム、ネットワーク、ソフトウェア開発などを扱います。',
+    examples: ['新・解きながら学ぶC言語', 'Pythonプロフェッショナルプログラミング', 'React.js & Next.js超入門'],
+    boundary: '試験合格が主目的なら資格、数学的アルゴリズムの理論が主なら離散数学・組合せ論です。'
+  },
+  '自然科学': {
+    group: '自然科学 / 生物・化学',
+    definition: '化学、生物、動物、植物、環境など、数学・物理以外の自然科学や観察・飼育を扱います。',
+    examples: ['原点からの化学 原子の理論', 'DISCOVERY ヤモリ大図鑑', '中・小型水槽で楽しむ アクアリウム'],
+    boundary: '化学・生物の専門分野が今後増えたら細分化できます。物理法則の数理モデルが主なら物理または物理数学です。'
+  },
+  '資格': {
+    group: '資格 / 試験対策',
+    definition: '特定の資格・検定の合格を目的に、過去問、教科書、分野別演習を扱います。',
+    examples: ['応用情報技術者パーフェクトラーニング過去問題集', '電験三種完全攻略', '数検1級をめざせ'],
+    boundary: '同じ内容でも資格対策ではなく理論を学ぶ本なら、情報・数学・物理など内容本位の分野を選びます。'
+  },
+  'その他': {
+    group: '保留 / その他',
+    definition: '現在のプリセットでは適切な専門分野がまだ用意されていない本を一時的に置く場所です。',
+    examples: ['例題で学ぶやさしい電気回路 直流編'],
+    boundary: '迷ったまま固定せず、ガイドの近い分野へ寄せられないか確認してください。新しい分野を追加する候補にもなります。'
+  },
+  '未分類': {
+    group: '未設定',
+    definition: '分野をまだ判断していない、またはスキャン時に自動分類されなかった本です。',
+    examples: ['数学のかんどころ 12 平面代数曲線', 'ベクトル解析', '物理学レクチャーコース 物理数学'],
+    boundary: '登録後に必ずガイドを開き、タイトルの主題に合わせて入力欄から分類してください。シリーズ名だけで判断しないのがコツです。'
+  }
+};
 
 function renderFieldOptions() {
   renderFieldPicker('');
@@ -4816,6 +5218,51 @@ function renderFieldPicker(query = '') {
     ? suggestions.map((field) => `<button class="bs-field-option" type="button" role="option" onclick="bsPickField('${esc(field).replace(/'/g, "\\'")}')">${esc(field)}</button>`).join('')
     : '<div class="bs-field-picker-empty">一致する分野がありません</div>';
 }
+
+function renderFieldGuide() {
+  const list = document.getElementById('bs-field-guide-list');
+  if (!list) return;
+  list.innerHTML = FIELD_PRESETS.map((field) => {
+    const guide = FIELD_GUIDE[field];
+    if (!guide) {
+      return `<article class="bs-field-guide-entry"><div class="bs-field-guide-entry-title">${esc(field)}</div><p class="bs-field-guide-empty">この分野の説明は準備中です。</p></article>`;
+    }
+    const examples = (guide.examples || []).map((example) => `<span class="bs-field-guide-example">${esc(example)}</span>`).join('');
+    return `
+      <article class="bs-field-guide-entry" data-field-guide="${esc(field)}">
+        <div class="bs-field-guide-entry-head">
+          <div class="bs-field-guide-entry-title">${esc(field)}</div>
+          <span class="bs-field-guide-group">${esc(guide.group)}</span>
+        </div>
+        <p class="bs-field-guide-definition"><span class="bs-field-guide-label">要点</span><br>${esc(guide.definition)}</p>
+        <div class="bs-field-guide-definition"><span class="bs-field-guide-label">蔵書の例 / 判断語</span><div class="bs-field-guide-examples">${examples}</div></div>
+        <p class="bs-field-guide-boundary"><span class="bs-field-guide-label">境界メモ</span><br>${esc(guide.boundary)}</p>
+      </article>`;
+  }).join('');
+}
+
+window.bsOpenFieldGuide = function(event) {
+  event?.preventDefault();
+  event?.stopPropagation();
+  renderFieldGuide();
+  const overlay = document.getElementById('bs-overlay-field-guide');
+  if (!overlay) return;
+  overlay.classList.add('open');
+  overlay.focus();
+};
+
+window.bsCloseFieldGuide = function() {
+  const overlay = document.getElementById('bs-overlay-field-guide');
+  if (overlay) overlay.classList.remove('open');
+};
+
+window.bsFieldGuideBackdropClick = function(event) {
+  if (event.target === event.currentTarget) window.bsCloseFieldGuide();
+};
+
+window.bsFieldGuideKeydown = function(event) {
+  if (event.key === 'Escape') window.bsCloseFieldGuide();
+};
 
 window.bsOpenFieldPicker = function() {
   const input = document.getElementById('bs-f-field');
@@ -5790,8 +6237,9 @@ window.bsDeleteFromDetail = function() {
 
 document.addEventListener('keydown', function(e) {
       if(e.key === 'Escape') {
-        bsCloseForm();
-        bsCloseDetail();
+            bsCloseForm();
+            bsCloseFieldGuide();
+            bsCloseDetail();
         bsCloseSettings();
         bsCloseRotator();
         bsCloseScanner();
