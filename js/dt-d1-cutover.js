@@ -409,6 +409,30 @@
     }
   }
 
+  function writeLocalStorageEntry(storage, appKey, key, raw) {
+    try {
+      storage.setItem(key, raw);
+      return;
+    } catch (error) {
+      if (!isQuotaError(error)) throw error;
+      // The live value is never removed before a successful replacement.
+      // Reclaim only generated runtime copies for this app, then retry the
+      // incoming D1 value. Pre-cutover backups and live data remain intact.
+      let lastError = error;
+      for (const item of runtimeBackupItems(storage, appKey)) {
+        storage.removeItem(item.key);
+        try {
+          storage.setItem(key, raw);
+          return;
+        } catch (retryError) {
+          if (!isQuotaError(retryError)) throw retryError;
+          lastError = retryError;
+        }
+      }
+      throw lastError;
+    }
+  }
+
   async function saveRuntimeBackup(storage, appKey, indexedDB, reason = 'remote-apply') {
     const currentEntries = [
       ...collectLocalStorageEntries(storage, appKey),
@@ -487,7 +511,7 @@
         const key = entry.recordKey.startsWith('localStorage:') ? entry.recordKey.slice('localStorage:'.length) : '';
         if (!key || typeof entry.entry?.raw !== 'string' || CREDENTIAL_KEY.test(key) || CONNECTION_KEY.test(key)) throw new Error('candidate_invalid');
         if (entry.deletedAt) storage.removeItem(key);
-        else storage.setItem(key, entry.entry.raw);
+        else writeLocalStorageEntry(storage, appKey, key, entry.entry.raw);
         localApplied += 1;
       } else {
         if (!indexedDB) throw new Error('indexeddb_unavailable');
