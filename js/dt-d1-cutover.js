@@ -385,6 +385,36 @@
     return items;
   }
 
+  function allRuntimeBackupItems(storage) {
+    const items = [];
+    for (let index = 0; index < Number(storage.length) || 0; index += 1) {
+      const key = storage.key(index);
+      if (!key || !key.startsWith(RUNTIME_BACKUP_PREFIX)) continue;
+      const suffix = key.slice(RUNTIME_BACKUP_PREFIX.length);
+      const separator = suffix.lastIndexOf('_');
+      if (separator <= 0) continue;
+      let createdAt = '';
+      try { createdAt = JSON.parse(storage.getItem(key) || '{}').createdAt || ''; } catch (_) {}
+      items.push({
+        key,
+        appKey: suffix.slice(0, separator),
+        createdAt
+      });
+    }
+    items.sort((left, right) => String(left.createdAt).localeCompare(String(right.createdAt)) || left.key.localeCompare(right.key));
+    return items;
+  }
+
+  function runtimeBackupCleanupItems(storage, appKey) {
+    const sameApp = runtimeBackupItems(storage, appKey);
+    const all = allRuntimeBackupItems(storage);
+    const latestKeyByApp = new Map();
+    for (const item of all) latestKeyByApp.set(item.appKey, item.key);
+    const olderOtherApps = all.filter(item => item.appKey !== appKey && latestKeyByApp.get(item.appKey) !== item.key);
+    const newestOtherApps = all.filter(item => item.appKey !== appKey && latestKeyByApp.get(item.appKey) === item.key);
+    return [...sameApp, ...olderOtherApps, ...newestOtherApps];
+  }
+
   function writeRuntimeBackup(storage, appKey, backupKey, serialized) {
     try {
       storage.setItem(backupKey, serialized);
@@ -392,10 +422,10 @@
     } catch (error) {
       if (!isQuotaError(error)) throw error;
       // A runtime backup is a generated safety copy, not live application
-      // data. Remove only older generated copies until the new copy fits.
-      // Keep the current local data, pre-cutover backup, and all other apps.
+      // data. Remove only generated copies until the new copy fits. The
+      // current local data, pre-cutover backups, and connection metadata stay.
       let lastError = error;
-      for (const item of runtimeBackupItems(storage, appKey)) {
+      for (const item of runtimeBackupCleanupItems(storage, appKey)) {
         storage.removeItem(item.key);
         try {
           storage.setItem(backupKey, serialized);
@@ -416,10 +446,10 @@
     } catch (error) {
       if (!isQuotaError(error)) throw error;
       // The live value is never removed before a successful replacement.
-      // Reclaim only generated runtime copies for this app, then retry the
-      // incoming D1 value. Pre-cutover backups and live data remain intact.
+      // Reclaim only generated runtime copies, then retry the incoming D1
+      // value. Pre-cutover backups and live data remain intact.
       let lastError = error;
-      for (const item of runtimeBackupItems(storage, appKey)) {
+      for (const item of runtimeBackupCleanupItems(storage, appKey)) {
         storage.removeItem(item.key);
         try {
           storage.setItem(key, raw);
