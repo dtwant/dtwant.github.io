@@ -861,7 +861,12 @@
         suppressLocalTracking = true;
         await root.DTSyncCutover.applyCandidateApp(
           { status: 'ready', entries },
-          { appKey, storage, indexedDB: root.indexedDB }
+          {
+            appKey,
+            storage,
+            indexedDB: root.indexedDB,
+            skipSafetyBackup: Boolean(applyRemoteEntries.backupSaved)
+          }
         );
         return true;
       } catch (_) {

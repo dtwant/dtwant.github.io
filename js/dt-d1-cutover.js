@@ -454,7 +454,13 @@
     db.close();
   }
 
-  async function applyCandidateApp(candidate, { appKey, storage = root.localStorage, indexedDB = root.indexedDB, onlyIfEmpty = false } = {}) {
+  async function applyCandidateApp(candidate, {
+    appKey,
+    storage = root.localStorage,
+    indexedDB = root.indexedDB,
+    onlyIfEmpty = false,
+    skipSafetyBackup = false
+  } = {}) {
     if (!candidate || candidate.status !== 'ready' || !Array.isArray(candidate.entries) || !candidate.entries.length) {
       throw new Error('candidate_not_ready');
     }
@@ -466,7 +472,14 @@
       const existingIndexed = await collectIndexedDBEntries(indexedDB, appKey);
       if (existingLocal.length || existingIndexed.length) throw new Error('local_data_exists');
     }
-    const backupKey = await saveSafetyBackup(storage, appKey, entries, indexedDB);
+    // Live D1 pulls already create a full runtime backup immediately before
+    // entering this function. Do not serialize the same large application a
+    // second time: on storage-constrained PWAs that duplicate write is what
+    // turns a safe pull into an apply_failed result. Recovery/cutover callers
+    // keep the normal pre-cutover backup path.
+    const backupKey = skipSafetyBackup
+      ? null
+      : await saveSafetyBackup(storage, appKey, entries, indexedDB);
     let localApplied = 0;
     let indexedApplied = 0;
     for (const entry of entries) {
