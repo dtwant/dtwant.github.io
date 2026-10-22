@@ -235,7 +235,7 @@
   <script src="/js/dt-d1-cutover.js?v=20261023-runtime-backup-quota-v4"></script>
   <script src="/js/dt-d1-recovery.js?v=20261019-recovery-v3"></script>
   <script src="/js/dt-d1-onboarding.js?v=20260923-d1-live-runtime-v5"></script>
-  <script src="/js/dt-d1-runtime.js?v=20261023-live-apply-backup-v2"></script>
+  <script src="/js/dt-d1-runtime.js?v=20261023-live-apply-backup-v3"></script>
   <script src="/js/dt-d1-tool-bridge.js?v=20261019-recovery-hold-v1"></script>
 </head>
 
@@ -4310,6 +4310,10 @@ function mergeAndDeduplicate(arr1, arr2) {
 }
 
  
+function shouldPreserveD1LibraryPayload(raw, parsed) {
+  return Boolean(raw && Array.isArray(parsed) && window.DTD1LegacySync?.isDisabled?.('library'));
+}
+
 function initializeDatabase() {
   
   try { localStorage.removeItem('ns_data_v1'); } catch(e){}
@@ -4343,13 +4347,22 @@ function initializeDatabase() {
     }));
   }
 
-  
-  db = mergeAndDeduplicate(localParsed, initialSeeds);
-  saveLocal();
+  const preserveD1Payload = shouldPreserveD1LibraryPayload(raw, localParsed);
+  db = preserveD1Payload ? localParsed : mergeAndDeduplicate(localParsed, initialSeeds);
+  if (!preserveD1Payload) saveLocal();
 }
 
 function saveLocal() {
-  try { localStorage.setItem(LS_DATA, JSON.stringify(db)); } catch(e){}
+  try {
+    localStorage.setItem(LS_DATA, JSON.stringify(db));
+  } catch(e) {
+    return;
+  }
+  try {
+    window.dispatchEvent(new CustomEvent('dt-d1-local-change', {
+      detail: { appKey: 'library' }
+    }));
+  } catch(e) {}
 }
 
  
