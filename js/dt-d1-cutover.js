@@ -1,14 +1,23 @@
 /* Safe, opt-in application of a staged migration candidate.
  *
- * This module never removes a storage key, clears an object store, changes a
- * JSONBin ID, or writes to the raw migration snapshots.  Existing values are
- * captured before the candidate is applied so a cutover remains recoverable.
+ * This module never removes a live application storage key, clears an
+ * application object store, changes a JSONBin ID, or writes to the raw
+ * migration snapshots. Existing values are captured before the candidate is
+ * applied so a cutover remains recoverable.
+ *
+ * 2026-10-23 quota safeguard: large library data can coexist with old
+ * migration/recovery copies until localStorage is full.  Generated runtime
+ * copies and, only after a durable IndexedDB copy succeeds, oversized local
+ * recovery copies are moved to dt_d1_backup_v1.  No live app value is deleted
+ * to make room; if the overflow store cannot accept the copy, the apply stops.
  */
 (function (root) {
   'use strict';
 
   const BACKUP_PREFIX = 'dt_d1_pre_cutover_backup_';
   const RUNTIME_BACKUP_PREFIX = 'dt_d1_runtime_backup_';
+  const BACKUP_DB_NAME = 'dt_d1_backup_v1';
+  const BACKUP_STORE_NAME = 'snapshots';
   const MAX_CANDIDATE_AGE_MS = 24 * 60 * 60 * 1000;
   const CREDENTIAL_KEY = /^(?:dt_sync_gateway_key|shared_jsonbin_api_key)$/i;
   const D1_METADATA_KEY = /^dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup)_/i;
@@ -167,6 +176,92 @@
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error || new Error('indexeddb_request_failed'));
     });
+  }
+
+  function transactionResult(transaction) {
+    return new Promise((resolve, reject) => {
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error || new Error('indexeddb_transaction_failed'));
+      transaction.onabort = () => reject(transaction.error || new Error('indexeddb_transaction_aborted'));
+    });
+  }
+
+  function hasObjectStore(db, storeName) {
+    if (!db?.objectStoreNames) return false;
+    if (typeof db.objectStoreNames.contains === 'function') return db.objectStoreNames.contains(storeName);
+    return Array.from(db.objectStoreNames).includes(storeName);
+  }
+
+  function openBackupDatabase(indexedDB) {
+    if (!indexedDB || typeof indexedDB.open !== 'function') throw new Error('indexeddb_unavailable');
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(BACKUP_DB_NAME, 1);
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        if (!hasObjectStore(db, BACKUP_STORE_NAME)) db.createObjectStore(BACKUP_STORE_NAME, { keyPath: 'key' });
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error || new Error('indexeddb_backup_open_failed'));
+    });
+  }
+
+  async function putOverflowBackup(indexedDB, record) {
+    const db = await openBackupDatabase(indexedDB);
+    try {
+      const transaction = db.transaction(BACKUP_STORE_NAME, 'readwrite');
+      const complete = transactionResult(transaction);
+      const request = transaction.objectStore(BACKUP_STORE_NAME).put(record);
+      await requestResult(request);
+      await complete;
+      return record.key;
+    } finally {
+      db.close();
+    }
+  }
+
+  async function listOverflowBackups(indexedDB) {
+    const db = await openBackupDatabase(indexedDB);
+    try {
+      const transaction = db.transaction(BACKUP_STORE_NAME, 'readonly');
+      const complete = transactionResult(transaction);
+      const request = transaction.objectStore(BACKUP_STORE_NAME).getAll();
+      const records = await requestResult(request);
+      await complete;
+      return Array.isArray(records) ? records : [];
+    } finally {
+      db.close();
+    }
+  }
+
+  async function deleteOverflowBackup(indexedDB, key) {
+    const db = await openBackupDatabase(indexedDB);
+    try {
+      const transaction = db.transaction(BACKUP_STORE_NAME, 'readwrite');
+      const complete = transactionResult(transaction);
+      const request = transaction.objectStore(BACKUP_STORE_NAME).delete(key);
+      await requestResult(request);
+      await complete;
+    } finally {
+      db.close();
+    }
+  }
+
+  function overflowBackupRecord(key, raw, kind) {
+    let parsed = null;
+    try { parsed = JSON.parse(raw); } catch (_) {}
+    return {
+      key,
+      kind,
+      appKey: typeof parsed?.appKey === 'string' ? parsed.appKey : '',
+      createdAt: typeof parsed?.createdAt === 'string' ? parsed.createdAt : new Date().toISOString(),
+      serialized: raw
+    };
+  }
+
+  async function hasOverflowBackup(indexedDB, key) {
+    if (!indexedDB || typeof indexedDB.open !== 'function') return false;
+    const records = await listOverflowBackups(indexedDB);
+    return records.some(record => record?.key === key);
   }
 
   async function openDatabase(indexedDB, name, store) {
@@ -359,8 +454,15 @@
   async function saveSafetyBackup(storage, appKey, candidateEntries, indexedDB) {
     const backupKey = `${BACKUP_PREFIX}${appKey}`;
     if (storage.getItem(backupKey) !== null) return backupKey;
+    if (await hasOverflowBackup(indexedDB, backupKey)) return backupKey;
     const payload = await captureBackupPayload(storage, appKey, candidateEntries, indexedDB, 'dt-world-d1-pre-cutover-backup');
-    storage.setItem(backupKey, JSON.stringify(payload));
+    const serialized = JSON.stringify(payload);
+    try {
+      storage.setItem(backupKey, serialized);
+    } catch (error) {
+      if (!isQuotaError(error)) throw error;
+      await putOverflowBackup(indexedDB, overflowBackupRecord(backupKey, serialized, 'pre_cutover'));
+    }
     return backupKey;
   }
 
@@ -439,7 +541,7 @@
     }
   }
 
-  function writeLocalStorageEntry(storage, appKey, key, raw) {
+  async function writeLocalStorageEntry(storage, appKey, key, raw, indexedDB) {
     try {
       storage.setItem(key, raw);
       return;
@@ -459,8 +561,61 @@
           lastError = retryError;
         }
       }
-      throw lastError;
+      return spillLocalBackupsUntilFits(storage, appKey, key, raw, indexedDB, lastError);
     }
+  }
+
+  function spillableBackupItems(storage, appKey) {
+    const items = [];
+    for (let index = 0; index < Number(storage.length) || 0; index += 1) {
+      const key = storage.key(index);
+      if (!key || (!key.startsWith(BACKUP_PREFIX) && !key.startsWith('dt_d1_recovery_backup_'))) continue;
+      const raw = storage.getItem(key);
+      if (raw === null) continue;
+      let storedAppKey = '';
+      try { storedAppKey = JSON.parse(raw)?.appKey || ''; } catch (_) {}
+      items.push({
+        key,
+        raw,
+        sameApp: storedAppKey === appKey || key === `${BACKUP_PREFIX}${appKey}`
+      });
+    }
+    return items.sort((left, right) => Number(right.sameApp) - Number(left.sameApp) || left.key.localeCompare(right.key));
+  }
+
+  async function spillLocalBackup(indexedDB, storage, item) {
+    await putOverflowBackup(indexedDB, overflowBackupRecord(
+      item.key,
+      item.raw,
+      item.key.startsWith(BACKUP_PREFIX) ? 'pre_cutover' : 'recovery'
+    ));
+    // The copy is durable before the localStorage key is removed. If this
+    // removal fails, keeping both copies is safer than forcing the apply.
+    try { storage.removeItem(item.key); } catch (_) {}
+  }
+
+  async function spillLocalBackupsUntilFits(storage, appKey, key, raw, indexedDB, lastError) {
+    if (!indexedDB) throw lastError;
+    let error = lastError;
+    for (const item of spillableBackupItems(storage, appKey)) {
+      await spillLocalBackup(indexedDB, storage, item);
+      try {
+        storage.setItem(key, raw);
+        return;
+      } catch (retryError) {
+        if (!isQuotaError(retryError)) throw retryError;
+        error = retryError;
+      }
+    }
+    throw error;
+  }
+
+  async function trimOverflowRuntimeBackups(indexedDB, appKey) {
+    if (!indexedDB) return;
+    const records = (await listOverflowBackups(indexedDB))
+      .filter(record => record?.kind === 'runtime' && record.appKey === appKey)
+      .sort((left, right) => String(right.createdAt).localeCompare(String(left.createdAt)) || String(right.key).localeCompare(String(left.key)));
+    for (const record of records.slice(2)) await deleteOverflowBackup(indexedDB, record.key);
   }
 
   async function saveRuntimeBackup(storage, appKey, indexedDB, reason = 'remote-apply') {
@@ -472,7 +627,16 @@
     const payload = await captureBackupPayload(
       storage, appKey, currentEntries, indexedDB, 'dt-world-d1-runtime-backup', reason
     );
-    writeRuntimeBackup(storage, appKey, backupKey, JSON.stringify(payload));
+    const serialized = JSON.stringify(payload);
+    try {
+      writeRuntimeBackup(storage, appKey, backupKey, serialized);
+    } catch (error) {
+      if (!isQuotaError(error)) throw error;
+      if (!indexedDB) throw error;
+      await putOverflowBackup(indexedDB, overflowBackupRecord(backupKey, serialized, 'runtime'));
+      await trimOverflowRuntimeBackups(indexedDB, appKey);
+      return backupKey;
+    }
 
     const keys = runtimeBackupItems(storage, appKey).reverse();
     for (const item of keys.slice(2)) storage.removeItem(item.key);
@@ -541,7 +705,7 @@
         const key = entry.recordKey.startsWith('localStorage:') ? entry.recordKey.slice('localStorage:'.length) : '';
         if (!key || typeof entry.entry?.raw !== 'string' || CREDENTIAL_KEY.test(key) || CONNECTION_KEY.test(key)) throw new Error('candidate_invalid');
         if (entry.deletedAt) storage.removeItem(key);
-        else writeLocalStorageEntry(storage, appKey, key, entry.entry.raw);
+        else await writeLocalStorageEntry(storage, appKey, key, entry.entry.raw, indexedDB);
         localApplied += 1;
       } else {
         if (!indexedDB) throw new Error('indexeddb_unavailable');
@@ -556,6 +720,8 @@
   root.DTSyncCutover = {
     BACKUP_PREFIX,
     RUNTIME_BACKUP_PREFIX,
+    BACKUP_DB_NAME,
+    BACKUP_STORE_NAME,
     MAX_CANDIDATE_AGE_MS,
     isCandidateFresh,
     stableStringify,
@@ -566,6 +732,7 @@
     collectLocalStorageEntries,
     collectIndexedDBEntries,
     isIndexedDBMetadataRecord,
+    listOverflowBackups,
     saveRuntimeBackup,
     applyCandidateApp
   };

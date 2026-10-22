@@ -1,4 +1,7 @@
-/* Local, non-destructive recovery for data captured immediately before a D1 cutover. */
+/* Local, non-destructive recovery for data captured immediately before a D1 cutover.
+ * The 2026-10-23 quota safeguard also lists copies moved to the cutover
+ * module's dt_d1_backup_v1 IndexedDB overflow store, so moving a backup to
+ * make room never makes it disappear from Sync Settings. */
 (function (root) {
   'use strict';
 
@@ -56,6 +59,41 @@
       });
     }
     return backups.sort((left, right) => String(right.createdAt).localeCompare(String(left.createdAt)));
+  }
+
+  async function listPreCutoverBackupsWithOverflow(storage = root.localStorage, indexedDB = root.indexedDB) {
+    const localBackups = listPreCutoverBackups(storage);
+    if (typeof root.DTSyncCutover?.listOverflowBackups !== 'function' || !indexedDB) return localBackups;
+    let overflow;
+    try {
+      overflow = await root.DTSyncCutover.listOverflowBackups(indexedDB);
+    } catch (_) {
+      // Recovery UI should remain usable even if an optional overflow store
+      // cannot be opened on a mobile browser.
+      return localBackups;
+    }
+    const knownKeys = new Set(localBackups.map(item => item.backupKey));
+    for (const record of overflow) {
+      if (record?.kind !== 'pre_cutover' || typeof record.key !== 'string'
+        || !record.key.startsWith(PRE_CUTOVER_PREFIX) || knownKeys.has(record.key)) continue;
+      const backup = parsePreCutoverBackup(record.serialized);
+      if (!backup) continue;
+      const localCount = backup.local.filter(item => item.exists && typeof item.raw === 'string').length;
+      const indexedCount = backup.indexed.reduce((total, item) => total + (
+        item.exists && Array.isArray(item.dump?.records) ? item.dump.records.length : 0
+      ), 0);
+      localBackups.push({
+        backupKey: record.key,
+        appKey: backup.appKey,
+        createdAt: backup.createdAt,
+        localCount,
+        indexedCount,
+        totalCount: localCount + indexedCount,
+        backup,
+        storage: 'indexedDB'
+      });
+    }
+    return localBackups.sort((left, right) => String(right.createdAt).localeCompare(String(left.createdAt)));
   }
 
   function parseRecoveryExport(raw) {
@@ -239,6 +277,7 @@
     HOLD_PREFIX,
     parsePreCutoverBackup,
     listPreCutoverBackups,
+    listPreCutoverBackupsWithOverflow,
     parseRecoveryExport,
     importRecoveryExport,
     backupEntries,
