@@ -852,7 +852,7 @@
     }
 
     const applyRemoteEntries = async (entries) => {
-      if (!entries.length) return true;
+      if (!entries.length) return { ok: true };
       try {
         if (root.DTSyncCutover?.saveRuntimeBackup && !applyRemoteEntries.backupSaved) {
           await root.DTSyncCutover.saveRuntimeBackup(storage, appKey, root.indexedDB, 'remote-apply');
@@ -868,19 +868,30 @@
             skipSafetyBackup: Boolean(applyRemoteEntries.backupSaved)
           }
         );
-        return true;
-      } catch (_) {
-        return false;
+        return { ok: true };
+      } catch (error) {
+        const name = String(error?.name || '');
+        const message = String(error?.message || '');
+        const reason = name === 'QuotaExceededError' || /quota/i.test(message)
+          ? 'storage_quota'
+          : /^indexeddb_[a-z0-9_-]+$/.test(message)
+            ? message
+            : /^candidate_[a-z0-9_-]+$/.test(message)
+              ? message
+              : 'apply_failed';
+        return { ok: false, reason };
       } finally {
         suppressLocalTracking = false;
       }
     };
 
-    if (!await applyRemoteEntries(pullEntries)) {
-      return { ok: false, reason: 'apply_failed' };
+    const pulledApply = await applyRemoteEntries(pullEntries);
+    if (!pulledApply.ok) {
+      return pulledApply;
     }
-    if (!await applyRemoteEntries(mergedCalendarEntries)) {
-      return { ok: false, reason: 'apply_failed' };
+    const mergedApply = await applyRemoteEntries(mergedCalendarEntries);
+    if (!mergedApply.ok) {
+      return mergedApply;
     }
     for (const [recordKey, updatedAt] of pullUpdatedAt) writeLocalUpdatedAt(storage, appKey, recordKey, updatedAt);
 
@@ -951,8 +962,9 @@
       acceptedPushKeys.push(change.recordKey);
     }
 
-    if (!await applyRemoteEntries(stalePullEntries)) {
-      return { ok: false, reason: 'apply_failed' };
+    const staleApply = await applyRemoteEntries(stalePullEntries);
+    if (!staleApply.ok) {
+      return staleApply;
     }
     for (const [recordKey, updatedAt] of stalePullUpdatedAt) writeLocalUpdatedAt(storage, appKey, recordKey, updatedAt);
 

@@ -173,6 +173,7 @@
     runtime_error: 'D1実行エラー', worker_unavailable: 'D1 Worker未接続',
     recovery_hold: '復元保留中（D1未同期）',
     d1_runtime_unavailable: 'D1ランタイム未読込', indexeddb_unavailable: '端末DBを読めません',
+    storage_quota: '端末容量不足（自動退避を整理できません）',
     apply_failed: '端末への反映失敗', source_snapshot_missing: '選択原本に対象なし',
     source_snapshot_unavailable: '選択原本を確認できません',
     unauthorized: 'D1認証エラー', forbidden: 'D1アクセスエラー',
