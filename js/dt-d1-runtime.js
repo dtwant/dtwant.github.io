@@ -14,7 +14,7 @@
     [/\/0723\/movie(?:\/|$)/, 'movie'], [/\/0723\/feeding(?:\/|$)/, 'feeding'],
     [/\/project-x\/timetable(?:\/|$)/, 'timetable'], [/\/0723\/diary(?:\/|$)/, 'diary'],
     [/\/0723\/action_log(?:\/|$)/, 'task_calendar'], [/\/0723\/calendar(?:\/|$)/, 'calendar'],
-    [/\/0723\/report-card(?:\/|$)/, 'report_card'], [/\/lab\/deadline(?:\/|$)/, 'deadline'],
+    [/\/0723\/report-card(?:\/|$)/, 'report_card'], [/\/lab\/deadline(?:_test)?(?:\/|$)/, 'deadline'],
     [/(?:^|\/)tasks(?:\/|$)/, 'tasklist'], [/\/0723\/payment(?:\/|$)/, 'payment'],
     [/\/0723\/vocal-range(?:\/|$)/, 'vocal_range'], [/\/library(?:\/|$)/, 'library'],
     [/\/lab\/attendance(?:\/|$)/, 'attendance'], [/\/0723\/(?:weight_log|weight-log)(?:\/|$)/, 'weight_log'],
@@ -1188,6 +1188,15 @@
   function schedulePageReloadAfterPull(appKey, result) {
     if (pageReloadScheduled || !shouldReloadAfterPull(appKey, result)) return;
     if (typeof root.setTimeout !== 'function' || typeof root.location?.reload !== 'function') return;
+    // Tools with live rendering can apply the pulled data without discarding
+    // an open editor. Legacy tools retain their existing reload behavior.
+    if (typeof root.CustomEvent === 'function' && typeof root.dispatchEvent === 'function') {
+      const event = new root.CustomEvent('dt-d1-before-reload', {
+        cancelable: true, detail: { appKey }
+      });
+      root.dispatchEvent(event);
+      if (event.defaultPrevented) return;
+    }
     pageReloadScheduled = true;
     root.setTimeout(() => {
       try { root.location.reload(); } catch (_) { pageReloadScheduled = false; }
