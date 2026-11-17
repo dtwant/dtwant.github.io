@@ -22,6 +22,12 @@
   const CREDENTIAL_KEY = /^(?:dt_sync_gateway_key|shared_jsonbin_api_key)$/i;
   const D1_METADATA_KEY = /^dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup)_/i;
   const CONNECTION_KEY = /(?:^|_)(?:bin_id|blob|blob_id|sync_blob|sync_key|device_id|import_backup|recovery_v\d+)$/i;
+  const SCORE_BOOK_KEY = 'dt_score_book_v1';
+  const SCORE_BOOK_FIELD_PREFIX = `localStorage:${SCORE_BOOK_KEY}:`;
+  const SCORE_BOOK_FIELDS = {
+    first: ['midExam', 'midGrade', 'finalExam', 'finalGrade'],
+    second: ['midExam', 'midGrade', 'finalExam', 'yearGrade']
+  };
   const TOOL_PATTERNS = [
     ['manga', /^ms_/i], ['novel', /^ns_/i], ['movie', /^mt_/i],
     ['feeding', /^dt_feeding_log_/i], ['timetable', /^dt_subject_progress/i],
@@ -37,6 +43,7 @@
     ['biome_archive', /^dt_biome_archive_/i]
   ];
   const SPECIAL_KEYS = [
+    [/^dt_score_book_v1$/, 'score_book'],
     [/^novel-shelf:[^:]+$/i, 'novel'], [/^km_novel_v\d+$/i, 'novel'],
     [/^km_kanban_v\d+(?:_updated_at)?$/i, 'taskmanage'],
     [/^focus_lab_data_v2_\/.+$/i, 'focus_lab'], [/^focus-lab:v1:\/.+$/i, 'focus_lab'],
@@ -409,6 +416,85 @@
     return entries;
   }
 
+  function scoreBookFieldLocation(recordKey) {
+    if (!recordKey?.startsWith(SCORE_BOOK_FIELD_PREFIX)) return null;
+    const parts = recordKey.slice(SCORE_BOOK_FIELD_PREFIX.length).split(':');
+    const [subject, term, field] = parts;
+    if (parts.length !== 3 || !/^[a-z0-9][a-z0-9_-]{0,63}$/.test(subject)
+      || Object.hasOwn(Object.prototype, subject) || !Object.hasOwn(SCORE_BOOK_FIELDS, term)
+      || !SCORE_BOOK_FIELDS[term].includes(field)) return null;
+    return parts;
+  }
+
+  function readScoreBookSnapshot(storage) {
+    const raw = storage.getItem(SCORE_BOOK_KEY);
+    if (raw === null) return { version: 1, records: {}, fieldUpdatedAt: {} };
+    let snapshot;
+    try { snapshot = JSON.parse(raw); } catch (_) { throw new Error('score_book_local_invalid'); }
+    if (snapshot?.version !== 1 || !isObject(snapshot.records) || Array.isArray(snapshot.records)
+      || (snapshot.fieldUpdatedAt !== undefined && (!isObject(snapshot.fieldUpdatedAt) || Array.isArray(snapshot.fieldUpdatedAt)))) {
+      throw new Error('score_book_local_invalid');
+    }
+    snapshot.fieldUpdatedAt ??= {};
+    return snapshot;
+  }
+
+  function validScoreBookValue(value) {
+    return value === null || (Number.isInteger(value) && value >= 0 && value <= 100);
+  }
+
+  function scoreBookTimestamp(timestamp) {
+    return typeof timestamp === 'string' && Number.isFinite(Date.parse(timestamp)) ? timestamp : null;
+  }
+
+  function scoreBookFieldRaw(snapshot, subject, term, field) {
+    const value = snapshot.records[subject]?.[term]?.[field];
+    if (!validScoreBookValue(value)) return null;
+    const updatedAt = scoreBookTimestamp(snapshot.fieldUpdatedAt[subject]?.[term]?.[field]);
+    return JSON.stringify({ value, updatedAt });
+  }
+
+  // Keep one atomic browser snapshot, but use a D1 revision for each score.
+  // Independent edits can then sync even if both devices were offline.
+  function collectScoreBookEntries(storage) {
+    const snapshot = readScoreBookSnapshot(storage);
+    const entries = [];
+    for (const subject of Object.keys(snapshot.records)) {
+      for (const [term, fields] of Object.entries(SCORE_BOOK_FIELDS)) {
+        for (const field of fields) {
+          const recordKey = `${SCORE_BOOK_FIELD_PREFIX}${subject}:${term}:${field}`;
+          if (!scoreBookFieldLocation(recordKey)) continue;
+          const raw = scoreBookFieldRaw(snapshot, subject, term, field);
+          if (raw !== null) entries.push({ recordKey, kind: 'localStorage', entry: { encoding: 'json', raw } });
+        }
+      }
+    }
+    return entries;
+  }
+
+  function applyScoreBookEntries(storage, entries, onlyIfEmpty) {
+    const snapshot = readScoreBookSnapshot(storage);
+    if (onlyIfEmpty && storage.getItem(SCORE_BOOK_KEY) !== null) throw new Error('local_data_exists');
+    for (const entry of entries) {
+      const location = scoreBookFieldLocation(entry.recordKey);
+      if (!location || entry.kind !== 'localStorage' || entry.entry?.encoding !== 'json' || entry.deletedAt) {
+        throw new Error('candidate_invalid');
+      }
+      const [subject, term, field] = location;
+      if (Object.hasOwn(entry, 'expectedRaw') && scoreBookFieldRaw(snapshot, subject, term, field) !== entry.expectedRaw) {
+        throw new Error('local_changed_during_sync');
+      }
+      let incoming;
+      try { incoming = JSON.parse(entry.entry.raw); } catch (_) { throw new Error('candidate_invalid'); }
+      if (!incoming || !validScoreBookValue(incoming.value)) throw new Error('candidate_invalid');
+      const records = (snapshot.records[subject] ??= {});
+      const timestamps = (snapshot.fieldUpdatedAt[subject] ??= {});
+      (records[term] ??= {})[field] = incoming.value;
+      (timestamps[term] ??= {})[field] = scoreBookTimestamp(incoming.updatedAt);
+    }
+    storage.setItem(SCORE_BOOK_KEY, JSON.stringify(snapshot));
+  }
+
   async function captureBackupPayload(storage, appKey, candidateEntries, indexedDB, schema, reason = null) {
     const local = [];
     for (const candidate of candidateEntries.filter(entry => entry.kind === 'localStorage')) {
@@ -695,9 +781,15 @@
     // second time: on storage-constrained PWAs that duplicate write is what
     // turns a safe pull into an apply_failed result. Recovery/cutover callers
     // keep the normal pre-cutover backup path.
+    const appliesScoreBookFields = appKey === 'score_book' && entries.some(entry =>
+      Object.hasOwn(entry, 'expectedRaw') || entry.recordKey?.startsWith(SCORE_BOOK_FIELD_PREFIX));
     const backupKey = skipSafetyBackup
       ? null
-      : await saveSafetyBackup(storage, appKey, entries, indexedDB);
+      : await saveSafetyBackup(storage, appKey, appliesScoreBookFields ? collectLocalStorageEntries(storage, appKey) : entries, indexedDB);
+    if (appliesScoreBookFields) {
+      applyScoreBookEntries(storage, entries, onlyIfEmpty);
+      return { ok: true, appKey, backupKey, localApplied: entries.length, indexedApplied: 0, recordCount: entries.length };
+    }
     let localApplied = 0;
     let indexedApplied = 0;
     for (const entry of entries) {
@@ -730,6 +822,7 @@
     classifyLocalKey,
     classifyDatabase,
     collectLocalStorageEntries,
+    collectScoreBookEntries,
     collectIndexedDBEntries,
     isIndexedDBMetadataRecord,
     listOverflowBackups,

@@ -14,7 +14,8 @@
     [/\/0723\/movie(?:\/|$)/, 'movie'], [/\/0723\/feeding(?:\/|$)/, 'feeding'],
     [/\/project-x\/timetable(?:\/|$)/, 'timetable'], [/\/0723\/diary(?:\/|$)/, 'diary'],
     [/\/0723\/action_log(?:\/|$)/, 'task_calendar'], [/\/0723\/calendar(?:\/|$)/, 'calendar'],
-    [/\/0723\/report-card(?:\/|$)/, 'report_card'], [/\/lab\/deadline(?:_test)?(?:\/|$)/, 'deadline'],
+    [/\/0723\/report-card(?:\/|$)/, 'report_card'], [/\/0723\/score-book(?:\/|$)/, 'score_book'],
+    [/\/lab\/deadline(?:_test)?(?:\/|$)/, 'deadline'],
     [/(?:^|\/)tasks(?:\/|$)/, 'tasklist'], [/\/0723\/payment(?:\/|$)/, 'payment'],
     [/\/0723\/vocal-range(?:\/|$)/, 'vocal_range'], [/\/library(?:\/|$)/, 'library'],
     [/\/lab\/attendance(?:\/|$)/, 'attendance'], [/\/0723\/(?:weight_log|weight-log)(?:\/|$)/, 'weight_log'],
@@ -25,7 +26,7 @@
   ];
   const LIVE_APP_KEYS = [
     'manga', 'novel', 'movie', 'feeding', 'timetable', 'diary',
-    'task_calendar', 'calendar', 'report_card', 'deadline', 'tasklist',
+    'task_calendar', 'calendar', 'report_card', 'score_book', 'deadline', 'tasklist',
     'payment', 'vocal_range', 'library', 'attendance', 'weight_log',
     'shift_clock', 'taskmanage', 'math_memo', 'ritual_grid', 'oshi',
     'habit_heatmap', 'biome_archive'
@@ -287,6 +288,7 @@
   }
 
   function readStoredLocalUpdatedAt(storage, appKey, recordKey) {
+    if (appKey === 'score_book') return null; // Each score carries its own timestamp in the snapshot.
     try {
       const parsed = JSON.parse(storage.getItem(`${LOCAL_UPDATED_PREFIX}${appKey}`) || '');
       const stored = normalizedTimestamp(parsed?.[recordKey]);
@@ -341,6 +343,7 @@
   }
 
   function writeLocalUpdatedAt(storage, appKey, recordKey, updatedAt) {
+    if (appKey === 'score_book') return;
     const timestamp = normalizedTimestamp(updatedAt);
     if (!timestamp) return;
     const key = `${LOCAL_UPDATED_PREFIX}${appKey}`;
@@ -433,7 +436,7 @@
   function trackLocalStorageMutation(storage, key, updatedAt, originalSetItem) {
     if (suppressLocalTracking || !storage || RUNTIME_METADATA_KEY.test(String(key || ''))) return;
     const appKey = root.DTSyncCutover?.classifyLocalKey?.(key);
-    if (!appKey || storage.getItem(`dt_sync_provider_${appKey}`) !== 'd1') return;
+    if (!appKey || appKey === 'score_book' || storage.getItem(`dt_sync_provider_${appKey}`) !== 'd1') return;
     const metadataKey = `${LOCAL_UPDATED_PREFIX}${appKey}`;
     let parsed = {};
     try {
@@ -511,24 +514,33 @@
     writePendingChanges(storage, appKey, pending.changes.filter(change => !accepted.has(change.recordKey)));
   }
 
-  function config(appKey, storage) {
+  function connectionSettings(appKey, storage) {
     const provider = storage.getItem(`dt_sync_provider_${appKey}`);
     const baseUrl = storage.getItem('dt_sync_gateway_url') || '';
     const syncKey = storage.getItem('dt_sync_gateway_key') || '';
-    if (provider !== 'd1' || !/^https:\/\/[^\s/]+(?:\/[^\s]*)?$/.test(baseUrl) || syncKey.length < 32) return null;
-    return { baseUrl, syncKey, deviceId: ensureDeviceId(storage) };
+    // This D1-native tool starts syncing when opened with a configured gateway.
+    // General pages still limit all-tool runs to explicitly enabled tools.
+    const allowed = provider === 'd1' || (appKey === 'score_book' && provider === null
+      && appKeyFromPath(root.location?.pathname) === appKey);
+    if (!allowed || !/^https:\/\/[^\s/]+(?:\/[^\s]*)?$/.test(baseUrl) || syncKey.length < 32) return null;
+    return { baseUrl, syncKey };
+  }
+
+  function config(appKey, storage) {
+    const settings = connectionSettings(appKey, storage);
+    return settings && { ...settings, deviceId: ensureDeviceId(storage) };
   }
 
   function enabledAppKeys(storage = root.localStorage) {
     if (!storage) return [];
-    return LIVE_APP_KEYS.filter(appKey => config(appKey, storage));
+    return LIVE_APP_KEYS.filter(appKey => connectionSettings(appKey, storage));
   }
 
   // Normal tool pages run only their own app. Sync Settings is the explicit
   // all-tools entry point and invokes the same runtime without an app key.
   function automaticAppKeys(appKey, storage = root.localStorage) {
     if (!appKey) return [];
-    return config(appKey, storage) ? [appKey] : [];
+    return connectionSettings(appKey, storage) ? [appKey] : [];
   }
 
   function isRecoveryHeld(storage, appKey) {
@@ -536,6 +548,7 @@
   }
 
   function localEntries(storage, appKey) {
+    if (appKey === 'score_book') return root.DTSyncCutover.collectScoreBookEntries(storage);
     if (root.DTSyncCutover?.collectLocalStorageEntries) return root.DTSyncCutover.collectLocalStorageEntries(storage, appKey);
     return [];
   }
@@ -804,6 +817,7 @@
           conflicts.push({ recordKey, reason: 'invalid_remote_record' });
           continue;
         }
+        if (appKey === 'score_book') entry.expectedRaw = local?.entry.entry.raw ?? null;
         pullEntries.push(entry);
         if (remoteDescriptor.updatedAt) pullUpdatedAt.set(recordKey, remoteDescriptor.updatedAt);
         delete remainingForcePull[recordKey];
@@ -874,7 +888,7 @@
         const message = String(error?.message || '');
         const reason = name === 'QuotaExceededError' || /quota/i.test(message)
           ? 'storage_quota'
-          : /^indexeddb_[a-z0-9_-]+$/.test(message)
+          : message === 'local_changed_during_sync' || /^indexeddb_[a-z0-9_-]+$/.test(message)
             ? message
             : /^candidate_[a-z0-9_-]+$/.test(message)
               ? message
@@ -943,6 +957,7 @@
           conflicts.push({ recordKey: change.recordKey, reason: 'local_changed_during_sync' });
           continue;
         }
+        if (appKey === 'score_book') entry.expectedRaw = change.payload.entry.raw;
         stalePullEntries.push(entry);
         if (result.updatedAt) stalePullUpdatedAt.set(change.recordKey, normalizedTimestamp(result.updatedAt));
         nextRecords[change.recordKey] = {
@@ -1342,6 +1357,10 @@
     if (!root.localStorage) return;
     if (root[RUNTIME_STARTED_KEY]) return root.DTD1Runtime;
     root[RUNTIME_STARTED_KEY] = true;
+    if (appKey === 'score_book' && connectionSettings(appKey, root.localStorage)
+      && root.localStorage.getItem('dt_sync_provider_score_book') === null) {
+      try { root.localStorage.setItem('dt_sync_provider_score_book', 'd1'); } catch (_) { /* the open tool can still sync */ }
+    }
     if (appKey && appKey !== 'focus_lab') installLegacyJsonBinGuard(appKey);
     let timer = null;
     let running = false;
@@ -1431,7 +1450,9 @@
       enabledAppKeys: () => enabledAppKeys(root.localStorage),
       isLegacySyncDisabled: key => isLegacySyncDisabled(key, root.localStorage),
       isRecoveryHeld: key => isRecoveryHeld(root.localStorage, key),
-      isEnabled: key => root.localStorage?.getItem(`dt_sync_provider_${key}`) === 'd1',
+      isEnabled: key => key === 'score_book'
+        ? Boolean(connectionSettings(key, root.localStorage))
+        : root.localStorage?.getItem(`dt_sync_provider_${key}`) === 'd1',
       notifyLocalChange
     };
   }
