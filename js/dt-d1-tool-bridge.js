@@ -21,7 +21,7 @@
     report_card: ['#rc-sync-badge-label', '#rc-sync-status-text'],
     deadline: ['.dm-pill'],
     tasklist: ['[data-tl-sync-state] > span:last-child'],
-    payment: ['.cn-badge'],
+    payment: ['.cn-header-actions .cn-badge'],
     vocal_range: ['#vr-sbadge'],
     library: ['#bs-sync-status'],
     attendance: ['.ag-pill'],
@@ -277,7 +277,25 @@
     return 'synced';
   }
 
-  function normalizeLegacyStatusNode(node, state) {
+  // ツール固有のバッジ作法。長いD1文言をそのまま流し込むと小さいバッジや
+  // ラベル付きボタンが膨らんでヘッダーが壊れるため、ツール自身の語彙・色クラスで伝える。
+  const STATUS_STYLE = {
+    taskmanage: {
+      labelSelector: '.km-sync-label',
+      text: { synced: 'SYNCED', syncing: 'SYNCING', conflict: 'ERROR', error: 'ERROR' }
+    },
+    payment: {
+      text: { synced: 'SYNCED', syncing: 'SYNCING', conflict: 'ERROR', error: 'ERROR' },
+      variantClasses: ['cn-badge-outline', 'cn-badge-emerald', 'cn-badge-amber', 'cn-badge-rose'],
+      variantByState: { synced: 'cn-badge-emerald', syncing: 'cn-badge-amber', conflict: 'cn-badge-rose', error: 'cn-badge-rose' }
+    },
+    weight_log: {
+      variantClasses: ['local', 'ok', 'busy', 'err'],
+      variantByState: { synced: 'ok', syncing: 'busy', conflict: 'err', error: 'err' }
+    }
+  };
+
+  function normalizeLegacyStatusNode(node, state, protect) {
     if (!node) return;
     const legacyState = state === 'syncing' ? 'working'
       : state === 'synced' ? 'synced'
@@ -293,6 +311,7 @@
         // Never remove classes owned by this bridge. Removing and re-adding
         // them would retrigger the MutationObserver indefinitely.
         if (!/^dt-d1-status(?:-|$)/.test(token)
+          && !(protect && protect.includes(token))
           && /(?:^|[-_])(error|err|busy|working|syncing|ok|synced|online|offline|local)(?:$|[-_])/i.test(token)) {
           node.classList.remove(token);
         }
@@ -311,12 +330,22 @@
     const text = statusLabel(detail);
     const title = statusDetail(detail);
     const state = stateFor(detail);
+    const style = STATUS_STYLE[appKey] || {};
+    const label = style.text ? (style.text[state] || text) : text;
     for (const node of nodesFor(appKey)) {
-      normalizeLegacyStatusNode(node, state);
-      if (node.dataset.dtD1Status === text && node.title === title) continue;
-      node.dataset.dtD1Status = text;
+      normalizeLegacyStatusNode(node, state, style.variantClasses);
+      if (style.variantByState) {
+        const want = style.variantByState[state];
+        for (const cls of style.variantClasses) {
+          if (cls !== want && node.classList?.contains(cls)) node.classList.remove(cls);
+        }
+        if (want && !node.classList?.contains(want)) node.classList.add(want);
+      }
+      if (node.dataset.dtD1Status === label && node.title === title) continue;
+      node.dataset.dtD1Status = label;
       node.title = title;
-      node.textContent = text;
+      const labelNode = style.labelSelector ? (node.querySelector?.(style.labelSelector) || node) : node;
+      labelNode.textContent = label;
     }
   }
 

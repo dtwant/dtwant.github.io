@@ -50,9 +50,9 @@
     diary: ['#sd-sync-badge-top', '#sd-gaman-sync-status'],
     task_calendar: ['#ntc-sync-badge', '#ntc-sync-badge span:last-child'], calendar: ['#cg-sync'],
     deadline: ['.dm-pill'], tasklist: ['[data-tl-sync-state]', '[data-tl-sync-state] > span:last-child'],
-    payment: ['.cn-badge'], vocal_range: ['#vr-sbadge'], library: ['#bs-sync-status'],
+    payment: ['.cn-header-actions .cn-badge'], vocal_range: ['#vr-sbadge'], library: ['#bs-sync-status'],
     attendance: ['.ag-pill'], weight_log: ['#wl-sync-badge'], shift_clock: ['#sc-sync'],
-    math_memo: ['[data-mm-sync-label]'],
+    taskmanage: ['#km-btn-sync'], math_memo: ['[data-mm-sync-label]'],
     ritual_grid: ['.rg-sync-chip', '[data-rg-sync-label]'], biome_archive: ['#ba-sync'],
     score_book: ['#sb-status']
   };
