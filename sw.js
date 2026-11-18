@@ -35,7 +35,9 @@ const { request} = event;
 if (request.mode!== 'navigate') return; // ページ移動以外は介入しない
 event.respondWith((async () => {
 try {
-const fresh = await fetch(request);
+// cache:'no-cache' が必須。素の fetch(request) だと、ブラウザの HTTP キャッシュ
+// (max-age=600) が新鮮なうちは SW に古いコピーが渡り、ネット優先が無効化される。
+const fresh = await fetch(request, { cache: 'no-cache' });
 if (fresh && fresh.ok) {
 const cache = await caches.open(CACHE_NAME);
 cache.put(request, fresh.clone());
