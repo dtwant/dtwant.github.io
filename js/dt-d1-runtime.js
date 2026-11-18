@@ -3,8 +3,13 @@
  * D1 is used as the live transport only after a tool explicitly opts in.
  * Every record keeps the last successful local/remote baseline. Remote-only
  * changes are pulled, local-only changes are pushed, and when both changed
- * the value with the newer updatedAt wins. Equal or unavailable timestamps
- * remain reviewable conflicts.
+ * the value with the newer updatedAt wins. Equal timestamps remain
+ * reviewable conflicts. For apps on the Stage 4 allowlist
+ * (AUTO_RESOLVE_APP_KEYS), conflicts whose timestamps are only partially
+ * available, or where one side has disappeared, are also auto-resolved by
+ * autoResolveDecision; the losing payload is preserved first (server-side
+ * conflict copies when the Worker supports them, otherwise an on-device
+ * copy) and every auto-resolution is logged. Diary is never auto-resolved.
  */
 (function (root) {
   'use strict';
@@ -38,11 +43,16 @@
   const RECOVERY_HOLD_PREFIX = 'dt_d1_recovery_hold_';
   const PENDING_PREFIX = 'dt_d1_pending_';
   const LAST_SYNC_PREFIX = 'dt_d1_last_sync_';
+  const AUTO_RESOLUTIONS_PREFIX = 'dt_d1_auto_resolutions_';
+  const CONFLICT_COPIES_PREFIX = 'dt_d1_conflict_copies_';
+  // Stage 4 Wave 1: apps whose conflicts may auto-resolve. Diary is excluded
+  // permanently; score_book is deferred (its timestamps are payload-derived).
+  const AUTO_RESOLVE_APP_KEYS = new Set(['feeding', 'timetable', 'movie', 'novel', 'manga', 'calendar']);
   const RUNTIME_STARTED_KEY = '__dtD1RuntimeStarted';
   // D1 migration history: 2026-10-20. JSONBin remains readable only through
   // explicit recovery tooling; normal tool execution must never contact it.
   const LEGACY_JSONBIN_RETIRED = true;
-  const RUNTIME_METADATA_KEY = /^(?:dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup|recovery_backup|recovery_hold|local_updated|force_pull|pending|last_sync|runtime_backup)_|dt_sync_provider_|dt_sync_gateway_(?:url|key)$|dt_sync_device_id$)/i;
+  const RUNTIME_METADATA_KEY = /^(?:dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup|recovery_backup|recovery_hold|local_updated|force_pull|pending|last_sync|runtime_backup|auto_resolutions|conflict_copies)_|dt_sync_provider_|dt_sync_gateway_(?:url|key)$|dt_sync_device_id$)/i;
   const LIFECYCLE_SYNC_EVENTS = new Set(['pageshow', 'focus', 'visibilitychange']);
   let suppressLocalTracking = false;
   const patchedStorageInstances = new WeakSet();
@@ -126,6 +136,57 @@
       return { action: 'conflict', reason: 'both_changed' };
     }
     return { action: 'conflict', reason: 'baseline_mismatch' };
+  }
+
+  // Stage 4: decide whether a conflict that classifyRecord could not settle
+  // may be resolved automatically. Pure and descriptor-only (hash/updatedAt)
+  // so it can be unit-tested without payloads. Returns null to keep the
+  // conflict manual. Rules (STAGE4-DESIGN §3.2):
+  // - both_changed / baseline_missing: the side WITH a timestamp wins.
+  // - baseline_mismatch: retry latest-wins on the descriptors.
+  // - local_missing: with a tracked deletion timestamp, latest-wins against
+  //   the remote (a newer deletion pushes a tombstone); without one, the
+  //   local copy is treated as lost and the remote is pulled.
+  // - remote_missing: re-push the local record (D1 never hard-deletes, so a
+  //   missing remote means the server side was rolled back).
+  // - same_timestamp, invalid records and calendar merge failures stay
+  //   manual. Calendar only auto-resolves the disappearance cases; a failed
+  //   field-level merge must not fall back to record-level latest-wins.
+  function autoResolveDecision({ appKey, reason, local, remote }) {
+    if (appKey === 'diary') return null;
+    if (!AUTO_RESOLVE_APP_KEYS.has(appKey)) return null;
+    const localTs = timestampMs(local?.updatedAt);
+    const remoteTs = timestampMs(remote?.updatedAt);
+    switch (reason) {
+      case 'both_changed':
+      case 'baseline_missing': {
+        if (appKey === 'calendar') return null;
+        if (localTs !== null && remoteTs === null) return { action: 'push', winner: 'local', note: 'timestamp_side_wins' };
+        if (remoteTs !== null && localTs === null) return { action: 'pull', winner: 'remote', note: 'timestamp_side_wins' };
+        return null;
+      }
+      case 'baseline_mismatch': {
+        if (appKey === 'calendar') return null;
+        if (localTs !== null && remoteTs !== null && localTs !== remoteTs) {
+          return localTs > remoteTs
+            ? { action: 'push', winner: 'local', note: 'baseline_mismatch_lww' }
+            : { action: 'pull', winner: 'remote', note: 'baseline_mismatch_lww' };
+        }
+        return null;
+      }
+      case 'local_missing': {
+        // local.hash is null here; local.updatedAt, when present, is the
+        // tracked deletion time from dt_d1_local_updated_<appKey>.
+        if (localTs === null) return { action: 'pull', winner: 'remote', note: 'local_missing_no_trace' };
+        if (remoteTs !== null && remoteTs > localTs) return { action: 'pull', winner: 'remote', note: 'remote_newer_than_delete' };
+        if (remoteTs !== null && remoteTs < localTs) return { action: 'push_tombstone', winner: 'deleted', note: 'delete_newer_than_remote' };
+        return null;
+      }
+      case 'remote_missing':
+        return { action: 'push', winner: 'local', note: 'remote_missing_recreate' };
+      default:
+        return null;
+    }
   }
 
   function calendarPayloadValue(payload) {
@@ -462,6 +523,76 @@
     } catch (_) { /* local and D1 payloads are still left untouched */ }
   }
 
+  // Stage 4: log of automatic resolutions (ring buffer, newest last).
+  function appendAutoResolution(storage, appKey, entry) {
+    if (appKey === 'diary' || !entry?.recordKey) return;
+    const key = `${AUTO_RESOLUTIONS_PREFIX}${appKey}`;
+    try {
+      let entries = [];
+      try {
+        const parsed = JSON.parse(storage.getItem(key) || 'null');
+        if (parsed?.version === 1 && Array.isArray(parsed.entries)) entries = parsed.entries;
+      } catch (_) { /* a missing or invalid log starts fresh */ }
+      entries.push(entry);
+      if (entries.length > 50) entries = entries.slice(-50);
+      storage.setItem(key, JSON.stringify({
+        schema: 'dt-world-d1-auto-resolutions', version: 1, appKey, entries,
+        updatedAt: new Date().toISOString()
+      }));
+    } catch (_) { /* the log is diagnostic; the resolution itself stands */ }
+  }
+
+  function readAutoResolutions(storage, appKey) {
+    try {
+      const parsed = JSON.parse(storage.getItem(`${AUTO_RESOLUTIONS_PREFIX}${appKey}`) || '');
+      if (parsed?.version === 1 && Array.isArray(parsed.entries)) return parsed.entries;
+    } catch (_) { /* invalid log is treated as empty */ }
+    return [];
+  }
+
+  // Stage 4: on-device copies of payloads that lost an auto-resolution
+  // (fallback when the Worker's conflict-copies endpoint is unavailable).
+  function appendConflictCopy(storage, appKey, copy) {
+    if (appKey === 'diary' || !copy?.recordKey || !copy.payload) return false;
+    const key = `${CONFLICT_COPIES_PREFIX}${appKey}`;
+    try {
+      let copies = [];
+      try {
+        const parsed = JSON.parse(storage.getItem(key) || 'null');
+        if (parsed?.version === 1 && Array.isArray(parsed.copies)) copies = parsed.copies;
+      } catch (_) { /* missing or invalid copies start fresh */ }
+      copies.push(copy);
+      if (copies.length > 20) copies = copies.slice(-20);
+      storage.setItem(key, JSON.stringify({
+        schema: 'dt-world-d1-conflict-copies', version: 1, appKey, copies,
+        updatedAt: new Date().toISOString()
+      }));
+      return true;
+    } catch (_) { return false; }
+  }
+
+  function readConflictCopies(storage, appKey) {
+    try {
+      const parsed = JSON.parse(storage.getItem(`${CONFLICT_COPIES_PREFIX}${appKey}`) || '');
+      if (parsed?.version === 1 && Array.isArray(parsed.copies)) return parsed.copies;
+    } catch (_) { /* invalid copies are treated as empty */ }
+    return [];
+  }
+
+  // Preserve the payload an auto-resolution is about to discard. Server-side
+  // first (Worker conflict-copies); on any failure, keep an on-device copy.
+  // Never throws and never blocks the resolution itself.
+  async function preserveLoserCopy({ client, storage, appKey, deviceId, copy }) {
+    if (appKey === 'diary' || !copy?.payload) return 'none';
+    if (client && typeof client.addConflictCopies === 'function') {
+      try {
+        const result = await client.addConflictCopies(appKey, [copy], { deviceId });
+        if (result?.ok) return 'server';
+      } catch (_) { /* fall through to the on-device copy */ }
+    }
+    return appendConflictCopy(storage, appKey, copy) ? 'device' : 'none';
+  }
+
   function readForcePullState(storage, appKey) {
     try {
       const parsed = JSON.parse(storage.getItem(`${FORCE_PULL_PREFIX}${appKey}`) || '');
@@ -700,6 +831,7 @@
     const pushChanges = [];
     const mergedCalendarEntries = [];
     const conflicts = [];
+    const autoResolved = [];
     const nextRecords = { ...(previous.records || {}) };
 
     for (const recordKey of recordKeys) {
@@ -745,13 +877,15 @@
       } : null;
       const localChangedSinceBaseline = Boolean(localDescriptor && previousRecord
         && localDescriptor.hash !== (previousRecord.localHash ?? null));
-      if (localChangedSinceBaseline && localDescriptor.updatedAtSource === 'metadata') {
+      if (localChangedSinceBaseline && localDescriptor.updatedAtSource === 'metadata' && localDescriptor.hash !== null) {
         // The local timestamp can survive a cutover or an older browser
         // session even after the payload changes. Once the hash proves a
         // local edit happened after the last baseline, the observation time
         // is the only safe timestamp for latest-wins ordering. This also
         // lets a phone retry a previously rejected push without remaining
-        // stuck behind a stale timestamp.
+        // stuck behind a stale timestamp. A missing payload (hash === null)
+        // is a deletion, not an edit: its tracked timestamp IS the deletion
+        // time and must survive for latest-wins against the remote.
         localDescriptor.updatedAt = new Date().toISOString();
         writeLocalUpdatedAt(storage, appKey, recordKey, localDescriptor.updatedAt);
       }
@@ -779,7 +913,7 @@
         && remoteDescriptor?.hash === (previousRecord.remoteHash ?? null)
       );
       const forcedRevision = remainingForcePull[recordKey];
-      const decision = localDeletedSinceBaseline
+      let decision = localDeletedSinceBaseline
         ? { action: 'push', expectedRevision: remoteDescriptor?.revision ?? null, deleted: true, reason: 'local_deleted' }
         : remoteDeletedSinceBaseline
         ? { action: 'pull', reason: 'remote_deleted' }
@@ -809,8 +943,44 @@
             }
           }
         }
-        conflicts.push({ recordKey, reason: decision.reason });
-        continue;
+        // Stage 4: before parking this as a manual conflict, try the
+        // automatic rules. The losing payload is preserved first and the
+        // decision is logged; the win then rides the normal pull/push
+        // paths below by rewriting `decision`.
+        const auto = autoResolveDecision({
+          appKey, reason: decision.reason, local: localDescriptor, remote: remoteDescriptor
+        });
+        if (!auto) {
+          conflicts.push({ recordKey, reason: decision.reason });
+          continue;
+        }
+        const loserIsRemote = auto.winner === 'local' || auto.winner === 'deleted';
+        const loserPayload = loserIsRemote ? (remoteRecord?.payload ?? null) : (local?.payload ?? null);
+        const copyLocation = await preserveLoserCopy({
+          client, storage, appKey, deviceId: settings.deviceId,
+          copy: {
+            recordKey, reason: decision.reason, winner: auto.winner,
+            payload: loserPayload,
+            loserUpdatedAt: loserIsRemote ? (remoteDescriptor?.updatedAt ?? null) : (localDescriptor?.updatedAt ?? null),
+            loserHash: loserIsRemote ? (remoteDescriptor?.hash ?? null) : (localDescriptor?.hash ?? null),
+            winnerHash: loserIsRemote ? (localDescriptor?.hash ?? null) : (remoteDescriptor?.hash ?? null),
+            at: new Date().toISOString()
+          }
+        });
+        appendAutoResolution(storage, appKey, {
+          recordKey, reason: decision.reason, winner: auto.winner, note: auto.note,
+          loserHash: loserIsRemote ? (remoteDescriptor?.hash ?? null) : (localDescriptor?.hash ?? null),
+          winnerHash: loserIsRemote ? (localDescriptor?.hash ?? null) : (remoteDescriptor?.hash ?? null),
+          copyLocation, at: new Date().toISOString()
+        });
+        autoResolved.push({ recordKey, reason: decision.reason, winner: auto.winner });
+        if (auto.action === 'pull') {
+          decision = { action: 'pull', reason: `auto_${auto.note}` };
+        } else if (auto.action === 'push_tombstone') {
+          decision = { action: 'push', deleted: true, expectedRevision: remoteDescriptor?.revision ?? null, reason: `auto_${auto.note}` };
+        } else {
+          decision = { action: 'push', expectedRevision: remoteDescriptor?.revision ?? null, reason: `auto_${auto.note}` };
+        }
       }
       if (decision.action === 'pull') {
         const entry = candidateEntryForRemote(remoteRecord);
@@ -990,11 +1160,11 @@
     writeConflictState(storage, appKey, conflicts);
     const pulledCount = pullEntries.length + stalePullEntries.length;
     const changed = pulledCount + pushedCount;
-    if (conflicts.length) return { ok: true, status: 'conflict', changed, pulled: pulledCount, pushed: pushedCount, conflicts };
-    if (pulledCount && pushedCount) return { ok: true, status: 'synced', changed, pulled: pulledCount, pushed: pushedCount };
-    if (pulledCount) return { ok: true, status: 'pulled', changed: pulledCount, pulled: pulledCount, pushed: 0 };
-    if (pushedCount) return { ok: true, status: 'pushed', changed: pushedCount, pulled: 0, pushed: pushedCount };
-    return { ok: true, status: 'unchanged', changed: 0, pulled: 0, pushed: 0 };
+    if (conflicts.length) return { ok: true, status: 'conflict', changed, pulled: pulledCount, pushed: pushedCount, conflicts, autoResolved };
+    if (pulledCount && pushedCount) return { ok: true, status: 'synced', changed, pulled: pulledCount, pushed: pushedCount, autoResolved };
+    if (pulledCount) return { ok: true, status: 'pulled', changed: pulledCount, pulled: pulledCount, pushed: 0, autoResolved };
+    if (pushedCount) return { ok: true, status: 'pushed', changed: pushedCount, pulled: 0, pushed: pushedCount, autoResolved };
+    return { ok: true, status: 'unchanged', changed: 0, pulled: 0, pushed: 0, autoResolved };
   }
 
   function readConflictState(storage, appKey) {
@@ -1023,7 +1193,8 @@
         pulled: Number.isInteger(result?.pulled) ? result.pulled : 0,
         pushed: Number.isInteger(result?.pushed) ? result.pushed : 0,
         changed: Number.isInteger(result?.changed) ? result.changed : 0,
-        conflictCount: Array.isArray(result?.conflicts) ? result.conflicts.length : 0
+        conflictCount: Array.isArray(result?.conflicts) ? result.conflicts.length : 0,
+        autoResolvedCount: Array.isArray(result?.autoResolved) ? result.autoResolved.length : 0
       }));
     } catch (_) { /* the record is diagnostic only; sync itself is unaffected */ }
   }
@@ -1483,8 +1654,8 @@
     };
   }
 
-  root.DTSyncRuntimeCore = { appKeyFromPath, stableStringify, classifyRecord, mergeCalendarPayloads, explicitResolutionDecision, normalizeRuntimeError, enabledAppKeys, automaticAppKeys, isLegacySyncDisabled, isRecoveryHeld, shouldBlockLegacyJsonBin, shouldScheduleStorageKey, shouldSyncOnLifecycle, shouldReloadAfterPull };
-  root.DTD1Runtime = root.DTD1Runtime || { appKeyFromPath, syncApp, syncEnabledApps, classifyRecord, resolveConflicts, pendingConflicts: (key, storage = root.localStorage) => readConflictState(storage, key).conflicts, enabledAppKeys };
+  root.DTSyncRuntimeCore = { appKeyFromPath, stableStringify, classifyRecord, mergeCalendarPayloads, explicitResolutionDecision, autoResolveDecision, normalizeRuntimeError, enabledAppKeys, automaticAppKeys, isLegacySyncDisabled, isRecoveryHeld, shouldBlockLegacyJsonBin, shouldScheduleStorageKey, shouldSyncOnLifecycle, shouldReloadAfterPull };
+  root.DTD1Runtime = root.DTD1Runtime || { appKeyFromPath, syncApp, syncEnabledApps, classifyRecord, resolveConflicts, pendingConflicts: (key, storage = root.localStorage) => readConflictState(storage, key).conflicts, autoResolutions: (key, storage = root.localStorage) => readAutoResolutions(storage, key), conflictCopies: (key, storage = root.localStorage) => readConflictCopies(storage, key), enabledAppKeys };
   // Legacy shortcodes remain responsible for rendering their UI, but their
   // JSONBin routines must stop at the provider cutover boundary.
   root.DTD1LegacySync = {

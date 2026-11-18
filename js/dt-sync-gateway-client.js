@@ -226,7 +226,22 @@
       });
     }
 
-    return { getSnapshot, pushChanges, createDailyBackup, resolveRecords, resolveFromSourceSnapshot };
+    async function addConflictCopies(appKey, copies, { deviceId = 'browser' } = {}) {
+      if (!APP_KEY.test(String(appKey || ''))) return { ok: false, reason: 'invalid_app', data: null };
+      if (!Array.isArray(copies) || copies.length === 0 || copies.length > 100) return { ok: false, reason: 'invalid_copies', data: null };
+      if (!/^[A-Za-z0-9_-]{1,128}$/.test(String(deviceId || ''))) return { ok: false, reason: 'invalid_device', data: null };
+      return requestJson(`/v1/apps/${encodeURIComponent(appKey)}/conflict-copies`, {
+        method: 'POST',
+        body: JSON.stringify({ deviceId, copies })
+      });
+    }
+
+    async function listConflictCopies(appKey) {
+      if (!APP_KEY.test(String(appKey || ''))) return { ok: false, reason: 'invalid_app', data: null };
+      return requestJson(`/v1/apps/${encodeURIComponent(appKey)}/conflict-copies`);
+    }
+
+    return { getSnapshot, pushChanges, createDailyBackup, resolveRecords, resolveFromSourceSnapshot, addConflictCopies, listConflictCopies };
   }
 
   root.DTSyncGatewayClient = { create, createLive };
