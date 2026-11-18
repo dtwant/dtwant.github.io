@@ -235,6 +235,126 @@
     dialogFocus: new WeakMap()
   };
 
+  // ---- スコアブック連携（LINK-SPEC：スコアブック → Report の片方向） ----
+  // 正本はスコアブック。Report 側にコピーは保存せず、開くたびに
+  // D1 ランタイムが保持する最新スナップショットを参照する。
+  const SB_STORAGE_KEY = 'dt_score_book_v1';
+  const SB_SCORE_BOOK_URL = '/0723/score-book/';
+  const SB_SUBJECT_TO_CODE = {
+    'japanese-expression': '0030', 'classical-literature': '0040',
+    'ethics-1': '0031', 'ethics-2': '0041', 'liberal-arts-1': '0042',
+    'calculus-1': '0046', 'calculus-2': '0047',
+    'linear-algebra-1': '0048', 'linear-algebra-2': '0043',
+    'physics-2a': '0049', 'physics-2b': '0044',
+    'chemistry-3': '0050', 'chemistry-4': '0051',
+    'natural-sciences': '0052', 'physical-education-2': '0027',
+    'english-2a': '0032', 'english-2b': '0033', 'english-logic-expression': '0029',
+    'electrical-electronic-engineering': '0038', 'information-processing-2': '0036',
+    'logic-circuits-1': '0037', 'logic-circuits-2': '0045', 'computers-1a': '0039',
+    'engineering-practice-1': '0034', 'engineering-practice-2': '0035'
+  };
+  // 試験なし科目：前期の期末試験欄には公式成績と同値が入っているため実点として連携しない
+  const SB_NO_EXAM_SUBJECTS = new Set(['liberal-arts-1', 'physical-education-2', 'engineering-practice-1']);
+  const sbLink = { status: 'unknown', byCode: new Map(), count: 0, signature: '' };
+
+  function scoreBookCodeFor(subject) {
+    if (!subject) return null;
+    if (subject.syllabusCode) return subject.syllabusCode;
+    if (LEGACY_ID_TO_CODE[subject.id]) return LEGACY_ID_TO_CODE[subject.id];
+    const match = /^syll_2026_(\d{4})$/.exec(String(subject.id || ''));
+    return match ? match[1] : null;
+  }
+
+  function linkedExamScore(subject, semester, examType) {
+    if (!['mid', 'final'].includes(examType)) return undefined;
+    const code = scoreBookCodeFor(subject);
+    if (!code) return undefined;
+    const terms = sbLink.byCode.get(code);
+    if (!terms) return undefined;
+    const value = terms[semester]?.[examType];
+    return typeof value === 'number' ? value : undefined;
+  }
+
+  function withLinkedScore(subject, item) {
+    if (!item?.isExam) return item;
+    const linked = linkedExamScore(subject, item.semester || state.semester, item.examType);
+    if (linked === undefined) return item;
+    // 連携値がある間はスコアブックの実点を正とする。Report 側の保存値は
+    // 変更せず、表示・計算のときだけ重ねる（連携が切れたら手入力値に戻る）。
+    return { ...item, score: linked, outOf: 100, isSkipped: false, submitted: 'done', sbLinked: true };
+  }
+
+  function readScoreBookLink() {
+    sbLink.byCode.clear();
+    sbLink.count = 0;
+    let payload = null;
+    try {
+      const raw = localStorage.getItem(SB_STORAGE_KEY);
+      if (raw) payload = JSON.parse(raw);
+    } catch (error) {
+      sbLink.status = 'error';
+      sbLink.signature = 'error';
+      return;
+    }
+    if (!payload || typeof payload !== 'object' || !payload.records || typeof payload.records !== 'object') {
+      sbLink.status = 'unlinked';
+      sbLink.signature = 'unlinked';
+      return;
+    }
+    Object.entries(payload.records).forEach(([sbId, terms]) => {
+      const code = SB_SUBJECT_TO_CODE[sbId];
+      if (!code || !terms || typeof terms !== 'object') return;
+      const entry = {};
+      ['first', 'second'].forEach(semester => {
+        const block = terms[semester];
+        if (!block || typeof block !== 'object') return;
+        const termEntry = {};
+        const mid = numberOrNull(block.midExam);
+        if (mid !== null) termEntry.mid = mid;
+        const finalScore = numberOrNull(block.finalExam);
+        if (finalScore !== null && !(semester === 'first' && SB_NO_EXAM_SUBJECTS.has(sbId))) {
+          termEntry.final = finalScore;
+        }
+        if (Object.keys(termEntry).length) entry[semester] = termEntry;
+      });
+      if (Object.keys(entry).length) {
+        sbLink.byCode.set(code, entry);
+        sbLink.count += Object.values(entry).reduce((sum, term) => sum + Object.keys(term).length, 0);
+      }
+    });
+    sbLink.status = 'linked';
+    sbLink.signature = JSON.stringify([...sbLink.byCode.entries()]);
+  }
+
+  async function refreshScoreBookLink() {
+    try {
+      if (window.DTD1Runtime?.isEnabled?.('score_book')) {
+        await window.DTD1Runtime.syncAppNow('score_book');
+      }
+    } catch (error) { /* 取得に失敗しても手元の控えで続行する */ }
+    readScoreBookLink();
+    renderLinkStatus();
+    renderApp();
+  }
+
+  function renderLinkStatus() {
+    const element = $('rc-link-status');
+    if (!element) return;
+    if (sbLink.status === 'linked') {
+      element.hidden = false;
+      element.className = 'rc5-link-status is-linked';
+      element.innerHTML = `<span class="rc5-link-dot" aria-hidden="true"></span><span class="rc5-link-text">スコアブック連携中 · 実点 ${sbLink.count} 件を参照しています</span><a class="rc5-link-action" href="${SB_SCORE_BOOK_URL}">スコアブックで編集</a>`;
+    } else if (sbLink.status === 'error') {
+      element.hidden = false;
+      element.className = 'rc5-link-status is-error';
+      element.innerHTML = '<span class="rc5-link-dot" aria-hidden="true"></span><span class="rc5-link-text">スコアブックの記録を読めませんでした · 実点は手入力できます</span>';
+    } else if (sbLink.status === 'unlinked') {
+      element.hidden = false;
+      element.className = 'rc5-link-status';
+      element.innerHTML = '<span class="rc5-link-dot" aria-hidden="true"></span><span class="rc5-link-text">スコアブック未連携 · 実点は手入力できます</span>';
+    }
+  }
+
   function structuredCloneSafe(value) {
     if (typeof structuredClone === 'function') return structuredClone(value);
     return JSON.parse(JSON.stringify(value));
@@ -775,9 +895,9 @@
 
   function calculateSubjectGrade(subject, semester = state.semester) {
     const categories = Array.isArray(subject.categories) ? subject.categories : [];
-    const items = subject.period === 'full'
+    const items = (subject.period === 'full'
       ? SEMESTERS.flatMap(term => getTermItems(subject.id, term))
-      : getTermItems(subject.id, semester);
+      : getTermItems(subject.id, semester)).map(item => withLinkedScore(subject, item));
     const relevantSemesters = subject.period === 'full' ? SEMESTERS : [semester];
     const activeCategories = categories.filter(categoryValue => {
       if (inferCategoryKind(categoryValue) !== 'exam' || categoryValue.examRole !== 'mid') return true;
@@ -1231,6 +1351,22 @@
     }
     container.innerHTML = exams.map(item => {
       const categoryValue = getCategory(subject, item.categoryId);
+      const linked = linkedExamScore(subject, state.semester, item.examType);
+      if (linked !== undefined) {
+        return `
+        <div class="rc5-exam-row is-linked" data-item-id="${escapeHTML(item.id)}">
+          <div class="rc5-exam-name">
+            <strong>${escapeHTML(item.name)}</strong>
+            <span>${escapeHTML(categoryValue?.name || '試験')} · スコアブックの実点を連携中</span>
+          </div>
+          <div class="rc5-mini-score">
+            <input type="number" inputmode="decimal" data-exam-field="score" value="${linked}" aria-label="${escapeHTML(item.name)}の得点（スコアブック連携）" disabled>
+            <span>/</span>
+            <input type="number" inputmode="decimal" data-exam-field="outOf" value="100" aria-label="${escapeHTML(item.name)}の満点" disabled>
+          </div>
+          <a class="rc5-link-badge" href="${SB_SCORE_BOOK_URL}">連携中</a>
+        </div>`;
+      }
       const score = numberOrNull(item.score);
       const custom = !['mid', 'final'].includes(item.examType);
       return `
@@ -1810,6 +1946,7 @@
     if (!subject) return;
     const item = getTermItems(subject.id).find(entry => entry.id === row.dataset.itemId);
     if (!item) return;
+    if (linkedExamScore(subject, state.semester, item.examType) !== undefined) return;
     const validated = validateScoreFields(
       row.querySelector('[data-exam-field="score"]'),
       row.querySelector('[data-exam-field="outOf"]')
@@ -1830,6 +1967,7 @@
     const items = getTermItems(subject.id);
     const item = items.find(entry => entry.id === row.dataset.itemId);
     if (!item) return;
+    if (linkedExamScore(subject, state.semester, item.examType) !== undefined) return;
     if (action === 'skip') {
       item.isSkipped = !item.isSkipped;
       item.updatedAt = Date.now();
@@ -3042,6 +3180,16 @@
         if (isJsonBinId(cached)) await setSyncKey(cached);
       }
       renderApp();
+      refreshScoreBookLink();
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState !== 'visible') return;
+        const before = sbLink.signature;
+        readScoreBookLink();
+        if (sbLink.signature !== before) {
+          renderLinkStatus();
+          renderApp();
+        }
+      });
       if (state.syncConfig.syncEnabled && isJsonBinId(state.syncConfig.binId)) {
         enqueueSync(() => syncWithCloud({ silent: true }));
       }
@@ -3065,6 +3213,8 @@
     mergePackages,
     prepareImportedPackage,
     packageData,
+    getScoreBookLink: () => ({ status: sbLink.status, count: sbLink.count }),
+    readScoreBookLink,
     getState: () => ({
       settings: structuredCloneSafe(state.settings),
       subjects: structuredCloneSafe(state.subjects),

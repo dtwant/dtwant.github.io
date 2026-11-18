@@ -2160,3 +2160,363 @@ body.rc5-lock-scroll {
     transition-duration: .01ms !important;
   }
 }
+
+/* ============================================================
+   Ledger reskin (2026-11-18) — スコアブックと世界観を揃える上書き層。
+   紺×金の台帳デザイン。数値が主役、罫と余白で階層を作る。
+   ============================================================ */
+:root {
+  --rc5-bg: #070a12;
+  --rc5-surface: #101623;
+  --rc5-surface-raised: #16203a;
+  --rc5-surface-soft: #0b101d;
+  --rc5-border: rgba(216, 224, 242, 0.1);
+  --rc5-border-strong: rgba(216, 224, 242, 0.22);
+  --rc5-gold: #c9a45c;
+  --rc5-gold-bright: #e6cd8f;
+  --rc5-gold-soft: rgba(201, 164, 92, 0.13);
+  --rc5-gold-line: rgba(201, 164, 92, 0.38);
+}
+
+.rc5-shell {
+  background:
+    radial-gradient(ellipse 90% 34rem at 50% -12rem, rgba(201, 164, 92, 0.1), transparent 70%),
+    linear-gradient(168deg, #0d1526 0%, #0a0f1c 46%, #070a12 100%);
+}
+
+.rc5-shell button:focus-visible,
+.rc5-shell a:focus-visible,
+.rc5-shell input:focus-visible,
+.rc5-shell select:focus-visible,
+.rc5-shell textarea:focus-visible,
+.rc5-dialog button:focus-visible,
+.rc5-dialog a:focus-visible,
+.rc5-dialog input:focus-visible,
+.rc5-dialog select:focus-visible,
+.rc5-dialog textarea:focus-visible {
+  outline-color: rgba(230, 205, 143, 0.85);
+}
+
+/* --- ヘッダー --- */
+.rc5-topbar {
+  border-bottom: 1px solid var(--rc5-gold-line);
+  background: rgba(9, 13, 23, 0.88);
+}
+
+.rc5-eyebrow {
+  color: var(--rc5-gold-bright);
+  letter-spacing: 0.12em;
+}
+
+.rc5-kicker {
+  color: var(--rc5-gold);
+}
+
+/* --- 学期タブ --- */
+.rc5-term-nav {
+  border-radius: 13px;
+  background: rgba(13, 19, 33, 0.92);
+}
+
+.rc5-term-tab.is-active {
+  color: var(--rc5-gold-bright);
+  border-color: rgba(201, 164, 92, 0.35);
+  background: #1b2740;
+  box-shadow: inset 0 -2px 0 var(--rc5-gold), 0 3px 12px rgba(0, 0, 0, 0.22);
+}
+
+/* --- スコアブック連携ステータス --- */
+.rc5-link-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  max-width: 1180px;
+  margin: 0 auto 18px;
+  padding: 9px 13px;
+  color: var(--rc5-text-secondary);
+  border: 1px solid var(--rc5-border);
+  border-radius: 12px;
+  background: rgba(16, 22, 35, 0.72);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.rc5-link-status[hidden] {
+  display: none;
+}
+
+.rc5-link-dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--rc5-text-tertiary);
+}
+
+.rc5-link-status.is-linked .rc5-link-dot {
+  background: var(--rc5-green);
+  box-shadow: 0 0 0 3px rgba(52, 212, 123, 0.14);
+}
+
+.rc5-link-status.is-error .rc5-link-dot {
+  background: var(--rc5-red);
+  box-shadow: 0 0 0 3px rgba(255, 98, 107, 0.14);
+}
+
+.rc5-link-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.rc5-link-action {
+  flex: 0 0 auto;
+  color: var(--rc5-gold-bright);
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+/* --- 見出し（罫で区切る） --- */
+.rc5-section-heading {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rc5-border);
+}
+
+/* --- 概要：4つの数値を1枚の台帳バンドに --- */
+.rc5-metric-grid {
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--rc5-border);
+  border-radius: var(--rc5-radius-lg);
+  background: linear-gradient(160deg, rgba(23, 31, 50, 0.92), rgba(12, 17, 29, 0.94));
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+}
+
+.rc5-metric {
+  min-height: 118px;
+  padding: 20px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.rc5-metric + .rc5-metric {
+  border-left: 1px solid var(--rc5-border);
+}
+
+.rc5-metric-primary {
+  border-color: transparent;
+  background: linear-gradient(150deg, rgba(201, 164, 92, 0.13), transparent 62%);
+}
+
+.rc5-metric-ring {
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: none;
+  place-items: start;
+}
+
+.rc5-metric-ring::before {
+  display: none;
+}
+
+.rc5-metric-ring span {
+  font-size: 36px;
+  font-weight: 740;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.rc5-metric-value {
+  font-size: 30px;
+  font-variant-numeric: tabular-nums;
+}
+
+.rc5-metric-label {
+  letter-spacing: 0.05em;
+}
+
+/* --- 主ボタンは金 --- */
+.rc5-action-button-primary,
+.rc5-primary-button {
+  color: #20180a;
+  border-color: rgba(230, 205, 143, 0.55);
+  background: linear-gradient(180deg, #dec07c, #bd9750);
+  box-shadow: 0 8px 22px rgba(160, 124, 54, 0.25), inset 0 1px rgba(255, 255, 255, 0.35);
+  font-weight: 700;
+}
+
+.rc5-action-button-primary:hover,
+.rc5-primary-button:hover {
+  border-color: rgba(240, 219, 160, 0.8);
+  background: linear-gradient(180deg, #e8cd8b, #c8a356);
+}
+
+.rc5-add-button {
+  color: var(--rc5-gold-bright);
+  border-color: rgba(201, 164, 92, 0.42);
+}
+
+.rc5-add-button:hover {
+  border-color: rgba(201, 164, 92, 0.7);
+  background: var(--rc5-gold-soft);
+}
+
+/* --- クイック入力 --- */
+.rc5-quick-entry {
+  background: rgba(16, 22, 35, 0.66);
+}
+
+/* --- 科目リスト：台帳の行 --- */
+.rc5-subject-card {
+  border-radius: var(--rc5-radius-md);
+  background: linear-gradient(160deg, rgba(22, 30, 48, 0.92), rgba(12, 17, 29, 0.95));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.rc5-subject-card:hover {
+  border-color: rgba(201, 164, 92, 0.45);
+  transform: none;
+}
+
+.rc5-subject-card:active {
+  transform: scale(0.99);
+}
+
+.rc5-subject-score {
+  font-size: 27px;
+  font-variant-numeric: tabular-nums;
+}
+
+.rc5-subject-source-badge {
+  letter-spacing: 0.07em;
+}
+
+.rc5-filter-row button.is-active {
+  color: var(--rc5-gold-bright);
+  border-color: rgba(201, 164, 92, 0.42);
+  background: var(--rc5-gold-soft);
+}
+
+/* --- シラバス参照は脚注に --- */
+.rc5-reference-card {
+  min-height: 0;
+  margin: 4px auto 0;
+  padding: 16px 4px 0;
+  border: 0;
+  border-top: 1px solid var(--rc5-border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.rc5-reference-icon {
+  width: 30px;
+  height: 30px;
+  color: var(--rc5-gold);
+  border: 0;
+  background: transparent;
+}
+
+.rc5-reference-link {
+  color: var(--rc5-gold-bright);
+}
+
+/* --- ドロワー／シート --- */
+.rc5-drawer-frame,
+.rc5-sheet-frame {
+  background: linear-gradient(175deg, #131c30, #0c1220);
+}
+
+.rc5-dialog-header {
+  border-bottom: 1px solid var(--rc5-gold-line);
+}
+
+.rc5-score-hero {
+  border-color: var(--rc5-gold-line);
+  background: linear-gradient(150deg, rgba(201, 164, 92, 0.13), rgba(13, 19, 33, 0.85) 58%);
+}
+
+.rc5-score-main strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.rc5-score-main em {
+  color: var(--rc5-gold-bright);
+  border-color: rgba(201, 164, 92, 0.4);
+  background: var(--rc5-gold-soft);
+}
+
+/* --- 試験行：連携中 --- */
+.rc5-exam-row.is-linked {
+  border-radius: 10px;
+  background: var(--rc5-gold-soft);
+  box-shadow: inset 2px 0 0 var(--rc5-gold);
+}
+
+.rc5-exam-row.is-linked .rc5-mini-score input:disabled {
+  color: var(--rc5-gold-bright);
+  -webkit-text-fill-color: var(--rc5-gold-bright);
+  opacity: 1;
+}
+
+.rc5-link-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 11px;
+  color: var(--rc5-gold-bright);
+  border: 1px solid rgba(201, 164, 92, 0.45);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.rc5-link-badge:active {
+  transform: scale(0.96);
+}
+
+/* --- 空状態 --- */
+.rc5-empty-icon {
+  color: var(--rc5-gold);
+}
+
+@media (max-width: 720px) {
+  .rc5-metric-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .rc5-metric {
+    min-height: 104px;
+    padding: 16px;
+  }
+
+  .rc5-metric + .rc5-metric {
+    border-left: 0;
+  }
+
+  .rc5-metric:nth-child(even) {
+    border-left: 1px solid var(--rc5-border);
+  }
+
+  .rc5-metric:nth-child(n + 3) {
+    border-top: 1px solid var(--rc5-border);
+  }
+
+  .rc5-metric-primary {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .rc5-metric-ring span {
+    font-size: 30px;
+  }
+
+  .rc5-metric-value {
+    font-size: 26px;
+  }
+}

@@ -330,7 +330,8 @@
       ${viewOnly ? '' : bulkButton(terms[0], 'midExam', annual)}</div>` : '';
     const entryButtons = viewOnly ? '' : `<div class="sb-entry-actions${annual ? ' sb-entry-actions-annual' : ''}" data-sb-edit-only>${terms.map(term =>
       `${!empty || term !== terms[0] ? bulkButton(term, 'midExam', annual) : ''}${bulkButton(term, 'finalExam', annual)}`).join('')}</div>`;
-    panel.innerHTML = `<div class="sb-section-heading">
+    const progress = visibleSubjects.length ? totals.completed / visibleSubjects.length : 0;
+    panel.innerHTML = `<div class="sb-section-heading" style="--sb-progress:${progress}">
       <div><h2 id="sb-section-title">${TERMS[termView]}</h2>
         <p class="sb-section-summary"><strong>${totals.completed}/${visibleSubjects.length}</strong> 記録済み
           <span>${totals.entered}/${visibleSubjects.length} 入力あり</span>
