@@ -17,9 +17,9 @@
     grade: 2
   });
   const BIN_URL = 'https://api.jsonbin.io/v3/b';
-  const SYLLAGET_PAGE = 'https://syllaget.crystaworld.dev/schools/50/2026/15';
-  const SYLLAGET_DETAIL = 'https://syllaget-api.crystaworld.dev/api/schools/50/details/2026/15/';
-  const REFERENCE_DATE = '2026-08-09';
+  const SYLLAGET_PAGE = 'https://syllabus.kosen-k.go.jp/Pages/PublicSubjects?school_id=50&department_id=15&year=2026&lang=ja';
+  const SYLLAGET_DETAIL = 'https://syllabus.kosen-k.go.jp/Pages/PublicSyllabus?school_id=50&department_id=15&year=2025&lang=ja&subject_id=';
+  const REFERENCE_DATE = '2026-11-18';
   const SEMESTERS = ['first', 'second'];
   const SEMESTER_LABELS = { first: '前期', second: '後期' };
   const PERIOD_LABELS = { first: '前期', second: '後期', full: '通年' };
@@ -58,14 +58,12 @@
   });
 
   // 2026年度 鹿児島高専 情報工学科2年。保健体育の別クラス0028は0027に集約。
-  // Syllagetは本サイトOriginからのAPIアクセスを許可しないため、出典日付きで静的収録する。
+  // 高専Webシラバス（公式）の各科目詳細ページと全件照合済み（照合日 2026-11-18）。
+  // 単位・開講期・評価割合が公式と一致することを確認したものだけを収録する。
   const SYLLABUS_PRESETS = [
     preset('0027', '保健体育Ⅱ', 2, 'full', 'none', [
-      category('skill', '技能', 30, 'other'),
-      category('sport_test', 'スポーツテスト', 30, 'other'),
-      category('participation', '態度・意欲', 30, 'participation'),
-      category('report', 'レポート', 10, 'assignment')
-    ], '定期試験によらない各種評価'),
+      category('various', '各種評価', 100, 'other')
+    ], '定期試験によらない各種評価（公式シラバスの評価割合は「各種評価」100%）'),
     preset('0029', '英語論理・表現基礎', 1, 'second', 'none', [
       category('exam', '試験', 50, 'exam', { examRole: 'final' }),
       category('presentation', '授業内発表', 50, 'presentation')
@@ -90,9 +88,9 @@
       category('participation', '平常点', 30, 'participation')
     ], '中間試験の実施を明記'),
     preset('0034', '工学実習Ⅰ', 2, 'first', 'none', [
-      category('presentation', '発表', 30, 'presentation'),
+      category('achievement', '課題達成度（走行タイム等含む）', 30, 'other'),
       category('report', 'レポート', 70, 'assignment')
-    ], '試験0%'),
+    ], '試験0%・課題達成度とレポートで評価'),
     preset('0035', '工学実習Ⅱ', 2, 'second', 'none', [
       category('report_content', '実習レポート内容', 20, 'assignment'),
       category('consideration', '検討課題内容', 20, 'assignment'),
@@ -102,20 +100,20 @@
     preset('0036', '情報処理Ⅱ', 2, 'full', 'alternative', [
       category('exam', '試験', 100, 'exam')
     ], '通常の中間試験に代えて単元ごとの試験を実施'),
-    preset('0037', '論理回路Ⅰ', 1, 'first', 'held', [
+    preset('0037', '論理回路Ⅰ', 1, 'first', 'none', [
       category('exam_final', '定期試験', 50, 'exam', { examRole: 'final' }),
-      category('exam_mid', '中間試験', 50, 'exam', { examRole: 'mid' })
-    ]),
+      category('quiz', '確認テスト', 50, 'quiz')
+    ], '中間試験は実施するが非評価（公式シラバス明記）。評価は定期試験と確認テスト'),
     preset('0038', '電気電子工学概論', 1, 'first', 'unknown', [
       category('exam', '試験', 50, 'exam'),
       category('report', 'レポート', 20, 'assignment'),
       category('quiz', '小テスト', 30, 'quiz')
     ]),
     preset('0039', '電子計算機ⅠA', 1, 'second', 'unknown', [
-      category('exam', '試験', 40, 'exam'),
+      category('exam', '試験', 45, 'exam'),
       category('quiz', '小テスト', 25, 'quiz'),
       category('report', 'レポート', 20, 'assignment'),
-      category('participation', '平常点', 15, 'participation')
+      category('participation', '平常点', 10, 'participation')
     ]),
     preset('0040', '古典探求', 1, 'second', 'unknown', [
       category('exam', '定期試験', 40, 'exam'),
@@ -141,10 +139,10 @@
       category('exam', '試験', 70, 'exam'),
       category('other', 'その他', 30, 'other')
     ]),
-    preset('0045', '論理回路Ⅱ', 1, 'second', 'held', [
+    preset('0045', '論理回路Ⅱ', 1, 'second', 'none', [
       category('exam_final', '定期試験', 50, 'exam', { examRole: 'final' }),
-      category('exam_mid', '中間試験', 50, 'exam', { examRole: 'mid' })
-    ]),
+      category('quiz', '確認テスト', 50, 'quiz')
+    ], '中間試験は実施するが非評価（公式シラバス明記）。評価は定期試験と確認テスト'),
     preset('0046', '微分積分１', 2, 'first', 'held', [
       category('exam', '中間・期末試験', 75, 'exam'),
       category('assignment', '小テスト・課題等', 25, 'assignment')
@@ -1404,10 +1402,29 @@
   function renderCategoryStatus(subject) {
     const sum = (subject.categories || []).reduce((total, item) => total + cleanNumber(item.weight, 0), 0);
     const status = $('rc-category-sum-warning');
-    status.classList.toggle('is-warning', Math.abs(sum - 100) > 0.001);
-    status.textContent = Math.abs(sum - 100) <= 0.001
-      ? '配点合計 100% · シラバスと整合'
-      : `配点合計 ${sum}% · 100%になるよう調整してください`;
+    const sumOk = Math.abs(sum - 100) <= 0.001;
+    // 「シラバスと整合」は合計が100%なだけでは表示しない。連携プリセットの
+    // 項目名・配点・種類（配点0の保持項目は除く）と実際に一致したときだけ出す。
+    let matchesSyllabus = null;
+    const presetValue = findPresetForSubject(subject);
+    if (presetValue) {
+      const signature = cats => (cats || [])
+        .filter(item => cleanNumber(item.weight, 0) > 0)
+        .map(item => `${item.name}|${cleanNumber(item.weight, 0)}|${inferCategoryKind(item)}`)
+        .sort()
+        .join('/');
+      matchesSyllabus = signature(subject.categories) === signature(presetValue.categories);
+    }
+    status.classList.toggle('is-warning', !sumOk || matchesSyllabus === false);
+    if (!sumOk) {
+      status.textContent = `配点合計 ${sum}% · 100%になるよう調整してください`;
+    } else if (matchesSyllabus === true) {
+      status.textContent = '配点合計 100% · シラバスと整合';
+    } else if (matchesSyllabus === false) {
+      status.textContent = '配点合計 100% · シラバスと相違';
+    } else {
+      status.textContent = '配点合計 100%';
+    }
   }
 
   function renderAssessments(subject) {
@@ -1753,7 +1770,7 @@
       syllabusCode: presetValue.code,
       syllabusUrl: presetValue.sourceUrl,
       syllabusPage: SYLLAGET_PAGE,
-      evaluationSource: `Syllaget 2026 / ${REFERENCE_DATE}`,
+      evaluationSource: `高専Webシラバス（公式）2026年度 / 照合 ${REFERENCE_DATE}`,
       sourceNote: presetValue.note,
       midtermEvidence: presetValue.midtermEvidence,
       midtermPolicies: { first: presetValue.midtermPolicy, second: presetValue.midtermPolicy },
@@ -1823,7 +1840,7 @@
       syllabusCode: presetValue.code,
       syllabusUrl: presetValue.sourceUrl,
       syllabusPage: SYLLAGET_PAGE,
-      evaluationSource: `Syllaget 2026 / ${REFERENCE_DATE}`,
+      evaluationSource: `高専Webシラバス（公式）2026年度 / 照合 ${REFERENCE_DATE}`,
       sourceNote: presetValue.note,
       midtermEvidence: presetValue.midtermEvidence,
       midtermPolicies: nextMidtermPolicies,
