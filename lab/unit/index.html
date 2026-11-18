@@ -100,7 +100,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "69"
+    "wordCount": "71"
   }]
   </script>
 
@@ -308,409 +308,283 @@
 <p><strong>検索・お気に入り・クイックスワップ・変換式表示</strong> 搭載</p></blockquote>
 <hr>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap');
 
    
   #uc-app {
-    --neon-cyan: #00f3ff;
-    --neon-pink: #ff0055;
-    --neon-yellow: #fcee0a;
-    --neon-green: #00ff41;
-    --bg-dark: #050505;
-    --panel-bg: rgba(10,14,18,0.95);
-    
-    font-family: 'JetBrains Mono', monospace;
-    color: #e2e8f0;
-    
+    --uc-chassis: #35342b;
+    --uc-chassis-deep: #26251e;
+    --uc-face: #d9d3bf;
+    --uc-face-hi: #e6e0cd;
+    --uc-face-lo: #c4bda3;
+    --uc-ink: #26241b;
+    --uc-ink-soft: #5d5847;
+    --uc-line: #a49d83;
+    --uc-display-bg: #0c110b;
+    --uc-amber: #ffb000;
+    --uc-phos: #8dff6a;
+    --uc-led-off: #6b6753;
+    --uc-danger: #c33d1e;
+
     position: relative;
-    width: 100%;
-    min-height: min(760px, calc(100dvh - 92px));
-    z-index: 1;
-    background: var(--bg-dark);
-    margin: 0; padding: 0;
+    width: min(100%, 1080px);
+    margin: 0 auto;
     box-sizing: border-box;
-    display: block;
-    overflow: visible;
-  }
-  #uc-app * { box-sizing: inherit; }
-  #uc-app *:not(.uc-fav-star) { text-decoration: none !important; }
-
-   
-  .uc-bg-grid {
-    position: absolute; top:0; left:0; width:100%; height:100%;
-    background-image: 
-      radial-gradient(circle at 50% 100%, rgba(252, 238, 10, 0.05) 0%, transparent 60%),
-      linear-gradient(rgba(252, 238, 10, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(252, 238, 10, 0.03) 1px, transparent 1px);
-    background-size: 100% 100%, 40px 40px, 40px 40px; 
-    z-index: 1; pointer-events: none;
-  }
-  .uc-scanline {
-    position: absolute; top:0; left:0; width:100%; height:100%;
-    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%);
-    background-size: 100% 4px; z-index: 50; pointer-events: none; opacity: 0.6;
-  }
-
-   
-  .uc-container {
-    position: relative; z-index: 10;
-    display: flex; flex-direction: column;
-    width: 100%; min-height: inherit;
-  }
-
-   
-  .uc-header {
-    background: rgba(0,0,0,0.95);
-    border-bottom: 2px solid rgba(252, 238, 10, 0.4);
-    padding: 8px 15px;
-    display: flex; justify-content: space-between; align-items: center;
-    flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,0.8);
-    gap: 10px; flex-wrap: wrap;
+    background: linear-gradient(180deg, #3b3a30, var(--uc-chassis) 12%, var(--uc-chassis-deep));
+    border: 1px solid #17160f;
     border-radius: 16px;
+    box-shadow: inset 0 1px 0 rgba(255,250,230,.22), inset 0 -2px 0 rgba(0,0,0,.55), 0 18px 40px rgba(0,0,0,.45);
+    padding: 14px;
+    color: var(--uc-ink);
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    overflow: hidden;
   }
-  .uc-title {
-    font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
-    color: var(--neon-yellow); text-shadow: 0 0 10px rgba(252, 238, 10, 0.5);
-    letter-spacing: 2px; display: flex; align-items: center; gap: 10px;
-    white-space: nowrap;
-  }
-  .uc-header-right {
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  }
+  #uc-app *, #uc-app *::before, #uc-app *::after { box-sizing: border-box; }
+  #uc-app button { font-family: inherit; }
+  #uc-app :focus-visible { outline: 2px solid var(--uc-amber); outline-offset: 2px; }
 
    
-  .uc-search-wrap {
-    position: relative; display: flex; align-items: center;
+  .uc-head {
+    background: linear-gradient(180deg, var(--uc-face-hi), var(--uc-face));
+    border: 1px solid #8f8871;
+    border-radius: 10px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 -2px 0 rgba(0,0,0,.18);
+    padding: 12px 14px;
+    display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
   }
+  .uc-head-id { min-width: 0; }
+  .uc-head-title {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 19px;
+    letter-spacing: .14em; color: var(--uc-ink); line-height: 1.15; white-space: nowrap;
+  }
+  .uc-head-title .uc-head-jp { font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 13px; letter-spacing: .3em; margin-left: 10px; color: var(--uc-ink-soft); }
+  .uc-head-spec { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .12em; color: var(--uc-ink-soft); margin-top: 3px; }
+  .uc-vents { height: 8px; flex: 1 1 60px; min-width: 40px; border-radius: 4px;
+    background: repeating-linear-gradient(90deg, rgba(38,36,27,.55) 0 3px, transparent 3px 9px); opacity: .5; }
+  .uc-search-wrap { position: relative; flex: 0 1 260px; min-width: 170px; margin-left: auto; }
   .uc-search {
-    background: rgba(0,0,0,0.8); border: 1px solid #444; color: var(--neon-yellow);
-    font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
-    padding: 6px 12px 6px 30px; width: 200px; outline: none; transition: all 0.2s;
+    width: 100%; min-height: 44px; border-radius: 6px; border: 1px solid #17160f;
+    background: var(--uc-display-bg); color: var(--uc-phos);
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; padding: 0 12px 0 32px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,.8); caret-color: var(--uc-phos);
   }
-  .uc-search:focus { border-color: var(--neon-yellow); box-shadow: 0 0 10px rgba(252,238,10,0.2); width: 260px; }
-  .uc-search-icon {
-    position: absolute; left: 8px; color: #666; font-size: 0.8rem; pointer-events: none;
-  }
+  .uc-search::placeholder { color: #4d6b45; }
+  .uc-search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #4d6b45; font-size: 13px; pointer-events: none; font-family: 'JetBrains Mono', monospace; }
   .uc-search-results {
-    position: absolute; top: 100%; left: 0; right: 0;
-    background: rgba(5,5,5,0.98); border: 1px solid var(--neon-yellow);
-    max-height: 300px; overflow-y: auto; z-index: 999; display: none;
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 60;
+    background: var(--uc-face-hi); border: 1px solid #8f8871; border-radius: 8px;
+    box-shadow: 0 14px 30px rgba(0,0,0,.5); max-height: 320px; overflow-y: auto; display: none; padding: 4px;
   }
   .uc-search-results.show { display: block; }
   .uc-search-item {
-    padding: 8px 12px; cursor: pointer; font-size: 0.75rem;
-    border-bottom: 1px solid #1a1a1a; transition: background 0.15s;
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex; width: 100%; align-items: baseline; justify-content: space-between; gap: 10px;
+    background: none; border: 0; border-radius: 5px; padding: 10px; min-height: 44px;
+    font-size: 13px; font-weight: 700; color: var(--uc-ink); cursor: pointer; text-align: left;
   }
-  .uc-search-item:hover { background: rgba(252,238,10,0.08); }
-  .uc-search-item-cat { color: #666; font-size: 0.6rem; }
-
-  .uc-sys-status {
-    font-size: 0.65rem; color: var(--neon-cyan);
-    display: flex; align-items: center; gap: 6px;
-    background: rgba(0, 243, 255, 0.05); padding: 4px 8px; border: 1px solid rgba(0, 243, 255, 0.2);
-    font-family: 'Orbitron', sans-serif; white-space: nowrap;
-  }
-  .uc-exit-btn {
-    background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
-    font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: bold;
-    padding: 5px 12px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
-  }
-  .uc-exit-btn:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px rgba(255,0,85,0.5); }
+  .uc-search-item .uc-si-cat { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--uc-ink-soft); letter-spacing: .08em; white-space: nowrap; }
+  .uc-search-item:hover, .uc-search-item.active { background: var(--uc-face-lo); }
+  .uc-search-none { padding: 12px 10px; font-size: 12px; color: var(--uc-ink-soft); }
 
    
-  .uc-workspace {
-    flex-grow: 1; display: flex; flex-direction: column; overflow: visible;
+  .uc-body { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+  @media (min-width: 900px) {
+    .uc-body { flex-direction: row; align-items: flex-start; }
+    .uc-body .uc-bank { flex-direction: column; flex-wrap: nowrap; width: 196px; flex: 0 0 196px; overflow: visible; position: sticky; top: 12px; }
+    .uc-body .uc-main { flex: 1; min-width: 0; }
+    .uc-body .uc-cat { width: 100%; }
   }
-  @media(min-width: 900px) { .uc-workspace { flex-direction: row; } }
 
    
-  .uc-sidebar {
-    width: 100%; 
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(180deg, 
-      rgba(255, 255, 255, 0.05) 0%, 
-      rgba(10, 8, 28, 0.20) 100%
-    );
-    backdrop-filter: blur(14px) url(#liquid-refract) saturate(120%);
-    -webkit-backdrop-filter: blur(14px) url(#liquid-refract) saturate(120%);
-    box-shadow: 
-      inset 0.8px 0px 0px rgba(255, 255, 255, 0.15),
-      inset 0px 2px 5px rgba(255, 255, 255, 0.04),
-      inset -1px -1px 3px rgba(0, 0, 0, 0.45);
-    display: flex; flex-direction: row; flex-wrap: wrap; overflow: visible;
-    border-radius: 14px;
-    flex-shrink: 0;
+  .uc-bank {
+    display: flex; flex-direction: row; flex-wrap: nowrap; gap: 8px;
+    overflow-x: auto; overflow-y: hidden; padding: 2px 2px 8px; scrollbar-width: thin;
   }
-  @media(min-width: 900px) { 
-    .uc-sidebar { 
-      width: 230px; flex-direction: column; overflow-y: auto; overflow-x: hidden;
-    } 
+  .uc-cat {
+    flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
+    min-height: 48px; padding: 8px 12px; cursor: pointer; text-align: left;
+    background: linear-gradient(180deg, var(--uc-face-hi), var(--uc-face-lo));
+    border: 1px solid #17160f; border-radius: 8px; color: var(--uc-ink);
+    box-shadow: 0 3px 0 #17160f, inset 0 1px 0 rgba(255,255,255,.55);
+    transition: transform .05s ease, box-shadow .05s ease;
   }
-  .uc-sidebar::-webkit-scrollbar { width: 4px; height: 4px;}
-  .uc-sidebar::-webkit-scrollbar-thumb { background: rgba(252, 238, 10, 0.3); }
-
-  .uc-cat-btn {
-    background: transparent; border: none; border-left: 3px solid transparent; border-bottom: 1px solid rgba(255,255,255,0.05);
-    color: #888; text-align: left; padding: 12px 15px; font-family: 'Orbitron', sans-serif;
-    font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
-    letter-spacing: 1px; white-space: nowrap; display: flex; align-items: center; gap: 8px;
-    min-height: 44px; flex: 0 0 auto;
-  }
-  @media(max-width: 899px) {
-    .uc-cat-btn { border-left: none; border-bottom: 3px solid transparent; border-right: 1px solid rgba(255,255,255,0.05); padding: 10px 12px; font-size: 0.65rem; flex: 1 1 auto; justify-content: center; }
-  }
-  .uc-cat-btn:hover { background: rgba(252, 238, 10, 0.05); color: #ccc; }
-  .uc-cat-btn.active {
-    background: rgba(252, 238, 10, 0.08); color: var(--neon-yellow);
-    text-shadow: 0 0 8px rgba(252, 238, 10, 0.4);
-  }
-  @media(min-width: 900px) { .uc-cat-btn.active { border-left-color: var(--neon-yellow); } }
-  @media(max-width: 899px) { .uc-cat-btn.active { border-bottom-color: var(--neon-yellow); } }
-  
-  .uc-cat-icon { font-size: 1rem; }
-  .uc-cat-dim { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; color: #555; margin-top: 2px; font-weight: 400; }
-  .uc-cat-btn.active .uc-cat-dim { color: rgba(252, 238, 10, 0.6); }
+  .uc-cat:active { transform: translateY(2px); box-shadow: 0 1px 0 #17160f, inset 0 1px 0 rgba(255,255,255,.55); }
+  .uc-led { flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%; background: var(--uc-led-off); box-shadow: inset 0 1px 2px rgba(0,0,0,.6); }
+  .uc-cat.active { background: linear-gradient(180deg, #ccd2b2, #aeb695); box-shadow: inset 0 2px 6px rgba(0,0,0,.35), inset 0 -1px 0 rgba(255,255,255,.35); transform: translateY(2px); }
+  .uc-cat.active .uc-led { background: var(--uc-amber); box-shadow: 0 0 8px rgba(255,176,0,.9), inset 0 0 2px rgba(255,255,255,.7); }
+  .uc-cat-name { font-size: 13px; font-weight: 700; letter-spacing: .06em; white-space: nowrap; line-height: 1.2; }
+  .uc-cat-en { display: block; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 400; letter-spacing: .14em; color: var(--uc-ink-soft); }
 
    
-  .uc-panel {
-    flex-grow: 1; padding: 20px 0 8px; overflow: visible;
-    display: flex; flex-direction: column; background: transparent;
-  }
-  .uc-panel::-webkit-scrollbar { width: 6px; }
-  .uc-panel::-webkit-scrollbar-thumb { background: rgba(252, 238, 10, 0.2); }
-  
-  .uc-panel-title {
-    font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: #fff;
-    margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);
-    display: flex; justify-content: space-between; align-items: flex-end; text-transform: uppercase;
-    letter-spacing: 2px;
-  }
-  .uc-dimension-label { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--neon-cyan); background: rgba(0,243,255,0.05); padding: 3px 8px; border: 1px solid rgba(0,243,255,0.3); }
+  .uc-main { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 
    
-  .uc-quickswap {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.08) 0%, 
-      rgba(255, 255, 255, 0.01) 30%, 
-      rgba(10, 8, 28, 0.10) 80%, 
-      rgba(2, 2, 6, 0.35) 100%
-    );
-    backdrop-filter: blur(10px) url(#liquid-refract) saturate(120%);
-    -webkit-backdrop-filter: blur(10px) url(#liquid-refract) saturate(120%);
-    box-shadow: 
-      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.12),
-      inset 2px 2px 5px rgba(255, 255, 255, 0.02),
-      inset -1px -1px 3px rgba(0, 0, 0, 0.35);
-    padding: 12px; flex-wrap: wrap;
+  .uc-console {
+    position: relative; border-radius: 12px; padding: 16px;
+    background:
+      radial-gradient(circle 5px at 14px 14px, #17160f 60%, #4a483c 62%, transparent 64%),
+      radial-gradient(circle 5px at calc(100% - 14px) 14px, #17160f 60%, #4a483c 62%, transparent 64%),
+      radial-gradient(circle 5px at 14px calc(100% - 14px), #17160f 60%, #4a483c 62%, transparent 64%),
+      radial-gradient(circle 5px at calc(100% - 14px) calc(100% - 14px), #17160f 60%, #4a483c 62%, transparent 64%),
+      linear-gradient(180deg, #2e2d24, #23231b);
+    border: 1px solid #17160f;
+    box-shadow: inset 0 1px 0 rgba(255,250,230,.14), inset 0 -2px 0 rgba(0,0,0,.5);
   }
-  .uc-qs-select {
-    background: #000; border: 1px solid #444; color: var(--neon-cyan); padding: 8px 10px;
-    font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; outline: none;
-    flex: 1; min-width: 100px;
+  .uc-console-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .uc-console-cat { font-size: 17px; font-weight: 700; letter-spacing: .08em; color: var(--uc-face-hi); }
+  .uc-console-cat .uc-cc-en { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .16em; color: #9a9580; margin-left: 8px; }
+  .uc-dim { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--uc-amber); border: 1px solid rgba(255,176,0,.45); padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+  .uc-console-grid { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) {
+    .uc-console-grid { grid-template-columns: minmax(0,1fr) 52px minmax(0,1fr); align-items: stretch; }
+    .uc-field-from { grid-column: 1; } .uc-swap { grid-column: 2; } .uc-field-to { grid-column: 3; }
   }
-  .uc-qs-select:focus { border-color: var(--neon-yellow); }
-  .uc-qs-result {
-    font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--neon-yellow);
-    padding: 6px 12px; background: rgba(252,238,10,0.05); border: 1px solid rgba(252,238,10,0.2);
-    min-width: 200px; text-align: center; flex: 2;
+  .uc-field { min-width: 0; }
+  .uc-field label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .18em; color: #9a9580; margin-bottom: 6px; }
+  .uc-display {
+    display: flex; align-items: center; gap: 8px; background: var(--uc-display-bg);
+    border: 1px solid #000; border-radius: 8px; padding: 6px 10px;
+    box-shadow: inset 0 3px 12px rgba(0,0,0,.9), inset 0 0 0 1px rgba(141,255,106,.06);
   }
-  .uc-qs-swap-btn {
-    background: transparent; border: 1px solid #555; color: #888; width: 32px; height: 32px;
-    font-size: 1rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
-    min-width: 44px; min-height: 44px;
+  .uc-display input {
+    flex: 1; min-width: 0; background: none; border: 0; outline: none; min-height: 44px;
+    font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 700;
+    color: var(--uc-phos); caret-color: var(--uc-phos); text-align: right; letter-spacing: .02em;
   }
-  .uc-qs-swap-btn:hover { border-color: var(--neon-yellow); color: var(--neon-yellow); }
-
-   
-  .uc-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;
+  .uc-display select {
+    flex: 0 1 48%; min-width: 0; min-height: 44px; background: #1a2018; color: var(--uc-face-hi);
+    border: 1px solid #3d4a38; border-radius: 5px; padding: 0 6px;
+    font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer;
   }
-  @media(max-width: 640px) { .uc-grid { grid-template-columns: 1fr; gap: 10px; } }
-  
-   
-  .uc-unit-card {
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.10) 0%, 
-      rgba(255, 255, 255, 0.02) 30%, 
-      rgba(10, 8, 28, 0.15) 80%, 
-      rgba(2, 2, 6, 0.40) 100%
-    );
-    backdrop-filter: blur(14px) url(#liquid-refract) saturate(120%);
-    -webkit-backdrop-filter: blur(14px) url(#liquid-refract) saturate(120%);
-    box-shadow: 
-      inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.18),
-      inset 2px 2px 5px rgba(255, 255, 255, 0.04),
-      inset -1px -1px 3px rgba(0, 0, 0, 0.45),
-      inset -3px -3px 8px rgba(0, 0, 0, 0.55),
-      0 10px 20px rgba(0,0,0,0.4);
-    position: relative; transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-    display: flex; flex-direction: column;
+  .uc-result-num {
+    flex: 1; min-width: 0; text-align: right; font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(20px, 5.4vw, 27px); font-weight: 700; color: var(--uc-amber);
+    text-shadow: 0 0 12px rgba(255,176,0,.35); white-space: nowrap; overflow: hidden; padding: 8px 0;
   }
-  .uc-unit-card:hover { border-color: rgba(255, 255, 255, 0.15); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-  .uc-unit-card.active { border-color: var(--neon-yellow); background: rgba(252, 238, 10, 0.03); box-shadow: 0 0 20px rgba(252, 238, 10, 0.15); transform: translateY(-2px); }
-  .uc-unit-card.fav { border-left: 3px solid var(--neon-yellow); }
-
-   
-  .uc-card-header {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    margin-bottom: 10px;
-  }
-  .uc-unit-name {
-    font-size: 0.75rem; color: #aaa; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
-    display: flex; flex-direction: column; gap: 3px;
-  }
-  .uc-unit-name span { display: block; }
-  .uc-unit-sys {
-    font-size: 0.55rem; color: #00f3ff; background: rgba(0,243,255,0.05); 
-    padding: 2px 5px; border: 1px solid rgba(0,243,255,0.2); 
-    align-self: flex-start; font-family: 'JetBrains Mono', monospace;
-  }
-  
-  .uc-action-bar { display: flex; gap: 5px; }
-  .uc-copy-btn, .uc-fav-btn {
-    background: transparent; border: 1px solid #444; color: #888;
-    font-size: 0.55rem; padding: 3px 6px; cursor: pointer; transition: all 0.2s; 
-    font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
-    min-height: 44px;
-  }
-  .uc-copy-btn:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0,243,255,0.1); }
-  .uc-fav-btn { font-size: 0.8rem; padding: 2px 5px; }
-  .uc-fav-btn:hover { border-color: var(--neon-yellow); color: var(--neon-yellow); }
-  .uc-fav-btn.active { color: var(--neon-yellow); border-color: var(--neon-yellow); }
-
-   
-  .uc-input-row { 
-    display: flex; align-items: stretch; background: #000; 
-    border: 1px solid #222; height: 46px; transition: border-color 0.3s;
-  }
-  .uc-unit-card:hover .uc-input-row { border-color: #444; }
-  .uc-unit-card.active .uc-input-row { border-color: var(--neon-yellow); }
-
-  .uc-input {
-    flex-grow: 1; background: transparent; border: none; outline: none;
-    color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 1.2rem;
-    padding: 0 12px; width: 100%; transition: color 0.3s;
-  }
-  .uc-unit-card.active .uc-input { color: var(--neon-yellow); text-shadow: 0 0 8px rgba(252, 238, 10, 0.4); }
-
-  .uc-unit-symbol {
-    font-size: 1rem; color: var(--neon-cyan); font-weight: bold;
+  .uc-result-sym { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #c9c3ae; white-space: nowrap; }
+  .uc-swap {
+    align-self: center; justify-self: center; width: 52px; height: 52px; border-radius: 50%;
+    background: linear-gradient(180deg, var(--uc-face-hi), var(--uc-face-lo));
+    border: 1px solid #17160f; color: var(--uc-ink); font-size: 19px; cursor: pointer;
+    box-shadow: 0 3px 0 #17160f, inset 0 1px 0 rgba(255,255,255,.55);
     display: flex; align-items: center; justify-content: center;
-    padding: 0 12px; min-width: 50px;
-    background: rgba(0,243,255,0.03); border-left: 1px solid #222;
-    font-family: 'Orbitron', sans-serif; transition: all 0.3s;
   }
-  .uc-unit-card:hover .uc-unit-symbol { border-color: #444; background: rgba(0,243,255,0.08); }
-  .uc-unit-card.active .uc-unit-symbol { border-color: var(--neon-yellow); color: var(--neon-yellow); background: rgba(252,238,10,0.1); }
+  .uc-swap:active { transform: translateY(2px); box-shadow: 0 1px 0 #17160f; }
+  @media (max-width: 639px) { .uc-swap { transform: rotate(90deg); } .uc-swap:active { transform: rotate(90deg) translateX(2px); } }
+  .uc-rate { margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c9c3ae; letter-spacing: .04em; }
+  .uc-rate b { color: var(--uc-amber); font-weight: 700; }
 
    
-  .uc-formula {
-    font-size: 0.6rem; color: #555; margin-top: 6px;
-    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px;
-    transition: color 0.3s;
+  .uc-rows { display: flex; flex-direction: column; gap: 6px; }
+  .uc-row {
+    display: grid; align-items: center; gap: 6px 10px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto auto;
+    grid-template-areas: "name value fav copy";
+    background: linear-gradient(180deg, var(--uc-face-hi), var(--uc-face));
+    border: 1px solid #8f8871; border-radius: 8px; padding: 7px 8px 7px 12px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.55);
+    scroll-margin-block: 110px;
   }
-  .uc-unit-card.active .uc-formula { color: rgba(252,238,10,0.5); }
+  .uc-row.source { background: linear-gradient(180deg, #efe8cf, #e2d9ba); border-color: #17160f; box-shadow: inset 3px 0 0 var(--uc-amber), inset 0 1px 0 rgba(255,255,255,.6); }
+  .uc-row.flash { animation: uc-flash 1.6s ease; }
+  @keyframes uc-flash { 0%, 60% { background: #f3cf7a; } 100% { } }
+  .uc-r-name { grid-area: name; min-width: 0; }
+  .uc-r-jp { font-size: 13px; font-weight: 700; letter-spacing: .03em; line-height: 1.25; }
+  .uc-r-sub { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--uc-ink-soft); letter-spacing: .05em; line-height: 1.5; overflow-wrap: anywhere; }
+  .uc-r-formula { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #7a6a35; letter-spacing: .03em; line-height: 1.5; overflow-wrap: anywhere; }
+  .uc-r-value { grid-area: value; display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .uc-r-input {
+    flex: 1; min-width: 0; width: 100%; min-height: 44px; background: rgba(255,255,255,.35);
+    border: 1px solid var(--uc-line); border-radius: 6px; padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 16.5px; font-weight: 500; color: var(--uc-ink);
+    text-align: right; outline: none;
+  }
+  .uc-r-input:focus { border-color: #17160f; background: #fffdf4; box-shadow: inset 0 2px 5px rgba(0,0,0,.12); }
+  .uc-row.source .uc-r-input { font-weight: 700; }
+  .uc-r-sym {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; flex: 0 0 auto;
+    background: var(--uc-chassis); color: var(--uc-face-hi); border-radius: 4px; padding: 4px 7px;
+    white-space: nowrap;
+  }
+  .uc-icon-btn {
+    width: 44px; height: 44px; border-radius: 7px; cursor: pointer; flex: 0 0 auto;
+    background: linear-gradient(180deg, var(--uc-face-hi), var(--uc-face-lo));
+    border: 1px solid #17160f; color: var(--uc-ink-soft); font-size: 15px;
+    box-shadow: 0 2px 0 #17160f; display: flex; align-items: center; justify-content: center;
+  }
+  .uc-icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 #17160f; }
+  .uc-fav-btn { grid-area: fav; } .uc-copy-btn2 { grid-area: copy; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .uc-fav-btn.active { color: #a86e00; }
+  .uc-row.fav { border-left: 3px solid var(--uc-amber); }
 
    
+  @media (max-width: 639px) {
+    .uc-row {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      grid-template-areas: "name fav copy" "value value value";
+      row-gap: 8px;
+    }
+  }
   .uc-toast {
-    position: absolute; bottom: 30px; right: 30px; background: rgba(0,0,0,0.9);
-    border: 1px solid var(--neon-yellow); color: var(--neon-yellow); padding: 10px 20px;
-    font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: bold; letter-spacing: 1px;
-    box-shadow: 0 0 20px rgba(252, 238, 10, 0.4);
-    opacity: 0; transform: translateY(20px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    pointer-events: none; z-index: 1000;
+    position: absolute; left: 50%; bottom: 18px; transform: translate(-50%, 16px);
+    background: #17160f; color: var(--uc-amber); border: 1px solid rgba(255,176,0,.5);
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: .06em;
+    padding: 10px 18px; border-radius: 6px; opacity: 0; pointer-events: none; transition: all .25s ease; z-index: 80;
+    max-width: calc(100% - 32px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .uc-toast.show { opacity: 1; transform: translateY(0); }
-
-   
-  @media(max-width: 640px) {
-    .uc-header { padding: 6px 10px; }
-    .uc-title { font-size: 0.9rem; gap: 6px; }
-    .uc-search { width: 140px; font-size: 0.7rem; }
-    .uc-search:focus { width: 180px; }
-    .uc-panel { padding: 14px 0 6px; }
-    .uc-panel-title { font-size: 1rem; }
-    .uc-quickswap { padding: 8px; gap: 6px; }
-    .uc-unit-card { padding: 12px; }
-    .uc-input { font-size: 1rem; }
-    .uc-header-right { width: 100%; }
-    .uc-search-wrap { flex: 1 1 190px; min-width: 0; }
-    .uc-search { width: 100%; }
-    .uc-search:focus { width: 100%; }
-    .uc-sys-status { flex: 0 0 auto; }
-    .uc-panel-title { gap: 10px; flex-wrap: wrap; }
-    .uc-quickswap { align-items: stretch; }
-    .uc-qs-select { min-width: 0; flex: 1 1 calc(50% - 24px); }
-    .uc-qs-result { min-width: 0; flex: 1 0 100%; order: 3; }
-  }
+  .uc-toast.show { opacity: 1; transform: translate(-50%, 0); }
+  @media (prefers-reduced-motion: reduce) { #uc-app * { transition: none !important; animation: none !important; } }
 </style>
 
-<div id="uc-app">
-  <div class="uc-bg-grid"></div>
-  <div class="uc-scanline"></div>
-
-  <div class="uc-container">
-    
-    <div class="uc-header">
-      <div class="uc-title">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--neon-yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        UNIT_CONVERTER
-      </div>
-      <div class="uc-header-right">
-        <div class="uc-search-wrap">
-          <span class="uc-search-icon">&#x1F50D;</span>
-          <input type="search" class="uc-search" id="uc-search" aria-label="単位を検索" placeholder="単位を検索..." autocomplete="off">
-          <div class="uc-search-results" id="uc-search-results"></div>
-        </div>
-        <div class="uc-sys-status"><span style="color:#00ff41;">&#x25CF;</span> SYNC (同期中)</div>
-      </div>
+<div id="uc-app" class="uc-root">
+  <div class="uc-head">
+    <div class="uc-head-id">
+      <div class="uc-head-title">UNIT CONVERTER<span class="uc-head-jp">単位換算</span></div>
+      <div class="uc-head-spec" id="uc-spec">MODEL UC-14</div>
     </div>
-
-    <div class="uc-workspace">
-      
-      <div class="uc-sidebar" id="uc-sidebar" role="tablist" aria-label="単位カテゴリ"></div>
-      
-      
-      <div class="uc-panel">
-        <div class="uc-panel-title">
-          <span id="uc-current-cat">SELECT CATEGORY</span>
-          <span class="uc-dimension-label" id="uc-current-dim">[-]</span>
-        </div>
-
-        
-        <div class="uc-quickswap">
-          <select class="uc-qs-select" id="uc-qs-from"></select>
-          <button type="button" class="uc-qs-swap-btn" id="uc-qs-swap" title="単位を入れ替え" aria-label="単位を入れ替え">⇄</button>
-          <select class="uc-qs-select" id="uc-qs-to"></select>
-          <div class="uc-qs-result" id="uc-qs-result">1 ? = ? ?</div>
-        </div>
-
-        <div class="uc-grid" id="uc-grid"></div>
-      </div>
-
+    <div class="uc-vents" aria-hidden="true"></div>
+    <div class="uc-search-wrap">
+      <span class="uc-search-icon">⌕</span>
+      <input type="search" class="uc-search" id="uc-search" aria-label="単位を検索" placeholder="単位を検索（例: マイル、kcal）" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="uc-search-results" aria-autocomplete="list">
+      <div class="uc-search-results" id="uc-search-results" role="listbox"></div>
     </div>
   </div>
-  <div id="uc-toast" class="uc-toast">COPIED</div>
-  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
-    <filter id="liquid-refract">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
-    </filter>
-  </svg>
+
+  <div class="uc-body">
+    <div class="uc-bank" id="uc-bank" role="group" aria-label="単位カテゴリ"></div>
+    <div class="uc-main">
+      <section class="uc-console" aria-label="換算コンソール">
+        <div class="uc-console-head">
+          <div class="uc-console-cat"><span id="uc-cat-jp">長さ</span><span class="uc-cc-en" id="uc-cat-en">LENGTH</span></div>
+          <span class="uc-dim" id="uc-cat-dim">[L]</span>
+        </div>
+        <div class="uc-console-grid">
+          <div class="uc-field uc-field-from">
+            <label for="uc-cv">INPUT — 変換元</label>
+            <div class="uc-display">
+              <input type="text" id="uc-cv" inputmode="decimal" autocomplete="off" value="1" aria-label="変換元の値">
+              <select id="uc-from" aria-label="変換元の単位"></select>
+            </div>
+          </div>
+          <button type="button" class="uc-swap" id="uc-swap" aria-label="変換元と変換先を入れ替え" title="入れ替え">⇄</button>
+          <div class="uc-field uc-field-to">
+            <label for="uc-result">OUTPUT — 変換先</label>
+            <div class="uc-display">
+              <div class="uc-result-num" id="uc-result" aria-live="polite">—</div>
+              <select id="uc-to" aria-label="変換先の単位"></select>
+            </div>
+          </div>
+        </div>
+        <div class="uc-rate" id="uc-rate">RATE —</div>
+      </section>
+      <div class="uc-rows" id="uc-rows"></div>
+    </div>
+  </div>
+  <div class="uc-toast" id="uc-toast" role="status"></div>
 </div>
 
 <script>
 var ucApp = (function() {
   "use strict";
-  
-  const toast = document.getElementById('uc-toast');
-  const FAV_KEY = 'uc_favorites_v1';
-
-  let favorites = JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
 
   const db = {
     length: {
@@ -904,234 +778,29 @@ var ucApp = (function() {
     }
   };
 
+  const FAV_KEY = 'uc_favorites_v1';
+  let favorites = [];
+  try { favorites = JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); } catch (e) { favorites = []; }
+
+  const $ = id => document.getElementById(id);
+  const bankEl = $('uc-bank'), rowsEl = $('uc-rows'), toast = $('uc-toast');
+  const cvEl = $('uc-cv'), fromEl = $('uc-from'), toEl = $('uc-to');
+  const resultEl = $('uc-result'), rateEl = $('uc-rate');
+
   let currentCategory = 'length';
-  let activeInputs = {};
+  let inputs = {};       
+  let lastBase = null;   
 
-  function init() {
-    renderSidebar();
-    loadCategory('length');
-    setupSearch();
+  function toBase(catKey, unit, v) {
+    return catKey === 'temperature' ? v * unit.factor + (unit.offset || 0) : v * unit.factor;
   }
-
-  function renderSidebar() {
-    const sb = document.getElementById('uc-sidebar');
-    sb.innerHTML = '';
-    Object.keys(db).forEach(key => {
-      const cat = db[key];
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.setAttribute('role', 'tab');
-      btn.setAttribute('aria-label', `${cat.nameJp}（${cat.name}）`);
-      btn.setAttribute('aria-selected', String(key === currentCategory));
-      btn.className = `uc-cat-btn ${key === currentCategory ? 'active' : ''}`;
-      btn.innerHTML = `<span class="uc-cat-icon">${cat.icon}</span> ${cat.name} <span class="uc-cat-dim">${cat.dim}</span>`;
-      btn.onclick = () => {
-        document.querySelectorAll('.uc-cat-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.querySelectorAll('.uc-cat-btn').forEach(b => b.setAttribute('aria-selected', String(b === btn)));
-        loadCategory(key);
-      };
-      sb.appendChild(btn);
-    });
+  function fromBase(catKey, unit, base) {
+    return catKey === 'temperature' ? (base - (unit.offset || 0)) / unit.factor : base / unit.factor;
   }
-
-  function loadCategory(key) {
-    currentCategory = key;
-    const cat = db[key];
-    document.getElementById('uc-current-cat').textContent = `${cat.icon} ${cat.name} (${cat.nameJp})`;
-    document.getElementById('uc-current-dim').textContent = cat.dim;
-    
-    const grid = document.getElementById('uc-grid');
-    grid.innerHTML = '';
-    activeInputs = {};
-
-    
-    const qsFrom = document.getElementById('uc-qs-from');
-    const qsTo = document.getElementById('uc-qs-to');
-    qsFrom.innerHTML = '';
-    qsTo.innerHTML = '';
-    cat.units.forEach((u, i) => {
-      qsFrom.innerHTML += `<option value="${u.id}" ${i===0?'selected':''}>${u.symbol} - ${u.name}</option>`;
-      qsTo.innerHTML += `<option value="${u.id}" ${i===1?'selected':''}>${u.symbol} - ${u.name}</option>`;
-    });
-    updateQuickSwap();
-
-    
-    const sortedUnits = [...cat.units].sort((a, b) => {
-      const aFav = favorites.includes(`${key}:${a.id}`) ? -1 : 0;
-      const bFav = favorites.includes(`${key}:${b.id}`) ? -1 : 0;
-      return aFav - bFav;
-    });
-
-    sortedUnits.forEach(u => {
-      const card = document.createElement('div');
-      const isFav = favorites.includes(`${key}:${u.id}`);
-      card.className = `uc-unit-card ${isFav ? 'fav' : ''}`;
-      card.id = `card-${u.id}`;
-      
-      
-      const baseUnit = cat.units.find(x => x.id === cat.base) || cat.units[0];
-      let formulaText = '';
-      if (u.id !== cat.base && key !== 'temperature') {
-        const ratio = u.factor / baseUnit.factor;
-        formulaText = `1 ${u.symbol} = ${formatNumber(ratio)} ${baseUnit.symbol}`;
-      } else if (key === 'temperature' && u.id !== 'K') {
-        if (u.id === 'C') formulaText = 'T(K) = T(°C) + 273.15';
-        else if (u.id === 'F') formulaText = 'T(K) = (T(°F) - 32) × 5/9 + 273.15';
-        else if (u.id === 'R') formulaText = 'T(K) = T(°R) × 5/9';
-      }
-      
-      card.innerHTML = `
-        <div class="uc-card-header">
-          <div class="uc-unit-name">
-            <span>${u.name}</span>
-            <span style="font-size:0.6rem;color:#666;font-family:'JetBrains Mono',monospace;">${u.nameEn || ''}</span>
-            <span class="uc-unit-sys">${u.sys}</span>
-          </div>
-          <div class="uc-action-bar">
-            <button type="button" class="uc-fav-btn ${isFav ? 'active' : ''}" onclick="ucApp.toggleFav('${key}','${u.id}',this)" title="お気に入り" aria-label="${u.name}をお気に入りに追加">${isFav ? '★' : '☆'}</button>
-            <button type="button" class="uc-copy-btn" onclick="ucApp.copyVal('${u.id}')" aria-label="${u.name}の値をコピー">COPY</button>
-          </div>
-        </div>
-        <div class="uc-input-row">
-          <input type="text" class="uc-input" id="in-${u.id}" aria-label="${u.name}の値" placeholder="0" autocomplete="off" inputmode="decimal"
-            onfocus="ucApp.focusIn('${u.id}')" onblur="ucApp.focusOut('${u.id}')" oninput="ucApp.handleConv('${u.id}')">
-          <div class="uc-unit-symbol">${u.symbol}</div>
-        </div>
-        ${formulaText ? `<div class="uc-formula">${formulaText}</div>` : ''}
-      `;
-      grid.appendChild(card);
-      activeInputs[u.id] = document.getElementById(`in-${u.id}`);
-    });
-    
-    
-    const baseId = cat.base || cat.units[0].id;
-    if (activeInputs[baseId]) {
-      activeInputs[baseId].value = "1";
-      handleConv(baseId);
-    }
-  }
-
-  
-  function updateQuickSwap() {
-    const from = document.getElementById('uc-qs-from').value;
-    const to = document.getElementById('uc-qs-to').value;
-    const cat = db[currentCategory];
-    const fromU = cat.units.find(u => u.id === from);
-    const toU = cat.units.find(u => u.id === to);
-    if (!fromU || !toU) return;
-    
-    let result;
-    if (currentCategory === 'temperature') {
-      const baseVal = 1 * fromU.factor + (fromU.offset||0);
-      result = (baseVal - (toU.offset||0)) / toU.factor;
-    } else {
-      result = fromU.factor / toU.factor;
-    }
-    document.getElementById('uc-qs-result').textContent = `1 ${fromU.symbol} = ${formatNumber(result)} ${toU.symbol}`;
-  }
-  document.getElementById('uc-qs-from').addEventListener('change', updateQuickSwap);
-  document.getElementById('uc-qs-to').addEventListener('change', updateQuickSwap);
-  document.getElementById('uc-qs-swap').addEventListener('click', () => {
-    const f = document.getElementById('uc-qs-from');
-    const t = document.getElementById('uc-qs-to');
-    const tmp = f.value; f.value = t.value; t.value = tmp;
-    updateQuickSwap();
-  });
-
-  
-  function setupSearch() {
-    const searchInput = document.getElementById('uc-search');
-    const resultsEl = document.getElementById('uc-search-results');
-    
-    searchInput.addEventListener('input', () => {
-      const q = searchInput.value.toLowerCase().trim();
-      if (q.length < 1) { resultsEl.classList.remove('show'); return; }
-      
-      const matches = [];
-      Object.keys(db).forEach(catKey => {
-        db[catKey].units.forEach(u => {
-          if (u.name.toLowerCase().includes(q) || u.symbol.toLowerCase().includes(q) || u.id.toLowerCase().includes(q) || (u.nameEn && u.nameEn.toLowerCase().includes(q))) {
-            matches.push({ catKey, unit: u, catName: db[catKey].name });
-          }
-        });
-      });
-      
-      if (matches.length === 0) { resultsEl.innerHTML = '<div class="uc-search-item" style="color:#555;">No results</div>'; resultsEl.classList.add('show'); return; }
-      
-      resultsEl.innerHTML = matches.slice(0, 15).map(m =>
-        `<div class="uc-search-item" onclick="ucApp.jumpTo('${m.catKey}','${m.unit.id}')">
-          <span>${m.unit.name} (${m.unit.symbol})</span>
-          <span class="uc-search-item-cat">${m.catName}</span>
-        </div>`
-      ).join('');
-      resultsEl.classList.add('show');
-    });
-    
-    searchInput.addEventListener('blur', () => {
-      setTimeout(() => resultsEl.classList.remove('show'), 200);
-    });
-  }
-
-  function jumpTo(catKey, unitId) {
-    document.querySelectorAll('.uc-cat-btn').forEach((b, i) => {
-      b.classList.toggle('active', Object.keys(db)[i] === catKey);
-    });
-    loadCategory(catKey);
-    document.getElementById('uc-search').value = '';
-    document.getElementById('uc-search-results').classList.remove('show');
-    
-    setTimeout(() => {
-      const card = document.getElementById(`card-${unitId}`);
-      if (card) { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); card.classList.add('active'); setTimeout(() => card.classList.remove('active'), 2000); }
-    }, 100);
-  }
-
-  
-  function toggleFav(catKey, unitId, btn) {
-    const key = `${catKey}:${unitId}`;
-    const idx = favorites.indexOf(key);
-    if (idx >= 0) { favorites.splice(idx, 1); btn.classList.remove('active'); btn.textContent = '☆'; }
-    else { favorites.push(key); btn.classList.add('active'); btn.textContent = '★'; }
-    localStorage.setItem(FAV_KEY, JSON.stringify(favorites));
-    
-    const card = document.getElementById(`card-${unitId}`);
-    if (card) card.classList.toggle('fav', favorites.includes(key));
-  }
-
-  function focusIn(id) { document.getElementById(`card-${id}`).classList.add('active'); }
-  function focusOut(id) { document.getElementById(`card-${id}`).classList.remove('active'); }
-
-  function handleConv(sourceId) {
-    const sourceStr = activeInputs[sourceId].value;
-    if (sourceStr === "" || isNaN(sourceStr)) {
-      Object.keys(activeInputs).forEach(id => { if(id !== sourceId) activeInputs[id].value = ""; });
-      return;
-    }
-
-    const sourceVal = parseFloat(sourceStr);
-    const cat = db[currentCategory];
-    const sourceUnit = cat.units.find(u => u.id === sourceId);
-
-    let baseVal = 0;
-    if (currentCategory === 'temperature') {
-      baseVal = sourceVal * sourceUnit.factor + sourceUnit.offset;
-    } else {
-      baseVal = sourceVal * sourceUnit.factor;
-    }
-
-    cat.units.forEach(u => {
-      if (u.id === sourceId) return;
-      let targetVal = 0;
-      if (currentCategory === 'temperature') {
-        targetVal = (baseVal - u.offset) / u.factor;
-      } else {
-        targetVal = baseVal / u.factor;
-      }
-      if (activeInputs[u.id]) activeInputs[u.id].value = formatNumber(targetVal);
-    });
-
-    updateQuickSwap();
+  function unitById(cat, id) { return cat.units.find(u => u.id === id); }
+  function fmtTrim(s) {
+    if (s.includes('e') || !s.includes('.')) return s;
+    return s.replace(/0+$/, '').replace(/\.$/, '');
   }
 
   function formatNumber(num) {
@@ -1141,23 +810,268 @@ var ucApp = (function() {
       return num.toExponential(6).replace(/\.?0+e/, 'e');
     }
     if (abs < 0.01) return num.toPrecision(6);
-    return Math.round(num * 1e8) / 1e8;
+    return String(Math.round(num * 1e8) / 1e8);
   }
 
-  function copyVal(id) {
-    const val = activeInputs[id] ? activeInputs[id].value : '';
-    if(!val) return;
-    if (navigator.clipboard) { navigator.clipboard.writeText(val); }
-    else { const el = document.createElement('textarea'); el.value = val; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); }
+   
+  function renderBank() {
+    bankEl.innerHTML = '';
+    Object.keys(db).forEach(key => {
+      const cat = db[key];
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'uc-cat' + (key === currentCategory ? ' active' : '');
+      btn.setAttribute('aria-pressed', String(key === currentCategory));
+      btn.dataset.cat = key;
+      btn.innerHTML = `<span class="uc-led" aria-hidden="true"></span><span class="uc-cat-name">${cat.nameJp}<span class="uc-cat-en">${cat.name} · ${cat.dim}</span></span>`;
+      btn.addEventListener('click', () => loadCategory(key));
+      bankEl.appendChild(btn);
+    });
+  }
+
+   
+  function loadCategory(key) {
+    currentCategory = key;
+    const cat = db[key];
+    [...bankEl.children].forEach(b => {
+      const on = b.dataset.cat === key;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', String(on));
+    });
+    $('uc-cat-jp').textContent = cat.nameJp;
+    $('uc-cat-en').textContent = cat.name;
+    $('uc-cat-dim').textContent = cat.dim;
+
     
-    toast.textContent = `[ ${val} ] COPIED`;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2000);
+    fromEl.innerHTML = ''; toEl.innerHTML = '';
+    cat.units.forEach(u => {
+      fromEl.add(new Option(`${u.symbol} — ${u.name}`, u.id));
+      toEl.add(new Option(`${u.symbol} — ${u.name}`, u.id));
+    });
+    fromEl.value = cat.base;
+    toEl.value = (cat.units[1] || cat.units[0]).id;
+
+    buildRows(cat);
+    cvEl.value = '1';
+    convertAll(cat.base, '1', null);
   }
 
-  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { setTimeout(init, 50); }
+  function formulaFor(cat, key, u) {
+    const baseUnit = unitById(cat, cat.base) || cat.units[0];
+    if (key === 'temperature') {
+      if (u.id === 'C') return 'T(K) = T(°C) + 273.15';
+      if (u.id === 'F') return 'T(K) = (T(°F) − 32) × 5/9 + 273.15';
+      if (u.id === 'R') return 'T(K) = T(°R) × 5/9';
+      return '';
+    }
+    if (u.id === cat.base) return '基準単位';
+    return `1 ${u.symbol} = ${fmtTrim(formatNumber(u.factor / baseUnit.factor))} ${baseUnit.symbol}`;
+  }
 
-  return { loadCategory, handleConv, focusIn, focusOut, copyVal, toggleFav, jumpTo };
+  function buildRows(cat) {
+    rowsEl.innerHTML = '';
+    inputs = {};
+    const key = currentCategory;
+    const sorted = [...cat.units].sort((a, b) =>
+      (favorites.includes(`${key}:${b.id}`) ? 1 : 0) - (favorites.includes(`${key}:${a.id}`) ? 1 : 0));
+    sorted.forEach(u => {
+      const isFav = favorites.includes(`${key}:${u.id}`);
+      const row = document.createElement('div');
+      row.className = 'uc-row' + (isFav ? ' fav' : '');
+      row.id = `uc-row-${u.id}`;
+      row.innerHTML = `
+        <div class="uc-r-name">
+          <div class="uc-r-jp">${u.name}</div>
+          <div class="uc-r-sub">${u.nameEn || ''} · ${u.sys}</div>
+          ${formulaFor(cat, key, u) ? `<div class="uc-r-formula">${formulaFor(cat, key, u)}</div>` : ''}
+        </div>
+        <div class="uc-r-value">
+          <input type="text" class="uc-r-input" id="uc-in-${u.id}" inputmode="decimal" autocomplete="off" placeholder="0" aria-label="${u.name}の値">
+          <span class="uc-r-sym">${u.symbol}</span>
+        </div>
+        <button type="button" class="uc-icon-btn uc-fav-btn${isFav ? ' active' : ''}" aria-label="${u.name}のお気に入り切り替え" aria-pressed="${isFav}" title="お気に入り">${isFav ? '★' : '☆'}</button>
+        <button type="button" class="uc-icon-btn uc-copy-btn2" aria-label="COPY — ${u.name}の値をコピー" title="${u.name}の値をコピー">COPY</button>`;
+      rowsEl.appendChild(row);
+      const input = row.querySelector('.uc-r-input');
+      inputs[u.id] = input;
+      input.addEventListener('input', () => {
+        fromEl.value = u.id;
+        convertAll(u.id, input.value, input);
+      });
+      input.addEventListener('focus', () => markSource(u.id));
+      row.querySelector('.uc-fav-btn').addEventListener('click', ev => toggleFav(key, u.id, ev.currentTarget, row));
+      row.querySelector('.uc-copy-btn2').addEventListener('click', () => copyVal(u.id));
+    });
+  }
+
+  function markSource(id) {
+    rowsEl.querySelectorAll('.uc-row').forEach(r => r.classList.toggle('source', r.id === `uc-row-${id}`));
+  }
+
+   
+  function convertAll(srcId, raw, originEl) {
+    const cat = db[currentCategory];
+    markSource(srcId);
+    if (raw === '' || raw == null || isNaN(raw)) {
+      lastBase = null;
+      Object.keys(inputs).forEach(id => { if (inputs[id] !== originEl) inputs[id].value = ''; });
+      if (originEl !== cvEl) cvEl.value = '';
+      resultEl.textContent = '—';
+      updateRate();
+      return;
+    }
+    const src = unitById(cat, srcId);
+    lastBase = toBase(currentCategory, src, parseFloat(raw));
+    Object.keys(inputs).forEach(id => {
+      if (inputs[id] !== originEl) inputs[id].value = formatNumber(fromBase(currentCategory, unitById(cat, id), lastBase));
+    });
+    if (originEl !== cvEl && document.activeElement !== cvEl) cvEl.value = raw;
+    updateResult();
+    updateRate();
+  }
+
+  function updateResult() {
+    const cat = db[currentCategory];
+    const to = unitById(cat, toEl.value);
+    if (lastBase == null || !to) { resultEl.textContent = '—'; return; }
+    resultEl.textContent = formatNumber(fromBase(currentCategory, to, lastBase));
+  }
+
+  function updateRate() {
+    const cat = db[currentCategory];
+    const f = unitById(cat, fromEl.value), t = unitById(cat, toEl.value);
+    if (!f || !t) { rateEl.textContent = 'RATE —'; return; }
+    const r = fromBase(currentCategory, t, toBase(currentCategory, f, 1));
+    rateEl.innerHTML = `RATE&nbsp; <b>1 ${f.symbol}</b> = <b>${formatNumber(r)} ${t.symbol}</b>`;
+  }
+
+  cvEl.addEventListener('input', () => convertAll(fromEl.value, cvEl.value, cvEl));
+  fromEl.addEventListener('change', () => {
+    if (inputs[fromEl.value] && document.activeElement !== inputs[fromEl.value]) {
+      cvEl.value = inputs[fromEl.value].value;
+    }
+    convertAll(fromEl.value, cvEl.value, null);
+  });
+  toEl.addEventListener('change', () => { updateResult(); updateRate(); });
+  $('uc-swap').addEventListener('click', () => {
+    const f = fromEl.value; fromEl.value = toEl.value; toEl.value = f;
+    if (lastBase != null) {
+      const cat = db[currentCategory];
+      cvEl.value = formatNumber(fromBase(currentCategory, unitById(cat, fromEl.value), lastBase));
+    }
+    convertAll(fromEl.value, cvEl.value, null);
+  });
+
+   
+  function toggleFav(catKey, unitId, btn, row) {
+    const k = `${catKey}:${unitId}`;
+    const idx = favorites.indexOf(k);
+    const on = idx < 0;
+    if (on) favorites.push(k); else favorites.splice(idx, 1);
+    try { localStorage.setItem(FAV_KEY, JSON.stringify(favorites)); } catch (e) {}
+    btn.classList.toggle('active', on);
+    btn.setAttribute('aria-pressed', String(on));
+    btn.textContent = on ? '★' : '☆';
+    row.classList.toggle('fav', on);
+  }
+
+   
+  function copyVal(id) {
+    const v = inputs[id] ? inputs[id].value : '';
+    if (!v) return;
+    const done = () => {
+      const cat = db[currentCategory];
+      toast.textContent = `[ ${v} ${unitById(cat, id).symbol} ] COPIED`;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(v).then(done).catch(done);
+    } else {
+      const el = document.createElement('textarea');
+      el.value = v; document.body.appendChild(el); el.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(el); done();
+    }
+  }
+
+   
+  const searchEl = $('uc-search'), resultsEl = $('uc-search-results');
+  let searchItems = [], searchIdx = -1;
+
+  function closeSearch() {
+    resultsEl.classList.remove('show');
+    searchEl.setAttribute('aria-expanded', 'false');
+    searchIdx = -1;
+  }
+  function runSearch() {
+    const q = searchEl.value.toLowerCase().trim();
+    searchIdx = -1;
+    if (!q) { closeSearch(); return; }
+    searchItems = [];
+    Object.keys(db).forEach(catKey => {
+      db[catKey].units.forEach(u => {
+        if (u.name.toLowerCase().includes(q) || u.symbol.toLowerCase().includes(q) ||
+            u.id.toLowerCase().includes(q) || (u.nameEn && u.nameEn.toLowerCase().includes(q))) {
+          searchItems.push({ catKey, unit: u, catName: db[catKey].nameJp });
+        }
+      });
+    });
+    resultsEl.innerHTML = '';
+    if (!searchItems.length) {
+      resultsEl.innerHTML = '<div class="uc-search-none">該当する単位がありません</div>';
+    } else {
+      searchItems.slice(0, 15).forEach((m, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'uc-search-item';
+        b.setAttribute('role', 'option');
+        b.id = `uc-si-${i}`;
+        b.innerHTML = `<span>${m.unit.name}（${m.unit.symbol}）</span><span class="uc-si-cat">${m.catName} · ${db[m.catKey].name}</span>`;
+        b.addEventListener('click', () => jumpTo(m.catKey, m.unit.id));
+        resultsEl.appendChild(b);
+      });
+    }
+    resultsEl.classList.add('show');
+    searchEl.setAttribute('aria-expanded', 'true');
+  }
+  function paintSearchIdx() {
+    [...resultsEl.querySelectorAll('.uc-search-item')].forEach((el, i) => el.classList.toggle('active', i === searchIdx));
+    if (searchIdx >= 0) searchEl.setAttribute('aria-activedescendant', `uc-si-${searchIdx}`);
+    else searchEl.removeAttribute('aria-activedescendant');
+  }
+  searchEl.addEventListener('input', runSearch);
+  searchEl.addEventListener('keydown', e => {
+    const n = Math.min(searchItems.length, 15);
+    if (e.key === 'ArrowDown' && n) { e.preventDefault(); searchIdx = (searchIdx + 1) % n; paintSearchIdx(); }
+    else if (e.key === 'ArrowUp' && n) { e.preventDefault(); searchIdx = (searchIdx - 1 + n) % n; paintSearchIdx(); }
+    else if (e.key === 'Enter' && searchIdx >= 0 && searchItems[searchIdx]) { e.preventDefault(); jumpTo(searchItems[searchIdx].catKey, searchItems[searchIdx].unit.id); }
+    else if (e.key === 'Escape') { closeSearch(); }
+  });
+  searchEl.addEventListener('blur', () => setTimeout(closeSearch, 200));
+  searchEl.addEventListener('focus', () => { if (searchEl.value.trim()) runSearch(); });
+
+  function jumpTo(catKey, unitId) {
+    loadCategory(catKey);
+    searchEl.value = '';
+    closeSearch();
+    setTimeout(() => {
+      const row = $(`uc-row-${unitId}`);
+      if (row) {
+        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        row.classList.add('flash');
+        setTimeout(() => row.classList.remove('flash'), 1700);
+      }
+    }, 60);
+  }
+
+   
+  const totalUnits = Object.values(db).reduce((n, c) => n + c.units.length, 0);
+  $('uc-spec').textContent = `MODEL UC-14 · ${Object.keys(db).length} CATEGORIES · ${totalUnits} UNITS · SI / IMPERIAL / 和単位`;
+  renderBank();
+  loadCategory('length');
+
+  return { loadCategory, jumpTo };
 })();
 </script>
 
