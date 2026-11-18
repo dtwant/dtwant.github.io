@@ -42,6 +42,26 @@
     runtime_error: '実行時エラー'
   };
   const SETTINGS_URL = '/project-x/sync-settings/';
+  /* ツール自身のヘッダー内同期表示（dt-d1-tool-bridge の STATUS_TARGETS と同じ実物）。
+     これがあるページではフロートチップを作らず、その表示をタップでパネルが開くようにする。 */
+  const STATUS_TARGETS = {
+    manga: ['#ms-sync'], novel: ['[data-role="sync"]'], movie: ['#mt-sync'],
+    feeding: ['#fl-sync-badge'], timetable: ['#sync-badge-top', '#sync-status'],
+    diary: ['#sd-sync-badge-top', '#sd-gaman-sync-status'],
+    task_calendar: ['#ntc-sync-badge', '#ntc-sync-badge span:last-child'], calendar: ['#cg-sync'],
+    deadline: ['.dm-pill'], tasklist: ['[data-tl-sync-state]', '[data-tl-sync-state] > span:last-child'],
+    payment: ['.cn-badge'], vocal_range: ['#vr-sbadge'], library: ['#bs-sync-status'],
+    attendance: ['.ag-pill'], weight_log: ['#wl-sync-badge'], shift_clock: ['#sc-sync'],
+    math_memo: ['[data-mm-sync-label]'],
+    ritual_grid: ['.rg-sync-chip', '[data-rg-sync-label]'], biome_archive: ['#ba-sync'],
+    score_book: ['#sb-status']
+  };
+  function findOwnBadge(appKey) {
+    for (const sel of STATUS_TARGETS[appKey] || []) {
+      try { const el = document.querySelector(sel); if (el) return el; } catch (_) { /* bad selector */ }
+    }
+    return null;
+  }
 
   function detectAppKey() {
     try {
@@ -144,12 +164,16 @@
   .dtsp-chip[data-kind="syncing"] .dtsp-dot{background:#22d3ee;box-shadow:0 0 9px #22d3ee;animation:dtsp-pulse 1s ease-in-out infinite}
   @keyframes dtsp-pulse{50%{opacity:.35}}
   @media (prefers-reduced-motion:reduce){.dtsp-chip .dtsp-dot{animation:none}}
-  .dtsp-panel{position:fixed;z-index:2147482001;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));
+  .dtsp-chip-docked{position:static}
+  [data-sync-slot] .dtsp-chip{flex:none;align-self:center;height:auto;white-space:nowrap}
+  .dtsp-chip-bar{position:static;width:100%;border-radius:0;justify-content:center}
+  .dtsp-panel:not([hidden]){display:block}
+  .dtsp-panel.dtsp-panel{position:fixed;z-index:2147482001;left:10px;right:10px;top:76px;
     background:rgba(5,12,22,.97);border:1px solid rgba(34,211,238,.55);border-radius:6px;
     box-shadow:0 0 28px rgba(34,211,238,.25),0 18px 50px rgba(0,0,0,.6);color:#e6f6ff;
     font:13px/1.55 -apple-system,"Hiragino Kaku Gothic ProN",sans-serif;padding:16px;
     max-height:min(78vh,640px);overflow-y:auto;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-  @media (min-width:640px){.dtsp-panel{left:auto;right:16px;bottom:60px;width:352px}}
+  @media (min-width:640px){.dtsp-panel.dtsp-panel{left:auto;right:16px;top:76px;width:352px}}
   .dtsp-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(34,211,238,.25);padding-bottom:10px;margin-bottom:12px}
   .dtsp-title{font:700 12px/1.3 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:#67e8f9}
   .dtsp-tool{font-size:15px;font-weight:700;margin-top:3px}
@@ -189,10 +213,60 @@
     chip.className = 'dtsp-chip';
     chip.setAttribute('aria-haspopup', 'dialog');
     chip.innerHTML = '<span class="dtsp-dot"></span><span class="dtsp-chip-label"></span>';
-    document.body.appendChild(chip);
+    /* フロート禁止: 同期状態は必ずヘッダーの中（またはページ最上部の帯）に置く。
+       LABページ … 統一ヘッダー .lab-toolbar の2行目に格納
+       data-sync-slot … ツールが用意した格納場所
+       自前バッジ … ツール自身のヘッダー表示をそのまま使い、チップは作らない
+       どれも無い … body 先頭にインフローの帯として挿入 */
+    let anchor = chip;
+    let ownBadge = null;
+    const toolbar = document.querySelector('.lab-toolbar');
+    const slot = document.querySelector('[data-sync-slot]');
+    let inToolbar = false;
+    const compactChip = () => !!(chip.closest('.lab-toolbar') || chip.closest('[data-sync-slot]'));
+    const rendered = (el) => !!el && el.getClientRects().length > 0;
+    if (toolbar) {
+      chip.classList.add('dtsp-chip-docked');
+      toolbar.classList.add('dtsp-with-sync');
+      toolbar.appendChild(chip);
+      inToolbar = true;
+    } else if (rendered(findOwnBadge(appKey))) {
+      dockToOwnBadge(findOwnBadge(appKey));
+    } else if (slot) {
+      chip.classList.add('dtsp-chip-docked');
+      slot.appendChild(chip);
+      watchForBadge();
+    } else {
+      chip.classList.add('dtsp-chip-bar');
+      document.body.insertBefore(chip, document.body.firstChild);
+      watchForBadge();
+    }
+    /* ツール側のヘッダー表示が後から描画される（React製ツール等）、あるいは
+       狭い画面で自前バッジが隠れているページでは、バッジが実際に描画された
+       時点でそちらへ格納し直す */
+    function watchForBadge() {
+      const obs = new MutationObserver(() => {
+        const b = findOwnBadge(appKey);
+        if (rendered(b)) { obs.disconnect(); dockToOwnBadge(b); }
+      });
+      obs.observe(document.body, { childList: true, subtree: true });
+      window.setTimeout(() => obs.disconnect(), 30000);
+    }
+    function dockToOwnBadge(el) {
+      chip.remove();
+      ownBadge = el;
+      anchor = el;
+      el.style.cursor = 'pointer';
+      el.setAttribute('title', '同期状態の詳細');
+      el.setAttribute('aria-haspopup', 'dialog');
+      el.addEventListener('click', togglePanel);
+    }
 
     const panel = document.createElement('div');
     panel.className = 'dtsp-panel';
+    /* 映画ツールはテーマ chrome 一括非表示の都合で .mt-overlay だけが非表示化を免れる */
+    if (appKey === 'movie') panel.classList.add('mt-overlay');
+    if (appKey === 'manga') panel.classList.add('ms-overlay');
     panel.setAttribute('role', 'dialog');
     panel.setAttribute('aria-label', '同期状態');
     panel.hidden = true;
@@ -200,9 +274,12 @@
 
     let revisionsLoaded = false;
 
+    const SHORT_LABEL = { ok: 'OK', conflict: '競合', error: 'エラー', off: 'OFF', unknown: '未確認', syncing: 'SYNC' };
     function renderChip(state) {
+      if (ownBadge) { anchor.setAttribute('aria-expanded', panel.hidden ? 'false' : 'true'); return; }
       chip.dataset.kind = state.kind;
-      chip.querySelector('.dtsp-chip-label').textContent = `SYNC · ${state.label}`;
+      chip.querySelector('.dtsp-chip-label').textContent = compactChip() ? (SHORT_LABEL[state.kind] || state.label) : `SYNC · ${state.label}`;
+      chip.setAttribute('aria-label', `同期状態: ${state.label}。詳細を開く`);
       chip.setAttribute('aria-expanded', panel.hidden ? 'false' : 'true');
     }
 
@@ -293,22 +370,25 @@
       revisionsLoaded = false;
       refresh();
       loadRevisions();
-      chip.setAttribute('aria-expanded', 'true');
+      anchor.setAttribute('aria-expanded', 'true');
     }
     function closePanel() {
       panel.hidden = true;
-      chip.setAttribute('aria-expanded', 'false');
+      anchor.setAttribute('aria-expanded', 'false');
     }
-    chip.addEventListener('click', () => { panel.hidden ? openPanel() : closePanel(); });
+    anchor.addEventListener('click', togglePanel);
+    function togglePanel() { panel.hidden ? openPanel() : closePanel(); }
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) closePanel(); });
     document.addEventListener('pointerdown', e => {
-      if (!panel.hidden && !panel.contains(e.target) && e.target !== chip && !chip.contains(e.target)) closePanel();
+      if (!panel.hidden && !panel.contains(e.target) && e.target !== anchor && !anchor.contains(e.target)) closePanel();
     });
     window.addEventListener('dt-d1-sync-status', e => {
       if (!e.detail || e.detail.appKey !== appKey) return;
       if (e.detail.status === 'syncing') {
-        chip.dataset.kind = 'syncing';
-        chip.querySelector('.dtsp-chip-label').textContent = 'SYNC · 同期中';
+        if (!ownBadge) {
+          chip.dataset.kind = 'syncing';
+          chip.querySelector('.dtsp-chip-label').textContent = compactChip() ? 'SYNC' : 'SYNC · 同期中';
+        }
         return;
       }
       window.setTimeout(refresh, 60);

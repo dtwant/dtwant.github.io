@@ -107,7 +107,7 @@
       markers: ['端末間同期', '同期キー', 'クラウド送信']
     },
     deadline: {
-      roots: ['#dm-config-modal'],
+      roots: ['#dm-config-modal .dm-sheet'],
       selectors: ['#dm-config-blob-id'],
       markers: ['接続 BIN ID', 'Bin ID']
     },
@@ -132,7 +132,7 @@
       markers: ['JSONBIN', 'Bin ID', 'API KEY']
     },
     attendance: {
-      roots: ['#ag-config-modal'],
+      roots: ['#ag-config-modal .ag-sheet'],
       selectors: ['#ag-config-blob-id'],
       markers: ['接続 BIN ID', 'Bin ID']
     },
