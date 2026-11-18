@@ -331,381 +331,151 @@ body.portal-body,
 }
 
 :root {
-  --apple-bg: #000000;
-  --apple-card: rgba(28, 28, 30, 0.75);
-  --apple-border: rgba(255, 255, 255, 0.1);
-  --apple-text: #f5f5f7;
-  --apple-subtext: #8e8e93;
-  --apple-accent: #0a84ff;
-  --apple-green: #30d158;
-  --apple-yellow: #ffd60a;
-  --apple-red: #ff453a;
-  --apple-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Zen Kaku Gothic New', sans-serif;
-  --apple-spring: cubic-bezier(0.32, 0.72, 0, 1);
-  --apple-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --sd-ink: #f2f1fa;
+  --sd-dim: #aaa6c9;
+  --sd-faint: #7c78a0;
+  --sd-lav: #b7a6ff;
+  --sd-pink: #ffb7dd;
+  --sd-cyan: #8fe8ff;
+  --sd-cobalt: #5f7cff;
+  --sd-gold: #ffd9a0;
+  --sd-rose: #ff8fa8;
+  --sd-glass-brd: rgba(232, 233, 245, 0.22);
+  --sd-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Zen Kaku Gothic New', sans-serif;
+  --sd-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --sd-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.ag-app, .ag-app * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
+.ag-app, .ag-app * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 .ag-app {
-  font-family: var(--apple-font);
-  color: var(--apple-text);
+  font-family: var(--sd-font);
+  color: var(--sd-ink);
   min-height: 100vh;
   width: 100%;
-  padding: 6rem 1.25rem 4rem 1.25rem;
-  background: radial-gradient(circle at 50% 0%, rgba(10, 132, 255, 0.1) 0%, rgba(0, 0, 0, 0) 65%), #000000;
+  padding: 6rem 1.25rem 5rem;
+  background:
+    radial-gradient(70% 300px at 12% -40px, rgba(183,166,255,.22), transparent 70%),
+    radial-gradient(60% 280px at 88% 30px, rgba(255,183,221,.13), transparent 70%),
+    radial-gradient(80% 500px at 50% 115%, rgba(95,124,255,.16), transparent 70%),
+    linear-gradient(168deg, #171331 0%, #100e20 46%, #0b0a16 100%);
   -webkit-font-smoothing: antialiased;
   position: relative;
   z-index: 10;
+  overflow-x: clip;
 }
-
-.ag-container {
-  max-width: 820px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+ 
+.ag-app::before {
+  content: ""; position: fixed; left: -25%; right: -25%; bottom: -4vh; height: 36vh; z-index: -1; pointer-events: none;
+  background:
+    repeating-linear-gradient(90deg, rgba(143,232,255,.16) 0 1px, transparent 1px 46px),
+    repeating-linear-gradient(0deg, rgba(143,232,255,.12) 0 1px, transparent 1px 24px),
+    linear-gradient(180deg, transparent, rgba(95,124,255,.14));
+  transform: perspective(320px) rotateX(52deg);
+  transform-origin: bottom;
+  -webkit-mask-image: linear-gradient(180deg, transparent, black 45%);
+  mask-image: linear-gradient(180deg, transparent, black 45%);
 }
+ 
+.ag-app::after {
+  content: ""; position: fixed; top: 84px; right: max(10px, calc(50% - 470px)); width: 74px; height: 74px; border-radius: 50%; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle at 32% 28%, #ffffff 0%, #dfe4ff 22%, #9fb4ff 48%, #5f7cff 74%, #2c2a55 100%);
+  box-shadow: 0 18px 34px rgba(20,16,60,.55), inset -8px -10px 18px rgba(24,20,70,.45);
+  opacity: .9;
+}
+.ag-container { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.4rem; position: relative; z-index: 1; }
 
  
 .ag-card {
-  background: var(--apple-card);
-  border: 1px solid var(--apple-border);
+  background: linear-gradient(150deg, rgba(183,166,255,.15), rgba(143,232,255,.05) 44%, rgba(26,24,50,.58));
+  border: 1px solid var(--sd-glass-brd);
   border-radius: 22px;
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  padding: 1.5rem;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(28px) saturate(150%);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  padding: 1.4rem;
+  box-shadow: 0 18px 40px rgba(2,0,18,.45), inset 0 1px 0 rgba(255,255,255,.28), inset 0 -20px 34px rgba(95,124,255,.07);
 }
 
  
-.ag-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
+.ag-header { display: flex; justify-content: space-between; align-items: flex-start; gap: .75rem; flex-wrap: wrap; }
 .ag-header > :first-child { min-width: 0; flex: 1 1 180px; }
-.ag-header > :last-child { min-width: 0; max-width: 100%; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; }
-@media (max-width: 640px) {
-  .ag-header > :last-child { flex: 1 1 100%; justify-content: flex-start; }
-}
-.ag-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.ag-subtitle {
-  font-size: 0.8rem;
-  color: var(--apple-subtext);
-  margin-top: 0.15rem;
-}
+.ag-header > :last-child { min-width: 0; max-width: 100%; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; }
+@media (max-width: 640px) { .ag-header > :last-child { flex: 1 1 100%; justify-content: flex-start; } }
+.ag-title { font-size: 1.9rem; font-weight: 800; letter-spacing: -.01em; background: linear-gradient(180deg, #ffffff 0%, #d9d4ff 52%, #8f86c9 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.ag-subtitle { font-size: .78rem; color: var(--sd-dim); margin-top: .2rem; letter-spacing: .12em; }
+
+.ag-btn { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 44px; border-radius: 13px; font-size: .85rem; font-weight: 600; padding: .6rem 1.1rem; cursor: pointer; border: 1px solid var(--sd-glass-brd); background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.05)); color: var(--sd-ink); box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 6px 16px rgba(2,0,18,.35); transition: transform .15s var(--sd-bounce), background .2s ease; user-select: none; font-family: inherit; }
+.ag-btn:active { transform: scale(.94); }
+.ag-btn-primary { background: linear-gradient(180deg, #7ea0ff 0%, var(--sd-cobalt) 52%, #4353d8 100%); color: #fff; border-color: rgba(183,166,255,.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 8px 20px rgba(95,124,255,.4); }
+.ag-btn-danger { background: rgba(255,143,168,.12); color: var(--sd-rose); border-color: rgba(255,143,168,.35); }
+.ag-btn-circle { width: 2.75rem; height: 2.75rem; padding: 0; border-radius: 50%; font-size: 1.1rem; }
+.ag-exit { color: var(--sd-rose); border-color: rgba(255,143,168,.3); background: rgba(255,143,168,.08); }
+
+.ag-pill { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; padding: .35rem .85rem; border-radius: 999px; font-size: .75rem; font-weight: 600; border: 1px solid var(--sd-glass-brd); background: rgba(255,255,255,.05); color: var(--sd-dim); cursor: pointer; transition: transform .15s var(--sd-bounce); }
+.ag-pill:active { transform: scale(.94); }
+.ag-pill.ok { color: var(--sd-cyan); border-color: rgba(143,232,255,.4); background: rgba(143,232,255,.08); }
+.ag-pill.busy { color: var(--sd-gold); border-color: rgba(255,217,160,.4); background: rgba(255,217,160,.08); }
+.ag-pill.error { color: var(--sd-rose); border-color: rgba(255,143,168,.4); background: rgba(255,143,168,.08); }
 
  
-.ag-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 0.6rem 1.1rem;
-  cursor: pointer;
-  border: 1px solid var(--apple-border);
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--apple-text);
-  transition: transform 0.15s var(--apple-bounce), background 0.2s ease;
-  user-select: none;
-  font-family: inherit;
-}
-.ag-btn:active {
-  transform: scale(0.94);
-  background: rgba(255, 255, 255, 0.14);
-}
-.ag-btn-primary {
-  background: var(--apple-accent);
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 4px 14px rgba(10, 132, 255, 0.35);
-}
-.ag-btn-primary:active {
-  background: #0071e3;
-}
-.ag-btn-danger {
-  background: rgba(255, 69, 58, 0.12);
-  color: var(--apple-red);
-  border-color: rgba(255, 69, 58, 0.3);
-}
-.ag-btn-circle {
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0;
-  border-radius: 50%;
-  font-size: 1.1rem;
-}
+.ag-stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.ag-stat-card { padding: 1.15rem 1.25rem; border-radius: 20px; background: linear-gradient(150deg, rgba(255,255,255,.11), rgba(255,255,255,.03) 55%, rgba(95,124,255,.08)); border: 1px solid var(--sd-glass-brd); box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 12px 28px rgba(2,0,18,.35); display: flex; flex-direction: column; gap: .3rem; }
+.ag-stat-label { font-size: .72rem; color: var(--sd-dim); font-weight: 600; letter-spacing: .14em; }
+.ag-stat-val { font-size: 1.9rem; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.ag-stat-val .unit { font-size: .9rem; color: var(--sd-dim); margin-left: .3rem; font-weight: 600; }
 
  
-.ag-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.85rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border: 1px solid var(--apple-border);
-  background: rgba(255, 255, 255, 0.04);
-  cursor: pointer;
-  transition: transform 0.15s var(--apple-bounce);
-}
-.ag-pill:active { transform: scale(0.94); }
-.ag-pill.ok { color: var(--apple-green); border-color: rgba(48, 209, 88, 0.3); background: rgba(48, 209, 88, 0.1); }
-.ag-pill.busy { color: var(--apple-yellow); border-color: rgba(255, 214, 10, 0.3); background: rgba(255, 214, 10, 0.1); }
-.ag-pill.error { color: var(--apple-red); border-color: rgba(255, 69, 58, 0.3); background: rgba(255, 69, 58, 0.1); }
+.ag-course-card { display: flex; flex-direction: column; gap: 1.05rem; transition: transform .25s var(--sd-spring), border-color .25s ease; }
+.ag-course-card.safe { border-color: rgba(143,232,255,.32); }
+.ag-course-card.warn { border-color: rgba(255,217,160,.45); }
+.ag-course-card.danger { border-color: rgba(255,143,168,.5); }
+.ag-course-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.ag-course-name { font-size: 1.22rem; font-weight: 700; letter-spacing: -.01em; line-height: 1.35; }
+.ag-tags { display: flex; gap: .4rem; margin-top: .45rem; flex-wrap: wrap; }
+.ag-tag { font-size: .7rem; padding: .28rem .55rem; border-radius: 7px; background: rgba(255,255,255,.06); color: var(--sd-dim); border: 1px solid rgba(232,233,245,.14); font-weight: 500; cursor: pointer; transition: background .15s ease; }
+.ag-tag:hover { background: rgba(255,255,255,.13); color: #fff; }
+.ag-tag.edit-trigger { color: var(--sd-cyan); border-color: rgba(143,232,255,.35); background: rgba(143,232,255,.08); }
+.ag-ring-wrap { width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 20px rgba(2,0,18,.4), inset 0 1px 0 rgba(255,255,255,.3); }
+.ag-ring-inner { width: 45px; height: 45px; background: linear-gradient(160deg, #241f47, #141126); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .95rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.ag-status-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+.ag-remain-big { font-size: 1.85rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.ag-remain-big small { font-size: .95rem; font-weight: 700; margin-left: .15rem; }
+.ag-remain-sub { font-size: .74rem; color: var(--sd-dim); margin-top: .25rem; }
+.ag-risk-chip { flex: 0 0 auto; font-size: .72rem; font-weight: 700; letter-spacing: .08em; padding: .35rem .6rem; border-radius: 999px; border: 1px solid var(--sd-glass-brd); background: rgba(255,255,255,.05); font-variant-numeric: tabular-nums; }
+.ag-gauge-bar { height: 10px; background: rgba(255,255,255,.08); border-radius: 999px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,10,.5); }
+.ag-gauge-fill { height: 100%; border-radius: 999px; transition: width .4s var(--sd-spring); }
+.ag-actions { display: grid; grid-template-columns: 1fr 1fr auto; gap: .6rem; }
+.ag-act-btn { min-height: 48px; background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.04)); border: 1px solid var(--sd-glass-brd); box-shadow: inset 0 1px 0 rgba(255,255,255,.25); color: var(--sd-ink); padding: .7rem; border-radius: 14px; font-size: .85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform .15s var(--sd-bounce), background .2s ease; font-family: inherit; }
+.ag-act-btn:active { transform: scale(.94); }
+.ag-act-btn:disabled { opacity: .35; cursor: default; }
+.ag-act-btn.late { color: var(--sd-gold); }
+.ag-act-btn.absent { color: var(--sd-rose); }
+.ag-linked-btn { width: 100%; min-height: 48px; text-decoration: none; color: var(--sd-cyan); background: linear-gradient(180deg, rgba(143,232,255,.14), rgba(143,232,255,.04)); border: 1px solid rgba(143,232,255,.35); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 600; box-shadow: inset 0 1px 0 rgba(255,255,255,.25); }
+.ag-linked-btn:active { transform: scale(.98); }
 
  
-.ag-stats-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-.ag-stat-card {
-  padding: 1.25rem;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--apple-border);
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-.ag-stat-label {
-  font-size: 0.75rem;
-  color: var(--apple-subtext);
-  font-weight: 500;
-  text-transform: uppercase;
-}
-.ag-stat-val {
-  font-size: 1.85rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-}
+.ag-sheet-overlay { position: fixed; inset: 0; background: rgba(8,6,24,.66); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); z-index: 9999999; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s var(--sd-spring); }
+.ag-sheet-overlay.show { opacity: 1; pointer-events: auto; }
+.ag-sheet { width: 100%; max-width: 520px; background: linear-gradient(165deg, #2b2650, #1a1732 70%); border: 1px solid var(--sd-glass-brd); border-radius: 28px 28px 0 0; padding: 1.5rem 1.75rem 2.5rem; box-shadow: 0 -14px 44px rgba(2,0,18,.6), inset 0 1px 0 rgba(255,255,255,.25); transform: translateY(100%); transition: transform .35s var(--sd-spring); }
+.ag-sheet-overlay.show .ag-sheet { transform: translateY(0); }
+.ag-sheet-handle { width: 36px; height: 5px; background: rgba(255,255,255,.3); border-radius: 999px; margin: 0 auto 1.25rem; }
+.ag-sheet h3 { letter-spacing: -.01em; }
+.ag-form-group { display: flex; flex-direction: column; gap: .4rem; }
+.ag-form-label { font-size: .75rem; color: var(--sd-dim); font-weight: 500; }
+.ag-input-box { width: 100%; min-height: 48px; padding: .8rem 1.05rem; border-radius: 14px; background: rgba(10,8,26,.55); border: 1px solid rgba(232,233,245,.18); color: #fff; font-size: .95rem; outline: none; font-family: inherit; }
+.ag-input-box:focus { border-color: var(--sd-lav); box-shadow: 0 0 0 3px rgba(183,166,255,.22); }
+select option, .ag-input-box option { background-color: #221f42 !important; color: #fff !important; }
 
  
-.ag-course-card {
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-  border-radius: 20px;
-  transition: transform 0.25s var(--apple-spring), border-color 0.25s ease;
-}
-.ag-course-card.safe { border-color: rgba(48, 209, 88, 0.25); }
-.ag-course-card.warn { border-color: rgba(255, 214, 10, 0.35); }
-.ag-course-card.danger { border-color: rgba(255, 69, 58, 0.4); }
+.ag-toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px); background: rgba(38,34,70,.92); border: 1px solid var(--sd-glass-brd); backdrop-filter: blur(20px); padding: .75rem 1.35rem; border-radius: 999px; font-size: .85rem; font-weight: 600; color: #fff; box-shadow: 0 12px 36px rgba(2,0,18,.6), inset 0 1px 0 rgba(255,255,255,.25); opacity: 0; transition: transform .35s var(--sd-bounce), opacity .25s ease; z-index: 10000000; pointer-events: none; white-space: nowrap; }
+.ag-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-.ag-course-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.ag-course-name {
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-.ag-tags {
-  display: flex;
-  gap: 0.4rem;
-  margin-top: 0.35rem;
-  flex-wrap: wrap;
-}
-.ag-tag {
-  font-size: 0.7rem;
-  padding: 0.2rem 0.55rem;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--apple-subtext);
-  border: 1px solid var(--apple-border);
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-.ag-tag:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
-}
-.ag-tag.edit-trigger {
-  color: var(--apple-accent);
-  border-color: rgba(10, 132, 255, 0.3);
-  background: rgba(10, 132, 255, 0.08);
-}
-
- 
-.ag-ring-wrap {
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.ag-ring-inner {
-  width: 44px; height: 44px;
-  background: #141416;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.9rem; font-weight: 700;
-}
-
- 
-.ag-gauge-bar {
-  height: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 999px;
-  overflow: hidden;
-}
-.ag-gauge-fill {
-  height: 100%;
-  border-radius: 999px;
-  transition: width 0.4s var(--apple-spring);
-}
-
- 
-.ag-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 0.6rem;
-}
-.ag-act-btn {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--apple-border);
-  color: var(--apple-text);
-  padding: 0.7rem;
-  border-radius: 14px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.15s var(--apple-bounce), background 0.2s ease;
-  font-family: inherit;
-}
-.ag-act-btn:active {
-  transform: scale(0.94);
-  background: rgba(255, 255, 255, 0.12);
-}
-
- 
-.ag-sheet-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  z-index: 9999999;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s var(--apple-spring);
-}
-.ag-sheet-overlay.show {
-  opacity: 1;
-  pointer-events: auto;
-}
-.ag-sheet {
-  width: 100%;
-  max-width: 520px;
-  background: #1c1c1e;
-  border: 1px solid var(--apple-border);
-  border-radius: 28px 28px 0 0;
-  padding: 1.5rem 1.75rem 2.5rem 1.75rem;
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7);
-  transform: translateY(100%);
-  transition: transform 0.35s var(--apple-spring);
-}
-.ag-sheet-overlay.show .ag-sheet {
-  transform: translateY(0);
-}
-.ag-sheet-handle {
-  width: 36px; height: 5px;
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 999px;
-  margin: 0 auto 1.25rem auto;
-}
-
-.ag-form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-.ag-form-label {
-  font-size: 0.75rem;
-  color: var(--apple-subtext);
-  font-weight: 500;
-}
-.ag-input-box {
-  width: 100%;
-  padding: 0.85rem 1.1rem;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--apple-border);
-  color: #fff;
-  font-size: 0.95rem;
-  outline: none;
-  font-family: inherit;
-}
-.ag-input-box:focus {
-  border-color: var(--apple-accent);
-}
-select option,
-.ag-input-box option {
-  background-color: #1c1c1e !important;
-  color: #ffffff !important;
-}
-
- 
-.ag-toast {
-  position: fixed;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: rgba(44, 44, 46, 0.95);
-  border: 1px solid var(--apple-border);
-  backdrop-filter: blur(25px);
-  padding: 0.75rem 1.35rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #ffffff;
-  box-shadow: 0 12px 36px rgba(0,0,0,0.6);
-  opacity: 0;
-  transition: transform 0.35s var(--apple-bounce), opacity 0.25s ease;
-  z-index: 10000000;
-  pointer-events: none;
-  white-space: nowrap;
-}
-.ag-toast.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-
-@media (min-width: 641px) {
-  .ag-sheet-overlay { align-items: center; }
-  .ag-sheet { border-radius: 24px; padding-bottom: 1.75rem; }
-  .ag-sheet-handle { display: none; }
-}
+.ag-app :focus-visible, .ag-sheet :focus-visible { outline: 2px solid var(--sd-cyan); outline-offset: 2px; }
+@media (min-width: 641px) { .ag-sheet-overlay { align-items: center; } .ag-sheet { border-radius: 24px; padding-bottom: 1.75rem; } .ag-sheet-handle { display: none; } }
+@media (max-width: 560px) { .ag-app::after { width: 54px; height: 54px; top: 76px; } .ag-remain-big { font-size: 1.6rem; } }
+@media (prefers-reduced-motion: reduce) { .ag-course-card, .ag-act-btn, .ag-gauge-fill { transition: none; } }
 </style>
+
 
 <div class="ag-app">
   <div class="ag-container" id="ag-main-content">
@@ -740,8 +510,8 @@ select option,
         <div class="ag-form-group" style="flex:1;">
           <label class="ag-form-label">落単ライン (許容減点)</label>
           <select id="ag-input-fail" class="ag-input-box">
-            <option value="-11">半期基準 (-11点で落単)</option>
-            <option value="-21">通年基準 (-21点で落単)</option>
+            <option value="-11">半期基準 (-11点)</option>
+            <option value="-21">通年基準 (-21点)</option>
             <option value="-10">-10点で落単</option>
             <option value="-20">-20点で落単</option>
             <option value="-15">-15点で落単</option>
@@ -973,19 +743,20 @@ select option,
       const statusClass = isFailed ? 'danger' : isDanger ? 'warn' : 'safe';
       const remainingToFail = Math.max(0, course.current - failVal);
       const percent = Math.min((Math.abs(course.current) / Math.abs(limitVal)) * 100, 100);
-      const ringColor = isFailed ? 'var(--apple-red)' : isDanger ? 'var(--apple-yellow)' : 'var(--apple-green)';
+      const hues = isFailed ? ['#ff8fa8', '#ff5f7a'] : isDanger ? ['#ffd9a0', '#ffb7dd'] : ['#8fe8ff', '#b7a6ff'];
+      const ringColor = hues[0];
       const weekly = course.weeklyLessons || 1;
 
       const actionButtons = course.isTimetableLinked ? `
-        <a href="/project-x/timetable/" class="ag-btn" style="width: 100%; text-decoration: none; color: #64d2ff; background: rgba(100,210,255,0.06);">
+        <a href="/project-x/timetable/" class="ag-linked-btn">
           時間割ログで出欠を記録 ➔
         </a>
       ` : `
         <div class="ag-actions">
-          <button class="ag-act-btn" style="color:var(--apple-yellow);" onclick="agUpdateCourse('${course.id}', -1, 'late')" ${isFailed ? 'disabled' : ''}>
+          <button class="ag-act-btn late" onclick="agUpdateCourse('${course.id}', -1, 'late')" ${isFailed ? 'disabled' : ''}>
             遅刻 (-1)
           </button>
-          <button class="ag-act-btn" style="color:var(--apple-red);" onclick="agUpdateCourse('${course.id}', -2, 'absent')" ${isFailed ? 'disabled' : ''}>
+          <button class="ag-act-btn absent" onclick="agUpdateCourse('${course.id}', -2, 'absent')" ${isFailed ? 'disabled' : ''}>
             欠席 (-2)
           </button>
           <button class="ag-act-btn" onclick="agUpdateCourse('${course.id}', 1, 'undo')">
@@ -1007,21 +778,23 @@ select option,
                 <span class="ag-tag edit-trigger" onclick="agOpenEditModal('${course.id}')">✎ 設定</span>
               </div>
             </div>
-            <div class="ag-ring-wrap" style="background: conic-gradient(${ringColor} ${percent}%, rgba(255,255,255,0.08) 0%)">
+            <div class="ag-ring-wrap" style="background: conic-gradient(from -90deg, ${hues[0]} 0%, ${hues[1]} ${percent}%, rgba(255,255,255,0.08) ${percent}%)">
               <div class="ag-ring-inner">
                 <span style="color: ${ringColor}">${course.current}</span>
               </div>
             </div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 0.4rem;">
-            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--apple-subtext);">
-              <span>${isFailed ? '落単確定' : `あと欠席 ${Math.floor(remainingToFail / 2)}回 (遅刻 ${remainingToFail}回)`}</span>
-              <span style="font-weight: 600; color: ${ringColor}">${Math.round(percent)}% RISK</span>
+          <div class="ag-status-row">
+            <div>
+              ${isFailed
+                ? '<div class="ag-remain-big" style="color: var(--sd-rose);">落単確定</div><div class="ag-remain-sub">これ以上の欠席は記録できません</div>'
+                : `<div class="ag-remain-big">あと ${Math.floor(remainingToFail / 2)}<small>回</small></div><div class="ag-remain-sub">欠席換算で落単まで（遅刻 ${remainingToFail} 回まで）</div>`}
             </div>
-            <div class="ag-gauge-bar">
-              <div class="ag-gauge-fill" style="width: ${percent}%"></div>
-            </div>
+            <span class="ag-risk-chip" style="color: ${ringColor}">${Math.round(percent)}% RISK</span>
+          </div>
+          <div class="ag-gauge-bar">
+            <div class="ag-gauge-fill" style="width: ${percent}%; background: linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,0) 55%), linear-gradient(90deg, ${hues[0]}, ${hues[1]});"></div>
           </div>
 
           ${actionButtons}
@@ -1033,7 +806,7 @@ select option,
       <div class="ag-header">
         <div>
           <h1 class="ag-title">出欠 Guardian</h1>
-          <div class="ag-subtitle">Attendance & Risk Monitor</div>
+          <div class="ag-subtitle">ATTENDANCE & RISK MONITOR</div>
         </div>
         <div style="display: flex; gap: 0.5rem; align-items: center;">
           <span class="ag-pill ${syncStatus}" onclick="agTriggerSync()">
@@ -1041,21 +814,21 @@ select option,
           </span>
           <button class="ag-btn ag-btn-circle" onclick="agOpenAddModal()" title="科目追加">＋</button>
           <button class="ag-btn ag-btn-circle" onclick="agOpenConfigModal()" title="設定">⚙</button>
-          <button class="ag-btn" style="color:var(--apple-red); border-color:rgba(255,69,58,0.3); background:rgba(255,69,58,0.1);" onclick="if(history.length>1){history.back();}else{location.href='/lab/';}" title="ポータルへ戻る">✕ EXIT</button>
+          <button class="ag-btn ag-exit" onclick="if(history.length>1){history.back();}else{location.href='/lab/';}" title="ポータルへ戻る">✕ EXIT</button>
         </div>
       </div>
 
       <div class="ag-stats-row">
         <div class="ag-stat-card">
           <div class="ag-stat-label">登録単位数</div>
-          <div class="ag-stat-val">${totalCredits}<span style="font-size: 0.9rem; color: var(--apple-subtext); margin-left: 0.3rem;">単位</span></div>
+          <div class="ag-stat-val">${totalCredits}<span class="unit">単位</span></div>
         </div>
         <div class="ag-stat-card">
           <div class="ag-stat-label">警告 / 落単リスク</div>
           <div class="ag-stat-val">
-            <span style="color: ${dangerCount > 0 ? 'var(--apple-yellow)' : 'var(--apple-text)'}">${dangerCount}</span>
-            <span style="color: var(--apple-subtext); margin: 0 0.4rem; font-size: 1.2rem;">/</span>
-            <span style="color: ${failCount > 0 ? 'var(--apple-red)' : 'var(--apple-text)'}">${failCount}</span>
+            <span style="color: ${dangerCount > 0 ? 'var(--sd-gold)' : 'var(--sd-ink)'}">${dangerCount}</span>
+            <span style="color: var(--sd-faint); margin: 0 0.4rem; font-size: 1.2rem;">/</span>
+            <span style="color: ${failCount > 0 ? 'var(--sd-rose)' : 'var(--sd-ink)'}">${failCount}</span>
           </div>
         </div>
       </div>
@@ -1069,7 +842,7 @@ select option,
   
   window.agUpdateCourse = function(id, delta, actionType) {
     const next = courses.map(c => {
-      if (c.id === id && !c.isTimetableLinked) {
+      if (String(c.id) === String(id) && !c.isTimetableLinked) {
         return { ...c, current: Math.min(0, c.current + delta) };
       }
       return c;
