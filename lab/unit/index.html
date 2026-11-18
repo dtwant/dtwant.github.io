@@ -245,7 +245,7 @@
     }
   </script>
 </head>
-<link rel="stylesheet" href="/css/lab-ui-system.min.f56336d8ab03847c3f0663ce044b0fd3312c01745c023571ba954c01bb737eb2.css" integrity="sha256-9WM22KsDhHw/BmPOBEsP0zEsAXRcAjVxupVMAbtzfrI="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
+<link rel="stylesheet" href="/css/lab-ui-system.min.adccb40324dd6a860a84182e892e0866ecc3bbfe002a22ac3d77e542bfe83781.css" integrity="sha256-rcy0AyTdaoYKhBguiS4IZuzDu/4AKiKsPXflQr/oN4E="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
   </head>
   <body class="lab-body portal-body" data-lab-slug="unit">
 
@@ -337,9 +337,10 @@
     padding: 14px;
     color: var(--uc-ink);
     font-family: 'Zen Kaku Gothic New', sans-serif;
-    overflow: hidden;
   }
   #uc-app *, #uc-app *::before, #uc-app *::after { box-sizing: border-box; }
+   
+  #uc-app *, #uc-app *::before, #uc-app *::after { text-decoration: none !important; }
   #uc-app button { font-family: inherit; }
   #uc-app :focus-visible { outline: 2px solid var(--uc-amber); outline-offset: 2px; }
 
@@ -362,6 +363,10 @@
   .uc-vents { height: 8px; flex: 1 1 60px; min-width: 40px; border-radius: 4px;
     background: repeating-linear-gradient(90deg, rgba(38,36,27,.55) 0 3px, transparent 3px 9px); opacity: .5; }
   .uc-search-wrap { position: relative; flex: 0 1 260px; min-width: 170px; margin-left: auto; }
+  @media (max-width: 639px) {
+    .uc-search-wrap { flex: 1 1 100%; margin-left: 0; }
+    .uc-vents { display: none; }
+  }
   .uc-search {
     width: 100%; min-height: 44px; border-radius: 6px; border: 1px solid #17160f;
     background: var(--uc-display-bg); color: var(--uc-phos);
@@ -470,6 +475,10 @@
   }
   .uc-swap:active { transform: translateY(2px); box-shadow: 0 1px 0 #17160f; }
   @media (max-width: 639px) { .uc-swap { transform: rotate(90deg); } .uc-swap:active { transform: rotate(90deg) translateX(2px); } }
+  @media (max-width: 899px) {
+    .uc-display { flex-wrap: wrap; }
+    .uc-display select { order: -1; flex: 1 1 100%; max-width: none; text-align: left; }
+  }
   .uc-rate { margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c9c3ae; letter-spacing: .04em; }
   .uc-rate b { color: var(--uc-amber); font-weight: 700; }
 
@@ -512,7 +521,7 @@
     box-shadow: 0 2px 0 #17160f; display: flex; align-items: center; justify-content: center;
   }
   .uc-icon-btn:active { transform: translateY(2px); box-shadow: 0 0 0 #17160f; }
-  .uc-fav-btn { grid-area: fav; } .uc-copy-btn2 { grid-area: copy; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .uc-fav-btn { grid-area: fav; } .uc-copy-btn2 { grid-area: copy; color: var(--uc-ink-soft); }
   .uc-fav-btn.active { color: #a86e00; }
   .uc-row.fav { border-left: 3px solid var(--uc-amber); }
 
@@ -544,7 +553,7 @@
     <div class="uc-vents" aria-hidden="true"></div>
     <div class="uc-search-wrap">
       <span class="uc-search-icon">⌕</span>
-      <input type="search" class="uc-search" id="uc-search" aria-label="単位を検索" placeholder="単位を検索（例: マイル、kcal）" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="uc-search-results" aria-autocomplete="list">
+      <input type="search" class="uc-search" id="uc-search" aria-label="単位を検索" placeholder="単位を検索（例：マイル）" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="uc-search-results" aria-autocomplete="list">
       <div class="uc-search-results" id="uc-search-results" role="listbox"></div>
     </div>
   </div>
@@ -890,7 +899,7 @@ var ucApp = (function() {
           <span class="uc-r-sym">${u.symbol}</span>
         </div>
         <button type="button" class="uc-icon-btn uc-fav-btn${isFav ? ' active' : ''}" aria-label="${u.name}のお気に入り切り替え" aria-pressed="${isFav}" title="お気に入り">${isFav ? '★' : '☆'}</button>
-        <button type="button" class="uc-icon-btn uc-copy-btn2" aria-label="COPY — ${u.name}の値をコピー" title="${u.name}の値をコピー">COPY</button>`;
+        <button type="button" class="uc-icon-btn uc-copy-btn2" aria-label="COPY — ${u.name}の値をコピー" title="${u.name}の値をコピー"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>`;
       rowsEl.appendChild(row);
       const input = row.querySelector('.uc-r-input');
       inputs[u.id] = input;
