@@ -253,7 +253,7 @@
   };
   // 試験なし科目：前期の期末試験欄には公式成績と同値が入っているため実点として連携しない
   const SB_NO_EXAM_SUBJECTS = new Set(['liberal-arts-1', 'physical-education-2', 'engineering-practice-1']);
-  const sbLink = { status: 'unknown', byCode: new Map(), count: 0, signature: '' };
+  const sbLink = { status: 'unknown', byCode: new Map(), gradesByCode: new Map(), count: 0, signature: '' };
 
   function scoreBookCodeFor(subject) {
     if (!subject) return null;
@@ -282,8 +282,20 @@
     return { ...item, score: linked, outOf: 100, isSkipped: false, submitted: 'done', sbLinked: true };
   }
 
+  // スコアブックの公式成績（中間成績・期末成績）。確定した学期は入力ベースの
+  // 見込みではなく、こちらを正として表示・GPA計算に使う。
+  function linkedOfficialGrade(subject, semester) {
+    const code = scoreBookCodeFor(subject);
+    if (!code) return undefined;
+    const terms = sbLink.gradesByCode.get(code);
+    if (!terms) return undefined;
+    const value = terms[semester]?.finalGrade;
+    return typeof value === 'number' ? value : undefined;
+  }
+
   function readScoreBookLink() {
     sbLink.byCode.clear();
+    sbLink.gradesByCode.clear();
     sbLink.count = 0;
     let payload = null;
     try {
@@ -303,6 +315,7 @@
       const code = SB_SUBJECT_TO_CODE[sbId];
       if (!code || !terms || typeof terms !== 'object') return;
       const entry = {};
+      const gradeEntry = {};
       ['first', 'second'].forEach(semester => {
         const block = terms[semester];
         if (!block || typeof block !== 'object') return;
@@ -314,14 +327,21 @@
           termEntry.final = finalScore;
         }
         if (Object.keys(termEntry).length) entry[semester] = termEntry;
+        const termGrades = {};
+        const midGrade = numberOrNull(block.midGrade);
+        if (midGrade !== null) termGrades.midGrade = midGrade;
+        const finalGrade = numberOrNull(block.finalGrade);
+        if (finalGrade !== null) termGrades.finalGrade = finalGrade;
+        if (Object.keys(termGrades).length) gradeEntry[semester] = termGrades;
       });
       if (Object.keys(entry).length) {
         sbLink.byCode.set(code, entry);
         sbLink.count += Object.values(entry).reduce((sum, term) => sum + Object.keys(term).length, 0);
       }
+      if (Object.keys(gradeEntry).length) sbLink.gradesByCode.set(code, gradeEntry);
     });
     sbLink.status = 'linked';
-    sbLink.signature = JSON.stringify([...sbLink.byCode.entries()]);
+    sbLink.signature = JSON.stringify([[...sbLink.byCode.entries()], [...sbLink.gradesByCode.entries()]]);
   }
 
   async function refreshScoreBookLink() {
@@ -904,10 +924,12 @@
       return !relevantSemesters.every(term => getMidtermPolicy(subject, term) === 'none');
     });
     const totalWeight = activeCategories.reduce((sum, item) => sum + Math.max(0, cleanNumber(item.weight, 0)), 0);
+    const officialScore = linkedOfficialGrade(subject, semester) ?? null;
     if (totalWeight <= 0) {
       return {
         score: null,
         observedScore: null,
+        officialScore,
         currentPoints: 0,
         contribution: 0,
         coverage: 0,
@@ -965,6 +987,7 @@
     return {
       score: observedScore,
       observedScore,
+      officialScore,
       currentPoints,
       contribution,
       coverage: coveredWeight,
@@ -1004,18 +1027,22 @@
   function dashboardValues() {
     const activeSubjects = state.subjects.filter(subject => periodIncludes(subject, state.semester));
     const evaluated = activeSubjects
-      .map(subject => ({ subject, result: calculateSubjectGrade(subject) }))
-      .filter(row => row.result.observedScore !== null);
+      .map(subject => {
+        const result = calculateSubjectGrade(subject);
+        // 公式成績が確定している科目は、入力ベースの見込みより公式を優先する
+        return { subject, result, effectiveScore: result.officialScore ?? result.observedScore };
+      })
+      .filter(row => row.effectiveScore !== null);
     const evaluatedCredits = evaluated.reduce((sum, row) => sum + Math.max(0, row.subject.credits), 0);
     const gpaRows = evaluated.filter(row => row.subject.gpaEligible !== false);
     const gpaCredits = gpaRows.reduce((sum, row) => sum + Math.max(0, row.subject.credits), 0);
-    const weightedScore = evaluated.reduce((sum, row) => sum + row.result.observedScore * row.subject.credits, 0);
-    const weightedGP = gpaRows.reduce((sum, row) => sum + getGPAPoints(row.result.observedScore) * row.subject.credits, 0);
+    const weightedScore = evaluated.reduce((sum, row) => sum + row.effectiveScore * row.subject.credits, 0);
+    const weightedGP = gpaRows.reduce((sum, row) => sum + getGPAPoints(row.effectiveScore) * row.subject.credits, 0);
     const gpa = gpaCredits > 0 ? weightedGP / gpaCredits : null;
     const average = evaluatedCredits > 0 ? weightedScore / evaluatedCredits : null;
     const totalCredits = activeSubjects.reduce((sum, subject) => sum + Math.max(0, subject.credits), 0);
     const expectedCredits = evaluated
-      .filter(row => row.result.observedScore >= 60)
+      .filter(row => row.effectiveScore >= 60)
       .reduce((sum, row) => sum + Math.max(0, row.subject.credits), 0);
 
     const assignmentRows = [];
@@ -1154,9 +1181,10 @@
   }
 
   function subjectAccent(result) {
-    if (result.observedScore === null) return '#747985';
-    if (result.observedScore >= 80) return '#6e8cff';
-    if (result.observedScore >= 60) return '#34d47b';
+    const score = result.officialScore ?? result.observedScore;
+    if (score === null) return '#747985';
+    if (score >= 80) return '#6e8cff';
+    if (score >= 60) return '#34d47b';
     return '#ff626b';
   }
 
@@ -1182,16 +1210,19 @@
     const empty = $('rc-subject-empty');
     list.innerHTML = subjects.map(subject => {
       const result = calculateSubjectGrade(subject);
-      const grade = getGradeInfo(result.observedScore);
-      const score = result.observedScore === null ? '—' : formatScoreForDisplay(result.observedScore);
+      const effectiveScore = result.officialScore ?? result.observedScore;
+      const grade = getGradeInfo(effectiveScore);
+      const score = effectiveScore === null ? '—' : formatScoreForDisplay(effectiveScore);
       const sourceBadge = subject.syllabusCode ? '<span class="rc5-subject-source-badge">SYLLABUS</span>' : '';
       const customizedBadge = subject.syllabusCode && hasManualSyllabusChanges(subject)
         ? '<span class="rc5-subject-source-badge rc5-customized-badge">変更あり</span>'
         : '';
       const gpaBadge = subject.gpaEligible === false ? '<span class="rc5-subject-source-badge rc5-gpa-excluded-badge">GPA対象外</span>' : '';
-      const coverageText = result.coveragePercent > 0 ? `評価済み ${Math.round(result.coveragePercent)}%` : '未入力';
+      const coverageText = result.officialScore !== null
+        ? '公式成績（確定）'
+        : result.coveragePercent > 0 ? `評価済み ${Math.round(result.coveragePercent)}%` : '未入力';
       const customizationLabel = subject.syllabusCode && hasManualSyllabusChanges(subject) ? '、シラバス情報を手動変更済み' : '';
-      const accessibleResult = result.observedScore === null
+      const accessibleResult = effectiveScore === null
         ? '得点未入力'
         : `${score}点、評価${grade.label}${grade.gp === null ? '' : `、GP ${grade.gp}`}${subject.gpaEligible === false ? '、GPA対象外' : ''}`;
       return `
@@ -1207,7 +1238,7 @@
                 ${gpaBadge}
               </span>
             </span>
-            <span class="rc5-subject-coverage">${coverageText}${result.complete ? ' · 入力完了' : ''}</span>
+            <span class="rc5-subject-coverage">${coverageText}${result.officialScore === null && result.complete ? ' · 入力完了' : ''}</span>
           </span>
           <span class="rc5-subject-result">
             <span class="rc5-subject-score">${score}${score === '—' ? '' : '<small>点</small>'}</span>
@@ -1257,12 +1288,21 @@
 
   function renderDrawerScore(subject) {
     const result = calculateSubjectGrade(subject);
-    const grade = getGradeInfo(result.observedScore);
-    $('rc-drawer-live-score').textContent = result.observedScore === null ? '—' : formatScoreForDisplay(result.observedScore);
+    const official = result.officialScore;
+    const displayScore = official ?? result.observedScore;
+    const grade = getGradeInfo(displayScore);
+    $('rc-drawer-live-score').textContent = displayScore === null ? '—' : formatScoreForDisplay(displayScore);
     $('rc-drawer-live-badge').textContent = grade.gp === null ? '未入力' : `${grade.label} · GP ${grade.gp}`;
     $('rc-drawer-contribution').textContent = `${result.currentPoints.toFixed(1)} / ${result.totalWeight || 100}`;
-    $('rc-drawer-coverage-bar').style.width = `${result.coveragePercent}%`;
-    $('rc-score-title').textContent = subject.period === 'full' ? 'FULL-YEAR PREVIEW' : 'INPUT-BASED PREVIEW';
+    $('rc-drawer-coverage-bar').style.width = `${official !== null ? 100 : result.coveragePercent}%`;
+    $('rc-score-title').textContent = official !== null ? 'OFFICIAL GRADE' : subject.period === 'full' ? 'FULL-YEAR PREVIEW' : 'INPUT-BASED PREVIEW';
+    if (official !== null) {
+      $('rc-drawer-live-formula').textContent = result.observedScore === null || result.observedScore === official
+        ? `公式成績（確定） ${formatScoreForDisplay(official)}点 · スコアブック連携`
+        : `公式成績（確定） ${formatScoreForDisplay(official)}点 · 入力ベースの見込みは ${formatScoreForDisplay(result.observedScore)}点`;
+      $('rc-drawer-score-range').textContent = '公式成績が確定しています。見込み計算は入力項目の参考値です';
+      return;
+    }
     $('rc-drawer-live-formula').textContent = result.observedScore === null
       ? result.formula
       : `${subject.period === 'full' ? '通年累計 · ' : ''}${result.complete ? '総合見込' : '入力済み換算'} ${formatScoreForDisplay(result.observedScore)}点 · 評価済み ${Math.round(result.coveragePercent)}%`;
