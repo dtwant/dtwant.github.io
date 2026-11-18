@@ -102,7 +102,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "65"
+    "wordCount": "67"
   }]
   </script>
 
@@ -247,7 +247,7 @@
     }
   </script>
 </head>
-<link rel="stylesheet" href="/css/lab-ui-system.min.217f413f59d473ed72cd51996fb36286422e098832a39e1cbb2b4fdb9abd7cd5.css" integrity="sha256-IX9BP1nUc&#43;1yzVGZb7NihkIuCYgyo54cuytP25q9fNU="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
+<link rel="stylesheet" href="/css/lab-ui-system.min.f56336d8ab03847c3f0663ce044b0fd3312c01745c023571ba954c01bb737eb2.css" integrity="sha256-9WM22KsDhHw/BmPOBEsP0zEsAXRcAjVxupVMAbtzfrI="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
   </head>
   <body class="lab-body portal-body" data-lab-slug="tech-tree">
 
@@ -305,6 +305,8 @@
     --tt-r-control: 10px;
     --tt-ease: cubic-bezier(0.22, 1, 0.36, 1);
     --tt-node-w: 136px;
+    --gc-mag: hsl(300 100% 62%);
+    --gc-cyn: hsl(184 100% 55%);
     position: relative;
     width: 100%;
     overflow: hidden;
@@ -320,6 +322,22 @@
     -webkit-font-smoothing: antialiased;
   }
   .tt-root *, .tt-root *::before, .tt-root *::after { box-sizing: border-box; }
+   
+  .tt-root::before, .tt-root::after {
+    content: ""; position: absolute; width: 96px; height: 64px; z-index: 1;
+    pointer-events: none; opacity: 0.55;
+    background-size: 16px 16px;
+    -webkit-mask-image: linear-gradient(135deg, black 25%, transparent 75%);
+    mask-image: linear-gradient(135deg, black 25%, transparent 75%);
+  }
+  .tt-root::before {
+    top: 0; right: 0;
+    background-image: repeating-conic-gradient(hsl(300 100% 62% / 0.55) 0% 25%, transparent 0% 50%);
+  }
+  .tt-root::after {
+    bottom: 0; left: 0; transform: scale(-1);
+    background-image: repeating-conic-gradient(hsl(184 100% 55% / 0.55) 0% 25%, transparent 0% 50%);
+  }
   .tt-num {
     font-family: ui-monospace, "SFMono-Regular", "Cascadia Code", Menlo, monospace;
     font-variant-numeric: tabular-nums;
@@ -329,7 +347,7 @@
     min-height: 44px; height: 44px;
     display: inline-flex; align-items: center; justify-content: center; gap: 6px;
     padding: 0 14px;
-    border: 1px solid var(--dt-border); border-radius: var(--tt-r-control);
+    border: 1px solid var(--dt-border); border-radius: 4px;
     background: hsl(228 20% 14% / 0.9); color: var(--dt-text-2);
     font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap;
     touch-action: manipulation;
@@ -343,8 +361,9 @@
     outline: 2px solid var(--tt-accent); outline-offset: 2px;
   }
   .tt-btn[aria-pressed="true"] {
-    border-color: var(--tt-accent); color: var(--tt-accent);
-    background: hsl(258 90% 76% / 0.1); font-weight: 600;
+    border-color: transparent; color: hsl(184 100% 6%);
+    background: var(--gc-cyn); font-weight: 700;
+    box-shadow: 3px 3px 0 hsl(300 100% 62% / 0.5);
   }
   .tt-btn-danger {
     border-color: hsl(350 85% 72% / 0.4); color: var(--tt-danger); background: transparent;
@@ -352,26 +371,34 @@
   .tt-btn-danger:hover { background: hsl(350 85% 72% / 0.1); color: var(--tt-danger); }
 
    
-  .tt-container { position: absolute; inset: 0; overflow: hidden; cursor: grab; }
+   
+  .tt-container {
+    position: absolute; inset: 0;
+    overflow: hidden;
+    cursor: grab; touch-action: none; overscroll-behavior: none;
+  }
   .tt-container:active { cursor: grabbing; }
   .tt-canvas { position: relative; width: 4000px; height: 3000px; transform-origin: 0 0; }
   .tt-canvas svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-  .tt-line { stroke: hsl(0 0% 100% / 0.14); stroke-width: 3; fill: none; }
-  .tt-line.is-active { stroke: var(--tt-accent); stroke-width: 3; }
+  .tt-line { stroke: hsl(0 0% 100% / 0.16); stroke-width: 3; fill: none; stroke-dasharray: 3 7; }
+  .tt-line.is-active { stroke: var(--gc-mag); stroke-width: 3; stroke-dasharray: none; }
 
   .tt-node {
     position: absolute; transform: translate(-50%, -50%);
     width: var(--tt-node-w);
     background: hsl(228 22% 11% / 0.97);
     border: 2px solid hsl(0 0% 100% / 0.16);
-    border-radius: 12px;
+    border-radius: 3px;
     padding: 10px 8px; text-align: center; cursor: pointer; z-index: 2;
     display: flex; flex-direction: column; gap: 3px;
     transition: border-color 160ms var(--tt-ease), opacity 160ms var(--tt-ease);
   }
   .tt-node-title { font-size: 13px; font-weight: 600; line-height: 1.35; overflow-wrap: anywhere; }
   .tt-node-cost { font-size: 11px; font-weight: 600; }
-  .tt-node.is-locked { opacity: 0.55; }
+  .tt-node.is-locked { opacity: 0.55; border-style: dashed; }
+  .tt-node.is-unlocked {
+    box-shadow: 4px 4px 0 hsl(300 100% 62% / 0.4), -4px -4px 0 hsl(184 100% 55% / 0.28);
+  }
   .tt-node.is-locked .tt-node-cost { color: var(--tt-muted); }
   .tt-node.is-available .tt-node-cost { color: var(--tt-exp); }
   .tt-node.is-unlocked .tt-node-cost { color: var(--tt-ok); }
@@ -381,7 +408,7 @@
   .tt-node.is-unlocked.class-cyber { border-color: hsl(330 81% 65%); }
   .tt-node.is-unlocked.class-custom { border-color: var(--tt-accent); }
   .tt-node.is-available:hover { border-color: hsl(0 0% 100% / 0.45); }
-  .tt-node.is-search { outline: 3px solid var(--tt-exp); outline-offset: 3px; }
+  .tt-node.is-search { outline: 3px solid var(--gc-mag); outline-offset: 3px; box-shadow: 6px 0 0 hsl(184 100% 55% / 0.6); }
   .tt-node.is-dragmode { border-style: dashed; cursor: move; }
   .tt-node.is-linkmode { border-style: dashed; cursor: crosshair; }
   .tt-node.is-linking { border-color: hsl(330 81% 65%); border-style: solid; }
@@ -391,15 +418,31 @@
     position: absolute; top: 12px; left: 12px; z-index: 20;
     width: 300px; max-width: calc(100% - 24px);
     max-height: calc(100% - 24px); overflow-y: auto; overscroll-behavior: contain;
-    background: var(--tt-panel);
-    border: 1px solid var(--dt-border); border-radius: var(--tt-r-panel);
+    background: hsl(228 24% 8% / 0.97);
+    border: 1px solid hsl(0 0% 100% / 0.28); border-radius: 6px;
     padding: 16px; display: flex; flex-direction: column; gap: 12px;
-    box-shadow: var(--dt-shadow);
+    box-shadow: 5px 5px 0 hsl(300 100% 62% / 0.22), var(--dt-shadow);
     transition: transform 240ms var(--tt-ease), opacity 240ms var(--tt-ease);
   }
   .tt-hud.is-closed { transform: translateX(calc(-100% - 16px)); opacity: 0; pointer-events: none; }
   .tt-hud-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-  .tt-hud-title { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.35; }
+  .tt-hud::before {
+    content: ""; display: block; height: 7px; margin: -6px -6px 0; flex-shrink: 0;
+    background: repeating-linear-gradient(90deg,
+      var(--gc-mag) 0 14px, transparent 14px 22px, var(--gc-cyn) 22px 30px,
+      transparent 30px 44px, hsl(0 0% 100% / 0.7) 44px 47px, transparent 47px 60px);
+    opacity: 0.8;
+  }
+  .tt-hud-title {
+    margin: 0; font-size: 17px; font-weight: 700; line-height: 1.35; position: relative;
+    letter-spacing: 0.03em;
+    text-shadow: 2px 0 hsl(300 100% 62% / 0.45), -2px 0 hsl(184 100% 55% / 0.45);
+  }
+  .tt-hud-title::before, .tt-hud-title::after {
+    content: attr(data-text); position: absolute; inset: 0; pointer-events: none;
+  }
+  .tt-hud-title::before { color: var(--gc-mag); transform: translate(-2.5px, 0); clip-path: inset(6% 0 78% 0); }
+  .tt-hud-title::after { color: var(--gc-cyn); transform: translate(2.5px, 0); clip-path: inset(66% 0 8% 0); }
   .tt-hud-sub { margin: 2px 0 0; font-size: 12px; color: var(--tt-muted); }
   .tt-icon-btn {
     width: 44px; height: 44px; flex-shrink: 0; display: inline-grid; place-items: center;
@@ -409,10 +452,18 @@
   }
   .tt-icon-btn:hover { background: var(--dt-surface-hover); color: var(--dt-text); }
   .tt-exp-label { font-size: 12px; color: var(--tt-muted); }
-  .tt-exp-value { font-size: 30px; font-weight: 700; line-height: 1.15; color: var(--tt-exp); }
+  .tt-exp-value {
+    font-size: 30px; font-weight: 700; line-height: 1.15; color: var(--tt-exp);
+    text-shadow: 2px 0 hsl(300 100% 62% / 0.4), -2px 0 hsl(184 100% 55% / 0.4);
+  }
   .tt-progress { display: flex; align-items: center; gap: 10px; }
-  .tt-progress-track { flex: 1; height: 8px; border-radius: 999px; background: var(--tt-track); overflow: hidden; }
-  .tt-progress-fill { height: 100%; background: var(--tt-accent); border-radius: 999px; transition: width 500ms var(--tt-ease); }
+  .tt-progress-track { flex: 1; height: 8px; border-radius: 0; background: var(--tt-track); overflow: hidden; }
+  .tt-progress-fill {
+    height: 100%; border-radius: 0; transition: width 500ms var(--tt-ease);
+    background:
+      repeating-linear-gradient(90deg, transparent 0 10px, hsl(0 0% 0% / 0.3) 10px 12px),
+      linear-gradient(90deg, var(--gc-mag), var(--gc-cyn));
+  }
   .tt-progress-text { font-size: 12px; color: var(--dt-text-2); white-space: nowrap; }
   .tt-search {
     width: 100%; min-height: 48px; height: 48px; padding: 0 12px;
@@ -426,7 +477,12 @@
   .tt-controls { display: flex; flex-direction: column; gap: 8px; }
   .tt-controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .tt-controls .tt-btn { width: 100%; }
-  .tt-btn-farm { border-color: hsl(38 92% 66% / 0.5); color: var(--tt-exp); }
+  .tt-btn-farm {
+    background: var(--gc-mag); border-color: hsl(0 0% 100% / 0.35);
+    color: hsl(300 100% 7%); font-weight: 700;
+    box-shadow: 3px 3px 0 hsl(184 100% 55% / 0.55);
+  }
+  .tt-btn-farm:hover { background: var(--gc-mag); filter: brightness(1.12); color: hsl(300 100% 7%); }
   .tt-danger-zone { border-top: 1px solid var(--dt-border); padding-top: 12px; }
 
   .tt-hud-toggle {
@@ -446,7 +502,8 @@
     position: absolute; right: 12px; bottom: 12px; z-index: 20;
     display: flex; flex-direction: column; align-items: center; gap: 6px;
   }
-  .tt-zoom .tt-icon-btn { background: var(--tt-panel); font-size: 19px; }
+  .tt-zoom .tt-icon-btn { background: hsl(228 24% 8% / 0.97); font-size: 19px; border-radius: 3px; }
+  .tt-zoom-label { border-radius: 2px; }
   .tt-zoom-label { font-size: 11px; color: var(--tt-muted); background: var(--tt-panel); padding: 2px 8px; border-radius: 999px; }
 
    
@@ -456,8 +513,9 @@
   .tt-dialog-card {
     width: min(calc(100vw - 32px), 560px);
     max-height: min(88dvh, 760px); overflow-y: auto; overscroll-behavior: contain;
-    border: 1px solid var(--dt-border); border-radius: 20px;
-    background: var(--tt-panel-solid); padding: 20px; box-shadow: var(--dt-shadow);
+    border: 1px solid hsl(0 0% 100% / 0.3); border-radius: 6px;
+    background: hsl(228 22% 8%); padding: 20px;
+    box-shadow: 6px 6px 0 hsl(184 100% 55% / 0.22), var(--dt-shadow);
     display: flex; flex-direction: column;
   }
   .tt-dialog-card.is-wide { width: min(calc(100vw - 32px), 860px); height: min(84dvh, 720px); }
@@ -483,8 +541,8 @@
   }
   .tt-dialog-actions { display: flex; gap: 8px; }
   .tt-dialog-actions .tt-btn { flex: 1; height: 48px; }
-  .tt-btn-apply { background: var(--tt-accent); border-color: transparent; color: hsl(258 60% 10%); font-weight: 600; }
-  .tt-btn-apply:hover { filter: brightness(1.08); color: hsl(258 60% 10%); }
+  .tt-btn-apply { background: var(--gc-mag); border-color: transparent; color: hsl(300 100% 7%); font-weight: 700; }
+  .tt-btn-apply:hover { filter: brightness(1.1); color: hsl(300 100% 7%); }
 
    
   .tt-toast {
@@ -506,16 +564,23 @@
     .tt-node-title { font-size: 12px; }
     .tt-hud {
       top: auto; bottom: 0; left: 0; right: 0; width: auto; max-width: none;
-      max-height: 62%; border-radius: 20px 20px 0 0; border-bottom: none;
+      max-height: 62%; border-radius: 10px 10px 0 0; border-bottom: none;
       background: var(--tt-panel-solid);
     }
     .tt-hud.is-closed { transform: translateY(calc(100% + 4px)); }
     .tt-hud-toggle { top: auto; left: auto; right: 12px; bottom: 188px; }
     .tt-zoom { bottom: 12px; }
   }
+  @keyframes tt-slice {
+    0% { clip-path: inset(0 0 0 0); transform: translate(-50%, -50%); }
+    25% { clip-path: inset(12% 0 58% 0); transform: translate(calc(-50% + 7px), -50%); }
+    55% { clip-path: inset(52% 0 18% 0); transform: translate(calc(-50% - 6px), -50%); }
+    100% { clip-path: inset(0 0 0 0); transform: translate(-50%, -50%); }
+  }
+  .tt-node.is-glitching { animation: tt-slice 260ms steps(3, end) 1; }
   @media (prefers-reduced-motion: reduce) {
     .tt-root *, .tt-root *::before, .tt-root *::after {
-      transition-duration: 0.01ms !important; animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation: none !important;
     }
   }
 </style>
@@ -542,8 +607,8 @@
   <section class="tt-hud" id="hud-panel" aria-label="スキルツリーのパネル">
     <div class="tt-hud-head">
       <div>
-        <h1 class="tt-hud-title">スキルツリー</h1>
-        <p class="tt-hud-sub">学習の進み具合をEXPで管理</p>
+        <h1 class="tt-hud-title" data-text="スキルツリー">スキルツリー</h1>
+        <p class="tt-hud-sub">学習の進み具合をEXPで管理 — Glitchcore</p>
       </div>
       <div style="display:flex; gap:6px;">
         <button class="tt-icon-btn" type="button" id="tt-help-btn" aria-label="使い方を開く">?</button>
@@ -767,6 +832,8 @@
     if (saveData.exp >= node.cost) {
       saveData.exp -= node.cost; saveData.unlocked.push(node.id);
       saveProgression(); renderTree(); showToast(`解放しました：${node.label}`);
+      const unlockedEl = document.getElementById('node-' + node.id);
+      if (unlockedEl) { unlockedEl.classList.add('is-glitching'); setTimeout(() => unlockedEl.classList.remove('is-glitching'), 320); }
     } else { showToast(`EXPが足りません（${node.cost} 必要）`); }
   }
 
@@ -955,6 +1022,7 @@
       return;
     }
     if (!isDown || e.touches.length > 1) return;
+    e.preventDefault();
     const x = e.touches[0].pageX - container.offsetLeft; const y = e.touches[0].pageY - container.offsetTop;
     container.scrollLeft = scrollLeft - (x - startX) * 1.5;
     container.scrollTop = scrollTop - (y - startY) * 1.5;

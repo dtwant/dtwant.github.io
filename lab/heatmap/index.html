@@ -102,7 +102,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "66"
+    "wordCount": "69"
   }]
   </script>
 
@@ -247,7 +247,7 @@
     }
   </script>
 </head>
-<link rel="stylesheet" href="/css/lab-ui-system.min.217f413f59d473ed72cd51996fb36286422e098832a39e1cbb2b4fdb9abd7cd5.css" integrity="sha256-IX9BP1nUc&#43;1yzVGZb7NihkIuCYgyo54cuytP25q9fNU="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
+<link rel="stylesheet" href="/css/lab-ui-system.min.f56336d8ab03847c3f0663ce044b0fd3312c01745c023571ba954c01bb737eb2.css" integrity="sha256-9WM22KsDhHw/BmPOBEsP0zEsAXRcAjVxupVMAbtzfrI="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
   </head>
   <body class="lab-body portal-body" data-lab-slug="heatmap">
 
@@ -310,8 +310,21 @@
     --heat-4: #34d399;
     --heat-cell-size: 13px;
     --heat-cell-gap: 3px;
+    --sd-lav: hsl(262 90% 82%);
+    --sd-pink: hsl(322 90% 84%);
+    --sd-cyan: hsl(190 95% 74%);
+    --sd-cobalt: hsl(222 90% 68%);
     position: relative;
     width: 100%;
+    padding: 20px 16px 24px;
+    border-radius: 24px;
+    background:
+      radial-gradient(560px 300px at 12% -40px, hsl(262 90% 70% / 0.28), transparent 70%),
+      radial-gradient(520px 320px at 88% -60px, hsl(190 95% 60% / 0.2), transparent 70%),
+      radial-gradient(700px 500px at 50% 115%, hsl(322 90% 65% / 0.12), transparent 70%),
+      linear-gradient(180deg, hsl(252 45% 13%), hsl(240 40% 8%) 55%, hsl(258 42% 10%));
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.07);
+    overflow: hidden;
     color: var(--dt-text);
     font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
       "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
@@ -324,11 +337,27 @@
     font-family: ui-monospace, "SFMono-Regular", "Cascadia Code", Menlo, monospace;
     font-variant-numeric: tabular-nums;
   }
-  .hh-stack { display: flex; flex-direction: column; gap: 16px; }
+  .hh-stack { display: flex; flex-direction: column; gap: 16px; position: relative; z-index: 1; }
+  .hh-root::before {
+    content: ""; position: absolute; inset: auto -10% -30px -10%; height: 190px;
+    background:
+      linear-gradient(hsl(190 95% 74% / 0.13) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(262 90% 82% / 0.13) 1px, transparent 1px);
+    background-size: 100% 22px, 44px 100%;
+    transform: perspective(300px) rotateX(48deg);
+    transform-origin: bottom;
+    -webkit-mask-image: linear-gradient(180deg, transparent, black 55%);
+    mask-image: linear-gradient(180deg, transparent, black 55%);
+    pointer-events: none;
+  }
 
   .hh-panel {
-    border: 1px solid var(--dt-border); border-radius: var(--hh-r-panel);
-    background: var(--hh-panel); padding: 20px; min-width: 0;
+    border: 1px solid transparent; border-radius: 20px;
+    background:
+      linear-gradient(hsl(252 30% 13% / 0.88), hsl(252 30% 13% / 0.88)) padding-box,
+      linear-gradient(135deg, hsl(262 90% 82% / 0.55), hsl(190 95% 74% / 0.35) 45%, hsl(322 90% 84% / 0.5)) border-box;
+    box-shadow: 0 12px 32px hsl(252 60% 4% / 0.45), inset 0 1px 0 hsl(0 0% 100% / 0.06);
+    padding: 20px; min-width: 0;
   }
   .hh-panel-head {
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -355,12 +384,12 @@
     outline: 2px solid hsl(var(--dt-accent) / 0.9); outline-offset: 2px;
   }
   .hh-btn-primary {
-    background: var(--heat-base); border-color: transparent;
-    color: hsl(160 60% 6%); font-weight: 600; height: 48px;
+    background: linear-gradient(135deg, var(--sd-cobalt), hsl(262 85% 62%) 55%, hsl(322 85% 66%));
+    border-color: hsl(0 0% 100% / 0.25);
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.45), inset 0 -8px 16px hsl(240 70% 30% / 0.35), 0 8px 20px hsl(252 70% 8% / 0.5);
+    color: #fff; font-weight: 600; height: 48px;
   }
-  .theme-pink .hh-btn-primary { color: hsl(330 60% 6%); }
-  .theme-blue .hh-btn-primary { color: hsl(220 60% 8%); }
-  .hh-btn-primary:hover { filter: brightness(1.1); color: inherit; }
+  .hh-btn-primary:hover { filter: brightness(1.12); color: #fff; }
   .hh-btn-danger {
     border-color: hsl(350 85% 72% / 0.45); color: var(--hh-danger); background: transparent;
   }
@@ -374,8 +403,32 @@
   .hh-header {
     display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;
   }
-  .hh-title { margin: 0; font-size: 20px; font-weight: 600; line-height: 1.3; }
+  .hh-title {
+    margin: 0; font-size: 22px; font-weight: 700; line-height: 1.3; letter-spacing: 0.02em;
+    background: linear-gradient(92deg, var(--sd-lav), var(--sd-cyan) 55%, var(--sd-pink));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
   .hh-sub { margin: 4px 0 0; font-size: 12px; color: var(--hh-muted); }
+  .hh-sphere {
+    width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0;
+    background:
+      radial-gradient(circle at 32% 28%, hsl(0 0% 100% / 0.95), hsl(0 0% 100% / 0) 42%),
+      radial-gradient(circle at 72% 82%, hsl(322 90% 70% / 0.75), hsl(0 0% 100% / 0) 55%),
+      radial-gradient(circle at 50% 45%, hsl(190 95% 78%), hsl(222 90% 62%) 58%, hsl(262 80% 45%) 100%);
+    box-shadow: inset -8px -10px 18px hsl(250 60% 20% / 0.55), inset 4px 6px 12px hsl(0 0% 100% / 0.35),
+      0 10px 24px hsl(240 70% 5% / 0.55);
+  }
+  .hh-header-main { display: flex; align-items: center; gap: 14px; }
+  .hh-checker {
+    height: 26px; margin-top: 14px; border-radius: 6px;
+    background: repeating-conic-gradient(hsl(252 30% 16%) 0% 25%, hsl(230 25% 26%) 0% 50%);
+    background-size: 26px 26px;
+    transform: perspective(160px) rotateX(52deg);
+    transform-origin: bottom;
+    -webkit-mask-image: linear-gradient(180deg, transparent, black 45%);
+    mask-image: linear-gradient(180deg, transparent, black 45%);
+    opacity: 0.85;
+  }
 
    
   .hh-tabs {
@@ -393,9 +446,11 @@
       border-color 160ms var(--hh-ease), transform 80ms ease-out;
   }
   .hh-chip:active { transform: scale(0.96); }
-  .hh-chip[aria-selected="true"] {
-    border-color: var(--heat-base); color: var(--heat-base); font-weight: 600;
-    background: hsl(0 0% 100% / 0.04);
+  .hh-chip[aria-selected="true"], .hh-chip[aria-pressed="true"] {
+    border: 1px solid transparent; color: var(--sd-lav); font-weight: 600;
+    background:
+      linear-gradient(hsl(252 30% 15% / 0.95), hsl(252 30% 15% / 0.95)) padding-box,
+      linear-gradient(120deg, var(--sd-lav), var(--sd-cyan)) border-box;
   }
   .hh-chip-add { border-style: dashed; color: var(--hh-muted); }
   .hh-chip-del { border-color: hsl(350 85% 72% / 0.4); color: var(--hh-danger); }
@@ -404,7 +459,7 @@
   .hh-goal { display: flex; align-items: center; gap: 12px; }
   .hh-goal-label { font-size: 13px; color: var(--dt-text-2); white-space: nowrap; }
   .hh-goal-track { flex: 1; height: 8px; border-radius: 999px; background: var(--hh-track); overflow: hidden; }
-  .hh-goal-fill { height: 100%; background: var(--heat-base); border-radius: 999px; transition: width 500ms var(--hh-ease); }
+  .hh-goal-fill { height: 100%; background: linear-gradient(90deg, var(--sd-cobalt), var(--sd-lav), var(--sd-cyan)); border-radius: 999px; transition: width 500ms var(--hh-ease); }
   .hh-goal-text { font-size: 14px; font-weight: 600; min-width: 44px; text-align: right; }
   .hh-goal .hh-btn { height: 44px; }
 
@@ -431,6 +486,10 @@
     cursor: pointer; position: relative; padding: 0;
     transition: transform 120ms var(--hh-ease);
   }
+  .hh-cell::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: linear-gradient(180deg, hsl(0 0% 100% / 0.34), hsl(0 0% 100% / 0.04) 52%, hsl(0 0% 100% / 0) 70%);
+  }
   .hh-cell.is-today { border: 2px solid var(--heat-base); }
   @media (hover: hover) {
     .hh-cell:hover { transform: scale(1.25); z-index: 2; }
@@ -452,12 +511,16 @@
   .hh-stat { border-left: 1px solid var(--dt-border); padding-left: 16px; }
   .hh-stat:first-child { border-left: none; padding-left: 0; }
   .hh-stat dt { font-size: 12px; color: var(--hh-muted); margin: 0; }
-  .hh-stat dd { margin: 4px 0 0; font-size: 24px; font-weight: 600; line-height: 1.2; }
+  .hh-stat dd {
+    margin: 4px 0 0; font-size: 24px; font-weight: 700; line-height: 1.2;
+    background: linear-gradient(180deg, hsl(0 0% 100%), var(--sd-lav) 75%, var(--sd-cobalt));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
 
    
   .hh-weekly { display: flex; gap: 6px; align-items: flex-end; height: 76px; }
   .hh-weekbar {
-    flex: 1; min-width: 0; background: var(--heat-base); opacity: 0.55;
+    flex: 1; min-width: 0; background: linear-gradient(180deg, var(--sd-cyan), var(--heat-base) 60%, hsl(252 60% 40%)); opacity: 0.6;
     border-radius: 4px 4px 0 0; position: relative;
     transition: height 400ms var(--hh-ease);
   }
@@ -493,8 +556,11 @@
   .hh-dialog-card {
     width: min(calc(100vw - 32px), 560px);
     max-height: min(88dvh, 760px); overflow-y: auto; overscroll-behavior: contain;
-    border: 1px solid var(--dt-border); border-radius: 20px;
-    background: var(--hh-panel-solid); padding: 20px; box-shadow: var(--dt-shadow);
+    border: 1px solid transparent; border-radius: 20px;
+    background:
+      linear-gradient(hsl(252 26% 11%), hsl(252 26% 11%)) padding-box,
+      linear-gradient(135deg, hsl(262 90% 82% / 0.6), hsl(190 95% 74% / 0.4) 50%, hsl(322 90% 84% / 0.55)) border-box;
+    padding: 20px; box-shadow: var(--dt-shadow);
   }
   .hh-dialog-card.is-narrow { width: min(calc(100vw - 32px), 400px); }
   .hh-dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; margin-bottom: 8px; }
@@ -535,6 +601,8 @@
   .hh-toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   @media (max-width: 600px) {
+    .hh-root { padding: 16px 12px 20px; border-radius: 20px; }
+    .hh-sphere { width: 44px; height: 44px; }
     .hh-stack { gap: 12px; }
     .hh-panel { padding: 16px; }
     .hh-root { --heat-cell-size: 11px; }
@@ -558,12 +626,18 @@
 <div class="cy-root hh-root dt-ui" aria-label="習慣ヒートマップ">
   <div class="hh-stack">
 
-    <div class="hh-header">
-      <div>
-        <h1 class="hh-title">習慣ヒートマップ</h1>
-        <p class="hh-sub">過去52週間の記録</p>
+    <div>
+      <div class="hh-header">
+        <div class="hh-header-main">
+          <span class="hh-sphere" aria-hidden="true"></span>
+          <div>
+            <h1 class="hh-title">習慣ヒートマップ</h1>
+            <p class="hh-sub">過去52週間の記録 — Silicon Dreams</p>
+          </div>
+        </div>
+        <button class="hh-btn" type="button" id="hh-help-btn">使い方</button>
       </div>
-      <button class="hh-btn" type="button" id="hh-help-btn">使い方</button>
+      <div class="hh-checker" aria-hidden="true"></div>
     </div>
 
     <div class="hh-tabs" id="habit-tabs" role="group" aria-label="習慣の切り替え"></div>

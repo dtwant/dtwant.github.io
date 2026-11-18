@@ -100,7 +100,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "67"
+    "wordCount": "69"
   }]
   </script>
 
@@ -245,7 +245,7 @@
     }
   </script>
 </head>
-<link rel="stylesheet" href="/css/lab-ui-system.min.217f413f59d473ed72cd51996fb36286422e098832a39e1cbb2b4fdb9abd7cd5.css" integrity="sha256-IX9BP1nUc&#43;1yzVGZb7NihkIuCYgyo54cuytP25q9fNU="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
+<link rel="stylesheet" href="/css/lab-ui-system.min.f56336d8ab03847c3f0663ce044b0fd3312c01745c023571ba954c01bb737eb2.css" integrity="sha256-9WM22KsDhHw/BmPOBEsP0zEsAXRcAjVxupVMAbtzfrI="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
   </head>
   <body class="lab-body portal-body" data-lab-slug="mermaid">
 
@@ -304,15 +304,40 @@
     --mm-r-panel: 16px;
     --mm-r-control: 10px;
     --mm-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --cd-pink: hsl(322 100% 62%);
+    --cd-lime: hsl(84 100% 58%);
+    --cd-cyn: hsl(184 100% 55%);
+    --cd-purp: hsl(262 100% 68%);
+    --cd-org: hsl(28 100% 58%);
+    --cd-spectrum: linear-gradient(92deg, var(--cd-pink), var(--cd-org), var(--cd-lime), var(--cd-cyn), var(--cd-purp));
     position: relative;
     width: 100%;
+    padding: 20px 16px 24px;
+    border-radius: 24px;
+    overflow: hidden;
+    background:
+      radial-gradient(560px 300px at 8% -40px, hsl(322 100% 62% / 0.16), transparent 70%),
+      radial-gradient(520px 340px at 92% -60px, hsl(184 100% 55% / 0.13), transparent 70%),
+      radial-gradient(640px 460px at 50% 115%, hsl(262 100% 68% / 0.14), transparent 70%),
+      linear-gradient(180deg, hsl(262 42% 10%), hsl(250 38% 7%) 55%, hsl(275 40% 9%));
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.06);
     color: var(--dt-text);
     font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
       "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
     -webkit-font-smoothing: antialiased;
   }
   .mm-root *, .mm-root *::before, .mm-root *::after { box-sizing: border-box; }
-  .mm-stack { display: flex; flex-direction: column; gap: 16px; }
+  .mm-stack { display: flex; flex-direction: column; gap: 16px; position: relative; z-index: 1; }
+  .mm-root::before {
+    content: ""; position: absolute; top: 0; right: 0; width: 200px; height: 200px;
+    border-radius: 50%; pointer-events: none; opacity: 0.32;
+    background: repeating-conic-gradient(from 0deg,
+      hsl(322 100% 62% / 0.5) 0deg 18deg, transparent 18deg 36deg,
+      hsl(184 100% 55% / 0.5) 36deg 54deg, transparent 54deg 72deg,
+      hsl(84 100% 58% / 0.45) 72deg 90deg, transparent 90deg 108deg);
+    -webkit-mask-image: radial-gradient(circle, black 30%, transparent 70%);
+    mask-image: radial-gradient(circle, black 30%, transparent 70%);
+  }
 
   .mm-btn {
     min-height: 48px; height: 48px;
@@ -331,15 +356,26 @@
     outline: 2px solid var(--mm-accent); outline-offset: 2px;
   }
   .mm-btn-primary {
-    background: var(--mm-accent); border-color: transparent;
-    color: hsl(330 55% 8%); font-weight: 600;
+    background: var(--cd-spectrum); background-size: 180% 100%;
+    border-color: hsl(0 0% 100% / 0.3);
+    color: hsl(280 80% 7%); font-weight: 700;
+    box-shadow: 0 8px 22px hsl(322 100% 40% / 0.28);
+    animation: mm-pulse 5s ease-in-out infinite alternate;
   }
-  .mm-btn-primary:hover { filter: brightness(1.08); color: hsl(330 55% 8%); }
+  .mm-btn-primary:hover { filter: brightness(1.1); color: hsl(280 80% 7%); }
+  @keyframes mm-pulse {
+    from { background-position: 0% 50%; }
+    to { background-position: 100% 50%; }
+  }
 
    
   .mm-header { display: flex; align-items: center; justify-content: flex-end; gap: 12px; min-height: 28px; }
   .mm-status { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--dt-text-2); white-space: nowrap; }
-  .mm-status-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--mm-ok); flex-shrink: 0; }
+  .mm-status-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    background: conic-gradient(var(--cd-pink), var(--cd-org), var(--cd-lime), var(--cd-cyn), var(--cd-purp), var(--cd-pink));
+    box-shadow: 0 0 8px hsl(322 100% 62% / 0.5);
+  }
   .mm-status.is-busy .mm-status-dot { background: var(--mm-warn); }
   .mm-status.is-error .mm-status-dot { background: var(--mm-danger); }
 
@@ -347,15 +383,30 @@
   .mm-workspace { display: grid; grid-template-columns: 1fr; gap: 16px; }
   @media (min-width: 900px) { .mm-workspace { grid-template-columns: 1fr 1fr; } }
   .mm-pane {
-    border: 1px solid var(--dt-border); border-radius: var(--mm-r-panel);
-    background: var(--mm-panel); overflow: hidden; min-width: 0;
+    border: 1px solid transparent; border-radius: 20px;
+    background:
+      linear-gradient(hsl(262 30% 11% / 0.92), hsl(262 30% 11% / 0.92)) padding-box,
+      linear-gradient(140deg, hsl(322 100% 62% / 0.55), hsl(262 100% 68% / 0.35) 48%, hsl(184 100% 55% / 0.5)) border-box;
+    box-shadow: 0 12px 30px hsl(260 60% 3% / 0.45);
+    overflow: hidden; min-width: 0;
     display: flex; flex-direction: column;
   }
   .mm-pane-head {
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    min-height: 44px; padding: 0 16px;
+    min-height: 44px; padding: 0 16px; position: relative;
     border-bottom: 1px solid var(--dt-border);
     font-size: 13px; font-weight: 600;
+  }
+  .mm-pane-head::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--cd-pink), var(--cd-purp), var(--cd-cyn));
+  }
+  .mm-workspace .mm-pane:nth-child(2) .mm-pane-head::before {
+    background: linear-gradient(90deg, var(--cd-lime), var(--cd-cyn), var(--cd-pink));
+  }
+  .mm-pane-head span:first-child {
+    background: linear-gradient(90deg, hsl(0 0% 100%), var(--cd-cyn));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
   .mm-pane-head span:last-child { font-size: 12px; font-weight: 400; color: var(--mm-muted); }
    
@@ -364,16 +415,22 @@
   .mm-textarea {
     flex: 1; width: 100%; min-height: 300px; resize: vertical;
     border: none; padding: 16px;
-    background: var(--mm-code-bg); color: var(--dt-text);
+    background: hsl(262 32% 7% / 0.94); color: var(--dt-text);
+    box-shadow: inset 3px 0 0 hsl(322 100% 62% / 0.55);
+    caret-color: var(--cd-lime);
     font-family: ui-monospace, "SFMono-Regular", "Cascadia Code", Menlo, monospace;
     font-size: 14px; line-height: 1.65;
   }
+  .mm-textarea::selection { background: hsl(262 100% 68% / 0.45); }
   @media (pointer: coarse) { .mm-textarea { font-size: 16px; } }
   @media (min-width: 900px) { .mm-textarea { min-height: 440px; } }
   .mm-preview {
     flex: 1; min-height: 300px; padding: 20px;
     display: flex; align-items: center; justify-content: center;
-    overflow: auto; background: hsl(228 22% 9% / 0.9);
+    overflow: auto;
+    background:
+      repeating-radial-gradient(circle at 50% 42%, transparent 0 46px, hsl(184 100% 55% / 0.05) 46px 47px, transparent 47px 92px),
+      hsl(262 34% 7% / 0.94);
   }
   @media (min-width: 900px) { .mm-preview { min-height: 440px; } }
   .mm-preview svg { max-width: 100%; height: auto; }
@@ -381,7 +438,7 @@
 
   .mm-error {
     display: none; margin-top: 12px; padding: 12px 16px;
-    border: 1px solid hsl(350 85% 72% / 0.45); border-radius: var(--mm-r-control);
+    border: 1px solid hsl(350 85% 72% / 0.45); border-left: 4px solid var(--cd-org); border-radius: var(--mm-r-control);
     background: hsl(350 85% 72% / 0.07); color: var(--mm-danger);
     font-size: 13px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere;
   }
@@ -395,10 +452,25 @@
 
    
   .mm-ref {
-    border: 1px solid var(--dt-border); border-radius: var(--mm-r-panel);
-    background: var(--mm-panel); padding: 20px;
+    border: 1px solid transparent; border-radius: 20px;
+    background:
+      linear-gradient(hsl(262 30% 11% / 0.92), hsl(262 30% 11% / 0.92)) padding-box,
+      linear-gradient(140deg, hsl(84 100% 58% / 0.4), hsl(322 100% 62% / 0.4) 55%, hsl(184 100% 55% / 0.45)) border-box;
+    padding: 20px;
   }
-  .mm-ref > h2 { margin: 0 0 16px; font-size: 15px; font-weight: 600; }
+  .mm-ref > h2 {
+    margin: 0 0 4px; font-size: 16px; font-weight: 700;
+  }
+  .mm-ref > h2::after {
+    content: ""; display: block; height: 3px; margin-top: 10px; border-radius: 999px;
+    background: var(--cd-spectrum); opacity: 0.85;
+  }
+  .mm-ref-grid > div:nth-child(1) h3 { color: var(--cd-pink); }
+  .mm-ref-grid > div:nth-child(2) h3 { color: var(--cd-cyn); }
+  .mm-ref-grid > div:nth-child(3) h3 { color: var(--cd-lime); }
+  .mm-ref-grid > div:nth-child(1) pre { border-top: 3px solid hsl(322 100% 62% / 0.6); }
+  .mm-ref-grid > div:nth-child(2) pre { border-top: 3px solid hsl(184 100% 55% / 0.6); }
+  .mm-ref-grid > div:nth-child(3) pre { border-top: 3px solid hsl(84 100% 58% / 0.6); }
   .mm-ref-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
   @media (min-width: 900px) { .mm-ref-grid { grid-template-columns: repeat(3, 1fr); } }
   .mm-ref h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--dt-text-2); }
@@ -410,6 +482,7 @@
     white-space: pre;
   }
   @media (max-width: 600px) {
+    .mm-root { padding: 16px 12px 20px; border-radius: 20px; }
     .mm-stack { gap: 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -453,7 +526,7 @@
     </div>
 
     <section class="mm-ref" aria-labelledby="mm-h-ref">
-      <h2 id="mm-h-ref">記法リファレンス</h2>
+      <h2 id="mm-h-ref">記法リファレンス — Cyberdelic</h2>
       <div class="mm-ref-grid">
         <div>
           <h3>フローチャート</h3>
