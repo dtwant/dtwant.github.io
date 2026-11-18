@@ -37,11 +37,12 @@
   const FORCE_PULL_PREFIX = 'dt_d1_force_pull_';
   const RECOVERY_HOLD_PREFIX = 'dt_d1_recovery_hold_';
   const PENDING_PREFIX = 'dt_d1_pending_';
+  const LAST_SYNC_PREFIX = 'dt_d1_last_sync_';
   const RUNTIME_STARTED_KEY = '__dtD1RuntimeStarted';
   // D1 migration history: 2026-10-20. JSONBin remains readable only through
   // explicit recovery tooling; normal tool execution must never contact it.
   const LEGACY_JSONBIN_RETIRED = true;
-  const RUNTIME_METADATA_KEY = /^(?:dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup|recovery_backup|recovery_hold|local_updated|force_pull|pending|runtime_backup)_|dt_sync_provider_|dt_sync_gateway_(?:url|key)$|dt_sync_device_id$)/i;
+  const RUNTIME_METADATA_KEY = /^(?:dt_d1_(?:sync_state|sync_conflict|pre_cutover_backup|recovery_backup|recovery_hold|local_updated|force_pull|pending|last_sync|runtime_backup)_|dt_sync_provider_|dt_sync_gateway_(?:url|key)$|dt_sync_device_id$)/i;
   const LIFECYCLE_SYNC_EVENTS = new Set(['pageshow', 'focus', 'visibilitychange']);
   let suppressLocalTracking = false;
   const patchedStorageInstances = new WeakSet();
@@ -1004,6 +1005,29 @@
     return { version: 1, appKey, conflicts: [] };
   }
 
+  function readLastSync(storage, appKey) {
+    try {
+      const parsed = JSON.parse(storage.getItem(`${LAST_SYNC_PREFIX}${appKey}`) || '');
+      if (parsed?.version === 1 && typeof parsed.at === 'string') return parsed;
+    } catch (_) { /* invalid metadata is treated as no sync record */ }
+    return null;
+  }
+
+  function writeLastSync(storage, appKey, result) {
+    try {
+      storage.setItem(`${LAST_SYNC_PREFIX}${appKey}`, JSON.stringify({
+        version: 1, appKey, at: new Date().toISOString(),
+        ok: result?.ok === true,
+        status: typeof result?.status === 'string' ? result.status : (result?.ok ? 'unknown' : 'error'),
+        reason: typeof result?.reason === 'string' ? result.reason : null,
+        pulled: Number.isInteger(result?.pulled) ? result.pulled : 0,
+        pushed: Number.isInteger(result?.pushed) ? result.pushed : 0,
+        changed: Number.isInteger(result?.changed) ? result.changed : 0,
+        conflictCount: Array.isArray(result?.conflicts) ? result.conflicts.length : 0
+      }));
+    } catch (_) { /* the record is diagnostic only; sync itself is unaffected */ }
+  }
+
   async function resolveConflicts(appKey, source, storage = root.localStorage) {
     const settings = config(appKey, storage);
     if (!settings || !root.DTSyncGatewayClient?.createLive) return { ok: false, reason: 'not_enabled' };
@@ -1184,6 +1208,7 @@
         result = normalizeRuntimeError(error);
       }
       dispatchStatus(appKey, result);
+      writeLastSync(storage, appKey, result);
       schedulePageReloadAfterPull(appKey, result);
       return result;
     })();
@@ -1447,6 +1472,7 @@
       syncAppNow: key => syncAppNow(key, root.localStorage),
       resolveConflicts: (key, source) => resolveConflicts(key, source, root.localStorage),
       pendingConflicts: key => readConflictState(root.localStorage, key).conflicts,
+      lastSync: key => readLastSync(root.localStorage, key),
       enabledAppKeys: () => enabledAppKeys(root.localStorage),
       isLegacySyncDisabled: key => isLegacySyncDisabled(key, root.localStorage),
       isRecoveryHeld: key => isRecoveryHeld(root.localStorage, key),
