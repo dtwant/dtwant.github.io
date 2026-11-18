@@ -102,7 +102,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "119"
+    "wordCount": "66"
   }]
   </script>
 
@@ -247,7 +247,7 @@
     }
   </script>
 </head>
-<link rel="stylesheet" href="/css/lab-ui-system.min.a8376d37a89e59d62dddc8986f6b788e8a4fb8fa040a4fdc19fa7325c3f93561.css" integrity="sha256-qDdtN6ieWdYt3ciYb2t4jopPuPoECk/cGfpzJcP5NWE="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
+<link rel="stylesheet" href="/css/lab-ui-system.min.217f413f59d473ed72cd51996fb36286422e098832a39e1cbb2b4fdb9abd7cd5.css" integrity="sha256-IX9BP1nUc&#43;1yzVGZb7NihkIuCYgyo54cuytP25q9fNU="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
   </head>
   <body class="lab-body portal-body" data-lab-slug="heatmap">
 
@@ -291,365 +291,425 @@
       <article class="lab-article">
         <div class="lab-content">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
-
-  :root {
+  .hh-root {
+    --dt-accent: 84 81% 64%;
+    --hh-accent: var(--heat-base);
+    --hh-panel: hsl(228 20% 12% / 0.82);
+    --hh-panel-solid: hsl(228 22% 10%);
+    --hh-track: hsl(0 0% 100% / 0.08);
+    --hh-muted: hsl(210 16% 78% / 0.72);
+    --hh-danger: hsl(350 85% 72%);
+    --hh-r-panel: 16px;
+    --hh-r-control: 10px;
+    --hh-ease: cubic-bezier(0.22, 1, 0.36, 1);
     --heat-base: #10b981;
-    --heat-0: #111;
+    --heat-0: hsl(228 18% 14%);
     --heat-1: #064e3b;
     --heat-2: #059669;
     --heat-3: #10b981;
     --heat-4: #34d399;
-  }
-  .theme-pink { --heat-base: #ec4899; --heat-0: #111; --heat-1: #500724; --heat-2: #9d174d; --heat-3: #db2777; --heat-4: #f472b6; }
-  .theme-blue { --heat-base: #3b82f6; --heat-0: #111; --heat-1: #1e3a8a; --heat-2: #1d4ed8; --heat-3: #2563eb; --heat-4: #60a5fa; }
-
-  .cy-root {
     --heat-cell-size: 13px;
     --heat-cell-gap: 3px;
-    font-family: "JetBrains Mono", monospace;
-    position: relative; width: 100%; min-height: min(760px, calc(100dvh - 92px));
-    background-color: #050508;
-    background-image:
-      radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.03) 0%, transparent 80%),
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 100% 100%, 30px 30px, 30px 30px;
-    z-index: 1; overflow: visible; color: #e2e8f0;
+    position: relative;
+    width: 100%;
+    color: var(--dt-text);
+    font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
+      "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
-  .cy-root::after {
-    content: ""; position: fixed; inset: 0;
-    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
-    pointer-events: none; z-index: 10;
+  .hh-root.theme-pink { --heat-base: #ec4899; --heat-1: #500724; --heat-2: #9d174d; --heat-3: #db2777; --heat-4: #f472b6; }
+  .hh-root.theme-blue { --heat-base: #3b82f6; --heat-1: #1e3a8a; --heat-2: #1d4ed8; --heat-3: #2563eb; --heat-4: #60a5fa; }
+  .hh-root *, .hh-root *::before, .hh-root *::after { box-sizing: border-box; }
+  .hh-num {
+    font-family: ui-monospace, "SFMono-Regular", "Cascadia Code", Menlo, monospace;
+    font-variant-numeric: tabular-nums;
   }
-  .cy-root::before {
-    content: ""; position: fixed; top: -10%; left: 0; right: 0; height: 10vh;
-    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1));
-    border-bottom: 2px solid var(--heat-base);
-    animation: scan 8s linear infinite; pointer-events: none; z-index: 11; opacity: 0.5;
-  }
-  @keyframes scan { 0% { top: -10%; } 100% { top: 110%; } }
+  .hh-stack { display: flex; flex-direction: column; gap: 16px; }
 
-  .main-content {
-    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-    padding: 2rem 1rem 4rem; position: relative; z-index: 5; max-width: 1100px; margin: 0 auto;
+  .hh-panel {
+    border: 1px solid var(--dt-border); border-radius: var(--hh-r-panel);
+    background: var(--hh-panel); padding: 20px; min-width: 0;
   }
-
-   
-  .hud-header { width: min(100%, 720px); max-width: 100%; text-align: center; margin-bottom: 1rem; position: relative; }
-  .cy-title { font-family: 'Orbitron', sans-serif; color: var(--heat-base); font-size: clamp(1.15rem, 4vw, 1.6rem); line-height: 1.2; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; text-shadow: 0 0 15px var(--heat-base); transition: 0.3s; margin: 0; overflow-wrap: anywhere;}
-  .cy-desc { font-size: 0.75rem; line-height: 1.4; color: #64748b; letter-spacing: 0.04em; margin-top: 0.3rem; }
-  .header-actions { display: flex; column-gap: 10px; row-gap: 8px; margin-top: 0.5rem; justify-content: center; flex-wrap: wrap; }
-
-  .help-btn {
-    background: transparent; border: 1px solid var(--heat-base); color: var(--heat-base);
-    display: inline-flex; align-items: center; justify-content: center; min-width: 72px;
-    font-size: 0.65rem; line-height: 1.2; white-space: nowrap; padding: 3px 8px; cursor: pointer; font-family: 'Orbitron', sans-serif; transition: 0.2s;
+  .hh-panel-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    min-height: 28px; margin-bottom: 12px;
   }
-  .help-btn:hover { background: var(--heat-base); color: #000; box-shadow: 0 0 10px var(--heat-base); }
+  .hh-panel-head h2 { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.4; text-wrap: balance; }
+  .hh-head-note { font-size: 12px; color: var(--hh-muted); white-space: nowrap; }
 
-   
-  .habit-tabs { display: flex; column-gap: 10px; row-gap: 8px; flex-wrap: wrap; width: 100%; justify-content: center; margin-bottom: 1rem; }
-  .habit-tab {
-    background: rgba(5, 5, 5, 0.4);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-    color: #94a3b8; padding: 0.4rem 0.8rem;
+  .hh-btn {
+    min-height: 44px; height: 44px;
     display: inline-flex; align-items: center; justify-content: center;
-    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; line-height: 1.2; white-space: nowrap; cursor: pointer; transition: 0.2s;
-    text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 0 16px;
+    border: 1px solid var(--dt-border); border-radius: var(--hh-r-control);
+    background: var(--hh-panel); color: var(--dt-text-2);
+    font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap;
+    touch-action: manipulation;
+    transition: background-color 160ms var(--hh-ease), color 160ms var(--hh-ease),
+      border-color 160ms var(--hh-ease), transform 80ms ease-out;
   }
-  .habit-tab:hover { border-color: var(--heat-base); color: var(--heat-base); }
-  .habit-tab.active { border-color: var(--heat-base); color: var(--heat-base); background: rgba(16, 185, 129, 0.1); box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
-  .habit-tab-add { border-style: dashed; color: #555; }
-  .habit-tab-add:hover { color: var(--heat-base); border-color: var(--heat-base); }
-  .habit-tab-del { border-color: #ef4444; color: #ef4444; font-size: 0.55rem; padding: 0.3rem 0.5rem; }
+  .hh-btn:hover { background: var(--dt-surface-hover); color: var(--dt-text); }
+  .hh-btn:active { transform: scale(0.96); }
+  .hh-btn:focus-visible, .hh-chip:focus-visible, .hh-root input:focus-visible,
+  .hh-root textarea:focus-visible, .hh-scroll:focus-visible {
+    outline: 2px solid hsl(var(--dt-accent) / 0.9); outline-offset: 2px;
+  }
+  .hh-btn-primary {
+    background: var(--heat-base); border-color: transparent;
+    color: hsl(160 60% 6%); font-weight: 600; height: 48px;
+  }
+  .theme-pink .hh-btn-primary { color: hsl(330 60% 6%); }
+  .theme-blue .hh-btn-primary { color: hsl(220 60% 8%); }
+  .hh-btn-primary:hover { filter: brightness(1.1); color: inherit; }
+  .hh-btn-danger {
+    border-color: hsl(350 85% 72% / 0.45); color: var(--hh-danger); background: transparent;
+  }
+  .hh-btn-danger:hover { background: hsl(350 85% 72% / 0.1); color: var(--hh-danger); }
+  .hh-btn[aria-pressed="true"] {
+    border-color: var(--heat-base); color: var(--heat-base);
+    background: hsl(0 0% 100% / 0.04);
+  }
 
    
-  .goal-bar { width: 100%; max-width: 800px; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.8rem; }
-  .goal-label { font-size: 0.7rem; color: #94a3b8; white-space: nowrap; }
-  .goal-track { flex: 1; height: 8px; background: #111; border: 1px solid #222; position: relative; overflow: hidden; }
-  .goal-fill { height: 100%; background: var(--heat-base); transition: width 0.5s; box-shadow: 0 0 10px var(--heat-base); }
-  .goal-text { font-family: 'Orbitron', sans-serif; font-size: 0.75rem; color: var(--heat-base); white-space: nowrap; }
-  .goal-edit-btn { background: none; border: 1px dashed #555; color: #555; font-size: 0.55rem; padding: 2px 5px; cursor: pointer; font-family: inherit; }
-  .goal-edit-btn:hover { border-color: var(--heat-base); color: var(--heat-base); }
+  .hh-header {
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;
+  }
+  .hh-title { margin: 0; font-size: 20px; font-weight: 600; line-height: 1.3; }
+  .hh-sub { margin: 4px 0 0; font-size: 12px; color: var(--hh-muted); }
 
    
-  .heatmap-wrapper {
-    background: rgba(5, 5, 5, 0.45);
-    backdrop-filter: blur(14px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    padding: 2rem 1rem 1rem 1rem; border-radius: 4px; position: relative; max-width: 1000px;
-    width: 100%; overflow-x: auto; overflow-y: hidden; transition: 0.3s;
+  .hh-tabs {
+    display: flex; gap: 8px; flex-wrap: nowrap; overflow-x: auto;
+    padding-bottom: 4px; scrollbar-width: thin;
+    scrollbar-color: hsl(0 0% 100% / 0.18) transparent;
   }
-  .heatmap-wrapper::-webkit-scrollbar { height: 6px; }
-  .heatmap-wrapper::-webkit-scrollbar-track { background: #111; border-radius: 3px;}
-  .heatmap-wrapper::-webkit-scrollbar-thumb { background: var(--heat-base); border-radius: 3px;}
-
-  .heatmap-wrapper::before, .heatmap-wrapper::after { content: ''; position: absolute; width: 15px; height: 15px; border: 2px solid var(--heat-base); pointer-events: none; transition: 0.3s;}
-  .heatmap-wrapper::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
-  .heatmap-wrapper::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-
-  .heatmap-inner { display: inline-flex; flex-direction: column; position: relative; width: max-content; padding-bottom: 10px;}
-  .month-labels { display: flex; position: absolute; top: -1.5rem; left: 0; width: 100%; height: 1.5rem; font-size: 0.65rem; color: #64748b; }
-  .month-label { position: absolute; }
-
-  .heatmap-container { display: flex; gap: var(--heat-cell-gap); }
-  .week-col { display: flex; flex-direction: column; gap: var(--heat-cell-gap); }
-  
-  .day-cell {
-    width: var(--heat-cell-size); height: var(--heat-cell-size); background-color: var(--heat-0); border: 1px solid #333;
-    border-radius: 2px; cursor: pointer; transition: all 0.2s; position: relative;
+  .hh-chip {
+    min-height: 44px; height: 44px; flex-shrink: 0;
+    display: inline-flex; align-items: center; padding: 0 16px;
+    border: 1px solid var(--dt-border); border-radius: 999px;
+    background: transparent; color: var(--dt-text-2);
+    font: inherit; font-size: 13px; cursor: pointer; touch-action: manipulation;
+    transition: background-color 160ms var(--hh-ease), color 160ms var(--hh-ease),
+      border-color 160ms var(--hh-ease), transform 80ms ease-out;
   }
-  .day-cell:hover { border-color: var(--heat-base) !important; transform: scale(1.4); z-index: 10; box-shadow: 0 0 10px var(--heat-base); }
-  .day-cell.today-cell { border: 2px solid var(--heat-base) !important; box-shadow: 0 0 8px var(--heat-base); animation: today-pulse 2s infinite; }
-  @keyframes today-pulse { 0%,100% { box-shadow: 0 0 5px var(--heat-base); } 50% { box-shadow: 0 0 15px var(--heat-base); } }
-
-  .day-cell .tooltip {
-    position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%) translateY(10px);
-    background: #000; color: var(--heat-base); padding: 4px 8px; font-size: 0.65rem;
-    border: 1px solid var(--heat-base); pointer-events: none; opacity: 0; transition: 0.2s;
-    white-space: nowrap; z-index: 20; box-shadow: 0 0 10px rgba(0,0,0,0.8);
+  .hh-chip:active { transform: scale(0.96); }
+  .hh-chip[aria-selected="true"] {
+    border-color: var(--heat-base); color: var(--heat-base); font-weight: 600;
+    background: hsl(0 0% 100% / 0.04);
   }
-  .day-cell:hover .tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .hh-chip-add { border-style: dashed; color: var(--hh-muted); }
+  .hh-chip-del { border-color: hsl(350 85% 72% / 0.4); color: var(--hh-danger); }
 
    
-  .stats-panel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; width: 100%; max-width: 1000px; margin-top: 1.5rem; }
-  .stat-box {
-    background: rgba(5, 5, 5, 0.4);
-    backdrop-filter: blur(10px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(10px) url(#liquid-refract);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
-    padding: 1rem; text-align: center;
-  }
-  .stat-label { font-size: 0.65rem; color: #94a3b8; font-weight: bold; }
-  .stat-val { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; color: var(--heat-base); text-shadow: 0 0 10px var(--heat-base); transition: 0.3s;}
+  .hh-goal { display: flex; align-items: center; gap: 12px; }
+  .hh-goal-label { font-size: 13px; color: var(--dt-text-2); white-space: nowrap; }
+  .hh-goal-track { flex: 1; height: 8px; border-radius: 999px; background: var(--hh-track); overflow: hidden; }
+  .hh-goal-fill { height: 100%; background: var(--heat-base); border-radius: 999px; transition: width 500ms var(--hh-ease); }
+  .hh-goal-text { font-size: 14px; font-weight: 600; min-width: 44px; text-align: right; }
+  .hh-goal .hh-btn { height: 44px; }
 
    
-  .weekly-chart { display: flex; gap: 4px; align-items: flex-end; height: 60px; margin-top: 0.5rem; }
-  .week-bar { flex: 1; background: var(--heat-base); min-width: 4px; transition: height 0.3s; opacity: 0.7; position: relative; }
-  .week-bar:hover { opacity: 1; }
-  .week-bar-label { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: #64748b; white-space: nowrap; }
+  .hh-scroll {
+    overflow-x: auto; overflow-y: hidden; overscroll-behavior: contain;
+    scrollbar-width: thin; scrollbar-color: hsl(0 0% 100% / 0.18) transparent;
+    margin: 0 -8px -8px; padding: 0 8px 8px;
+  }
+  .hh-inner { display: inline-flex; flex-direction: column; position: relative; width: max-content; padding-top: 24px; }
+  .hh-months { position: absolute; top: 0; left: 0; width: 100%; height: 20px; font-size: 11px; color: var(--hh-muted); }
+  .hh-month { position: absolute; white-space: nowrap; }
+  .hh-grid { display: flex; gap: var(--heat-cell-gap); }
+  .hh-week { display: flex; flex-direction: column; gap: var(--heat-cell-gap); }
+   
+  .hh-root button.hh-cell {
+    min-height: 0 !important; min-width: 0 !important;
+    width: var(--heat-cell-size) !important; height: var(--heat-cell-size) !important;
+  }
+  .hh-cell {
+    width: var(--heat-cell-size); height: var(--heat-cell-size);
+    border-radius: 3px; background: var(--heat-0);
+    border: 1px solid hsl(0 0% 100% / 0.07);
+    cursor: pointer; position: relative; padding: 0;
+    transition: transform 120ms var(--hh-ease);
+  }
+  .hh-cell.is-today { border: 2px solid var(--heat-base); }
+  @media (hover: hover) {
+    .hh-cell:hover { transform: scale(1.25); z-index: 2; }
+    .hh-cell .hh-tip {
+      position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+      background: hsl(228 22% 8%); color: var(--dt-text); border: 1px solid var(--dt-border);
+      padding: 4px 8px; font-size: 11px; border-radius: 6px; white-space: nowrap;
+      pointer-events: none; opacity: 0; transition: opacity 120ms var(--hh-ease); z-index: 20;
+    }
+    .hh-cell:hover .hh-tip { opacity: 1; }
+  }
+  @media (hover: none) { .hh-cell .hh-tip { display: none; } }
+  .hh-legend { display: flex; align-items: center; gap: 4px; margin-top: 12px; font-size: 11px; color: var(--hh-muted); }
+  .hh-legend .hh-cell { cursor: default; }
+  .hh-legend .hh-cell:hover { transform: none; }
 
    
-  .action-panel {
-    background: rgba(5, 5, 5, 0.45);
-    backdrop-filter: blur(14px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(14px) url(#liquid-refract);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
-    padding: 1.2rem; width: 100%; max-width: 1000px; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem;
-  }
-  .action-title { font-size: 0.75rem; color: #a1a1aa; text-transform: uppercase; border-bottom: 1px dashed #333; padding-bottom: 0.4rem; }
-  .controls-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
-
-  .cy-btn {
-    background: transparent; border: 1px solid var(--heat-base); color: var(--heat-base); padding: 0.5rem 1rem;
-    font-family: 'Orbitron', sans-serif; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: 0.2s; font-size: 0.7rem;
-  }
-  .cy-btn:hover { background: var(--heat-1); box-shadow: 0 0 15px var(--heat-2); color: #fff; }
-
-  .theme-btn { border-color: #555; color: #999; }
-  .theme-btn.active-theme { border-color: var(--heat-base); color: var(--heat-base); box-shadow: 0 0 10px var(--heat-base); }
-
-  textarea.cy-textarea { background: #000; border: 1px solid #333; color: var(--heat-base); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.5rem; width: 100%; box-sizing: border-box; resize: vertical; margin-bottom: 0.3rem;}
-  textarea.cy-textarea:focus { outline: none; border-color: var(--heat-base); }
+  .hh-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .hh-stat { border-left: 1px solid var(--dt-border); padding-left: 16px; }
+  .hh-stat:first-child { border-left: none; padding-left: 0; }
+  .hh-stat dt { font-size: 12px; color: var(--hh-muted); margin: 0; }
+  .hh-stat dd { margin: 4px 0 0; font-size: 24px; font-weight: 600; line-height: 1.2; }
 
    
-  .cy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-  .cy-modal-content {
-    background: rgba(5, 5, 5, 0.75);
-    backdrop-filter: blur(16px) url(#liquid-refract);
-    -webkit-backdrop-filter: blur(16px) url(#liquid-refract);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
-    padding: 1.5rem; width: 90%; max-width: 600px; position: relative; font-family: "Zen Kaku Gothic New", sans-serif; overflow-y: auto; max-height: 90vh;
+  .hh-weekly { display: flex; gap: 6px; align-items: flex-end; height: 76px; }
+  .hh-weekbar {
+    flex: 1; min-width: 0; background: var(--heat-base); opacity: 0.55;
+    border-radius: 4px 4px 0 0; position: relative;
+    transition: height 400ms var(--hh-ease);
   }
-  .cy-modal-title { font-family: 'Orbitron', sans-serif; color: var(--heat-base); font-size: 1.3rem; margin-top: 0; margin-bottom: 1rem; border-bottom: 1px solid #333; padding-bottom: 0.5rem; }
-  .cy-modal-body { font-size: 0.85rem; line-height: 1.6; color: #e2e8f0; }
-  .cy-modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: #ef4444; font-size: 1.5rem; cursor: pointer; }
+  .hh-weekbar.is-current { opacity: 1; }
+  .hh-weekbar span {
+    position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+    font-size: 11px; color: var(--hh-muted); white-space: nowrap;
+  }
 
-  .cy-prompt { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 99998; display: none; align-items: center; justify-content: center; }
-  .cy-prompt-box { background: #0a0a0f; border: 1px solid var(--heat-base); padding: 1.5rem; width: 280px; display: flex; flex-direction: column; gap: 0.7rem; }
-  .cy-prompt-box input { background: #000; border: 1px solid #333; border-bottom: 2px solid var(--heat-base); color: var(--heat-base); padding: 0.5rem; font-family: inherit; font-size: 0.85rem; }
-  .cy-prompt-box input:focus { outline: none; }
-  .cy-prompt-box label { font-size: 0.7rem; color: #94a3b8; }
+   
+  .hh-ops { display: flex; flex-direction: column; gap: 20px; }
+  .hh-ops-group > h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--dt-text-2); }
+  .hh-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hh-row .hh-btn { flex: 1; }
+  .hh-textarea {
+    width: 100%; min-height: 64px; resize: vertical;
+    padding: 10px 12px; margin-bottom: 8px;
+    border: 1px solid var(--dt-border); border-radius: var(--hh-r-control);
+    background: hsl(228 24% 7% / 0.82); color: var(--dt-text);
+    font-family: ui-monospace, Menlo, monospace; font-size: 13px; line-height: 1.5;
+  }
+  .hh-textarea::placeholder { color: var(--hh-muted); }
+  .hh-danger-row {
+    border-top: 1px solid var(--dt-border); padding-top: 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .hh-danger-row p { margin: 0; font-size: 12px; color: var(--hh-muted); line-height: 1.6; }
 
-  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: #000; border: 1px solid var(--heat-base); color: var(--heat-base); padding: 0.6rem 1.2rem; font-family: 'Orbitron', sans-serif; pointer-events: none; opacity: 0; transition: 0.3s; z-index: 99999; box-shadow: 0 0 20px rgba(0,0,0,0.8); font-weight: bold; font-size: 0.7rem; }
+   
+  .hh-dialog { border: none; padding: 0; background: transparent; color: var(--dt-text); max-width: none; max-height: none; }
+  .hh-dialog::backdrop { background: hsl(235 40% 2% / 0.72); }
+  .hh-dialog:modal { overscroll-behavior: contain; }
+  .hh-dialog-card {
+    width: min(calc(100vw - 32px), 560px);
+    max-height: min(88dvh, 760px); overflow-y: auto; overscroll-behavior: contain;
+    border: 1px solid var(--dt-border); border-radius: 20px;
+    background: var(--hh-panel-solid); padding: 20px; box-shadow: var(--dt-shadow);
+  }
+  .hh-dialog-card.is-narrow { width: min(calc(100vw - 32px), 400px); }
+  .hh-dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; margin-bottom: 8px; }
+  .hh-dialog-head h2 { margin: 0; font-size: 16px; font-weight: 600; text-wrap: balance; }
+  .hh-dialog-close {
+    width: 44px; height: 44px; flex-shrink: 0; display: inline-grid; place-items: center;
+    border: none; border-radius: 50%; background: transparent; color: var(--dt-text-2);
+    font-size: 20px; line-height: 1; cursor: pointer; touch-action: manipulation;
+  }
+  .hh-dialog-close:hover { background: hsl(0 0% 100% / 0.06); }
+  .hh-dialog-body { font-size: 14px; line-height: 1.75; color: var(--dt-text-2); }
+  .hh-dialog-body h3 { font-size: 14px; color: var(--dt-text); margin: 16px 0 4px; }
+  .hh-dialog-body h3:first-child { margin-top: 0; }
+  .hh-dialog-body p, .hh-dialog-body ul, .hh-dialog-body ol { margin: 4px 0; }
+  .hh-dialog-body ul, .hh-dialog-body ol { padding-left: 20px; }
+  .hh-dialog-actions { display: flex; gap: 8px; margin-top: 16px; }
+  .hh-dialog-actions .hh-btn { flex: 1; height: 48px; }
+  .hh-field-label { display: block; font-size: 13px; color: var(--dt-text-2); margin-bottom: 8px; }
+  .hh-input {
+    width: 100%; min-height: 48px; height: 48px; padding: 0 12px;
+    border: 1px solid var(--dt-border); border-radius: var(--hh-r-control);
+    background: hsl(228 24% 7% / 0.82); color: var(--dt-text); font: inherit; font-size: 16px;
+  }
 
-  @media (max-width: 768px) {
-    .stats-panel { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
-    .heatmap-wrapper { padding: 1.5rem 0.5rem 0.5rem 0.5rem; }
-    .cy-root { --heat-cell-size: 11px; }
-    .month-labels { font-size: 0.55rem; }
-    .main-content { padding: 1.5rem 0.5rem 4rem; }
-    .cy-title { font-size: 1.2rem; }
-    .stat-val { font-size: 1.3rem; }
-    .stat-label { font-size: 0.55rem; }
-    .action-panel { padding: 1rem 0.8rem; }
-    .cy-btn { padding: 0.5rem 0.7rem; font-size: 0.6rem; }
-    .habit-tab { font-size: 0.6rem; padding: 0.35rem 0.6rem; }
+   
+  .hh-toast {
+    position: fixed; left: 50%; z-index: 1000001;
+    bottom: max(20px, env(safe-area-inset-bottom, 0px));
+    max-width: min(calc(100vw - 32px), 460px);
+    padding: 12px 16px;
+    border: 1px solid var(--dt-border); border-radius: 12px;
+    background: hsl(228 22% 10% / 0.97); color: var(--dt-text);
+    font-size: 13px; line-height: 1.5; text-align: center;
+    opacity: 0; pointer-events: none;
+    transform: translateX(-50%) translateY(12px);
+    transition: opacity 200ms var(--hh-ease), transform 200ms var(--hh-ease);
+  }
+  .hh-toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 600px) {
+    .hh-stack { gap: 12px; }
+    .hh-panel { padding: 16px; }
+    .hh-root { --heat-cell-size: 11px; }
+    .hh-stats { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .hh-stat { padding-left: 12px; }
+    .hh-stat:nth-child(3) { border-left: none; padding-left: 0; }
+    .hh-stat dd { font-size: 20px; }
+    .hh-header { align-items: flex-start; }
+    .hh-danger-row { flex-direction: column; align-items: stretch; }
   }
   @media (max-width: 400px) {
-    .cy-root { --heat-cell-size: 9px; --heat-cell-gap: 2px; }
-    .stats-panel { grid-template-columns: 1fr 1fr; }
+    .hh-root { --heat-cell-size: 10px; --heat-cell-gap: 2px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hh-root *, .hh-root *::before, .hh-root *::after {
+      transition-duration: 0.01ms !important; animation-duration: 0.01ms !important;
+    }
   }
 </style>
 
-<div class="cy-root" id="app-root">
-  
-  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
-    <filter id="liquid-refract">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
-    </filter>
-  </svg>
-  <div class="main-content">
-    
-    <div class="hud-header">
-      <h1 class="cy-title">CONTRIBUTION_MATRIX</h1>
-      <div class="cy-desc">AWARENESS LEVEL // LAST 52 WEEKS</div>
-      <div class="header-actions">
-        <button class="help-btn" onclick="window.history.back()">◀ EXIT</button>
-        <button class="help-btn" onclick="document.getElementById('help-modal').style.display='flex'">HELP</button>
+<div class="cy-root hh-root dt-ui" aria-label="習慣ヒートマップ">
+  <div class="hh-stack">
+
+    <div class="hh-header">
+      <div>
+        <h1 class="hh-title">習慣ヒートマップ</h1>
+        <p class="hh-sub">過去52週間の記録</p>
       </div>
+      <button class="hh-btn" type="button" id="hh-help-btn">使い方</button>
     </div>
 
-    
-    <div class="habit-tabs" id="habit-tabs">
-      
-    </div>
+    <div class="hh-tabs" id="habit-tabs" role="group" aria-label="習慣の切り替え"></div>
 
-    
-    <div class="goal-bar" id="goal-bar">
-      <span class="goal-label">TODAY GOAL</span>
-      <div class="goal-track"><div class="goal-fill" id="goal-fill"></div></div>
-      <span class="goal-text" id="goal-text">0/1</span>
-      <button class="goal-edit-btn" onclick="editGoal()">EDIT</button>
-    </div>
+    <section class="hh-panel" aria-labelledby="hh-h-goal">
+      <h2 id="hh-h-goal" class="hh-head-note" style="position:absolute;left:-9999px;">今日の目標</h2>
+      <div class="hh-goal">
+        <span class="hh-goal-label">今日の目標</span>
+        <div class="hh-goal-track" role="progressbar" id="goal-bar-el" aria-label="今日の目標の達成度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="hh-goal-fill" id="goal-fill"></div>
+        </div>
+        <span class="hh-goal-text hh-num" id="goal-text">0/1</span>
+        <button class="hh-btn" type="button" onclick="editGoal()">変更</button>
+      </div>
+    </section>
 
-    <div class="heatmap-wrapper">
-      <div class="heatmap-inner">
-        <div class="month-labels" id="month-labels"></div>
-        <div class="heatmap-container" id="heatmap-el"></div>
+    <section class="hh-panel" aria-labelledby="hh-h-map">
+      <div class="hh-panel-head">
+        <h2 id="hh-h-map">ヒートマップ</h2>
+        <span class="hh-head-note">セルを押すとレベルが変わります</span>
       </div>
-    </div>
+      <div class="hh-scroll" id="heatmap-scroll" role="region" aria-label="過去52週間のヒートマップ（横スクロール）" tabindex="0">
+        <div class="hh-inner">
+          <div class="hh-months hh-num" id="month-labels"></div>
+          <div class="hh-grid" id="heatmap-el"></div>
+        </div>
+      </div>
+      <div class="hh-legend" aria-hidden="true">
+        <span>少ない</span>
+        <span class="hh-cell" style="background:var(--heat-0)"></span>
+        <span class="hh-cell" style="background:var(--heat-1)"></span>
+        <span class="hh-cell" style="background:var(--heat-2)"></span>
+        <span class="hh-cell" style="background:var(--heat-3)"></span>
+        <span class="hh-cell" style="background:var(--heat-4)"></span>
+        <span>多い</span>
+      </div>
+    </section>
 
-    <div class="stats-panel">
-      <div class="stat-box">
-        <div class="stat-label">TOTAL ACTIONS</div>
-        <div class="stat-val" id="stat-total">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">CURRENT STREAK</div>
-        <div class="stat-val" id="stat-streak">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">MAX STREAK</div>
-        <div class="stat-val" id="stat-max-streak">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">THIS WEEK</div>
-        <div class="stat-val" id="stat-week">0</div>
-      </div>
-    </div>
+    <section class="hh-panel" aria-labelledby="hh-h-stats">
+      <div class="hh-panel-head"><h2 id="hh-h-stats">統計</h2></div>
+      <dl class="hh-stats">
+        <div class="hh-stat"><dt>合計アクション</dt><dd class="hh-num" id="stat-total">0</dd></div>
+        <div class="hh-stat"><dt>現在の連続記録</dt><dd class="hh-num" id="stat-streak">0</dd></div>
+        <div class="hh-stat"><dt>最長連続記録</dt><dd class="hh-num" id="stat-max-streak">0</dd></div>
+        <div class="hh-stat"><dt>今週</dt><dd class="hh-num" id="stat-week">0</dd></div>
+      </dl>
+    </section>
 
-    
-    <div class="action-panel" style="border-color:var(--heat-base); border-style:dashed;">
-      <div class="action-title">// WEEKLY ACTIVITY (直近12週)</div>
-      <div class="weekly-chart" id="weekly-chart"></div>
-    </div>
-
-    
-    <div class="action-panel">
-      <div class="action-title">// SYSTEM OPERATIONS (TODAY)</div>
-      <div class="controls-row" style="margin-top:0;">
-        <button class="cy-btn" onclick="logToday(1)">+ LOG ACTION (L1)</button>
-        <button class="cy-btn" onclick="logToday(2)">+ INTENSE (L2)</button>
+    <section class="hh-panel" aria-labelledby="hh-h-weekly">
+      <div class="hh-panel-head">
+        <h2 id="hh-h-weekly">週間アクティビティ</h2>
+        <span class="hh-head-note">直近12週</span>
       </div>
-      
-      <div class="action-title" style="margin-top:0.5rem;">// THEME SELECTION</div>
-      <div class="controls-row" style="margin-top:0;">
-        <button class="cy-btn theme-btn active-theme" id="t-green" onclick="setTheme('green')">GREEN</button>
-        <button class="cy-btn theme-btn" id="t-pink" onclick="setTheme('pink')" style="--heat-base:#ec4899;">PINK</button>
-        <button class="cy-btn theme-btn" id="t-blue" onclick="setTheme('blue')" style="--heat-base:#3b82f6;">BLUE</button>
-      </div>
+      <div class="hh-weekly" id="weekly-chart"></div>
+    </section>
 
-      <div class="action-title" style="margin-top:0.5rem;">// DATA BACKUP (JSON)</div>
-      <textarea id="io-area" class="cy-textarea" rows="2" placeholder="RAW JSON DATA HERE..."></textarea>
-      <div class="controls-row" style="margin-top:0;">
-        <button class="cy-btn" onclick="exportData()">EXPORT</button>
-        <button class="cy-btn" onclick="importData()">IMPORT</button>
-        <button class="cy-btn" style="border-color:#ef4444; color:#ef4444;" onclick="if(confirm('PURGE CURRENT HABIT?')) { allData.habits[currentHabit].data={}; saveAndRender(); }">PURGE</button>
+    <section class="hh-panel" aria-labelledby="hh-h-ops">
+      <div class="hh-panel-head"><h2 id="hh-h-ops">操作</h2></div>
+      <div class="hh-ops">
+        <div class="hh-ops-group">
+          <h3>今日を記録</h3>
+          <div class="hh-row">
+            <button class="hh-btn hh-btn-primary" type="button" onclick="logToday(1)">+1 記録する</button>
+            <button class="hh-btn" type="button" onclick="logToday(2)">+2 しっかり記録</button>
+          </div>
+        </div>
+        <div class="hh-ops-group">
+          <h3>テーマ</h3>
+          <div class="hh-row" role="group" aria-label="テーマ選択">
+            <button class="hh-btn" type="button" id="t-green" aria-pressed="true" onclick="setTheme('green')">グリーン</button>
+            <button class="hh-btn" type="button" id="t-pink" aria-pressed="false" onclick="setTheme('pink')">ピンク</button>
+            <button class="hh-btn" type="button" id="t-blue" aria-pressed="false" onclick="setTheme('blue')">ブルー</button>
+          </div>
+        </div>
+        <div class="hh-ops-group">
+          <h3>データの書き出し・読み込み（JSON）</h3>
+          <textarea id="io-area" class="hh-textarea" rows="3" placeholder="ここにJSONが書き出されます。読み込むときはJSONを貼り付けてください" aria-label="JSONデータ"></textarea>
+          <div class="hh-row">
+            <button class="hh-btn" type="button" onclick="exportData()">書き出す</button>
+            <button class="hh-btn" type="button" onclick="importData()">読み込む</button>
+          </div>
+        </div>
+        <div class="hh-danger-row">
+          <p>現在の習慣の記録だけを全て消します。習慣そのものは残ります。</p>
+          <button class="hh-btn hh-btn-danger" type="button" id="hh-purge-btn">この習慣の記録を消去</button>
+        </div>
       </div>
-    </div>
-
+    </section>
   </div>
 
-  
-  <div class="cy-modal" id="help-modal">
-    <div class="cy-modal-content">
-      <button class="cy-modal-close" onclick="document.getElementById('help-modal').style.display='none'">&times;</button>
-      <h2 class="cy-modal-title">SYSTEM_HELP // HEATMAP v2</h2>
-      <div class="cy-modal-body">
-        <p>日々の活動量や習慣の継続をGitHub風のヒートマップで可視化するツールです。過去52週間の記録を一覧できます。</p>
-
-        <p><strong>📝 基本の使い方</strong></p>
+  <dialog class="hh-dialog" id="help-modal" closedby="any" aria-labelledby="hh-help-title">
+    <div class="hh-dialog-card">
+      <div class="hh-dialog-head">
+        <h2 id="hh-help-title">使い方</h2>
+        <button class="hh-dialog-close" type="button" data-close-dialog aria-label="使い方を閉じる">&times;</button>
+      </div>
+      <div class="hh-dialog-body">
+        <p>日々の活動量や習慣の継続を、GitHub風のヒートマップで可視化するツールです。過去52週間の記録を一覧できます。</p>
+        <h3>記録する</h3>
         <ol>
-          <li>下の <strong>+ LOG ACTION (L1)</strong> ボタンを押すと、今日のレベルが1つ上がります</li>
-          <li><strong>+ INTENSE (L2)</strong> を押すと、レベルが2つ上がります（最大 LVL 4）</li>
-          <li>ヒートマップの各セルを直接 <strong>クリック/タップ</strong> してもレベルを変更できます（0→1→2→3→4→0の循環）</li>
+          <li>「+1 記録する」を押すと、今日のレベルが1つ上がります</li>
+          <li>「+2 しっかり記録」を押すと、レベルが2つ上がります（最大レベル4）</li>
+          <li>ヒートマップのセルを直接押してもレベルを変更できます（0→1→2→3→4→0の循環）</li>
+          <li>セルを長押しすると、レベルを数値で直接指定できます</li>
         </ol>
-
-        <p><strong>🎯 ゴールを設定する</strong></p>
+        <h3>今日の目標</h3>
         <ul>
-          <li>上部のプログレスバー横の <strong>EDIT</strong> ボタンで、1日の目標レベル（1〜4）を設定できます</li>
-          <li>達成度がバーで表示されるので、毎日の目標管理に活用してください</li>
+          <li>「変更」から、1日の目標レベル（1〜4）を設定できます</li>
         </ul>
-
-        <p><strong>📋 複数の習慣を管理する</strong></p>
+        <h3>複数の習慣を管理する</h3>
         <ul>
-          <li>上部の <strong>+ ADD</strong> タブをクリックして、新しい習慣を追加（例: 運動、読書、コーディング）</li>
-          <li>タブをクリックして習慣を切り替え。<strong>× DEL</strong> で現在の習慣を削除</li>
+          <li>上部の「+ 習慣を追加」から、新しい習慣を追加できます（例：運動、読書、コーディング）</li>
+          <li>タブを押して習慣を切り替えます。「削除」は現在の習慣を丸ごと削除します</li>
         </ul>
-
-        <p><strong>📱 スマホ操作</strong></p>
+        <h3>その他</h3>
         <ul>
-          <li>セルを <strong>長押し</strong> すると、レベルを直接数値で指定できます</li>
+          <li>テーマ：グリーン / ピンク / ブルーの色テーマを切り替えます</li>
+          <li>週間アクティビティ：直近12週の棒グラフで活動量の流れを確認できます</li>
+          <li>書き出し / 読み込み：JSONでデータのバックアップと復元ができます</li>
         </ul>
-
-        <p><strong>🎨 その他</strong></p>
-        <ul>
-          <li><strong>THEME:</strong> GREEN / PINK / BLUE のカラーテーマを切り替え</li>
-          <li><strong>WEEKLY ACTIVITY:</strong> 直近12週の棒グラフで活動量のトレンドを確認</li>
-          <li><strong>EXPORT / IMPORT:</strong> JSONでデータのバックアップと復元が可能</li>
-        </ul>
-
-        <p style="color:#64748b; font-size:0.75rem;">💾 データはブラウザのlocalStorageに自動保存されます。</p>
+        <p>データはブラウザの localStorage に自動保存されます。</p>
       </div>
     </div>
-  </div>
+  </dialog>
 
-  
-  <div class="cy-prompt" id="prompt-modal" onclick="closePrompt()">
-    <div class="cy-prompt-box" onclick="event.stopPropagation()">
-      <label id="prompt-label">ENTER VALUE</label>
-      <input type="text" id="prompt-input">
-      <button class="cy-btn" onclick="submitPrompt()" style="font-size:0.7rem;">APPLY</button>
-    </div>
-  </div>
+  <dialog class="hh-dialog" id="prompt-modal" aria-labelledby="prompt-label">
+    <form class="hh-dialog-card is-narrow" id="prompt-form" method="dialog">
+      <div class="hh-dialog-head">
+        <h2 id="prompt-label">値を入力</h2>
+        <button class="hh-dialog-close" type="button" data-close-dialog aria-label="閉じる">&times;</button>
+      </div>
+      <input type="text" id="prompt-input" class="hh-input">
+      <div class="hh-dialog-actions">
+        <button class="hh-btn" type="button" data-close-dialog>キャンセル</button>
+        <button class="hh-btn hh-btn-primary" type="submit">適用する</button>
+      </div>
+    </form>
+  </dialog>
 
-  <div class="toast" id="toast-msg"></div>
+  <div class="hh-toast" id="toast-msg" role="status" aria-live="polite"></div>
 </div>
 
 <script>
   const STORAGE_KEY = 'dt_heatmap_v2';
   const ioArea = document.getElementById('io-area');
+  const rootEl = document.querySelector('.hh-root');
 
   
   let allData = JSON.parse(localStorage.getItem(STORAGE_KEY));
@@ -673,21 +733,23 @@
 
   
   window.setTheme = function(theme) {
-    const root = document.getElementById('app-root');
-    root.className = 'cy-root ' + (theme === 'green' ? '' : 'theme-' + theme);
+    rootEl.classList.toggle('theme-pink', theme === 'pink');
+    rootEl.classList.toggle('theme-blue', theme === 'blue');
     allData.theme = theme;
-    const btns = ['green', 'pink', 'blue'];
-    btns.forEach(b => {
+    ['green', 'pink', 'blue'].forEach(b => {
       const el = document.getElementById('t-' + b);
-      if(el) { b === theme ? el.classList.add('active-theme') : el.classList.remove('active-theme'); }
+      if(el) el.setAttribute('aria-pressed', String(b === theme));
     });
     setTimeout(saveAndRender, 50);
   }
 
+  let toastTimer = null;
   function showToast(msg) {
     const t = document.getElementById('toast-msg');
-    t.innerText = msg; t.style.opacity = 1; t.style.transform = 'translate(-50%, -20px)';
-    setTimeout(() => { t.style.opacity = 0; t.style.transform = 'translate(-50%, 0)'; }, 2000);
+    t.textContent = msg;
+    t.classList.add('is-visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.classList.remove('is-visible'); }, 2500);
   }
 
   function dtStr(d) {
@@ -696,19 +758,25 @@
 
   const WEEKS = 52; const DAYS_PER_WEEK = 7;
 
+  const promptDialog = document.getElementById('prompt-modal');
   function showPrompt(label, defaultVal, cb) {
-    document.getElementById('prompt-label').innerText = label;
+    document.getElementById('prompt-label').textContent = label;
     document.getElementById('prompt-input').value = defaultVal || '';
-    document.getElementById('prompt-modal').style.display = 'flex';
     promptCallback = cb;
+    if(typeof promptDialog.showModal === 'function') promptDialog.showModal();
+    else promptDialog.setAttribute('open', '');
     setTimeout(() => document.getElementById('prompt-input').focus(), 100);
   }
-  window.closePrompt = function() { document.getElementById('prompt-modal').style.display = 'none'; promptCallback = null; }
+  window.closePrompt = function() { if(promptDialog.open) promptDialog.close(); promptCallback = null; }
   window.submitPrompt = function() {
     const val = document.getElementById('prompt-input').value;
     if(promptCallback) promptCallback(val);
     closePrompt();
   }
+  document.getElementById('prompt-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    submitPrompt();
+  });
 
   
   function renderTabs() {
@@ -717,18 +785,20 @@
     Object.keys(allData.habits).forEach(key => {
       const h = allData.habits[key];
       const tab = document.createElement('button');
-      tab.className = 'habit-tab' + (key === currentHabit ? ' active' : '');
+      tab.className = 'hh-chip';
+      tab.type = 'button';
+      tab.setAttribute('aria-pressed', String(key === currentHabit));
       tab.textContent = h.label || key.toUpperCase();
       tab.onclick = () => { currentHabit = key; allData.activeHabit = key; saveAndRender(); };
       container.appendChild(tab);
     });
-    
     if(Object.keys(allData.habits).length > 1) {
       const del = document.createElement('button');
-      del.className = 'habit-tab habit-tab-del';
-      del.textContent = '× DEL';
+      del.className = 'hh-chip hh-chip-del';
+      del.type = 'button';
+      del.textContent = '削除';
       del.onclick = () => {
-        if(confirm(`DELETE HABIT [${allData.habits[currentHabit]?.label || currentHabit}]?`)) {
+        if(confirm(`習慣「${allData.habits[currentHabit]?.label || currentHabit}」を削除しますか？`)) {
           delete allData.habits[currentHabit];
           currentHabit = Object.keys(allData.habits)[0];
           allData.activeHabit = currentHabit;
@@ -737,20 +807,20 @@
       };
       container.appendChild(del);
     }
-    
     const addBtn = document.createElement('button');
-    addBtn.className = 'habit-tab habit-tab-add';
-    addBtn.textContent = '+ ADD';
+    addBtn.className = 'hh-chip hh-chip-add';
+    addBtn.type = 'button';
+    addBtn.textContent = '+ 習慣を追加';
     addBtn.onclick = () => {
-      showPrompt('HABIT NAME (習慣名)', '', (name) => {
+      showPrompt('習慣の名前', '', (name) => {
         if(!name) return;
         const key = 'h_' + name.toLowerCase().replace(/[^a-z0-9]/g, '_');
-        if(allData.habits[key]) { showToast('ALREADY EXISTS'); return; }
+        if(allData.habits[key]) { showToast('その習慣は既にあります'); return; }
         allData.habits[key] = { data: {}, goal: 1, label: name };
         currentHabit = key;
         allData.activeHabit = key;
         saveAndRender();
-        showToast('HABIT ADDED: ' + name);
+        showToast('習慣を追加しました：' + name);
       });
     };
     container.appendChild(addBtn);
@@ -764,34 +834,33 @@
     const pct = Math.min(todayVal / goal, 1) * 100;
     document.getElementById('goal-fill').style.width = pct + '%';
     document.getElementById('goal-text').textContent = `${todayVal}/${goal}`;
+    document.getElementById('goal-bar-el').setAttribute('aria-valuenow', String(Math.round(pct)));
   }
 
   window.editGoal = function() {
     const h = allData.habits[currentHabit];
-    showPrompt('DAILY GOAL (日次目標 1-4)', String(h?.goal || 1), (val) => {
+    showPrompt('1日の目標レベル（1〜4）', String(h?.goal || 1), (val) => {
       const g = parseInt(val);
       if(g >= 1 && g <= 4) {
         allData.habits[currentHabit].goal = g;
         saveAndRender();
-        showToast('GOAL SET TO ' + g);
+        showToast('目標を ' + g + ' に設定しました');
       }
     });
   }
 
   
   let longPressTimer = null;
-  let longPressTarget = null;
 
   function generateGrid() {
     const heatData = getHeatData();
     const container = document.getElementById('heatmap-el');
     const labelsContainer = document.getElementById('month-labels');
     container.innerHTML = ''; labelsContainer.innerHTML = '';
-    
-    const rootStyle = getComputedStyle(document.getElementById('app-root'));
+
+    const rootStyle = getComputedStyle(rootEl);
     function getColor(val) { return rootStyle.getPropertyValue('--heat-' + Math.min(val, 4)).trim(); }
-    const baseColor = rootStyle.getPropertyValue('--heat-base').trim();
-    
+
     const today = new Date();
     const todayStr = dtStr(today);
     const startObj = new Date(today);
@@ -799,48 +868,47 @@
 
     let cursorDate = new Date(startObj);
     let currentMonth = -1;
-    const geometry = getComputedStyle(document.getElementById('app-root'));
-    const cellSize = parseFloat(geometry.getPropertyValue('--heat-cell-size')) || 13;
-    const cellGap = parseFloat(geometry.getPropertyValue('--heat-cell-gap')) || 3;
+    let lastLabelX = -1000;
+    const cellSize = parseFloat(rootStyle.getPropertyValue('--heat-cell-size')) || 13;
+    const cellGap = parseFloat(rootStyle.getPropertyValue('--heat-cell-gap')) || 3;
     const colWidth = cellSize + cellGap;
-    
+
     for(let w = 0; w <= WEEKS; w++) {
       const col = document.createElement('div');
-      col.className = 'week-col';
-      
+      col.className = 'hh-week';
+
       let weekStartMonth = cursorDate.getMonth();
       if (weekStartMonth !== currentMonth) {
-        if (w > 0 || (w === 0 && cursorDate.getDate() < 14)) {
+        const labelX = w * colWidth;
+        if ((w > 0 || (w === 0 && cursorDate.getDate() < 14)) && labelX - lastLabelX >= 44) {
           const mLabel = document.createElement('div');
-          mLabel.className = 'month-label';
-          mLabel.style.left = (w * colWidth) + 'px';
-          mLabel.innerText = `${cursorDate.getFullYear()}/${String(weekStartMonth+1).padStart(2,'0')}`;
+          mLabel.className = 'hh-month';
+          mLabel.style.left = labelX + 'px';
+          mLabel.textContent = `${cursorDate.getFullYear()}/${String(weekStartMonth+1).padStart(2,'0')}`;
           labelsContainer.appendChild(mLabel);
+          currentMonth = weekStartMonth;
+          lastLabelX = labelX;
+        } else if (weekStartMonth !== currentMonth) {
           currentMonth = weekStartMonth;
         }
       }
-      
+
       for(let d = 0; d < DAYS_PER_WEEK; d++) {
         if (cursorDate > today) break;
-        
+
         const dStr = dtStr(cursorDate);
         const val = heatData[dStr] || 0;
 
-        const cell = document.createElement('div');
-        cell.className = 'day-cell';
-        if(dStr === todayStr) cell.classList.add('today-cell');
-        
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = 'hh-cell';
         cell.style.backgroundColor = getColor(val);
-        if(val === 0) { cell.style.borderColor = dStr === todayStr ? '' : '#333'; }
-        else if(val === 1) { cell.style.borderColor = getColor(2); }
-        else if(val >= 2) { 
-          cell.style.borderColor = getColor(Math.min(val+1, 4));
-          cell.style.boxShadow = `0 0 ${val*3}px ${baseColor}`;
-        }
-        
-        const tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.innerText = `${dStr} : LVL ${val}`;
+        if(dStr === todayStr) cell.classList.add('is-today');
+        cell.setAttribute('aria-label', `${dStr} レベル ${val}（押すと変更）`);
+
+        const tooltip = document.createElement('span');
+        tooltip.className = 'hh-tip';
+        tooltip.textContent = `${dStr}：レベル ${val}`;
         cell.appendChild(tooltip);
 
         const cellDateStr = dStr; 
@@ -854,10 +922,9 @@
         };
 
         
-        cell.addEventListener('touchstart', (e) => {
-          longPressTarget = cellDateStr;
+        cell.addEventListener('touchstart', () => {
           longPressTimer = setTimeout(() => {
-            showPrompt(`SET LEVEL FOR ${cellDateStr} (0-4)`, String(heatData[cellDateStr] || 0), (val) => {
+            showPrompt(`${cellDateStr} のレベル（0〜4）`, String(getHeatData()[cellDateStr] || 0), (val) => {
               const lv = parseInt(val);
               if(lv >= 0 && lv <= 4) {
                 const hd = getHeatData();
@@ -877,8 +944,8 @@
       container.appendChild(col);
     }
 
-    const wrapper = document.querySelector('.heatmap-wrapper');
-    if(wrapper) wrapper.scrollLeft = Math.max(0, container.getBoundingClientRect().width - wrapper.clientWidth);
+    const wrapper = document.getElementById('heatmap-scroll');
+    if(wrapper) wrapper.scrollLeft = Math.max(0, wrapper.scrollWidth - wrapper.clientWidth);
   }
 
   function calculateStats() {
@@ -898,7 +965,7 @@
       if(iterDate >= weekAgo) weekTotal += v;
       iterDate.setDate(iterDate.getDate() + 1);
     }
-    
+
     let traceDate = new Date();
     let todayVal = heatData[dtStr(traceDate)] || 0;
     let hitZero = false;
@@ -916,10 +983,10 @@
       }
     }
 
-    document.getElementById('stat-total').innerText = total;
-    document.getElementById('stat-streak').innerText = currentStreak;
-    document.getElementById('stat-max-streak').innerText = maxStreak;
-    document.getElementById('stat-week').innerText = weekTotal;
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-streak').textContent = currentStreak;
+    document.getElementById('stat-max-streak').textContent = maxStreak;
+    document.getElementById('stat-week').textContent = weekTotal;
   }
 
   function renderWeeklyChart() {
@@ -943,11 +1010,12 @@
     const maxWeek = Math.max(...weekTotals, 1);
     weekTotals.forEach((wt, i) => {
       const bar = document.createElement('div');
-      bar.className = 'week-bar';
-      bar.style.height = Math.max((wt / maxWeek) * 100, 2) + '%';
-      if(i === weekTotals.length - 1) bar.style.opacity = '1';
-      const label = document.createElement('div');
-      label.className = 'week-bar-label';
+      bar.className = 'hh-weekbar' + (i === weekTotals.length - 1 ? ' is-current' : '');
+      bar.style.height = Math.max((wt / maxWeek) * 100, 3) + '%';
+      bar.setAttribute('role', 'img');
+      bar.setAttribute('aria-label', `${i === weekTotals.length - 1 ? '今週' : (weekTotals.length - 1 - i) + '週前'}：合計 ${wt}`);
+      const label = document.createElement('span');
+      label.className = 'hh-num';
       label.textContent = wt;
       bar.appendChild(label);
       container.appendChild(bar);
@@ -971,12 +1039,12 @@
     hd[dStr] = current;
     setHeatData(hd);
     saveAndRender();
-    showToast(`LOGGED TODAY: LVL ${current}`);
+    showToast(`今日を記録しました：レベル ${current}`);
   }
 
   window.exportData = function() {
     ioArea.value = JSON.stringify(allData, null, 2);
-    showToast("DATA EXPORTED");
+    showToast("データを書き出しました");
   }
 
   window.importData = function() {
@@ -991,15 +1059,41 @@
           currentHabit = allData.activeHabit || Object.keys(allData.habits)[0];
         }
         saveAndRender();
-        showToast("DATA IMPORT SUCCESSFUL");
+        showToast("データを読み込みました");
         ioArea.value = "";
       }
-    } catch(e) { showToast("ERROR: INVALID JSON"); }
+    } catch(e) { showToast("エラー：JSONの形式が正しくありません"); }
   }
+
+  document.getElementById('hh-purge-btn').addEventListener('click', () => {
+    if(confirm('現在の習慣の記録を全て消しますか？')) {
+      allData.habits[currentHabit].data = {};
+      saveAndRender();
+      showToast('記録を消去しました');
+    }
+  });
+
+  const helpDialog = document.getElementById('help-modal');
+  document.getElementById('hh-help-btn').addEventListener('click', () => {
+    if(typeof helpDialog.showModal === 'function') helpDialog.showModal();
+    else helpDialog.setAttribute('open', '');
+  });
+  document.querySelectorAll('.hh-root [data-close-dialog]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const dlg = btn.closest('dialog');
+      if(dlg && dlg.open) dlg.close();
+      if(dlg === promptDialog) promptCallback = null;
+    });
+  });
 
   
   if(allData.theme && allData.theme !== 'green') {
     setTheme(allData.theme);
+  } else {
+    ['green', 'pink', 'blue'].forEach(b => {
+      const el = document.getElementById('t-' + b);
+      if(el) el.setAttribute('aria-pressed', String(b === 'green'));
+    });
   }
 
   saveAndRender();

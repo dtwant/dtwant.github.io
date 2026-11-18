@@ -100,7 +100,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "88"
+    "wordCount": "67"
   }]
   </script>
 
@@ -245,7 +245,7 @@
     }
   </script>
 </head>
-<link rel="stylesheet" href="/css/lab-ui-system.min.a8376d37a89e59d62dddc8986f6b788e8a4fb8fa040a4fdc19fa7325c3f93561.css" integrity="sha256-qDdtN6ieWdYt3ciYb2t4jopPuPoECk/cGfpzJcP5NWE="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
+<link rel="stylesheet" href="/css/lab-ui-system.min.217f413f59d473ed72cd51996fb36286422e098832a39e1cbb2b4fdb9abd7cd5.css" integrity="sha256-IX9BP1nUc&#43;1yzVGZb7NihkIuCYgyo54cuytP25q9fNU="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
   </head>
   <body class="lab-body portal-body" data-lab-slug="mermaid">
 
@@ -290,222 +290,194 @@
         <div class="lab-content"><p>テキストで記述する作図ツール「Mermaid.js」のライブエディター.<br>
 フローチャート、シーケンス図、ガントチャートなどが作成できる.</p>
 
-
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap');
-
-  #cyber-mermaid-app {
-    --neon-pink: #ff0055; --neon-cyan: #00f3ff; --neon-green: #00ff41;
-    --neon-purple: #b026ff; --neon-yellow: #fcee0a; --bg-dark: #050505;
-    --panel-bg: rgba(10,14,18,0.65);
-    font-family: 'JetBrains Mono', monospace; color: #e0e0e0;
-    background-color: var(--bg-dark);
-    background-image: linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px);
-    background-size: 40px 40px; animation: mm-bg 20s linear infinite;
-    min-height: calc(100vh - 100px); width: 100%; position: relative; z-index: 10; margin: 0; padding: 0;
+  .mm-root {
+    --mm-accent: hsl(330 95% 74%);
+    --mm-panel: hsl(228 20% 12% / 0.82);
+    --mm-panel-solid: hsl(228 22% 10%);
+    --mm-code-bg: hsl(228 24% 7% / 0.9);
+    --mm-track: hsl(0 0% 100% / 0.08);
+    --mm-muted: hsl(210 16% 78% / 0.72);
+    --mm-danger: hsl(350 85% 72%);
+    --mm-ok: hsl(152 65% 62%);
+    --mm-warn: hsl(45 95% 68%);
+    --mm-r-panel: 16px;
+    --mm-r-control: 10px;
+    --mm-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    width: 100%;
+    color: var(--dt-text);
+    font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
+      "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
-  #cyber-mermaid-app * { box-sizing: border-box; }
-  #cyber-mermaid-app::before { content:''; position:fixed; top:0; left:0; width:100vw; height:100vw; background-color:#050505; z-index:-2; }
-  #cyber-mermaid-app::after { content:''; position:fixed; top:0; left:0; width:100vw; height:100vw; background-image:linear-gradient(rgba(0,243,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,0.05) 1px,transparent 1px); background-size:40px 40px; animation:mm-bg 20s linear infinite; z-index:-1; }
-  #cyber-mermaid-app .mm-scan { position:fixed; top:0; left:0; width:100vw; height:100vh; background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0) 50%,rgba(0,0,0,0.1) 50%,rgba(0,0,0,0.1)); background-size:100% 4px; pointer-events:none; z-index:50; opacity:0.5; }
-  @keyframes mm-bg { 0%{background-position:0 0}100%{background-position:40px 40px} }
+  .mm-root *, .mm-root *::before, .mm-root *::after { box-sizing: border-box; }
+  .mm-stack { display: flex; flex-direction: column; gap: 16px; }
 
-   
-  #cyber-mermaid-app .mm-ref {
-    margin-top:24px; padding:20px;
-    background:rgba(0, 0, 0, 0.4);
-    border:1px solid rgba(255,255,255,0.08);
-    border-left:3px solid var(--neon-cyan);
-    border-radius: 4px;
+  .mm-btn {
+    min-height: 48px; height: 48px;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0 20px;
+    border: 1px solid var(--dt-border); border-radius: var(--mm-r-control);
+    background: var(--mm-panel); color: var(--dt-text-2);
+    font: inherit; font-size: 14px; cursor: pointer; white-space: nowrap;
+    touch-action: manipulation;
+    transition: background-color 160ms var(--mm-ease), color 160ms var(--mm-ease),
+      border-color 160ms var(--mm-ease), transform 80ms ease-out;
   }
-  #cyber-mermaid-app .mm-ref h3 { color:var(--neon-cyan); font-family:'Orbitron',sans-serif; font-size:14px; margin-bottom:16px; letter-spacing:1px; }
-  #cyber-mermaid-app .mm-ref h4 { color:#94a3b8; font-size:12px; margin:16px 0 8px; text-transform:uppercase; letter-spacing:0.5px; }
-  #cyber-mermaid-app .mm-ref h4:first-of-type { margin-top:0; }
-  #cyber-mermaid-app .mm-ref pre { background:rgba(0,0,0,0.8); border:1px solid #333; padding:12px; font-size:12px; color:#9ca3af; overflow-x:auto; margin:0 0 8px; white-space:pre; }
-  @media(min-width:768px) { #cyber-mermaid-app .mm-ref pre { font-size:13px; } }
-
-  #cyber-mermaid-app .mm-glitch { font-family:'Orbitron',sans-serif; position:relative; color:var(--neon-cyan); text-shadow:2px 2px var(--neon-pink); }
-  #cyber-mermaid-app .mm-glitch::before,#cyber-mermaid-app .mm-glitch::after { content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%; background:transparent; }
-  #cyber-mermaid-app .mm-glitch::before { left:2px; text-shadow:-1px 0 var(--neon-cyan); clip:rect(24px,550px,90px,0); animation:mm-g2 3s infinite linear alternate-reverse; }
-  #cyber-mermaid-app .mm-glitch::after { left:-2px; text-shadow:-1px 0 var(--neon-pink); clip:rect(85px,550px,140px,0); animation:mm-g1 2.5s infinite linear alternate-reverse; }
-  @keyframes mm-g1 { 0%{clip:rect(14px,9999px,122px,0)} 5%{clip:rect(82px,9999px,92px,0)} 100%{clip:rect(5px,9999px,133px,0)} }
-  @keyframes mm-g2 { 0%{clip:rect(65px,9999px,100px,0)} 100%{clip:rect(10px,9999px,111px,0)} }
-
-  #cyber-mermaid-app .mm-panel {
-    background: linear-gradient(135deg, rgba(15, 20, 25, 0.7), rgba(5, 8, 12, 0.8));
-    border: 1px solid rgba(0, 243, 255, 0.2);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.4);
-    backdrop-filter: blur(16px) url(#liquid-refract) saturate(125%);
-    -webkit-backdrop-filter: blur(16px) saturate(125%);
-    border-radius: 8px;
+  .mm-btn:hover { background: var(--dt-surface-hover); color: var(--dt-text); }
+  .mm-btn:active { transform: scale(0.96); }
+  .mm-btn:focus-visible, .mm-root textarea:focus-visible {
+    outline: 2px solid var(--mm-accent); outline-offset: 2px;
   }
-  #cyber-mermaid-app .mm-clip { clip-path:polygon(0 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%); }
-
-  #cyber-mermaid-app .mm-main { width:100%; max-width:1100px; position:relative; z-index:10; margin:0 auto; padding:8px; padding-bottom:32px; }
-  @media(min-width:768px) { #cyber-mermaid-app .mm-main { padding:0 0 32px 0; margin-top:32px; } }
-
-   
-  #cyber-mermaid-app .mm-hbar { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; padding:0 4px; opacity:0.8; }
-  #cyber-mermaid-app .mm-sysver { font-size:9px; color:var(--neon-cyan); font-family:monospace; letter-spacing:2px; }
-  @media(min-width:768px) { #cyber-mermaid-app .mm-sysver { font-size:12px; } }
-  #cyber-mermaid-app .mm-status { font-size:9px; font-family:monospace; display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:4px; border:1px solid rgba(0,255,65,0.3); color:#4ade80; white-space:nowrap; }
-  @media(min-width:768px) { #cyber-mermaid-app .mm-status { font-size:12px; padding:4px 12px; gap:8px; } }
-  #cyber-mermaid-app .mm-pulse { animation:mm-p 1.5s ease-in-out infinite; }
-  @keyframes mm-p { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-   
-  #cyber-mermaid-app .mm-title-sec { margin-bottom:16px; text-align:center; border-bottom:1px solid #1f2937; padding-bottom:16px; position:relative; padding-top:24px; }
-  @media(min-width:768px) { #cyber-mermaid-app .mm-title-sec { text-align:left; padding-top:0; margin-bottom:24px; padding-bottom:20px; } }
-  #cyber-mermaid-app .mm-title { font-size:20px; font-weight:700; letter-spacing:-0.05em; margin-bottom:4px; margin-top:8px; }
-  @media(min-width:768px) { #cyber-mermaid-app .mm-title { font-size:40px; margin-top:0; } }
-  #cyber-mermaid-app .mm-sub { font-size:9px; color:#9ca3af; font-family:monospace; letter-spacing:0.1em; text-transform:uppercase; }
-  @media(min-width:768px) { #cyber-mermaid-app .mm-sub { font-size:12px; letter-spacing:0.2em; } }
-
-   
-  #cyber-mermaid-app .mm-workspace { display:flex; flex-direction:column; gap:16px; }
-  @media(min-width:900px) { #cyber-mermaid-app .mm-workspace { flex-direction:row; } }
-
-  #cyber-mermaid-app .mm-pane { flex:1; display:flex; flex-direction:column; min-width:0; }
-
-  #cyber-mermaid-app .mm-pane-header {
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-bottom:none; padding:8px 12px; font-size:9px;
-    color:var(--neon-cyan); letter-spacing:2px;
-    font-family:'Orbitron',sans-serif; display:flex;
-    justify-content:space-between; align-items:center;
-    border-radius: 4px 4px 0 0;
+  .mm-btn-primary {
+    background: var(--mm-accent); border-color: transparent;
+    color: hsl(330 55% 8%); font-weight: 600;
   }
-  @media(min-width:768px) { #cyber-mermaid-app .mm-pane-header { font-size:11px; } }
+  .mm-btn-primary:hover { filter: brightness(1.08); color: hsl(330 55% 8%); }
 
-  #cyber-mermaid-app .mm-textarea {
-    width:100%; min-height:300px;
-    background:rgba(0,0,0,0.6);
-    border:1px solid rgba(255,255,255,0.1);
-    color:#e0e0e0; font-family:'JetBrains Mono',monospace;
-    font-size:13px; line-height:1.6; padding:16px; resize:vertical;
-    outline:none; transition:all 0.3s;
-    border-radius: 0 0 4px 4px;
+   
+  .mm-header { display: flex; align-items: center; justify-content: flex-end; gap: 12px; min-height: 28px; }
+  .mm-status { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--dt-text-2); white-space: nowrap; }
+  .mm-status-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--mm-ok); flex-shrink: 0; }
+  .mm-status.is-busy .mm-status-dot { background: var(--mm-warn); }
+  .mm-status.is-error .mm-status-dot { background: var(--mm-danger); }
+
+   
+  .mm-workspace { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 900px) { .mm-workspace { grid-template-columns: 1fr 1fr; } }
+  .mm-pane {
+    border: 1px solid var(--dt-border); border-radius: var(--mm-r-panel);
+    background: var(--mm-panel); overflow: hidden; min-width: 0;
+    display: flex; flex-direction: column;
   }
-  @media(min-width:768px) { #cyber-mermaid-app .mm-textarea { min-height:400px; font-size:14px; } }
-  #cyber-mermaid-app .mm-textarea:focus { border-color:var(--neon-cyan); box-shadow:inset 0 0 10px rgba(0,243,255,0.1); }
-  #cyber-mermaid-app .mm-textarea::-webkit-scrollbar { width:6px; }
-  #cyber-mermaid-app .mm-textarea::-webkit-scrollbar-track { background:rgba(0,0,0,0.5); }
-  #cyber-mermaid-app .mm-textarea::-webkit-scrollbar-thumb { background:var(--neon-cyan); }
-
-  #cyber-mermaid-app .mm-preview-box {
-    width:100%; min-height:300px;
-    background:rgba(14,14,17,0.85);
-    border:1px solid rgba(255,255,255,0.1);
-    padding:20px; display:flex; justify-content:center;
-    align-items:center; overflow:auto; position:relative;
-    border-radius: 0 0 4px 4px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+  .mm-pane-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    min-height: 44px; padding: 0 16px;
+    border-bottom: 1px solid var(--dt-border);
+    font-size: 13px; font-weight: 600;
   }
-  @media(min-width:768px) { #cyber-mermaid-app .mm-preview-box { min-height:400px; } }
-  #cyber-mermaid-app .mm-preview-box svg { max-width:100%; height:auto; }
+  .mm-pane-head span:last-child { font-size: 12px; font-weight: 400; color: var(--mm-muted); }
+   
+  .mm-root .mm-textarea { min-height: 300px !important; }
+  @media (min-width: 900px) { .mm-root .mm-textarea { min-height: 440px !important; } }
+  .mm-textarea {
+    flex: 1; width: 100%; min-height: 300px; resize: vertical;
+    border: none; padding: 16px;
+    background: var(--mm-code-bg); color: var(--dt-text);
+    font-family: ui-monospace, "SFMono-Regular", "Cascadia Code", Menlo, monospace;
+    font-size: 14px; line-height: 1.65;
+  }
+  @media (pointer: coarse) { .mm-textarea { font-size: 16px; } }
+  @media (min-width: 900px) { .mm-textarea { min-height: 440px; } }
+  .mm-preview {
+    flex: 1; min-height: 300px; padding: 20px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: auto; background: hsl(228 22% 9% / 0.9);
+  }
+  @media (min-width: 900px) { .mm-preview { min-height: 440px; } }
+  .mm-preview svg { max-width: 100%; height: auto; }
+  .mm-empty { color: var(--mm-muted); font-size: 13px; text-align: center; line-height: 1.7; }
+
+  .mm-error {
+    display: none; margin-top: 12px; padding: 12px 16px;
+    border: 1px solid hsl(350 85% 72% / 0.45); border-radius: var(--mm-r-control);
+    background: hsl(350 85% 72% / 0.07); color: var(--mm-danger);
+    font-size: 13px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere;
+  }
 
    
-  #cyber-mermaid-app .mm-actions { display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
-  #cyber-mermaid-app .mm-btn { background:linear-gradient(90deg,transparent 0%,rgba(0,243,255,0.1) 50%,transparent 100%); border:1px solid var(--neon-cyan); color:var(--neon-cyan); font-family:'Orbitron',sans-serif; font-size:12px; font-weight:700; padding:12px 24px; cursor:pointer; transition:all 0.3s; letter-spacing:1px; position:relative; overflow:hidden; flex:1; min-width:120px; text-align:center; }
-  @media(min-width:768px) { #cyber-mermaid-app .mm-btn { font-size:13px; letter-spacing:2px; } }
-  #cyber-mermaid-app .mm-btn:hover { background:var(--neon-cyan); color:#000; box-shadow:0 0 20px var(--neon-cyan); }
-  #cyber-mermaid-app .mm-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent); transition:0.5s; }
-  #cyber-mermaid-app .mm-btn:hover::before { left:100%; }
-  #cyber-mermaid-app .mm-btn-green { border-color:var(--neon-green); color:var(--neon-green); background:linear-gradient(90deg,transparent 0%,rgba(0,255,65,0.1) 50%,transparent 100%); }
-  #cyber-mermaid-app .mm-btn-green:hover { background:var(--neon-green); color:#000; box-shadow:0 0 20px var(--neon-green); }
+  .mm-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mm-actions .mm-btn-primary { flex: 0 0 auto; }
+  @media (max-width: 600px) {
+    .mm-actions .mm-btn { flex: 1; }
+  }
 
    
-  #cyber-mermaid-app .mm-error { color:#ef4444; font-weight:bold; font-size:11px; margin-top:8px; display:none; border-left:2px solid #ef4444; padding-left:10px; white-space:pre-wrap; }
-
-   
-  #cyber-mermaid-app .mm-corner { position:absolute; width:24px; height:24px; border-color:var(--neon-cyan); opacity:0.5; }
-  @media(min-width:768px) { #cyber-mermaid-app .mm-corner { width:32px; height:32px; } }
-  #cyber-mermaid-app .mm-c-tl { top:0; left:0; border-top:2px solid; border-left:2px solid; }
-  #cyber-mermaid-app .mm-c-tr { top:0; right:0; border-top:2px solid; border-right:2px solid; }
-  #cyber-mermaid-app .mm-c-bl { bottom:0; left:0; border-bottom:2px solid; border-left:2px solid; }
-  #cyber-mermaid-app .mm-c-br { bottom:0; right:0; border-bottom:2px solid; border-right:2px solid; }
+  .mm-ref {
+    border: 1px solid var(--dt-border); border-radius: var(--mm-r-panel);
+    background: var(--mm-panel); padding: 20px;
+  }
+  .mm-ref > h2 { margin: 0 0 16px; font-size: 15px; font-weight: 600; }
+  .mm-ref-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 900px) { .mm-ref-grid { grid-template-columns: repeat(3, 1fr); } }
+  .mm-ref h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--dt-text-2); }
+  .mm-ref pre {
+    margin: 0; padding: 12px; overflow-x: auto;
+    border: 1px solid var(--dt-border); border-radius: var(--mm-r-control);
+    background: var(--mm-code-bg); color: var(--dt-text-2);
+    font-family: ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.6;
+    white-space: pre;
+  }
+  @media (max-width: 600px) {
+    .mm-stack { gap: 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mm-root *, .mm-root *::before, .mm-root *::after {
+      transition-duration: 0.01ms !important; animation-duration: 0.01ms !important;
+    }
+  }
 </style>
 
-<div id="cyber-mermaid-app">
-  
-  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
-    <filter id="liquid-refract">
-      <feTurbulence type="fractalNoise" baseFrequency="0.015 0.02" numOctaves="3" result="noise" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
-    </filter>
-  </svg>
-  <div class="mm-scan"></div>
-  <div class="mm-main">
-    <div class="mm-hbar" style="align-items: center;">
-      <button onclick="window.history.back()" style="background: transparent; border: 1px solid var(--neon-cyan); color: var(--neon-cyan); padding: 0.2rem 0.5rem; font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: bold; cursor: pointer; border-radius: 3px;">◀ EXIT</button>
-      <div class="mm-sysver" style="margin-left: 8px;">SYS.VER.2.0 // DIAGRAM_ENGINE</div>
-      <div style="flex: 1;"></div>
-      <div class="mm-status" id="mmStatus"><span class="mm-pulse">●</span> SYSTEM READY</div>
+<div class="cy-root mm-root dt-ui" aria-label="Mermaidエディター">
+  <div class="mm-stack">
+
+    <div class="mm-header">
+      <span class="mm-status" id="mmStatus" role="status"><span class="mm-status-dot" aria-hidden="true"></span><span id="mmStatusText">準備完了</span></span>
     </div>
 
-    <div class="mm-panel mm-clip" style="padding:16px; position:relative;">
-      <div class="mm-corner mm-c-tl"></div><div class="mm-corner mm-c-tr"></div>
-      <div class="mm-corner mm-c-bl"></div><div class="mm-corner mm-c-br"></div>
-
-      <div class="mm-title-sec">
-        <h1 class="mm-title mm-glitch" data-text="MERMAID_EDITOR">MERMAID_EDITOR</h1>
-        <p class="mm-sub">Diagram Visualization Engine — Mermaid.js Integration</p>
-      </div>
-
-      <div class="mm-workspace">
-        
-        <div class="mm-pane">
-          <div class="mm-pane-header">
-            <span>INPUT_SOURCE [CODE]</span>
-          </div>
-<textarea id="mermaidCode" class="mm-textarea" spellcheck="false">
-graph TD
+    <div class="mm-workspace">
+      <section class="mm-pane" aria-labelledby="mm-h-code">
+        <div class="mm-pane-head"><span id="mm-h-code">コード</span><span>Mermaid記法</span></div>
+<textarea id="mermaidCode" class="mm-textarea" spellcheck="false" aria-label="Mermaidコード">graph TD
     A[START] --> B{CHECK_SYSTEM}
     B -- OK --> C[PROCEED]
     B -- FAIL --> D[DEBUG_MODE]
     D --> B
 </textarea>
-          <div id="mmErrorDisplay" class="mm-error"></div>
+      </section>
+
+      <section class="mm-pane" aria-labelledby="mm-h-preview">
+        <div class="mm-pane-head"><span id="mm-h-preview">プレビュー</span><span>SVG</span></div>
+        <div id="mermaidPreview" class="mm-preview">
+          <span class="mm-empty">「描画する」を押すと、ここに図が表示されます</span>
         </div>
+      </section>
+    </div>
 
-        
-        <div class="mm-pane">
-          <div class="mm-pane-header">
-            <span>VISUAL_OUTPUT [SVG]</span>
-          </div>
-          <div id="mermaidPreview" class="mm-preview-box">
-            <span style="color:#444; font-size:0.8rem;">// AWAITING_RENDER...</span>
-          </div>
-        </div>
-      </div>
+    <div id="mmErrorDisplay" class="mm-error" role="alert"></div>
 
-      <div class="mm-actions">
-        <button class="mm-btn mm-btn-green" id="mmRenderBtn">RENDER_GRAPH</button>
-        <button class="mm-btn" id="mmDownloadBtn" style="display:none;">DOWNLOAD_SVG</button>
-      </div>
+    <div class="mm-actions">
+      <button class="mm-btn mm-btn-primary" type="button" id="mmRenderBtn">描画する</button>
+      <button class="mm-btn" type="button" id="mmDownloadBtn" style="display:none;">SVGをダウンロード</button>
+    </div>
 
-      
-      <div class="mm-ref">
-        <h3>>> SYNTAX_REFERENCE [記法例]</h3>
-        <h4>Flowchart</h4>
-        <pre>graph TD
+    <section class="mm-ref" aria-labelledby="mm-h-ref">
+      <h2 id="mm-h-ref">記法リファレンス</h2>
+      <div class="mm-ref-grid">
+        <div>
+          <h3>フローチャート</h3>
+          <pre>graph TD
     A[開始] --> B{条件}
     B -- Yes --> C[処理1]
     B -- No --> D[処理2]</pre>
-        <h4>Sequence Diagram</h4>
-        <pre>sequenceDiagram
+        </div>
+        <div>
+          <h3>シーケンス図</h3>
+          <pre>sequenceDiagram
     Alice->>John: Hello John, how are you?
     John-->>Alice: Great!</pre>
-        <h4>Gantt Chart</h4>
-        <pre>gantt
+        </div>
+        <div>
+          <h3>ガントチャート</h3>
+          <pre>gantt
     title プロジェクト計画
     section 開発
     設計 :a1, 2025-01-01, 30d
     実装 :after a1, 20d</pre>
+        </div>
       </div>
-    </div>
+    </section>
   </div>
 </div>
 
@@ -516,7 +488,7 @@ graph TD
     startOnLoad: false,
     theme: 'dark',
     securityLevel: 'loose',
-    fontFamily: 'JetBrains Mono, monospace'
+    fontFamily: 'ui-monospace, Menlo, monospace'
   });
 
   const renderBtn = document.getElementById('mmRenderBtn');
@@ -525,29 +497,29 @@ graph TD
   const output = document.getElementById('mermaidPreview');
   const errorDisplay = document.getElementById('mmErrorDisplay');
   const statusEl = document.getElementById('mmStatus');
+  const statusText = document.getElementById('mmStatusText');
 
-  function setStatus(text, color) {
-    statusEl.innerHTML = '<span class="mm-pulse" style="color:' + color + '">●</span> ' + text;
+  function setStatus(text, state) {
+    statusText.textContent = text;
+    statusEl.classList.toggle('is-busy', state === 'busy');
+    statusEl.classList.toggle('is-error', state === 'error');
   }
 
   async function renderMermaid() {
     const code = input.value;
     errorDisplay.style.display = 'none';
-    output.style.opacity = '0.5';
-    setStatus('RENDERING...', '#fcee0a');
+    setStatus('描画中…', 'busy');
 
     try {
       const id = 'mermaid-graph-' + Date.now();
       const { svg } = await mermaid.render(id, code);
       output.innerHTML = svg;
-      output.style.opacity = '1';
-      downloadBtn.style.display = 'inline-block';
-      setStatus('RENDER COMPLETE', '#00ff41');
+      downloadBtn.style.display = 'inline-flex';
+      setStatus('描画完了', 'ok');
     } catch (error) {
       errorDisplay.style.display = 'block';
-      errorDisplay.innerText = ">> SYNTAX_ERROR: " + error.message;
-      output.style.opacity = '1';
-      setStatus('SYNTAX ERROR', '#ff0055');
+      errorDisplay.textContent = "構文エラー：" + error.message;
+      setStatus('構文エラー', 'error');
       console.error(error);
     }
   }
@@ -558,16 +530,18 @@ graph TD
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "diagram_cyberpunk.svg";
+    link.download = "diagram.svg";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   }
 
   renderBtn.addEventListener('click', renderMermaid);
   downloadBtn.addEventListener('click', downloadSVG);
   setTimeout(renderMermaid, 500);
 </script>
+
 </div>
       </article>
     </main>
