@@ -28,6 +28,10 @@
 
   const panel = byId('sb-panel');
   const scroll = byId('sb-scroll');
+  const rail = app.querySelector('.sb-rail');
+  const indexView = byId('sb-index');
+  const subtitle = byId('sb-subtitle');
+  const backLink = app.querySelector('.sb-back');
   const tabs = byId('sb-tabs');
   const dialog = byId('sb-dialog');
   const form = byId('sb-form');
@@ -37,8 +41,13 @@
   const status = byId('sb-status');
   const toast = byId('sb-toast');
 
-  const { subjects, seeds } = JSON.parse(byId('sb-seed').content.textContent);
+  const { subjects, seeds, volumes } = JSON.parse(byId('sb-seed').content.textContent);
   const subjectById = new Map(subjects.map(subject => [subject.id, subject]));
+  const volumeById = new Map(volumes.map(volume => [volume.id, volume]));
+  const DATA_VOLUME = volumes[0].id;
+  let screen = 'index';
+  let volumeId = DATA_VOLUME;
+  const currentSubjects = () => subjects.filter(subject => (subject.volume ?? DATA_VOLUME) === volumeId);
   const officialAverage = new Intl.NumberFormat('ja-JP', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
   let snapshot = cleanEnvelope();
   let termView = 'first';
@@ -130,6 +139,7 @@
       storageError = false;
       storagePending = false;
       renderPanel();
+      if (screen === 'index') renderIndex();
       updateSyncStatus();
     } catch {
       if (panel.getAttribute('aria-busy') === 'true') renderPanel();
@@ -289,7 +299,7 @@
       tab.tabIndex = selected ? 0 : -1;
     }
     if (bulk) {
-      const visibleSubjects = subjects.filter(subject => isOffered(subject, bulk.term) &&
+      const visibleSubjects = currentSubjects().filter(subject => isOffered(subject, bulk.term) &&
         (termView !== 'annual' || subject.term === 'annual'));
       panel.innerHTML = `<form id="sb-bulk-form" novalidate>
         <div class="sb-bulk-bar"><h2 id="sb-section-title">${TERMS[bulk.term]}の${FIELD_LABELS[bulk.field]}を入力</h2>
@@ -302,7 +312,16 @@
       return;
     }
 
-    const visibleSubjects = subjects.filter(subject => subject.term === termView);
+    if (currentSubjects().length === 0) {
+      const volume = volumeById.get(volumeId);
+      panel.innerHTML = `<div class="sb-section-heading">
+        <div><h2 id="sb-section-title">${volume.year}年度 ${escapeHtml(volume.grade)}</h2></div>
+      </div>
+      <div class="sb-empty"><p>${volume.year}年度 ${escapeHtml(volume.grade)}の科目はまだ登録されていません。科目が決まったら、ここに表示されます。</p></div>`;
+      return;
+    }
+
+    const visibleSubjects = currentSubjects().filter(subject => subject.term === termView);
     const totals = summary(visibleSubjects);
     const annual = termView === 'annual';
     const terms = annual ? ['first', 'second'] : [termView];
@@ -375,7 +394,7 @@
   function renderEditor(focusField) {
     const { id, term } = editor;
     const subject = subjectById.get(id);
-    const eligible = subjects.filter(candidate => candidate.term === termView);
+    const eligible = currentSubjects().filter(candidate => candidate.term === termView);
     const position = eligible.findIndex(candidate => candidate.id === id) + 1;
     byId('sb-dialog-title').textContent = subject.name;
     byId('sb-dialog-context').textContent = `${TERMS[term]} ・ ${subject.credits}単位`;
@@ -430,7 +449,7 @@
     announce('科目の記録を保存しました。');
     if (next) {
       const { id, term, trigger } = editor;
-      const eligible = subjects.filter(subject => subject.term === termView);
+      const eligible = currentSubjects().filter(subject => subject.term === termView);
       const position = eligible.findIndex(subject => subject.id === id);
       const following = [...eligible.slice(position + 1), ...eligible.slice(0, position)];
       const candidate = following.find(subject => fieldsFor(term).some(field => scoreOf(subject.id, term, field) === null));
@@ -631,6 +650,77 @@
     }
   }
 
+  function volumeStatus(volume) {
+    const list = subjects.filter(subject => (subject.volume ?? DATA_VOLUME) === volume.id);
+    if (!list.length) return { active: false, text: '科目はまだ登録されていません' };
+    const entered = list.filter(subject => {
+      const terms = subject.term === 'annual' ? ['first', 'second'] : [subject.term];
+      return terms.some(term => fieldsFor(term).some(field => scoreOf(subject.id, term, field) !== null));
+    }).length;
+    return entered
+      ? { active: true, text: `${list.length}科目 ・ ${entered}科目に記録あり` }
+      : { active: false, text: `${list.length}科目 ・ まだ記録はありません` };
+  }
+
+  function renderIndex() {
+    byId('sb-volume-list').innerHTML = volumes.map(volume => {
+      const status = volumeStatus(volume);
+      return `<button class="sb-volume" type="button" data-volume="${volume.id}"
+        aria-label="${volume.year}年度 ${escapeHtml(volume.dept)} ${escapeHtml(volume.grade)}のスコアブックを開く">
+        <span class="sb-volume-year"><strong>${volume.year}</strong><span>年度</span></span>
+        <span class="sb-volume-main">
+          <span class="sb-volume-grade">${escapeHtml(volume.grade)}</span>
+          <span class="sb-volume-meta">${escapeHtml(volume.dept)}</span>
+          <span class="sb-volume-status"><span class="sb-dot${status.active ? ' is-active' : ''}" aria-hidden="true"></span>${escapeHtml(status.text)}</span>
+        </span>
+        <span class="sb-volume-chevron" aria-hidden="true"></span>
+      </button>`;
+    }).join('');
+  }
+
+  function showIndex() {
+    screen = 'index';
+    app.classList.add('is-index');
+    app.classList.remove('is-empty-volume');
+    rail.hidden = true;
+    scroll.hidden = true;
+    indexView.hidden = false;
+    subtitle.textContent = '年度・学年を選んでください';
+    backLink.setAttribute('aria-label', '0723へ戻る');
+    renderIndex();
+  }
+
+  function openVolume(id) {
+    if (!volumeById.has(id)) return;
+    if (bulk && !discardBulk()) return;
+    volumeId = id;
+    screen = 'book';
+    const volume = volumeById.get(id);
+    app.classList.remove('is-index');
+    app.classList.toggle('is-empty-volume', currentSubjects().length === 0);
+    indexView.hidden = true;
+    rail.hidden = false;
+    scroll.hidden = false;
+    subtitle.textContent = `${volume.year}年度 ${volume.dept} ${volume.grade}`;
+    backLink.setAttribute('aria-label', '年度・学年の選択へ戻る');
+    termView = 'first';
+    renderPanel();
+    scroll.scrollTop = 0;
+    panel.focus({ preventScroll: true });
+  }
+
+  byId('sb-volume-list').addEventListener('click', event => {
+    const button = event.target.closest('[data-volume]');
+    if (button) openVolume(button.dataset.volume);
+  });
+  backLink.addEventListener('click', event => {
+    if (screen !== 'book') return;
+    event.preventDefault();
+    if (bulk && !discardBulk()) return;
+    showIndex();
+    byId('sb-volume-list').querySelector(`[data-volume="${volumeId}"]`)?.focus({ preventScroll: true });
+  });
+
   tabs.addEventListener('click', event => {
     const tab = event.target.closest('[role="tab"]');
     if (tab) selectTerm(tab);
@@ -734,4 +824,5 @@
 
   syncState = syncEnabled() ? 'loading' : 'local';
   refreshFromStorage();
+  showIndex();
 })();
