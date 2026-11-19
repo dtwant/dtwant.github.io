@@ -1044,7 +1044,9 @@
       diary: { hide: ['.sd-title-text'], title: { font: "'JetBrains Mono', monospace", ls: '.08em', weight: '700' } },
       timetable: { hide: ['.apple-page-title', '.apple-back-btn', '.apple-header'] },
       manga: { hide: ['.ms-logo-title'] },
-      taskmanage: { hide: ['.km-back-btn'] }
+      taskmanage: { hide: ['.km-back-btn'] },
+      score_book: { hide: ['.sb-topbar'] },
+      report_card: { hide: ['#rc-close-btn', '.rc5-title-group', '#rc-sync-badge-top'], gearBeside: ['#rc-settings-btn', '.rc5-term-nav', '.rc5-topbar'] }
     };
     function dedupeOwnChrome() {
       const spec = OWN_CHROME[appKey];
@@ -1053,6 +1055,24 @@
         document.querySelectorAll(sel).forEach(el => {
           if (!el.closest('.dtsp-header')) el.style.setProperty('display', 'none', 'important');
         });
+      }
+      if (spec.gearBeside) {
+        const [btnSel, navSel, barSel] = spec.gearBeside;
+        const btn = document.querySelector(btnSel);
+        const nav = document.querySelector(navSel);
+        if (btn && nav && !btn.closest('.dtsp-navrow')) {
+          const row = document.createElement('div');
+          row.className = 'dtsp-navrow';
+          row.style.cssText = 'display:flex!important;gap:8px!important;align-items:center!important;width:100%!important;box-sizing:border-box!important;padding:0 12px!important;';
+          nav.parentElement.insertBefore(row, nav);
+          row.appendChild(nav);
+          row.appendChild(btn);
+          nav.style.setProperty('flex', '1 1 auto', 'important');
+          nav.style.setProperty('margin-right', '0', 'important');
+          btn.style.setProperty('flex', '0 0 auto', 'important');
+          const bar = document.querySelector(barSel);
+          if (bar) bar.style.setProperty('display', 'none', 'important');
+        }
       }
       for (const text of spec.hideTextExact || []) {
         const matches = [...document.querySelectorAll('div, span, h1, h2, p')].filter(el =>
