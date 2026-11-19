@@ -948,7 +948,7 @@
       library: ['.bs-toolbar', 'before'], weight_log: ['.wl-topbar', 'before'],
       shift_clock: ['.sc-hdr', 'before'], taskmanage: ['.km-topbar', 'before'],
       math_memo: ['.mm-app', 'prepend'], ritual_grid: ['.rg-header', 'before'],
-      oshi: ['.odb-header', 'before'], biome_archive: ['.ba-header', 'before']
+      oshi: ['.od-header', 'before'], biome_archive: ['.ba-header', 'before']
     };
     let commonHeader = null;
     function hexToRgba(hex, a) {
@@ -968,6 +968,15 @@
         + '<div class="dtsp-header-title"><span class="dtsp-header-kicker">DT // TOOL</span><strong></strong></div>'
         + '<span class="dtsp-header-slot"></span>';
       el.querySelector('strong').textContent = name;
+      const ownTitle = (OWN_CHROME[appKey] || {}).title;
+      if (ownTitle) {
+        const strong = el.querySelector('strong');
+        if (ownTitle.text) strong.textContent = ownTitle.text;
+        if (ownTitle.font) strong.style.setProperty('font-family', ownTitle.font, 'important');
+        if (ownTitle.color) strong.style.setProperty('color', ownTitle.color, 'important');
+        if (ownTitle.ls) strong.style.setProperty('letter-spacing', ownTitle.ls, 'important');
+        if (ownTitle.weight) strong.style.setProperty('font-weight', ownTitle.weight, 'important');
+      }
       /* ツール側のリセットCSS (.km * 等) に padding を消されるページがあるため、
          ヘッダーの骨格寸法はインライン !important で固定する (チップと同じ方針)。 */
       el.style.cssText = 'display:flex!important;align-items:center!important;gap:12px!important;'
@@ -1005,6 +1014,7 @@
         chip.classList.add('dtsp-chip-docked');
         commonHeader.querySelector('.dtsp-header-slot').appendChild(chip);
         hideLegacy();
+        dedupeOwnChrome();
       }
       return placed;
     }
@@ -1015,6 +1025,48 @@
     let inToolbar = false;
     const compactChip = () => true; /* 表示文言は全ツール共通の短ラベルに統一 */
     const rendered = (el) => !!el && el.getClientRects().length > 0;
+    /* ページ側の「戻る・ページ名」が共通ヘッダーと二重になる問題への対策 (Kaneko 指摘 2026-11-19)。
+       ページ側の戻るボタンとタイトルを隠し、タイトルのデザイン (書体・色・字間) は
+       共通ヘッダーのタイトルへ移す。ヒーロー内の他の要素 (状態行・ナビ等) は残す。 */
+    const OWN_CHROME = {
+      novel: { hide: ['.ns-back', '.ns-title'], title: { text: 'NOVEL SHELF', weight: '800' } },
+      movie: { hide: ['.mt-hbtn', '.mt-logo-title'], title: { text: 'MOVIE_SHELF', font: "'Bebas Neue', sans-serif", color: '#fbbf24', ls: '.18em', weight: '400' } },
+      feeding: { hide: ['.fl-title'], hideText: ['◀ EXIT'], title: { text: 'FEEDING_LOG', font: "'Orbitron', sans-serif", color: '#10b981', ls: '.15em', weight: '700' } },
+      task_calendar: { hide: ['#ntc-root h1'], hideText: ['EXIT'], title: { text: 'ACTION_LOG', font: "ui-monospace, 'SF Mono', Menlo, monospace", weight: '700' } },
+      calendar: { hide: ['.cg-btn', '.cg-title'], title: { text: 'CHRONO_GRID', font: "'Orbitron', sans-serif", color: '#00f3ff', ls: '.12em', weight: '900' } },
+      library: { hide: ['.bs-btn', 'h1.mt-0'] },
+      biome_archive: { hide: ['.ba-exit', '.ba-title'], title: { text: 'BIOME_ARCHIVE', font: "'Orbitron', sans-serif", color: '#ffffff', ls: '.05em', weight: '300' } },
+      shift_clock: { hide: ['.sc-back', '.sc-title'], title: { text: 'SHIFT_CLOCK', font: "'JetBrains Mono', monospace", color: '#eaf4f8', ls: '.04em', weight: '600' } },
+      math_memo: { hide: ['.mm-exit-button'], hideTextExact: ['Math Memo'] },
+      ritual_grid: { hide: ['.rg-back', '.rg-title-lockup h1'], title: { text: 'RITUAL GRID' } },
+      oshi: { hide: ['.od-header-title'], hideText: ['◀ EXIT'] },
+      vocal_range: { hide: ['.vr-hbtn.exit', '.vr-head h1'] },
+      diary: { hide: ['.sd-title-text'], title: { font: "'JetBrains Mono', monospace", ls: '.08em', weight: '700' } },
+      timetable: { hide: ['.apple-page-title', '.apple-back-btn', '.apple-header'] },
+      manga: { hide: ['.ms-logo-title'] },
+      taskmanage: { hide: ['.km-back-btn'] }
+    };
+    function dedupeOwnChrome() {
+      const spec = OWN_CHROME[appKey];
+      if (!spec) return;
+      for (const sel of spec.hide || []) {
+        document.querySelectorAll(sel).forEach(el => {
+          if (!el.closest('.dtsp-header')) el.style.setProperty('display', 'none', 'important');
+        });
+      }
+      for (const text of spec.hideTextExact || []) {
+        const matches = [...document.querySelectorAll('div, span, h1, h2, p')].filter(el =>
+          !el.closest('.dtsp-header') && (el.textContent || '').trim() === text);
+        matches.sort((a, b) => a.querySelectorAll('*').length - b.querySelectorAll('*').length);
+        if (matches[0]) matches[0].style.setProperty('display', 'none', 'important');
+      }
+      for (const text of spec.hideText || []) {
+        document.querySelectorAll('a, button').forEach(el => {
+          if (el.closest('.dtsp-header') || el.closest('.dtsp-panel')) return;
+          if ((el.textContent || '').trim() === text) el.style.setProperty('display', 'none', 'important');
+        });
+      }
+    }
     function hideLegacy() {
       for (const sel of LEGACY_TARGETS[appKey] || []) {
         try {
@@ -1030,6 +1082,7 @@
       chip.classList.add('dtsp-chip-docked');
       el.parentNode.insertBefore(chip, el);
       hideLegacy();
+      dedupeOwnChrome();
     }
     function watchRelocation(fromBar) {
       const obs = new MutationObserver(() => {
