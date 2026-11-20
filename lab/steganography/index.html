@@ -1,0 +1,3000 @@
+<!doctype html>
+<html lang="ja" class="lab-document">
+  <head><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="ja" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>STEGANO TOOL &middot; dt&#39;s world</title>
+  <meta name="title" content="STEGANO TOOL &middot; dt&#39;s world" />
+  
+  <meta name="description" content="画像のRGB-LSBへメッセージを端末内で埋め込み・復元するローカル専用ツール" />
+  
+  
+  
+  <meta name="robots" content="noindex, nofollow" />
+  
+  <link rel="canonical" href="https://dtwant.github.io/lab/steganography/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.5008af349b4dacf61499a7ca30a07e6e86fa6c56d19add899f2f5399351138d3e8cf94ec19b98a9c3835418041c2378fd3be076c595c772e17e0daa596ba6f10.css"
+    integrity="sha512-UAivNJtNrPYUmafKMKB&#43;bob6bFbRmt2Jny9TmTURONPoz5TsGbmKnDg1QYBBwjeP074HbFlcdy4X4NqllrpvEA==" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.4080cca54f0846f36f81f334d01ff18907713d293fbc79e0f54632bf45d1c5037affb9a9915f28bc07b6416657c984d9de59d824fe91bcb53a3cc5d0fd74e4e4.js"
+    integrity="sha512-QIDMpU8IRvNvgfM00B/xiQdxPSk/vHng9UYyv0XRxQN6/7mpkV8ovAe2QWZXyYTZ3lnYJP6RvLU6PMXQ/XTk5A=="></script>
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.25149c9f5fe7876ef6d26c65b05b3ffd599ded9a9d183eb6a233c42e2e217052245df1f7124102049ae3853452165497bab0a64f1eb09b4474fab694d405eaf7.js"
+    integrity="sha512-JRScn1/nh2720mxlsFs//Vmd7ZqdGD62ojPELi4hcFIkXfH3EkECBJrjhTRSFlSXurCmTx6wm0R0&#43;raU1AXq9w==" data-copy="コピー" data-copied="コピーしました"></script>
+    <script src="/lib/zoom/zoom.min.a527109b68c082a70f3697716dd72a9d5aa8b545cf800cecbbc7399f2ca6f6e0ce3e431f2062b48bbfa47c9ea42822714060bef309be073f49b9c0e30d318d7b.js" integrity="sha512-pScQm2jAgqcPNpdxbdcqnVqotUXPgAzsu8c5nyym9uDOPkMfIGK0i7&#43;kfJ6kKCJxQGC&#43;8wm&#43;Bz9JucDjDTGNew=="></script>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://dtwant.github.io/lab/steganography/">
+  <meta property="og:site_name" content="dt&#39;s world">
+  <meta property="og:title" content="STEGANO TOOL">
+  <meta property="og:description" content="画像のRGB-LSBへメッセージを端末内で埋め込み・復元するローカル専用ツール">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="lab">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="STEGANO TOOL">
+  <meta name="twitter:description" content="画像のRGB-LSBへメッセージを端末内で埋め込み・復元するローカル専用ツール">
+
+    
+  
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Labs",
+    "name": "STEGANO TOOL",
+    "headline": "STEGANO TOOL",
+    "description": "画像のRGB-LSBへメッセージを端末内で埋め込み・復元するローカル専用ツール",
+    
+    "inLanguage": "ja-JP",
+    "url" : "https:\/\/dtwant.github.io\/lab\/steganography\/",
+    "author" : {
+      "@type": "Person",
+      "name": "dt"
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "103"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="dt" />
+  
+  
+  
+  
+  <link href="https://x.com/iambunnkei" rel="me" />
+  
+  
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+
+
+
+
+  
+  
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+   
+  
+   
+  .fixed.inset-0.z-40.flex,
+  .bg-neutral-800\/90, 
+  .bg-neutral-900\/90,
+  [x-show="mobileMenu"] {
+      background-color: #050505 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+  }
+
+   
+  nav ul li a {
+      font-family: 'Orbitron', sans-serif !important;  
+      color: #00f3ff !important;  
+      letter-spacing: 0.15em !important;
+      text-transform: uppercase !important;  
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.5) !important;
+      padding: 10px 0 !important;
+      border-bottom: 1px solid rgba(0, 243, 255, 0.1) !important;
+  }
+
+   
+  nav ul li a:hover {
+      color: #ff0055 !important;  
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.8) !important;
+      border-bottom-color: rgba(255, 0, 85, 0.5) !important;
+  }
+
+   
+  button[aria-label="Close menu"],
+  button[aria-label="Open menu"],
+  #menu button {
+      color: #00f3ff !important;
+  }
+
+   
+  ::-webkit-scrollbar {
+      width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+      background: #050505; 
+  }
+  ::-webkit-scrollbar-thumb {
+      background: #00f3ff; 
+      border-radius: 4px;
+  }
+</style>
+
+  
+  
+  
+  <meta name="theme-color"/>
+  
+  
+
+  
+  <script src="/js/dt-sync-gateway-client.js?v=20261118-stage4-v1"></script>
+  <script src="/js/dt-d1-cutover.js?v=20261118-score-book-v1"></script>
+  <script src="/js/dt-d1-recovery.js?v=20261023-overflow-backups-v4"></script>
+  <script src="/js/dt-d1-onboarding.js?v=20260923-d1-live-runtime-v5"></script>
+  <script src="/js/dt-d1-runtime.js?v=20261118-stage4-v1"></script>
+  <script src="/js/dt-d1-tool-bridge.js?v=20261119-bridge-v2"></script>
+  <script src="/js/dt-sync-panel.js?v=20261119-sync-panel-v26"></script>
+  <script>
+    
+    
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</head>
+<link rel="stylesheet" href="/css/lab-ui-system.min.e30d460949532cddd06db637f69207e6e10b6e4177197b7106c62ed82968559d.css" integrity="sha256-4w1GCUlTLN3QbbY39pIH5uELbkF3GXtxBsYu2CloVZ0="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
+  </head>
+  <body class="lab-body portal-body" data-lab-slug="steganography">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+  
+
+
+
+
+
+<div id="search-wrapper" style="display:none" aria-hidden="true">
+      <div id="search-modal"></div>
+      <input id="search-query" />
+      <button id="close-search-button" type="button"></button>
+      <div id="search-results"><div></div></div>
+    </div>
+    <main id="main-content" class="lab-shell" data-lab-slug="steganography">
+      <div class="lab-toolbar lab-glass" role="navigation" aria-label="LABツール操作">
+        <a class="lab-exit" href="/lab/" aria-label="LAB一覧へ戻る">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+          <span>戻る</span>
+        </a>
+        <div class="lab-toolbar-title">
+          <span class="lab-toolbar-kicker">DT // LAB</span>
+          <strong>STEGANO TOOL</strong>
+        </div>
+      </div>
+      <article class="lab-article">
+        <div class="lab-content"><link href="https://fonts.googleapis.com/css2?family=M+PLUS+1+Code:wght@400;500;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style data-overhaul="steganography">
+ 
+
+ 
+html:has(.sr-hub[data-tool-root="steganography"]) {
+  background: #0a0518;
+  color-scheme: dark;
+  overflow-x: clip;
+}
+
+body:has(.sr-hub[data-tool-root="steganography"]) {
+  background: #0a0518 !important;
+  color: #f2f6ff;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  overflow-x: clip;
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+}
+
+body:has(.sr-hub[data-tool-root="steganography"]) > div.fixed.inset-x-0,
+body:has(.sr-hub[data-tool-root="steganography"]) .main-menu,
+body:has(.sr-hub[data-tool-root="steganography"]) [class*="min-h-[148px]"],
+body:has(.sr-hub[data-tool-root="steganography"]) article > header,
+body:has(.sr-hub[data-tool-root="steganography"]) #site-footer,
+body:has(.sr-hub[data-tool-root="steganography"]) #scroll-to-top,
+body:has(.sr-hub[data-tool-root="steganography"]) h1:not(.sr-title) {
+  display: none !important;
+}
+
+ 
+body:not(.lab-body):has(.sr-hub[data-tool-root="steganography"]) #main-content,
+body:not(.lab-body):has(.sr-hub[data-tool-root="steganography"]) #main-content > article {
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: none !important;
+}
+
+ 
+@supports not selector(:has(*)) {
+  body.steg-tool-page {
+    background: #0a0518 !important;
+    max-width: none !important;
+    padding: 0 !important;
+    display: block !important;
+    overflow-x: clip;
+  }
+  body.steg-tool-page .main-menu,
+  body.steg-tool-page [class*="min-h-[148px]"],
+  body.steg-tool-page article > header,
+  body.steg-tool-page #site-footer,
+  body.steg-tool-page #scroll-to-top {
+    display: none !important;
+  }
+  body.steg-tool-page #main-content,
+  body.steg-tool-page #main-content > article {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+  }
+}
+
+ 
+body:has(.sr-hub[data-tool-root="steganography"]) .sr-bg {
+  position: fixed;
+  inset: -4%;
+  width: 108%;
+  height: 108%;
+  z-index: 0;
+  pointer-events: none;
+  background-color: #0a0518;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 22% 15%, rgba(0, 243, 255, 0.12), transparent 60%),
+    radial-gradient(ellipse 65% 55% at 82% 80%, rgba(188, 19, 254, 0.16), transparent 62%),
+    url('/img/cyber_terms_bg.png');
+  background-size: auto, auto, cover;
+  background-position: center;
+  filter: brightness(0.36) contrast(1.15) saturate(1.45);
+}
+
+body:has(.sr-hub[data-tool-root="steganography"]) .sr-grid {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(transparent 0%, rgba(0, 243, 255, 0.085) 1px, transparent 2px),
+    linear-gradient(90deg, transparent 0%, rgba(188, 19, 254, 0.085) 1px, transparent 2px);
+  background-size: 40px 40px;
+  transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px);
+  animation: steg-grid-drift 10s linear infinite;
+  will-change: transform;
+}
+
+@keyframes steg-grid-drift {
+  from {
+    transform: perspective(300px) rotateX(60deg) translateY(0) translateZ(-100px);
+  }
+  to {
+    transform: perspective(300px) rotateX(60deg) translateY(40px) translateZ(-100px);
+  }
+}
+
+body:has(.sr-hub[data-tool-root="steganography"]) .sr-scanline {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.22) 2px,
+    rgba(0, 0, 0, 0.22) 4px
+  );
+  opacity: 0.42;
+}
+
+body:has(.sr-hub[data-tool-root="steganography"]) .sr-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 36%, rgba(4, 2, 10, 0.84) 100%);
+}
+
+ 
+body:has(.sr-hub[data-tool-root="steganography"]) .sr-particle {
+  display: none !important;
+}
+
+ 
+body:has(.sr-hub[data-tool-root="steganography"]) #sr-toast-container {
+  position: fixed;
+  left: 50%;
+  bottom: max(18px, calc(16px + env(safe-area-inset-bottom)));
+  top: auto;
+  z-index: 9999;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(16px);
+  transition:
+    opacity 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 200ms;
+}
+
+body:has(.sr-hub[data-tool-root="steganography"]) #sr-toast-container.visible,
+body:has(.sr-hub[data-tool-root="steganography"]) #sr-toast-container[data-visible="true"] {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  transition:
+    opacity 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0s;
+}
+
+body:has(.sr-hub[data-tool-root="steganography"]) #sr-toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 243, 255, 0.55);
+  border-left: 3px solid #00f3ff;
+  background: rgba(14, 7, 29, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65), 0 0 18px rgba(0, 243, 255, 0.18);
+  color: #f2f6ff;
+  font-family: 'M PLUS 1 Code', 'JetBrains Mono', 'Hiragino Kaku Gothic ProN', monospace;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  letter-spacing: 0.03em;
+}
+
+body:has(.sr-hub[data-tool-root="steganography"]) #sr-toast.is-error,
+body:has(.sr-hub[data-tool-root="steganography"]) #sr-toast[data-tone="error"] {
+  border-color: rgba(255, 0, 85, 0.6);
+  border-left-color: #ff0055;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65), 0 0 18px rgba(255, 0, 85, 0.22);
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] {
+   
+  --steg-bg-deep: #0a0518;
+  --steg-glass: rgba(14, 7, 29, 0.86);
+  --steg-glass-hi: rgba(22, 12, 43, 0.92);
+  --steg-field: #090414;
+  --steg-field-hover: #0e0720;
+
+   
+  --steg-ink-1: #f2f6ff;        
+  --steg-ink-2: #b8c6e0;        
+  --steg-ink-3: #8e9ec2;        
+  --steg-ink-on-cyan: #070312;  
+
+   
+  --steg-cyan: #00f3ff;         
+  --steg-cyan-dim: rgba(0, 243, 255, 0.14);
+  --steg-cyan-line: rgba(0, 243, 255, 0.34);
+
+  --steg-purple: #bc13fe;       
+  --steg-purple-text: #d884ff;  
+  --steg-purple-dim: rgba(188, 19, 254, 0.14);
+  --steg-purple-line: rgba(188, 19, 254, 0.38);
+
+  --steg-pink: #ff0055;         
+  --steg-pink-text: #ff5c93;    
+  --steg-pink-dim: rgba(255, 0, 85, 0.13);
+  --steg-pink-line: rgba(255, 0, 85, 0.48);
+
+  --steg-warn: #ffc857;         
+  --steg-warn-dim: rgba(255, 200, 87, 0.13);
+
+   
+  --steg-line: rgba(184, 198, 224, 0.16);
+  --steg-line-strong: rgba(184, 198, 224, 0.30);
+  --steg-bracket-size: 12px;
+  --steg-radius-panel: 6px;
+  --steg-radius-ctrl: 4px;
+
+   
+  --steg-font-display: 'Orbitron', sans-serif;
+  --steg-font-body: 'M PLUS 1 Code', 'JetBrains Mono', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', monospace;
+
+   
+  --steg-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding:
+    max(16px, env(safe-area-inset-top))
+    clamp(12px, 3vw, 24px)
+    calc(40px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--steg-ink-1);
+  font-family: var(--steg-font-body);
+  font-feature-settings: "kern" 1;
+  line-height: 1.65;
+  line-break: strict;
+  box-sizing: border-box;
+}
+
+.sr-hub[data-tool-root="steganography"] *,
+.sr-hub[data-tool-root="steganography"] *::before,
+.sr-hub[data-tool-root="steganography"] *::after {
+  box-sizing: border-box;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] :where(a, button, label, input, textarea, select, summary, [role="button"], [role="tab"]) {
+  text-decoration: none !important;
+  touch-action: manipulation;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .active {
+  text-decoration: none !important;
+}
+
+.sr-hub[data-tool-root="steganography"] [hidden] {
+  display: none !important;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-visually-hidden {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] :is(button, a, input, textarea, [tabindex="0"]):focus-visible {
+  outline: 2px solid var(--steg-cyan);
+  outline-offset: 2px;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-brackets {
+  position: relative;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-bracket {
+  position: absolute;
+  width: var(--steg-bracket-size);
+  height: var(--steg-bracket-size);
+  border-color: var(--steg-bracket-color, var(--steg-cyan));
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+  z-index: 4;
+  transition: border-color 180ms var(--steg-ease), box-shadow 180ms var(--steg-ease);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-bracket.b-tl {
+  top: -1px;
+  left: -1px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+.sr-hub[data-tool-root="steganography"] .steg-bracket.b-tr {
+  top: -1px;
+  right: -1px;
+  border-top-width: 2px;
+  border-right-width: 2px;
+}
+.sr-hub[data-tool-root="steganography"] .steg-bracket.b-bl {
+  bottom: -1px;
+  left: -1px;
+  border-bottom-width: 2px;
+  border-left-width: 2px;
+}
+.sr-hub[data-tool-root="steganography"] .steg-bracket.b-br {
+  bottom: -1px;
+  right: -1px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .sr-header {
+  position: relative;
+  margin: 0;
+  padding: 16px 18px 14px;
+  border: 1px solid var(--steg-cyan-line);
+  border-left: 3px solid var(--steg-cyan);
+  border-radius: var(--steg-radius-panel);
+  background: var(--steg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 12px 32px rgba(0, 0, 0, 0.45);
+  text-align: left;
+  overflow: visible;
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-header::before,
+.sr-hub[data-tool-root="steganography"] .sr-header::after {
+  display: none;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-kicker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--steg-font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--steg-cyan);
+  line-height: 1.2;
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--steg-cyan);
+  box-shadow: 0 0 8px var(--steg-cyan);
+  animation: steg-pulse 2.2s ease-in-out infinite;
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-dot.purple {
+  background: var(--steg-purple);
+  box-shadow: 0 0 8px var(--steg-purple);
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-dot.pink {
+  background: var(--steg-pink);
+  box-shadow: 0 0 8px var(--steg-pink);
+}
+
+@keyframes steg-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-title {
+  margin: 0;
+  font-family: var(--steg-font-display);
+  font-size: clamp(1.2rem, 4.2vw, 1.65rem);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  color: var(--steg-ink-1);
+  text-shadow: 0 0 18px rgba(0, 243, 255, 0.24);
+  overflow-wrap: break-word;
+  min-width: 0;
+  animation: none;
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-title::before,
+.sr-hub[data-tool-root="steganography"] .sr-title::after {
+  display: none;
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-subtitle {
+  margin: 6px 0 0;
+  font-family: var(--steg-font-body);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  color: var(--steg-ink-2);
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-subtitle::before,
+.sr-hub[data-tool-root="steganography"] .sr-subtitle::after {
+  display: none;
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--steg-line);
+  font-family: var(--steg-font-body);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--steg-ink-3);
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 5px;
+  margin: 0;
+  border: 1px solid var(--steg-line);
+  border-radius: var(--steg-radius-panel);
+  background: var(--steg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-tab-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--steg-radius-ctrl);
+  background: transparent;
+  color: var(--steg-ink-2);
+  font-family: var(--steg-font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    background-color 160ms var(--steg-ease),
+    border-color 160ms var(--steg-ease),
+    color 160ms var(--steg-ease),
+    transform 100ms var(--steg-ease);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-tab-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  fill: none;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-tab-jp {
+  font-family: var(--steg-font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-tab-btn:hover:not(.active) {
+  color: var(--steg-ink-1);
+  border-color: var(--steg-line-strong);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-tab-btn:active {
+  transform: scale(0.96);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-tab-btn.active,
+.sr-hub[data-tool-root="steganography"] .steg-tab-btn[aria-selected="true"] {
+  color: var(--steg-cyan);
+  border-color: var(--steg-cyan);
+  background: linear-gradient(180deg, rgba(0, 243, 255, 0.16), rgba(0, 243, 255, 0.06));
+  box-shadow: inset 0 2px 0 var(--steg-cyan), 0 0 14px rgba(0, 243, 255, 0.16);
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-workbench {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-stage {
+  --steg-bracket-color: var(--steg-purple);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--steg-purple-line);
+  border-radius: var(--steg-radius-panel);
+  background: var(--steg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 14px 36px rgba(0, 0, 0, 0.48);
+  transition: border-color 180ms var(--steg-ease), background-color 180ms var(--steg-ease);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-loaded,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="loaded"],
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-verified,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="verified"] {
+  --steg-bracket-color: var(--steg-cyan);
+  border-color: var(--steg-cyan-line);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-dragover,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="dragover"] {
+  --steg-bracket-color: var(--steg-cyan);
+  border-color: var(--steg-cyan);
+  background: rgba(14, 18, 40, 0.92);
+  box-shadow: inset 0 0 28px rgba(0, 243, 255, 0.14), 0 0 24px rgba(0, 243, 255, 0.18);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-error,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="failed"],
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="corrupted"] {
+  --steg-bracket-color: var(--steg-pink);
+  border-color: var(--steg-pink-line);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage-label {
+  font-family: var(--steg-font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--steg-ink-1);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage-state-pill {
+  font-family: var(--steg-font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--steg-purple-text);
+  padding: 2px 8px;
+  border: 1px solid var(--steg-purple-line);
+  border-radius: 3px;
+  background: var(--steg-purple-dim);
+  white-space: nowrap;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-loaded .steg-stage-state-pill,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="loaded"] .steg-stage-state-pill,
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-verified .steg-stage-state-pill,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="verified"] .steg-stage-state-pill {
+  color: var(--steg-cyan);
+  border-color: var(--steg-cyan-line);
+  background: var(--steg-cyan-dim);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-error .steg-stage-state-pill,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="failed"] .steg-stage-state-pill,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="corrupted"] .steg-stage-state-pill {
+  color: var(--steg-pink-text);
+  border-color: var(--steg-pink-line);
+  background: var(--steg-pink-dim);
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-preview-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 152px;
+  border: 1px dashed var(--steg-line-strong);
+  border-radius: var(--steg-radius-ctrl);
+  background: var(--steg-field);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: border-color 180ms var(--steg-ease), background-color 180ms var(--steg-ease);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-loaded .steg-preview-wrapper,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="loaded"] .steg-preview-wrapper,
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-processing .steg-preview-wrapper,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="processing"] .steg-preview-wrapper,
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-verified .steg-preview-wrapper,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="verified"] .steg-preview-wrapper {
+  border-style: solid;
+  border-color: var(--steg-cyan-line);
+  min-height: 180px;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-dragover .steg-preview-wrapper,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="dragover"] .steg-preview-wrapper {
+  border-color: var(--steg-cyan);
+  background: rgba(0, 243, 255, 0.06);
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-dropbay-empty {
+  width: 100%;
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-loaded .steg-dropbay-empty,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="loaded"] .steg-dropbay-empty,
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-processing .steg-dropbay-empty,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="processing"] .steg-dropbay-empty,
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-verified .steg-dropbay-empty,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="verified"] .steg-dropbay-empty {
+  display: none;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-dropbay-icon {
+  width: 34px;
+  height: 34px;
+  stroke: var(--steg-cyan);
+  stroke-width: 1.5;
+  fill: none;
+  opacity: 0.9;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-dropbay-title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--steg-ink-1);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-dropbay-hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--steg-ink-3);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-dropbay-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 420px;
+  margin-top: 4px;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-dropbay-actions > .steg-btn-outline {
+  flex: 1 1 148px;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-preview-img {
+  display: none;
+  max-width: 100%;
+  max-height: 260px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  padding: 8px;
+  z-index: 1;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-loaded .steg-preview-img,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="loaded"] .steg-preview-img,
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-processing .steg-preview-img,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="processing"] .steg-preview-img,
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-verified .steg-preview-img,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="verified"] .steg-preview-img {
+  display: block;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-scanner {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  display: none;
+  background: linear-gradient(180deg, rgba(0, 243, 255, 0.04), rgba(0, 243, 255, 0.14));
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-processing .steg-scanner,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="processing"] .steg-scanner,
+.sr-hub[data-tool-root="steganography"] .steg-scanner.is-active {
+  display: block;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-scanner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--steg-cyan), transparent);
+  box-shadow: 0 0 12px var(--steg-cyan);
+  animation: steg-scan-sweep 1.3s ease-in-out infinite;
+}
+
+@keyframes steg-scan-sweep {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(200px); }
+  100% { transform: translateY(0); }
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-stage-meta {
+  display: none;
+  width: 100%;
+  padding: 8px 12px;
+  border-top: 1px solid var(--steg-line);
+  background: rgba(9, 4, 20, 0.92);
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  z-index: 2;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-loaded .steg-stage-meta,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="loaded"] .steg-stage-meta,
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-processing .steg-stage-meta,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="processing"] .steg-stage-meta,
+.sr-hub[data-tool-root="steganography"] .steg-stage.is-verified .steg-stage-meta,
+.sr-hub[data-tool-root="steganography"] .steg-stage[data-stage-state="verified"] .steg-stage-meta {
+  display: flex;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-carrier-specs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--steg-ink-2);
+  min-width: 0;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-spec-sep {
+  color: var(--steg-ink-3);
+  opacity: 0.6;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-stage-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-panel {
+  --steg-bracket-color: var(--steg-cyan);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 16px;
+  border: 1px solid var(--steg-line-strong);
+  border-radius: var(--steg-radius-panel);
+  background: var(--steg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 14px 36px rgba(0, 0, 0, 0.48);
+  min-width: 0;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-panel::before {
+  display: none;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--steg-line);
+  font-family: var(--steg-font-display);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--steg-ink-1);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-panel-heading small {
+  font-family: var(--steg-font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--steg-ink-3);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-pane {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-pane.active {
+  display: flex;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-honesty-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--steg-pink-line);
+  border-left: 3px solid var(--steg-pink);
+  border-radius: var(--steg-radius-ctrl);
+  background: var(--steg-pink-dim);
+  color: var(--steg-ink-1);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-honesty-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  stroke: var(--steg-pink);
+  stroke-width: 2;
+  fill: none;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-honesty-line strong {
+  color: var(--steg-pink-text);
+  font-weight: 700;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-field-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-label {
+  font-family: var(--steg-font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--steg-cyan);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-label-crypto {
+  color: var(--steg-purple-text);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-field-hint {
+  font-size: 0.75rem;
+  color: var(--steg-ink-3);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-textarea,
+.sr-hub[data-tool-root="steganography"] .steg-input {
+  width: 100%;
+  min-width: 0;
+  background: var(--steg-field);
+  border: 1px solid var(--steg-line-strong);
+  border-radius: var(--steg-radius-ctrl);
+  color: var(--steg-ink-1);
+  font-family: var(--steg-font-body);
+  font-size: max(1rem, 1em);  
+  line-height: 1.6;
+  color-scheme: dark;
+  transition: border-color 160ms var(--steg-ease), box-shadow 160ms var(--steg-ease), background-color 160ms var(--steg-ease);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-textarea {
+  min-height: 120px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-input {
+  min-height: 46px;
+  padding: 10px 14px;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-textarea::placeholder,
+.sr-hub[data-tool-root="steganography"] .steg-input::placeholder {
+  color: var(--steg-ink-3);
+  opacity: 0.85;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-textarea:focus,
+.sr-hub[data-tool-root="steganography"] .steg-input:focus {
+  border-color: var(--steg-cyan);
+  background: var(--steg-field-hover);
+  box-shadow: 0 0 0 3px rgba(0, 243, 255, 0.14);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-input.steg-passphrase-input:focus {
+  border-color: var(--steg-purple);
+  box-shadow: 0 0 0 3px rgba(188, 19, 254, 0.18);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-textarea:disabled,
+.sr-hub[data-tool-root="steganography"] .steg-input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-textarea[aria-invalid="true"],
+.sr-hub[data-tool-root="steganography"] .steg-input[aria-invalid="true"] {
+  border-color: var(--steg-pink);
+  box-shadow: 0 0 0 3px rgba(255, 0, 85, 0.16);
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-passphrase-row {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-passphrase-row .steg-input {
+  flex: 1 1 auto;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-pass-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 46px;
+  min-height: 46px;
+  padding: 0 10px;
+  border: 1px solid var(--steg-line-strong);
+  border-radius: var(--steg-radius-ctrl);
+  background: var(--steg-field);
+  color: var(--steg-ink-2);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 160ms var(--steg-ease), color 160ms var(--steg-ease), transform 100ms var(--steg-ease);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-pass-toggle svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  fill: none;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-pass-toggle:hover,
+.sr-hub[data-tool-root="steganography"] .steg-pass-toggle[aria-pressed="true"] {
+  border-color: var(--steg-purple);
+  color: var(--steg-purple-text);
+  background: var(--steg-purple-dim);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-pass-toggle:active {
+  transform: scale(0.96);
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-passphrase-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--steg-purple-line);
+  border-left: 3px solid var(--steg-purple);
+  border-radius: var(--steg-radius-ctrl);
+  background: var(--steg-purple-dim);
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--steg-line);
+  border-radius: var(--steg-radius-ctrl);
+  background: rgba(9, 4, 20, 0.78);
+  transition: border-color 180ms var(--steg-ease), background-color 180ms var(--steg-ease);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container.is-warn,
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container[data-capacity-state="warn"] {
+  border-color: rgba(255, 200, 87, 0.48);
+  background: var(--steg-warn-dim);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container.is-over,
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container[data-capacity-state="over"] {
+  border-color: var(--steg-pink-line);
+  background: var(--steg-pink-dim);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-capacity-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--steg-ink-2);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-capacity-title {
+  font-family: var(--steg-font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--steg-ink-3);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container.is-warn .steg-capacity-meta,
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container[data-capacity-state="warn"] .steg-capacity-meta {
+  color: var(--steg-warn);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container.is-over .steg-capacity-meta,
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container[data-capacity-state="over"] .steg-capacity-meta {
+  color: var(--steg-pink-text);
+  font-weight: 700;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-capacity-bar {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid var(--steg-line);
+  background: #06030e;
+  overflow: clip;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-capacity-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(10% - 1.5px),
+    rgba(10, 5, 24, 0.92) calc(10% - 1.5px),
+    rgba(10, 5, 24, 0.92) 10%
+  );
+  z-index: 2;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-capacity-fill {
+  height: 100%;
+  width: 0%;
+  max-width: 100%;
+  background: linear-gradient(90deg, var(--steg-purple) 0%, var(--steg-cyan) 100%);
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.45);
+  transition: width 180ms var(--steg-ease), background-color 180ms var(--steg-ease);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-capacity-fill.warning,
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container.is-warn .steg-capacity-fill,
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container[data-capacity-state="warn"] .steg-capacity-fill {
+  background: var(--steg-warn);
+  box-shadow: 0 0 10px rgba(255, 200, 87, 0.5);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-capacity-fill.danger,
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container.is-over .steg-capacity-fill,
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container[data-capacity-state="over"] .steg-capacity-fill {
+  background: var(--steg-pink);
+  box-shadow: 0 0 12px rgba(255, 0, 85, 0.65);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-capacity-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--steg-font-display);
+  font-size: 0.625rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  color: var(--steg-ink-3);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-capacity-over-msg {
+  display: none;
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--steg-pink-text);
+  font-weight: 600;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container.is-over .steg-capacity-over-msg,
+.sr-hub[data-tool-root="steganography"] .steg-capacity-container[data-capacity-state="over"] .steg-capacity-over-msg {
+  display: block;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-btn,
+.sr-hub[data-tool-root="steganography"] .steg-btn-outline,
+.sr-hub[data-tool-root="steganography"] .steg-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 11px 16px;
+  border-radius: var(--steg-radius-ctrl);
+  font-family: var(--steg-font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  line-height: 1.25;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 160ms var(--steg-ease),
+    border-color 160ms var(--steg-ease),
+    color 160ms var(--steg-ease),
+    box-shadow 160ms var(--steg-ease),
+    transform 100ms var(--steg-ease);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-btn svg,
+.sr-hub[data-tool-root="steganography"] .steg-btn-outline svg,
+.sr-hub[data-tool-root="steganography"] .steg-dl-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  stroke-width: 1.85;
+  fill: none;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-btn {
+  width: 100%;
+  border: 1px solid var(--steg-cyan);
+  background: linear-gradient(180deg, rgba(0, 243, 255, 0.22), rgba(0, 243, 255, 0.10));
+  color: var(--steg-cyan);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 16px rgba(0, 243, 255, 0.12);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-btn:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: rgba(0, 243, 255, 0.28);
+  color: var(--steg-ink-1);
+  box-shadow: 0 0 22px rgba(0, 243, 255, 0.30);
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-dl-btn {
+  border: 1px solid var(--steg-cyan);
+  background: var(--steg-cyan);
+  color: var(--steg-ink-on-cyan);
+  box-shadow: 0 0 22px rgba(0, 243, 255, 0.32);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-dl-btn:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: #47f7ff;
+  box-shadow: 0 0 28px rgba(0, 243, 255, 0.5);
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-btn-outline {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid var(--steg-cyan-line);
+  background: rgba(0, 243, 255, 0.05);
+  color: var(--steg-ink-1);
+  font-family: var(--steg-font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-btn-outline:hover:not(:disabled) {
+  border-color: var(--steg-cyan);
+  background: var(--steg-cyan-dim);
+  color: var(--steg-cyan);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-btn-outline.is-purple {
+  border-color: var(--steg-purple-line);
+  background: var(--steg-purple-dim);
+  color: var(--steg-purple-text);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-btn-outline.is-purple:hover:not(:disabled) {
+  border-color: var(--steg-purple);
+  background: rgba(188, 19, 254, 0.24);
+  color: var(--steg-ink-1);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-btn-outline.is-compact {
+  min-height: 44px;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+}
+
+.sr-hub[data-tool-root="steganography"] :is(.steg-btn, .steg-btn-outline, .steg-dl-btn):active:not(:disabled):not([aria-disabled="true"]) {
+  transform: scale(0.96);
+}
+
+.sr-hub[data-tool-root="steganography"] :is(.steg-btn, .steg-btn-outline, .steg-dl-btn):disabled,
+.sr-hub[data-tool-root="steganography"] .steg-dl-btn[aria-disabled="true"],
+.sr-hub[data-tool-root="steganography"] .steg-dl-btn.is-disabled {
+  opacity: 0.36;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+  filter: grayscale(0.4);
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-btn.is-processing::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: steg-spin 650ms linear infinite;
+}
+
+@keyframes steg-spin {
+  to { transform: rotate(360deg); }
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-result-area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--steg-line-strong);
+  border-radius: var(--steg-radius-ctrl);
+  background: rgba(9, 4, 20, 0.88);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-result-area.is-verified,
+.sr-hub[data-tool-root="steganography"] .steg-result-area[data-verify-state="verified"] {
+  border-color: var(--steg-cyan);
+  box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.08);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-result-area.is-failed,
+.sr-hub[data-tool-root="steganography"] .steg-result-area[data-verify-state="failed"] {
+  border-color: var(--steg-pink);
+  background: var(--steg-pink-dim);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-verify-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-verify-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  border: 1px solid var(--steg-line-strong);
+  background: rgba(255, 255, 255, 0.04);
+  font-family: var(--steg-font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  color: var(--steg-ink-2);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-verify-badge[data-state="processing"],
+.sr-hub[data-tool-root="steganography"] .steg-verify-badge.is-processing {
+  border-color: var(--steg-purple-line);
+  background: var(--steg-purple-dim);
+  color: var(--steg-purple-text);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-verify-badge[data-state="verified"],
+.sr-hub[data-tool-root="steganography"] .steg-verify-badge.is-verified {
+  border-color: var(--steg-cyan);
+  background: var(--steg-cyan-dim);
+  color: var(--steg-cyan);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-verify-badge[data-state="failed"],
+.sr-hub[data-tool-root="steganography"] .steg-verify-badge.is-failed {
+  border-color: var(--steg-pink);
+  background: var(--steg-pink-dim);
+  color: var(--steg-pink-text);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-verify-meta {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--steg-ink-3);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-result-actions .steg-dl-btn {
+  flex: 1 1 200px;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-lossy-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--steg-ink-2);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-lossy-note svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  stroke: var(--steg-pink);
+  stroke-width: 2;
+  fill: none;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  min-height: 140px;
+  border: 1px solid var(--steg-line-strong);
+  border-left: 3px solid var(--steg-purple);
+  border-radius: var(--steg-radius-ctrl);
+  background: var(--steg-field);
+  transition: border-color 180ms var(--steg-ease), background-color 180ms var(--steg-ease);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud.is-verified,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud[data-extract-state="verified"] {
+  border-color: var(--steg-cyan-line);
+  border-left-color: var(--steg-cyan);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud.is-no-signal,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud[data-extract-state="no-signal"] {
+  border-color: var(--steg-purple-line);
+  border-left-color: var(--steg-purple);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud.is-corrupted,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud[data-extract-state="corrupted"],
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud.is-failed,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud[data-extract-state="failed"] {
+  border-color: var(--steg-pink-line);
+  border-left-color: var(--steg-pink);
+  background: rgba(24, 6, 20, 0.92);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--steg-line);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-title {
+  font-family: var(--steg-font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--steg-ink-2);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--steg-line);
+  font-family: var(--steg-font-display);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--steg-ink-3);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud[data-extract-state="verified"] .steg-decode-badge,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud.is-verified .steg-decode-badge {
+  border-color: var(--steg-cyan-line);
+  background: var(--steg-cyan-dim);
+  color: var(--steg-cyan);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud[data-extract-state="no-signal"] .steg-decode-badge,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud.is-no-signal .steg-decode-badge {
+  border-color: var(--steg-purple-line);
+  background: var(--steg-purple-dim);
+  color: var(--steg-purple-text);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud[data-extract-state="corrupted"] .steg-decode-badge,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud.is-corrupted .steg-decode-badge,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud[data-extract-state="failed"] .steg-decode-badge,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud.is-failed .steg-decode-badge {
+  border-color: var(--steg-pink-line);
+  background: var(--steg-pink-dim);
+  color: var(--steg-pink-text);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-copy {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--steg-cyan-line);
+  border-radius: var(--steg-radius-ctrl);
+  background: rgba(0, 243, 255, 0.08);
+  color: var(--steg-cyan);
+  font-family: var(--steg-font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background-color 160ms var(--steg-ease), transform 100ms var(--steg-ease);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-copy:hover {
+  background: var(--steg-cyan-dim);
+  color: var(--steg-ink-1);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-copy:active {
+  transform: scale(0.96);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-result {
+  margin: 0;
+  min-height: 72px;
+  font-family: var(--steg-font-body);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--steg-ink-1);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-result.is-empty,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud[data-extract-state="empty"] .steg-decode-result {
+  color: var(--steg-ink-3);
+  font-size: 0.8125rem;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-result.is-no-signal,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud[data-extract-state="no-signal"] .steg-decode-result {
+  color: var(--steg-purple-text);
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-decode-result.error,
+.sr-hub[data-tool-root="steganography"] .steg-decode-result.is-corrupted,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud[data-extract-state="corrupted"] .steg-decode-result,
+.sr-hub[data-tool-root="steganography"] .steg-decode-hud[data-extract-state="failed"] .steg-decode-result {
+  color: var(--steg-pink-text);
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .steg-alert {
+  display: none;
+  padding: 8px 10px;
+  border-left: 3px solid var(--steg-pink);
+  border-radius: 3px;
+  background: var(--steg-pink-dim);
+  color: var(--steg-pink-text);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.sr-hub[data-tool-root="steganography"] .steg-alert.is-visible {
+  display: block;
+}
+
+ 
+.sr-hub[data-tool-root="steganography"] .sr-footer {
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--steg-line);
+  text-align: center;
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-footer-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid var(--steg-line-strong);
+  border-radius: var(--steg-radius-ctrl);
+  background: var(--steg-glass);
+  color: var(--steg-ink-2);
+  font-family: var(--steg-font-body);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  transition: border-color 160ms var(--steg-ease), color 160ms var(--steg-ease), transform 100ms var(--steg-ease);
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-footer-link::before {
+  content: "<";
+  color: var(--steg-cyan);
+  font-family: var(--steg-font-display);
+  font-weight: 700;
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-footer-link:hover {
+  border-color: var(--steg-cyan);
+  color: var(--steg-cyan);
+}
+
+.sr-hub[data-tool-root="steganography"] .sr-footer-link:active {
+  transform: scale(0.96);
+}
+
+ 
+@media (max-width: 480px) {
+  .sr-hub[data-tool-root="steganography"] {
+    padding:
+      max(12px, env(safe-area-inset-top))
+      12px
+      calc(32px + env(safe-area-inset-bottom));
+    gap: 12px;
+  }
+
+  .sr-hub[data-tool-root="steganography"] .sr-header {
+    padding: 14px 14px 12px;
+  }
+
+  .sr-hub[data-tool-root="steganography"] .sr-title {
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .sr-hub[data-tool-root="steganography"] .steg-tab-btn {
+    padding: 8px 6px;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    gap: 6px;
+  }
+
+  .sr-hub[data-tool-root="steganography"] .steg-stage,
+  .sr-hub[data-tool-root="steganography"] .steg-panel {
+    padding: 14px;
+  }
+
+  .sr-hub[data-tool-root="steganography"] .steg-preview-img {
+    max-height: min(56vw, 220px);
+  }
+
+  .sr-hub[data-tool-root="steganography"] .steg-stage-meta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sr-hub[data-tool-root="steganography"] .steg-stage-toolbar {
+    width: 100%;
+  }
+
+  .sr-hub[data-tool-root="steganography"] .steg-stage-toolbar > button {
+    flex: 1 1 0;
+  }
+
+  .sr-hub[data-tool-root="steganography"] .steg-result-actions {
+    flex-direction: column;
+  }
+
+  .sr-hub[data-tool-root="steganography"] .steg-result-actions .steg-dl-btn,
+  .sr-hub[data-tool-root="steganography"] .steg-result-actions .steg-btn-outline {
+    width: 100%;
+    flex: none;
+  }
+}
+
+ 
+@media (prefers-reduced-motion: reduce) {
+  body:has(.sr-hub[data-tool-root="steganography"]) .sr-grid,
+  .sr-hub[data-tool-root="steganography"] .sr-dot,
+  .sr-hub[data-tool-root="steganography"] .steg-scanner::before,
+  .sr-hub[data-tool-root="steganography"] .steg-btn.is-processing::before {
+    animation: none !important;
+  }
+
+  .sr-hub[data-tool-root="steganography"] *,
+  .sr-hub[data-tool-root="steganography"] *::before,
+  .sr-hub[data-tool-root="steganography"] *::after,
+  body:has(.sr-hub[data-tool-root="steganography"]) #sr-toast-container {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .sr-hub[data-tool-root="steganography"] .steg-tab-btn.active,
+  .sr-hub[data-tool-root="steganography"] .steg-dl-btn,
+  .sr-hub[data-tool-root="steganography"] .steg-verify-badge,
+  .sr-hub[data-tool-root="steganography"] .steg-capacity-bar {
+    border: 2px solid ButtonText;
+  }
+  .sr-hub[data-tool-root="steganography"] .steg-tab-btn.active {
+    border-color: Highlight;
+    outline: 2px solid Highlight;
+  }
+  .sr-hub[data-tool-root="steganography"] .steg-capacity-fill {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+  .sr-hub[data-tool-root="steganography"] .steg-bracket {
+    border-color: CanvasText;
+  }
+}
+</style>
+
+
+<div class="sr-bg" aria-hidden="true"></div>
+<div class="sr-grid" aria-hidden="true"></div>
+<div class="sr-scanline" aria-hidden="true"></div>
+<div class="sr-vignette" aria-hidden="true"></div>
+
+
+<div class="sr-toast-container" id="sr-toast-container" role="status" aria-live="polite" aria-atomic="true">
+  <div class="sr-toast" id="sr-toast"></div>
+</div>
+
+
+<div class="sr-hub" data-tool-root="steganography" data-mode="inject">
+
+  
+  <header class="sr-header steg-brackets">
+    <span class="steg-bracket b-tl" aria-hidden="true"></span>
+    <span class="steg-bracket b-tr" aria-hidden="true"></span>
+    <span class="steg-bracket b-bl" aria-hidden="true"></span>
+    <span class="steg-bracket b-br" aria-hidden="true"></span>
+
+    <div class="steg-kicker-row">
+      <span class="steg-kicker">
+        <span class="sr-dot" aria-hidden="true"></span>
+        SIGNAL_STEG // LSB_FORGE
+      </span>
+    </div>
+    <h1 class="sr-title" id="glitch-title" data-text="OPTICAL CARRIER LAB">OPTICAL CARRIER LAB</h1>
+    <p class="sr-subtitle">PNG画素の最下位ビット（RGB-LSB）にテキストを埋込・抽出するローカル検証ワークベンチ</p>
+
+    <div class="sr-status">
+      <div class="sr-stat" id="sr-status-line" role="status" aria-live="polite">
+        <span class="sr-dot" id="sec-indicator" aria-hidden="true"></span>
+        <span>STATUS: STANDBY</span>
+      </div>
+      <div class="sr-stat">
+        <span class="sr-dot purple" aria-hidden="true"></span>
+        <span>UPTIME: <span id="sr-uptime">00:00:00</span></span>
+      </div>
+    </div>
+  </header>
+
+  
+  <div class="steg-tabs" role="tablist" aria-label="動作モード切替">
+    <button type="button" class="steg-tab-btn active" id="tab-steg-enc" role="tab" aria-selected="true" aria-controls="pane-steg-enc">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke-linecap="round"/>
+      </svg>
+      <span>INJECT</span>
+      <span class="steg-tab-jp">埋込</span>
+    </button>
+    <button type="button" class="steg-tab-btn" id="tab-steg-dec" role="tab" aria-selected="false" aria-controls="pane-steg-dec">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 15V3m0 0l-4 4m4-4l4 4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke-linecap="round"/>
+      </svg>
+      <span>EXTRACT</span>
+      <span class="steg-tab-jp">抽出</span>
+    </button>
+  </div>
+
+  
+  <div class="steg-workbench">
+
+    
+    <section class="steg-stage steg-brackets" id="steg-stage" data-stage-state="empty" aria-label="キャリア画像ステージ">
+      <span class="steg-bracket b-tl" aria-hidden="true"></span>
+      <span class="steg-bracket b-tr" aria-hidden="true"></span>
+      <span class="steg-bracket b-bl" aria-hidden="true"></span>
+      <span class="steg-bracket b-br" aria-hidden="true"></span>
+
+      <div class="steg-stage-header">
+        <span class="steg-stage-label">CARRIER STAGE</span>
+        <span class="steg-stage-state-pill" id="steg-preview-state">NO CARRIER</span>
+      </div>
+
+      <div class="steg-preview-wrapper" id="preview-wrapper">
+        <div class="steg-scanner" id="steg-scanner" aria-hidden="true"></div>
+
+        
+        <input type="file" id="steg-file-enc" class="steg-visually-hidden" accept="image/png,image/*" aria-label="キャリア画像ファイルを選択">
+
+        
+        <div class="steg-dropbay-empty" id="steg-holder-view">
+          <svg class="steg-dropbay-icon" viewBox="0 0 36 36" aria-hidden="true">
+            <rect x="4" y="6" width="28" height="24" rx="2"/>
+            <circle cx="13" cy="14" r="2.5"/>
+            <path d="M4 25l8-8 7 7 4-4 9 9" stroke-linejoin="round"/>
+          </svg>
+          <p class="steg-dropbay-title">キャリア画像をドロップ、または選択</p>
+          <p class="steg-dropbay-hint">PNG推奨（最大4096px） · 端末内処理のみ · INJECT / EXTRACT共通</p>
+          <div class="steg-dropbay-actions">
+            <button type="button" class="steg-btn-outline" id="steg-zone-enc">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+              <span>画像を選択</span>
+            </button>
+            <button type="button" class="steg-btn-outline is-purple" id="steg-sample-btn">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/></svg>
+              <span>SAMPLE CARRIER</span>
+            </button>
+          </div>
+        </div>
+
+        
+        <img id="steg-prev-view" class="steg-preview-img" alt="読み込んだキャリア画像のプレビュー">
+
+        
+        <div class="steg-stage-meta" id="steg-carrier-meta">
+          <div class="steg-carrier-specs">
+            <span id="hud-carrier-type">PNG</span>
+            <span class="steg-spec-sep" aria-hidden="true">·</span>
+            <span id="hud-resolution">-- × --</span>
+            <span class="steg-spec-sep" aria-hidden="true">·</span>
+            <span id="hud-pixels">-- px</span>
+            <span class="steg-spec-sep" aria-hidden="true">·</span>
+            <span>MAX <span id="hud-payload">--</span></span>
+          </div>
+          <div class="steg-stage-toolbar">
+            <button type="button" class="steg-btn-outline is-compact" id="steg-replace-btn">変更</button>
+            <button type="button" class="steg-btn-outline is-compact" id="steg-clear-btn">クリア</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="steg-enc-file-alert" class="steg-alert" role="alert"></div>
+    </section>
+
+    
+    <section class="steg-panel steg-brackets" aria-labelledby="steg-mode-heading">
+      <span class="steg-bracket b-tl" aria-hidden="true"></span>
+      <span class="steg-bracket b-tr" aria-hidden="true"></span>
+      <span class="steg-bracket b-bl" aria-hidden="true"></span>
+      <span class="steg-bracket b-br" aria-hidden="true"></span>
+
+      <div class="steg-panel-heading">
+        <span id="steg-mode-heading">INJECT PAYLOAD</span>
+        <small>FORMAT DTS2 // RGB-LSB</small>
+      </div>
+
+      
+      <div class="steg-pane active" id="pane-steg-enc" role="tabpanel" aria-labelledby="tab-steg-enc">
+
+        
+        <div class="steg-honesty-line" id="steg-honesty-line" role="note">
+          <svg class="steg-honesty-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3L2 20h20L12 3z" stroke-linejoin="round"/>
+            <path d="M12 9v5M12 17.5h.01" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <strong>暗号化ではありません</strong> — LSBは画素へ平文を隠すだけです。JPEG変換やSNS投稿（再圧縮・リサイズ）で信号は消失します。機密テキストは下の任意パスフレーズ（AES-256-GCM）を併用してください。
+          </div>
+        </div>
+
+        
+        <div class="steg-input-group">
+          <div class="steg-field-header">
+            <label class="steg-label" for="steg-msg">MESSAGE PAYLOAD</label>
+            <span class="steg-field-hint" id="steg-msg-hint">UTF-8 · DTS2ヘッダ込みで容量計算</span>
+          </div>
+          <textarea
+            id="steg-msg"
+            class="steg-textarea"
+            aria-describedby="steg-msg-hint steg-capacity-pct"
+            placeholder="キャリア画像を読み込むと入力できます…"
+            disabled
+          ></textarea>
+        </div>
+
+        
+        <div class="steg-capacity-container" id="steg-capacity-wrap" data-capacity-state="normal" hidden>
+          <div class="steg-capacity-meta">
+            <span class="steg-capacity-title">CAPACITY RAIL</span>
+            <span id="steg-capacity-pct">0 / 0 bytes (0.0%)</span>
+          </div>
+          <div class="steg-capacity-bar" role="progressbar" aria-label="ペイロード使用率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="steg-capacity-fill" id="steg-capacity-fill"></div>
+          </div>
+          <div class="steg-capacity-ticks" aria-hidden="true">
+            <span>0%</span><span>25%</span><span>50%</span><span>80%</span><span>100%</span>
+          </div>
+          <p class="steg-capacity-over-msg" id="steg-capacity-over-msg" role="alert">容量超過 — メッセージを短縮するか、解像度の高い画像を選択してください。</p>
+        </div>
+
+        
+        <div class="steg-input-group">
+          <div class="steg-field-header">
+            <label class="steg-label steg-label-crypto" for="steg-passphrase">PASSPHRASE (OPTIONAL)</label>
+            <span class="steg-field-hint" id="steg-pass-hint">入力時のみ AES-256-GCM 暗号化</span>
+          </div>
+          <div class="steg-passphrase-row">
+            <input
+              type="password"
+              id="steg-passphrase"
+              class="steg-input steg-passphrase-input"
+              autocomplete="new-password"
+              autocorrect="off"
+              autocapitalize="none"
+              spellcheck="false"
+              aria-describedby="steg-pass-hint"
+              placeholder="空欄 = 平文DTS2（CRC32付）"
+            >
+            <button type="button" class="steg-pass-toggle" id="steg-passphrase-toggle" aria-pressed="false" aria-label="パスフレーズを表示">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        
+        <button type="button" id="steg-run-enc" class="steg-btn" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke-linecap="round"/>
+          </svg>
+          <span>INJECT &amp; VERIFY PNG</span>
+        </button>
+
+        
+        <div class="steg-result-area" id="steg-result-area" data-verify-state="idle" hidden>
+          <div class="steg-verify-bar">
+            <span class="steg-verify-badge" id="steg-verify-state" data-state="idle" role="status" aria-live="polite">
+              STANDBY
+            </span>
+            <span class="steg-verify-meta" id="steg-verify-meta">ROUND-TRIP CHECK</span>
+          </div>
+
+          <div class="steg-result-actions">
+            <a id="steg-download" class="steg-dl-btn is-disabled" href="#" download="optical_carrier.png" aria-disabled="true" tabindex="-1">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v13m0 0l-4.5-4.5M12 16l4.5-4.5M4 20h16" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>DOWNLOAD PNG</span>
+            </a>
+            <button type="button" class="steg-btn-outline" id="steg-send-extract">
+              <span>EXTRACTで確認</span>
+            </button>
+          </div>
+
+          <p class="steg-lossy-note">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3L2 20h20L12 3z" stroke-linejoin="round"/>
+              <path d="M12 9v5M12 17.5h.01" stroke-linecap="round"/>
+            </svg>
+            <span>無圧縮のPNGファイルのまま転送してください（SNS投稿・JPEG保存で破損します）。</span>
+          </p>
+        </div>
+      </div>
+
+      
+      <div class="steg-pane" id="pane-steg-dec" role="tabpanel" aria-labelledby="tab-steg-dec" hidden>
+
+        
+        <div class="steg-passphrase-prompt" id="steg-passphrase-dec-wrap" hidden>
+          <div class="steg-field-header">
+            <label class="steg-label steg-label-crypto" for="steg-passphrase-dec">ENCRYPTED SIGNAL // PASSPHRASE</label>
+            <span class="steg-field-hint">DTS2 · AES-256-GCM 復号鍵</span>
+          </div>
+          <div class="steg-passphrase-row">
+            <input
+              type="password"
+              id="steg-passphrase-dec"
+              class="steg-input steg-passphrase-input"
+              autocomplete="current-password"
+              autocorrect="off"
+              autocapitalize="none"
+              spellcheck="false"
+              placeholder="パスフレーズを入力…"
+            >
+            <button type="button" class="steg-pass-toggle" id="steg-passphrase-dec-toggle" aria-pressed="false" aria-label="復号パスフレーズを表示">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="button" id="steg-run-dec" class="steg-btn" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 15V3m0 0l-4 4m4-4l4 4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke-linecap="round"/>
+          </svg>
+          <span>EXTRACT SIGNAL</span>
+        </button>
+
+        
+        <div class="steg-decode-hud" id="steg-decode-hud" data-extract-state="empty">
+          <div class="steg-decode-header">
+            <span class="steg-decode-title">EXTRACTED PAYLOAD</span>
+            <span class="steg-decode-badge" id="steg-decode-badge">STANDBY</span>
+            <button type="button" class="steg-decode-copy" id="steg-decode-copy" hidden>COPY</button>
+          </div>
+          <pre id="steg-result-dec" class="steg-decode-result is-empty" role="status" aria-live="polite">上のステージへPNG画像を読み込んで「EXTRACT SIGNAL」を実行してください。</pre>
+        </div>
+
+        <div id="steg-dec-file-alert" class="steg-alert" role="alert"></div>
+      </div>
+
+    </section>
+  </div>
+
+  <footer class="sr-footer">
+    <a href="/project-x/" class="sr-footer-link">PROJECT X へ戻る</a>
+  </footer>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+
+  
+  const MAGIC = [0x44, 0x54, 0x53, 0x32]; 
+  const VERSION = 2;
+  const HEADER_LEN = 10;                  
+  const CRC_LEN = 4;
+  const SALT_LEN = 16, IV_LEN = 12, GCM_TAG_LEN = 16;
+  const PBKDF2_ITERS = 210000;
+  const ENC_OVERHEAD = SALT_LEN + IV_LEN + GCM_TAG_LEN; 
+
+  
+  const CRC_TABLE = (() => {
+    const t = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) {
+      let c = n;
+      for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      t[n] = c >>> 0;
+    }
+    return t;
+  })();
+  function crc32(bytes) {
+    let c = 0xFFFFFFFF;
+    for (let i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+  const u32be = (b, o) => ((b[o] << 24) | (b[o + 1] << 16) | (b[o + 2] << 8) | b[o + 3]) >>> 0;
+  function writeU32be(out, o, v) {
+    out[o] = (v >>> 24) & 0xFF; out[o + 1] = (v >>> 16) & 0xFF;
+    out[o + 2] = (v >>> 8) & 0xFF; out[o + 3] = v & 0xFF;
+  }
+
+  
+  function embedBytes(data, bytes) {
+    let bitPos = 0;
+    const totalBits = bytes.length * 8;
+    for (let i = 0; i < data.length && bitPos < totalBits; i++) {
+      if ((i + 1) % 4 === 0) continue;
+      const byte = bytes[bitPos >> 3];
+      const bit = (byte >> (7 - (bitPos & 7))) & 1;
+      data[i] = (data[i] & 0xFE) | bit;
+      bitPos++;
+    }
+    return bitPos === totalBits;
+  }
+  function extractBytes(data, count, bitOffset) {
+    const out = new Uint8Array(count);
+    let bitPos = 0, skipped = 0;
+    const totalBits = count * 8;
+    for (let i = 0; i < data.length && bitPos < totalBits; i++) {
+      if ((i + 1) % 4 === 0) continue;
+      if (skipped < bitOffset) { skipped++; continue; }
+      out[bitPos >> 3] = (out[bitPos >> 3] << 1) | (data[i] & 1);
+      bitPos++;
+    }
+    if (bitPos < totalBits) throw new Error('carrier too small');
+    return out;
+  }
+
+  
+  async function deriveKey(passphrase, salt) {
+    const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(passphrase), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt, iterations: PBKDF2_ITERS, hash: 'SHA-256' },
+      base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+  }
+  async function encryptPayload(plainBytes, passphrase) {
+    const salt = crypto.getRandomValues(new Uint8Array(SALT_LEN));
+    const iv = crypto.getRandomValues(new Uint8Array(IV_LEN));
+    const key = await deriveKey(passphrase, salt);
+    const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, plainBytes));
+    const blob = new Uint8Array(SALT_LEN + IV_LEN + ct.length);
+    blob.set(salt, 0); blob.set(iv, SALT_LEN); blob.set(ct, SALT_LEN + IV_LEN);
+    return blob;
+  }
+  async function decryptPayload(blob, passphrase) {
+    const salt = blob.slice(0, SALT_LEN);
+    const iv = blob.slice(SALT_LEN, SALT_LEN + IV_LEN);
+    const ct = blob.slice(SALT_LEN + IV_LEN);
+    const key = await deriveKey(passphrase, salt);
+    const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct);
+    return new Uint8Array(pt);
+  }
+
+  
+  
+  
+  function parseCarrier(data, totalPixels) {
+    const rawCap = Math.floor((totalPixels * 3) / 8);
+    if (rawCap < 4) return { kind: 'no-signal' };
+    let head4;
+    try { head4 = extractBytes(data, 4, 0); } catch (e) { return { kind: 'no-signal' }; }
+    let head = head4;
+    if (rawCap >= HEADER_LEN) {
+      try { head = extractBytes(data, HEADER_LEN, 0); } catch (e) { head = head4; }
+    }
+    const isMagic = rawCap >= HEADER_LEN && MAGIC.every((b, i) => head[i] === b);
+    if (isMagic) {
+      const version = head[4];
+      const flags = head[5];
+      const len = u32be(head, 6);
+      if (version !== VERSION) return { kind: 'corrupted', reason: '未対応のフォーマットバージョンです (v' + version + ')。' };
+      if (flags & ~1) return { kind: 'corrupted', reason: '未対応のフラグ (0x' + flags.toString(16) + ') が立っています。' };
+      if (len <= 0 || HEADER_LEN + len > rawCap) return { kind: 'corrupted', reason: 'DTS2ヘッダの長さが画像容量と矛盾しています。画像が加工された可能性があります。' };
+      const stored = extractBytes(data, len, HEADER_LEN * 8);
+      if (flags & 1) {
+        if (len < ENC_OVERHEAD + 1) return { kind: 'corrupted', reason: '暗号化ペイロードが短すぎます (salt/iv/tag込みで最低45バイト必要)。' };
+        return { kind: 'encrypted', blob: stored };
+      }
+      if (len < CRC_LEN) return { kind: 'corrupted', reason: 'ペイロードが短すぎます。' };
+      const msgBytes = stored.slice(0, len - CRC_LEN);
+      const storedCrc = u32be(stored, len - CRC_LEN);
+      if (crc32(msgBytes) !== storedCrc) return { kind: 'corrupted', reason: 'CRC32が一致しません。信号が破損しているか、画像が再圧縮・編集されています。無圧縮PNGのまま転送してください。' };
+      try {
+        const text = new TextDecoder('utf-8', { fatal: true }).decode(msgBytes);
+        return { kind: 'plain', text, bytes: msgBytes };
+      } catch (e) {
+        return { kind: 'corrupted', reason: 'ペイロードがUTF-8として復号できませんでした。' };
+      }
+    }
+    
+    const legacyLen = u32be(head4, 0);
+    if (legacyLen > 0 && legacyLen <= rawCap - 4) {
+      try {
+        const bytes = extractBytes(data, legacyLen, 32);
+        const text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+        return { kind: 'legacy', text, bytes };
+      } catch (e) {
+        return { kind: 'no-signal' };
+      }
+    }
+    return { kind: 'no-signal' };
+  }
+
+  class StegTool {
+    constructor() {
+      this.mode = 'ENCODE';
+      this.opToken = 0; 
+      this.activeImg = null;
+      this.carrierName = '';
+      this.rawCapBytes = 0;      
+      this.producedUrl = null;   
+      this.toastTimer = null;
+      this.el = {};
+      ['sr-toast-container', 'sr-toast', 'sr-uptime', 'sec-indicator', 'tab-steg-enc', 'tab-steg-dec',
+       'pane-steg-enc', 'pane-steg-dec', 'steg-mode-heading', 'steg-stage', 'preview-wrapper',
+       'steg-scanner', 'steg-prev-view', 'steg-holder-view', 'steg-preview-state', 'steg-carrier-meta',
+       'hud-carrier-type', 'hud-resolution', 'hud-pixels', 'hud-payload', 'steg-zone-enc',
+       'steg-sample-btn', 'steg-replace-btn', 'steg-clear-btn', 'steg-file-enc', 'steg-enc-file-alert',
+       'steg-dec-file-alert', 'steg-msg', 'steg-capacity-wrap', 'steg-capacity-pct', 'steg-capacity-fill',
+       'steg-passphrase', 'steg-passphrase-toggle', 'steg-run-enc', 'steg-result-area',
+       'steg-verify-state', 'steg-verify-meta', 'steg-download', 'steg-send-extract',
+       'steg-passphrase-dec-wrap', 'steg-passphrase-dec', 'steg-passphrase-dec-toggle',
+       'steg-run-dec', 'steg-decode-hud', 'steg-decode-badge', 'steg-result-dec', 'steg-decode-copy',
+      ].forEach((id) => { this.el[id] = $(id); });
+      this.bind();
+      this.startUptime();
+    }
+
+    bind() {
+      const E = this.el;
+      E['tab-steg-enc'].addEventListener('click', () => this.switchMode('ENCODE'));
+      E['tab-steg-dec'].addEventListener('click', () => this.switchMode('DECODE'));
+      E['steg-zone-enc'].addEventListener('click', () => E['steg-file-enc'].click());
+      E['steg-replace-btn'].addEventListener('click', () => E['steg-file-enc'].click());
+      E['steg-clear-btn'].addEventListener('click', () => this.clearCarrier());
+      E['steg-sample-btn'].addEventListener('click', () => this.loadSampleCarrier());
+      E['steg-file-enc'].addEventListener('change', () => {
+        const f = E['steg-file-enc'].files[0];
+        E['steg-file-enc'].value = '';
+        if (f) this.handleFile(f);
+      });
+      const stage = E['steg-stage'];
+      stage.addEventListener('dragover', (e) => { e.preventDefault(); stage.classList.add('is-dragover'); stage.dataset.stageState = 'dragover'; });
+      stage.addEventListener('dragleave', () => { stage.classList.remove('is-dragover'); stage.dataset.stageState = this.activeImg ? 'loaded' : 'empty'; });
+      stage.addEventListener('drop', (e) => {
+        e.preventDefault();
+        stage.classList.remove('is-dragover');
+        stage.dataset.stageState = this.activeImg ? 'loaded' : 'empty';
+        const f = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (f) this.handleFile(f);
+      });
+      E['steg-msg'].addEventListener('input', () => this.updateCapacity());
+      E['steg-passphrase'].addEventListener('input', () => this.updateCapacity());
+      E['steg-run-enc'].addEventListener('click', () => this.executeEncode());
+      E['steg-run-dec'].addEventListener('click', () => this.executeDecode());
+      E['steg-send-extract'].addEventListener('click', () => this.handoffToExtract());
+      E['steg-download'].addEventListener('click', (e) => {
+        if (E['steg-download'].getAttribute('aria-disabled') === 'true') e.preventDefault();
+      });
+      E['steg-decode-copy'].addEventListener('click', () => {
+        const t = this.decodedText;
+        if (t) this.copyText(t);
+      });
+      this.bindPassToggle(E['steg-passphrase'], E['steg-passphrase-toggle']);
+      this.bindPassToggle(E['steg-passphrase-dec'], E['steg-passphrase-dec-toggle']);
+      E['steg-passphrase-dec'].addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); this.executeDecode(); }
+      });
+    }
+
+    bindPassToggle(input, btn) {
+      if (!input || !btn) return;
+      btn.addEventListener('click', () => {
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        btn.setAttribute('aria-pressed', String(show));
+      });
+    }
+
+    startUptime() {
+      const t0 = Date.now();
+      setInterval(() => {
+        const s = Math.floor((Date.now() - t0) / 1000);
+        const el = this.el['sr-uptime'];
+        if (el) el.textContent = [s / 3600, (s % 3600) / 60, s % 60]
+          .map((v) => String(Math.floor(v)).padStart(2, '0')).join(':');
+      }, 1000);
+    }
+
+    setStatus(text, tone) {
+      const line = $('sr-status-line');
+      if (line) line.lastElementChild.textContent = 'STATUS: ' + text;
+      const dot = this.el['sec-indicator'];
+      if (dot) dot.className = 'sr-dot' + (tone ? ' ' + tone : '');
+    }
+
+    showToast(msg, isError) {
+      const c = this.el['sr-toast-container'], t = this.el['sr-toast'];
+      if (!c || !t) return;
+      t.textContent = msg;
+      t.classList.toggle('is-error', !!isError);
+      c.classList.add('visible');
+      clearTimeout(this.toastTimer);
+      this.toastTimer = setTimeout(() => c.classList.remove('visible'), 2400);
+      if (navigator.vibrate) navigator.vibrate(15);
+    }
+
+    showAlert(which, msg) {
+      const el = which === 'dec' ? this.el['steg-dec-file-alert'] : this.el['steg-enc-file-alert'];
+      if (!el) return;
+      el.textContent = msg || '';
+      el.classList.toggle('is-visible', !!msg);
+      el.style.display = msg ? 'block' : 'none';
+    }
+
+    switchMode(mode) {
+      this.mode = mode;
+      const E = this.el, enc = mode === 'ENCODE';
+      document.querySelector('.sr-hub[data-tool-root="steganography"]').dataset.mode = enc ? 'inject' : 'extract';
+      E['tab-steg-enc'].classList.toggle('active', enc);
+      E['tab-steg-dec'].classList.toggle('active', !enc);
+      E['tab-steg-enc'].setAttribute('aria-selected', String(enc));
+      E['tab-steg-dec'].setAttribute('aria-selected', String(!enc));
+      E['pane-steg-enc'].classList.toggle('active', enc);
+      E['pane-steg-dec'].classList.toggle('active', !enc);
+      E['pane-steg-enc'].hidden = !enc;
+      E['pane-steg-dec'].hidden = enc;
+      E['steg-mode-heading'].textContent = enc ? 'INJECT PAYLOAD' : 'EXTRACT PAYLOAD';
+      
+    }
+
+    
+    handleFile(file) {
+      this.showAlert('enc', ''); this.showAlert('dec', '');
+      if (!file.type.startsWith('image/')) {
+        this.showAlert(this.mode === 'DECODE' ? 'dec' : 'enc', '画像ファイルを選択してください。');
+        return;
+      }
+      if (this.mode === 'DECODE' && file.type !== 'image/png') {
+        this.showAlert('dec', 'EXTRACTにはPNG画像のみ対応しています（JPEG等へ変換された画像では信号は復元できません）。');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onerror = () => this.showAlert('enc', 'ファイルを読み込めませんでした。別の画像を試してください。');
+      reader.onload = (e) => this.loadCarrierFromSrc(e.target.result, file.name, file.type.replace('image/', '').toUpperCase());
+      reader.readAsDataURL(file);
+    }
+
+    loadCarrierFromSrc(src, name, typeLabel) {
+      const token = ++this.opToken;
+      this.producedUrl = null;
+      const img = new Image();
+      img.onerror = () => this.showAlert('enc', '画像を解析できませんでした。');
+      img.onload = () => {
+        if (token !== this.opToken) return; 
+        this.activeImg = img;
+        this.carrierName = name || 'carrier';
+        const pixels = img.width * img.height;
+        this.rawCapBytes = Math.floor((pixels * 3) / 8);
+        const E = this.el;
+        E['steg-prev-view'].src = src;
+        const stage = E['steg-stage'];
+        stage.classList.add('is-loaded'); stage.classList.remove('is-verified', 'is-error');
+        stage.dataset.stageState = 'loaded';
+        E['steg-preview-state'].textContent = 'CARRIER LOADED';
+        E['hud-carrier-type'].textContent = typeLabel || 'PNG';
+        E['hud-resolution'].textContent = img.width + ' × ' + img.height;
+        E['hud-pixels'].textContent = pixels.toLocaleString() + ' px';
+        E['hud-payload'].textContent = this.rawCapBytes.toLocaleString() + ' B';
+        E['steg-msg'].disabled = false;
+        E['steg-msg'].placeholder = 'ここに埋め込むメッセージを入力…';
+        E['steg-run-dec'].disabled = false;
+        this.resetResultArea();
+        this.updateCapacity();
+        this.setStatus('CARRIER ARMED', '');
+      };
+      img.src = src;
+    }
+
+    loadSampleCarrier() {
+      const w = 480, h = 320;
+      const cv = document.createElement('canvas');
+      cv.width = w; cv.height = h;
+      const ctx = cv.getContext('2d');
+      const g = ctx.createLinearGradient(0, 0, w, h);
+      g.addColorStop(0, '#1b0f3a'); g.addColorStop(0.5, '#0e2a4a'); g.addColorStop(1, '#3a0f2e');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = 'rgba(0,243,255,0.35)'; ctx.lineWidth = 1;
+      for (let x = 0; x <= w; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for (let y = 0; y <= h; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+      for (let i = 0; i < 26; i++) {
+        const x = (i * 173) % w, y = (i * 97) % h, r = 8 + ((i * 37) % 42);
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.strokeStyle = i % 3 ? 'rgba(188,19,254,0.5)' : 'rgba(0,243,255,0.55)';
+        ctx.lineWidth = 1.5; ctx.stroke();
+      }
+      ctx.fillStyle = 'rgba(242,246,255,0.9)';
+      ctx.font = '700 20px Orbitron, sans-serif';
+      ctx.fillText('SAMPLE CARRIER', 24, 44);
+      ctx.font = '12px monospace'; ctx.fillStyle = 'rgba(184,198,224,0.85)';
+      ctx.fillText('480 × 320 · generated in-browser · safe to inject', 24, 66);
+      this.loadCarrierFromSrc(cv.toDataURL('image/png'), 'SAMPLE CARRIER (generated)', 'PNG');
+      this.showToast('サンプルキャリアを生成しました');
+    }
+
+    clearCarrier() {
+      this.opToken++;
+      this.activeImg = null; this.rawCapBytes = 0; this.producedUrl = null;
+      const E = this.el, stage = E['steg-stage'];
+      stage.classList.remove('is-loaded', 'is-verified', 'is-error', 'is-processing');
+      stage.dataset.stageState = 'empty';
+      E['steg-prev-view'].removeAttribute('src');
+      E['steg-preview-state'].textContent = 'NO CARRIER';
+      E['steg-msg'].value = ''; E['steg-msg'].disabled = true;
+      E['steg-run-enc'].disabled = true; E['steg-run-dec'].disabled = true;
+      E['steg-capacity-wrap'].hidden = true;
+      this.resetResultArea();
+      this.setExtractState('empty', 'STANDBY', '上のステージへPNG画像を読み込んで「EXTRACT SIGNAL」を実行してください。');
+      this.setStatus('STANDBY', '');
+    }
+
+    
+    overheadBytes() {
+      return HEADER_LEN + (this.el['steg-passphrase'].value ? ENC_OVERHEAD : CRC_LEN);
+    }
+    updateCapacity() {
+      const E = this.el;
+      if (!this.activeImg) { E['steg-capacity-wrap'].hidden = true; return; }
+      E['steg-capacity-wrap'].hidden = false;
+      const msgBytes = new TextEncoder().encode(E['steg-msg'].value).length;
+      const used = msgBytes + this.overheadBytes();
+      const max = this.rawCapBytes;
+      const pct = max > 0 ? (used / max) * 100 : (used > 0 ? 100 : 0);
+      E['steg-capacity-pct'].textContent = used.toLocaleString() + ' / ' + max.toLocaleString() + ' bytes (' + pct.toFixed(1) + '%)';
+      const fill = E['steg-capacity-fill'];
+      fill.style.width = Math.min(100, pct) + '%';
+      const wrap = E['steg-capacity-wrap'];
+      const bar = wrap.querySelector('.steg-capacity-bar');
+      if (bar) bar.setAttribute('aria-valuenow', String(Math.min(100, Math.round(pct))));
+      let state = 'normal';
+      fill.className = 'steg-capacity-fill';
+      if (used > max) { state = 'over'; fill.classList.add('danger'); }
+      else if (pct >= 80) { state = 'warn'; fill.classList.add('warning'); }
+      wrap.dataset.capacityState = state;
+      wrap.classList.toggle('is-over', state === 'over');
+      wrap.classList.toggle('is-warn', state === 'warn');
+      E['steg-msg'].setAttribute('aria-invalid', String(state === 'over'));
+      E['steg-run-enc'].disabled = msgBytes === 0 || state === 'over';
+    }
+
+    
+    resetResultArea() {
+      const E = this.el;
+      E['steg-result-area'].hidden = true;
+      E['steg-result-area'].dataset.verifyState = 'idle';
+      this.setVerifyBadge('idle', 'STANDBY');
+      this.lockDownload();
+    }
+    setVerifyBadge(state, text) {
+      const b = this.el['steg-verify-state'];
+      b.dataset.state = state;
+      b.className = 'steg-verify-badge' + (state === 'verified' ? ' is-verified' : state === 'failed' ? ' is-failed' : state === 'processing' ? ' is-processing' : '');
+      b.textContent = text;
+    }
+    lockDownload() {
+      const d = this.el['steg-download'];
+      d.classList.add('is-disabled');
+      d.setAttribute('aria-disabled', 'true');
+      d.setAttribute('tabindex', '-1');
+      d.setAttribute('href', '#');
+    }
+    unlockDownload(url) {
+      const d = this.el['steg-download'];
+      d.classList.remove('is-disabled');
+      d.removeAttribute('aria-disabled');
+      d.removeAttribute('tabindex');
+      d.setAttribute('href', url);
+    }
+
+    carrierImageData(img) {
+      const src = img || this.activeImg;
+      const cv = document.createElement('canvas');
+      cv.width = src.width; cv.height = src.height;
+      const ctx = cv.getContext('2d');
+      ctx.drawImage(src, 0, 0);
+      return { canvas: cv, ctx, imgData: ctx.getImageData(0, 0, cv.width, cv.height) };
+    }
+    
+    reloadImageData(dataUrl) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          try { resolve({ img, ...this.carrierImageData(img) }); }
+          catch (e) { reject(e); }
+        };
+        img.onerror = () => reject(new Error('produced PNG reload failed'));
+        img.src = dataUrl;
+      });
+    }
+
+    setProcessing(on) {
+      const stage = this.el['steg-stage'];
+      stage.classList.toggle('is-processing', on);
+      if (on) stage.dataset.stageState = 'processing';
+      else stage.dataset.stageState = this.activeImg ? 'loaded' : 'empty';
+      this.el['steg-scanner'].classList.toggle('is-active', on);
+      this.el['steg-scanner'].style.display = on ? 'block' : 'none';
+    }
+
+    
+    async executeEncode() {
+      if (!this.activeImg) return;
+      const E = this.el;
+      const token = ++this.opToken;
+      const carrier = this.activeImg;
+      const msg = E['steg-msg'].value;
+      const msgBytes = new TextEncoder().encode(msg);
+      if (!msgBytes.length) return;
+      const passphrase = E['steg-passphrase'].value;
+      const used = msgBytes.length + this.overheadBytes();
+      if (used > this.rawCapBytes) {
+        this.showAlert('enc', '容量超過です。メッセージを短縮するか、解像度の高い画像を選んでください。');
+        return;
+      }
+      this.producedUrl = null;
+      this.showAlert('enc', '');
+      E['steg-run-enc'].disabled = true;
+      this.setProcessing(true);
+      this.setStatus('INJECTING…', 'purple');
+      E['steg-result-area'].hidden = false;
+      E['steg-result-area'].dataset.verifyState = 'processing';
+      this.setVerifyBadge('processing', 'VERIFYING…');
+      this.lockDownload();
+      await new Promise((r) => setTimeout(r, 500));
+      try {
+        let stored, flags;
+        if (passphrase) { stored = await encryptPayload(msgBytes, passphrase); flags = 1; }
+        else {
+          stored = new Uint8Array(msgBytes.length + CRC_LEN);
+          stored.set(msgBytes, 0);
+          writeU32be(stored, msgBytes.length, crc32(msgBytes));
+          flags = 0;
+        }
+        if (token !== this.opToken) { this.setProcessing(false); return; }
+        if (stored.length > 0xFFFFFFFF) throw new Error('payload exceeds 32-bit length field');
+        const full = new Uint8Array(HEADER_LEN + stored.length);
+        full.set(MAGIC, 0); full[4] = VERSION; full[5] = flags;
+        writeU32be(full, 6, stored.length);
+        full.set(stored, HEADER_LEN);
+
+        const { canvas, ctx, imgData } = this.carrierImageData(carrier);
+        if (!embedBytes(imgData.data, full)) throw new Error('embed overflow');
+        ctx.putImageData(imgData, 0, 0);
+        const dataUrl = canvas.toDataURL('image/png');
+
+        
+        
+        
+        const reloaded = await this.reloadImageData(dataUrl);
+        if (token !== this.opToken) { this.setProcessing(false); return; }
+        const parsed = parseCarrier(reloaded.imgData.data, reloaded.img.width * reloaded.img.height);
+        let ok = false;
+        if (parsed.kind === 'plain') ok = parsed.bytes.length === msgBytes.length && parsed.bytes.every((b, i) => b === msgBytes[i]);
+        else if (parsed.kind === 'encrypted') {
+          const back = await decryptPayload(parsed.blob, passphrase);
+          ok = back.length === msgBytes.length && back.every((b, i) => b === msgBytes[i]);
+        }
+        if (token !== this.opToken) { this.setProcessing(false); return; }
+        this.setProcessing(false);
+        if (!ok) {
+          E['steg-result-area'].dataset.verifyState = 'failed';
+          this.setVerifyBadge('failed', 'VERIFY FAILED');
+          E['steg-verify-meta'].textContent = 'ROUND-TRIP MISMATCH — DOWNLOAD LOCKED';
+          this.setStatus('VERIFY FAILED', 'pink');
+          return;
+        }
+        this.producedUrl = dataUrl;
+        E['steg-result-area'].dataset.verifyState = 'verified';
+        E['steg-result-area'].classList.add('is-verified');
+        this.setVerifyBadge('verified', 'VERIFIED ✓');
+        E['steg-verify-meta'].textContent = 'ROUND-TRIP OK · ' + stored.length.toLocaleString() + ' B STORED' + (flags ? ' · AES-256-GCM' : ' · CRC32');
+        this.unlockDownload(this.producedUrl);
+        const stage = E['steg-stage'];
+        stage.classList.add('is-verified'); stage.dataset.stageState = 'verified';
+        this.setStatus('VERIFIED — READY', '');
+        this.showToast('埋め込み完了 — ラウンドトリップ検証OK');
+        if (navigator.vibrate) navigator.vibrate([30, 40, 30]);
+      } catch (err) {
+        this.setProcessing(false);
+        E['steg-result-area'].dataset.verifyState = 'failed';
+        this.setVerifyBadge('failed', 'INJECT FAILED');
+        this.setStatus('INJECT FAILED', 'pink');
+        this.showAlert('enc', '埋め込みに失敗しました: ' + err.message);
+      } finally {
+        this.updateCapacity();
+      }
+    }
+
+    handoffToExtract() {
+      if (!this.producedUrl) return;
+      this.switchMode('DECODE');
+      this.loadCarrierFromSrc(this.producedUrl, 'optical_carrier.png (in-memory)', 'PNG');
+      this.showToast('生成したPNGをEXTRACTステージへ渡しました');
+    }
+
+    
+    setExtractState(state, badge, text) {
+      const hud = this.el['steg-decode-hud'];
+      hud.dataset.extractState = state;
+      hud.className = 'steg-decode-hud' + (state === 'verified' ? ' is-verified' : state === 'no-signal' ? ' is-no-signal' : (state === 'corrupted' || state === 'failed') ? ' is-corrupted' : '');
+      this.el['steg-decode-badge'].textContent = badge;
+      const res = this.el['steg-result-dec'];
+      res.textContent = text;
+      res.className = 'steg-decode-result' + (state === 'empty' ? ' is-empty' : state === 'no-signal' ? ' is-no-signal' : (state === 'corrupted' || state === 'failed') ? ' error' : '');
+      const hasText = state === 'verified';
+      this.el['steg-decode-copy'].hidden = !hasText;
+      this.decodedText = hasText ? text : '';
+    }
+
+    async executeDecode() {
+      if (!this.activeImg) return;
+      const E = this.el;
+      const token = ++this.opToken;
+      const carrier = this.activeImg;
+      E['steg-run-dec'].disabled = true;
+      this.setProcessing(true);
+      this.setStatus('EXTRACTING…', 'purple');
+      await new Promise((r) => setTimeout(r, 450));
+      if (token !== this.opToken) { this.setProcessing(false); return; }
+      try {
+        const { imgData } = this.carrierImageData(carrier);
+        const parsed = parseCarrier(imgData.data, carrier.width * carrier.height);
+        this.setProcessing(false);
+        if (parsed.kind === 'plain' || parsed.kind === 'legacy') {
+          
+          this.setExtractState('verified', parsed.kind === 'legacy' ? 'LEGACY' : 'DTS2 ✓', parsed.text);
+          if (parsed.kind === 'legacy') E['steg-decode-badge'].textContent = 'LEGACY FORMAT (無検証)';
+          this.setStatus('EXTRACTION COMPLETED', '');
+          if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+        } else if (parsed.kind === 'encrypted') {
+          E['steg-passphrase-dec-wrap'].hidden = false;
+          const pass = E['steg-passphrase-dec'].value;
+          if (!pass) {
+            this.setExtractState('no-signal', 'ENCRYPTED', '暗号化された信号（DTS2 / AES-256-GCM）を検出しました。パスフレーズを入力して、もう一度「EXTRACT SIGNAL」を押してください。');
+            E['steg-passphrase-dec'].focus();
+            this.setStatus('PASSPHRASE REQUIRED', 'purple');
+          } else {
+            try {
+              const pt = await decryptPayload(parsed.blob, pass);
+              if (token !== this.opToken) return;
+              const text = new TextDecoder('utf-8', { fatal: true }).decode(pt);
+              this.setExtractState('verified', 'DTS2 · AES-GCM ✓', text);
+              this.setStatus('EXTRACTION COMPLETED', '');
+            } catch (e) {
+              this.setExtractState('failed', 'AUTH FAILED', '復号に失敗しました。パスフレーズが違うか、信号が破損しています（AES-GCM認証エラー）。');
+              this.setStatus('AUTH FAILED', 'pink');
+            }
+          }
+        } else if (parsed.kind === 'corrupted') {
+          this.setExtractState('corrupted', 'CORRUPTED', 'CORRUPTED — ' + parsed.reason);
+          this.setStatus('SIGNAL CORRUPTED', 'pink');
+        } else {
+          this.setExtractState('no-signal', 'NO SIGNAL', 'NO SIGNAL — この画像から埋め込み信号は検出されませんでした。DTS2形式でも旧形式でもありません。無圧縮PNGのままのファイルか確認してください。');
+          this.setStatus('NO SIGNAL', 'purple');
+        }
+      } catch (err) {
+        this.setProcessing(false);
+        this.setExtractState('failed', 'ERROR', '抽出に失敗しました: ' + err.message);
+        this.setStatus('EXTRACT ERROR', 'pink');
+      } finally {
+        E['steg-run-dec'].disabled = !this.activeImg;
+      }
+    }
+
+    async copyText(text) {
+      try { await navigator.clipboard.writeText(text); }
+      catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); ta.remove();
+      }
+      this.showToast('コピーしました');
+    }
+  }
+
+  const boot = () => { new StegTool(); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
+
+</div>
+      </article>
+    </main>
+    <style>
+       
+      body.lab-body .lab-content > #auto-app,
+      body.lab-body .lab-content > #circ-app,
+      body.lab-body .lab-content > #ct-app,
+      body.lab-body .lab-content > #cyber-cipher-app,
+      body.lab-body .lab-content > #cyber-graph-app,
+      body.lab-body .lab-content > #cyber-latex-app,
+      body.lab-body .lab-content > #cyber-logic-app,
+      body.lab-body .lab-content > #cyber-matrix-app,
+      body.lab-body .lab-content > #cyber-pf-app,
+      body.lab-body .lab-content > #cyber-rg-app,
+      body.lab-body .lab-content > #cyber-rsa-app,
+      body.lab-body .lab-content > #cyber-mermaid-app,
+      body.lab-body .lab-content > #fc-app,
+      body.lab-body .lab-content > #isbn-root,
+      body.lab-body .lab-content > #ls-app,
+      body.lab-body .lab-content > #mech-app,
+      body.lab-body .lab-content > #mq-app,
+      body.lab-body .lab-content > #ps-app,
+      body.lab-body .lab-content > #sa-app,
+      body.lab-body .lab-content > #topo-app,
+      body.lab-body .lab-content > #uc-app,
+      body.lab-body .lab-content > #ym-root,
+      body.lab-body .lab-content > .cy-root,
+      body.lab-body .lab-content > #app-root {
+        position: relative !important;
+        inset: auto !important;
+        z-index: 1 !important;
+        width: 100% !important;
+        max-width: 1040px !important;
+        height: calc(100dvh - 92px) !important;
+        min-height: min(680px, calc(100dvh - 92px)) !important;
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
+        overflow-x: clip !important;
+      }
+
+      body.lab-body .lab-content [class*="exit"] { display: none !important; }
+
+      body.lab-body .lab-content > .ag-app,
+      body.lab-body .lab-content > .dm-app {
+        min-height: 0 !important;
+        padding: 1rem 1rem calc(2rem + env(safe-area-inset-bottom, 0px)) !important;
+        overflow-x: clip !important;
+      }
+
+      body.lab-body .lab-content > #dc-app {
+        z-index: 1 !important;
+      }
+    </style>
+  </body>
+</html>

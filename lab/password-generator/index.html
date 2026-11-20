@@ -1,0 +1,2530 @@
+<!doctype html>
+<html lang="ja" class="lab-document">
+  <head><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="ja" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>PASS GENERATOR &middot; dt&#39;s world</title>
+  <meta name="title" content="PASS GENERATOR &middot; dt&#39;s world" />
+  
+  <meta name="description" content="エントロピー解析機能付きローカルパスワード生成器" />
+  
+  
+  
+  <meta name="robots" content="noindex, nofollow" />
+  
+  <link rel="canonical" href="https://dtwant.github.io/lab/password-generator/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.5008af349b4dacf61499a7ca30a07e6e86fa6c56d19add899f2f5399351138d3e8cf94ec19b98a9c3835418041c2378fd3be076c595c772e17e0daa596ba6f10.css"
+    integrity="sha512-UAivNJtNrPYUmafKMKB&#43;bob6bFbRmt2Jny9TmTURONPoz5TsGbmKnDg1QYBBwjeP074HbFlcdy4X4NqllrpvEA==" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.4080cca54f0846f36f81f334d01ff18907713d293fbc79e0f54632bf45d1c5037affb9a9915f28bc07b6416657c984d9de59d824fe91bcb53a3cc5d0fd74e4e4.js"
+    integrity="sha512-QIDMpU8IRvNvgfM00B/xiQdxPSk/vHng9UYyv0XRxQN6/7mpkV8ovAe2QWZXyYTZ3lnYJP6RvLU6PMXQ/XTk5A=="></script>
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.25149c9f5fe7876ef6d26c65b05b3ffd599ded9a9d183eb6a233c42e2e217052245df1f7124102049ae3853452165497bab0a64f1eb09b4474fab694d405eaf7.js"
+    integrity="sha512-JRScn1/nh2720mxlsFs//Vmd7ZqdGD62ojPELi4hcFIkXfH3EkECBJrjhTRSFlSXurCmTx6wm0R0&#43;raU1AXq9w==" data-copy="コピー" data-copied="コピーしました"></script>
+    <script src="/lib/zoom/zoom.min.a527109b68c082a70f3697716dd72a9d5aa8b545cf800cecbbc7399f2ca6f6e0ce3e431f2062b48bbfa47c9ea42822714060bef309be073f49b9c0e30d318d7b.js" integrity="sha512-pScQm2jAgqcPNpdxbdcqnVqotUXPgAzsu8c5nyym9uDOPkMfIGK0i7&#43;kfJ6kKCJxQGC&#43;8wm&#43;Bz9JucDjDTGNew=="></script>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://dtwant.github.io/lab/password-generator/">
+  <meta property="og:site_name" content="dt&#39;s world">
+  <meta property="og:title" content="PASS GENERATOR">
+  <meta property="og:description" content="エントロピー解析機能付きローカルパスワード生成器">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="lab">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PASS GENERATOR">
+  <meta name="twitter:description" content="エントロピー解析機能付きローカルパスワード生成器">
+
+    
+  
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Labs",
+    "name": "PASS GENERATOR",
+    "headline": "PASS GENERATOR",
+    "description": "エントロピー解析機能付きローカルパスワード生成器",
+    
+    "inLanguage": "ja-JP",
+    "url" : "https:\/\/dtwant.github.io\/lab\/password-generator\/",
+    "author" : {
+      "@type": "Person",
+      "name": "dt"
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "105"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="dt" />
+  
+  
+  
+  
+  <link href="https://x.com/iambunnkei" rel="me" />
+  
+  
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+
+
+
+
+  
+  
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+   
+  
+   
+  .fixed.inset-0.z-40.flex,
+  .bg-neutral-800\/90, 
+  .bg-neutral-900\/90,
+  [x-show="mobileMenu"] {
+      background-color: #050505 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+  }
+
+   
+  nav ul li a {
+      font-family: 'Orbitron', sans-serif !important;  
+      color: #00f3ff !important;  
+      letter-spacing: 0.15em !important;
+      text-transform: uppercase !important;  
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.5) !important;
+      padding: 10px 0 !important;
+      border-bottom: 1px solid rgba(0, 243, 255, 0.1) !important;
+  }
+
+   
+  nav ul li a:hover {
+      color: #ff0055 !important;  
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.8) !important;
+      border-bottom-color: rgba(255, 0, 85, 0.5) !important;
+  }
+
+   
+  button[aria-label="Close menu"],
+  button[aria-label="Open menu"],
+  #menu button {
+      color: #00f3ff !important;
+  }
+
+   
+  ::-webkit-scrollbar {
+      width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+      background: #050505; 
+  }
+  ::-webkit-scrollbar-thumb {
+      background: #00f3ff; 
+      border-radius: 4px;
+  }
+</style>
+
+  
+  
+  
+  <meta name="theme-color"/>
+  
+  
+
+  
+  <script src="/js/dt-sync-gateway-client.js?v=20261118-stage4-v1"></script>
+  <script src="/js/dt-d1-cutover.js?v=20261118-score-book-v1"></script>
+  <script src="/js/dt-d1-recovery.js?v=20261023-overflow-backups-v4"></script>
+  <script src="/js/dt-d1-onboarding.js?v=20260923-d1-live-runtime-v5"></script>
+  <script src="/js/dt-d1-runtime.js?v=20261118-stage4-v1"></script>
+  <script src="/js/dt-d1-tool-bridge.js?v=20261119-bridge-v2"></script>
+  <script src="/js/dt-sync-panel.js?v=20261119-sync-panel-v26"></script>
+  <script>
+    
+    
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</head>
+<link rel="stylesheet" href="/css/lab-ui-system.min.e30d460949532cddd06db637f69207e6e10b6e4177197b7106c62ed82968559d.css" integrity="sha256-4w1GCUlTLN3QbbY39pIH5uELbkF3GXtxBsYu2CloVZ0="><script src="/js/lab-ui.min.03a060ddbcf489bca19a7b5dac14297350a2c8e8e70808d4923dfb945540efc1.js" integrity="sha256-A6Bg3bz0ibyhmntdrBQpc1CiyOjnCAjUkj37lFVA78E=" defer></script>
+  </head>
+  <body class="lab-body portal-body" data-lab-slug="password-generator">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+  
+
+
+
+
+
+<div id="search-wrapper" style="display:none" aria-hidden="true">
+      <div id="search-modal"></div>
+      <input id="search-query" />
+      <button id="close-search-button" type="button"></button>
+      <div id="search-results"><div></div></div>
+    </div>
+    <main id="main-content" class="lab-shell" data-lab-slug="password-generator">
+      <div class="lab-toolbar lab-glass" role="navigation" aria-label="LABツール操作">
+        <a class="lab-exit" href="/lab/" aria-label="LAB一覧へ戻る">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+          <span>戻る</span>
+        </a>
+        <div class="lab-toolbar-title">
+          <span class="lab-toolbar-kicker">DT // LAB</span>
+          <strong>PASS GENERATOR</strong>
+        </div>
+      </div>
+      <article class="lab-article">
+        <div class="lab-content"><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1+Code:wght@400;500;600;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style data-forge="password-generator">
+ 
+
+.sr-hub[data-tool-root="password-generator"] {
+   
+  --pg-bg-deep: #090414;
+  --pg-glass: rgba(14, 7, 29, 0.86);
+  --pg-glass-elevated: rgba(22, 13, 43, 0.9);
+  --pg-glass-chamber: rgba(9, 4, 20, 0.92);
+  --pg-glass-hover: rgba(30, 19, 56, 0.92);
+
+   
+  --pg-cyan: #00f3ff;
+  --pg-cyan-dim: rgba(0, 243, 255, 0.14);
+  --pg-cyan-border: rgba(0, 243, 255, 0.56);
+  --pg-ink-on-cyan: #070312;
+
+  --pg-purple: #bc13fe;
+  --pg-purple-dim: rgba(188, 19, 254, 0.15);
+  --pg-purple-border: rgba(188, 19, 254, 0.58);
+
+   
+  --pg-pink: #ff0055;
+  --pg-pink-dim: rgba(255, 0, 85, 0.14);
+  --pg-pink-border: rgba(255, 0, 85, 0.72);
+
+   
+  --pg-text-primary: #f4f7ff;     
+  --pg-text-secondary: #c3cfe6;   
+  --pg-text-muted: #a4b4d2;       
+
+   
+  --pg-ch-letter: #f4f7ff;        
+  --pg-ch-digit: #00f3ff;         
+  --pg-ch-symbol: #de8aff;        
+  --pg-ch-over: #ff6398;          
+
+   
+  --pg-border-subtle: rgba(132, 120, 186, 0.44);
+  --pg-border-control: #6e6494;   
+
+   
+  --pg-rail-accent: var(--pg-cyan);
+  --pg-bracket-color: var(--pg-cyan);
+
+   
+  --pg-font-display: 'Orbitron', 'M PLUS 1 Code', sans-serif;
+  --pg-font-mono: 'M PLUS 1 Code', ui-monospace, 'Cascadia Mono', 'SFMono-Regular', monospace;
+  --pg-radius-outer: 4px;
+  --pg-radius-inner: 2px;
+  --pg-bracket-size: 12px;
+  --pg-bracket-weight: 2px;
+  --pg-ease-tactile: cubic-bezier(0.2, 0, 0, 1);
+
+   
+  --pg-icon-check: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='square' stroke-linejoin='miter'><polyline points='20 6 9 17 4 12'/></svg>");
+  --pg-icon-chevron: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='square' stroke-linejoin='miter'><polyline points='6 9 12 15 18 9'/></svg>");
+
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100dvh;
+  overflow-x: clip;
+  color-scheme: dark;
+  background-color: var(--pg-bg-deep);
+  color: var(--pg-text-primary);
+  font-family: var(--pg-font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  line-break: strict;
+  font-feature-settings: "kern" 1;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+.sr-hub[data-tool-root="password-generator"] *,
+.sr-hub[data-tool-root="password-generator"] *::before,
+.sr-hub[data-tool-root="password-generator"] *::after {
+  box-sizing: border-box;
+}
+
+.sr-hub[data-tool-root="password-generator"] [hidden] {
+  display: none !important;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"][data-preset="overdrive"] {
+  --pg-rail-accent: var(--pg-pink);
+  --pg-bracket-color: var(--pg-pink);
+}
+
+.sr-hub[data-tool-root="password-generator"][data-mode="passphrase"] {
+  --pg-rail-accent: var(--pg-purple);
+  --pg-bracket-color: var(--pg-purple);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .sr-bg,
+.sr-hub[data-tool-root="password-generator"] .sr-grid,
+.sr-hub[data-tool-root="password-generator"] .sr-scanline,
+.sr-hub[data-tool-root="password-generator"] .sr-vignette,
+.sr-hub[data-tool-root="password-generator"] .sr-particle {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sr-hub[data-tool-root="password-generator"] .sr-bg {
+  background-color: var(--pg-bg-deep);
+  background-size: cover;
+  background-position: center;
+  filter: saturate(1.1) brightness(0.42) contrast(1.08);
+}
+
+.sr-hub[data-tool-root="password-generator"] .sr-grid {
+  background-image:
+    linear-gradient(to right, rgba(0, 243, 255, 0.085) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(188, 19, 254, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(560px) rotateX(60deg) translateY(24%);
+  transform-origin: center bottom;
+  opacity: 0.72;
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.35) 55%, transparent 100%);
+}
+
+.sr-hub[data-tool-root="password-generator"] .sr-scanline {
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 243, 255, 0.03) 2px,
+    rgba(0, 243, 255, 0.03) 4px
+  );
+}
+
+.sr-hub[data-tool-root="password-generator"] .sr-vignette {
+  background:
+    radial-gradient(ellipse 85% 65% at 50% 18%, rgba(188, 19, 254, 0.14), transparent 65%),
+    radial-gradient(circle at 50% 50%, transparent 45%, rgba(7, 3, 18, 0.88) 100%);
+}
+
+.sr-hub[data-tool-root="password-generator"] .sr-particle {
+  background-image:
+    radial-gradient(1.5px 1.5px at 14% 22%, rgba(0, 243, 255, 0.45), transparent),
+    radial-gradient(1.5px 1.5px at 84% 18%, rgba(188, 19, 254, 0.45), transparent),
+    radial-gradient(1px 1px at 72% 68%, rgba(0, 243, 255, 0.32), transparent),
+    radial-gradient(1px 1px at 26% 78%, rgba(188, 19, 254, 0.32), transparent);
+  opacity: 0.65;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-shell {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 960px;
+  margin-inline: auto;
+  padding: 12px 12px calc(28px + env(safe-area-inset-bottom, 0px));
+  display: grid;
+  gap: 12px;
+}
+
+.sr-hub[data-tool-root="password-generator"] .sr-header {
+  display: grid;
+  gap: 4px;
+  padding: 8px 2px 4px;
+  border-bottom: 1px solid rgba(188, 19, 254, 0.35);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--pg-font-display);
+  font-size: 0.6875rem;  
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--pg-cyan);
+  text-transform: uppercase;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-kicker::before {
+  content: "";
+  inline-size: 6px;
+  block-size: 6px;
+  background-color: var(--pg-cyan);
+  box-shadow: 0 0 8px rgba(0, 243, 255, 0.75);
+  flex-shrink: 0;
+}
+
+.sr-hub[data-tool-root="password-generator"] .sr-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.6875rem;  
+  color: var(--pg-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-hub[data-tool-root="password-generator"] #sec-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--pg-cyan);
+  font-weight: 600;
+}
+
+.sr-hub[data-tool-root="password-generator"] #sec-indicator::before {
+  content: "";
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 50%;
+  background-color: var(--pg-cyan);
+}
+
+.sr-hub[data-tool-root="password-generator"] #sr-uptime {
+  color: var(--pg-text-muted);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sr-hub[data-tool-root="password-generator"] h1.sr-title {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: break-word;
+  font-family: var(--pg-font-display);
+  font-size: clamp(1.2rem, 5vw, 1.75rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  font-feature-settings: "palt" 1, "kern" 1;
+  color: var(--pg-text-primary);
+  text-transform: uppercase;
+}
+
+.sr-hub[data-tool-root="password-generator"] .sr-subtitle {
+  margin: 0;
+  font-size: 0.75rem;  
+  line-height: 1.4;
+  color: var(--pg-text-muted);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-forge-deck {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  background-color: var(--pg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--pg-purple-border);
+  border-radius: var(--pg-radius-outer);
+  box-shadow:
+    inset 0 1px 0 rgba(0, 243, 255, 0.22),
+    inset 0 -1px 0 rgba(188, 19, 254, 0.28),
+    0 16px 40px rgba(4, 1, 12, 0.65);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-chamber-wrap {
+  display: grid;
+  gap: 0;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-display-box {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px 14px;
+  background-color: var(--pg-glass-chamber);
+  border: 1px solid var(--pg-border-subtle);
+  border-bottom: 0;
+  border-radius: var(--pg-radius-inner) var(--pg-radius-inner) 0 0;
+  transition: border-color 180ms var(--pg-ease-tactile);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-display-box::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background:
+     
+    linear-gradient(var(--pg-bracket-color), var(--pg-bracket-color)) 0 0 / var(--pg-bracket-size) var(--pg-bracket-weight),
+    linear-gradient(var(--pg-bracket-color), var(--pg-bracket-color)) 0 0 / var(--pg-bracket-weight) var(--pg-bracket-size),
+     
+    linear-gradient(var(--pg-bracket-color), var(--pg-bracket-color)) 100% 0 / var(--pg-bracket-size) var(--pg-bracket-weight),
+    linear-gradient(var(--pg-bracket-color), var(--pg-bracket-color)) 100% 0 / var(--pg-bracket-weight) var(--pg-bracket-size),
+     
+    linear-gradient(var(--pg-bracket-color), var(--pg-bracket-color)) 0 100% / var(--pg-bracket-size) var(--pg-bracket-weight),
+    linear-gradient(var(--pg-bracket-color), var(--pg-bracket-color)) 0 100% / var(--pg-bracket-weight) var(--pg-bracket-size),
+     
+    linear-gradient(var(--pg-bracket-color), var(--pg-bracket-color)) 100% 100% / var(--pg-bracket-size) var(--pg-bracket-weight),
+    linear-gradient(var(--pg-bracket-color), var(--pg-bracket-color)) 100% 100% / var(--pg-bracket-weight) var(--pg-bracket-size);
+  background-repeat: no-repeat;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-display-box.is-overdrive {
+  --pg-bracket-color: var(--pg-pink);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-chamber-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-chamber-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-chamber-label {
+  font-family: var(--pg-font-display);
+  font-size: 0.6875rem;  
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--pg-text-muted);
+  text-transform: uppercase;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-copied-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--pg-radius-inner);
+  background-color: var(--pg-cyan);
+  color: var(--pg-ink-on-cyan);
+  font-family: var(--pg-font-display);
+  font-size: 0.6875rem;  
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-copied-pill::before {
+  content: "✓";
+  font-family: var(--pg-font-mono);
+  font-weight: 700;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding: 0 10px;
+  gap: 6px;
+  border: 1px solid var(--pg-border-control);
+  border-radius: var(--pg-radius-inner);
+  background-color: rgba(22, 13, 43, 0.72);
+  color: var(--pg-text-secondary);
+  font-family: var(--pg-font-display);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 140ms var(--pg-ease-tactile), border-color 140ms var(--pg-ease-tactile), color 140ms var(--pg-ease-tactile), transform 110ms var(--pg-ease-tactile);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-icon-btn svg {
+  inline-size: 18px;
+  block-size: 18px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.75;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-icon-btn[aria-pressed="true"] {
+  border-color: var(--pg-cyan);
+  background-color: var(--pg-cyan-dim);
+  color: var(--pg-cyan);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-icon-btn:active {
+  transform: scale(0.96);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-display {
+  margin: 0;
+  min-block-size: 3.1em;
+  padding: 6px 2px 4px;
+  font-family: var(--pg-font-mono);
+  font-size: clamp(1.125rem, 4.8vw, 1.5625rem);  
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: var(--pg-ch-letter);
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  font-variant-ligatures: none;
+  user-select: text;
+  transition: filter 160ms var(--pg-ease-tactile), opacity 160ms var(--pg-ease-tactile);
+}
+
+.sr-hub[data-tool-root="password-generator"][data-mode="passphrase"] #pg-display {
+  word-break: normal;
+  overflow-wrap: anywhere;
+  letter-spacing: 0.02em;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-ch-letter {
+  color: var(--pg-ch-letter);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-ch-digit {
+  color: var(--pg-ch-digit);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-ch-symbol {
+  color: var(--pg-ch-symbol);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-ch-over {
+  color: var(--pg-ch-over);
+  text-shadow: 0 0 8px rgba(255, 0, 85, 0.38);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-display.is-masked,
+.sr-hub[data-tool-root="password-generator"] #pg-display[data-masked="true"] {
+  filter: blur(7px);
+  user-select: none;
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-display.is-wiped,
+.sr-hub[data-tool-root="password-generator"] #pg-display:empty {
+  display: flex;
+  align-items: center;
+  color: var(--pg-text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-display:empty::before {
+  content: "CHAMBER WIPED // PRESS REGEN";
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-power-rail {
+  position: relative;
+  block-size: 6px;
+  background-color: rgba(14, 7, 29, 0.96);
+  border-inline: 1px solid var(--pg-border-subtle);
+  background-image:
+    linear-gradient(to right, var(--pg-rail-accent) 0%, var(--pg-purple) 100%),
+    repeating-linear-gradient(
+      to right,
+      transparent 0px,
+      transparent 7px,
+      rgba(9, 4, 20, 0.88) 7px,
+      rgba(9, 4, 20, 0.88) 9px
+    );
+  background-size: 100% 2px, 100% 100%;
+  background-position: left bottom, left top;
+  background-repeat: no-repeat, repeat;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-entropy-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  background-color: rgba(18, 10, 36, 0.92);
+  border: 1px solid var(--pg-border-subtle);
+  border-top: 0;
+  border-radius: 0 0 var(--pg-radius-inner) var(--pg-radius-inner);
+  font-size: 0.8125rem;  
+  font-variant-numeric: tabular-nums;
+  color: var(--pg-text-secondary);
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-entropy {
+  font-weight: 600;
+  color: var(--pg-text-primary);
+  letter-spacing: 0.02em;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-entropy-line.is-weak,
+.sr-hub[data-tool-root="password-generator"] #pg-entropy-line[data-warn="true"],
+.sr-hub[data-tool-root="password-generator"] #pg-entropy-line[data-level="low"] {
+  border-color: var(--pg-pink-border);
+  background-color: var(--pg-pink-dim);
+  color: var(--pg-ch-over);
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-entropy-line.is-weak #pg-entropy,
+.sr-hub[data-tool-root="password-generator"] #pg-entropy-line[data-warn="true"] #pg-entropy,
+.sr-hub[data-tool-root="password-generator"] #pg-entropy-line[data-level="low"] #pg-entropy,
+.sr-hub[data-tool-root="password-generator"] #pg-entropy.is-weak {
+  color: var(--pg-ch-over);
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-entropy-line.is-weak #pg-entropy::after,
+.sr-hub[data-tool-root="password-generator"] #pg-entropy-line[data-warn="true"] #pg-entropy::after,
+.sr-hub[data-tool-root="password-generator"] #pg-entropy-line[data-level="low"] #pg-entropy::after {
+  content: "  [!] <64b";
+  font-family: var(--pg-font-display);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--pg-ch-over);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-char-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;  
+  font-weight: 600;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-action-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1.05fr) auto;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-copy-btn,
+.sr-hub[data-tool-root="password-generator"] .pg-gen-btn,
+.sr-hub[data-tool-root="password-generator"] #pg-wipe {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-block-size: 48px;
+  padding: 0 12px;
+  border-radius: var(--pg-radius-inner);
+  font-family: var(--pg-font-display);
+  font-size: 0.8125rem;  
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 140ms var(--pg-ease-tactile), border-color 140ms var(--pg-ease-tactile), color 140ms var(--pg-ease-tactile), box-shadow 140ms var(--pg-ease-tactile), transform 110ms var(--pg-ease-tactile);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-action-bar svg {
+  inline-size: 16px;
+  block-size: 16px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-copy-btn {
+  border: 1.5px solid var(--pg-cyan);
+  background-color: var(--pg-cyan);
+  color: var(--pg-ink-on-cyan);
+  box-shadow: 0 0 18px rgba(0, 243, 255, 0.28);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-gen-btn {
+  border: 1.5px solid var(--pg-cyan);
+  background-color: rgba(0, 243, 255, 0.08);
+  color: var(--pg-cyan);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-wipe {
+  min-inline-size: 56px;
+  padding-inline: 10px;
+  border: 1px solid var(--pg-border-control);
+  background-color: rgba(22, 13, 43, 0.82);
+  color: var(--pg-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-copy-btn:active,
+.sr-hub[data-tool-root="password-generator"] .pg-gen-btn:active,
+.sr-hub[data-tool-root="password-generator"] #pg-wipe:active {
+  transform: scale(0.96);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 4px;
+  background-color: rgba(9, 4, 20, 0.78);
+  border: 1px solid var(--pg-border-subtle);
+  border-radius: var(--pg-radius-inner);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-block-size: 44px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--pg-radius-inner);
+  background-color: transparent;
+  color: var(--pg-text-muted);
+  font-family: var(--pg-font-display);
+  font-size: 0.75rem;  
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 140ms var(--pg-ease-tactile), border-color 140ms var(--pg-ease-tactile), color 140ms var(--pg-ease-tactile), transform 110ms var(--pg-ease-tactile);
+}
+
+.sr-hub[data-tool-root="password-generator"] #tab-random:is(.active, .is-active, [aria-selected="true"], [aria-pressed="true"]) {
+  border-color: var(--pg-cyan-border);
+  background-color: var(--pg-cyan-dim);
+  color: var(--pg-cyan);
+}
+
+.sr-hub[data-tool-root="password-generator"] #tab-passphrase:is(.active, .is-active, [aria-selected="true"], [aria-pressed="true"]) {
+  border-color: var(--pg-purple-border);
+  background-color: var(--pg-purple-dim);
+  color: var(--pg-ch-symbol);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-tab-btn:active {
+  transform: scale(0.96);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-random-controls {
+  display: grid;
+  gap: 10px;
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-preset-deck {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-preset-deck:has(> :nth-child(4)) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-preset {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  min-block-size: 48px;
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1px solid var(--pg-border-control);
+  border-radius: var(--pg-radius-inner);
+  background-color: rgba(16, 9, 32, 0.85);
+  color: var(--pg-text-secondary);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 140ms var(--pg-ease-tactile), border-color 140ms var(--pg-ease-tactile), color 140ms var(--pg-ease-tactile), transform 110ms var(--pg-ease-tactile);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-preset-name {
+  font-family: var(--pg-font-display);
+  font-size: 0.71875rem;  
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  color: var(--pg-text-primary);
+  text-transform: uppercase;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-preset-meta {
+  font-size: 0.6875rem;  
+  line-height: 1.2;
+  color: var(--pg-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-preset:is(.active, .is-active, [aria-pressed="true"]) {
+  border-color: var(--pg-cyan);
+  background-color: var(--pg-cyan-dim);
+  box-shadow: inset 0 2px 0 var(--pg-cyan);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-preset:is(.active, .is-active, [aria-pressed="true"]) .pg-preset-name {
+  color: var(--pg-cyan);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-preset[data-preset="overdrive"] {
+  border-color: rgba(255, 0, 85, 0.48);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-preset[data-preset="overdrive"] .pg-preset-name {
+  color: var(--pg-ch-over);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-preset[data-preset="overdrive"]:is(.active, .is-active, [aria-pressed="true"]) {
+  border-color: var(--pg-pink);
+  background-color: var(--pg-pink-dim);
+  box-shadow: inset 0 2px 0 var(--pg-pink);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-preset:active {
+  transform: scale(0.96);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-quicklen-bar {
+  display: grid;
+  grid-template-columns: auto repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: 8px;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-quicklen-label {
+  font-family: var(--pg-font-display);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--pg-text-muted);
+  text-transform: uppercase;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-quicklen {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 44px;
+  padding: 0 8px;
+  border: 1px solid var(--pg-border-control);
+  border-radius: var(--pg-radius-inner);
+  background-color: rgba(16, 9, 32, 0.8);
+  color: var(--pg-text-secondary);
+  font-family: var(--pg-font-mono);
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 140ms var(--pg-ease-tactile), border-color 140ms var(--pg-ease-tactile), color 140ms var(--pg-ease-tactile), transform 110ms var(--pg-ease-tactile);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-quicklen:is(.active, .is-active, [aria-pressed="true"]) {
+  border-color: var(--pg-cyan);
+  background-color: var(--pg-cyan-dim);
+  color: var(--pg-cyan);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-quicklen:active {
+  transform: scale(0.96);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-overdrive-warn,
+.sr-hub[data-tool-root="password-generator"] #pg-guard-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 9px 11px;
+  border: 1px solid var(--pg-pink-border);
+  border-left: 3px solid var(--pg-pink);
+  border-radius: var(--pg-radius-inner);
+  background-color: var(--pg-pink-dim);
+  color: var(--pg-ch-over);
+  font-size: 0.8125rem;  
+  line-height: 1.5;
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-overdrive-warn:empty,
+.sr-hub[data-tool-root="password-generator"] #pg-guard-msg:empty {
+  display: none;
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-overdrive-warn::before,
+.sr-hub[data-tool-root="password-generator"] #pg-guard-msg::before {
+  content: "[!]";
+  font-family: var(--pg-font-display);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--pg-pink);
+  flex-shrink: 0;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-phrase-controls {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  background-color: rgba(18, 9, 38, 0.85);
+  border: 1px solid var(--pg-purple-border);
+  border-radius: var(--pg-radius-inner);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-phrase-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-field-label {
+  font-family: var(--pg-font-display);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--pg-ch-symbol);
+  text-transform: uppercase;
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-sep {
+  appearance: none;
+  -webkit-appearance: none;
+  inline-size: 100%;
+  min-block-size: 44px;
+  padding: 8px 38px 8px 12px;
+  border: 1px solid var(--pg-border-control);
+  border-radius: var(--pg-radius-inner);
+  background-color: var(--pg-glass-chamber);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300f3ff' stroke-width='2.5' stroke-linecap='square'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+  color: var(--pg-text-primary);
+  font-family: var(--pg-font-mono);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-sep option {
+  background-color: #0e071d;
+  color: #f4f7ff;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-phrase-note {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--pg-text-muted);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-tuning {
+  border: 1px solid var(--pg-border-control);
+  border-radius: var(--pg-radius-inner);
+  background-color: rgba(12, 6, 26, 0.82);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-tuning[open] {
+  border-color: var(--pg-cyan-border);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-tuning > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-block-size: 48px;
+  padding: 10px 12px;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  font-family: var(--pg-font-display);
+  font-size: 0.75rem;  
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--pg-text-primary);
+  text-transform: uppercase;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-tuning > summary::-webkit-details-marker {
+  display: none;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-tuning > summary::before {
+  content: "";
+  inline-size: 16px;
+  block-size: 16px;
+  flex-shrink: 0;
+  background-color: var(--pg-cyan);
+  mask: var(--pg-icon-chevron) no-repeat center / contain;
+  -webkit-mask: var(--pg-icon-chevron) no-repeat center / contain;
+  rotate: -90deg;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-tuning[open] > summary::before {
+  rotate: 0deg;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-tuning-summary-meta {
+  margin-inline-start: auto;
+  font-family: var(--pg-font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--pg-text-muted);
+  text-transform: none;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-tuning::details-content {
+  interpolate-size: allow-keywords;
+  overflow: clip;
+  contain: layout;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-tuning:not([open])::details-content {
+  block-size: 0;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-tuning-body {
+  display: grid;
+  gap: 14px;
+  padding: 12px;
+  border-top: 1px solid var(--pg-border-subtle);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-slider-group {
+  display: grid;
+  gap: 6px;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-slider-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sr-hub[data-tool-root="password-generator"] #slider-label-text {
+  font-family: var(--pg-font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--pg-text-secondary);
+  text-transform: uppercase;
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-len-val {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 3ch;
+  padding: 2px 8px;
+  border: 1px solid var(--pg-cyan-border);
+  border-radius: var(--pg-radius-inner);
+  background-color: var(--pg-cyan-dim);
+  color: var(--pg-cyan);
+  font-family: var(--pg-font-mono);
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-len.pg-slider {
+  --slider-track-size: 6px;
+  --slider-thumb-size: 22px;
+  --slider-track-color: #3a3259;  
+  --slider-fill-color: var(--pg-cyan);
+  --slider-thumb-color: var(--pg-cyan);
+  --attr-min: 8;
+  --attr-max: 64;
+  --control-value: 20;
+  --slider-progress: calc(
+    progress(var(--control-value), var(--attr-min), var(--attr-max)) * 100%
+  );
+
+  appearance: none;
+  -webkit-appearance: none;
+  inline-size: 100%;
+  block-size: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+
+@supports not (opacity: progress(1, 0, 100)) {
+  .sr-hub[data-tool-root="password-generator"] #pg-len.pg-slider {
+    --slider-progress: calc(
+      (var(--control-value) - var(--attr-min)) /
+      (var(--attr-max) - var(--attr-min)) * 100%
+    );
+  }
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-len.pg-slider::-webkit-slider-runnable-track {
+  block-size: var(--slider-track-size);
+  border: 0;
+  border-radius: 1px;
+  background: linear-gradient(
+    to right,
+    var(--slider-fill-color) var(--slider-progress),
+    var(--slider-track-color) var(--slider-progress)
+  );
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-len.pg-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  inline-size: var(--slider-thumb-size);
+  block-size: var(--slider-thumb-size);
+  margin-block-start: calc((var(--slider-track-size) - var(--slider-thumb-size)) / 2);
+  border: 2px solid var(--pg-ink-on-cyan);
+  border-radius: 2px;
+  background-color: var(--slider-thumb-color);
+  box-shadow: 0 0 0 1px var(--pg-cyan), 0 0 10px rgba(0, 243, 255, 0.5);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-len.pg-slider::-moz-range-track {
+  block-size: var(--slider-track-size);
+  border: 0;
+  border-radius: 1px;
+  background-color: var(--slider-track-color);
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-len.pg-slider::-moz-range-progress {
+  block-size: var(--slider-track-size);
+  border-radius: 1px;
+  background-color: var(--slider-fill-color);
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-len.pg-slider::-moz-range-thumb {
+  inline-size: var(--slider-thumb-size);
+  block-size: var(--slider-thumb-size);
+  border: 2px solid var(--pg-ink-on-cyan);
+  border-radius: 2px;
+  background-color: var(--slider-thumb-color);
+  box-shadow: 0 0 0 1px var(--pg-cyan);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: var(--pg-text-muted);
+  font-variant-numeric: tabular-nums;
+  padding-inline: 2px;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #pg-options-area.pg-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-checkbox-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-block-size: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--pg-border-control);
+  border-radius: var(--pg-radius-inner);
+  background-color: rgba(18, 10, 36, 0.8);
+  color: var(--pg-text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  transition: background-color 140ms var(--pg-ease-tactile), border-color 140ms var(--pg-ease-tactile), color 140ms var(--pg-ease-tactile);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-checkbox-label--full {
+  grid-column: 1 / -1;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-checkbox-label > input[type="checkbox"] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-custom-box {
+  display: inline-grid;
+  place-content: center;
+  inline-size: 18px;
+  block-size: 18px;
+  flex-shrink: 0;
+  border: 2px solid var(--pg-border-control);
+  border-radius: var(--pg-radius-inner);
+  background-color: var(--pg-glass-chamber);
+  transition: background-color 140ms var(--pg-ease-tactile), border-color 140ms var(--pg-ease-tactile);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-custom-box::before {
+  content: "";
+  inline-size: 12px;
+  block-size: 12px;
+  background-color: var(--pg-ink-on-cyan);
+  mask: var(--pg-icon-check) no-repeat center / contain;
+  -webkit-mask: var(--pg-icon-check) no-repeat center / contain;
+  scale: 0;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-checkbox-label:has(> input:checked) {
+  border-color: var(--pg-cyan-border);
+  background-color: var(--pg-cyan-dim);
+  color: var(--pg-text-primary);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-checkbox-label > input:checked + .pg-custom-box {
+  border-color: var(--pg-cyan);
+  background-color: var(--pg-cyan);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-checkbox-label > input:checked + .pg-custom-box::before {
+  scale: 1;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-checkbox-label--overdrive:has(> input:checked) {
+  border-color: var(--pg-pink-border);
+  background-color: var(--pg-pink-dim);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-checkbox-label--overdrive > input:checked + .pg-custom-box {
+  border-color: var(--pg-pink);
+  background-color: var(--pg-pink);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-checkbox-label--overdrive > input:checked + .pg-custom-box::before {
+  background-color: #ffffff;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-opt-text {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-opt-title {
+  font-weight: 600;
+  color: var(--pg-text-primary);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-opt-sample {
+  font-size: 0.6875rem;
+  color: var(--pg-text-muted);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-checkbox-label:has(> input:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-honesty {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  background-color: rgba(14, 7, 29, 0.78);
+  border: 1px solid var(--pg-border-subtle);
+  border-left: 2px solid var(--pg-purple);
+  border-radius: var(--pg-radius-inner);
+  font-size: 0.75rem;  
+  line-height: 1.65;
+  color: var(--pg-text-muted);
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-honesty-title {
+  font-family: var(--pg-font-display);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--pg-text-secondary);
+  text-transform: uppercase;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-honesty p {
+  margin: 0;
+}
+
+.sr-hub[data-tool-root="password-generator"] .sr-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 4px 2px 0;
+  font-size: 0.6875rem;
+  color: var(--pg-text-muted);
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] #sr-toast-container {
+  position: fixed;
+  inset-inline: 12px;
+  inset-block-end: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 90;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.sr-hub[data-tool-root="password-generator"] #sr-toast {
+  max-inline-size: min(420px, 100%);
+  padding: 10px 16px;
+  border: 1px solid var(--pg-cyan);
+  border-left: 4px solid var(--pg-cyan);
+  border-radius: var(--pg-radius-inner);
+  background-color: rgba(14, 7, 29, 0.95);
+  color: var(--pg-text-primary);
+  font-family: var(--pg-font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.65);
+  opacity: 0;
+  transform: translateY(10px);
+  visibility: hidden;
+  transition: opacity 180ms var(--pg-ease-tactile), transform 180ms var(--pg-ease-tactile), visibility 180ms;
+}
+
+.sr-hub[data-tool-root="password-generator"] #sr-toast:is(.show, .is-visible, [data-visible="true"]) {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+ 
+.sr-hub[data-tool-root="password-generator"] :is(button, select, summary, input[type="range"]):focus-visible {
+  outline: 2px solid var(--pg-cyan);
+  outline-offset: 2px;
+}
+
+.sr-hub[data-tool-root="password-generator"] #pg-len.pg-slider:focus-visible {
+  outline: 2px solid var(--pg-cyan);
+  outline-offset: 4px;
+}
+
+.sr-hub[data-tool-root="password-generator"] .pg-checkbox-label:has(> input:focus-visible) {
+  outline: 2px solid var(--pg-cyan);
+  outline-offset: 2px;
+}
+
+ 
+@media (hover: hover) {
+  .sr-hub[data-tool-root="password-generator"] .pg-copy-btn:hover {
+    background-color: #4df8ff;
+    border-color: #4df8ff;
+    box-shadow: 0 0 22px rgba(0, 243, 255, 0.45);
+  }
+
+  .sr-hub[data-tool-root="password-generator"] .pg-gen-btn:hover {
+    background-color: rgba(0, 243, 255, 0.18);
+  }
+
+  .sr-hub[data-tool-root="password-generator"] #pg-wipe:hover,
+  .sr-hub[data-tool-root="password-generator"] .pg-icon-btn:hover,
+  .sr-hub[data-tool-root="password-generator"] .pg-preset:hover,
+  .sr-hub[data-tool-root="password-generator"] .pg-quicklen:hover,
+  .sr-hub[data-tool-root="password-generator"] .pg-checkbox-label:hover {
+    background-color: var(--pg-glass-hover);
+    border-color: var(--pg-cyan-border);
+  }
+
+  .sr-hub[data-tool-root="password-generator"] .pg-preset[data-preset="overdrive"]:hover {
+    border-color: var(--pg-pink);
+  }
+
+  .sr-hub[data-tool-root="password-generator"] .pg-tuning > summary:hover {
+    background-color: rgba(0, 243, 255, 0.06);
+  }
+}
+
+ 
+@media (min-width: 640px) {
+  .sr-hub[data-tool-root="password-generator"] .pg-shell {
+    padding: 24px 24px 48px;
+    gap: 16px;
+  }
+
+  .sr-hub[data-tool-root="password-generator"] .pg-forge-deck {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .sr-hub[data-tool-root="password-generator"] .pg-display-box {
+    padding: 14px 18px 18px;
+  }
+
+  .sr-hub[data-tool-root="password-generator"] .pg-action-bar {
+    grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr) 108px;
+    gap: 10px;
+  }
+
+  .sr-hub[data-tool-root="password-generator"] #pg-preset-deck:has(> :nth-child(4)) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .sr-hub[data-tool-root="password-generator"] #pg-options-area.pg-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .sr-hub[data-tool-root="password-generator"] .pg-phrase-row {
+    grid-template-columns: 160px minmax(0, 1fr);
+    align-items: center;
+  }
+}
+
+ 
+@media (prefers-reduced-motion: no-preference) {
+  .sr-hub[data-tool-root="password-generator"] .pg-tuning > summary::before {
+    transition: rotate 180ms var(--pg-ease-tactile);
+  }
+
+  .sr-hub[data-tool-root="password-generator"] .pg-tuning::details-content {
+    transition: block-size 220ms var(--pg-ease-tactile), content-visibility 220ms var(--pg-ease-tactile);
+    transition-behavior: allow-discrete;
+  }
+
+  .sr-hub[data-tool-root="password-generator"] .pg-custom-box::before {
+    transition: scale 130ms var(--pg-ease-tactile);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sr-hub[data-tool-root="password-generator"] *,
+  .sr-hub[data-tool-root="password-generator"] *::before,
+  .sr-hub[data-tool-root="password-generator"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+ 
+@media (forced-colors: active) {
+  .sr-hub[data-tool-root="password-generator"] .pg-forge-deck,
+  .sr-hub[data-tool-root="password-generator"] .pg-display-box,
+  .sr-hub[data-tool-root="password-generator"] #pg-entropy-line,
+  .sr-hub[data-tool-root="password-generator"] .pg-tuning {
+    background-color: Canvas;
+    color: CanvasText;
+    border: 1px solid ButtonBorder;
+    box-shadow: none;
+  }
+
+  .sr-hub[data-tool-root="password-generator"] .pg-copy-btn,
+  .sr-hub[data-tool-root="password-generator"] .pg-preset:is(.active, .is-active, [aria-pressed="true"]),
+  .sr-hub[data-tool-root="password-generator"] .pg-tab-btn:is(.active, .is-active, [aria-selected="true"], [aria-pressed="true"]) {
+    border: 2px solid Highlight;
+  }
+
+  .sr-hub[data-tool-root="password-generator"] .pg-custom-box::before,
+  .sr-hub[data-tool-root="password-generator"] .pg-tuning > summary::before {
+    background-color: CanvasText;
+  }
+}
+</style>
+
+<style data-chrome-hide="password-generator">
+body:has(.sr-hub[data-tool-root="password-generator"]) { background: #090414 !important; max-width: none !important; padding: 0 !important; display: block !important; margin: 0 !important; }
+body:has(.sr-hub[data-tool-root="password-generator"]) .main-menu,
+body:has(.sr-hub[data-tool-root="password-generator"]) [class*="min-h-[148px]"],
+body:has(.sr-hub[data-tool-root="password-generator"]) article > header,
+body:has(.sr-hub[data-tool-root="password-generator"]) #site-footer,
+body:has(.sr-hub[data-tool-root="password-generator"]) #scroll-to-top { display: none !important; }
+ 
+body:not(.lab-body):has(.sr-hub[data-tool-root="password-generator"]) #main-content,
+body:not(.lab-body):has(.sr-hub[data-tool-root="password-generator"]) #main-content > article { margin: 0 !important; padding: 0 !important; max-width: none !important; }
+h1:not(.sr-title) { display: none !important; }
+ 
+.sr-hub[data-tool-root="password-generator"] .pg-copy-btn,
+.sr-hub[data-tool-root="password-generator"] .pg-gen-btn,
+.sr-hub[data-tool-root="password-generator"] #pg-wipe { height: 48px !important; }
+</style>
+
+<div class="sr-hub" data-tool-root="password-generator" data-mode="random" data-preset="safe">
+  
+  <div class="sr-bg" aria-hidden="true"></div>
+  <div class="sr-grid" aria-hidden="true"></div>
+  <div class="sr-scanline" aria-hidden="true"></div>
+  <div class="sr-vignette" aria-hidden="true"></div>
+  <div class="sr-particle" aria-hidden="true"></div>
+
+  
+  <div id="sr-toast-container" aria-live="polite" aria-atomic="true">
+    <div id="sr-toast" role="status"></div>
+  </div>
+
+  <div class="pg-shell">
+    
+    <header class="sr-header">
+      <div class="pg-header-top">
+        <span class="pg-kicker" translate="no">CRYPTO_FORGE // KEY_GEN</span>
+        <div class="sr-status" translate="no">
+          <span id="sec-indicator">CSPRNG</span>
+          <span id="sr-uptime">00:00:00</span>
+        </div>
+      </div>
+      <div class="pg-title-row">
+        <h1 class="sr-title" id="glitch-title" translate="no">PASSWORD GENERATOR</h1>
+        <p class="sr-subtitle">ローカル暗号乱数キー生成</p>
+      </div>
+    </header>
+
+    
+    <main class="pg-forge-deck">
+      
+      <section class="pg-chamber-wrap" aria-label="生成されたパスワード">
+        <div id="pg-display-box" class="pg-display-box">
+          <div class="pg-chamber-head">
+            <div class="pg-chamber-meta">
+              <span class="pg-chamber-label" translate="no">KEY_CHAMBER</span>
+              <span id="pg-copied-pill" aria-live="polite" hidden translate="no">COPIED</span>
+            </div>
+            <button
+              type="button"
+              id="pg-visibility-toggle"
+              class="pg-icon-btn"
+              aria-label="パスワードの表示・マスク切替"
+              aria-pressed="false"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <span translate="no">MASK</span>
+            </button>
+          </div>
+
+          
+          <div
+            id="pg-display"
+            role="region"
+            aria-label="生成パスワード出力"
+            aria-live="polite"
+            spellcheck="false"
+            translate="no"
+          ></div>
+        </div>
+
+        <div class="pg-power-rail" aria-hidden="true"></div>
+
+        
+        <div id="pg-entropy-line">
+          <span id="pg-entropy" translate="no">20 chars · 131 bits</span>
+          <span class="pg-char-legend" aria-hidden="true" translate="no">
+            <span class="pg-ch-letter">Aa</span>
+            <span class="pg-ch-digit">09</span>
+            <span class="pg-ch-symbol">#!</span>
+            <span class="pg-ch-over">Ω</span>
+          </span>
+        </div>
+      </section>
+
+      
+      <div class="pg-action-bar">
+        <button type="button" id="pg-copy" class="pg-copy-btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="1"/>
+            <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/>
+          </svg>
+          <span translate="no">COPY</span>
+        </button>
+        <button type="button" id="pg-generate" class="pg-gen-btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+            <polyline points="21 3 21 9 15 9"/>
+          </svg>
+          <span translate="no">REGEN</span>
+        </button>
+        <button type="button" id="pg-wipe" aria-label="表示中のキーを消去">
+          <span translate="no">WIPE</span>
+        </button>
+      </div>
+
+      
+      <div class="pg-mode-tabs" role="tablist" aria-label="生成モード">
+        <button
+          type="button"
+          id="tab-random"
+          class="pg-tab-btn is-active"
+          role="tab"
+          aria-selected="true"
+          translate="no"
+        >RANDOM</button>
+        <button
+          type="button"
+          id="tab-passphrase"
+          class="pg-tab-btn"
+          role="tab"
+          aria-selected="false"
+          translate="no"
+        >PASSPHRASE</button>
+      </div>
+
+      
+      <div class="pg-random-controls">
+        <div id="pg-preset-deck" role="group" aria-label="プリセット選択">
+          <button
+            type="button"
+            class="pg-preset is-active"
+            data-preset="safe"
+            aria-pressed="true"
+          >
+            <span class="pg-preset-name" translate="no">SAFE</span>
+            <span class="pg-preset-meta" translate="no">20 · SAFE SYM</span>
+          </button>
+          <button
+            type="button"
+            class="pg-preset"
+            data-preset="standard"
+            aria-pressed="false"
+          >
+            <span class="pg-preset-name" translate="no">STANDARD</span>
+            <span class="pg-preset-meta" translate="no">16 · A–Z 0–9</span>
+          </button>
+          <button
+            type="button"
+            class="pg-preset"
+            data-preset="overdrive"
+            aria-pressed="false"
+          >
+            <span class="pg-preset-name" translate="no">OVERDRIVE</span>
+            <span class="pg-preset-meta" translate="no">CYB + MATH</span>
+          </button>
+        </div>
+
+        <div class="pg-quicklen-bar" role="group" aria-label="長さクイック設定">
+          <span class="pg-quicklen-label" translate="no">LEN</span>
+          <button type="button" class="pg-quicklen" data-len="16" aria-pressed="false" translate="no">16</button>
+          <button type="button" class="pg-quicklen" data-len="24" aria-pressed="false" translate="no">24</button>
+          <button type="button" class="pg-quicklen" data-len="32" aria-pressed="false" translate="no">32</button>
+        </div>
+      </div>
+
+      
+      <div id="pg-overdrive-warn" role="status" aria-live="polite" hidden>
+        OVERDRIVE文字種（記号・数学記号）は一部サービスの入力制限で非対応となる場合があります。
+      </div>
+
+      
+      <section id="pg-phrase-controls" aria-label="パスフレーズ設定" hidden>
+        <div class="pg-phrase-row">
+          <label class="pg-field-label" for="pg-sep" translate="no">SEPARATOR</label>
+          <select id="pg-sep" name="pg-sep">
+            <option value="-" selected>Hyphen ( - )</option>
+            <option value="_">Underscore ( _ )</option>
+            <option value=".">Period ( . )</option>
+            <option value=" ">Space (   )</option>
+            <option value="">None</option>
+          </select>
+        </div>
+        <p class="pg-phrase-note">単語数は下の TUNING MATRIX 内スライダーで調整できます。</p>
+      </section>
+
+      
+      <details id="pg-tuning" class="pg-tuning">
+        <summary>
+          <span translate="no">TUNING MATRIX</span>
+          <span class="pg-tuning-summary-meta">文字種・長さ詳細</span>
+        </summary>
+
+        <div class="pg-tuning-body">
+          
+          <div class="pg-slider-group">
+            <div class="pg-slider-head">
+              <label id="slider-label-text" for="pg-len" translate="no">LENGTH</label>
+              <output id="pg-len-val" for="pg-len" translate="no">20</output>
+            </div>
+            <input
+              type="range"
+              id="pg-len"
+              class="pg-slider"
+              min="8"
+              max="64"
+              value="20"
+              aria-labelledby="slider-label-text"
+            >
+            <div class="pg-slider-ticks" aria-hidden="true" translate="no">
+              <span>MIN</span>
+              <span>STD</span>
+              <span>HIGH</span>
+              <span>MAX</span>
+            </div>
+          </div>
+
+          
+          <div id="pg-options-area" class="pg-options" role="group" aria-label="使用文字セット">
+            <label class="pg-checkbox-label">
+              <input type="checkbox" id="pg-opt-upper" checked>
+              <span class="pg-custom-box" aria-hidden="true"></span>
+              <span class="pg-opt-text">
+                <span class="pg-opt-title" translate="no">UPPER</span>
+                <span class="pg-opt-sample" translate="no">A–Z</span>
+              </span>
+            </label>
+
+            <label class="pg-checkbox-label">
+              <input type="checkbox" id="pg-opt-lower" checked>
+              <span class="pg-custom-box" aria-hidden="true"></span>
+              <span class="pg-opt-text">
+                <span class="pg-opt-title" translate="no">LOWER</span>
+                <span class="pg-opt-sample" translate="no">a–z</span>
+              </span>
+            </label>
+
+            <label class="pg-checkbox-label">
+              <input type="checkbox" id="pg-opt-num" checked>
+              <span class="pg-custom-box" aria-hidden="true"></span>
+              <span class="pg-opt-text">
+                <span class="pg-opt-title" translate="no">DIGITS</span>
+                <span class="pg-opt-sample" translate="no">0–9</span>
+              </span>
+            </label>
+
+            <label class="pg-checkbox-label">
+              <input type="checkbox" id="pg-opt-sym" checked>
+              <span class="pg-custom-box" aria-hidden="true"></span>
+              <span class="pg-opt-text">
+                <span class="pg-opt-title" translate="no">SAFE SYM</span>
+                <span class="pg-opt-sample" translate="no">!@#$%^&amp;*</span>
+              </span>
+            </label>
+
+            <label class="pg-checkbox-label pg-checkbox-label--overdrive">
+              <input type="checkbox" id="pg-opt-cyber">
+              <span class="pg-custom-box" aria-hidden="true"></span>
+              <span class="pg-opt-text">
+                <span class="pg-opt-title" translate="no">CYBER</span>
+                <span class="pg-opt-sample" translate="no">§¤†‡¥£€</span>
+              </span>
+            </label>
+
+            <label class="pg-checkbox-label pg-checkbox-label--overdrive">
+              <input type="checkbox" id="pg-opt-math">
+              <span class="pg-custom-box" aria-hidden="true"></span>
+              <span class="pg-opt-text">
+                <span class="pg-opt-title" translate="no">MATH</span>
+                <span class="pg-opt-sample" translate="no">±×÷≈≠≤≥∞</span>
+              </span>
+            </label>
+
+            <label class="pg-checkbox-label pg-checkbox-label--full">
+              <input type="checkbox" id="pg-opt-exclude-ambiguous">
+              <span class="pg-custom-box" aria-hidden="true"></span>
+              <span class="pg-opt-text">
+                <span class="pg-opt-title">紛らわしい文字を除外</span>
+                <span class="pg-opt-sample" translate="no">0 O 1 l I</span>
+              </span>
+            </label>
+          </div>
+
+          
+          <div id="pg-guard-msg" role="alert" hidden></div>
+        </div>
+      </details>
+    </main>
+
+    
+    <aside class="pg-honesty" aria-label="生成方式とプライバシーについて">
+      <span class="pg-honesty-title" translate="no">LOCAL_ONLY // ZERO_STORAGE</span>
+      <p>すべての生成処理はブラウザ内の暗号学的乱数（Web Crypto API）のみで完結します。生成されたキーは外部送信・保存・履歴記録（ログ保持）のいずれも一切行いません。</p>
+    </aside>
+
+    
+    <footer class="sr-footer" translate="no">
+      <span>CRYPTO_FORGE // OUTPUT-FIRST</span>
+      <span>WEB CRYPTO CSPRNG</span>
+    </footer>
+  </div>
+</div>
+
+<script>
+(() => {
+  
+  const startTime = Date.now();
+  setInterval(() => {
+    const s = Math.floor((Date.now() - startTime) / 1000);
+    const el = document.getElementById('sr-uptime');
+    if (el) {
+      el.textContent =
+        String(Math.floor(s / 3600)).padStart(2, '0') + ':' +
+        String(Math.floor((s % 3600) / 60)).padStart(2, '0') + ':' +
+        String(s % 60).padStart(2, '0');
+    }
+  }, 1000);
+
+  
+  const WordList = [...new Set([
+    'quantum', 'cyber', 'matrix', 'cipher', 'vector', 'nexus', 'kernel', 'proxy',
+    'phantom', 'fusion', 'neuron', 'beacon', 'breach', 'glitch', 'bypass', 'signal',
+    'hazard', 'vortex', 'vertex', 'pulses', 'stream', 'domain', 'hybrid', 'static',
+    'crypto', 'buffer', 'socket', 'uplink', 'shadow', 'packet', 'secure', 'system',
+    'cosmic', 'plasma', 'tensor', 'binary', 'modulo', 'cortex',
+    'fluxon', 'magnet', 'photon', 'spiral', 'portal', 'mirror', 'tracer', 'factor',
+    'carbon', 'silicon', 'copper', 'cobalt', 'helium', 'lambda', 'omega', 'aurora',
+    'nebula', 'galaxy', 'quasar', 'pulsar', 'comet', 'meteor', 'vacuum', 'gravity',
+    'entropy', 'inertia', 'impulse', 'torque', 'fission', 'optical', 'thermal', 'kinetic',
+    'cryptic', 'tactical', 'spectral', 'critical', 'synaptic', 'terminal', 'protocol', 'database',
+    'circuit', 'voltage', 'element', 'isotope', 'catalyst', 'fraction', 'infinite', 'absolute'
+  ])];
+
+  
+  const SETS = {
+    upper: [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'],
+    lower: [...'abcdefghijklmnopqrstuvwxyz'],
+    num:   [...'0123456789'],
+    sym:   [...'!@#$%^&*()_+-=:;,.?'],
+    cyber: [...'☣☠☯⚡ΞΨΦΩ★☢❄☄💧🔥'],
+    math:  [...'∫∑√∂π∞±≠≈≡≤≥∝']
+  };
+  const AMBIGUOUS = new Set([...'0O1lI']);
+  const OVER_SET = new Set([...SETS.cyber, ...SETS.math]);
+
+  class PasswordGenerator {
+    constructor() {
+      this.currentMode = 'RANDOM'; 
+      this.currentPreset = 'safe';
+      this.currentPassword = '';
+      this.isVisible = true;
+      this.randomLength = 20;
+      this.generationSeq = 0;
+
+      this.initDOMElements();
+      this.setupEventListeners();
+      this.applyPreset('safe', false);
+      this.updateUIVisibility();
+      this.generate();
+    }
+
+    initDOMElements() {
+      this.root = document.querySelector('.sr-hub[data-tool-root="password-generator"]');
+      this.tabRandom = document.getElementById('tab-random');
+      this.tabPassphrase = document.getElementById('tab-passphrase');
+      this.display = document.getElementById('pg-display');
+      this.displayBox = document.getElementById('pg-display-box');
+      this.copyBtn = document.getElementById('pg-copy');
+      this.wipeBtn = document.getElementById('pg-wipe');
+      this.copiedPill = document.getElementById('pg-copied-pill');
+      this.visibilityToggle = document.getElementById('pg-visibility-toggle');
+      this.generateBtn = document.getElementById('pg-generate');
+      this.slider = document.getElementById('pg-len');
+      this.sliderVal = document.getElementById('pg-len-val');
+      this.sliderLabelText = document.getElementById('slider-label-text');
+      this.optionsArea = document.getElementById('pg-options-area');
+      this.optUpper = document.getElementById('pg-opt-upper');
+      this.optLower = document.getElementById('pg-opt-lower');
+      this.optNum = document.getElementById('pg-opt-num');
+      this.optSym = document.getElementById('pg-opt-sym');
+      this.optCyber = document.getElementById('pg-opt-cyber');
+      this.optMath = document.getElementById('pg-opt-math');
+      this.optExcludeAmbiguous = document.getElementById('pg-opt-exclude-ambiguous');
+      this.entropyVal = document.getElementById('pg-entropy');
+      this.entropyLine = document.getElementById('pg-entropy-line');
+      this.guardMsg = document.getElementById('pg-guard-msg');
+      this.tuning = document.getElementById('pg-tuning');
+      this.overdriveWarn = document.getElementById('pg-overdrive-warn');
+      this.phraseControls = document.getElementById('pg-phrase-controls');
+      this.sepSelect = document.getElementById('pg-sep');
+      this.randomControls = document.querySelector('.pg-random-controls');
+      this.presetBtns = [...document.querySelectorAll('.pg-preset')];
+      this.quicklenBtns = [...document.querySelectorAll('.pg-quicklen')];
+      this.toast = document.getElementById('sr-toast');
+      this.toastContainer = document.getElementById('sr-toast-container');
+    }
+
+    setupEventListeners() {
+      this.tabRandom.addEventListener('click', () => this.switchMode('RANDOM'));
+      this.tabPassphrase.addEventListener('click', () => this.switchMode('PASSPHRASE'));
+
+      this.slider.addEventListener('input', () => {
+        this.sliderVal.textContent = this.slider.value;
+        this.syncSliderFill();
+        if (this.currentMode === 'RANDOM') {
+          this.randomLength = parseInt(this.slider.value, 10);
+          this.syncQuicklen();
+        }
+      });
+      this.slider.addEventListener('change', () => this.generate());
+
+      this.generateBtn.addEventListener('click', () => this.generate());
+
+      this.copyBtn.addEventListener('click', () => {
+        if (this.currentPassword) this.copyToClipboard(this.currentPassword);
+      });
+
+      this.wipeBtn.addEventListener('click', () => this.wipe());
+
+      this.visibilityToggle.addEventListener('click', () => {
+        this.isVisible = !this.isVisible;
+        this.visibilityToggle.setAttribute('aria-pressed', String(!this.isVisible));
+        this.display.classList.toggle('is-masked', !this.isVisible);
+      });
+
+      this.presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => { this.applyPreset(btn.dataset.preset, false); this.generate(); });
+      });
+
+      this.quicklenBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const len = parseInt(btn.dataset.len, 10);
+          this.clearPreset();
+          this.slider.value = String(len);
+          this.randomLength = len;
+          this.sliderVal.textContent = String(len);
+          this.syncSliderFill();
+          this.syncQuicklen();
+          this.generate();
+        });
+      });
+
+      [this.optUpper, this.optLower, this.optNum, this.optSym, this.optCyber, this.optMath, this.optExcludeAmbiguous]
+        .forEach(opt => opt.addEventListener('change', () => {
+          this.clearPreset();
+          this.updateOverdriveWarn();
+          this.generate();
+        }));
+
+      this.sepSelect.addEventListener('change', () => {
+        if (this.currentMode === 'PASSPHRASE') this.generate();
+      });
+    }
+
+    
+    applyPreset(name, keepLength) {
+      this.currentPreset = name;
+      const cfg = {
+        safe:      { upper: true,  lower: true,  num: true,  sym: true,  cyber: false, math: false, len: 20 },
+        standard:  { upper: true,  lower: true,  num: true,  sym: false, cyber: false, math: false, len: 16 },
+        overdrive: { upper: true,  lower: true,  num: true,  sym: true,  cyber: true,  math: true,  len: null }
+      }[name];
+      if (!cfg) return;
+      this.optUpper.checked = cfg.upper;
+      this.optLower.checked = cfg.lower;
+      this.optNum.checked = cfg.num;
+      this.optSym.checked = cfg.sym;
+      this.optCyber.checked = cfg.cyber;
+      this.optMath.checked = cfg.math;
+      if (cfg.len && !keepLength && this.currentMode === 'RANDOM') {
+        this.slider.value = String(cfg.len);
+        this.randomLength = cfg.len;
+        this.sliderVal.textContent = String(cfg.len);
+      }
+      this.root.dataset.preset = name;
+      this.presetBtns.forEach(b => {
+        const active = b.dataset.preset === name;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-pressed', String(active));
+      });
+      this.displayBox.classList.toggle('is-overdrive', name === 'overdrive');
+      this.syncSliderFill();
+      this.syncQuicklen();
+      this.updateOverdriveWarn();
+    }
+
+    clearPreset() {
+      this.currentPreset = 'custom';
+      this.root.dataset.preset = 'custom';
+      this.presetBtns.forEach(b => { b.classList.remove('is-active'); b.setAttribute('aria-pressed', 'false'); });
+      this.displayBox.classList.remove('is-overdrive');
+    }
+
+    updateOverdriveWarn() {
+      const show = this.currentMode === 'RANDOM' && (this.currentPreset === 'overdrive' || this.optCyber.checked || this.optMath.checked);
+      this.overdriveWarn.hidden = !show;
+      if (this.currentPreset === 'overdrive') this.displayBox.classList.add('is-overdrive');
+    }
+
+    syncQuicklen() {
+      const len = parseInt(this.slider.value, 10);
+      this.quicklenBtns.forEach(b => {
+        const active = parseInt(b.dataset.len, 10) === len;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-pressed', String(active));
+      });
+    }
+
+    syncSliderFill() {
+      const min = parseFloat(this.slider.min), max = parseFloat(this.slider.max), val = parseFloat(this.slider.value);
+      const pct = max > min ? ((val - min) / (max - min)) * 100 : 0;
+      this.slider.style.setProperty('--control-value', String(pct));
+      this.slider.style.setProperty('--attr-min', String(min));
+      this.slider.style.setProperty('--attr-max', String(max));
+    }
+
+    switchMode(mode) {
+      if (this.currentMode === mode) return;
+      this.currentMode = mode;
+      this.tabRandom.classList.toggle('is-active', mode === 'RANDOM');
+      this.tabRandom.setAttribute('aria-selected', String(mode === 'RANDOM'));
+      this.tabPassphrase.classList.toggle('is-active', mode === 'PASSPHRASE');
+      this.tabPassphrase.setAttribute('aria-selected', String(mode === 'PASSPHRASE'));
+      this.root.dataset.mode = mode === 'RANDOM' ? 'random' : 'passphrase';
+      this.updateUIVisibility();
+      this.generate();
+    }
+
+    updateUIVisibility() {
+      if (this.currentMode === 'RANDOM') {
+        this.slider.min = '8';
+        this.slider.max = '64';
+        this.slider.value = String(this.randomLength);
+        this.sliderVal.textContent = String(this.randomLength);
+        this.sliderLabelText.textContent = 'LENGTH';
+        this.optionsArea.style.display = '';
+        this.phraseControls.hidden = true;
+        this.randomControls.hidden = false;
+      } else {
+        this.slider.min = '3';
+        this.slider.max = '8';
+        this.slider.value = '4';
+        this.sliderVal.textContent = '4';
+        this.sliderLabelText.textContent = 'WORDS';
+        this.optionsArea.style.display = 'none';
+        this.phraseControls.hidden = false;
+        this.randomControls.hidden = true;
+        this.overdriveWarn.hidden = true;
+      }
+      this.syncSliderFill();
+      this.syncQuicklen();
+      if (this.currentMode === 'RANDOM') this.updateOverdriveWarn();
+    }
+
+    
+    getRandomIntUnbiased(max) {
+      if (!Number.isSafeInteger(max) || max <= 0 || max > 0x100000000) throw new RangeError('invalid random range');
+      const limit = Math.floor(0x100000000 / max) * max;
+      const array = new Uint32Array(1);
+      do {
+        window.crypto.getRandomValues(array);
+      } while (array[0] >= limit);
+      return array[0] % max;
+    }
+
+    
+    buildPool() {
+      const parts = [];
+      if (this.optUpper.checked) parts.push(SETS.upper);
+      if (this.optLower.checked) parts.push(SETS.lower);
+      if (this.optNum.checked) parts.push(SETS.num);
+      if (this.optSym.checked) parts.push(SETS.sym);
+      if (this.optCyber.checked) parts.push(SETS.cyber);
+      if (this.optMath.checked) parts.push(SETS.math);
+      let pool = parts.flat();
+      if (this.optExcludeAmbiguous.checked) pool = pool.filter(ch => !AMBIGUOUS.has(ch));
+      return pool;
+    }
+
+    generateRandomKey(len) {
+      const pool = this.buildPool();
+      if (pool.length === 0) return null;
+      let pass = '';
+      for (let i = 0; i < len; i++) {
+        pass += pool[this.getRandomIntUnbiased(pool.length)];
+      }
+      
+      
+      return { pass, poolSize: pool.length, draws: len, mode: 'RANDOM' };
+    }
+
+    generatePassphraseKey(wordsCount) {
+      const selectedWords = [];
+      for (let i = 0; i < wordsCount; i++) {
+        selectedWords.push(WordList[this.getRandomIntUnbiased(WordList.length)]);
+      }
+      return { pass: selectedWords.join(this.sepSelect.value), poolSize: WordList.length, words: wordsCount, draws: wordsCount, mode: 'PASSPHRASE' };
+    }
+
+    
+    generate() {
+      const seq = ++this.generationSeq;
+      const n = parseInt(this.slider.value, 10);
+      let result = null;
+
+      if (this.currentMode === 'RANDOM') {
+        result = this.generateRandomKey(n);
+        if (!result) {
+          
+          
+          this.currentPassword = '';
+          this.display.textContent = '';
+          this.copyBtn.disabled = true;
+          this.generateBtn.disabled = false;
+          this.copiedPill.hidden = true;
+          this.entropyVal.textContent = '— chars · — bits';
+          this.entropyLine.classList.remove('is-weak');
+          delete this.entropyLine.dataset.warn;
+          this.guardMsg.textContent = '[!] 文字種がすべてOFFです。最低1つ有効にしてください（空の文字セットでは生成できません）。';
+          this.guardMsg.hidden = false;
+          if (this.tuning) this.tuning.open = true;
+          return;
+        }
+      } else {
+        result = this.generatePassphraseKey(n);
+      }
+      this.guardMsg.hidden = true;
+
+      const { pass } = result;
+      const passChars = [...pass];
+      this.copiedPill.hidden = true;
+      this.generateBtn.disabled = true;
+      this.copyBtn.disabled = true;
+
+      const noiseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?☣☠☯⚡ΞΨΦΩ★☢❄☄';
+      let tick = 0;
+      const totalTicks = 8;
+      const interval = setInterval(() => {
+        if (seq !== this.generationSeq) { clearInterval(interval); return; }
+        let displayStr = '';
+        for (let i = 0; i < passChars.length; i++) {
+          const lockThreshold = (tick / totalTicks) * passChars.length;
+          displayStr += i < lockThreshold ? passChars[i] : noiseChars.charAt(Math.floor(Math.random() * noiseChars.length));
+        }
+        this.display.textContent = displayStr;
+        tick++;
+        if (tick > totalTicks) {
+          clearInterval(interval);
+          if (seq === this.generationSeq) this.finalizeGeneration(result);
+        }
+      }, 25);
+    }
+
+    finalizeGeneration(result) {
+      const { pass, poolSize } = result;
+      this.currentPassword = pass;
+      this.renderCurrentPassword(result.mode);
+      this.generateBtn.disabled = false;
+      this.copyBtn.disabled = false;
+
+      
+      
+      
+      const exactBits = result.draws * Math.log2(poolSize);
+      const bits = Math.floor(exactBits);
+      const label = result.mode === 'PASSPHRASE'
+        ? `${result.words} words · ${bits} bits`
+        : `${result.draws} chars · ${bits} bits`;
+      this.entropyVal.textContent = label;
+      this.entropyLine.classList.toggle('is-weak', exactBits < 64);
+      if (exactBits < 64) this.entropyLine.dataset.warn = 'true';
+      else delete this.entropyLine.dataset.warn;
+    }
+
+    renderCurrentPassword(mode) {
+      this.display.textContent = '';
+      this.display.classList.remove('is-wiped');
+      if (!this.currentPassword) return;
+      if ((mode || this.currentMode) === 'PASSPHRASE') {
+        this.display.textContent = this.currentPassword;
+        return;
+      }
+      const frag = document.createDocumentFragment();
+      for (const ch of this.currentPassword) {
+        const span = document.createElement('span');
+        if (/[0-9]/.test(ch)) span.className = 'pg-ch-digit';
+        else if (/[A-Za-z]/.test(ch)) span.className = 'pg-ch-letter';
+        else if (OVER_SET.has(ch)) span.className = 'pg-ch-over';
+        else span.className = 'pg-ch-symbol';
+        span.textContent = ch;
+        frag.appendChild(span);
+      }
+      this.display.appendChild(frag);
+    }
+
+    wipe() {
+      this.generationSeq++;
+      this.generateBtn.disabled = false;
+      this.currentPassword = '';
+      this.display.textContent = '';
+      this.display.classList.add('is-wiped');
+      this.copyBtn.disabled = true;
+      this.copiedPill.hidden = true;
+      this.entropyVal.textContent = '— chars · — bits';
+      this.entropyLine.classList.remove('is-weak');
+      delete this.entropyLine.dataset.warn;
+    }
+
+    copyToClipboard(text) {
+      const onSuccess = () => {
+        this.copiedPill.hidden = false;
+        if (this.toast) {
+          this.toast.textContent = 'COPIED';
+          this.toast.classList.add('is-visible');
+          if (this.toastContainer) this.toastContainer.classList.add('is-visible');
+          setTimeout(() => {
+            this.toast.classList.remove('is-visible');
+            if (this.toastContainer) this.toastContainer.classList.remove('is-visible');
+          }, 1500);
+        }
+        if (navigator.vibrate) navigator.vibrate(20);
+        setTimeout(() => { this.copiedPill.hidden = true; }, 2500);
+      };
+      const fallbackCopy = () => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        ta.setSelectionRange(0, ta.value.length);
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        ta.remove();
+        return ok;
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
+          if (!fallbackCopy()) this.copiedPill.hidden = true;
+          else onSuccess();
+        });
+      } else if (fallbackCopy()) {
+        onSuccess();
+      }
+    }
+  }
+
+  const startAll = () => { new PasswordGenerator(); };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startAll);
+  } else {
+    startAll();
+  }
+})();
+</script>
+
+</div>
+      </article>
+    </main>
+    <style>
+       
+      body.lab-body .lab-content > #auto-app,
+      body.lab-body .lab-content > #circ-app,
+      body.lab-body .lab-content > #ct-app,
+      body.lab-body .lab-content > #cyber-cipher-app,
+      body.lab-body .lab-content > #cyber-graph-app,
+      body.lab-body .lab-content > #cyber-latex-app,
+      body.lab-body .lab-content > #cyber-logic-app,
+      body.lab-body .lab-content > #cyber-matrix-app,
+      body.lab-body .lab-content > #cyber-pf-app,
+      body.lab-body .lab-content > #cyber-rg-app,
+      body.lab-body .lab-content > #cyber-rsa-app,
+      body.lab-body .lab-content > #cyber-mermaid-app,
+      body.lab-body .lab-content > #fc-app,
+      body.lab-body .lab-content > #isbn-root,
+      body.lab-body .lab-content > #ls-app,
+      body.lab-body .lab-content > #mech-app,
+      body.lab-body .lab-content > #mq-app,
+      body.lab-body .lab-content > #ps-app,
+      body.lab-body .lab-content > #sa-app,
+      body.lab-body .lab-content > #topo-app,
+      body.lab-body .lab-content > #uc-app,
+      body.lab-body .lab-content > #ym-root,
+      body.lab-body .lab-content > .cy-root,
+      body.lab-body .lab-content > #app-root {
+        position: relative !important;
+        inset: auto !important;
+        z-index: 1 !important;
+        width: 100% !important;
+        max-width: 1040px !important;
+        height: calc(100dvh - 92px) !important;
+        min-height: min(680px, calc(100dvh - 92px)) !important;
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
+        overflow-x: clip !important;
+      }
+
+      body.lab-body .lab-content [class*="exit"] { display: none !important; }
+
+      body.lab-body .lab-content > .ag-app,
+      body.lab-body .lab-content > .dm-app {
+        min-height: 0 !important;
+        padding: 1rem 1rem calc(2rem + env(safe-area-inset-bottom, 0px)) !important;
+        overflow-x: clip !important;
+      }
+
+      body.lab-body .lab-content > #dc-app {
+        z-index: 1 !important;
+      }
+    </style>
+  </body>
+</html>
