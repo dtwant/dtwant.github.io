@@ -158,8 +158,7 @@
     return parts.join(' / ');
   }
 
-  const CSS = `
-/* ==========================================================================
+  const CSS = `/* ==========================================================================
    dtwant.github.io — Unified Common Header & Sync Chip
    Skeleton (immutable):
      Header: 64px height, 20px radius, 10px 12px padding, 16px bottom margin
@@ -180,29 +179,51 @@
   --_dtsp-accent: var(--dtsp-accent, #67e8f9);
   --_dtsp-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* Smoked obsidian glass ramp (fallback before color-mix) */
-  --_dtsp-bg-top: rgba(15, 18, 24, 0.85);
-  --_dtsp-bg-bottom: rgba(10, 12, 17, 0.89);
-  --_dtsp-rim: var(--dtsp-accent-dim, rgba(237, 245, 255, 0.12));
-  --_dtsp-specular: rgba(255, 255, 255, 0.12);
-  --_dtsp-bevel-low: rgba(0, 0, 0, 0.30);
+  /* Accent-tinted smoked console glass ramp (fallback before color-mix) */
+  --_dtsp-bg-top: rgba(11, 16, 26, 0.84);
+  --_dtsp-bg-bottom: rgba(7, 10, 18, 0.90);
+  --_dtsp-wash-left: var(--dtsp-accent-dim, rgba(103, 232, 249, 0.18));
+  --_dtsp-wash-bottom: rgba(103, 232, 249, 0.08);
+  --_dtsp-rim: var(--dtsp-accent-soft, rgba(103, 232, 249, 0.42));
+  --_dtsp-rim-bottom: var(--dtsp-accent-dim, rgba(103, 232, 249, 0.24));
+  --_dtsp-specular: rgba(255, 255, 255, 0.16);
+  --_dtsp-bracket: var(--_dtsp-accent);
+  --_dtsp-rail-hot: #ffffff;
+  --_dtsp-rail-core: var(--_dtsp-accent);
+  --_dtsp-tick: var(--dtsp-accent-soft, rgba(103, 232, 249, 0.34));
+  --_dtsp-glow-core: var(--dtsp-accent-soft, rgba(103, 232, 249, 0.48));
+  --_dtsp-glow-soft: var(--dtsp-accent-dim, rgba(103, 232, 249, 0.22));
+  --_dtsp-glow-ambient: var(--dtsp-accent-dim, rgba(103, 232, 249, 0.24));
+  --_dtsp-glow-text: var(--dtsp-accent-dim, rgba(103, 232, 249, 0.32));
+  --_dtsp-title-glow: var(--dtsp-accent-dim, rgba(103, 232, 249, 0.22));
+
+  /* Grounded instrument chassis shadow (seated contact seam + lower ambient link) */
   --_dtsp-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.34),
-    0 10px 28px -6px rgba(0, 0, 0, 0.42);
+    0 0 0 1px rgba(0, 0, 0, 0.62),
+    0 2px 6px rgba(0, 0, 0, 0.60),
+    0 10px 22px -10px rgba(0, 0, 0, 0.78),
+    0 6px 20px -10px var(--_dtsp-glow-ambient);
 
-  /* Three neutral text roles */
-  --_dtsp-ink-1: #f2f5fa;
-  --_dtsp-ink-2: #dce4f0;
-  --_dtsp-ink-3: #9aa6b8;
+  /* Three high-contrast luminous text roles */
+  --_dtsp-ink-1: #f4f8ff;
+  --_dtsp-ink-2: #e6eef9;
+  --_dtsp-ink-3: #b4c4d8;
+  --_dtsp-kicker-ink: var(--_dtsp-accent);
+  --_dtsp-icon-ink: var(--_dtsp-accent);
 
-  /* Borderless ghost back-button surface steps */
-  --_dtsp-ghost-bg: rgba(255, 255, 255, 0.048);
-  --_dtsp-ghost-bg-hover: var(--dtsp-accent-soft, rgba(255, 255, 255, 0.092));
-  --_dtsp-ghost-bg-active: rgba(255, 255, 255, 0.062);
+  /* Recessed tactile console back-button surface steps */
+  --_dtsp-ghost-bg: rgba(7, 10, 18, 0.68);
+  --_dtsp-ghost-bg-hover: var(--dtsp-accent-dim, rgba(103, 232, 249, 0.18));
+  --_dtsp-ghost-bg-active: rgba(5, 7, 13, 0.84);
+  --_dtsp-ghost-ring: var(--dtsp-accent-soft, rgba(103, 232, 249, 0.34));
+  --_dtsp-ghost-ring-hover: var(--_dtsp-accent);
 
   /* Interactive button state variables (safe under !important rules) */
   --_dtsp-btn-bg: var(--_dtsp-ghost-bg);
-  --_dtsp-btn-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  --_dtsp-btn-shadow:
+    inset 0 0 0 1px var(--_dtsp-ghost-ring),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.42);
   --_dtsp-btn-ink: var(--_dtsp-ink-2);
 }
 
@@ -211,36 +232,67 @@
   --_dtsp-accent: var(--dtsp-accent, var(--lab-accent, var(--accent, #22d3ee)));
 }
 
-/* Perceptually uniform oklab world-tinting: keeps dark obsidian neutral while
-   absorbing ~3.5% of the page's temperature; nested color-mix pins exact alpha */
+/* Perceptually uniform oklab world-tinting: absorbs 12-18% of the page accent
+   into a deep nocturnal glass base while transmitting the page stage behind it */
 @supports (color: color-mix(in oklab, white, black)) {
   .dtsp-header.dtsp-header,
   .lab-shell .lab-toolbar.lab-toolbar,
   .lab-toolbar.lab-toolbar {
     --_dtsp-bg-top: color-mix(
       in oklab,
-      color-mix(in oklab, #0f1218 96.5%, var(--_dtsp-accent)) 85%,
+      color-mix(in oklab, #080910 82%, var(--_dtsp-accent)) 80%,
       transparent
     );
     --_dtsp-bg-bottom: color-mix(
       in oklab,
-      color-mix(in oklab, #0a0c11 98%, var(--_dtsp-accent)) 89%,
+      color-mix(in oklab, #05060b 88%, var(--_dtsp-accent)) 88%,
       transparent
     );
-    --_dtsp-rim: color-mix(
+    --_dtsp-wash-left: color-mix(in oklab, var(--_dtsp-accent) 22%, transparent);
+    --_dtsp-wash-bottom: color-mix(in oklab, var(--_dtsp-accent) 13%, transparent);
+    --_dtsp-rim: color-mix(in oklab, var(--_dtsp-accent) 44%, transparent);
+    --_dtsp-rim-bottom: color-mix(in oklab, var(--_dtsp-accent) 30%, transparent);
+    --_dtsp-specular: color-mix(
       in oklab,
-      color-mix(in oklab, #ffffff 72%, var(--_dtsp-accent)) 13%,
+      color-mix(in oklab, #ffffff 62%, var(--_dtsp-accent)) 22%,
+      transparent
+    );
+    --_dtsp-bracket: color-mix(in oklab, var(--_dtsp-accent) 82%, #ffffff);
+    --_dtsp-rail-hot: color-mix(in oklab, var(--_dtsp-accent) 36%, #ffffff);
+    --_dtsp-rail-core: color-mix(in oklab, var(--_dtsp-accent) 92%, transparent);
+    --_dtsp-tick: color-mix(in oklab, var(--_dtsp-accent) 36%, transparent);
+    --_dtsp-glow-core: color-mix(in oklab, var(--_dtsp-accent) 62%, transparent);
+    --_dtsp-glow-soft: color-mix(in oklab, var(--_dtsp-accent) 34%, transparent);
+    --_dtsp-glow-ambient: color-mix(in oklab, var(--_dtsp-accent) 28%, transparent);
+    --_dtsp-glow-text: color-mix(in oklab, var(--_dtsp-accent) 46%, transparent);
+    --_dtsp-title-glow: color-mix(in oklab, var(--_dtsp-accent) 26%, transparent);
+
+    --_dtsp-ink-1: color-mix(in oklab, #f5f9ff 93%, var(--_dtsp-accent));
+    --_dtsp-ink-2: color-mix(in oklab, #e8f0fa 90%, var(--_dtsp-accent));
+    --_dtsp-kicker-ink: color-mix(in oklab, var(--_dtsp-accent) 64%, #ffffff);
+    --_dtsp-icon-ink: color-mix(in oklab, var(--_dtsp-accent) 70%, #ffffff);
+
+    --_dtsp-ghost-bg: color-mix(
+      in oklab,
+      color-mix(in oklab, #070911 84%, var(--_dtsp-accent)) 72%,
       transparent
     );
     --_dtsp-ghost-bg-hover: color-mix(
       in oklab,
-      color-mix(in oklab, #ffffff 86%, var(--_dtsp-accent)) 9.5%,
+      color-mix(in oklab, #0d1320 68%, var(--_dtsp-accent)) 80%,
       transparent
     );
+    --_dtsp-ghost-bg-active: color-mix(
+      in oklab,
+      color-mix(in oklab, #05070d 82%, var(--_dtsp-accent)) 86%,
+      transparent
+    );
+    --_dtsp-ghost-ring: color-mix(in oklab, var(--_dtsp-accent) 34%, transparent);
+    --_dtsp-ghost-ring-hover: color-mix(in oklab, var(--_dtsp-accent) 68%, #ffffff);
   }
 }
 
-/* Core shell geometry + smoked glass surface (shared by .dtsp-header & LAB) */
+/* Core shell geometry + accent-tinted smoked console surface (shared by .dtsp-header & LAB) */
 .dtsp-header.dtsp-header,
 .lab-shell .lab-toolbar.lab-toolbar,
 .lab-toolbar.lab-toolbar {
@@ -260,14 +312,88 @@
   isolation: isolate;
   border: 0 !important;
   border-radius: 20px !important;
-  background: linear-gradient(180deg, var(--_dtsp-bg-top), var(--_dtsp-bg-bottom)) !important;
+  background-color: transparent !important;
+  /* 13-layer console surface without ::after:
+     1. Left-edge power rail (3px x 28px spine along straight left wall)
+     2-9. Four-corner 10x2px L-brackets inset cleanly inside 20px radius
+     10. Bottom inner precision tick gauge (10px pitch)
+     11. Directional left-rail ambient accent wash
+     12. Lower-edge chassis ambient lift linking to panels below
+     13. Deep accent-tinted smoked glass gradient */
+  background-image:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      var(--_dtsp-rail-core) 16%,
+      var(--_dtsp-rail-hot) 50%,
+      var(--_dtsp-rail-core) 84%,
+      transparent 100%
+    ),
+    linear-gradient(90deg, var(--_dtsp-bracket), var(--_dtsp-bracket)),
+    linear-gradient(180deg, var(--_dtsp-bracket), var(--_dtsp-bracket)),
+    linear-gradient(90deg, var(--_dtsp-bracket), var(--_dtsp-bracket)),
+    linear-gradient(180deg, var(--_dtsp-bracket), var(--_dtsp-bracket)),
+    linear-gradient(90deg, var(--_dtsp-bracket), var(--_dtsp-bracket)),
+    linear-gradient(180deg, var(--_dtsp-bracket), var(--_dtsp-bracket)),
+    linear-gradient(90deg, var(--_dtsp-bracket), var(--_dtsp-bracket)),
+    linear-gradient(180deg, var(--_dtsp-bracket), var(--_dtsp-bracket)),
+    repeating-linear-gradient(
+      90deg,
+      var(--_dtsp-tick) 0 1px,
+      transparent 1px 10px
+    ),
+    radial-gradient(
+      48% 170% at 0% 50%,
+      var(--_dtsp-wash-left) 0%,
+      transparent 72%
+    ),
+    linear-gradient(
+      0deg,
+      var(--_dtsp-wash-bottom) 0%,
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      var(--_dtsp-bg-top) 0%,
+      var(--_dtsp-bg-bottom) 100%
+    ) !important;
+  background-position:
+    left 0 center,
+    left 8px top 6px,
+    left 8px top 6px,
+    right 8px top 6px,
+    right 8px top 6px,
+    left 8px bottom 6px,
+    left 8px bottom 6px,
+    right 8px bottom 6px,
+    right 8px bottom 6px,
+    center bottom 1px,
+    0 0,
+    0 0,
+    0 0 !important;
+  background-size:
+    3px 28px,
+    10px 2px,
+    2px 10px,
+    10px 2px,
+    2px 10px,
+    10px 2px,
+    2px 10px,
+    10px 2px,
+    2px 10px,
+    calc(100% - 64px) 4px,
+    100% 100%,
+    100% 100%,
+    100% 100% !important;
+  background-repeat: no-repeat !important;
   box-shadow:
     inset 0 0 0 1px var(--_dtsp-rim),
     inset 0 1px 0 var(--_dtsp-specular),
-    inset 0 -1px 0 var(--_dtsp-bevel-low),
+    inset 0 -1px 0 var(--_dtsp-rim-bottom),
+    inset 14px 0 26px -16px var(--_dtsp-glow-soft),
     var(--_dtsp-shadow) !important;
-  backdrop-filter: blur(22px) saturate(180%) brightness(0.97) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(180%) brightness(0.97) !important;
+  backdrop-filter: blur(20px) saturate(185%) brightness(0.92) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(185%) brightness(0.92) !important;
   color: var(--_dtsp-ink-1) !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -279,30 +405,34 @@
   font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", "Hiragino Kaku Gothic ProN", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Signature detail: razor-thin 1px machined top-bevel accent reflection,
-   aligned to the 20px corner tangent points, fading out before the chip */
+/* Signature detail: illuminated machined top-bevel accent rail with subtle
+   downward light spill, aligned to the 20px corner tangent points */
 .dtsp-header.dtsp-header::before,
 .lab-shell .lab-toolbar.lab-toolbar::before,
 .lab-toolbar.lab-toolbar::before {
   content: "" !important;
   position: absolute !important;
-  inset: 0 20px auto 20px !important;
+  inset: 0 22px auto 22px !important;
   width: auto !important;
-  height: 1px !important;
+  height: 1.5px !important;
   border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  border-radius: 999px !important;
+  box-shadow:
+    0 1px 8px var(--_dtsp-glow-core),
+    0 0 2px var(--_dtsp-glow-soft) !important;
   filter: none !important;
   pointer-events: none !important;
   z-index: 1;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    var(--_dtsp-accent) 22%,
-    var(--dtsp-accent-dim, var(--_dtsp-accent)) 56%,
+    var(--_dtsp-accent) 16%,
+    var(--_dtsp-rail-hot) 34%,
+    var(--_dtsp-accent) 66%,
+    var(--dtsp-accent-dim, var(--_dtsp-accent)) 86%,
     transparent 100%
   ) !important;
-  opacity: 0.46 !important;
+  opacity: 0.92 !important;
 }
 
 @supports (color: color-mix(in oklab, white, black)) {
@@ -312,11 +442,13 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      color-mix(in oklab, var(--_dtsp-accent) 68%, #ffffff) 22%,
-      color-mix(in oklab, var(--_dtsp-accent) 34%, transparent) 58%,
+      color-mix(in oklab, var(--_dtsp-accent) 82%, transparent) 16%,
+      color-mix(in oklab, var(--_dtsp-accent) 52%, #ffffff) 34%,
+      color-mix(in oklab, var(--_dtsp-accent) 78%, transparent) 66%,
+      color-mix(in oklab, var(--_dtsp-accent) 28%, transparent) 88%,
       transparent 100%
     ) !important;
-    opacity: 0.56 !important;
+    opacity: 0.95 !important;
   }
 }
 
@@ -351,7 +483,11 @@
   border: 0 !important;
   border-radius: 10px !important;
   background-color: var(--_dtsp-btn-bg) !important;
-  background-image: none !important;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(0, 0, 0, 0.14) 100%
+  ) !important;
   box-shadow: var(--_dtsp-btn-shadow) !important;
   color: var(--_dtsp-btn-ink) !important;
   text-decoration: none !important;
@@ -389,9 +525,9 @@
   display: block !important;
   width: 18px !important;
   height: 18px !important;
-  color: currentColor;
-  opacity: 0.72;
-  stroke-width: 1.75;
+  color: var(--_dtsp-icon-ink);
+  opacity: 0.92;
+  stroke-width: 1.85;
   transition:
     transform 150ms var(--_dtsp-ease),
     opacity 150ms var(--_dtsp-ease);
@@ -403,8 +539,11 @@
   .lab-shell .lab-toolbar.lab-toolbar .lab-exit:hover,
   .lab-toolbar.lab-toolbar .lab-exit:hover {
     --_dtsp-btn-bg: var(--_dtsp-ghost-bg-hover);
-    --_dtsp-btn-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.11);
-    --_dtsp-btn-ink: #f5f8fc;
+    --_dtsp-btn-shadow:
+      inset 0 0 0 1px var(--_dtsp-ghost-ring-hover),
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 0 12px -4px var(--_dtsp-glow-soft);
+    --_dtsp-btn-ink: #f7faff;
   }
 
   .dtsp-header.dtsp-header .dtsp-header-back:hover svg,
@@ -419,8 +558,10 @@
 .lab-shell .lab-toolbar.lab-toolbar .lab-exit:active,
 .lab-toolbar.lab-toolbar .lab-exit:active {
   --_dtsp-btn-bg: var(--_dtsp-ghost-bg-active);
-  --_dtsp-btn-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.28);
-  --_dtsp-btn-ink: #f5f8fc;
+  --_dtsp-btn-shadow:
+    inset 0 0 0 1px var(--_dtsp-ghost-ring-hover),
+    inset 0 2px 4px rgba(0, 0, 0, 0.48);
+  --_dtsp-btn-ink: #f7faff;
   transform: scale(0.96);
 }
 
@@ -467,10 +608,11 @@
   white-space: nowrap;
   margin: 0 !important;
   padding: 0 !important;
-  color: var(--_dtsp-accent) !important;
+  color: var(--_dtsp-kicker-ink) !important;
+  text-shadow: 0 0 10px var(--_dtsp-glow-text);
   font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 10px !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
   line-height: 1.1 !important;
   letter-spacing: 0.14em !important;
   text-transform: uppercase;
@@ -486,6 +628,7 @@
   margin: 0 !important;
   padding: 0 !important;
   color: var(--_dtsp-ink-1) !important;
+  text-shadow: 0 0 14px var(--_dtsp-title-glow);
   font-size: 16px !important;
   font-weight: 600 !important;
   line-height: 1.25 !important;
@@ -518,6 +661,7 @@
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
   color: var(--_dtsp-ink-1) !important;
+  text-shadow: 0 0 14px var(--_dtsp-title-glow);
   font-size: 16px !important;
   font-weight: 600 !important;
   line-height: 1.25 !important;
@@ -545,6 +689,7 @@
   margin: 0 !important;
   padding: 0 !important;
   color: var(--_dtsp-ink-1) !important;
+  text-shadow: 0 0 14px var(--_dtsp-title-glow);
   font-size: 16px !important;
   font-weight: 600 !important;
   line-height: 1.25 !important;
@@ -573,14 +718,17 @@
 .dtsp-chip.dtsp-chip {
   /* Self-contained defaults so chip stays consistent in any mount context */
   --_dtsp-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --_chip-bg: rgba(7, 9, 14, 0.56);
-  --_chip-bg-hover: rgba(20, 25, 36, 0.78);
-  --_chip-bg-active: rgba(6, 8, 12, 0.74);
-  --_chip-ring: rgba(255, 255, 255, 0.11);
-  --_chip-ring-hover: rgba(255, 255, 255, 0.22);
-  --_chip-ink: #dde6f2;
-  --_chip-ink-hover: #f5f8fc;
-  --_dot-bg: #4cc38a;
+  --_chip-accent: var(--_dtsp-accent, var(--dtsp-accent, #67e8f9));
+  --_chip-bg: rgba(5, 8, 15, 0.80);
+  --_chip-bg-hover: rgba(12, 20, 34, 0.88);
+  --_chip-bg-active: rgba(4, 6, 11, 0.88);
+  --_chip-ring: var(--dtsp-accent-soft, rgba(103, 232, 249, 0.36));
+  --_chip-ring-hover: var(--_chip-accent);
+  --_chip-glow: var(--dtsp-accent-dim, rgba(103, 232, 249, 0.16));
+  --_chip-ink: #e4eef9;
+  --_chip-ink-hover: #f7faff;
+  --_dot-bg: #34d399;
+  --_dot-glow: rgba(52, 211, 153, 0.50);
 
   /* Always in-flow inside the header — never floats over page content */
   position: relative !important;
@@ -604,11 +752,24 @@
   border: 0 !important;
   border-radius: 6px !important;
   background-color: var(--_chip-bg) !important;
-  background-image: none !important;
+  /* Recessed telemetry bay: diagonal micro corner-notches + subtle depth ramp */
+  background-image:
+    linear-gradient(90deg, var(--_chip-ring-hover), var(--_chip-ring-hover)),
+    linear-gradient(90deg, var(--_chip-ring-hover), var(--_chip-ring-hover)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.20) 100%) !important;
+  background-position:
+    left 4px top 0,
+    right 4px bottom 0,
+    0 0 !important;
+  background-size:
+    8px 1px,
+    8px 1px,
+    100% 100% !important;
+  background-repeat: no-repeat !important;
   box-shadow:
     inset 0 0 0 1px var(--_chip-ring),
-    inset 0 1px 2px rgba(0, 0, 0, 0.30),
-    0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    inset 0 1px 3px rgba(0, 0, 0, 0.52),
+    0 0 12px -4px var(--_chip-glow) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 
@@ -633,6 +794,29 @@
     color 150ms var(--_dtsp-ease),
     box-shadow 150ms var(--_dtsp-ease),
     transform 140ms var(--_dtsp-ease);
+}
+
+@supports (color: color-mix(in oklab, white, black)) {
+  .dtsp-chip.dtsp-chip {
+    --_chip-bg: color-mix(
+      in oklab,
+      color-mix(in oklab, #05070e 88%, var(--_chip-accent)) 80%,
+      transparent
+    );
+    --_chip-bg-hover: color-mix(
+      in oklab,
+      color-mix(in oklab, #0a101d 76%, var(--_chip-accent)) 88%,
+      transparent
+    );
+    --_chip-bg-active: color-mix(
+      in oklab,
+      color-mix(in oklab, #04060b 86%, var(--_chip-accent)) 88%,
+      transparent
+    );
+    --_chip-ring: color-mix(in oklab, var(--_chip-accent) 38%, transparent);
+    --_chip-ring-hover: color-mix(in oklab, var(--_chip-accent) 72%, #ffffff);
+    --_chip-glow: color-mix(in oklab, var(--_chip-accent) 24%, transparent);
+  }
 }
 
 /* Extend touch hit area vertically to 44px inside the bounded slot container
@@ -660,101 +844,146 @@
   justify-content: center !important;
 }
 
-/* 8px rotated diamond indicator — carries semantic color without glow */
+/* 8px rotated diamond prism indicator — semantic color + fill/shape cue */
 .dtsp-dot {
   width: 8px !important;
   height: 8px !important;
   flex: none !important;
+  box-sizing: border-box !important;
   border-radius: 0 !important;
-  background-color: var(--_dot-bg, #4cc38a) !important;
-  box-shadow: none !important;
+  background-color: var(--_dot-bg, #34d399) !important;
+  box-shadow: 0 0 8px var(--_dot-glow, rgba(52, 211, 153, 0.50)) !important;
   transform: rotate(45deg);
   transform-origin: center;
-  transition: background-color 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition:
+    background-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* --------------------------------------------------------------------------
-   5. Sync Chip Semantic States (all 6 states, muted contrast, zero glow)
+   5. Sync Chip Semantic States (all 6 states: shape + luminance + semantic hue)
    -------------------------------------------------------------------------- */
 
-/* OK: normal / calm */
+/* OK: normal / active telemetry prism (solid ◆) */
 .dtsp-chip.dtsp-chip[data-kind="ok"] {
-  --_dot-bg: #4cc38a;
-  --_chip-bg: rgba(7, 9, 14, 0.56);
-  --_chip-bg-hover: rgba(20, 25, 36, 0.78);
-  --_chip-bg-active: rgba(5, 7, 11, 0.72);
-  --_chip-ring: rgba(255, 255, 255, 0.11);
-  --_chip-ring-hover: rgba(255, 255, 255, 0.22);
-  --_chip-ink: #dde6f2;
-  --_chip-ink-hover: #f5f8fc;
+  --_dot-bg: #34d399;
+  --_dot-glow: rgba(52, 211, 153, 0.58);
+  --_chip-bg: rgba(6, 17, 15, 0.80);
+  --_chip-bg-hover: rgba(10, 28, 24, 0.88);
+  --_chip-bg-active: rgba(4, 12, 11, 0.88);
+  --_chip-ring: rgba(52, 211, 153, 0.42);
+  --_chip-ring-hover: rgba(110, 231, 183, 0.74);
+  --_chip-glow: rgba(52, 211, 153, 0.24);
+  --_chip-ink: #e4f8ef;
+  --_chip-ink-hover: #f2fdf8;
 }
 
-/* SYNC: active transfer */
+/* SYNC: active transfer (pulsing solid ◆) */
 .dtsp-chip.dtsp-chip[data-kind="syncing"] {
   --_dot-bg: #22d3ee;
-  --_chip-bg: rgba(10, 22, 29, 0.68);
-  --_chip-bg-hover: rgba(14, 30, 40, 0.84);
-  --_chip-bg-active: rgba(8, 17, 23, 0.78);
-  --_chip-ring: rgba(34, 211, 238, 0.30);
-  --_chip-ring-hover: rgba(34, 211, 238, 0.50);
-  --_chip-ink: #e2f5f9;
-  --_chip-ink-hover: #f2fbfd;
+  --_dot-glow: rgba(34, 211, 238, 0.72);
+  --_chip-bg: rgba(7, 20, 28, 0.82);
+  --_chip-bg-hover: rgba(11, 31, 43, 0.90);
+  --_chip-bg-active: rgba(5, 15, 22, 0.88);
+  --_chip-ring: rgba(34, 211, 238, 0.50);
+  --_chip-ring-hover: rgba(103, 232, 249, 0.82);
+  --_chip-glow: rgba(34, 211, 238, 0.32);
+  --_chip-ink: #e2f8fc;
+  --_chip-ink-hover: #f2fdff;
 }
 
 .dtsp-chip.dtsp-chip[data-kind="syncing"] .dtsp-dot {
   animation: dtsp-pulse 1.1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* 競合: requires user attention */
+/* 競合: requires user attention (pulsing ringed ◆) */
 .dtsp-chip.dtsp-chip[data-kind="conflict"] {
   --_dot-bg: #fbbf24;
-  --_chip-bg: rgba(28, 22, 11, 0.70);
-  --_chip-bg-hover: rgba(38, 30, 15, 0.84);
-  --_chip-bg-active: rgba(22, 17, 9, 0.80);
-  --_chip-ring: rgba(251, 191, 36, 0.38);
-  --_chip-ring-hover: rgba(251, 191, 36, 0.58);
-  --_chip-ink: #fae5b2;
-  --_chip-ink-hover: #fef0cc;
+  --_dot-glow: rgba(251, 191, 36, 0.64);
+  --_chip-bg: rgba(28, 20, 8, 0.84);
+  --_chip-bg-hover: rgba(40, 29, 12, 0.92);
+  --_chip-bg-active: rgba(22, 15, 6, 0.90);
+  --_chip-ring: rgba(251, 191, 36, 0.54);
+  --_chip-ring-hover: rgba(253, 224, 71, 0.84);
+  --_chip-glow: rgba(251, 191, 36, 0.30);
+  --_chip-ink: #fef0c7;
+  --_chip-ink-hover: #fff8e1;
 }
 
 .dtsp-chip.dtsp-chip[data-kind="conflict"] .dtsp-dot {
+  box-shadow:
+    0 0 0 2px rgba(251, 191, 36, 0.28),
+    0 0 10px var(--_dot-glow) !important;
   animation: dtsp-pulse 1.8s ease-in-out infinite;
 }
 
-/* エラー: static high-clarity alert */
+/* エラー: static high-clarity alert (static ringed ◆) */
 .dtsp-chip.dtsp-chip[data-kind="error"] {
-  --_dot-bg: #e5484d;
-  --_chip-bg: rgba(30, 13, 16, 0.72);
-  --_chip-bg-hover: rgba(42, 17, 21, 0.86);
-  --_chip-bg-active: rgba(24, 10, 13, 0.82);
-  --_chip-ring: rgba(229, 72, 77, 0.44);
-  --_chip-ring-hover: rgba(229, 72, 77, 0.64);
-  --_chip-ink: #f8d0d2;
-  --_chip-ink-hover: #fce4e6;
+  --_dot-bg: #f87171;
+  --_dot-glow: rgba(239, 68, 68, 0.68);
+  --_chip-bg: rgba(31, 10, 14, 0.86);
+  --_chip-bg-hover: rgba(44, 14, 20, 0.94);
+  --_chip-bg-active: rgba(24, 8, 11, 0.92);
+  --_chip-ring: rgba(248, 113, 113, 0.58);
+  --_chip-ring-hover: rgba(252, 165, 165, 0.86);
+  --_chip-glow: rgba(239, 68, 68, 0.34);
+  --_chip-ink: #fee2e2;
+  --_chip-ink-hover: #fff1f2;
 }
 
-/* OFF: dormant / sync disabled */
+.dtsp-chip.dtsp-chip[data-kind="error"] .dtsp-dot {
+  box-shadow:
+    0 0 0 2px rgba(248, 113, 113, 0.32),
+    0 0 10px var(--_dot-glow) !important;
+}
+
+/* OFF: dormant / standby socket (hollow ◇ diamond, accent-rimmed telemetry bay) */
 .dtsp-chip.dtsp-chip[data-kind="off"] {
-  --_dot-bg: #64748b;
-  --_chip-bg: rgba(7, 9, 14, 0.46);
-  --_chip-bg-hover: rgba(18, 22, 31, 0.72);
-  --_chip-bg-active: rgba(5, 7, 11, 0.62);
-  --_chip-ring: rgba(255, 255, 255, 0.08);
-  --_chip-ring-hover: rgba(255, 255, 255, 0.18);
-  --_chip-ink: #9aa6b8;
-  --_chip-ink-hover: #cbd6e6;
+  --_dot-bg: #94a3b8;
+  --_dot-glow: transparent;
+  --_chip-ink: #ccd8e8;
+  --_chip-ink-hover: #edf4fc;
 }
 
-/* 未確認: awaiting initial check */
+@supports (color: color-mix(in oklab, white, black)) {
+  .dtsp-chip.dtsp-chip[data-kind="off"] {
+    --_dot-bg: color-mix(in oklab, #94a3b8 68%, var(--_chip-accent));
+    --_chip-ring: color-mix(in oklab, var(--_chip-accent) 34%, transparent);
+    --_chip-ring-hover: color-mix(in oklab, var(--_chip-accent) 68%, #ffffff);
+    --_chip-glow: color-mix(in oklab, var(--_chip-accent) 18%, transparent);
+    --_chip-ink: color-mix(in oklab, #cedaec 88%, var(--_chip-accent));
+  }
+}
+
+.dtsp-chip.dtsp-chip[data-kind="off"] .dtsp-dot {
+  background-color: transparent !important;
+  border: 1.5px solid var(--_dot-bg) !important;
+  box-shadow: none !important;
+}
+
+/* 未確認: awaiting initial check (probing ◈ diamond with center pin) */
 .dtsp-chip.dtsp-chip[data-kind="unknown"] {
-  --_dot-bg: #64748b;
-  --_chip-bg: rgba(7, 9, 14, 0.54);
-  --_chip-bg-hover: rgba(20, 25, 36, 0.76);
-  --_chip-bg-active: rgba(5, 7, 11, 0.70);
-  --_chip-ring: rgba(255, 255, 255, 0.11);
-  --_chip-ring-hover: rgba(255, 255, 255, 0.22);
-  --_chip-ink: #c8d3e3;
-  --_chip-ink-hover: #eef3fa;
+  --_dot-bg: #a8b9cf;
+  --_dot-glow: rgba(148, 163, 184, 0.30);
+  --_chip-ink: #dae6f5;
+  --_chip-ink-hover: #f4f8ff;
+}
+
+@supports (color: color-mix(in oklab, white, black)) {
+  .dtsp-chip.dtsp-chip[data-kind="unknown"] {
+    --_dot-bg: color-mix(in oklab, #a8b9cf 62%, var(--_chip-accent));
+    --_dot-glow: color-mix(in oklab, var(--_chip-accent) 36%, transparent);
+    --_chip-ring: color-mix(in oklab, var(--_chip-accent) 42%, transparent);
+    --_chip-ring-hover: color-mix(in oklab, var(--_chip-accent) 74%, #ffffff);
+    --_chip-glow: color-mix(in oklab, var(--_chip-accent) 22%, transparent);
+  }
+}
+
+.dtsp-chip.dtsp-chip[data-kind="unknown"] .dtsp-dot {
+  background-color: transparent !important;
+  background-image: radial-gradient(circle, var(--_dot-bg) 0 1.4px, transparent 1.6px) !important;
+  border: 1.5px solid var(--_dot-bg) !important;
+  box-shadow: 0 0 6px var(--_dot-glow) !important;
 }
 
 /* Chip hover / active / focus-visible */
@@ -764,8 +993,8 @@
     color: var(--_chip-ink-hover) !important;
     box-shadow:
       inset 0 0 0 1px var(--_chip-ring-hover),
-      inset 0 1px 2px rgba(0, 0, 0, 0.24),
-      0 1px 0 rgba(255, 255, 255, 0.07) !important;
+      inset 0 1px 2px rgba(0, 0, 0, 0.30),
+      0 0 14px -2px var(--_chip-glow) !important;
   }
 }
 
@@ -774,7 +1003,7 @@
   color: var(--_chip-ink-hover) !important;
   box-shadow:
     inset 0 0 0 1px var(--_chip-ring-hover),
-    inset 0 1px 3px rgba(0, 0, 0, 0.44) !important;
+    inset 0 2px 4px rgba(0, 0, 0, 0.56) !important;
   transform: scale(0.96);
 }
 
@@ -788,7 +1017,7 @@
     opacity: 1;
   }
   50% {
-    opacity: 0.32;
+    opacity: 0.34;
   }
 }
 
@@ -853,6 +1082,12 @@
     border: 1px solid CanvasText !important;
   }
 
+  .dtsp-header.dtsp-header::before,
+  .lab-shell .lab-toolbar.lab-toolbar::before,
+  .lab-toolbar.lab-toolbar::before {
+    display: none !important;
+  }
+
   .dtsp-header.dtsp-header .dtsp-header-back,
   .lab-shell .lab-toolbar.lab-toolbar .lab-exit,
   .lab-toolbar.lab-toolbar .lab-exit,
@@ -860,8 +1095,22 @@
     border: 1px solid ButtonBorder !important;
   }
 
+  .dtsp-header.dtsp-header .dtsp-header-kicker,
+  .lab-shell .lab-toolbar.lab-toolbar .lab-toolbar-kicker,
+  .lab-toolbar.lab-toolbar .lab-toolbar-kicker,
+  .dtsp-header.dtsp-header .dtsp-header-title strong,
+  .lab-shell .lab-toolbar.lab-toolbar .lab-toolbar-title,
+  .lab-toolbar.lab-toolbar .lab-toolbar-title {
+    text-shadow: none !important;
+  }
+
   .dtsp-dot {
     forced-color-adjust: none;
+  }
+
+  .dtsp-chip.dtsp-chip[data-kind="off"] .dtsp-dot,
+  .dtsp-chip.dtsp-chip[data-kind="unknown"] .dtsp-dot {
+    border-color: ButtonText !important;
   }
 }
 
@@ -869,7 +1118,7 @@
 /* Long-label guard: the frame never breaks — an over-long status truncates */
 .dtsp-chip.dtsp-chip { max-width: min(240px, 60vw); }
 .dtsp-chip .dtsp-chip-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-  .dtsp-chip.dtsp-chip-docked{position:relative!important}
+.dtsp-chip.dtsp-chip-docked { position: relative !important; }
 
   .dtsp-panel:not([hidden]){display:block}
   .dtsp-panel.dtsp-panel{position:fixed;z-index:2147482001;left:10px;right:10px;top:76px;
@@ -961,9 +1210,6 @@
       const back = window.location.pathname.startsWith('/0723/') ? '/0723/' : '/';
       const el = document.createElement('div');
       el.className = 'dtsp-header';
-      el.style.setProperty('--dtsp-accent', accent);
-      el.style.setProperty('--dtsp-accent-dim', hexToRgba(accent, 0.16));
-      el.style.setProperty('--dtsp-accent-soft', hexToRgba(accent, 0.45));
       el.innerHTML = '<a class="dtsp-header-back" href="' + back + '" aria-label="戻る"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span>戻る</span></a>'
         + '<div class="dtsp-header-title"><span class="dtsp-header-kicker">DT // TOOL</span><strong></strong></div>'
         + '<span class="dtsp-header-slot"></span>';
@@ -982,6 +1228,10 @@
       el.style.cssText = 'display:flex!important;align-items:center!important;gap:12px!important;'
         + 'height:64px!important;box-sizing:border-box!important;width:100%!important;'
         + 'padding:10px 12px!important;margin:0 auto 16px!important';
+      /* cssText 代入は先に設定したカスタムプロパティを消去するため、アクセント変数は代入後に設定する */
+      el.style.setProperty('--dtsp-accent', accent);
+      el.style.setProperty('--dtsp-accent-dim', hexToRgba(accent, 0.16));
+      el.style.setProperty('--dtsp-accent-soft', hexToRgba(accent, 0.45));
       const backBtn = el.querySelector('.dtsp-header-back');
       if (backBtn) backBtn.style.cssText = 'display:inline-flex!important;align-items:center!important;gap:6px!important;'
         + 'height:44px!important;padding:0 14px 0 12px!important;flex:none!important';
