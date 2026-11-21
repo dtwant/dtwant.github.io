@@ -399,6 +399,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Touch devices (iOS WebKit): a backdrop-filter on the page-top chrome puts
+   the header into a backdrop-filtered compositing layer that WebKit can
+   rasterize softly, so the header text looks blurred (reported 2026-11-21).
+   These headers sit in-flow at the page top over a dark background, so the
+   blur contributes almost nothing visually; dropping it on touch keeps the
+   smoked-glass tint while the text layer stays sharp. Non-touch unchanged. */
+@media (hover: none) and (pointer: coarse) {
+  .dtsp-header.dtsp-header,
+  .lab-shell .lab-toolbar.lab-toolbar,
+  .lab-toolbar.lab-toolbar {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
 /* Default interface typeface for tool header only (LAB preserves theme font,
    e.g. DotGothic16 on pixel / deadline) */
 .dtsp-header.dtsp-header {
