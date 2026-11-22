@@ -79,6 +79,7 @@ import { ACTION_LOG_SNAPSHOT } from '/js/ritual-action-data.mjs';
     todayTelemetry: $('[data-rg-today-telemetry]'),
     todayMain: $('[data-rg-today-main]'),
     pulseShell: $('[data-rg-pulse-shell]'),
+    heatShell: $('[data-rg-heat-shell]'),
     gridCount: $('[data-rg-grid-count]'),
     exportStage: $('[data-rg-export-stage]')
   };
@@ -536,10 +537,14 @@ import { ACTION_LOG_SNAPSHOT } from '/js/ritual-action-data.mjs';
       const info = task.archivedAt ? { state: 'idle' } : dueInfo(task, today, index);
       const overdue = info.state === 'overdue';
       const sub = task.subgroup || CATEGORY_LABELS[task.category] || '';
-      return `<th class="rg-task-col ${overdue ? 'is-overdue' : ''}" scope="col" title="${escapeHtml(task.name)}${overdue ? `（${info.overdueDays}日超過）` : ''}"><span class="rg-col-name">${escapeHtml(task.name)}</span><span class="rg-col-sub">${escapeHtml(sub)}${overdue ? ` · +${info.overdueDays}d` : ''}</span></th>`;
+      return `<th class="rg-task-col ${overdue ? 'is-overdue' : ''}" scope="col" title="${escapeHtml(task.name)}${overdue ? `（${info.overdueDays}日超過）` : ''}"><span class="rg-col-name">${headerNameHtml(task.name)}</span><span class="rg-col-sub">${escapeHtml(sub)}${overdue ? ` · +${info.overdueDays}d` : ''}</span></th>`;
     }).join('')}${emptyTask}</tr>`;
   }
 
+  function headerNameHtml(name) {
+    // keep the action word unbreakable so long names wrap before it (こむぎ/部屋んぽ), never inside it
+    return escapeHtml(name).replace(/(部屋んぽ|水換え|ご飯|お散歩|掃除|消灯)/g, '<span class="rg-col-brk">$1</span>');
+  }
   function fixedHeaderHtml() { return '<tr><th class="rg-day-col" scope="col"><span class="rg-col-name">DAY</span><span class="rg-col-sub">日付</span></th><th class="rg-main-col" scope="col"><span class="rg-col-name">SUM</span><span class="rg-col-sub">サマリ</span></th></tr>'; }
 
   function taskHeaderSpacerHtml(tasks) {
@@ -925,6 +930,7 @@ import { ACTION_LOG_SNAPSHOT } from '/js/ritual-action-data.mjs';
       const p = s.due ? Math.round((s.done / s.due) * 100) : 100;
       return `<div class="rg-pulse-cat"><span class="rg-pulse-cat-label">${label}</span><span class="rg-pulse-cat-bar"><i style="width:${p}%"></i></span><span class="rg-pulse-cat-num">${s.done}/${s.due} · ${p}%</span></div>`;
     };
+
     els.pulseShell.innerHTML = `
       <div class="rg-pulse-head">
         <button type="button" class="rg-icon-button" data-rg-action="prev-month" data-rg-four-edge aria-label="前月"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
@@ -950,9 +956,52 @@ import { ACTION_LOG_SNAPSHOT } from '/js/ritual-action-data.mjs';
       </div>`;
   }
 
+  function renderHeat() {
+    if (!els.heatShell) return;
+    const today = localToday();
+    // daily record counts for the last 26 weeks (Sunday-start columns)
+    const heatStart = shiftDateKey(today, -weekdayOf(today) - 25 * 7);
+    const heatCounts = [];
+    let heatMax = 1;
+    let totalRecords = 0;
+    let activeDays = 0;
+    for (let i = 0; i < 182; i += 1) {
+      const day = shiftDateKey(heatStart, i);
+      const count = day <= today ? dayCounts(day).total : -1;
+      heatCounts.push([day, count]);
+      if (count > heatMax) heatMax = count;
+      if (count > 0) { activeDays += 1; totalRecords += count; }
+    }
+    let longest = 0;
+    let run = 0;
+    let current = 0;
+    heatCounts.forEach(([, count]) => {
+      if (count > 0) { run += 1; if (run > longest) longest = run; } else if (count === 0) run = 0;
+    });
+    for (let i = heatCounts.length - 1; i >= 0; i -= 1) {
+      const count = heatCounts[i][1];
+      if (count > 0) current += 1;
+      else if (count === 0) break;
+    }
+    const heatCells = heatCounts.map(([day, count]) => {
+      if (count < 0) return '<span class="rg-heat-cell is-future" aria-hidden="true"></span>';
+      const level = count === 0 ? 0 : Math.max(1, Math.ceil((count / heatMax) * 4));
+      return `<button type="button" class="rg-heat-cell" data-rg-day="${day}" data-level="${level}" title="${day} · ${count}件" aria-label="${day} ${count}件"></button>`;
+    }).join('');
+    const stat = (label, value, unit) => `<div class="rg-heat-stat"><span class="rg-heat-stat-value">${value}<small>${unit}</small></span><span class="rg-heat-stat-label">${label}</span></div>`;
+    els.heatShell.innerHTML = `
+      <div class="rg-heat-head"><span class="rg-pulse-month">記録ヒートマップ</span><span class="rg-heat-range">${heatStart} 〜 ${today}</span></div>
+      <div class="rg-heat-stats">${stat('記録した日', activeDays, '日')}${stat('合計記録', totalRecords, '件')}${stat('現在の連続', current, '日')}${stat('最長連続', longest, '日')}</div>
+      <div class="rg-pulse-card rg-pulse-heat">
+        <div class="rg-heat-grid">${heatCells}</div>
+        <div class="rg-heat-legend"><span>少</span><i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i><span>多</span></div>
+        <p class="rg-heat-note">マスをタップするとその日の詳細が開きます。</p>
+      </div>`;
+  }
+
   /* ---------- views ---------- */
   function setView(view) {
-    activeView = ['today', 'log', 'pulse', 'tasks', 'settings'].includes(view) ? view : 'today';
+    activeView = ['today', 'log', 'pulse', 'heat', 'tasks', 'settings'].includes(view) ? view : 'today';
     try { localStorage.setItem(VIEW_KEY, activeView); } catch (_) { /* ignore */ }
     $$('[data-rg-view]').forEach((section) => { section.hidden = section.dataset.rgView !== activeView; });
     $$('[data-rg-tab]').forEach((tab) => { tab.classList.toggle('is-active', tab.dataset.rgTab === activeView); tab.setAttribute('aria-selected', String(tab.dataset.rgTab === activeView)); });
@@ -960,12 +1009,14 @@ import { ACTION_LOG_SNAPSHOT } from '/js/ritual-action-data.mjs';
     if (activeView === 'tasks') renderTasks();
     if (activeView === 'today') renderToday();
     if (activeView === 'pulse') renderPulse();
+    if (activeView === 'heat') renderHeat();
   }
   function renderAll() {
     if (activeView === 'log') renderMatrix();
     if (activeView === 'tasks') renderTasks();
     if (activeView === 'today') renderToday();
     if (activeView === 'pulse') renderPulse();
+    if (activeView === 'heat') renderHeat();
     if (els.dateDialog?.open) renderDateDetail();
   }
 
