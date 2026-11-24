@@ -291,15 +291,17 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 
 
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap"
+    rel="stylesheet">
 
 <div id="cyber-graph-app">
     
     <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
-      <filter id="liquid-refract">
-        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
-      </filter>
+        <filter id="liquid-refract">
+            <feTurbulence type="fractalNoise" baseFrequency="0.012 0.015" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
     </svg>
 
     <style>
@@ -323,45 +325,124 @@
             width: 100%;
             position: relative;
             z-index: 10;
-            margin: 0; padding: 0;
+            margin: 0;
+            padding: 0;
         }
-        #cyber-graph-app * { box-sizing: border-box; }
+
+        #cyber-graph-app * {
+            box-sizing: border-box;
+        }
 
         #cyber-graph-app::before {
-            content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #050505; z-index: -2;
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #050505;
+            z-index: -2;
         }
+
         #cyber-graph-app::after {
-            content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             background-image: linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px; animation: gp-bg-scroll 20s linear infinite; z-index: -1;
+            background-size: 40px 40px;
+            animation: gp-bg-scroll 20s linear infinite;
+            z-index: -1;
         }
 
         #cyber-graph-app .gp-scanline {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
-            background-size: 100% 4px; pointer-events: none; z-index: 50; opacity: 0.6;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.6;
         }
 
-        @keyframes gp-bg-scroll { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+        @keyframes gp-bg-scroll {
+            0% {
+                background-position: 0 0;
+            }
 
-        #cyber-graph-app .gp-clip { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%); }
-        #cyber-graph-app .gp-clip-top { clip-path: polygon(15px 0, 100% 0, 100% 100%, 0 100%, 0 15px); }
+            100% {
+                background-position: 40px 40px;
+            }
+        }
+
+        #cyber-graph-app .gp-clip {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+        }
+
+        #cyber-graph-app .gp-clip-top {
+            clip-path: polygon(15px 0, 100% 0, 100% 100%, 0 100%, 0 15px);
+        }
 
         #cyber-graph-app .gp-glitch {
-            font-family: 'Orbitron', sans-serif; position: relative; color: var(--neon-cyan); text-shadow: 2px 2px var(--neon-pink);
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+            color: var(--neon-cyan);
+            text-shadow: 2px 2px var(--neon-pink);
         }
-        #cyber-graph-app .gp-glitch::before, #cyber-graph-app .gp-glitch::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent;
-        }
-        #cyber-graph-app .gp-glitch::before {
-            left: 2px; text-shadow: -1px 0 var(--neon-pink); clip: rect(24px, 550px, 90px, 0); animation: gp-glitch2 3s infinite linear alternate-reverse;
-        }
+
+        #cyber-graph-app .gp-glitch::before,
         #cyber-graph-app .gp-glitch::after {
-            left: -2px; text-shadow: -1px 0 var(--neon-green); clip: rect(85px, 550px, 140px, 0); animation: gp-glitch1 2.5s infinite linear alternate-reverse;
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
         }
-        @keyframes gp-glitch1 { 0% { clip: rect(14px, 9999px, 122px, 0); } 5% { clip: rect(82px, 9999px, 92px, 0); } 100% { clip: rect(5px, 9999px, 133px, 0); } }
-        @keyframes gp-glitch2 { 0% { clip: rect(65px, 9999px, 100px, 0); } 100% { clip: rect(10px, 9999px, 111px, 0); } }
+
+        #cyber-graph-app .gp-glitch::before {
+            left: 2px;
+            text-shadow: -1px 0 var(--neon-pink);
+            clip: rect(24px, 550px, 90px, 0);
+            animation: gp-glitch2 3s infinite linear alternate-reverse;
+        }
+
+        #cyber-graph-app .gp-glitch::after {
+            left: -2px;
+            text-shadow: -1px 0 var(--neon-green);
+            clip: rect(85px, 550px, 140px, 0);
+            animation: gp-glitch1 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes gp-glitch1 {
+            0% {
+                clip: rect(14px, 9999px, 122px, 0);
+            }
+
+            5% {
+                clip: rect(82px, 9999px, 92px, 0);
+            }
+
+            100% {
+                clip: rect(5px, 9999px, 133px, 0);
+            }
+        }
+
+        @keyframes gp-glitch2 {
+            0% {
+                clip: rect(65px, 9999px, 100px, 0);
+            }
+
+            100% {
+                clip: rect(10px, 9999px, 111px, 0);
+            }
+        }
 
         #cyber-graph-app .gp-panel {
             background: rgba(10, 14, 18, 0.65);
@@ -373,234 +454,606 @@
 
          
         #cyber-graph-app .gp-main {
-            width: 100%; max-width: 960px; position: relative; z-index: 10;
-            margin: 0 auto; padding: 8px; padding-top: 8px; padding-bottom: 32px;
+            width: 100%;
+            max-width: 960px;
+            position: relative;
+            z-index: 10;
+            margin: 0 auto;
+            padding: 8px;
+            padding-top: 8px;
+            padding-bottom: 32px;
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-main { padding: 0 0 32px 0; margin-top: 32px; } }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-main {
+                padding: 0 0 32px 0;
+                margin-top: 32px;
+            }
+        }
 
          
         #cyber-graph-app .gp-header-bar {
-            display: flex; justify-content: space-between; align-items: flex-end;
-            margin-bottom: 8px; padding: 0 4px; opacity: 0.8;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 8px;
+            padding: 0 4px;
+            opacity: 0.8;
         }
-        #cyber-graph-app .gp-sysver { font-size: 9px; color: #06b6d4; font-family: monospace; letter-spacing: 2px; white-space: nowrap; }
-        @media (min-width: 768px) { #cyber-graph-app .gp-sysver { font-size: 12px; } }
+
+        #cyber-graph-app .gp-sysver {
+            font-size: 9px;
+            color: #06b6d4;
+            font-family: monospace;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-sysver {
+                font-size: 12px;
+            }
+        }
 
         #cyber-graph-app .gp-status {
-            font-size: 9px; font-family: monospace; display: flex; align-items: center; gap: 4px;
-            background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px;
-            border: 1px solid rgba(0, 255, 65, 0.3); color: #4ade80; white-space: nowrap;
-            box-shadow: 0 0 10px rgba(0,255,65,0.2);
+            font-size: 9px;
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            color: #4ade80;
+            white-space: nowrap;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-status { font-size: 12px; padding: 4px 12px; gap: 8px; } }
-        #cyber-graph-app .gp-status .gp-pulse { animation: gp-pulse 1.5s ease-in-out infinite; }
-        @keyframes gp-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-status {
+                font-size: 12px;
+                padding: 4px 12px;
+                gap: 8px;
+            }
+        }
+
+        #cyber-graph-app .gp-status .gp-pulse {
+            animation: gp-pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes gp-pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
 
          
         #cyber-graph-app .gp-title-section {
-            margin-bottom: 24px; text-align: center; border-bottom: 1px solid #1f2937;
-            padding-bottom: 16px; position: relative; padding-top: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+            border-bottom: 1px solid #1f2937;
+            padding-bottom: 16px;
+            position: relative;
+            padding-top: 24px;
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-title-section { text-align: left; padding-top: 0; margin-bottom: 32px; padding-bottom: 24px; } }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-title-section {
+                text-align: left;
+                padding-top: 0;
+                margin-bottom: 32px;
+                padding-bottom: 24px;
+            }
+        }
 
         #cyber-graph-app .gp-return {
-            position: absolute; top: 0; right: 0; color: #06b6d4; font-family: monospace;
-            font-size: 10px; border: 1px solid rgba(6,182,212,0.3); background: rgba(0,0,0,0.8);
-            padding: 4px 8px; text-decoration: none; transition: color 0.3s; z-index: 20;
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: #06b6d4;
+            font-family: monospace;
+            font-size: 10px;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 4px 8px;
+            text-decoration: none;
+            transition: color 0.3s;
+            z-index: 20;
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-return { font-size: 12px; } }
-        #cyber-graph-app .gp-return:hover { color: var(--neon-pink); }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-return {
+                font-size: 12px;
+            }
+        }
+
+        #cyber-graph-app .gp-return:hover {
+            color: var(--neon-pink);
+        }
 
         #cyber-graph-app .gp-title {
-            font-size: 24px; font-weight: 700; letter-spacing: -0.05em; margin-bottom: 4px; margin-top: 8px;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            margin-bottom: 4px;
+            margin-top: 8px;
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-title { font-size: 48px; margin-top: 0; } }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-title {
+                font-size: 48px;
+                margin-top: 0;
+            }
+        }
 
         #cyber-graph-app .gp-subtitle {
-            font-size: 10px; color: #9ca3af; font-family: monospace; letter-spacing: 0.1em; text-transform: uppercase;
+            font-size: 10px;
+            color: #9ca3af;
+            font-family: monospace;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-subtitle { font-size: 14px; letter-spacing: 0.2em; } }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-subtitle {
+                font-size: 14px;
+                letter-spacing: 0.2em;
+            }
+        }
 
          
-        #cyber-graph-app .gp-func-list { margin-bottom: 16px; }
+        #cyber-graph-app .gp-func-list {
+            margin-bottom: 16px;
+        }
 
         #cyber-graph-app .gp-func-row {
-            display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
         #cyber-graph-app .gp-func-color {
-            width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
             box-shadow: 0 0 8px currentColor;
         }
 
         #cyber-graph-app .gp-func-input-wrap {
-            flex: 1; display: flex; align-items: center; position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            position: relative;
             background: rgba(10, 14, 18, 0.45);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 8px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(8px) url(#liquid-refract);
             -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
             transition: all 0.3s;
-            padding: 2px 4px 2px 12px; min-height: 44px; cursor: text;
+            padding: 2px 4px 2px 12px;
+            min-height: 44px;
+            cursor: text;
         }
+
         #cyber-graph-app .gp-func-input-wrap.gp-editing {
             border-color: var(--neon-green);
             box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), 0 0 15px rgba(0, 255, 65, 0.2);
         }
 
         #cyber-graph-app .gp-func-prefix {
-            color: var(--neon-pink); font-weight: 700; font-size: 14px; margin-right: 4px; font-family: monospace;
-            animation: gp-pulse 1.5s infinite; white-space: nowrap; flex-shrink: 0;
+            color: var(--neon-pink);
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 4px;
+            font-family: monospace;
+            animation: gp-pulse 1.5s infinite;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         #cyber-graph-app .gp-func-input {
-            flex: 1; background: transparent; border: none; color: var(--neon-green);
-            font-family: 'JetBrains Mono', monospace; font-size: 14px;
-            padding: 10px 4px; outline: none; min-width: 0;
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--neon-green);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            padding: 10px 4px;
+            outline: none;
+            min-width: 0;
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-func-input { font-size: 16px; padding: 12px 4px; } }
-        #cyber-graph-app .gp-func-input::placeholder { color: #374151; }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-func-input {
+                font-size: 16px;
+                padding: 12px 4px;
+            }
+        }
+
+        #cyber-graph-app .gp-func-input::placeholder {
+            color: #374151;
+        }
 
          
         #cyber-graph-app .gp-func-katex-overlay {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            display: flex; align-items: center; padding: 2px 4px 2px 12px;
-            cursor: text; overflow-x: auto; white-space: nowrap;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            padding: 2px 4px 2px 12px;
+            cursor: text;
+            overflow-x: auto;
+            white-space: nowrap;
         }
+
         #cyber-graph-app .gp-func-katex-overlay .gp-katex-prefix {
-            color: var(--neon-cyan); font-weight: 700; font-size: 14px; margin-right: 6px;
-            font-family: 'Orbitron', sans-serif; white-space: nowrap; flex-shrink: 0;
-            text-shadow: 0 0 6px rgba(0,243,255,0.4);
+            color: var(--neon-cyan);
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 6px;
+            font-family: 'Orbitron', sans-serif;
+            white-space: nowrap;
+            flex-shrink: 0;
+            text-shadow: 0 0 6px rgba(0, 243, 255, 0.4);
         }
+
         #cyber-graph-app .gp-func-katex-overlay .gp-katex-body {
             color: #e0e0e0;
         }
-        #cyber-graph-app .gp-func-katex-overlay .katex { font-size: 1.1em; }
+
+        #cyber-graph-app .gp-func-katex-overlay .katex {
+            font-size: 1.1em;
+        }
 
         #cyber-graph-app .gp-func-del {
-            background: transparent; border: 1px solid rgba(255,0,85,0.3); color: var(--neon-pink);
-            cursor: pointer; font-size: 16px; width: 32px; height: 32px; display: flex;
-            align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.3s;
+            background: transparent;
+            border: 1px solid rgba(255, 0, 85, 0.3);
+            color: var(--neon-pink);
+            cursor: pointer;
+            font-size: 16px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s;
             font-family: monospace;
         }
-        #cyber-graph-app .gp-func-del:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 10px var(--neon-pink); }
+
+        #cyber-graph-app .gp-func-del:hover {
+            background: var(--neon-pink);
+            color: #000;
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
 
          
         #cyber-graph-app .gp-actions {
-            display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
         }
 
         #cyber-graph-app .gp-btn-add {
-            background: rgba(0,243,255,0.1); border: 1px solid rgba(0,243,255,0.4);
-            color: var(--neon-cyan); font-family: 'Orbitron', sans-serif; font-size: 11px;
-            padding: 8px 16px; cursor: pointer; transition: all 0.3s; letter-spacing: 1px;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid rgba(0, 243, 255, 0.4);
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 1px;
         }
-        #cyber-graph-app .gp-btn-add:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
+
+        #cyber-graph-app .gp-btn-add:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
 
         #cyber-graph-app .gp-btn-plot {
-            flex: 1; background: linear-gradient(90deg, transparent 0%, rgba(0,255,65,0.1) 50%, transparent 100%);
-            border: 1px solid var(--neon-green); color: var(--neon-green);
-            font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 700;
-            padding: 12px 16px; cursor: pointer; transition: all 0.3s; letter-spacing: 2px;
-            position: relative; overflow: hidden;
+            flex: 1;
+            background: linear-gradient(90deg, transparent 0%, rgba(0, 255, 65, 0.1) 50%, transparent 100%);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-btn-plot { font-size: 18px; letter-spacing: 3px; } }
-        #cyber-graph-app .gp-btn-plot:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 25px var(--neon-green); }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-btn-plot {
+                font-size: 18px;
+                letter-spacing: 3px;
+            }
+        }
+
+        #cyber-graph-app .gp-btn-plot:hover {
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 25px var(--neon-green);
+        }
+
         #cyber-graph-app .gp-btn-plot::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent); transition: 0.5s;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            transition: 0.5s;
         }
-        #cyber-graph-app .gp-btn-plot:hover::before { left: 100%; }
+
+        #cyber-graph-app .gp-btn-plot:hover::before {
+            left: 100%;
+        }
 
         #cyber-graph-app .gp-btn-reset {
-            background: rgba(255,0,85,0.1); border: 1px solid rgba(255,0,85,0.4);
-            color: var(--neon-pink); font-family: 'Orbitron', sans-serif; font-size: 11px;
-            padding: 8px 16px; cursor: pointer; transition: all 0.3s; letter-spacing: 1px;
+            background: rgba(255, 0, 85, 0.1);
+            border: 1px solid rgba(255, 0, 85, 0.4);
+            color: var(--neon-pink);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 1px;
         }
-        #cyber-graph-app .gp-btn-reset:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 15px var(--neon-pink); }
+
+        #cyber-graph-app .gp-btn-reset:hover {
+            background: var(--neon-pink);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
 
          
-        #cyber-graph-app .gp-canvas-section { margin-bottom: 16px; position: relative; }
+        #cyber-graph-app .gp-canvas-section {
+            margin-bottom: 16px;
+            position: relative;
+        }
 
         #cyber-graph-app .gp-canvas-label {
-            position: absolute; top: -12px; left: 8px; background: rgba(0,0,0,0.9);
-            padding: 0 8px; font-size: 10px; color: var(--neon-cyan); font-weight: 700;
-            text-transform: uppercase; letter-spacing: 2px; border: 1px solid rgba(6,182,212,0.3);
-            transform: skewX(12deg); z-index: 20;
+            position: absolute;
+            top: -12px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 0 8px;
+            font-size: 10px;
+            color: var(--neon-cyan);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            transform: skewX(12deg);
+            z-index: 20;
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-canvas-label { font-size: 12px; left: 16px; top: -14px; } }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-canvas-label {
+                font-size: 12px;
+                left: 16px;
+                top: -14px;
+            }
+        }
 
         #cyber-graph-app .gp-canvas-wrap {
-            border: 1px solid #1f2937; background: rgba(0,0,0,0.6); position: relative;
-            overflow: hidden; cursor: crosshair;
+            border: 1px solid #1f2937;
+            background: rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+            cursor: crosshair;
         }
 
-        #cyber-graph-app #graphCanvas { display: block; width: 100%; height: auto; }
+        #cyber-graph-app #graphCanvas {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
 
         #cyber-graph-app .gp-coords {
-            position: absolute; bottom: 8px; right: 8px; font-size: 10px; font-family: monospace;
-            color: var(--neon-cyan); background: rgba(0,0,0,0.8); padding: 2px 6px;
-            border: 1px solid rgba(6,182,212,0.2);
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-size: 10px;
+            font-family: monospace;
+            color: var(--neon-cyan);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2px 6px;
+            border: 1px solid rgba(6, 182, 212, 0.2);
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-coords { font-size: 12px; padding: 4px 10px; } }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-coords {
+                font-size: 12px;
+                padding: 4px 10px;
+            }
+        }
 
         #cyber-graph-app .gp-zoom-info {
-            position: absolute; top: 8px; right: 8px; font-size: 9px; font-family: monospace;
-            color: #6b7280; background: rgba(0,0,0,0.6); padding: 2px 6px;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 9px;
+            font-family: monospace;
+            color: #6b7280;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 2px 6px;
         }
 
          
         #cyber-graph-app .gp-legend {
-            display: flex; flex-wrap: wrap; gap: 12px; padding: 8px 0; margin-bottom: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 8px 0;
+            margin-bottom: 12px;
         }
+
         #cyber-graph-app .gp-legend-item {
-            display: flex; align-items: center; gap: 6px; font-size: 12px; font-family: monospace;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-family: monospace;
         }
-        #cyber-graph-app .gp-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
-        #cyber-graph-app .gp-legend-katex { color: #d1d5db; }
-        #cyber-graph-app .gp-legend-katex .katex { font-size: 0.9em; }
+
+        #cyber-graph-app .gp-legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        #cyber-graph-app .gp-legend-katex {
+            color: #d1d5db;
+        }
+
+        #cyber-graph-app .gp-legend-katex .katex {
+            font-size: 0.9em;
+        }
 
          
         #cyber-graph-app .gp-log-section {
-            border-top: 1px solid rgba(31,41,55,0.5); padding-top: 12px; margin-top: 24px;
+            border-top: 1px solid rgba(31, 41, 55, 0.5);
+            padding-top: 12px;
+            margin-top: 24px;
         }
+
         #cyber-graph-app .gp-log-header {
-            font-size: 9px; color: #6b7280; margin-bottom: 8px; text-transform: uppercase;
-            letter-spacing: 2px; display: flex; justify-content: space-between;
+            font-size: 9px;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            justify-content: space-between;
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-log-header { font-size: 10px; } }
-        #cyber-graph-app .gp-log-header span:last-child { color: #374151; }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-log-header {
+                font-size: 10px;
+            }
+        }
+
+        #cyber-graph-app .gp-log-header span:last-child {
+            color: #374151;
+        }
 
         #cyber-graph-app .gp-terminal {
-            font-family: 'JetBrains Mono', monospace; height: 80px; padding: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            height: 80px;
+            padding: 8px;
             background: rgba(10, 14, 18, 0.45);
             border: 1px solid rgba(255, 255, 255, 0.06);
             box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 -2px 8px rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(8px) url(#liquid-refract);
             -webkit-backdrop-filter: blur(8px) url(#liquid-refract);
             font-size: 10px;
-            border-radius: 4px; overflow-y: auto; word-break: break-all; white-space: pre-wrap;
+            border-radius: 4px;
+            overflow-y: auto;
+            word-break: break-all;
+            white-space: pre-wrap;
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-terminal { height: 96px; font-size: 12px; } }
 
-        #cyber-graph-app .gp-terminal::-webkit-scrollbar { width: 6px; }
-        #cyber-graph-app .gp-terminal::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); }
-        #cyber-graph-app .gp-terminal::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 3px; }
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-terminal {
+                height: 96px;
+                font-size: 12px;
+            }
+        }
 
-        #cyber-graph-app .gp-log-info { color: #9ca3af; }
-        #cyber-graph-app .gp-log-success { color: #4ade80; }
-        #cyber-graph-app .gp-log-error { color: #f43f5e; }
-        #cyber-graph-app .gp-log-warn { color: #facc15; }
+        #cyber-graph-app .gp-terminal::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #cyber-graph-app .gp-terminal::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        #cyber-graph-app .gp-terminal::-webkit-scrollbar-thumb {
+            background: var(--neon-cyan);
+            border-radius: 3px;
+        }
+
+        #cyber-graph-app .gp-log-info {
+            color: #9ca3af;
+        }
+
+        #cyber-graph-app .gp-log-success {
+            color: #4ade80;
+        }
+
+        #cyber-graph-app .gp-log-error {
+            color: #f43f5e;
+        }
+
+        #cyber-graph-app .gp-log-warn {
+            color: #facc15;
+        }
 
          
         #cyber-graph-app .gp-corner {
-            position: absolute; width: 24px; height: 24px; border-color: #06b6d4; opacity: 0.5;
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-color: #06b6d4;
+            opacity: 0.5;
         }
-        @media (min-width: 768px) { #cyber-graph-app .gp-corner { width: 32px; height: 32px; } }
-        #cyber-graph-app .gp-c-tl { top: 0; left: 0; border-top: 2px solid; border-left: 2px solid; }
-        #cyber-graph-app .gp-c-tr { top: 0; right: 0; border-top: 2px solid; border-right: 2px solid; }
-        #cyber-graph-app .gp-c-bl { bottom: 0; left: 0; border-bottom: 2px solid; border-left: 2px solid; }
-        #cyber-graph-app .gp-c-br { bottom: 0; right: 0; border-bottom: 2px solid; border-right: 2px solid; }
+
+        @media (min-width: 768px) {
+            #cyber-graph-app .gp-corner {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        #cyber-graph-app .gp-c-tl {
+            top: 0;
+            left: 0;
+            border-top: 2px solid;
+            border-left: 2px solid;
+        }
+
+        #cyber-graph-app .gp-c-tr {
+            top: 0;
+            right: 0;
+            border-top: 2px solid;
+            border-right: 2px solid;
+        }
+
+        #cyber-graph-app .gp-c-bl {
+            bottom: 0;
+            left: 0;
+            border-bottom: 2px solid;
+            border-left: 2px solid;
+        }
+
+        #cyber-graph-app .gp-c-br {
+            bottom: 0;
+            right: 0;
+            border-bottom: 2px solid;
+            border-right: 2px solid;
+        }
     </style>
 
     <div class="gp-scanline"></div>
@@ -621,7 +1074,8 @@
 
             
             <div class="gp-title-section">
-                <button onclick="window.history.back()" class="gp-return" style="cursor: pointer; border-radius: 3px; font-weight: bold;">◀ EXIT</button>
+                <button onclick="window.history.back()" class="gp-return"
+                    style="cursor: pointer; border-radius: 3px; font-weight: bold;">◀ EXIT</button>
                 <h1 class="gp-title gp-glitch" data-text="GRAPH_PLOTTER">GRAPH_PLOTTER</h1>
                 <p class="gp-subtitle">Function Visualization Engine</p>
             </div>
@@ -674,545 +1128,545 @@
 </div>
 
 <script>
-const graphApp = (function() {
-    "use strict";
+    const graphApp = (function () {
+        "use strict";
 
-    const COLORS = ['#ff0055', '#00f3ff', '#00ff41', '#fcee0a', '#bf5af2'];
-    const COLOR_NAMES = ['PINK', 'CYAN', 'GREEN', 'YELLOW', 'PURPLE'];
-    const MAX_FUNCS = 5;
+        const COLORS = ['#ff0055', '#00f3ff', '#00ff41', '#fcee0a', '#bf5af2'];
+        const COLOR_NAMES = ['PINK', 'CYAN', 'GREEN', 'YELLOW', 'PURPLE'];
+        const MAX_FUNCS = 5;
 
-    let functions = [{ expr: '', color: COLORS[0] }];
-
-    
-    let viewX = -10, viewY = -7, viewW = 20, viewH = 14;
-    let isDragging = false, dragStartX = 0, dragStartY = 0, dragViewX = 0, dragViewY = 0;
-
-    
-    let lastTouchDist = 0;
-    let lastTouchMid = null;
-
-    
-    let canvas, ctx, wrap;
-
-    function init() {
-        canvas = document.getElementById('graphCanvas');
-        ctx = canvas.getContext('2d');
-        wrap = document.getElementById('canvasWrap');
-
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+        let functions = [{ expr: '', color: COLORS[0] }];
 
         
-        canvas.addEventListener('mousedown', onMouseDown);
-        canvas.addEventListener('mousemove', onMouseMove);
-        canvas.addEventListener('mouseup', onMouseUp);
-        canvas.addEventListener('mouseleave', onMouseUp);
-        canvas.addEventListener('wheel', onWheel, { passive: false });
+        let viewX = -10, viewY = -7, viewW = 20, viewH = 14;
+        let isDragging = false, dragStartX = 0, dragStartY = 0, dragViewX = 0, dragViewY = 0;
 
         
-        canvas.addEventListener('touchstart', onTouchStart, { passive: false });
-        canvas.addEventListener('touchmove', onTouchMove, { passive: false });
-        canvas.addEventListener('touchend', onTouchEnd);
+        let lastTouchDist = 0;
+        let lastTouchMid = null;
 
         
-        document.getElementById('funcList').addEventListener('input', debounce(onInputChange, 300));
-        document.getElementById('funcList').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') { e.preventDefault(); plot(); }
-        });
+        let canvas, ctx, wrap;
 
-        drawGrid();
-        setupFocusToggle();
-        log('System ready. Enter a function and click RENDER GRAPH.', 'info');
-    }
+        function init() {
+            canvas = document.getElementById('graphCanvas');
+            ctx = canvas.getContext('2d');
+            wrap = document.getElementById('canvasWrap');
 
-    function resizeCanvas() {
-        const dpr = window.devicePixelRatio || 1;
-        const rect = wrap.getBoundingClientRect();
-        const w = rect.width;
-        const h = Math.min(w * 0.62, 560);
-        canvas.width = w * dpr;
-        canvas.height = h * dpr;
-        canvas.style.width = w + 'px';
-        canvas.style.height = h + 'px';
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        
-        const aspect = w / h;
-        viewH = viewW / aspect;
-        drawAll();
-    }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
 
-    
-    function toCanvasX(x) { return (x - viewX) / viewW * parseFloat(canvas.style.width); }
-    function toCanvasY(y) { return (1 - (y - viewY) / viewH) * parseFloat(canvas.style.height); }
-    function toMathX(cx) { return viewX + cx / parseFloat(canvas.style.width) * viewW; }
-    function toMathY(cy) { return viewY + (1 - cy / parseFloat(canvas.style.height)) * viewH; }
+            
+            canvas.addEventListener('mousedown', onMouseDown);
+            canvas.addEventListener('mousemove', onMouseMove);
+            canvas.addEventListener('mouseup', onMouseUp);
+            canvas.addEventListener('mouseleave', onMouseUp);
+            canvas.addEventListener('wheel', onWheel, { passive: false });
 
-    
-    function drawAll() {
-        const w = parseFloat(canvas.style.width);
-        const h = parseFloat(canvas.style.height);
-        ctx.clearRect(0, 0, w, h);
-        drawGrid();
-        functions.forEach((f, i) => {
-            if (f.compiled) drawFunction(f.compiled, f.color, w);
-        });
-    }
+            
+            canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+            canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+            canvas.addEventListener('touchend', onTouchEnd);
 
-    function drawGrid() {
-        const w = parseFloat(canvas.style.width);
-        const h = parseFloat(canvas.style.height);
+            
+            document.getElementById('funcList').addEventListener('input', debounce(onInputChange, 300));
+            document.getElementById('funcList').addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') { e.preventDefault(); plot(); }
+            });
 
-        
-        ctx.fillStyle = 'rgba(5, 5, 5, 0.95)';
-        ctx.fillRect(0, 0, w, h);
+            drawGrid();
+            setupFocusToggle();
+            log('System ready. Enter a function and click RENDER GRAPH.', 'info');
+        }
+
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = wrap.getBoundingClientRect();
+            const w = rect.width;
+            const h = Math.min(w * 0.62, 560);
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = w + 'px';
+            canvas.style.height = h + 'px';
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            
+            const aspect = w / h;
+            viewH = viewW / aspect;
+            drawAll();
+        }
 
         
-        ctx.fillStyle = 'rgba(51, 51, 51, 0.4)';
-        const dotSpacingPx = 20;
-        for (let px = 0; px < w; px += dotSpacingPx) {
-            for (let py = 0; py < h; py += dotSpacingPx) {
-                ctx.fillRect(px, py, 1, 1);
+        function toCanvasX(x) { return (x - viewX) / viewW * parseFloat(canvas.style.width); }
+        function toCanvasY(y) { return (1 - (y - viewY) / viewH) * parseFloat(canvas.style.height); }
+        function toMathX(cx) { return viewX + cx / parseFloat(canvas.style.width) * viewW; }
+        function toMathY(cy) { return viewY + (1 - cy / parseFloat(canvas.style.height)) * viewH; }
+
+        
+        function drawAll() {
+            const w = parseFloat(canvas.style.width);
+            const h = parseFloat(canvas.style.height);
+            ctx.clearRect(0, 0, w, h);
+            drawGrid();
+            functions.forEach((f, i) => {
+                if (f.compiled) drawFunction(f.compiled, f.color, w);
+            });
+        }
+
+        function drawGrid() {
+            const w = parseFloat(canvas.style.width);
+            const h = parseFloat(canvas.style.height);
+
+            
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.95)';
+            ctx.fillRect(0, 0, w, h);
+
+            
+            ctx.fillStyle = 'rgba(51, 51, 51, 0.4)';
+            const dotSpacingPx = 20;
+            for (let px = 0; px < w; px += dotSpacingPx) {
+                for (let py = 0; py < h; py += dotSpacingPx) {
+                    ctx.fillRect(px, py, 1, 1);
+                }
+            }
+
+            
+            const gridStep = niceStep(viewW / 8);
+
+            
+            ctx.strokeStyle = 'rgba(0, 243, 255, 0.06)';
+            ctx.lineWidth = 0.5;
+            const minorStep = gridStep / 5;
+            drawGridLines(w, h, minorStep);
+
+            
+            ctx.strokeStyle = 'rgba(0, 243, 255, 0.15)';
+            ctx.lineWidth = 0.5;
+            drawGridLines(w, h, gridStep);
+
+            
+            const ox = toCanvasX(0), oy = toCanvasY(0);
+
+            
+            if (oy >= 0 && oy <= h) {
+                ctx.strokeStyle = 'rgba(0, 243, 255, 0.6)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(w, oy); ctx.stroke();
+            }
+            
+            if (ox >= 0 && ox <= w) {
+                ctx.strokeStyle = 'rgba(0, 243, 255, 0.6)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, h); ctx.stroke();
+            }
+
+            
+            ctx.fillStyle = 'rgba(0, 243, 255, 0.5)';
+            ctx.font = '10px "JetBrains Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+            const startX = Math.ceil(viewX / gridStep) * gridStep;
+            for (let gx = startX; gx < viewX + viewW; gx += gridStep) {
+                if (Math.abs(gx) < gridStep * 0.01) continue;
+                const cx = toCanvasX(gx);
+                const labelY = oy >= 0 && oy <= h ? Math.min(oy + 4, h - 14) : h - 14;
+                ctx.fillText(formatNum(gx), cx, labelY);
+            }
+
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            const startY = Math.ceil(viewY / gridStep) * gridStep;
+            for (let gy = startY; gy < viewY + viewH; gy += gridStep) {
+                if (Math.abs(gy) < gridStep * 0.01) continue;
+                const cy = toCanvasY(gy);
+                const labelX = ox >= 0 && ox <= w ? Math.max(ox - 4, 30) : 30;
+                ctx.fillText(formatNum(gy), labelX, cy);
+            }
+
+            
+            if (ox >= 0 && ox <= w && oy >= 0 && oy <= h) {
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'top';
+                ctx.fillText('0', ox - 4, oy + 4);
             }
         }
 
-        
-        const gridStep = niceStep(viewW / 8);
-
-        
-        ctx.strokeStyle = 'rgba(0, 243, 255, 0.06)';
-        ctx.lineWidth = 0.5;
-        const minorStep = gridStep / 5;
-        drawGridLines(w, h, minorStep);
-
-        
-        ctx.strokeStyle = 'rgba(0, 243, 255, 0.15)';
-        ctx.lineWidth = 0.5;
-        drawGridLines(w, h, gridStep);
-
-        
-        const ox = toCanvasX(0), oy = toCanvasY(0);
-
-        
-        if (oy >= 0 && oy <= h) {
-            ctx.strokeStyle = 'rgba(0, 243, 255, 0.6)';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(w, oy); ctx.stroke();
-        }
-        
-        if (ox >= 0 && ox <= w) {
-            ctx.strokeStyle = 'rgba(0, 243, 255, 0.6)';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, h); ctx.stroke();
+        function drawGridLines(w, h, step) {
+            const startX = Math.floor(viewX / step) * step;
+            for (let gx = startX; gx < viewX + viewW; gx += step) {
+                const cx = toCanvasX(gx);
+                ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, h); ctx.stroke();
+            }
+            const startY = Math.floor(viewY / step) * step;
+            for (let gy = startY; gy < viewY + viewH; gy += step) {
+                const cy = toCanvasY(gy);
+                ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+            }
         }
 
-        
-        ctx.fillStyle = 'rgba(0, 243, 255, 0.5)';
-        ctx.font = '10px "JetBrains Mono", monospace';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
+        function drawFunction(fn, color, w) {
+            const h = parseFloat(canvas.style.height);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 6;
+            ctx.beginPath();
 
-        const startX = Math.ceil(viewX / gridStep) * gridStep;
-        for (let gx = startX; gx < viewX + viewW; gx += gridStep) {
-            if (Math.abs(gx) < gridStep * 0.01) continue;
-            const cx = toCanvasX(gx);
-            const labelY = oy >= 0 && oy <= h ? Math.min(oy + 4, h - 14) : h - 14;
-            ctx.fillText(formatNum(gx), cx, labelY);
-        }
+            let started = false;
+            const steps = Math.ceil(w * 1.5);
+            let prevY = null;
 
-        ctx.textAlign = 'right';
-        ctx.textBaseline = 'middle';
-        const startY = Math.ceil(viewY / gridStep) * gridStep;
-        for (let gy = startY; gy < viewY + viewH; gy += gridStep) {
-            if (Math.abs(gy) < gridStep * 0.01) continue;
-            const cy = toCanvasY(gy);
-            const labelX = ox >= 0 && ox <= w ? Math.max(ox - 4, 30) : 30;
-            ctx.fillText(formatNum(gy), labelX, cy);
-        }
+            for (let i = 0; i <= steps; i++) {
+                const cx = (i / steps) * w;
+                const mx = toMathX(cx);
+                try {
+                    const my = fn(mx);
+                    const cy = toCanvasY(my);
 
-        
-        if (ox >= 0 && ox <= w && oy >= 0 && oy <= h) {
-            ctx.textAlign = 'right';
-            ctx.textBaseline = 'top';
-            ctx.fillText('0', ox - 4, oy + 4);
-        }
-    }
+                    if (!isFinite(my) || Math.abs(my) > 1e10) {
+                        if (started) { ctx.stroke(); ctx.beginPath(); started = false; }
+                        prevY = null;
+                        continue;
+                    }
 
-    function drawGridLines(w, h, step) {
-        const startX = Math.floor(viewX / step) * step;
-        for (let gx = startX; gx < viewX + viewW; gx += step) {
-            const cx = toCanvasX(gx);
-            ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, h); ctx.stroke();
-        }
-        const startY = Math.floor(viewY / step) * step;
-        for (let gy = startY; gy < viewY + viewH; gy += step) {
-            const cy = toCanvasY(gy);
-            ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
-        }
-    }
+                    
+                    if (prevY !== null && Math.abs(cy - prevY) > h * 0.8) {
+                        ctx.stroke(); ctx.beginPath(); started = false;
+                    }
 
-    function drawFunction(fn, color, w) {
-        const h = parseFloat(canvas.style.height);
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
-        ctx.shadowColor = color;
-        ctx.shadowBlur = 6;
-        ctx.beginPath();
+                    if (!started) { ctx.moveTo(cx, cy); started = true; }
+                    else ctx.lineTo(cx, cy);
 
-        let started = false;
-        const steps = Math.ceil(w * 1.5);
-        let prevY = null;
-
-        for (let i = 0; i <= steps; i++) {
-            const cx = (i / steps) * w;
-            const mx = toMathX(cx);
-            try {
-                const my = fn(mx);
-                const cy = toCanvasY(my);
-
-                if (!isFinite(my) || Math.abs(my) > 1e10) {
+                    prevY = cy;
+                } catch (e) {
                     if (started) { ctx.stroke(); ctx.beginPath(); started = false; }
                     prevY = null;
-                    continue;
                 }
+            }
+            if (started) ctx.stroke();
+            ctx.shadowBlur = 0;
+        }
 
-                
-                if (prevY !== null && Math.abs(cy - prevY) > h * 0.8) {
-                    ctx.stroke(); ctx.beginPath(); started = false;
+        
+        function compileMathExpr(expr) {
+            var s = expr.trim();
+            if (!s) return null;
+
+            
+            var tks = [];
+            var i = 0;
+            while (i < s.length) {
+                var ch = s[i];
+                if (ch === ' ') { i++; continue; }
+                if ((ch >= '0' && ch <= '9') || (ch === '.' && i + 1 < s.length && s[i + 1] >= '0' && s[i + 1] <= '9')) {
+                    var num = '';
+                    while (i < s.length && ((s[i] >= '0' && s[i] <= '9') || s[i] === '.')) { num += s[i]; i++; }
+                    tks.push({ t: 'n', v: num }); continue;
                 }
+                if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+                    var word = '';
+                    while (i < s.length && ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z'))) { word += s[i]; i++; }
+                    tks.push({ t: 'w', v: word }); continue;
+                }
+                if (ch === '*' && i + 1 < s.length && s[i + 1] === '*') { tks.push({ t: 'o', v: '**' }); i += 2; continue; }
+                if (ch === '^') { tks.push({ t: 'o', v: '**' }); i++; continue; }
+                tks.push({ t: 'o', v: ch }); i++;
+            }
 
-                if (!started) { ctx.moveTo(cx, cy); started = true; }
-                else ctx.lineTo(cx, cy);
+            var fMap = {
+                'arcsin': 'Math.asin', 'arccos': 'Math.acos', 'arctan': 'Math.atan',
+                'asin': 'Math.asin', 'acos': 'Math.acos', 'atan': 'Math.atan',
+                'sinh': 'Math.sinh', 'cosh': 'Math.cosh', 'tanh': 'Math.tanh',
+                'sin': 'Math.sin', 'cos': 'Math.cos', 'tan': 'Math.tan',
+                'sqrt': 'Math.sqrt', 'abs': 'Math.abs', 'exp': 'Math.exp',
+                'ln': 'Math.log', 'log': 'Math.log',
+                'ceil': 'Math.ceil', 'floor': 'Math.floor', 'sign': 'Math.sign',
+                'pi': 'Math.PI', 'PI': 'Math.PI'
+            };
 
-                prevY = cy;
+            var out = '';
+            for (var j = 0; j < tks.length; j++) {
+                var tk = tks[j];
+                var prev = j > 0 ? tks[j - 1] : null;
+                if (prev) {
+                    var mul = false;
+                    if (prev.t === 'n' && tk.t === 'w') mul = true;
+                    if (prev.t === 'n' && tk.t === 'o' && tk.v === '(') mul = true;
+                    if (prev.t === 'o' && prev.v === ')' && tk.t === 'n') mul = true;
+                    if (prev.t === 'o' && prev.v === ')' && tk.t === 'w') mul = true;
+                    if (prev.t === 'o' && prev.v === ')' && tk.t === 'o' && tk.v === '(') mul = true;
+                    if (prev.t === 'w' && tk.t === 'o' && tk.v === '(') {
+                        if (!fMap[prev.v] && prev.v !== 'Math') mul = true;
+                    }
+                    if (prev.t === 'w' && tk.t === 'n') mul = true;
+                    if (mul) out += '*';
+                }
+                if (tk.t === 'w') {
+                    if (fMap[tk.v]) out += fMap[tk.v];
+                    else if (tk.v === 'e' || tk.v === 'E') out += 'Math.E';
+                    else out += tk.v;
+                } else {
+                    out += tk.v;
+                }
+            }
+
+            try {
+                var fn = new Function('x', '"use strict"; return (' + out + ');');
+                fn(0); fn(1); fn(-1);
+                return fn;
+            } catch (err) {
+                console.error('Parse: "' + expr + '" -> "' + out + '"', err.message);
+                return null;
+            }
+        }
+
+        function exprToLatex(expr) {
+            let s = expr.trim();
+            if (!s) return '';
+            s = s.replace(/\*\*/g, '^');
+            s = s.replace(/\bpi\b/gi, '\\pi');
+            s = s.replace(/\bsqrt\(([^)]+)\)/g, '\\sqrt{$1}');
+            s = s.replace(/\bsin\b/g, '\\sin');
+            s = s.replace(/\bcos\b/g, '\\cos');
+            s = s.replace(/\btan\b/g, '\\tan');
+            s = s.replace(/\basin\b/g, '\\arcsin');
+            s = s.replace(/\bacos\b/g, '\\arccos');
+            s = s.replace(/\batan\b/g, '\\arctan');
+            s = s.replace(/\bln\b/g, '\\ln');
+            s = s.replace(/\blog\b/g, '\\log');
+            s = s.replace(/\bexp\b/g, '\\exp');
+            s = s.replace(/\babs\(([^)]+)\)/g, '|$1|');
+            s = s.replace(/\*/g, '\\cdot ');
+            
+            s = s.replace(/\(([^)]+)\)\/\(([^)]+)\)/g, '\\frac{$1}{$2}');
+            return s;
+        }
+
+        function renderKatex(elementId, latex) {
+            const el = document.getElementById(elementId);
+            if (!el || !latex) { if (el) el.innerHTML = ''; return; }
+            try {
+                if (typeof katex !== 'undefined') {
+                    katex.render(latex, el, { throwOnError: false, displayMode: false });
+                }
             } catch (e) {
-                if (started) { ctx.stroke(); ctx.beginPath(); started = false; }
-                prevY = null;
+                el.innerHTML = '<span style="color:#f43f5e;font-size:10px;">PARSE ERR</span>';
             }
         }
-        if (started) ctx.stroke();
-        ctx.shadowBlur = 0;
-    }
-
-    
-    function compileMathExpr(expr) {
-        var s = expr.trim();
-        if (!s) return null;
 
         
-        var tks = [];
-        var i = 0;
-        while (i < s.length) {
-            var ch = s[i];
-            if (ch === ' ') { i++; continue; }
-            if ((ch >= '0' && ch <= '9') || (ch === '.' && i + 1 < s.length && s[i+1] >= '0' && s[i+1] <= '9')) {
-                var num = '';
-                while (i < s.length && ((s[i] >= '0' && s[i] <= '9') || s[i] === '.')) { num += s[i]; i++; }
-                tks.push({t:'n', v:num}); continue;
-            }
-            if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
-                var word = '';
-                while (i < s.length && ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z'))) { word += s[i]; i++; }
-                tks.push({t:'w', v:word}); continue;
-            }
-            if (ch === '*' && i + 1 < s.length && s[i+1] === '*') { tks.push({t:'o', v:'**'}); i += 2; continue; }
-            if (ch === '^') { tks.push({t:'o', v:'**'}); i++; continue; }
-            tks.push({t:'o', v:ch}); i++;
-        }
+        function showKatexOverlay(idx) {
+            const expr = functions[idx] ? functions[idx].expr : '';
+            const overlay = document.getElementById('katex-overlay-' + idx);
+            const wrap = overlay ? overlay.parentElement : null;
+            const input = wrap ? wrap.querySelector('.gp-func-input') : null;
+            if (!overlay || !wrap || !input) return;
 
-        var fMap = {
-            'arcsin':'Math.asin','arccos':'Math.acos','arctan':'Math.atan',
-            'asin':'Math.asin','acos':'Math.acos','atan':'Math.atan',
-            'sinh':'Math.sinh','cosh':'Math.cosh','tanh':'Math.tanh',
-            'sin':'Math.sin','cos':'Math.cos','tan':'Math.tan',
-            'sqrt':'Math.sqrt','abs':'Math.abs','exp':'Math.exp',
-            'ln':'Math.log','log':'Math.log',
-            'ceil':'Math.ceil','floor':'Math.floor','sign':'Math.sign',
-            'pi':'Math.PI','PI':'Math.PI'
-        };
-
-        var out = '';
-        for (var j = 0; j < tks.length; j++) {
-            var tk = tks[j];
-            var prev = j > 0 ? tks[j-1] : null;
-            if (prev) {
-                var mul = false;
-                if (prev.t === 'n' && tk.t === 'w') mul = true;
-                if (prev.t === 'n' && tk.t === 'o' && tk.v === '(') mul = true;
-                if (prev.t === 'o' && prev.v === ')' && tk.t === 'n') mul = true;
-                if (prev.t === 'o' && prev.v === ')' && tk.t === 'w') mul = true;
-                if (prev.t === 'o' && prev.v === ')' && tk.t === 'o' && tk.v === '(') mul = true;
-                if (prev.t === 'w' && tk.t === 'o' && tk.v === '(') {
-                    if (!fMap[prev.v] && prev.v !== 'Math') mul = true;
-                }
-                if (prev.t === 'w' && tk.t === 'n') mul = true;
-                if (mul) out += '*';
-            }
-            if (tk.t === 'w') {
-                if (fMap[tk.v]) out += fMap[tk.v];
-                else if (tk.v === 'e' || tk.v === 'E') out += 'Math.E';
-                else out += tk.v;
+            if (expr.trim()) {
+                const latex = exprToLatex(expr);
+                const label = idx === 0 ? 'f(x)=' : 'f' + (idx + 1) + '(x)=';
+                overlay.innerHTML = '<span class="gp-katex-prefix">' + label + '</span><span class="gp-katex-body" id="katex-body-' + idx + '"></span>';
+                renderKatex('katex-body-' + idx, latex);
+                overlay.style.display = 'flex';
+                input.style.visibility = 'hidden';
+                wrap.querySelector('.gp-func-prefix').style.visibility = 'hidden';
+                wrap.classList.remove('gp-editing');
             } else {
-                out += tk.v;
+                overlay.style.display = 'none';
+                input.style.visibility = 'visible';
+                wrap.querySelector('.gp-func-prefix').style.visibility = 'visible';
+                wrap.classList.add('gp-editing');
             }
         }
 
-        try {
-            var fn = new Function('x', '"use strict"; return (' + out + ');');
-            fn(0); fn(1); fn(-1);
-            return fn;
-        } catch (err) {
-            console.error('Parse: "' + expr + '" -> "' + out + '"', err.message);
-            return null;
-        }
-    }
+        function enterEditMode(idx) {
+            const overlay = document.getElementById('katex-overlay-' + idx);
+            const wrap = overlay ? overlay.parentElement : null;
+            const input = wrap ? wrap.querySelector('.gp-func-input') : null;
+            if (!overlay || !wrap || !input) return;
 
-    function exprToLatex(expr) {
-        let s = expr.trim();
-        if (!s) return '';
-        s = s.replace(/\*\*/g, '^');
-        s = s.replace(/\bpi\b/gi, '\\pi');
-        s = s.replace(/\bsqrt\(([^)]+)\)/g, '\\sqrt{$1}');
-        s = s.replace(/\bsin\b/g, '\\sin');
-        s = s.replace(/\bcos\b/g, '\\cos');
-        s = s.replace(/\btan\b/g, '\\tan');
-        s = s.replace(/\basin\b/g, '\\arcsin');
-        s = s.replace(/\bacos\b/g, '\\arccos');
-        s = s.replace(/\batan\b/g, '\\arctan');
-        s = s.replace(/\bln\b/g, '\\ln');
-        s = s.replace(/\blog\b/g, '\\log');
-        s = s.replace(/\bexp\b/g, '\\exp');
-        s = s.replace(/\babs\(([^)]+)\)/g, '|$1|');
-        s = s.replace(/\*/g, '\\cdot ');
-        
-        s = s.replace(/\(([^)]+)\)\/\(([^)]+)\)/g, '\\frac{$1}{$2}');
-        return s;
-    }
-
-    function renderKatex(elementId, latex) {
-        const el = document.getElementById(elementId);
-        if (!el || !latex) { if (el) el.innerHTML = ''; return; }
-        try {
-            if (typeof katex !== 'undefined') {
-                katex.render(latex, el, { throwOnError: false, displayMode: false });
-            }
-        } catch (e) {
-            el.innerHTML = '<span style="color:#f43f5e;font-size:10px;">PARSE ERR</span>';
-        }
-    }
-
-    
-    function showKatexOverlay(idx) {
-        const expr = functions[idx] ? functions[idx].expr : '';
-        const overlay = document.getElementById('katex-overlay-' + idx);
-        const wrap = overlay ? overlay.parentElement : null;
-        const input = wrap ? wrap.querySelector('.gp-func-input') : null;
-        if (!overlay || !wrap || !input) return;
-
-        if (expr.trim()) {
-            const latex = exprToLatex(expr);
-            const label = idx === 0 ? 'f(x)=' : 'f' + (idx + 1) + '(x)=';
-            overlay.innerHTML = '<span class="gp-katex-prefix">' + label + '</span><span class="gp-katex-body" id="katex-body-' + idx + '"></span>';
-            renderKatex('katex-body-' + idx, latex);
-            overlay.style.display = 'flex';
-            input.style.visibility = 'hidden';
-            wrap.querySelector('.gp-func-prefix').style.visibility = 'hidden';
-            wrap.classList.remove('gp-editing');
-        } else {
             overlay.style.display = 'none';
             input.style.visibility = 'visible';
             wrap.querySelector('.gp-func-prefix').style.visibility = 'visible';
             wrap.classList.add('gp-editing');
+            input.focus();
         }
-    }
 
-    function enterEditMode(idx) {
-        const overlay = document.getElementById('katex-overlay-' + idx);
-        const wrap = overlay ? overlay.parentElement : null;
-        const input = wrap ? wrap.querySelector('.gp-func-input') : null;
-        if (!overlay || !wrap || !input) return;
-
-        overlay.style.display = 'none';
-        input.style.visibility = 'visible';
-        wrap.querySelector('.gp-func-prefix').style.visibility = 'visible';
-        wrap.classList.add('gp-editing');
-        input.focus();
-    }
-
-    function setupFocusToggle() {
-        const list = document.getElementById('funcList');
-
-        
-        list.addEventListener('click', function(e) {
-            const overlay = e.target.closest('.gp-func-katex-overlay');
-            if (overlay) {
-                const wrap = overlay.parentElement;
-                const idx = parseInt(wrap.dataset.idx);
-                enterEditMode(idx);
-                return;
-            }
-        });
-
-        
-        list.addEventListener('focusout', function(e) {
-            if (!e.target.classList.contains('gp-func-input')) return;
-            const idx = parseInt(e.target.dataset.idx);
-            functions[idx].expr = e.target.value;
-            setTimeout(function() { showKatexOverlay(idx); }, 150);
-        });
-    }
-
-    
-    function onInputChange(e) {
-        if (!e.target.classList.contains('gp-func-input')) return;
-        const idx = parseInt(e.target.dataset.idx);
-        const expr = e.target.value;
-        functions[idx].expr = expr;
-    }
-
-    function onMouseDown(e) {
-        isDragging = true;
-        const rect = canvas.getBoundingClientRect();
-        dragStartX = e.clientX - rect.left;
-        dragStartY = e.clientY - rect.top;
-        dragViewX = viewX;
-        dragViewY = viewY;
-        canvas.style.cursor = 'grabbing';
-    }
-
-    function onMouseMove(e) {
-        const rect = canvas.getBoundingClientRect();
-        const cx = e.clientX - rect.left;
-        const cy = e.clientY - rect.top;
-
-        
-        const mx = toMathX(cx);
-        const my = toMathY(cy);
-        document.getElementById('coordsDisplay').textContent = `x: ${mx.toFixed(3)}, y: ${my.toFixed(3)}`;
-
-        if (isDragging) {
-            const dx = cx - dragStartX;
-            const dy = cy - dragStartY;
-            const w = parseFloat(canvas.style.width);
-            const h = parseFloat(canvas.style.height);
-            viewX = dragViewX - (dx / w) * viewW;
-            viewY = dragViewY + (dy / h) * viewH;
-            drawAll();
-        }
-    }
-
-    function onMouseUp() {
-        isDragging = false;
-        canvas.style.cursor = 'crosshair';
-    }
-
-    function onWheel(e) {
-        e.preventDefault();
-        const rect = canvas.getBoundingClientRect();
-        const cx = e.clientX - rect.left;
-        const cy = e.clientY - rect.top;
-        const mx = toMathX(cx);
-        const my = toMathY(cy);
-
-        const factor = e.deltaY > 0 ? 1.15 : 0.87;
-        zoom(mx, my, factor);
-    }
-
-    function onTouchStart(e) {
-        if (e.touches.length === 1) {
-            e.preventDefault();
-            const rect = canvas.getBoundingClientRect();
-            const t = e.touches[0];
-            dragStartX = t.clientX - rect.left;
-            dragStartY = t.clientY - rect.top;
-            dragViewX = viewX;
-            dragViewY = viewY;
-            isDragging = true;
+        function setupFocusToggle() {
+            const list = document.getElementById('funcList');
 
             
-            const mx = toMathX(dragStartX);
-            const my = toMathY(dragStartY);
-            document.getElementById('coordsDisplay').textContent = `x: ${mx.toFixed(3)}, y: ${my.toFixed(3)}`;
-        } else if (e.touches.length === 2) {
-            e.preventDefault();
-            isDragging = false;
-            const t1 = e.touches[0], t2 = e.touches[1];
-            lastTouchDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-            const rect = canvas.getBoundingClientRect();
-            lastTouchMid = {
-                x: (t1.clientX + t2.clientX) / 2 - rect.left,
-                y: (t1.clientY + t2.clientY) / 2 - rect.top
-            };
+            list.addEventListener('click', function (e) {
+                const overlay = e.target.closest('.gp-func-katex-overlay');
+                if (overlay) {
+                    const wrap = overlay.parentElement;
+                    const idx = parseInt(wrap.dataset.idx);
+                    enterEditMode(idx);
+                    return;
+                }
+            });
+
+            
+            list.addEventListener('focusout', function (e) {
+                if (!e.target.classList.contains('gp-func-input')) return;
+                const idx = parseInt(e.target.dataset.idx);
+                functions[idx].expr = e.target.value;
+                setTimeout(function () { showKatexOverlay(idx); }, 150);
+            });
         }
-    }
 
-    function onTouchMove(e) {
-        if (e.touches.length === 1 && isDragging) {
-            e.preventDefault();
+        
+        function onInputChange(e) {
+            if (!e.target.classList.contains('gp-func-input')) return;
+            const idx = parseInt(e.target.dataset.idx);
+            const expr = e.target.value;
+            functions[idx].expr = expr;
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
             const rect = canvas.getBoundingClientRect();
-            const t = e.touches[0];
-            const cx = t.clientX - rect.left;
-            const cy = t.clientY - rect.top;
-            const dx = cx - dragStartX;
-            const dy = cy - dragStartY;
-            const w = parseFloat(canvas.style.width);
-            const h = parseFloat(canvas.style.height);
-            viewX = dragViewX - (dx / w) * viewW;
-            viewY = dragViewY + (dy / h) * viewH;
-            drawAll();
+            dragStartX = e.clientX - rect.left;
+            dragStartY = e.clientY - rect.top;
+            dragViewX = viewX;
+            dragViewY = viewY;
+            canvas.style.cursor = 'grabbing';
+        }
 
+        function onMouseMove(e) {
+            const rect = canvas.getBoundingClientRect();
+            const cx = e.clientX - rect.left;
+            const cy = e.clientY - rect.top;
+
+            
             const mx = toMathX(cx);
             const my = toMathY(cy);
             document.getElementById('coordsDisplay').textContent = `x: ${mx.toFixed(3)}, y: ${my.toFixed(3)}`;
-        } else if (e.touches.length === 2) {
-            e.preventDefault();
-            const t1 = e.touches[0], t2 = e.touches[1];
-            const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-            if (lastTouchDist > 0) {
-                const factor = lastTouchDist / dist;
-                const mx = toMathX(lastTouchMid.x);
-                const my = toMathY(lastTouchMid.y);
-                zoom(mx, my, factor);
+
+            if (isDragging) {
+                const dx = cx - dragStartX;
+                const dy = cy - dragStartY;
+                const w = parseFloat(canvas.style.width);
+                const h = parseFloat(canvas.style.height);
+                viewX = dragViewX - (dx / w) * viewW;
+                viewY = dragViewY + (dy / h) * viewH;
+                drawAll();
             }
-            lastTouchDist = dist;
         }
-    }
 
-    function onTouchEnd(e) {
-        if (e.touches.length === 0) {
+        function onMouseUp() {
             isDragging = false;
-            lastTouchDist = 0;
+            canvas.style.cursor = 'crosshair';
         }
-    }
 
-    function zoom(mx, my, factor) {
-        const newW = viewW * factor;
-        const newH = viewH * factor;
+        function onWheel(e) {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const cx = e.clientX - rect.left;
+            const cy = e.clientY - rect.top;
+            const mx = toMathX(cx);
+            const my = toMathY(cy);
+
+            const factor = e.deltaY > 0 ? 1.15 : 0.87;
+            zoom(mx, my, factor);
+        }
+
+        function onTouchStart(e) {
+            if (e.touches.length === 1) {
+                e.preventDefault();
+                const rect = canvas.getBoundingClientRect();
+                const t = e.touches[0];
+                dragStartX = t.clientX - rect.left;
+                dragStartY = t.clientY - rect.top;
+                dragViewX = viewX;
+                dragViewY = viewY;
+                isDragging = true;
+
+                
+                const mx = toMathX(dragStartX);
+                const my = toMathY(dragStartY);
+                document.getElementById('coordsDisplay').textContent = `x: ${mx.toFixed(3)}, y: ${my.toFixed(3)}`;
+            } else if (e.touches.length === 2) {
+                e.preventDefault();
+                isDragging = false;
+                const t1 = e.touches[0], t2 = e.touches[1];
+                lastTouchDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+                const rect = canvas.getBoundingClientRect();
+                lastTouchMid = {
+                    x: (t1.clientX + t2.clientX) / 2 - rect.left,
+                    y: (t1.clientY + t2.clientY) / 2 - rect.top
+                };
+            }
+        }
+
+        function onTouchMove(e) {
+            if (e.touches.length === 1 && isDragging) {
+                e.preventDefault();
+                const rect = canvas.getBoundingClientRect();
+                const t = e.touches[0];
+                const cx = t.clientX - rect.left;
+                const cy = t.clientY - rect.top;
+                const dx = cx - dragStartX;
+                const dy = cy - dragStartY;
+                const w = parseFloat(canvas.style.width);
+                const h = parseFloat(canvas.style.height);
+                viewX = dragViewX - (dx / w) * viewW;
+                viewY = dragViewY + (dy / h) * viewH;
+                drawAll();
+
+                const mx = toMathX(cx);
+                const my = toMathY(cy);
+                document.getElementById('coordsDisplay').textContent = `x: ${mx.toFixed(3)}, y: ${my.toFixed(3)}`;
+            } else if (e.touches.length === 2) {
+                e.preventDefault();
+                const t1 = e.touches[0], t2 = e.touches[1];
+                const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+                if (lastTouchDist > 0) {
+                    const factor = lastTouchDist / dist;
+                    const mx = toMathX(lastTouchMid.x);
+                    const my = toMathY(lastTouchMid.y);
+                    zoom(mx, my, factor);
+                }
+                lastTouchDist = dist;
+            }
+        }
+
+        function onTouchEnd(e) {
+            if (e.touches.length === 0) {
+                isDragging = false;
+                lastTouchDist = 0;
+            }
+        }
+
+        function zoom(mx, my, factor) {
+            const newW = viewW * factor;
+            const newH = viewH * factor;
+            
+            if (newW < 0.001 || newW > 100000) return;
+
+            viewX = mx - (mx - viewX) * factor;
+            viewY = my - (my - viewY) * factor;
+            viewW = newW;
+            viewH = newH;
+            drawAll();
+            document.getElementById('zoomInfo').textContent = `ZOOM: ${(20 / viewW).toFixed(1)}x`;
+        }
+
         
-        if (newW < 0.001 || newW > 100000) return;
+        function addFunction() {
+            if (functions.length >= MAX_FUNCS) {
+                log('Maximum function slot limit reached (5).', 'warn');
+                return;
+            }
+            const idx = functions.length;
+            const color = COLORS[idx % COLORS.length];
+            functions.push({ expr: '', color: color });
 
-        viewX = mx - (mx - viewX) * factor;
-        viewY = my - (my - viewY) * factor;
-        viewW = newW;
-        viewH = newH;
-        drawAll();
-        document.getElementById('zoomInfo').textContent = `ZOOM: ${(20 / viewW).toFixed(1)}x`;
-    }
-
-    
-    function addFunction() {
-        if (functions.length >= MAX_FUNCS) {
-            log('Maximum function slot limit reached (5).', 'warn');
-            return;
-        }
-        const idx = functions.length;
-        const color = COLORS[idx % COLORS.length];
-        functions.push({ expr: '', color: color });
-
-        const list = document.getElementById('funcList');
-        const row = document.createElement('div');
-        row.className = 'gp-func-row';
-        row.dataset.idx = idx;
-        row.innerHTML = `
+            const list = document.getElementById('funcList');
+            const row = document.createElement('div');
+            row.className = 'gp-func-row';
+            row.dataset.idx = idx;
+            row.innerHTML = `
             <div class="gp-func-color" style="color:${color}; background:${color};"></div>
             <div class="gp-func-input-wrap gp-clip-top gp-editing" data-idx="${idx}">
                 <span class="gp-func-prefix">f${idx + 1}(x)=</span>
@@ -1221,30 +1675,30 @@ const graphApp = (function() {
             </div>
             <button class="gp-func-del" onclick="graphApp.removeFunction(${idx})">✕</button>
         `;
-        list.appendChild(row);
-        log(`Function slot f${idx + 1}(x) allocated [${COLOR_NAMES[idx % COLORS.length]}].`, 'info');
-    }
+            list.appendChild(row);
+            log(`Function slot f${idx + 1}(x) allocated [${COLOR_NAMES[idx % COLORS.length]}].`, 'info');
+        }
 
-    function removeFunction(idx) {
-        if (functions.length <= 1) return;
-        functions.splice(idx, 1);
-        rebuildFuncList();
-        drawAll();
-        updateLegend();
-        log(`Function slot removed. ${functions.length} active.`, 'info');
-    }
+        function removeFunction(idx) {
+            if (functions.length <= 1) return;
+            functions.splice(idx, 1);
+            rebuildFuncList();
+            drawAll();
+            updateLegend();
+            log(`Function slot removed. ${functions.length} active.`, 'info');
+        }
 
-    function rebuildFuncList() {
-        const list = document.getElementById('funcList');
-        list.innerHTML = '';
-        functions.forEach((f, i) => {
-            f.color = COLORS[i % COLORS.length];
-            const row = document.createElement('div');
-            row.className = 'gp-func-row';
-            row.dataset.idx = i;
-            const label = i === 0 ? 'f(x)=' : `f${i + 1}(x)=`;
-            const delBtn = i === 0 && functions.length === 1 ? '' : `<button class="gp-func-del" onclick="graphApp.removeFunction(${i})">✕</button>`;
-            row.innerHTML = `
+        function rebuildFuncList() {
+            const list = document.getElementById('funcList');
+            list.innerHTML = '';
+            functions.forEach((f, i) => {
+                f.color = COLORS[i % COLORS.length];
+                const row = document.createElement('div');
+                row.className = 'gp-func-row';
+                row.dataset.idx = i;
+                const label = i === 0 ? 'f(x)=' : `f${i + 1}(x)=`;
+                const delBtn = i === 0 && functions.length === 1 ? '' : `<button class="gp-func-del" onclick="graphApp.removeFunction(${i})">✕</button>`;
+                row.innerHTML = `
                 <div class="gp-func-color" style="color:${f.color}; background:${f.color};"></div>
                 <div class="gp-func-input-wrap gp-clip-top gp-editing" data-idx="${i}">
                     <span class="gp-func-prefix">${label}</span>
@@ -1253,149 +1707,148 @@ const graphApp = (function() {
                 </div>
                 ${delBtn}
             `;
-            list.appendChild(row);
+                list.appendChild(row);
 
-            
-            setTimeout(function() { showKatexOverlay(i); }, 50);
-        });
-    }
+                
+                setTimeout(function () { showKatexOverlay(i); }, 50);
+            });
+        }
 
-    function plot() {
-        let success = 0;
-        const inputs = document.querySelectorAll('.gp-func-input');
-        inputs.forEach(function(inp) {
-            const idx = parseInt(inp.dataset.idx);
-            functions[idx].expr = inp.value;
-        });
+        function plot() {
+            let success = 0;
+            const inputs = document.querySelectorAll('.gp-func-input');
+            inputs.forEach(function (inp) {
+                const idx = parseInt(inp.dataset.idx);
+                functions[idx].expr = inp.value;
+            });
 
-        functions.forEach(function(f, i) {
-            if (!f.expr.trim()) { f.compiled = null; return; }
-            const fn = compileMathExpr(f.expr);
-            if (fn) {
-                f.compiled = fn;
-                success++;
-                log(`f${i > 0 ? i + 1 : ''}(x) = ${f.expr} compiled. [${COLOR_NAMES[i % COLORS.length]}]`, 'success');
-            } else {
-                f.compiled = null;
-                log(`f${i > 0 ? i + 1 : ''}(x) = "${f.expr}" — SYNTAX ERROR`, 'error');
+            functions.forEach(function (f, i) {
+                if (!f.expr.trim()) { f.compiled = null; return; }
+                const fn = compileMathExpr(f.expr);
+                if (fn) {
+                    f.compiled = fn;
+                    success++;
+                    log(`f${i > 0 ? i + 1 : ''}(x) = ${f.expr} compiled. [${COLOR_NAMES[i % COLORS.length]}]`, 'success');
+                } else {
+                    f.compiled = null;
+                    log(`f${i > 0 ? i + 1 : ''}(x) = "${f.expr}" — SYNTAX ERROR`, 'error');
+                }
+
+                
+                showKatexOverlay(i);
+            });
+
+            if (success > 0) {
+                setStatus('RENDERING', 'loading');
+                drawAll();
+                updateLegend();
+                setStatus('PLOT ACTIVE', 'success');
+                log(`Render complete. ${success} function(s) plotted.`, 'success');
+            } else if (functions.some(f => f.expr.trim())) {
+                setStatus('COMPILE ERROR', 'error');
+            }
+        }
+
+        function updateLegend() {
+            const legend = document.getElementById('gpLegend');
+            legend.innerHTML = '';
+            functions.forEach(function (f, i) {
+                if (!f.expr.trim() || !f.compiled) return;
+                const item = document.createElement('div');
+                item.className = 'gp-legend-item';
+                const latex = exprToLatex(f.expr);
+                item.innerHTML = `<span class="gp-legend-dot" style="background:${f.color}; box-shadow: 0 0 6px ${f.color};"></span><span class="gp-legend-katex" id="legend-katex-${i}"></span>`;
+                legend.appendChild(item);
+                setTimeout(function () {
+                    const el = document.getElementById('legend-katex-' + i);
+                    if (el && typeof katex !== 'undefined') {
+                        try { katex.render(latex, el, { throwOnError: false, displayMode: false }); }
+                        catch (e) { el.textContent = f.expr; }
+                    }
+                }, 50);
+            });
+        }
+
+        function resetView() {
+            viewX = -10; viewY = -7; viewW = 20;
+            const w = parseFloat(canvas.style.width);
+            const h = parseFloat(canvas.style.height);
+            viewH = viewW / (w / h);
+            drawAll();
+            document.getElementById('zoomInfo').textContent = 'ZOOM: 1.0x';
+            log('View reset to default range.', 'info');
+        }
+
+        
+        function niceStep(roughStep) {
+            const pow = Math.pow(10, Math.floor(Math.log10(roughStep)));
+            const norm = roughStep / pow;
+            let nice;
+            if (norm <= 1) nice = 1;
+            else if (norm <= 2) nice = 2;
+            else if (norm <= 5) nice = 5;
+            else nice = 10;
+            return nice * pow;
+        }
+
+        function formatNum(n) {
+            if (Math.abs(n) < 1e-10) return '0';
+            if (Math.abs(n) >= 1000 || (Math.abs(n) < 0.01 && Math.abs(n) > 0)) return n.toExponential(1);
+            const s = n.toFixed(6);
+            return parseFloat(s).toString();
+        }
+
+        function setStatus(text, state) {
+            const el = document.getElementById('gpStatus');
+            if (!el) return;
+            let icon = '●';
+            let borderColor = 'rgba(0,255,65,0.3)';
+            let textColor = '#4ade80';
+            let shadow = 'rgba(0,255,65,0.2)';
+
+            if (state === 'loading') {
+                textColor = '#facc15'; borderColor = 'rgba(250,204,21,0.3)'; shadow = 'rgba(250,204,21,0.2)';
+            } else if (state === 'error') {
+                icon = '✖'; textColor = '#f43f5e'; borderColor = 'rgba(244,63,94,0.3)'; shadow = 'rgba(244,63,94,0.2)';
             }
 
-            
-            showKatexOverlay(i);
-        });
-
-        if (success > 0) {
-            setStatus('RENDERING', 'loading');
-            drawAll();
-            updateLegend();
-            setStatus('PLOT ACTIVE', 'success');
-            log(`Render complete. ${success} function(s) plotted.`, 'success');
-        } else if (functions.some(f => f.expr.trim())) {
-            setStatus('COMPILE ERROR', 'error');
-        }
-    }
-
-    function updateLegend() {
-        const legend = document.getElementById('gpLegend');
-        legend.innerHTML = '';
-        functions.forEach(function(f, i) {
-            if (!f.expr.trim() || !f.compiled) return;
-            const item = document.createElement('div');
-            item.className = 'gp-legend-item';
-            const latex = exprToLatex(f.expr);
-            item.innerHTML = `<span class="gp-legend-dot" style="background:${f.color}; box-shadow: 0 0 6px ${f.color};"></span><span class="gp-legend-katex" id="legend-katex-${i}"></span>`;
-            legend.appendChild(item);
-            setTimeout(function() {
-                const el = document.getElementById('legend-katex-' + i);
-                if (el && typeof katex !== 'undefined') {
-                    try { katex.render(latex, el, { throwOnError: false, displayMode: false }); }
-                    catch (e) { el.textContent = f.expr; }
-                }
-            }, 50);
-        });
-    }
-
-    function resetView() {
-        viewX = -10; viewY = -7; viewW = 20;
-        const w = parseFloat(canvas.style.width);
-        const h = parseFloat(canvas.style.height);
-        viewH = viewW / (w / h);
-        drawAll();
-        document.getElementById('zoomInfo').textContent = 'ZOOM: 1.0x';
-        log('View reset to default range.', 'info');
-    }
-
-    
-    function niceStep(roughStep) {
-        const pow = Math.pow(10, Math.floor(Math.log10(roughStep)));
-        const norm = roughStep / pow;
-        let nice;
-        if (norm <= 1) nice = 1;
-        else if (norm <= 2) nice = 2;
-        else if (norm <= 5) nice = 5;
-        else nice = 10;
-        return nice * pow;
-    }
-
-    function formatNum(n) {
-        if (Math.abs(n) < 1e-10) return '0';
-        if (Math.abs(n) >= 1000 || (Math.abs(n) < 0.01 && Math.abs(n) > 0)) return n.toExponential(1);
-        const s = n.toFixed(6);
-        return parseFloat(s).toString();
-    }
-
-    function setStatus(text, state) {
-        const el = document.getElementById('gpStatus');
-        if (!el) return;
-        let icon = '●';
-        let borderColor = 'rgba(0,255,65,0.3)';
-        let textColor = '#4ade80';
-        let shadow = 'rgba(0,255,65,0.2)';
-
-        if (state === 'loading') {
-            textColor = '#facc15'; borderColor = 'rgba(250,204,21,0.3)'; shadow = 'rgba(250,204,21,0.2)';
-        } else if (state === 'error') {
-            icon = '✖'; textColor = '#f43f5e'; borderColor = 'rgba(244,63,94,0.3)'; shadow = 'rgba(244,63,94,0.2)';
+            el.style.color = textColor;
+            el.style.borderColor = borderColor;
+            el.style.boxShadow = '0 0 10px ' + shadow;
+            el.innerHTML = `<span class="${state !== 'error' ? 'gp-pulse' : ''}">${icon}</span> ${text}`;
         }
 
-        el.style.color = textColor;
-        el.style.borderColor = borderColor;
-        el.style.boxShadow = '0 0 10px ' + shadow;
-        el.innerHTML = `<span class="${state !== 'error' ? 'gp-pulse' : ''}">${icon}</span> ${text}`;
-    }
+        function log(msg, type) {
+            type = type || 'info';
+            const term = document.getElementById('gpTerminal');
+            if (!term) return;
+            const div = document.createElement('div');
+            div.className = 'gp-log-' + type;
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+            div.textContent = `[${time}] ${msg}`;
+            term.appendChild(div);
+            term.scrollTop = term.scrollHeight;
+        }
 
-    function log(msg, type) {
-        type = type || 'info';
-        const term = document.getElementById('gpTerminal');
-        if (!term) return;
-        const div = document.createElement('div');
-        div.className = 'gp-log-' + type;
-        const time = new Date().toLocaleTimeString('en-US', { hour12: false });
-        div.textContent = `[${time}] ${msg}`;
-        term.appendChild(div);
-        term.scrollTop = term.scrollHeight;
-    }
+        function debounce(fn, delay) {
+            let timer;
+            return function () {
+                const args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(function () { fn.apply(null, args); }, delay);
+            };
+        }
 
-    function debounce(fn, delay) {
-        let timer;
-        return function() {
-            const args = arguments;
-            clearTimeout(timer);
-            timer = setTimeout(function() { fn.apply(null, args); }, delay);
-        };
-    }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            setTimeout(init, 100);
+        }
 
-    
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        setTimeout(init, 100);
-    }
-
-    return { addFunction: addFunction, removeFunction: removeFunction, plot: plot, resetView: resetView };
-})();
+        return { addFunction: addFunction, removeFunction: removeFunction, plot: plot, resetView: resetView };
+    })();
 </script>
-
 </div>
       </article>
     </main>
