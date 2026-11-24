@@ -300,13 +300,13 @@
   align-items: center !important;
   flex-wrap: nowrap !important;
   gap: 12px !important;
-  height: 64px !important;
-  min-height: 64px !important;
-  max-height: 64px !important;
-  width: 100% !important;
+  height: 58px !important;
+  min-height: 58px !important;
+  max-height: 58px !important;
+  width: calc(100% - 16px) !important;
   box-sizing: border-box !important;
-  padding: 10px 12px !important;
-  margin: 0 auto 16px !important;
+  padding: 7px 10px !important;
+  margin: 6px auto 14px !important;
   position: relative !important;
   z-index: 30;
   isolation: isolate;
@@ -1037,7 +1037,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   6. Responsive (Mobile <= 600px: preserve 64px skeleton, hide kicker, gap 8px)
+   6. Responsive (Mobile <= 600px: preserve 58px skeleton, hide kicker, gap 8px)
    -------------------------------------------------------------------------- */
 
 @media (max-width: 600px) {
@@ -1241,8 +1241,8 @@
       /* ツール側のリセットCSS (.km * 等) に padding を消されるページがあるため、
          ヘッダーの骨格寸法はインライン !important で固定する (チップと同じ方針)。 */
       el.style.cssText = 'display:flex!important;align-items:center!important;gap:12px!important;'
-        + 'height:64px!important;box-sizing:border-box!important;width:100%!important;'
-        + 'padding:10px 12px!important;margin:0 auto 16px!important';
+        + 'height:58px!important;box-sizing:border-box!important;width:calc(100% - 16px)!important;'
+        + 'padding:7px 10px!important;margin:6px auto 14px!important';
       /* cssText 代入は先に設定したカスタムプロパティを消去するため、アクセント変数は代入後に設定する */
       el.style.setProperty('--dtsp-accent', accent);
       el.style.setProperty('--dtsp-accent-dim', hexToRgba(accent, 0.16));
