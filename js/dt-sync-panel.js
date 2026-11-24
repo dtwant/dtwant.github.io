@@ -1199,7 +1199,7 @@
       timetable: '#4ade80', diary: '#f9a8d4', task_calendar: '#22d3ee', calendar: '#818cf8',
       report_card: '#fbbf24', score_book: '#38bdf8', tasklist: '#94a3b8', payment: '#34d399',
       vocal_range: '#f472b6', library: '#fbbf24', weight_log: '#06b6d4', shift_clock: '#22d3ee',
-      taskmanage: '#818cf8', math_memo: '#a78bfa', ritual_grid: '#c084fc', oshi: '#f472b6',
+      taskmanage: '#818cf8', math_memo: '#a78bfa', ritual_grid: '#7ad7f0', oshi: '#f472b6',
       biome_archive: '#4ade80'
     };
     const HEADER_INSERT = {
@@ -1303,7 +1303,7 @@
       biome_archive: { hide: ['.ba-exit', '.ba-title'], title: { text: 'BIOME_ARCHIVE', font: "'Orbitron', sans-serif", color: '#ffffff', ls: '.05em', weight: '300' } },
       shift_clock: { hide: ['.sc-back', '.sc-title'], title: { text: 'SHIFT_CLOCK', font: "'JetBrains Mono', monospace", color: '#eaf4f8', ls: '.04em', weight: '600' } },
       math_memo: { hide: ['.mm-exit-button'], hideTextExact: ['Math Memo'] },
-      ritual_grid: { hide: ['.rg-back', '.rg-title-lockup h1'], title: { text: 'RITUAL GRID' } },
+      ritual_grid: { hide: ['.rg-back', '.rg-title-lockup h1'], title: { text: 'RITUAL GRID', font: "ui-monospace, 'SF Mono', Menlo, monospace", color: '#eaf6fb', ls: '.18em', weight: '700' } },
       oshi: { hide: ['.od-header-title'], hideText: ['◀ EXIT'] },
       vocal_range: { hide: ['.vr-hbtn.exit', '.vr-head h1'] },
       diary: { hide: ['.sd-title-text'], title: { font: "'JetBrains Mono', monospace", ls: '.08em', weight: '700' } },
