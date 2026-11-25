@@ -91,6 +91,34 @@ export function filterBooksByTag(books, tag) {
   return target ? books.filter(book => (book.tags || []).includes(target)) : [...books];
 }
 
+export function bookMatchesCreator(book, creator) {
+  if (!creator || !creator.name) return true;
+  const list = creator.kind === 'circle' ? (book.circles || []) : (book.authors || []);
+  return list.includes(creator.name);
+}
+
+export function lastOpenedByBook(state) {
+  const latest = {};
+  for (const event of state.openEvents || []) {
+    if (!latest[event.bookId] || event.openedAt > latest[event.bookId]) latest[event.bookId] = event.openedAt;
+  }
+  return latest;
+}
+
+// Short freshness label for "last opened" timestamps: 今日 / 昨日 / N日前 / M/D.
+export function formatShelfDate(iso, now = new Date()) {
+  const then = new Date(iso);
+  if (Number.isNaN(then.getTime())) return '';
+  const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  const days = Math.round((startOfDay(now) - startOfDay(then)) / 86400000);
+  if (days <= 0) return '今日';
+  if (days === 1) return '昨日';
+  if (days < 30) return `${days}日前`;
+  return then.getFullYear() === now.getFullYear()
+    ? `${then.getMonth() + 1}/${then.getDate()}`
+    : `${then.getFullYear()}/${then.getMonth() + 1}/${then.getDate()}`;
+}
+
 export function groupBooksByAuthor(books) {
   const groups = new Map();
   for (const book of books) {

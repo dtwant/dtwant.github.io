@@ -1,4 +1,4 @@
-import { addOpenEvent, creatorLabel, filterBooks, filterBooksByTag, groupBooksByAuthor, mergeBackup, normalizeBook, rankBooks, recentBooks, thumbnailUrl } from './core.js';
+import { addOpenEvent, bookMatchesCreator, creatorLabel, filterBooks, filterBooksByTag, formatShelfDate, groupBooksByAuthor, lastOpenedByBook, mergeBackup, normalizeBook, rankBooks, recentBooks, thumbnailUrl } from './core.js';
 import { exportState, loadState, saveState } from './store.js';
 import { createShelfSync, setSyncEnabled, syncConfig, syncEnabled, syncMeta } from './sync.js';
 
@@ -30,7 +30,7 @@ const COLUMNS_KEY = 'dt_private_shelf_columns_v1';
 function savedColumns() {
   try { return localStorage.getItem(COLUMNS_KEY) === '3' ? 3 : 2; } catch { return 2; }
 }
-let view = 'shelf', query = '', tag = '', sort = 'new', period = 'all', columns = savedColumns();
+let view = 'shelf', query = '', tag = '', sort = 'new', period = 'all', columns = savedColumns(), creatorFilter = null;
 let busy = false, openLock = false, toastTimer, returnFocus;
 const titles = { shelf: '本棚', search: '作品を探す', favorites: 'お気に入り', ranking: 'よく読む作品' };
 const liveBooks = () => state.books.filter(b => !b.deletedAt);
@@ -88,13 +88,20 @@ async function fetchMetadata(url) {
     return { title: typeof data?.title === 'string' ? data.title.trim().slice(0, 200) : '', authors: names(data?.authors), circles: names(data?.circles), thumbnailUrl: thumbnailUrl(data?.thumbnailUrl) };
   } finally { clearTimeout(timer); }
 }
+function creatorLinks(book) {
+  const link = (kind, name) => `<button type="button" class="ps-creator-link" data-creator-kind="${kind}" data-creator-name="${esc(name)}" aria-label="${kind === 'circle' ? 'サークル' : '著者'} ${esc(name)} の作品だけを表示">${esc(name)}</button>`;
+  const parts = [];
+  if ((book.circles || []).length) parts.push(book.circles.map(c => link('circle', c)).join('、'));
+  if ((book.authors || []).length) parts.push(book.authors.map(a => link('author', a)).join('、'));
+  return parts.join(' <span class="ps-creator-sep" aria-hidden="true">/</span> ');
+}
 function card(book) {
   const thumb = thumbnailUrl(book.thumbnailUrl);
   return `<article class="ps-card">
     <button class="ps-card-open" data-open="${esc(book.id)}" aria-label="${esc(book.title)}を読む">
-      <span class="ps-cover ps-tone-${tone(book)}"><span class="ps-cover-rule"></span><span class="ps-cover-title">${esc(book.title)}</span><span class="ps-cover-bottom">${esc(creatorLabel(book))}</span>${thumb ? `<img class="ps-thumbnail" src="${esc(thumb)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : ''}</span>
-      <span class="ps-book-title">${esc(book.title)}</span><span class="ps-author">${esc(creatorLabel(book))}</span>
+      <span class="ps-cover ps-tone-${tone(book)}"><span class="ps-cover-rule"></span><span class="ps-cover-title">${esc(book.title)}</span><span class="ps-cover-bottom">${esc(creatorLabel(book))}</span>${thumb ? `<img class="ps-thumbnail" src="${esc(thumb)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : ''}${book.favorite ? `<span class="ps-fav-badge" aria-hidden="true">${icon('heart')}</span>` : ''}</span>
     </button>
+    <div class="ps-card-meta"><button type="button" class="ps-book-title" data-open="${esc(book.id)}">${esc(book.title)}</button><span class="ps-author">${creatorLinks(book)}</span></div>
     <div class="ps-card-actions"><span class="ps-card-tag">${esc(book.tags[0] || 'タグなし')}</span><button class="ps-icon-button ps-fav${book.favorite ? ' is-favorite' : ''}" data-fav="${esc(book.id)}" aria-label="${esc(book.title)}のお気に入り" aria-pressed="${book.favorite}">${icon('heart')}</button><button class="ps-icon-button" data-edit="${esc(book.id)}" aria-label="${esc(book.title)}を編集">${icon('more')}</button></div>
   </article>`;
 }
@@ -115,25 +122,29 @@ function render() {
   $('#ps-clear').hidden = !query;
   let books = filterBooks(liveBooks().filter(b => view !== 'favorites' || b.favorite), query);
   books = filterBooksByTag(books, tag);
+  if (creatorFilter) books = books.filter(b => bookMatchesCreator(b, creatorFilter));
   books.sort(sort === 'title' ? (a, b) => a.title.localeCompare(b.title, 'ja') : (a, b) => b.createdAt.localeCompare(a.createdAt));
   if (view === 'ranking') {
     const now = new Date();
     const since = period === 'week' ? now.getTime() - 7 * 86400000 : period === 'month' ? new Date(now.getFullYear(), now.getMonth(), 1).getTime() : null;
     const rows = rankBooks(state, { since });
+    const lastOpened = lastOpenedByBook(state);
     let rank = 0;
-    $('#ps-results').innerHTML = `<div class="ps-period" aria-label="集計期間">${[['all', 'すべて'], ['month', '今月'], ['week', '7日間']].map(([key, label]) => `<button data-period="${key}" aria-pressed="${period === key}">${label}</button>`).join('')}</div><p class="ps-ranking-note">作品を開いた回数で集計</p>${rows.length ? `<div class="ps-ranking">${rows.map((row, i) => { if (!i || row.count !== rows[i - 1].count) rank = i + 1; const thumb = thumbnailUrl(row.book.thumbnailUrl); return `<button class="ps-rank-row" data-open="${esc(row.book.id)}"><b class="ps-rank-number">${String(rank).padStart(2, '0')}</b><span class="ps-rank-book ps-tone-${tone(row.book)}" aria-hidden="true">${icon('shelf')}${thumb ? `<img class="ps-rank-thumbnail" src="${esc(thumb)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : ''}</span><span class="ps-rank-info"><strong>${esc(row.book.title)}</strong><small>${esc(creatorLabel(row.book))}</small></span><span class="ps-rank-count">${row.count}<small>回</small></span></button>`; }).join('')}</div>` : empty('ランキングは空です', '作品を開くと回数が記録されます。')}`;
+    $('#ps-results').innerHTML = `<div class="ps-period" aria-label="集計期間">${[['all', 'すべて'], ['month', '今月'], ['week', '7日間']].map(([key, label]) => `<button data-period="${key}" aria-pressed="${period === key}">${label}</button>`).join('')}</div><p class="ps-ranking-note">作品を開いた回数で集計</p>${rows.length ? `<div class="ps-ranking">${rows.map((row, i) => { if (!i || row.count !== rows[i - 1].count) rank = i + 1; const thumb = thumbnailUrl(row.book.thumbnailUrl); const last = lastOpened[row.book.id]; return `<button class="ps-rank-row" data-open="${esc(row.book.id)}"><b class="ps-rank-number">${String(rank).padStart(2, '0')}</b><span class="ps-rank-book ps-tone-${tone(row.book)}" aria-hidden="true">${icon('shelf')}${thumb ? `<img class="ps-rank-thumbnail" src="${esc(thumb)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : ''}</span><span class="ps-rank-info"><strong>${esc(row.book.title)}</strong><small>${esc(creatorLabel(row.book))}${last ? ` ・ 最終 ${esc(formatShelfDate(last))}` : ''}</small></span><span class="ps-rank-count">${row.count}<small>回</small></span></button>`; }).join('')}</div>` : empty('ランキングは空です', '作品を開くと回数が記録されます。')}`;
     return;
   }
   if (!liveBooks().length) {
     $('#ps-results').innerHTML = empty('本棚は空です', '作品のURLを追加してください。', '<button class="ps-primary" data-add>作品を追加</button>');
     return;
   }
-  const recent = view === 'shelf' && !query && !tag ? recentBooks(state).slice(0, 6) : [];
+  const recent = view === 'shelf' && !query && !tag && !creatorFilter ? recentBooks(state).slice(0, 6) : [];
+  const recentOpenedAt = Object.fromEntries((state.recent || []).map(r => [r.bookId, r.openedAt]));
   const tags = [...new Set(liveBooks().flatMap(b => b.tags))].sort((a, b) => a.localeCompare(b, 'ja'));
-  $('#ps-results').innerHTML = `${recent.length ? `<section class="ps-recent-section"><div class="ps-section-head"><h2>最近読んだ作品</h2><span>最新${recent.length}件</span></div><div class="ps-recent">${recent.map((b, i) => `<button class="ps-recent-item" data-open="${esc(b.id)}"><span class="ps-recent-cover ps-tone-${tone(b)}">${String(i + 1).padStart(2, '0')}</span><span><strong>${esc(b.title)}</strong><small>${esc(creatorLabel(b))}</small></span></button>`).join('')}</div></section>` : ''}
+  $('#ps-results').innerHTML = `${recent.length ? `<section class="ps-recent-section"><div class="ps-section-head"><h2>最近読んだ作品</h2><span>最新${recent.length}件</span></div><div class="ps-recent">${recent.map((b, i) => { const thumb = thumbnailUrl(b.thumbnailUrl); const opened = recentOpenedAt[b.id]; return `<button class="ps-recent-item" data-open="${esc(b.id)}"><span class="ps-recent-cover ps-tone-${tone(b)}">${thumb ? `<img class="ps-recent-thumb" src="${esc(thumb)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : String(i + 1).padStart(2, '0')}</span><span><strong>${esc(b.title)}</strong><small>${esc(creatorLabel(b))}${opened ? ` ・ ${esc(formatShelfDate(opened))}` : ''}</small></span></button>`; }).join('')}</div></section>` : ''}
     ${tags.length ? `<section class="ps-tag-filter" aria-label="タグで絞り込み"><div class="ps-section-head"><h2>タグで絞り込み</h2><span>${tag ? `選択中: ${esc(tag)}` : 'すべて'}</span></div><div class="ps-tags"><button data-tag="" aria-pressed="${!tag}">すべて</button>${tags.map(t => `<button data-tag="${esc(t)}" aria-pressed="${tag === t}">${esc(t)}</button>`).join('')}</div></section>` : ''}
-    <div class="ps-section-head ps-library-head"><h2>${query || tag ? '検索結果' : view === 'favorites' ? 'お気に入り' : 'すべての作品'}<span class="ps-total">${books.length}</span></h2><select id="ps-sort" aria-label="並び順"><option value="new" ${sort === 'new' ? 'selected' : ''}>追加した順</option><option value="title" ${sort === 'title' ? 'selected' : ''}>タイトル順</option><option value="author" ${sort === 'author' ? 'selected' : ''}>作者順</option></select></div>
-    ${books.length ? sort === 'author' ? authorSections(books) : libraryGrid(books) : empty(view === 'favorites' && !query && !tag ? 'お気に入りはありません' : '作品が見つかりません', view === 'favorites' && !query && !tag ? '作品のハートから追加できます。' : '別の言葉やタグで探してみてください。')}`;
+    ${creatorFilter ? `<div class="ps-filter-chip"><span>${creatorFilter.kind === 'circle' ? 'サークル' : '著者'}「${esc(creatorFilter.name)}」で絞り込み中</span><button type="button" data-clear-creator>解除</button></div>` : ''}
+    <div class="ps-section-head ps-library-head"><h2>${query || tag || creatorFilter ? '検索結果' : view === 'favorites' ? 'お気に入り' : 'すべての作品'}<span class="ps-total">${books.length}</span></h2><select id="ps-sort" aria-label="並び順"><option value="new" ${sort === 'new' ? 'selected' : ''}>追加した順</option><option value="title" ${sort === 'title' ? 'selected' : ''}>タイトル順</option><option value="author" ${sort === 'author' ? 'selected' : ''}>作者順</option></select></div>
+    ${books.length ? sort === 'author' ? authorSections(books) : libraryGrid(books) : empty(view === 'favorites' && !query && !tag && !creatorFilter ? 'お気に入りはありません' : '作品が見つかりません', view === 'favorites' && !query && !tag && !creatorFilter ? '作品のハートから追加できます。' : '別の言葉やタグで探してみてください。')}`;
 }
 function closeSheet() {
   $('#ps-dialog').close();
@@ -154,7 +165,7 @@ function openForm(book = null) {
     <label for="ps-title">タイトル <small>必須</small></label><input id="ps-title" name="title" required maxlength="200" value="${esc(book?.title || '')}" placeholder="作品名を入力">
     <label for="ps-authors">著者 <small>必須</small></label><input id="ps-authors" name="authors" required value="${esc(book?.authors.join(', ') || '')}" placeholder="名前を入力すると候補が出ます" autocomplete="off"><div class="ps-suggestions" id="ps-authors-suggestions"></div>
     <label for="ps-circles">サークル <small>任意</small></label><input id="ps-circles" name="circles" value="${esc((book?.circles || []).join(', '))}" placeholder="サークル名" autocomplete="off"><div class="ps-suggestions" id="ps-circles-suggestions"></div>
-    <label for="ps-tags">タグ <small>任意</small></label><input id="ps-tags" name="tags" value="${esc(book?.tags.join(', ') || '')}" placeholder="恋愛、あとで読む…" autocomplete="off"><div class="ps-suggestions" id="ps-tags-suggestions"></div><p class="ps-field-hint">著者・タグは「、」か「,」で複数追加できます。</p>
+    <label for="ps-tags">タグ <small>任意</small></label><input id="ps-tags" name="tags" value="${esc(book?.tags.join(', ') || '')}" placeholder="恋愛、あとで読む…" autocomplete="off"><div class="ps-suggestions" id="ps-tags-suggestions"></div><div class="ps-tag-chips" id="ps-tags-chips" aria-label="使ったことのあるタグ"></div><p class="ps-field-hint">著者・タグは「、」か「,」で複数追加できます。タグは下のチップからも選べます。</p>
     <p class="ps-error" role="alert" hidden></p>${book ? '<button type="button" class="ps-danger" id="ps-delete">この作品を削除</button>' : ''}</div><footer class="ps-sheet-footer"><button type="button" class="ps-secondary" data-cancel>キャンセル</button><button type="submit" class="ps-primary" data-save>${book ? '変更を保存' : '本棚に追加'}</button></footer></form>`);
   const form = $('#ps-form');
   const initial = JSON.stringify([...new FormData(form)]);
@@ -178,6 +189,25 @@ function openForm(book = null) {
       const terms = input.value.split(/[,、\n]/); terms.pop(); terms.push(button.dataset.value);
       input.value = terms.map(t => t.trim()).filter(Boolean).join(', ') + ', ';
       suggestions(); input.focus();
+    };
+  }
+  // One-tap tag chips: every tag already used in the library, toggled in/out
+  // of the tags input without typing.
+  const tagInput = form.elements.tags;
+  const allTags = [...new Set(state.books.flatMap(b => b.tags || []))].sort((a, b) => a.localeCompare(b, 'ja'));
+  const renderTagChips = () => {
+    const selected = tagInput.value.split(/[,、\n]/).map(v => v.trim()).filter(Boolean);
+    $('#ps-tags-chips').innerHTML = allTags.map(t => `<button type="button" data-tag-chip="${esc(t)}" aria-pressed="${selected.includes(t)}">${esc(t)}</button>`).join('');
+  };
+  if (allTags.length) {
+    renderTagChips();
+    tagInput.addEventListener('input', renderTagChips);
+    $('#ps-tags-chips').onclick = e => {
+      const chip = e.target.closest('[data-tag-chip]'); if (!chip) return;
+      const name = chip.dataset.tagChip;
+      const terms = tagInput.value.split(/[,、\n]/).map(v => v.trim()).filter(Boolean);
+      tagInput.value = (terms.includes(name) ? terms.filter(t => t !== name) : [...terms, name]).join(', ');
+      renderTagChips(); tagInput.focus();
     };
   }
   $('#ps-paste').onclick = async () => { try { form.elements.url.value = await navigator.clipboard.readText(); } catch { toast('URL欄を長押しして貼り付けてください'); form.elements.url.focus(); } };
@@ -240,7 +270,7 @@ function openForm(book = null) {
         }
       }
       await commit({ ...state, books: [...state.books.filter(b => b.id !== next.id), next], vocabulary });
-      if (!book) { view = 'shelf'; query = ''; tag = ''; sort = 'new'; $('#ps-search').value = ''; $('.ps-content').scrollTop = 0; }
+      if (!book) { view = 'shelf'; query = ''; tag = ''; creatorFilter = null; sort = 'new'; $('#ps-search').value = ''; $('.ps-content').scrollTop = 0; }
       render(); closeSheet(); toast(book ? '変更を保存しました' : '本棚に追加しました');
     } catch (err) {
       error.textContent = err.message === 'author is required' ? '著者を入力してください。自動取得できない場合は手入力で補えます。' : err.message.includes('URL') ? 'URLを確認してください。同じURLの重複登録はできません。' : '保存できませんでした。タイトル・著者と端末の空き容量を確認してください。';
@@ -306,15 +336,20 @@ async function openBook(id) {
   openLock = true;
   try {
     await commit(addOpenEvent(state, id));
-    try { sessionStorage.setItem('dt_private_shelf_view_v1', JSON.stringify({ view, query, tag, sort, period, scroll: $('.ps-content').scrollTop })); } catch {}
+    try { sessionStorage.setItem('dt_private_shelf_view_v1', JSON.stringify({ view, query, tag, sort, period, creatorFilter, scroll: $('.ps-content').scrollTop })); } catch {}
     location.assign(book.url);
   } catch { openLock = false; toast('履歴を保存できませんでした。もう一度お試しください'); }
 }
 root.addEventListener('click', async e => {
   const button = e.target.closest('button'); if (!button) return;
+  if (button.dataset.creatorKind) {
+    creatorFilter = { kind: button.dataset.creatorKind, name: button.dataset.creatorName };
+    render(); $('.ps-content').scrollTop = 0; return;
+  }
+  if ('clearCreator' in button.dataset) { creatorFilter = null; render(); return; }
   if (button.dataset.open) return openBook(button.dataset.open);
   if (button.dataset.view) {
-    view = button.dataset.view; query = ''; tag = ''; $('#ps-search').value = ''; render(); $('.ps-content').scrollTop = 0;
+    view = button.dataset.view; query = ''; tag = ''; creatorFilter = null; $('#ps-search').value = ''; render(); $('.ps-content').scrollTop = 0;
     if (view === 'search') $('#ps-search').focus(); return;
   }
   if ('tag' in button.dataset) { tag = button.dataset.tag; render(); return; }
@@ -349,7 +384,7 @@ $('#ps-sync').onclick = settings;
 window.addEventListener('pageshow', e => { openLock = false; if (e.persisted) render(); });
 try {
   const saved = JSON.parse(sessionStorage.getItem('dt_private_shelf_view_v1'));
-  if (saved && titles[saved.view]) { ({ view, query, tag, sort, period } = saved); $('#ps-search').value = query; render(); $('.ps-content').scrollTop = saved.scroll; }
+  if (saved && titles[saved.view]) { ({ view, query, tag, sort, period, creatorFilter } = saved); $('#ps-search').value = query; render(); $('.ps-content').scrollTop = saved.scroll; }
   else render();
 } catch { render(); }
 renderSyncBadge(shelfSync.currentStatus());

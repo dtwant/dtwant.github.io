@@ -160,3 +160,117 @@ body.ps-page > :not(.ps-root):not(script):not(style):not(link) { display: none !
 #ps-fetch-status { margin-top: 8px !important; }
 .ps-inline-link { color: var(--ps-accent) !important; text-decoration: none !important; font-weight: 600; }
 .ps-cover .ps-thumbnail { position: absolute; inset: 0; z-index: 1; display: block; width: 100%; height: 100%; max-width: none; margin: 0; object-fit: cover; border-radius: inherit; }
+/* Creator filter, freshness labels, favorite badge, tag chips (2026-11-25). */
+.ps-card-meta { min-width: 0; }
+.ps-book-title { width: 100%; min-height: 0 !important; text-align: left; }
+.ps-creator-link { display: inline; min-height: 0 !important; min-width: 0 !important; padding: 0 !important; color: inherit; font-size: inherit; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; }
+.ps-creator-link:active { color: var(--ps-accent); text-decoration-color: currentColor; }
+.ps-creator-sep { color: var(--ps-line); }
+.ps-fav-badge { position: absolute; top: 8px; right: 8px; z-index: 2; color: var(--ps-accent); filter: drop-shadow(0 1px 3px #000a); }
+.ps-fav-badge svg { width: 17px; height: 17px; fill: currentColor; }
+.ps-recent-cover { position: relative; overflow: hidden; }
+.ps-recent-thumb { position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: none; margin: 0; object-fit: cover; }
+.ps-filter-chip { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 12px; padding: 8px 8px 8px 14px; border-radius: 12px; background: var(--ps-panel); border: 1px solid var(--ps-line); font-size: 12px; }
+.ps-filter-chip button { min-height: 36px; padding: 0 12px !important; border-radius: 9px; background: var(--ps-accent); color: #172016; font-weight: 600; font-size: 12px; }
+.ps-tag-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ps-tag-chips button { border-radius: 10px; background: #232c25; border-color: var(--ps-line) !important; padding: 0 12px; margin-top: 6px; font-size: 12px; color: var(--ps-muted); }
+.ps-tag-chips button[aria-pressed="true"] { background: var(--ps-accent); border-color: var(--ps-accent) !important; color: #172016; font-weight: 600; }
+/* ==========================================================================
+   PINK NEON × MICRO-CYBERPUNK THEME (designed by Neon, 2026-11-25)
+   "Velvet-Noir Rose Neon" — color / glow / texture only, no layout changes.
+   Deep plum-black surfaces; pink neon lives on 1px rims, focus rails and
+   wet specular highlights; cyan is reserved for the sync instrument badge.
+   ========================================================================== */
+.ps-root {
+  --ps-bg: #120a13; --ps-panel: #1d1220; --ps-line: #4d304c;
+  --ps-text: #f7eef5; --ps-muted: #c0a4b8; --ps-accent: #ff6eb4;
+  --ps-panel-hi: #27172b; --ps-panel-deep: #140b16; --ps-line-hi: #9e5088;
+  --ps-accent-2: #f04e9e; --ps-accent-ink: #160712; --ps-neon: #ff2e93;
+  --ps-cyber: #67e4ec;
+  --ps-glass: rgba(22, 12, 26, 0.88);
+  --ps-glow-edge: rgba(255, 110, 180, 0.48); --ps-glow-soft: rgba(255, 46, 147, 0.24);
+  --ps-glow-wash: rgba(255, 46, 147, 0.14); --ps-glow-ambient: rgba(255, 46, 147, 0.075);
+  --ps-cyber-wash: rgba(103, 228, 236, 0.12); --ps-cyber-edge: rgba(103, 228, 236, 0.42); --ps-cyber-glow: rgba(103, 228, 236, 0.20);
+  --ps-grid-line: rgba(255, 110, 180, 0.032); --ps-scan-line: rgba(0, 0, 0, 0.18);
+  --ps-specular: rgba(255, 224, 240, 0.28);
+  --ps-shadow-deep: rgba(6, 2, 8, 0.76); --ps-shadow-inset: rgba(5, 1, 7, 0.64);
+  --ps-tone-0-hi: #6c1945; --ps-tone-0-lo: #290a1d;
+  --ps-tone-1-hi: #571959; --ps-tone-1-lo: #210a26;
+  --ps-tone-2-hi: #69172b; --ps-tone-2-lo: #280912;
+  --ps-tone-3-hi: #3b1957; --ps-tone-3-lo: #190a29;
+  --ps-tone-4-hi: #201c52; --ps-tone-4-lo: #100c29;
+  accent-color: var(--ps-accent);
+}
+.ps-root::before {
+  background:
+    radial-gradient(ellipse 85% 38% at 50% -8%, var(--ps-glow-ambient), transparent 72%),
+    radial-gradient(ellipse 60% 42% at 92% 96%, var(--ps-glow-ambient), transparent 70%),
+    repeating-linear-gradient(0deg, transparent 0 3px, var(--ps-scan-line) 3px 4px),
+    linear-gradient(var(--ps-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ps-grid-line) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 4px, 36px 36px, 36px 36px;
+}
+/* Generated covers: dark rose-to-indigo gradients, white title stays AAA. */
+:is(.ps-tone-0, .ps-tone-1, .ps-tone-2, .ps-tone-3, .ps-tone-4) {
+  color: var(--ps-text);
+  box-shadow: inset 0 1px 0 var(--ps-specular), inset 0 -18px 28px var(--ps-shadow-inset), inset 4px 0 #00000025, inset 6px 0 #ffffff0c, 0 6px 15px #00000020;
+  text-shadow: 0 1px 6px var(--ps-shadow-deep);
+}
+.ps-tone-0 { background: linear-gradient(90deg, var(--ps-accent), transparent 65%) 0 0 / 100% 1px no-repeat, linear-gradient(155deg, var(--ps-tone-0-hi), var(--ps-tone-0-lo)); }
+.ps-tone-1 { background: linear-gradient(90deg, var(--ps-accent), transparent 65%) 0 0 / 100% 1px no-repeat, linear-gradient(155deg, var(--ps-tone-1-hi), var(--ps-tone-1-lo)); }
+.ps-tone-2 { background: linear-gradient(90deg, var(--ps-accent), transparent 65%) 0 0 / 100% 1px no-repeat, linear-gradient(155deg, var(--ps-tone-2-hi), var(--ps-tone-2-lo)); }
+.ps-tone-3 { background: linear-gradient(90deg, var(--ps-glow-edge), transparent 65%) 0 0 / 100% 1px no-repeat, linear-gradient(155deg, var(--ps-tone-3-hi), var(--ps-tone-3-lo)); }
+.ps-tone-4 { background: linear-gradient(90deg, var(--ps-cyber-edge), var(--ps-glow-edge) 45%, transparent 80%) 0 0 / 100% 1px no-repeat, linear-gradient(155deg, var(--ps-tone-4-hi), var(--ps-tone-4-lo)); }
+/* Dock: dark glass, one 1px neon lip line on the top edge. */
+.ps-dock {
+  background: linear-gradient(90deg, transparent 6%, var(--ps-line-hi) 26%, var(--ps-accent) 50%, var(--ps-line-hi) 74%, transparent 94%) 0 0 / 100% 1px no-repeat, var(--ps-glass);
+  border-top-color: var(--ps-line-hi);
+  backdrop-filter: blur(14px) saturate(1.15); -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  box-shadow: 0 -8px 24px var(--ps-shadow-deep), 0 -1px 12px var(--ps-glow-soft), inset 0 1px 0 var(--ps-specular);
+}
+.ps-dock button.is-active { color: var(--ps-accent); text-shadow: 0 0 10px var(--ps-glow-edge); }
+.ps-dock .is-active > span:first-child { background: var(--ps-glow-wash); box-shadow: inset 0 2px 0 var(--ps-neon); }
+.ps-add-icon { background: linear-gradient(180deg, var(--ps-accent), var(--ps-accent-2)); color: var(--ps-accent-ink); box-shadow: inset 0 1px 0 var(--ps-specular), 0 4px 14px var(--ps-glow-soft); }
+/* Search: sunken dark slot, corner reticles, focus energizes pink. */
+.ps-search {
+  background: linear-gradient(var(--ps-line-hi), var(--ps-line-hi)) 0 0 / 6px 1px no-repeat, linear-gradient(var(--ps-line-hi), var(--ps-line-hi)) 0 0 / 1px 6px no-repeat, linear-gradient(var(--ps-cyber-edge), var(--ps-cyber-edge)) 100% 100% / 6px 1px no-repeat, linear-gradient(var(--ps-cyber-edge), var(--ps-cyber-edge)) 100% 100% / 1px 6px no-repeat, var(--ps-panel-deep);
+  color: var(--ps-muted); caret-color: var(--ps-accent);
+  box-shadow: inset 0 2px 6px var(--ps-shadow-inset);
+}
+.ps-search:focus-within {
+  background: linear-gradient(var(--ps-accent), var(--ps-accent)) 0 0 / 8px 1px no-repeat, linear-gradient(var(--ps-accent), var(--ps-accent)) 0 0 / 1px 8px no-repeat, linear-gradient(var(--ps-accent), var(--ps-accent)) 100% 100% / 8px 1px no-repeat, linear-gradient(var(--ps-accent), var(--ps-accent)) 100% 100% / 1px 8px no-repeat, var(--ps-panel-deep);
+  box-shadow: inset 0 2px 6px var(--ps-shadow-inset), 0 0 0 1px var(--ps-glow-edge), 0 0 14px var(--ps-glow-soft);
+}
+/* Sheet: smoked plum glass with a neon lip line on the top edge. */
+.ps-root dialog {
+  background: linear-gradient(90deg, transparent 8%, var(--ps-glow-edge) 32%, var(--ps-accent) 50%, var(--ps-glow-edge) 68%, transparent 92%) 0 0 / 100% 1px no-repeat, linear-gradient(180deg, var(--ps-panel-hi), var(--ps-panel) 28%, var(--ps-bg));
+  border-color: var(--ps-line-hi);
+  box-shadow: 0 -14px 36px var(--ps-shadow-deep), 0 -2px 16px var(--ps-glow-soft), inset 0 1px 0 var(--ps-specular);
+}
+.ps-root dialog::backdrop { background: var(--ps-shadow-deep); }
+.ps-sheet-footer { background: transparent; }
+.ps-sheet input { background: var(--ps-panel-deep); border-color: var(--ps-line) !important; }
+.ps-sheet input::placeholder { color: var(--ps-muted); }
+#ps-paste, #ps-fetch { background: var(--ps-panel-hi); }
+.ps-suggestions button { background: var(--ps-panel-hi); }
+/* Toast: dark pill with a 3px neon rail on the left. */
+.ps-toast {
+  background: linear-gradient(90deg, var(--ps-glow-wash), var(--ps-panel) 38%);
+  color: var(--ps-text); border: 1px solid var(--ps-line-hi);
+  box-shadow: inset 3px 0 0 var(--ps-neon), inset 0 1px 0 var(--ps-specular), 0 8px 24px var(--ps-shadow-deep), 0 0 12px var(--ps-glow-soft);
+}
+.ps-toast-action { color: var(--ps-accent); }
+/* Sync badge: the one cyan instrument in a pink room. */
+.ps-sync-badge { background: linear-gradient(180deg, var(--ps-cyber-wash), var(--ps-panel-deep)); border-color: var(--ps-cyber-edge) !important; color: var(--ps-cyber); box-shadow: inset 0 1px 0 var(--ps-cyber-wash), 0 0 10px var(--ps-cyber-glow); text-shadow: 0 0 8px var(--ps-cyber-glow); }
+.ps-sync-badge[data-status="synced"] .ps-sync-dot { background: var(--ps-cyber); box-shadow: 0 0 6px var(--ps-cyber); }
+.ps-sync-badge[data-status="syncing"] .ps-sync-dot { background: var(--ps-accent); }
+.ps-sync-badge[data-status="error"] { color: #ffb5ab; border-color: #ff8a75 !important; text-shadow: none; }
+.ps-sync-badge[data-status="error"] .ps-sync-dot { background: #ff8a75; box-shadow: none; }
+/* Accent surfaces: wet rose gradient with dark plum ink. */
+.ps-primary { background: linear-gradient(180deg, var(--ps-accent), var(--ps-accent-2)) !important; color: var(--ps-accent-ink) !important; box-shadow: inset 0 1px 0 var(--ps-specular), 0 4px 14px var(--ps-glow-soft); }
+.ps-tags button[aria-pressed="true"], .ps-period button[aria-pressed="true"], .ps-column-toggle button[aria-pressed="true"], .ps-tag-chips button[aria-pressed="true"] { background: linear-gradient(180deg, var(--ps-accent), var(--ps-accent-2)); border-color: var(--ps-accent) !important; color: var(--ps-accent-ink); }
+.ps-filter-chip button { background: linear-gradient(180deg, var(--ps-accent), var(--ps-accent-2)); color: var(--ps-accent-ink); }
+.ps-period { background: var(--ps-panel); }
+.ps-empty-icon { background: var(--ps-panel-hi); }
+.ps-tag-chips button { background: var(--ps-panel-deep); }
+.ps-author-group-head h3::before { box-shadow: 0 0 8px var(--ps-glow-soft); }
