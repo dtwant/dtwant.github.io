@@ -104,7 +104,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "217"
+    "wordCount": "62"
   }]
   </script>
 
@@ -730,131 +730,813 @@
     </header>
     <section class="max-w-full mt-6 prose dark:prose-invert">
       <style>
-  :root { color-scheme: dark; }
-  body { background: #07090B !important; }
-  .li-wrap {
-    position: relative; min-height: 100dvh; background: #07090B; color: #D8DEE4;
-    font-family: 'JetBrains Mono', 'BIZ UDGothic', monospace; box-sizing: border-box;
-    padding: calc(18px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom));
-  }
-  .li-wrap::before {
-    content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: repeating-linear-gradient(0deg, rgba(216,222,228,.013) 0 1px, transparent 1px 3px);
-  }
-  .li-inner { position: relative; max-width: 720px; margin: 0 auto; }
-  .li-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
-  .li-title { font-size: 15px; letter-spacing: .22em; margin: 0; font-weight: 700; }
-  .li-title small { color: #7C8794; font-size: 11px; letter-spacing: .1em; margin-left: 8px; }
-  .li-spacer { flex: 1; }
-  .li-pill {
-    font-size: 10px; letter-spacing: .16em; color: #E8B34B; border: 1px solid rgba(232,179,75,.45);
-    padding: 5px 9px; border-radius: 999px; white-space: nowrap;
-  }
-  .li-btn {
-    font: inherit; font-size: 11px; letter-spacing: .14em; padding: 9px 12px; min-height: 36px;
-    background: #0D1114; color: #D8DEE4; border: 1px solid rgba(216,222,228,.28); cursor: pointer;
-    text-decoration: none; display: inline-flex; align-items: center;
-  }
-  .li-btn[disabled] { color: #5C6672; border-color: rgba(216,222,228,.14); cursor: not-allowed; }
-  .li-caption { width: 100%; font-size: 10px; color: #7C8794; letter-spacing: .06em; margin: 2px 0 0; text-align: right; }
-  .li-summary {
-    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: rgba(216,222,228,.14);
-    border: 1px solid rgba(216,222,228,.14); margin-top: 22px;
-  }
-  .li-cell { background: #0A0D10; padding: 12px 14px; }
-  .li-cell dt { font-size: 9px; letter-spacing: .2em; color: #7C8794; margin: 0 0 6px; }
-  .li-cell dd { margin: 0; font-size: 17px; font-variant-numeric: tabular-nums; }
-  .li-cell dd small { font-size: 10px; color: #7C8794; }
-  .li-h { font-size: 10px; letter-spacing: .24em; color: #7C8794; margin: 26px 0 10px; }
-  .li-mod { border-top: 1px solid rgba(216,222,228,.12); padding: 11px 2px 12px; }
-  .li-mod-head { display: flex; align-items: baseline; gap: 10px; }
-  .li-mod-name { font-size: 13px; letter-spacing: .05em; }
-  .li-mod-pct { margin-left: auto; font-size: 13px; font-variant-numeric: tabular-nums; }
-  .li-mod-status { font-size: 9px; letter-spacing: .18em; }
-  .st-done { color: #58C184; } .st-wip { color: #E8B34B; } .st-draft { color: #7FA8C9; }
-  .st-stub { color: #9A8AC9; } .st-pending { color: #5C6672; }
-  .li-gauge { display: flex; gap: 3px; margin-top: 8px; }
-  .li-seg { height: 5px; flex: 1; background: rgba(216,222,228,.12); }
-  .li-seg.on-done { background: #58C184; } .li-seg.on-wip { background: #E8B34B; }
-  .li-seg.on-draft { background: #7FA8C9; } .li-seg.on-stub { background: #9A8AC9; }
-  .li-log { font-size: 11px; line-height: 1.9; color: #AEB7C0; }
-  .li-log time { color: #5C6672; margin-right: 10px; font-variant-numeric: tabular-nums; }
-  .li-memo { font-size: 11px; line-height: 1.9; color: #AEB7C0; }
-  .li-memo li { margin: 2px 0; }
-  @media (max-width: 560px) {
-    .li-summary { grid-template-columns: 1fr 1fr; }
-    .li-cell:first-child { grid-column: 1 / -1; }
-    .li-caption { text-align: left; }
-  }
+ 
+.meta-breadcrumb, .article-title, .post-title, .article-header, main article > header, h1:not(.li-title) { display: none !important; }
+body > div.fixed.inset-x-0.z-100, body > div.min-h-\[148px\] { display: none !important; }
 </style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700&display=swap');
+
+:root {
+  --li-bg: #060A08;
+  --li-surface: #030604;
+  --li-fg: #E4F2E9;
+  --li-fg-sub: #88A394;
+  --li-fg-muted: #5C7366;
+  --li-accent: #00FF66;
+  --li-border-1: rgba(0, 255, 102, .12);
+  --li-border-2: rgba(0, 255, 102, .35);
+  --li-border-3: rgba(0, 255, 102, .70);
+
+  --li-st-done: #00FF66;
+  --li-st-wip: #52D9BE;
+  --li-st-draft: #E2B45A;
+  --li-st-stub: #DD856B;
+  --li-st-pending: #7B9486;
+
+  --li-display: 'Orbitron', 'JetBrains Mono', ui-monospace, monospace;
+  --li-mono: 'JetBrains Mono', 'BIZ UDGothic', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+html {
+  overflow-x: clip;
+}
+
+body {
+  background-color: var(--li-bg) !important;
+  color: var(--li-fg) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: none !important;
+  overflow-x: clip;
+  color-scheme: only dark;
+}
+
+main,
+main article,
+.article-content,
+.prose,
+.max-w-prose {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.li-wrap,
+.li-wrap *,
+.li-wrap *::before,
+.li-wrap *::after {
+  box-sizing: border-box;
+}
+
+.li-wrap {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  background-color: var(--li-bg);
+  color: var(--li-fg);
+  font-family: var(--li-mono);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  font-kerning: normal;
+  font-feature-settings: "kern" 1;
+  line-break: strict;
+  color-scheme: only dark;
+}
+
+.li-wrap::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 255, 102, .014) 2px,
+    rgba(0, 255, 102, .014) 3px
+  );
+}
+
+.prose .li-wrap :where(h1, h2, p, dl, dt, dd, ul, ol, li),
+.li-wrap :where(h1, h2, p, dl, dt, dd, ul, ol, li) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  list-style: none;
+  color: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.li-wrap ul li::before,
+.li-wrap ol li::before,
+.li-wrap ul li::marker,
+.li-wrap ol li::marker {
+  content: none !important;
+  display: none !important;
+}
+
+.li-wrap .li-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding:
+    max(36px, env(safe-area-inset-top))
+    max(24px, env(safe-area-inset-right))
+    max(64px, env(safe-area-inset-bottom))
+    max(24px, env(safe-area-inset-left));
+}
+
+ 
+.li-wrap .li-top {
+  position: static;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "title actions"
+    "pill caption";
+  align-items: center;
+  gap: 10px 20px;
+  padding-bottom: 20px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--li-border-1);
+}
+
+.li-wrap .li-title {
+  grid-area: title;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 12px;
+  min-width: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: var(--li-display) !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+  letter-spacing: 0.12em !important;
+  color: var(--li-fg) !important;
+  overflow-wrap: break-word;
+}
+
+.li-wrap .li-ver {
+  font-family: var(--li-mono) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+  color: var(--li-fg-sub) !important;
+  white-space: nowrap;
+}
+
+.li-wrap .li-pill {
+  grid-area: pill;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  border: 1px solid var(--li-border-2);
+  border-radius: 2px;
+  background-color: var(--li-surface);
+  color: var(--li-fg-sub);
+  font-family: var(--li-mono) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.li-wrap .li-pill-glyph {
+  font-size: 13px;
+  line-height: 1;
+  color: var(--li-st-draft);
+}
+
+.li-wrap .li-actions {
+  grid-area: actions;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.li-wrap .li-btn {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--li-border-2) !important;
+  border-radius: 2px !important;
+  background-color: var(--li-surface) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: var(--li-fg) !important;
+  font-family: var(--li-mono) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.08em;
+  text-decoration: none !important;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color 140ms ease-out, border-color 140ms ease-out, background-color 140ms ease-out;
+}
+
+.li-wrap a.li-btn:hover {
+  color: var(--li-accent) !important;
+  border-color: var(--li-border-3) !important;
+  background-color: rgba(0, 255, 102, .06) !important;
+}
+
+.li-wrap .li-btn:focus-visible {
+  outline: 2px solid var(--li-accent) !important;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .li-wrap a.li-btn:active {
+    transform: scale(0.96);
+  }
+}
+
+.li-wrap .li-btn:disabled,
+.li-wrap .li-btn[disabled] {
+  border-color: var(--li-border-1) !important;
+  border-style: dashed !important;
+  background-color: var(--li-surface) !important;
+  color: var(--li-fg-muted) !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+}
+
+.li-wrap .li-caption {
+  grid-area: caption;
+  justify-self: end;
+  font-family: var(--li-mono) !important;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+  color: var(--li-fg-sub) !important;
+  text-align: right;
+}
+
+ 
+.li-wrap .li-summary {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0 0 36px 0 !important;
+  padding: 0 !important;
+  background-color: var(--li-border-1);
+  border: 1px solid var(--li-border-1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.li-wrap .li-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 16px 20px !important;
+  background-color: var(--li-surface);
+  min-width: 0;
+}
+
+.li-wrap .li-cell dt {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: var(--li-mono) !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.06em;
+  color: var(--li-fg-sub) !important;
+}
+
+.li-wrap .li-cell dd {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: var(--li-mono) !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  font-variant-numeric: tabular-nums;
+  color: var(--li-fg) !important;
+  overflow-wrap: break-word;
+}
+
+.li-wrap .li-cell:first-child dd {
+  color: var(--li-accent) !important;
+}
+
+.li-wrap .li-cell:last-child dd {
+  font-size: 18px !important;
+  font-weight: 500 !important;
+}
+
+ 
+.li-wrap .li-sec {
+  margin-bottom: 36px;
+}
+
+.li-wrap .li-sec:last-child {
+  margin-bottom: 0;
+}
+
+.li-wrap .li-h {
+  display: flex !important;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 14px 0 !important;
+  padding: 0 0 8px 0 !important;
+  border-bottom: 1px solid var(--li-border-1) !important;
+  font-family: var(--li-display) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase;
+  color: var(--li-fg) !important;
+}
+
+.li-wrap .li-h-jp {
+  font-family: var(--li-mono) !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+  font-feature-settings: "kern" 1, "palt" 1;
+  text-transform: none;
+  color: var(--li-fg-sub) !important;
+}
+
+ 
+.li-wrap .li-mods {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid var(--li-border-1);
+  border-radius: 2px;
+  background-color: var(--li-surface);
+}
+
+.li-wrap .li-mod {
+  display: grid !important;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  align-items: center;
+  gap: 20px;
+  margin: 0 !important;
+  padding: 14px 18px !important;
+  border-bottom: 1px solid var(--li-border-1) !important;
+}
+
+.li-wrap .li-mod:last-child {
+  border-bottom: 0 !important;
+}
+
+.li-wrap .li-mod-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px 76px;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.li-wrap .li-mod-name {
+  font-family: var(--li-mono) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+  color: var(--li-fg) !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.li-wrap .li-mod-pct {
+  font-family: var(--li-mono) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--li-fg-sub) !important;
+}
+
+.li-wrap .li-mod-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid currentColor;
+  font-family: var(--li-mono) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.li-wrap .st-done {
+  color: var(--li-st-done) !important;
+  background-color: rgba(0, 255, 102, .08);
+}
+
+.li-wrap .st-wip {
+  color: var(--li-st-wip) !important;
+  background-color: rgba(82, 217, 190, .08);
+}
+
+.li-wrap .st-draft {
+  color: var(--li-st-draft) !important;
+  background-color: rgba(226, 180, 90, .08);
+}
+
+.li-wrap .st-stub {
+  color: var(--li-st-stub) !important;
+  background-color: rgba(221, 133, 107, .08);
+}
+
+.li-wrap .st-pending {
+  color: var(--li-st-pending) !important;
+  background-color: rgba(123, 148, 134, .06);
+}
+
+.li-wrap .li-gauge {
+  display: grid;
+  grid-template-columns: repeat(20, minmax(0, 1fr));
+  gap: 3px;
+  width: 100%;
+  height: 16px;
+  padding: 3px;
+  background-color: var(--li-bg);
+  border: 1px solid var(--li-border-1);
+  border-radius: 2px;
+}
+
+.li-wrap .li-seg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 1px;
+  background-color: rgba(136, 163, 148, .12);
+}
+
+.li-wrap .li-seg.on-done { background-color: var(--li-st-done); }
+.li-wrap .li-seg.on-wip { background-color: var(--li-st-wip); }
+.li-wrap .li-seg.on-draft { background-color: var(--li-st-draft); }
+.li-wrap .li-seg.on-stub { background-color: var(--li-st-stub); }
+
+ 
+.li-wrap .li-lower {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.li-wrap .li-log {
+  display: flex;
+  flex-direction: column;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid var(--li-border-1);
+  border-radius: 2px;
+  background-color: var(--li-surface);
+}
+
+.li-wrap .li-log li {
+  display: grid !important;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 12px;
+  margin: 0 !important;
+  padding: 13px 16px !important;
+  border-bottom: 1px solid var(--li-border-1) !important;
+  font-size: 13px !important;
+  line-height: 1.65 !important;
+}
+
+.li-wrap .li-log li:last-child {
+  border-bottom: 0 !important;
+}
+
+.li-wrap .li-log-ver {
+  font-family: var(--li-mono) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--li-fg-sub) !important;
+  white-space: nowrap;
+}
+
+.li-wrap .li-log-msg {
+  color: var(--li-fg) !important;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.li-wrap .li-memo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 !important;
+  padding: 16px 18px !important;
+  border: 1px solid var(--li-border-1) !important;
+  border-left: 2px solid var(--li-st-draft) !important;
+  border-radius: 2px;
+  background-color: var(--li-surface);
+}
+
+.li-wrap .li-memo li {
+  display: grid !important;
+  grid-template-columns: 14px minmax(0, 1fr);
+  gap: 8px;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 13px !important;
+  line-height: 1.65 !important;
+  color: var(--li-fg) !important;
+}
+
+.li-wrap .li-memo-mark {
+  color: var(--li-st-draft);
+  user-select: none;
+}
+
+@media (max-width: 780px) {
+  .li-wrap .li-lower {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+ 
+@media (max-width: 640px) {
+  .li-wrap .li-inner {
+    padding:
+      max(20px, env(safe-area-inset-top))
+      max(16px, env(safe-area-inset-right))
+      max(48px, env(safe-area-inset-bottom))
+      max(16px, env(safe-area-inset-left));
+  }
+
+   
+  .li-wrap .li-top {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title lock"
+      "pill run"
+      "caption caption";
+    gap: 10px 8px;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+    align-items: center;
+  }
+
+  .li-wrap .li-actions {
+    display: contents;
+  }
+
+  .li-wrap .li-btn-lock {
+    grid-area: lock;
+    justify-self: end;
+  }
+
+  .li-wrap .li-btn-run {
+    grid-area: run;
+    justify-self: end;
+  }
+
+  .li-wrap .li-title {
+    font-size: 14px !important;
+    letter-spacing: 0.08em !important;
+    gap: 2px 8px;
+  }
+
+  .li-wrap .li-ver {
+    font-size: 11px !important;
+  }
+
+  .li-wrap .li-pill {
+    font-size: 10px !important;
+    padding: 5px 8px;
+    letter-spacing: 0.06em;
+  }
+
+  .li-wrap .li-btn {
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 0 10px !important;
+    font-size: 11px !important;
+  }
+
+  .li-wrap .li-caption {
+    justify-self: end;
+    font-size: 11px !important;
+    margin-top: -2px;
+  }
+
+   
+  .li-wrap .li-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0 0 28px 0 !important;
+  }
+
+  .li-wrap .li-summary > .li-cell:first-child {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .li-wrap .li-cell {
+    padding: 14px 16px !important;
+  }
+
+  .li-wrap .li-cell dd {
+    font-size: 20px !important;
+  }
+
+  .li-wrap .li-cell:last-child dd {
+    font-size: 15px !important;
+  }
+
+  .li-wrap .li-sec {
+    margin-bottom: 28px;
+  }
+
+   
+  .li-wrap .li-mod {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 13px 14px !important;
+  }
+
+  .li-wrap .li-mod-head {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 8px;
+  }
+
+  .li-wrap .li-gauge {
+    gap: 2px;
+    height: 14px;
+    padding: 2px;
+  }
+
+  .li-wrap .li-log li {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 12px 14px !important;
+  }
+
+  .li-wrap .li-memo {
+    padding: 14px 16px !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .li-wrap .li-seg.on-done,
+  .li-wrap .li-seg.on-wip,
+  .li-wrap .li-seg.on-draft,
+  .li-wrap .li-seg.on-stub {
+    background-color: Highlight;
+  }
+}
+</style>
+
 <div class="li-wrap">
   <div class="li-inner">
-    <div class="li-top">
-      <h1 class="li-title">LOCAL INDEXER<small>v0.4.2-dev</small></h1>
-      <span class="li-spacer"></span>
-      <a class="li-btn" href="/">[ LOCK ]</a>
-      <span class="li-pill">◐ DESIGN IN PROGRESS</span>
-      <button class="li-btn" type="button" disabled>[ RUN BATCH ]</button>
-      <p class="li-caption">出力スキーマ未確定のため無効</p>
+    <header class="li-top">
+      <h1 class="li-title" translate="no">LOCAL INDEXER <span class="li-ver">v0.4.2-dev</span></h1>
+      <span class="li-pill" translate="no"><span class="li-pill-glyph" aria-hidden="true">◐</span> DESIGN IN PROGRESS</span>
+      <div class="li-actions">
+        <a href="/" class="li-btn li-btn-lock" translate="no">[ LOCK ]</a>
+        <button type="button" class="li-btn li-btn-run" disabled aria-describedby="li-run-reason" translate="no">[ RUN BATCH ]</button>
+      </div>
+      <span id="li-run-reason" class="li-caption">出力スキーマ未確定のため無効</span>
+    </header>
+
+    <dl class="li-summary" aria-label="サマリー">
+      <div class="li-cell">
+        <dt>全体進捗</dt>
+        <dd>40%</dd>
+      </div>
+      <div class="li-cell">
+        <dt>対象モジュール</dt>
+        <dd>5</dd>
+      </div>
+      <div class="li-cell">
+        <dt>最終更新</dt>
+        <dd translate="no">v0.4.2-dev</dd>
+      </div>
+    </dl>
+
+    <section class="li-sec" aria-labelledby="li-h-modules">
+      <h2 id="li-h-modules" class="li-h"><span translate="no">MODULES</span><span class="li-h-jp">モジュール進捗</span></h2>
+      <ul class="li-mods" role="list">
+        <li class="li-mod">
+          <div class="li-mod-head">
+            <span class="li-mod-name" translate="no">core-parser</span>
+            <span class="li-mod-pct">100%</span>
+            <span class="li-mod-status st-done" translate="no">DONE</span>
+          </div>
+          <div class="li-gauge" role="progressbar" aria-label="core-parser 進捗" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-valuetext="100% DONE">
+            <span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span><span class="li-seg on-done" aria-hidden="true"></span>
+          </div>
+        </li>
+        <li class="li-mod">
+          <div class="li-mod-head">
+            <span class="li-mod-name" translate="no">index-worker</span>
+            <span class="li-mod-pct">64%</span>
+            <span class="li-mod-status st-wip" translate="no">WIP</span>
+          </div>
+          <div class="li-gauge" role="progressbar" aria-label="index-worker 進捗" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100" aria-valuetext="64% WIP">
+            <span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg on-wip" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span>
+          </div>
+        </li>
+        <li class="li-mod">
+          <div class="li-mod-head">
+            <span class="li-mod-name" translate="no">cache-layer</span>
+            <span class="li-mod-pct">28%</span>
+            <span class="li-mod-status st-draft" translate="no">DRAFT</span>
+          </div>
+          <div class="li-gauge" role="progressbar" aria-label="cache-layer 進捗" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100" aria-valuetext="28% DRAFT">
+            <span class="li-seg on-draft" aria-hidden="true"></span><span class="li-seg on-draft" aria-hidden="true"></span><span class="li-seg on-draft" aria-hidden="true"></span><span class="li-seg on-draft" aria-hidden="true"></span><span class="li-seg on-draft" aria-hidden="true"></span><span class="li-seg on-draft" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span>
+          </div>
+        </li>
+        <li class="li-mod">
+          <div class="li-mod-head">
+            <span class="li-mod-name" translate="no">export-pipe</span>
+            <span class="li-mod-pct">10%</span>
+            <span class="li-mod-status st-stub" translate="no">STUB</span>
+          </div>
+          <div class="li-gauge" role="progressbar" aria-label="export-pipe 進捗" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" aria-valuetext="10% STUB">
+            <span class="li-seg on-stub" aria-hidden="true"></span><span class="li-seg on-stub" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span>
+          </div>
+        </li>
+        <li class="li-mod">
+          <div class="li-mod-head">
+            <span class="li-mod-name" translate="no">ui-inspector</span>
+            <span class="li-mod-pct">0%</span>
+            <span class="li-mod-status st-pending" translate="no">PENDING</span>
+          </div>
+          <div class="li-gauge" role="progressbar" aria-label="ui-inspector 進捗" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0% PENDING">
+            <span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span><span class="li-seg" aria-hidden="true"></span>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <div class="li-lower">
+      <section class="li-sec" aria-labelledby="li-h-log">
+        <h2 id="li-h-log" class="li-h"><span translate="no">CHANGELOG</span><span class="li-h-jp">更新履歴</span></h2>
+        <ol class="li-log" role="list">
+          <li>
+            <span class="li-log-ver" translate="no">v0.4.2-dev</span>
+            <span class="li-log-msg"><span translate="no">cache-layer</span>：差分ハッシュ照合のドラフト実装を追加</span>
+          </li>
+          <li>
+            <span class="li-log-ver" translate="no">v0.4.1-dev</span>
+            <span class="li-log-msg"><span translate="no">index-worker</span>：チャンク分割ワーカーの並列上限を 4 に固定</span>
+          </li>
+          <li>
+            <span class="li-log-ver" translate="no">v0.4.0-dev</span>
+            <span class="li-log-msg"><span translate="no">core-parser</span>：Markdown / JSON フロントマター抽出を完了</span>
+          </li>
+        </ol>
+      </section>
+
+      <section class="li-sec" aria-labelledby="li-h-memo">
+        <h2 id="li-h-memo" class="li-h"><span translate="no">OPEN NOTES</span><span class="li-h-jp">未決定メモ</span></h2>
+        <ul class="li-memo" role="list">
+          <li>
+            <span class="li-memo-mark" aria-hidden="true">—</span>
+            <span>出力 JSON スキーマのメタデータキー命名（<span translate="no">snake_case</span> / <span translate="no">camelCase</span>）が未確定</span>
+          </li>
+          <li>
+            <span class="li-memo-mark" aria-hidden="true">—</span>
+            <span><span translate="no">ui-inspector</span> の検索結果ページング方式は <span translate="no">export-pipe</span> 仕様確定後に決定</span>
+          </li>
+        </ul>
+      </section>
     </div>
-<pre><code>&lt;dl class=&quot;li-summary&quot;&gt;
-  &lt;div class=&quot;li-cell&quot;&gt;&lt;dt&gt;全体進捗&lt;/dt&gt;&lt;dd&gt;40&lt;small&gt;%&lt;/small&gt;&lt;/dd&gt;&lt;/div&gt;
-  &lt;div class=&quot;li-cell&quot;&gt;&lt;dt&gt;対象モジュール&lt;/dt&gt;&lt;dd&gt;5&lt;/dd&gt;&lt;/div&gt;
-  &lt;div class=&quot;li-cell&quot;&gt;&lt;dt&gt;最終更新&lt;/dt&gt;&lt;dd style=&quot;font-size:13px&quot;&gt;v0.4.2-dev&lt;/dd&gt;&lt;/div&gt;
-&lt;/dl&gt;
-
-&lt;h2 class=&quot;li-h&quot;&gt;MODULES&lt;/h2&gt;
-
-&lt;div class=&quot;li-mod&quot;&gt;
-  &lt;div class=&quot;li-mod-head&quot;&gt;&lt;span class=&quot;li-mod-name&quot;&gt;core-parser&lt;/span&gt;&lt;span class=&quot;li-mod-status st-done&quot;&gt;● DONE&lt;/span&gt;&lt;span class=&quot;li-mod-pct&quot;&gt;100%&lt;/span&gt;&lt;/div&gt;
-  &lt;div class=&quot;li-gauge&quot; role=&quot;progressbar&quot; aria-valuenow=&quot;100&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot; aria-label=&quot;core-parser 進捗&quot;&gt;
-    &lt;span class=&quot;li-seg on-done&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-done&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-done&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-done&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-done&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-done&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-done&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-done&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-done&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-done&quot;&gt;&lt;/span&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;li-mod&quot;&gt;
-  &lt;div class=&quot;li-mod-head&quot;&gt;&lt;span class=&quot;li-mod-name&quot;&gt;index-worker&lt;/span&gt;&lt;span class=&quot;li-mod-status st-wip&quot;&gt;◐ WIP&lt;/span&gt;&lt;span class=&quot;li-mod-pct&quot;&gt;64%&lt;/span&gt;&lt;/div&gt;
-  &lt;div class=&quot;li-gauge&quot; role=&quot;progressbar&quot; aria-valuenow=&quot;64&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot; aria-label=&quot;index-worker 進捗&quot;&gt;
-    &lt;span class=&quot;li-seg on-wip&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-wip&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-wip&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-wip&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-wip&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-wip&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;li-mod&quot;&gt;
-  &lt;div class=&quot;li-mod-head&quot;&gt;&lt;span class=&quot;li-mod-name&quot;&gt;cache-layer&lt;/span&gt;&lt;span class=&quot;li-mod-status st-draft&quot;&gt;◔ DRAFT&lt;/span&gt;&lt;span class=&quot;li-mod-pct&quot;&gt;28%&lt;/span&gt;&lt;/div&gt;
-  &lt;div class=&quot;li-gauge&quot; role=&quot;progressbar&quot; aria-valuenow=&quot;28&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot; aria-label=&quot;cache-layer 進捗&quot;&gt;
-    &lt;span class=&quot;li-seg on-draft&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-draft&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg on-draft&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;li-mod&quot;&gt;
-  &lt;div class=&quot;li-mod-head&quot;&gt;&lt;span class=&quot;li-mod-name&quot;&gt;export-pipe&lt;/span&gt;&lt;span class=&quot;li-mod-status st-stub&quot;&gt;○ STUB&lt;/span&gt;&lt;span class=&quot;li-mod-pct&quot;&gt;10%&lt;/span&gt;&lt;/div&gt;
-  &lt;div class=&quot;li-gauge&quot; role=&quot;progressbar&quot; aria-valuenow=&quot;10&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot; aria-label=&quot;export-pipe 進捗&quot;&gt;
-    &lt;span class=&quot;li-seg on-stub&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;li-mod&quot;&gt;
-  &lt;div class=&quot;li-mod-head&quot;&gt;&lt;span class=&quot;li-mod-name&quot;&gt;ui-inspector&lt;/span&gt;&lt;span class=&quot;li-mod-status st-pending&quot;&gt;○ PENDING&lt;/span&gt;&lt;span class=&quot;li-mod-pct&quot;&gt;0%&lt;/span&gt;&lt;/div&gt;
-  &lt;div class=&quot;li-gauge&quot; role=&quot;progressbar&quot; aria-valuenow=&quot;0&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot; aria-label=&quot;ui-inspector 進捗&quot;&gt;
-    &lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;&lt;span class=&quot;li-seg&quot;&gt;&lt;/span&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;h2 class=&quot;li-h&quot;&gt;CHANGELOG — FRAGMENTS&lt;/h2&gt;
-&lt;div class=&quot;li-log&quot;&gt;
-  &lt;div&gt;&lt;time&gt;v0.4.2-dev&lt;/time&gt;index-worker: 差分走査の途中経過を保持するよう変更（未検証）&lt;/div&gt;
-  &lt;div&gt;&lt;time&gt;v0.4.1-dev&lt;/time&gt;cache-layer: 失效条件のドラフトを追加&lt;/div&gt;
-  &lt;div&gt;&lt;time&gt;v0.4.0-dev&lt;/time&gt;core-parser: 走査対象の切り替えに対応&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;h2 class=&quot;li-h&quot;&gt;UNDECIDED&lt;/h2&gt;
-&lt;ul class=&quot;li-memo&quot;&gt;
-  &lt;li&gt;出力スキーマの最終形（export-pipe と連動）&lt;/li&gt;
-  &lt;li&gt;再走査の間隔と手動実行の扱い&lt;/li&gt;
-&lt;/ul&gt;
-</code></pre>
   </div>
 </div>
+
 
     </section>
     <footer class="pt-8">
