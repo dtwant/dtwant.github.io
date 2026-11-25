@@ -119,6 +119,40 @@ export function formatShelfDate(iso, now = new Date()) {
     : `${then.getFullYear()}/${then.getMonth() + 1}/${then.getDate()}`;
 }
 
+// Author index for the authors view: one entry per distinct author name
+// (a book with several authors counts for each), representative books
+// ordered favorites-first then newest, for the cover stack.
+export function authorIndex(books) {
+  const byName = new Map();
+  for (const book of books) {
+    if (book.deletedAt) continue;
+    for (const name of book.authors || []) {
+      if (!byName.has(name)) byName.set(name, []);
+      byName.get(name).push(book);
+    }
+  }
+  return [...byName.entries()].map(([name, list]) => {
+    const covers = [...list].sort((a, b) =>
+      Number(b.favorite) - Number(a.favorite) || b.createdAt.localeCompare(a.createdAt));
+    const latest = [...list].sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+    return { name, count: list.length, books: covers, latestTitle: latest?.title || '', latestCreatedAt: latest?.createdAt || '' };
+  });
+}
+
+export function sortAuthorIndex(index, mode) {
+  const list = [...index];
+  if (mode === 'kana') return list.sort((a, b) => a.name.localeCompare(b.name, 'ja'));
+  if (mode === 'recent') return list.sort((a, b) => b.latestCreatedAt.localeCompare(a.latestCreatedAt) || b.count - a.count);
+  return list.sort((a, b) => b.count - a.count || b.latestCreatedAt.localeCompare(a.latestCreatedAt));
+}
+
+export function filterAuthors(index, query) {
+  const fold = value => String(value).normalize('NFKC').toLocaleLowerCase();
+  const terms = fold(query).split(/\s+/).filter(Boolean);
+  if (!terms.length) return index;
+  return index.filter(entry => terms.every(term => fold(entry.name).includes(term)));
+}
+
 export function groupBooksByAuthor(books) {
   const groups = new Map();
   for (const book of books) {

@@ -1,4 +1,4 @@
-import { addOpenEvent, bookMatchesCreator, creatorLabel, filterBooks, filterBooksByTag, formatShelfDate, groupBooksByAuthor, lastOpenedByBook, mergeBackup, normalizeBook, rankBooks, recentBooks, thumbnailUrl } from './core.js';
+import { addOpenEvent, authorIndex, bookMatchesCreator, creatorLabel, filterAuthors, filterBooks, filterBooksByTag, formatShelfDate, groupBooksByAuthor, lastOpenedByBook, mergeBackup, normalizeBook, rankBooks, recentBooks, sortAuthorIndex, thumbnailUrl } from './core.js';
 import { exportState, loadState, saveState } from './store.js';
 import { createShelfSync, setSyncEnabled, syncConfig, syncEnabled, syncMeta } from './sync.js';
 
@@ -11,6 +11,7 @@ const paths = {
   plus: '<path d="M12 5v14M5 12h14"/>',
   heart: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/>',
   ranking: '<path d="M5 20V13M12 20V4M19 20V9"/>',
+  author: '<circle cx="12" cy="8" r="3.6"/><path d="M5.5 19.5c1.1-3.3 3.6-5 6.5-5s5.4 1.7 6.5 5"/>',
   more: '<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
   close: '<path d="m6 6 12 12M6 18 18 6"/>',
   arrow: '<path d="M5 12h14m-5-5 5 5-5 5"/>',
@@ -28,11 +29,11 @@ $('#ps-search-icon').innerHTML = icon('search');
 let state = await loadState();
 const COLUMNS_KEY = 'dt_private_shelf_columns_v1';
 function savedColumns() {
-  try { return localStorage.getItem(COLUMNS_KEY) === '3' ? 3 : 2; } catch { return 2; }
+  try { const v = localStorage.getItem(COLUMNS_KEY); return v === '3' || v === '4' ? Number(v) : 2; } catch { return 2; }
 }
-let view = 'shelf', query = '', tag = '', sort = 'new', period = 'all', columns = savedColumns(), creatorFilter = null;
+let view = 'shelf', query = '', tag = '', sort = 'new', period = 'all', columns = savedColumns(), creatorFilter = null, authorSort = 'count';
 let busy = false, openLock = false, toastTimer, returnFocus;
-const titles = { shelf: '本棚', search: '作品を探す', favorites: 'お気に入り', ranking: 'よく読む作品' };
+const titles = { shelf: '本棚', authors: '著者', favorites: 'お気に入り', ranking: 'よく読む作品' };
 const liveBooks = () => state.books.filter(b => !b.deletedAt);
 const syncLabels = { off: '同期オフ', unconfigured: '同期未設定', syncing: '同期中', synced: '同期済み', error: '同期エラー' };
 function renderSyncBadge(status) {
@@ -119,6 +120,7 @@ function render() {
   $('.ps-content').setAttribute('aria-label', titles[view]);
   root.querySelectorAll('[data-view]').forEach(el => { el.classList.toggle('is-active', el.dataset.view === view); el.setAttribute('aria-current', el.dataset.view === view ? 'page' : 'false'); });
   $('.ps-search-wrap').hidden = view === 'ranking';
+  $('#ps-search').placeholder = view === 'authors' ? '著者名で絞り込み…' : 'タイトル・著者・タグで探す';
   $('#ps-clear').hidden = !query;
   let books = filterBooks(liveBooks().filter(b => view !== 'favorites' || b.favorite), query);
   books = filterBooksByTag(books, tag);
@@ -131,6 +133,19 @@ function render() {
     const lastOpened = lastOpenedByBook(state);
     let rank = 0;
     $('#ps-results').innerHTML = `<div class="ps-period" aria-label="集計期間">${[['all', 'すべて'], ['month', '今月'], ['week', '7日間']].map(([key, label]) => `<button data-period="${key}" aria-pressed="${period === key}">${label}</button>`).join('')}</div><p class="ps-ranking-note">作品を開いた回数で集計</p>${rows.length ? `<div class="ps-ranking">${rows.map((row, i) => { if (!i || row.count !== rows[i - 1].count) rank = i + 1; const thumb = thumbnailUrl(row.book.thumbnailUrl); const last = lastOpened[row.book.id]; return `<button class="ps-rank-row" data-open="${esc(row.book.id)}"><b class="ps-rank-number">${String(rank).padStart(2, '0')}</b><span class="ps-rank-book ps-tone-${tone(row.book)}" aria-hidden="true">${icon('shelf')}${thumb ? `<img class="ps-rank-thumbnail" src="${esc(thumb)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : ''}</span><span class="ps-rank-info"><strong>${esc(row.book.title)}</strong><small>${esc(creatorLabel(row.book))}${last ? ` ・ 最終 ${esc(formatShelfDate(last))}` : ''}</small></span><span class="ps-rank-count">${row.count}<small>回</small></span></button>`; }).join('')}</div>` : empty('ランキングは空です', '作品を開くと回数が記録されます。')}`;
+    return;
+  }
+  if (view === 'authors') {
+    const index = sortAuthorIndex(filterAuthors(authorIndex(liveBooks()), query), authorSort);
+    const all = authorIndex(liveBooks());
+    if (!all.length) {
+      $('#ps-results').innerHTML = empty('著者が登録された本がまだありません', '作品を追加すると、ここに著者が並びます。', '<button class="ps-primary" data-add>作品を追加</button>');
+      return;
+    }
+    $('#ps-results').innerHTML = `<div class="ps-period ps-author-sort" aria-label="著者の並び順">${[['count', '冊数順'], ['kana', '五十音順'], ['recent', '最近追加順']].map(([key, label]) => `<button data-author-sort="${key}" aria-pressed="${authorSort === key}">${label}</button>`).join('')}</div>
+    ${index.length ? `<div class="ps-authors">${index.map(entry => `<button class="ps-author-row" data-author-open="${esc(entry.name)}"><span class="ps-author-stack" aria-hidden="true">${entry.books.slice(0, 3).map(b => { const thumb = thumbnailUrl(b.thumbnailUrl); return `<span class="ps-author-cover ps-tone-${tone(b)}">${thumb ? `<img src="${esc(thumb)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : `<span>${esc([...b.title][0] || '')}</span>`}</span>`; }).join('')}</span><span class="ps-author-info"><strong>${esc(entry.name)}</strong><small>${esc(entry.latestTitle)}</small></span><span class="ps-author-count">${entry.count}<small>冊</small></span></button>`).join('')}</div>` : empty('一致する著者はいません', `「${query}」に一致する著者はいません。`, '<button class="ps-secondary" id="ps-author-clear">絞り込みを解除</button>')}`;
+    const clearButton = $('#ps-author-clear');
+    if (clearButton) clearButton.onclick = () => { query = ''; $('#ps-search').value = ''; render(); };
     return;
   }
   if (!liveBooks().length) {
@@ -279,7 +294,7 @@ function openForm(book = null) {
   };
 }
 function settings() {
-  showSheet(`<section class="ps-sheet"><header class="ps-sheet-head"><h2 id="ps-sheet-title">本棚の設定</h2><button class="ps-icon-button" data-cancel aria-label="閉じる">${icon('close')}</button></header><div class="ps-sheet-body"><h3>表示</h3><p class="ps-field-hint">作品カードの列数</p><div class="ps-column-toggle" role="group" aria-label="本棚の列数"><button type="button" data-columns="2" aria-pressed="${columns === 2}">2列</button><button type="button" data-columns="3" aria-pressed="${columns === 3}">3列</button></div><h3>同期</h3><p class="ps-field-hint" id="ps-sync-detail">状態を確認しています。</p><button class="ps-settings-action" id="ps-sync-now">今すぐ同期 ${icon('arrow')}</button><button class="ps-settings-action" id="ps-sync-toggle">同期をオフにする ${icon('arrow')}</button><h3>バックアップ</h3><p class="ps-field-hint">作品はこの端末にも保存されます。同期先の控えとして書き出しもできます。</p><button class="ps-settings-action" id="ps-export">JSONバックアップを書き出す ${icon('arrow')}</button><button class="ps-settings-action" id="ps-import">バックアップを読み込む ${icon('arrow')}</button><input type="file" id="ps-import-file" accept="application/json,.json" hidden><p class="ps-field-hint" id="ps-import-status" role="status"></p><button class="ps-primary" id="ps-import-confirm" hidden>この内容を本棚に取り込む</button><a class="ps-settings-action" href="/0723/">本棚を閉じる ${icon('arrow')}</a></div></section>`);
+  showSheet(`<section class="ps-sheet"><header class="ps-sheet-head"><h2 id="ps-sheet-title">本棚の設定</h2><button class="ps-icon-button" data-cancel aria-label="閉じる">${icon('close')}</button></header><div class="ps-sheet-body"><h3>表示</h3><p class="ps-field-hint">作品カードの列数</p><div class="ps-column-toggle" role="group" aria-label="本棚の列数"><button type="button" data-columns="2" aria-pressed="${columns === 2}">2列</button><button type="button" data-columns="3" aria-pressed="${columns === 3}">3列</button><button type="button" data-columns="4" aria-pressed="${columns === 4}">4列（表紙のみ）</button></div><h3>同期</h3><p class="ps-field-hint" id="ps-sync-detail">状態を確認しています。</p><button class="ps-settings-action" id="ps-sync-now">今すぐ同期 ${icon('arrow')}</button><button class="ps-settings-action" id="ps-sync-toggle">同期をオフにする ${icon('arrow')}</button><h3>バックアップ</h3><p class="ps-field-hint">作品はこの端末にも保存されます。同期先の控えとして書き出しもできます。</p><button class="ps-settings-action" id="ps-export">JSONバックアップを書き出す ${icon('arrow')}</button><button class="ps-settings-action" id="ps-import">バックアップを読み込む ${icon('arrow')}</button><input type="file" id="ps-import-file" accept="application/json,.json" hidden><p class="ps-field-hint" id="ps-import-status" role="status"></p><button class="ps-primary" id="ps-import-confirm" hidden>この内容を本棚に取り込む</button><a class="ps-settings-action" href="/0723/">本棚を閉じる ${icon('arrow')}</a></div></section>`);
   $('[data-cancel]').onclick = () => { if (!busy) closeSheet(); };
   $('#ps-dialog').oncancel = e => { if (busy) e.preventDefault(); };
   const syncDetail = () => {
@@ -347,14 +362,19 @@ root.addEventListener('click', async e => {
     render(); $('.ps-content').scrollTop = 0; return;
   }
   if ('clearCreator' in button.dataset) { creatorFilter = null; render(); return; }
+  if (button.dataset.authorOpen) {
+    creatorFilter = { kind: 'author', name: button.dataset.authorOpen };
+    view = 'shelf'; query = ''; tag = ''; $('#ps-search').value = ''; render(); $('.ps-content').scrollTop = 0; return;
+  }
+  if (button.dataset.authorSort) { authorSort = button.dataset.authorSort; render(); return; }
   if (button.dataset.open) return openBook(button.dataset.open);
   if (button.dataset.view) {
     view = button.dataset.view; query = ''; tag = ''; creatorFilter = null; $('#ps-search').value = ''; render(); $('.ps-content').scrollTop = 0;
-    if (view === 'search') $('#ps-search').focus(); return;
+    return;
   }
   if ('tag' in button.dataset) { tag = button.dataset.tag; render(); return; }
   if (button.dataset.columns) {
-    columns = button.dataset.columns === '3' ? 3 : 2;
+    columns = ['3', '4'].includes(button.dataset.columns) ? Number(button.dataset.columns) : 2;
     try { localStorage.setItem(COLUMNS_KEY, String(columns)); } catch {}
     root.querySelectorAll('[data-columns]').forEach(item => item.setAttribute('aria-pressed', String(Number(item.dataset.columns) === columns)));
     render();
