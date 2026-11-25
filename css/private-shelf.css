@@ -304,3 +304,257 @@ body.ps-page > :not(.ps-root):not(script):not(style):not(link) { display: none !
 .ps-grid-4 .ps-fav-badge { top: 4px; right: 4px; }
 .ps-grid-4 .ps-fav-badge svg { width: 12px; height: 12px; }
 @media (max-width: 350px) { .ps-search-wrap { margin-left: -16px; margin-right: -16px; padding-left: 16px; padding-right: 16px; } }
+
+/* ==========================================================================
+   Velvet-Noir Rose Neon — Neon Glass Tube Boost (Append-Only Override)
+   面はプラム黒のまま保ち、白熱芯 + ローズ蛍光層 + マゼンタ外光 + ガラス反射で管感を増強
+   ========================================================================== */
+
+/* 理由: グラデーション補間空間のフォールバック用トークンを空で初期化し、旧ブラウザでの構文エラーを防ぐ */
+.ps-root {
+  --in-oklab: ;
+}
+
+/* 理由: 対応ブラウザのみ oklab 補間を有効化し、ピンク発光から暗色プラムへの減衰が濁らないようにする */
+@supports (background: linear-gradient(in oklab, white, black)) {
+  .ps-root {
+    --in-oklab: in oklab;
+  }
+}
+
+/* 理由: 既存グロー変数を管の輪郭強度へ引き上げ、白熱芯・ガラス反射トークン追加と上下壁面のピンク反射を増量する */
+.ps-root {
+  --ps-glow-edge: rgba(255, 110, 180, 0.72);
+  --ps-glow-soft: rgba(255, 46, 147, 0.38);
+  --ps-glow-wash: rgba(255, 46, 147, 0.16);
+  --ps-glow-ambient: rgba(255, 46, 147, 0.22);
+  --ps-specular: rgba(255, 232, 246, 0.44);
+  --ps-line-hi: #c462a6;
+
+  --ps-tube-core: #ffe9f5;
+  --ps-tube-rim: rgba(255, 134, 196, 0.88);
+  --ps-tube-halo-near: rgba(255, 110, 180, 0.64);
+  --ps-tube-halo-far: rgba(255, 46, 147, 0.36);
+  --ps-tube-glass: rgba(255, 240, 249, 0.62);
+
+  background-color: #120a13;
+  background-image:
+    radial-gradient(ellipse 86% 28% at 50% -4% var(--in-oklab), rgba(255, 46, 147, 0.19), rgba(255, 110, 180, 0.06) 46%, transparent 76%),
+    radial-gradient(ellipse 82% 24% at 50% 104% var(--in-oklab), rgba(255, 46, 147, 0.17), rgba(255, 110, 180, 0.05) 48%, transparent 78%);
+}
+
+/* 理由: 上部「PRIVATE SHELF」英字ラベルを小型ネオン管サインとして白熱芯＋3段ハローで点火する */
+.ps-eyebrow {
+  color: #ffdced;
+  text-shadow:
+    0 0 1px rgba(255, 248, 252, 0.94),
+    0 0 5px rgba(255, 110, 180, 0.84),
+    0 0 13px rgba(255, 46, 147, 0.54),
+    0 0 24px rgba(255, 46, 147, 0.24);
+}
+
+/* 理由: 日本語見出しは高明度ローズ白の芯で画数の潰れを防ぎつつ、外側へ逃がす3層ハローで管の輝きを出す */
+.ps-section-head h2 {
+  color: #fff2f8;
+  text-shadow:
+    0 0 1px rgba(255, 245, 251, 0.85),
+    0 0 7px rgba(255, 110, 180, 0.58),
+    0 0 16px rgba(255, 46, 147, 0.38),
+    0 0 30px rgba(255, 46, 147, 0.18);
+}
+
+/* 理由: 著者グループ見出しのバーを白熱芯からマゼンタへ落ちる小型ガラス縦管として発光させる */
+.ps-author-group-head h3::before {
+  background-image: linear-gradient(180deg var(--in-oklab), #fff2f9 0%, #ff7cc0 40%, #ff2e93 100%);
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 248, 253, 0.88),
+    0 0 3px rgba(255, 232, 246, 0.9),
+    0 0 8px rgba(255, 110, 180, 0.82),
+    0 0 16px rgba(255, 46, 147, 0.48);
+}
+
+/* 理由: 筆画が開いたランキング数字に白熱芯とマゼンタ外光を強く乗せ、一覧の視線フックを作る */
+.ps-rank-number {
+  color: #ffe6f4;
+  text-shadow:
+    0 0 1px rgba(255, 248, 253, 0.96),
+    0 0 5px rgba(255, 110, 180, 0.86),
+    0 0 14px rgba(255, 46, 147, 0.56),
+    0 0 26px rgba(255, 46, 147, 0.24);
+}
+
+/* 理由: カード面は暗く保ち、上辺ガラス反射と極薄の縁受光だけで日本語本文の可読性を維持する */
+.ps-card {
+  border-color: rgba(196, 98, 166, 0.44);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 228, 244, 0.24),
+    inset 0 0 0 1px rgba(255, 110, 180, 0.08),
+    0 8px 22px rgba(8, 2, 10, 0.62),
+    0 0 14px rgba(255, 46, 147, 0.11);
+}
+
+/* 理由: 表紙アートを濁さずに内側極細ガラス反射(outline)と外側3段エッジライトでネオン縁取りを作る */
+.ps-cover {
+  border-color: rgba(255, 152, 206, 0.62);
+  outline: 1px solid rgba(255, 230, 245, 0.42);
+  outline-offset: -1px;
+  box-shadow:
+    0 0 0 1px rgba(255, 134, 196, 0.46),
+    0 0 3px rgba(255, 230, 245, 0.64),
+    0 0 10px rgba(255, 110, 180, 0.44),
+    0 0 22px rgba(255, 46, 147, 0.24),
+    0 10px 22px rgba(6, 2, 8, 0.68),
+    inset 4px 0 rgba(0, 0, 0, 0.15),
+    inset 6px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* 理由: ドック上辺を1.5px白熱芯リップ＋内外二重ハロー＋中央ガラスハイライトで直線ネオン管化する */
+.ps-dock {
+  border-top: 1.5px solid #ffd8ed;
+  border-left-color: rgba(255, 110, 180, 0.36);
+  border-right-color: rgba(255, 110, 180, 0.36);
+  border-bottom-color: rgba(158, 80, 136, 0.3);
+  background-color: var(--ps-glass);
+  background-image:
+    radial-gradient(ellipse 68% 2px at 50% 0% var(--in-oklab), rgba(255, 250, 253, 0.96), rgba(255, 110, 180, 0.58) 55%, transparent 100%),
+    linear-gradient(180deg var(--in-oklab), rgba(255, 46, 147, 0.15) 0%, rgba(18, 10, 19, 0) 44%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 253, 0.86),
+    inset 0 2px 7px rgba(255, 110, 180, 0.56),
+    inset 0 9px 18px -6px rgba(255, 46, 147, 0.32),
+    0 -1px 3px rgba(255, 232, 246, 0.92),
+    0 -2px 10px rgba(255, 110, 180, 0.78),
+    0 -6px 24px rgba(255, 46, 147, 0.48),
+    0 -12px 40px rgba(255, 46, 147, 0.22);
+}
+
+/* 理由: アクティブタブを「点灯中の管」として白熱文字・上辺ガラス反射・局所ハローで非アクティブと明確に分ける */
+.ps-dock button.is-active {
+  color: #fff2f9;
+  border-color: rgba(255, 152, 206, 0.7);
+  background-image: radial-gradient(ellipse 86% 68% at 50% 0% var(--in-oklab), rgba(255, 110, 180, 0.24), rgba(255, 46, 147, 0.08) 58%, transparent 100%);
+  text-shadow:
+    0 0 1px rgba(255, 248, 252, 0.95),
+    0 0 6px rgba(255, 110, 180, 0.88),
+    0 0 15px rgba(255, 46, 147, 0.56);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 242, 250, 0.64),
+    inset 0 0 10px rgba(255, 110, 180, 0.24),
+    0 0 4px rgba(255, 218, 238, 0.52),
+    0 0 14px rgba(255, 46, 147, 0.4);
+}
+
+/* 理由: アクティブタブ内の非矩形SVGアイコンも drop-shadow で線そのものを曲げネオン管として光らせる */
+.ps-dock button.is-active svg {
+  filter:
+    drop-shadow(0 0 2px rgba(255, 238, 248, 0.92))
+    drop-shadow(0 0 6px rgba(255, 110, 180, 0.86))
+    drop-shadow(0 0 13px rgba(255, 46, 147, 0.5));
+}
+
+/* 理由: 追加アイコンは暗い面を保ったまま高電圧リング管＋芯発光プラス記号で操作点を際立たせる */
+.ps-add-icon {
+  color: #fff0f8;
+  border: 1.5px solid #ffd4eb;
+  background-color: rgba(28, 12, 30, 0.92);
+  background-image: radial-gradient(circle at 50% 24% var(--in-oklab), rgba(255, 110, 180, 0.28), rgba(255, 46, 147, 0.08) 60%, transparent 100%);
+  text-shadow:
+    0 0 2px rgba(255, 248, 252, 0.96),
+    0 0 7px rgba(255, 110, 180, 0.9);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 246, 252, 0.74),
+    inset 0 0 8px rgba(255, 110, 180, 0.38),
+    0 0 3px rgba(255, 224, 242, 0.86),
+    0 0 10px rgba(255, 110, 180, 0.74),
+    0 0 22px rgba(255, 46, 147, 0.46);
+}
+
+/* 理由: 通常時の検索欄は待機電圧の細いガラス管リムにとどめ、入力面を静かに保つ */
+.ps-search {
+  border: 1px solid rgba(196, 98, 166, 0.58);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 228, 244, 0.24),
+    inset 0 0 8px rgba(255, 46, 147, 0.1),
+    0 0 9px rgba(255, 46, 147, 0.14);
+}
+
+/* 理由: 検索フォーカス時に枠線だけを白熱芯＋二重ハローで点火し、入力中の日本語テキスト可読性を守る */
+.ps-search:focus-within {
+  border-color: #ffd4eb;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 246, 252, 0.68),
+    inset 0 0 12px rgba(255, 110, 180, 0.26),
+    0 0 3px rgba(255, 226, 243, 0.86),
+    0 0 11px rgba(255, 110, 180, 0.7),
+    0 0 24px rgba(255, 46, 147, 0.4);
+}
+
+/* 理由: 主要ボタンは全面ベタ発光を避け、濃プラム地＋白熱枠管＋高コントラスト文字で高級な点灯感を作る */
+.ps-primary {
+  color: #fff4fa !important;
+  background: linear-gradient(180deg var(--in-oklab), rgba(255, 110, 180, 0.26) 0%, rgba(255, 46, 147, 0.1) 48%, rgba(24, 10, 27, 0.92) 100%) #210e24 !important;
+  border: 1.5px solid #ffd2ea;
+  text-shadow:
+    0 0 1px rgba(255, 250, 253, 0.9),
+    0 0 6px rgba(255, 110, 180, 0.76),
+    0 0 14px rgba(255, 46, 147, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 246, 252, 0.76),
+    inset 0 0 12px rgba(255, 110, 180, 0.34),
+    0 0 3px rgba(255, 224, 242, 0.82),
+    0 0 11px rgba(255, 110, 180, 0.68),
+    0 0 24px rgba(255, 46, 147, 0.42);
+}
+
+/* 理由: 同期バッジはピンクへ寄せずシアン独立色を維持しつつ、同工法の細いガラス管芯と反射で世界観を揃える */
+.ps-sync-badge {
+  color: #e6fcff;
+  border-color: rgba(140, 242, 255, 0.72);
+  text-shadow:
+    0 0 1px rgba(238, 253, 255, 0.9),
+    0 0 6px rgba(56, 224, 248, 0.66);
+  box-shadow:
+    inset 0 1px 0 rgba(232, 252, 255, 0.54),
+    inset 0 0 8px rgba(56, 224, 248, 0.18),
+    0 0 3px rgba(176, 246, 255, 0.58),
+    0 0 11px rgba(34, 211, 238, 0.38);
+}
+
+/* 理由: シート上辺をドックと同じ1.5px白熱リップ管＋上方ハローで統一し、内部面は暗く保って入力・閲覧性を守る */
+.ps-root dialog {
+  border-color: rgba(255, 134, 196, 0.54);
+  border-top: 1.5px solid #ffd6ec;
+  background-image:
+    radial-gradient(ellipse 72% 3px at 50% 0% var(--in-oklab), rgba(255, 248, 253, 0.92), rgba(255, 110, 180, 0.5) 55%, transparent 100%),
+    linear-gradient(180deg var(--in-oklab), rgba(255, 46, 147, 0.12) 0%, rgba(18, 10, 19, 0) 28%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 246, 252, 0.74),
+    inset 0 4px 14px -4px rgba(255, 110, 180, 0.34),
+    0 -1px 3px rgba(255, 226, 243, 0.8),
+    0 -3px 12px rgba(255, 110, 180, 0.58),
+    0 -8px 28px rgba(255, 46, 147, 0.34),
+    0 18px 44px rgba(4, 1, 6, 0.82);
+}
+
+/* 理由: モーダル背景の暗幕下端にだけシート上辺管からのピンク反射を滲ませ、奥行きを繋ぐ */
+.ps-root dialog::backdrop {
+  background: radial-gradient(ellipse 90% 45% at 50% 100% var(--in-oklab), rgba(255, 46, 147, 0.15), rgba(10, 5, 12, 0.78) 70%);
+}
+
+/* 理由: Forced Colors環境では影とグラデーションが消えるため、境界と点灯状態をシステム色の実線へフォールバックする */
+@media (forced-colors: active) {
+  .ps-dock,
+  .ps-card,
+  .ps-search,
+  dialog {
+    border-color: CanvasText;
+  }
+
+  .ps-dock button.is-active,
+  .ps-add-icon,
+  .ps-search:focus-within,
+  .ps-primary {
+    border-color: Highlight;
+    outline: 1px solid Highlight;
+  }
+}
