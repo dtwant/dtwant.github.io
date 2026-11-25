@@ -16,7 +16,6 @@
     feeding: ['#fl-sync-badge'],
     timetable: ['#sync-status'],
     diary: ['#sd-sync-badge-top', '#sd-gaman-sync-status'],
-    task_calendar: ['#ntc-sync-badge span:last-child'],
     calendar: ['#cg-sync'],
     report_card: ['#rc-sync-badge-label', '#rc-sync-status-text'],
     deadline: ['.dm-pill'],
@@ -40,7 +39,6 @@
     feeding: ['#fl-sync-badge'],
     timetable: ['#btn-sync-now'],
     diary: ['#sd-sync-badge-top'],
-    task_calendar: ['#ntc-sync-btn'],
     calendar: ['button[onclick*="cgSync"]'],
     report_card: ['#rc-sync-now-btn'],
     deadline: ['.dm-pill'],
@@ -90,11 +88,6 @@
       roots: ['#sd-tab-settings'],
       selectors: ['#sd-gaman-sync-copy-key-btn', '#sd-gaman-sync-key-input', '#sd-gaman-sync-save-btn', '#sd-gaman-sync-status'],
       markers: ['同期キー', '他の端末やブラウザと同期']
-    },
-    task_calendar: {
-      roots: ['#ntc-cfg-overlay'],
-      selectors: ['#ntc-cfg-binid'],
-      markers: ['JSONBIN', 'Bin ID', 'MASTER KEY']
     },
     calendar: {
       roots: ['#cg-ov-settings'],
