@@ -134,3 +134,52 @@ export function mergeBackup(current, incoming) {
 export function emptyState() {
   return { schema: 'dt-private-shelf', version: 1, books: [], vocabulary: [], recent: [], openEvents: [] };
 }
+
+// --- D1 sync record mapping -------------------------------------------------
+// The shelf lives locally in IndexedDB (database dt_private_shelf_v1, store
+// "state", key "current", value { id: 'current', value: <shelf state> }).
+// On the sync Worker it is one record in the dt-world-d1-record format used
+// by every other tool, so daily backups / restores understand it as-is.
+export const SHELF_SYNC_APP_KEY = 'private_shelf';
+export const SHELF_RECORD_KEY = 'indexedDB:dt_private_shelf_v1/state/"current"';
+
+export function wrapShelfState(state) {
+  return {
+    schema: 'dt-world-d1-record', version: 1, kind: 'indexedDB',
+    database: { name: 'dt_private_shelf_v1', version: 1 },
+    store: { name: 'state', keyPath: 'id' },
+    entry: { key: 'current', value: { id: 'current', value: state } },
+  };
+}
+
+export function unwrapShelfState(payload) {
+  const state = payload?.entry?.value?.value;
+  if (!state || state.schema !== 'dt-private-shelf' || state.version !== 1 || !Array.isArray(state.books)) return null;
+  return state;
+}
+
+export function stableShelfStringify(value) {
+  if (value === undefined) return 'null';
+  if (value === null || typeof value !== 'object') return JSON.stringify(value);
+  if (Array.isArray(value)) return `[${value.map(stableShelfStringify).join(',')}]`;
+  return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stableShelfStringify(value[key])}`).join(',')}}`;
+}
+
+export function shelfStatesEqual(a, b) {
+  return stableShelfStringify(a) === stableShelfStringify(b);
+}
+
+// Small FNV-1a fingerprint used only to notice local changes between syncs.
+export function shelfStateFingerprint(state) {
+  const text = stableShelfStringify(state);
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < text.length; i += 1) {
+    hash ^= text.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return `${text.length}:${(hash >>> 0).toString(16)}`;
+}
+
+export function shelfHasContent(state) {
+  return Boolean(state && ((state.books || []).length || (state.openEvents || []).length || (state.vocabulary || []).length));
+}

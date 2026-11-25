@@ -1,5 +1,6 @@
 import { addOpenEvent, creatorLabel, filterBooks, filterBooksByTag, groupBooksByAuthor, mergeBackup, normalizeBook, rankBooks, recentBooks, thumbnailUrl } from './core.js';
 import { exportState, loadState, saveState } from './store.js';
+import { createShelfSync, setSyncEnabled, syncConfig, syncEnabled, syncMeta } from './sync.js';
 
 const root = document.querySelector('[data-private-shelf]');
 const $ = selector => root.querySelector(selector);
@@ -33,15 +34,40 @@ let view = 'shelf', query = '', tag = '', sort = 'new', period = 'all', columns 
 let busy = false, openLock = false, toastTimer, returnFocus;
 const titles = { shelf: '本棚', search: '作品を探す', favorites: 'お気に入り', ranking: 'よく読む作品' };
 const liveBooks = () => state.books.filter(b => !b.deletedAt);
-function toast(message) {
+const syncLabels = { off: '同期オフ', unconfigured: '同期未設定', syncing: '同期中', synced: '同期済み', error: '同期エラー' };
+function renderSyncBadge(status) {
+  const badge = $('#ps-sync');
+  if (!badge) return;
+  badge.dataset.status = status;
+  $('#ps-sync-label').textContent = syncLabels[status] || '同期';
+}
+let shelfSync = createShelfSync({
+  getState: () => state,
+  applyRemote: async next => { await saveState(next); state = next; },
+  onStatus: status => renderSyncBadge(status),
+});
+function toast(message, action = null) {
   clearTimeout(toastTimer);
-  $('.ps-toast').textContent = message;
-  $('.ps-toast').hidden = false;
-  toastTimer = setTimeout(() => { $('.ps-toast').hidden = true; }, 3500);
+  const el = $('.ps-toast');
+  el.textContent = '';
+  const text = document.createElement('span');
+  text.textContent = message;
+  el.append(text);
+  if (action) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'ps-toast-action';
+    button.textContent = action.label;
+    button.onclick = async () => { clearTimeout(toastTimer); el.hidden = true; await action.run(); };
+    el.append(button);
+  }
+  el.hidden = false;
+  toastTimer = setTimeout(() => { el.hidden = true; }, action ? 8000 : 3500);
 }
 async function commit(next) {
   await saveState(next);
   state = next;
+  shelfSync?.schedulePush();
 }
 function tone(book) { return [...book.id].reduce((sum, c) => sum + c.codePointAt(0), 0) % 5; }
 // Shelf metadata is fetched through the user's own sync Worker; the key never leaves this request header.
@@ -186,7 +212,15 @@ function openForm(book = null) {
     try {
       const now = new Date().toISOString();
       await commit({ ...state, books: state.books.map(b => b.id === book.id ? { ...b, deletedAt: now, updatedAt: now } : b) });
-      render(); closeSheet(); toast('本棚から削除しました');
+      render(); closeSheet();
+      toast('本棚から削除しました', {
+        label: '元に戻す',
+        run: async () => {
+          const restoredAt = new Date().toISOString();
+          await commit({ ...state, books: state.books.map(b => b.id === book.id ? { ...b, deletedAt: null, updatedAt: restoredAt } : b) });
+          render(); toast('元に戻しました');
+        },
+      });
     } catch { toast('保存できませんでした。もう一度お試しください'); } finally { busy = false; }
   };
   form.onsubmit = async e => {
@@ -215,9 +249,30 @@ function openForm(book = null) {
   };
 }
 function settings() {
-  showSheet(`<section class="ps-sheet"><header class="ps-sheet-head"><h2 id="ps-sheet-title">本棚の設定</h2><button class="ps-icon-button" data-cancel aria-label="閉じる">${icon('close')}</button></header><div class="ps-sheet-body"><h3>表示</h3><p class="ps-field-hint">作品カードの列数</p><div class="ps-column-toggle" role="group" aria-label="本棚の列数"><button type="button" data-columns="2" aria-pressed="${columns === 2}">2列</button><button type="button" data-columns="3" aria-pressed="${columns === 3}">3列</button></div><h3>バックアップ</h3><p class="ps-field-hint">作品はこの端末に保存されます。</p><button class="ps-settings-action" id="ps-export">JSONバックアップを書き出す ${icon('arrow')}</button><button class="ps-settings-action" id="ps-import">バックアップを読み込む ${icon('arrow')}</button><input type="file" id="ps-import-file" accept="application/json,.json" hidden><p class="ps-field-hint" id="ps-import-status" role="status"></p><button class="ps-primary" id="ps-import-confirm" hidden>この内容を本棚に取り込む</button><a class="ps-settings-action" href="/0723/">本棚を閉じる ${icon('arrow')}</a></div></section>`);
+  showSheet(`<section class="ps-sheet"><header class="ps-sheet-head"><h2 id="ps-sheet-title">本棚の設定</h2><button class="ps-icon-button" data-cancel aria-label="閉じる">${icon('close')}</button></header><div class="ps-sheet-body"><h3>表示</h3><p class="ps-field-hint">作品カードの列数</p><div class="ps-column-toggle" role="group" aria-label="本棚の列数"><button type="button" data-columns="2" aria-pressed="${columns === 2}">2列</button><button type="button" data-columns="3" aria-pressed="${columns === 3}">3列</button></div><h3>同期</h3><p class="ps-field-hint" id="ps-sync-detail">状態を確認しています。</p><button class="ps-settings-action" id="ps-sync-now">今すぐ同期 ${icon('arrow')}</button><button class="ps-settings-action" id="ps-sync-toggle">同期をオフにする ${icon('arrow')}</button><h3>バックアップ</h3><p class="ps-field-hint">作品はこの端末にも保存されます。同期先の控えとして書き出しもできます。</p><button class="ps-settings-action" id="ps-export">JSONバックアップを書き出す ${icon('arrow')}</button><button class="ps-settings-action" id="ps-import">バックアップを読み込む ${icon('arrow')}</button><input type="file" id="ps-import-file" accept="application/json,.json" hidden><p class="ps-field-hint" id="ps-import-status" role="status"></p><button class="ps-primary" id="ps-import-confirm" hidden>この内容を本棚に取り込む</button><a class="ps-settings-action" href="/0723/">本棚を閉じる ${icon('arrow')}</a></div></section>`);
   $('[data-cancel]').onclick = () => { if (!busy) closeSheet(); };
   $('#ps-dialog').oncancel = e => { if (busy) e.preventDefault(); };
+  const syncDetail = () => {
+    const status = shelfSync.currentStatus();
+    const meta = syncMeta();
+    const last = meta.lastSyncAt ? `最終同期 ${new Date(meta.lastSyncAt).toLocaleString('ja-JP')}` : 'まだ同期していません';
+    const note = status === 'unconfigured' ? '同期設定（ゲートウェイ）が未設定です。' : status === 'off' ? '同期はオフです。この端末の中だけに保存されます。' : status === 'error' ? '前回の同期でエラーがありました。データはこの端末に残っています。' : '他の端末と自動でそろえます。競合した時は両方の作品を残す形で統合します。';
+    $('#ps-sync-detail').textContent = `${note} ${last}`;
+    $('#ps-sync-toggle').firstChild.textContent = syncEnabled() ? '同期をオフにする ' : '同期をオンにする ';
+  };
+  syncDetail();
+  $('#ps-sync-now').onclick = async () => {
+    $('#ps-sync-detail').textContent = '同期しています…';
+    const changed = await shelfSync.syncNow();
+    if (changed) render();
+    syncDetail();
+  };
+  $('#ps-sync-toggle').onclick = () => {
+    setSyncEnabled(!syncEnabled());
+    renderSyncBadge(shelfSync.currentStatus());
+    syncDetail();
+    if (syncEnabled()) shelfSync.syncNow().then(changed => { if (changed) render(); syncDetail(); });
+  };
   $('#ps-export').onclick = () => exportState(state);
   $('#ps-import').onclick = () => $('#ps-import-file').click();
   let incoming;
@@ -290,9 +345,14 @@ $('#ps-search').addEventListener('input', e => { query = e.target.value; render(
 $('#ps-clear').onclick = () => { query = ''; $('#ps-search').value = ''; render(); $('#ps-search').focus(); };
 $('#ps-add').onclick = () => openForm();
 $('#ps-settings').onclick = settings;
+$('#ps-sync').onclick = settings;
 window.addEventListener('pageshow', e => { openLock = false; if (e.persisted) render(); });
 try {
   const saved = JSON.parse(sessionStorage.getItem('dt_private_shelf_view_v1'));
   if (saved && titles[saved.view]) { ({ view, query, tag, sort, period } = saved); $('#ps-search').value = query; render(); $('.ps-content').scrollTop = saved.scroll; }
   else render();
 } catch { render(); }
+renderSyncBadge(shelfSync.currentStatus());
+// Reconcile with the sync record on launch: pull, merge (union), push back
+// if the merge produced something the remote does not have yet.
+shelfSync.syncNow().then(changed => { if (changed) render(); });
