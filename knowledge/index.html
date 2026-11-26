@@ -101,7 +101,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "22"
+    "wordCount": "35"
   }]
   </script>
 
@@ -726,7 +726,7 @@
   #graph-space-root {
     position: fixed;
     top: 0; left: 0;
-    width: 100vw; height: 100vh;
+    width: 100vw; height: 100vh; height: 100dvh;
     background: #000;
     z-index: 9999;
     overflow: hidden;
@@ -738,7 +738,7 @@
   .cyber-grid {
     position: absolute;
     top: -50%; left: -50%; width: 200vw; height: 200vh;
-    background: 
+    background:
       linear-gradient(transparent 0%, rgba(0, 243, 255, 0.08) 1%, transparent 2%),
       linear-gradient(90deg, transparent 0%, rgba(188, 19, 254, 0.08) 1%, transparent 2%);
     background-size: 50px 50px;
@@ -772,7 +772,6 @@
     flex-direction: column;
   }
 
-   
   .sys-header {
     height: 100px;
     padding: 20px 30px;
@@ -780,18 +779,16 @@
     justify-content: space-between;
     align-items: flex-end;
     border-bottom: 2px solid #ff0055;
-    
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.10) 0%, 
-      rgba(255, 255, 255, 0.02) 30%, 
-      rgba(10, 8, 28, 0.25) 70%, 
+    background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.10) 0%,
+      rgba(255, 255, 255, 0.02) 30%,
+      rgba(10, 8, 28, 0.25) 70%,
       rgba(2, 2, 6, 0.50) 100%
     );
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(20px) url(#liquid-refract) saturate(140%);
     -webkit-backdrop-filter: blur(20px) url(#liquid-refract) saturate(140%);
-    
-    box-shadow: 
+    box-shadow:
       inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.18),
       inset 2px 2px 5px rgba(255, 255, 255, 0.04),
       inset -1px -1px 3px rgba(0, 0, 0, 0.45),
@@ -808,15 +805,15 @@
     margin: 0;
     line-height: 1;
   }
+  .sys-eyebrow { font-size: 0.55rem; color: #ff0055; letter-spacing: 2px; margin-bottom: 4px; }
 
   .sys-status { text-align: right; font-size: 0.65rem; color: #00f3ff; line-height: 1.4; }
 
-   
   #graph-viewport {
     position: relative;
     flex-grow: 1;
     width: 100%;
-    overflow: hidden;  
+    overflow: hidden;
     pointer-events: all;
     z-index: 5;
   }
@@ -824,33 +821,38 @@
   #knowledgeGraphSvg {
     width: 100%; height: 100%;
     cursor: crosshair;
+    touch-action: none;
   }
 
-   
-  .link { stroke: rgba(0, 243, 255, 0.15); stroke-width: 1.2px; transition: all 0.3s; }
+  .link { stroke: rgba(0, 243, 255, 0.15); stroke-width: 1.2px; transition: stroke 0.3s, stroke-width 0.3s; }
   .link.highlight { stroke: #00f3ff; stroke-width: 3px; stroke-opacity: 1; filter: drop-shadow(0 0 8px #00f3ff); }
-  .node circle { stroke-width: 2px; transition: all 0.3s; }
-  .node.focused circle { stroke-width: 4px; stroke: #fff !important; filter: drop-shadow(0 0 15px currentColor); }
-  .node-label { font-size: 11px; fill: #fff; text-shadow: 0 0 5px #000; font-weight: bold; }
-  .node-label-en { font-size: 9px; fill: rgba(0, 243, 255, 0.6); font-style: italic; }
+  .node circle.body { stroke-width: 2px; transition: stroke-width 0.3s; pointer-events: none; }
+  .node circle.hit { fill: #fff; opacity: 0; pointer-events: all; cursor: pointer; }
+  .node.focused circle.body { stroke-width: 4px; stroke: #fff !important; filter: drop-shadow(0 0 15px currentColor); }
+  .node-label { font-size: 11px; fill: #fff; font-weight: bold; paint-order: stroke; stroke: rgba(0,0,0,0.92); stroke-width: 4px; stroke-linejoin: round; }
+  .node-label-en { font-size: 9px; fill: rgba(0, 243, 255, 0.8); stroke-width: 3px; }
+  .labels.focused .node-label { fill: #fff; }
+  .labels { transition: opacity 0.25s ease; }
+  @keyframes kg-focus-pulse {
+    0%, 100% { stroke-width: 4px; }
+    50% { stroke-width: 6px; }
+  }
+  .node.focused circle.body { animation: kg-focus-pulse 1.8s ease-in-out infinite; }
 
-   
   .side-panel {
     position: absolute;
-    right: 30px; top: 120px;  
+    right: 30px; top: 120px;
     width: 240px;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.12) 0%, 
-      rgba(255, 255, 255, 0.02) 40%, 
-      rgba(10, 8, 28, 0.20) 80%, 
+    background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.02) 40%,
+      rgba(10, 8, 28, 0.20) 80%,
       rgba(2, 2, 6, 0.40) 100%
     );
     backdrop-filter: blur(16px) url(#liquid-refract) saturate(135%);
     -webkit-backdrop-filter: blur(16px) url(#liquid-refract) saturate(135%);
-    
-    box-shadow: 
+    box-shadow:
       inset 0.8px 0.8px 0px rgba(255, 255, 255, 0.20),
       inset 2px 2px 6px rgba(255, 255, 255, 0.05),
       inset -1px -1px 3px rgba(0, 0, 0, 0.50),
@@ -863,7 +865,6 @@
   .panel-label { font-size: 0.6rem; color: #ff0055; margin-bottom: 8px; border-bottom: 1px solid rgba(255, 0, 85, 0.5); padding-bottom: 4px; }
   .log-area { height: 120px; overflow: hidden; font-size: 0.65rem; color: #00f3ff; line-height: 1.5; opacity: 0.8; }
 
-   
   .cp-tooltip {
     position: absolute; background: rgba(5, 5, 5, 0.95); border: 1px solid #ff0055; color: #fff;
     padding: 12px; font-size: 0.75rem; pointer-events: none; opacity: 0; z-index: 1000;
@@ -882,6 +883,7 @@
   .exit-btn {
     position: absolute; bottom: 50px; right: 30px;
     padding: 8px 16px;
+    min-height: 44px;
     border: 1px solid #ff0055;
     color: #ff0055;
     font-family: 'Orbitron', sans-serif;
@@ -894,10 +896,138 @@
   }
   .exit-btn:hover { background: #ff0055; color: #000; box-shadow: 0 0 15px #ff0055; }
 
+   
+  .kg-head-controls { display: none; }
+  .kg-back-btn { display: none; }
+
+   
+  .kg-hint {
+    display: none;
+    position: absolute; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+    z-index: 55; pointer-events: none;
+    white-space: nowrap;
+    font-size: 0.65rem; color: rgba(0, 243, 255, 0.85);
+    border: 1px solid rgba(0, 243, 255, 0.35);
+    background: rgba(2, 6, 14, 0.82);
+    padding: 8px 14px;
+    opacity: 1; transition: opacity 0.8s ease;
+  }
+  .kg-hint.gone { opacity: 0; }
+
+   
+  .node-sheet {
+    display: none;
+    position: absolute; left: 0; right: 0; bottom: 0;
+    z-index: 60;
+    pointer-events: all;
+    background: rgba(4, 6, 18, 0.94);
+    border-top: 1px solid #ff0055;
+    box-shadow: 0 -12px 32px rgba(0,0,0,0.6);
+    padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+    transform: translateY(105%);
+    transition: transform 0.28s ease;
+  }
+  .node-sheet.open { transform: translateY(0); }
+  .node-sheet .ns-label { font-size: 0.55rem; color: #ff0055; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center; }
+  .node-sheet .ns-close {
+    width: 44px; height: 44px; margin: -10px -8px -10px 0;
+    background: none; border: none; color: #00f3ff; font-size: 1.1rem; cursor: pointer;
+  }
+  .node-sheet .ns-jp { font-size: 1.25rem; font-weight: bold; color: #fff; margin-top: 6px; line-height: 1.3; }
+  .node-sheet .ns-en { font-size: 0.7rem; color: #00f3ff; margin-top: 2px; }
+  .node-sheet .ns-desc { font-size: 0.8rem; line-height: 1.6; color: #cbd5e1; margin-top: 8px; }
+  .node-sheet .ns-neighbors { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .node-sheet .ns-chip {
+    min-height: 44px; padding: 8px 12px;
+    border: 1px solid rgba(0, 243, 255, 0.45); color: #e2e8f0;
+    background: rgba(0, 243, 255, 0.06); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; cursor: pointer;
+  }
+  .node-sheet .ns-access {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 48px; margin-top: 14px;
+    border: 1px solid #ff0055; color: #fff; text-decoration: none;
+    font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 1px;
+    background: rgba(255, 0, 85, 0.14);
+  }
+
+   
+  .list-sheet {
+    display: none;
+    position: absolute; inset: 0;
+    z-index: 70;
+    pointer-events: all;
+    background: #02030a;
+    flex-direction: column;
+  }
+  .list-sheet.open { display: flex; }
+  .list-sheet .ls-head {
+    display: flex; gap: 8px; align-items: center;
+    padding: calc(10px + env(safe-area-inset-top)) 12px 10px;
+    border-bottom: 1px solid rgba(255, 0, 85, 0.6);
+  }
+  .list-sheet .ls-search {
+    flex: 1; min-width: 0; height: 48px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(0,243,255,0.4);
+    color: #fff; font-size: 16px; padding: 0 12px; font-family: 'JetBrains Mono', monospace;
+  }
+  .list-sheet .ls-close {
+    width: 48px; height: 48px; flex-shrink: 0;
+    background: none; border: 1px solid rgba(0,243,255,0.4); color: #00f3ff; font-size: 1rem; cursor: pointer;
+  }
+  .list-sheet .ls-body { overflow-y: auto; padding: 8px 12px calc(16px + env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch; }
+  .list-sheet .ls-group { font-size: 0.6rem; color: #ff0055; letter-spacing: 2px; margin: 16px 0 6px; }
+  .list-sheet .ls-item {
+    display: flex; align-items: center; gap: 10px; width: 100%;
+    min-height: 48px; padding: 8px 6px; text-align: left;
+    background: none; border: none; border-bottom: 1px solid rgba(255,255,255,0.07);
+    color: #e2e8f0; font-family: 'JetBrains Mono', monospace; cursor: pointer;
+  }
+  .list-sheet .ls-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .list-sheet .ls-jp { font-size: 0.9rem; font-weight: bold; color: #fff; }
+  .list-sheet .ls-en { font-size: 0.65rem; color: rgba(0,243,255,0.65); margin-left: auto; text-align: right; }
+  .list-sheet .ls-portal { font-size: 0.6rem; color: #ff0055; border: 1px solid rgba(255,0,85,0.6); padding: 2px 6px; flex-shrink: 0; }
+
   @media (max-width: 768px) {
-    .sys-header { height: 80px; padding: 10px 20px; }
-    .sys-title-box h1 { font-size: 1.2rem; }
+    .sys-header {
+      height: auto; min-height: 60px;
+      padding: calc(8px + env(safe-area-inset-top)) 12px 10px;
+      align-items: center; gap: 8px;
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+    }
+    .sys-title-box h1 { font-size: 1.02rem; }
+    .sys-eyebrow { font-size: 0.5rem; margin-bottom: 2px; }
+    .sys-status { display: none; }
     .side-panel { display: none; }
+    .sys-footer { display: none; }
+    .exit-btn { display: none; }
+    .scanline { display: none; }
+    .cp-tooltip { display: none; }
+    .cyber-grid { animation-duration: 24s; opacity: 0.65; }
+    .link.highlight { filter: none; }
+    .node.focused circle.body { filter: none; }
+
+    .kg-back-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px; flex-shrink: 0;
+      border: 1px solid rgba(255, 0, 85, 0.7); color: #ff0055;
+      background: rgba(255, 0, 85, 0.06); font-size: 1rem; cursor: pointer; pointer-events: all;
+    }
+    .sys-title-box { flex: 1; min-width: 0; }
+    .kg-head-controls { display: flex; gap: 8px; flex-shrink: 0; pointer-events: all; }
+    .kg-head-controls button {
+      height: 44px; min-width: 44px; padding: 0 10px;
+      border: 1px solid rgba(0, 243, 255, 0.55); color: #00f3ff;
+      background: rgba(0, 243, 255, 0.05);
+      font-family: 'Orbitron', sans-serif; font-size: 0.6rem; letter-spacing: 1px; cursor: pointer;
+    }
+    .node-sheet { display: block; }
+    .kg-hint { display: block; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cyber-grid { animation: none; }
+    .node-sheet { transition: none; }
   }
 </style>
 
@@ -907,9 +1037,14 @@
 
   <div class="system-overlay">
     <header class="sys-header">
+      <button class="kg-back-btn" id="kgBackBtn" aria-label="戻る">←</button>
       <div class="sys-title-box">
-        <div style="font-size: 0.55rem; color: #ff0055; letter-spacing: 2px; margin-bottom: 4px;">INTERNAL_MIND_MAP</div>
+        <div class="sys-eyebrow">INTERNAL_MIND_MAP</div>
         <h1>BRAIN_NETWORK_v3.1</h1>
+      </div>
+      <div class="kg-head-controls">
+        <button id="kgListBtn" type="button">LIST</button>
+        <button id="kgResetBtn" type="button">RESET</button>
       </div>
       <div class="sys-status">
         <p>SYNC: <span style="color: #0f0;">ACTIVE</span></p>
@@ -919,7 +1054,7 @@
 
     <div id="graph-viewport">
       <svg id="knowledgeGraphSvg"></svg>
-      
+
       <div class="side-panel">
         <div class="panel-label">SYSTEM_LOG</div>
         <div id="sys-log" class="log-area">
@@ -929,8 +1064,26 @@
         </div>
       </div>
 
+      <div class="kg-hint" id="kgHint">タップで詳細 · ピンチで拡大 · LISTで一覧</div>
       <div id="graphTooltip" class="cp-tooltip"></div>
       <button class="exit-btn" onclick="history.back()">>> DISCONNECT</button>
+
+      <div class="node-sheet" id="nodeSheet" aria-hidden="true">
+        <div class="ns-label"><span>>> DATA_CHIP</span><button class="ns-close" id="nsClose" aria-label="閉じる">✕</button></div>
+        <div class="ns-jp" id="nsJp"></div>
+        <div class="ns-en" id="nsEn"></div>
+        <div class="ns-desc" id="nsDesc"></div>
+        <div class="ns-neighbors" id="nsNeighbors"></div>
+        <a class="ns-access" id="nsAccess" href="#" style="display:none;">>> ACCESS_NODE</a>
+      </div>
+
+      <div class="list-sheet" id="listSheet" aria-hidden="true">
+        <div class="ls-head">
+          <input class="ls-search" id="lsSearch" type="search" placeholder="ノードを検索…" autocomplete="off">
+          <button class="ls-close" id="lsClose" aria-label="閉じる">✕</button>
+        </div>
+        <div class="ls-body" id="lsBody"></div>
+      </div>
     </div>
 
     <footer class="sys-footer">
@@ -945,12 +1098,12 @@
 <script>
 (function() {
   document.addEventListener("DOMContentLoaded", () => {
-    
     const rawData = {"links":[{"source":"Core","target":"Academic"},{"source":"Core","target":"Hobby"},{"source":"Academic","target":"Math"},{"source":"Academic","target":"Physics"},{"source":"Academic","target":"ComputerScience"},{"source":"Hobby","target":"KeepingPets"},{"source":"Hobby","target":"Plants"},{"source":"Hobby","target":"Literature"},{"source":"Hobby","target":"Subculture"},{"source":"Hobby","target":"Music"},{"source":"Hobby","target":"Games"},{"source":"Hobby","target":"Gadgets"},{"source":"Math","target":"Physics"},{"source":"Math","target":"Cryptography"},{"source":"Math","target":"Algebra"},{"source":"Math","target":"CompetitiveMath"},{"source":"Algebra","target":"GroupTheory"},{"source":"Algebra","target":"RingTheory"},{"source":"RingTheory","target":"CommutativeAlgebra"},{"source":"Algebra","target":"CategoryTheory"},{"source":"Math","target":"Analysis"},{"source":"Analysis","target":"Series"},{"source":"Analysis","target":"Integration"},{"source":"Integration","target":"LebesgueIntegral"},{"source":"Analysis","target":"ZetaFunction"},{"source":"ZetaFunction","target":"MZV"},{"source":"Series","target":"MZV"},{"source":"Physics","target":"AnalyticalMech"},{"source":"Physics","target":"QuantumMech"},{"source":"Physics","target":"Electromagnetism"},{"source":"Physics","target":"Relativity"},{"source":"ComputerScience","target":"LogicCircuit"},{"source":"ComputerScience","target":"Cryptography"},{"source":"ComputerScience","target":"Programming"},{"source":"ComputerScience","target":"AWS"},{"source":"Programming","target":"C_Lang"},{"source":"Programming","target":"Python"},{"source":"Programming","target":"JavaScript"},{"source":"KeepingPets","target":"Tarantula"},{"source":"KeepingPets","target":"Reptile"},{"source":"KeepingPets","target":"Amphibian"},{"source":"KeepingPets","target":"Mammal"},{"source":"KeepingPets","target":"Aquarium"},{"source":"Plants","target":"AquaticPlants"},{"source":"Aquarium","target":"AquaticPlants"},{"source":"Literature","target":"Latin"},{"source":"Literature","target":"Surrealism"},{"source":"Literature","target":"Absurdism"},{"source":"Literature","target":"ChinesePhilosophy"},{"source":"Games","target":"RhythmGames"},{"source":"Games","target":"DragonQuest"},{"source":"Games","target":"Zelda"},{"source":"Games","target":"PCGames"}],"nodes":[{"color":"#ffffff","desc":"","en":"Knowledge Core","group":0,"id":"Core","jp":"知識の核","radius":35},{"color":"#cccccc","desc":"","en":"Academic","group":0,"id":"Academic","jp":"学問領域","radius":25},{"color":"#cccccc","desc":"","en":"Hobby \u0026 Culture","group":0,"id":"Hobby","jp":"趣味・文化領域","radius":25},{"color":"#d946ef","desc":"","en":"Mathematics","group":1,"id":"Math","jp":"数学","radius":22},{"color":"#d946ef","desc":"","en":"Competitive Math","group":1,"id":"CompetitiveMath","jp":"競技数学","radius":12},{"color":"#d946ef","desc":"","en":"Algebra","group":1,"id":"Algebra","jp":"代数学","radius":15},{"color":"#d946ef","desc":"","en":"Group Theory","group":1,"id":"GroupTheory","jp":"群論","radius":12,"url":"/tags/math/"},{"color":"#d946ef","desc":"","en":"Ring Theory","group":1,"id":"RingTheory","jp":"環論","radius":12},{"color":"#d946ef","desc":"","en":"Commutative Algebra","group":1,"id":"CommutativeAlgebra","jp":"可換環論","radius":10},{"color":"#d946ef","desc":"","en":"Category Theory","group":1,"id":"CategoryTheory","jp":"圏論","radius":12},{"color":"#d946ef","desc":"","en":"Analysis","group":1,"id":"Analysis","jp":"解析学","radius":15},{"color":"#d946ef","desc":"","en":"Series","group":1,"id":"Series","jp":"級数","radius":12},{"color":"#d946ef","desc":"","en":"Integration","group":1,"id":"Integration","jp":"積分","radius":12},{"color":"#d946ef","desc":"","en":"Lebesgue Integration","group":1,"id":"LebesgueIntegral","jp":"ルベーグ積分","radius":10},{"color":"#d946ef","desc":"","en":"Zeta Function","group":1,"id":"ZetaFunction","jp":"ζ関数","radius":12},{"color":"#d946ef","desc":"多重ゼータ値","en":"Multiple Zeta Values","group":1,"id":"MZV","jp":"MZV","radius":10},{"color":"#00f3ff","desc":"","en":"Physics","group":2,"id":"Physics","jp":"物理学","radius":22},{"color":"#00f3ff","desc":"","en":"Analytical Mechanics","group":2,"id":"AnalyticalMech","jp":"解析力学","radius":15,"url":"/series/物レク解析力学/"},{"color":"#00f3ff","desc":"","en":"Quantum Mechanics","group":2,"id":"QuantumMech","jp":"量子力学","radius":15},{"color":"#00f3ff","desc":"","en":"Electromagnetism","group":2,"id":"Electromagnetism","jp":"電磁気学","radius":15},{"color":"#00f3ff","desc":"","en":"Theory of Relativity","group":2,"id":"Relativity","jp":"相対性理論","radius":15},{"color":"#10b981","desc":"","en":"Computer Science","group":3,"id":"ComputerScience","jp":"情報科学","radius":22},{"color":"#10b981","desc":"","en":"Logic Circuit","group":3,"id":"LogicCircuit","jp":"論理回路","radius":15,"url":"/lab/logic/"},{"color":"#10b981","desc":"","en":"Cryptography","group":3,"id":"Cryptography","jp":"暗号学","radius":15,"url":"/lab/crypto/"},{"color":"#10b981","desc":"","en":"Programming","group":3,"id":"Programming","jp":"プログラミング","radius":18},{"color":"#10b981","desc":"","en":"C Language","group":3,"id":"C_Lang","jp":"C言語","radius":12},{"color":"#10b981","desc":"","en":"Python","group":3,"id":"Python","jp":"Python","radius":12},{"color":"#10b981","desc":"","en":"JavaScript","group":3,"id":"JavaScript","jp":"JavaScript","radius":12},{"color":"#10b981","desc":"","en":"Amazon Web Services","group":3,"id":"AWS","jp":"AWS","radius":12},{"color":"#f59e0b","desc":"","en":"Keeping Pets","group":4,"id":"KeepingPets","jp":"生体飼育","radius":18},{"color":"#f59e0b","desc":"","en":"Plants","group":4,"id":"Plants","jp":"植物","radius":18},{"color":"#f59e0b","desc":"蜘蛛目オオツチグモ科","en":"Tarantula","group":4,"id":"Tarantula","jp":"タランチュラ","radius":12},{"color":"#f59e0b","desc":"ヤモリ・トカゲ・スキンク等","en":"Reptiles","group":4,"id":"Reptile","jp":"爬虫類","radius":12},{"color":"#f59e0b","desc":"カエル・イモリ・サラマンダー等","en":"Amphibians","group":4,"id":"Amphibian","jp":"両生類","radius":12},{"color":"#f59e0b","desc":"チンチラ・デグー・シーズー・ハムスター・ウサギ等","en":"Mammals","group":4,"id":"Mammal","jp":"哺乳類","radius":12},{"color":"#f59e0b","desc":"","en":"Aquarium","group":4,"id":"Aquarium","jp":"アクアリウム","radius":15},{"color":"#f59e0b","desc":"","en":"Aquatic Plants","group":4,"id":"AquaticPlants","jp":"水草","radius":12},{"color":"#ff0055","desc":"","en":"Literature","group":5,"id":"Literature","jp":"文学・読書","radius":20,"url":"/library/"},{"color":"#ff0055","desc":"","en":"Surrealism","group":5,"id":"Surrealism","jp":"超現実主義","radius":12,"url":"/tags/surrealism/"},{"color":"#ff0055","desc":"","en":"Absurdism","group":5,"id":"Absurdism","jp":"不条理文学","radius":12},{"color":"#ff0055","desc":"","en":"Chinese Philosophy","group":5,"id":"ChinesePhilosophy","jp":"中国哲学","radius":12},{"color":"#ff0055","desc":"","en":"Latin","group":5,"id":"Latin","jp":"ラテン語","radius":12},{"color":"#bc13fe","desc":"","en":"Anime \u0026 Manga","group":6,"id":"Subculture","jp":"アニメ・漫画","radius":18},{"color":"#bc13fe","desc":"","en":"Music","group":6,"id":"Music","jp":"音楽","radius":18},{"color":"#bc13fe","desc":"","en":"Gadgets \u0026 Hardware","group":6,"id":"Gadgets","jp":"ガジェット","radius":18},{"color":"#3b82f6","desc":"","en":"Video Games","group":7,"id":"Games","jp":"ゲーム","radius":20},{"color":"#3b82f6","desc":"","en":"Rhythm Games","group":7,"id":"RhythmGames","jp":"音ゲー","radius":15},{"color":"#3b82f6","desc":"","en":"Dragon Quest","group":7,"id":"DragonQuest","jp":"ドラクエ","radius":12},{"color":"#3b82f6","desc":"","en":"The Legend of Zelda","group":7,"id":"Zelda","jp":"ゼルダの伝説","radius":12},{"color":"#3b82f6","desc":"","en":"PC Games","group":7,"id":"PCGames","jp":"PCゲー","radius":12}]};
     if (!rawData) return;
 
     const logArea = document.getElementById('sys-log');
     function addLog(msg) {
+      if (!logArea) return;
       const div = document.createElement('div');
       div.innerText = `> ${msg}`;
       logArea.appendChild(div);
@@ -959,92 +1112,266 @@
 
     const svg = d3.select("#knowledgeGraphSvg");
     const viewport = document.getElementById('graph-viewport');
-    
-    const updateSize = () => {
-      return { w: viewport.clientWidth, h: viewport.clientHeight };
-    };
-    let { w, h } = updateSize();
-
-    const g = svg.append("g");
     const tooltip = d3.select("#graphTooltip");
 
-    
-    const zoom = d3.zoom().scaleExtent([0.1, 4]).on("zoom", (e) => g.attr("transform", e.transform));
-    svg.call(zoom);
-    svg.call(zoom.transform, d3.zoomIdentity.translate(w/2, h/2).scale(0.4).translate(-w/2, -h/2));
+    let { w, h } = { w: viewport.clientWidth, h: viewport.clientHeight };
+    const isMobile = () => w <= 768;
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    let currentK = isMobile() ? 1 : 0.4;
+    let selectedId = null;
+    let neighborSet = new Set();
 
-    
+    const g = svg.append("g");
 
-    
-    rawData.nodes.forEach(n => {
-      if (n.id === "Core") {
-        n.fx = w / 2;
-        n.fy = h / 2;
+     
+    function baseOffset(d) {
+      if (d.id === "Core") return [0, 0];
+      if (d.id === "Academic") return [-250, 0];
+      if (d.id === "Hobby") return [250, 0];
+      switch (d.group) {
+        case 1: return [-500, -350];
+        case 2: return [-700, 0];
+        case 3: return [-500, 350];
+        case 4: return [500, -350];
+        case 5: return [700, -100];
+        case 6: return [700, 150];
+        case 7: return [500, 350];
+        default: return [0, 0];
       }
+    }
+
+     
+    function getFocus(d) {
+      const cx = w / 2, cy = h / 2;
+      const [ox, oy] = baseOffset(d);
+      if (isMobile() && h > w) {
+        const rx = -oy, ry = ox;
+        const sx = Math.max(0.30, (w / 2 - 44) / 350);
+        const sy = Math.max(0.30, (h / 2 - 88) / 700);
+        return { x: cx + rx * sx, y: cy + ry * sy };
+      }
+      if (isMobile()) {
+        const s = clamp(Math.min(w, h) / 760, 0.42, 0.70);
+        return { x: cx + ox * s, y: cy + oy * s };
+      }
+      return { x: cx + ox, y: cy + oy };
+    }
+
+    function layoutParams() {
+      if (isMobile()) {
+        return { charge: -300, distMax: 430, collidePad: 12, collideIter: 2,
+                 dCore: 95, dSame: 48, dCross: 160, xy: 0.18 };
+      }
+      return { charge: -1200, distMax: 800, collidePad: 40, collideIter: 3,
+               dCore: 150, dSame: 80, dCross: 300, xy: 0.15 };
+    }
+
+    function initialTransform() {
+      if (isMobile()) return d3.zoomIdentity;
+      return d3.zoomIdentity.translate(w/2, h/2).scale(0.4).translate(-w/2, -h/2);
+    }
+
+     
+    function fitView(animate) {
+      if (!rawData.nodes.length) return;
+      let minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
+      rawData.nodes.forEach(n => {
+        if (typeof n.x !== 'number') return;
+        const m = n.radius + 34;
+        minX = Math.min(minX, n.x - m); maxX = Math.max(maxX, n.x + m);
+        minY = Math.min(minY, n.y - m); maxY = Math.max(maxY, n.y + m + 14);
+      });
+      if (minX > maxX) return;
+      const bw = maxX - minX, bh = maxY - minY;
+      const k = clamp(Math.min(w / bw, h / bh), 0.30, 1.05);
+      const t = d3.zoomIdentity
+        .translate(w / 2, h / 2).scale(k)
+        .translate(-(minX + maxX) / 2, -(minY + maxY) / 2);
+      if (animate) svg.transition().duration(500).call(zoom.transform, t);
+      else svg.call(zoom.transform, t);
+    }
+
+    let userMovedView = false;
+    const zoom = d3.zoom().scaleExtent([0.15, 4]).on("zoom", (e) => {
+      currentK = e.transform.k;
+      if (e.sourceEvent) userMovedView = true;
+      g.attr("transform", e.transform);
+      updateLabels();
+    });
+    svg.call(zoom);
+
+    rawData.nodes.forEach(n => {
+      if (n.id === "Core") { n.fx = w / 2; n.fy = h / 2; }
     });
 
-    
-    const getFocus = (d) => {
-      const cx = w / 2;
-      const cy = h / 2;
-      if (d.id === "Core") return {x: cx, y: cy};
-      
-      
-      if (d.id === "Academic") return {x: cx - 250, y: cy}; 
-      if (d.id === "Hobby") return {x: cx + 250, y: cy};    
-      
-      
-      if (d.group === 1) return {x: cx - 500, y: cy - 350}; 
-      if (d.group === 2) return {x: cx - 700, y: cy};       
-      if (d.group === 3) return {x: cx - 500, y: cy + 350}; 
-      
-      
-      if (d.group === 4) return {x: cx + 500, y: cy - 350}; 
-      if (d.group === 5) return {x: cx + 700, y: cy - 100}; 
-      if (d.group === 6) return {x: cx + 700, y: cy + 150}; 
-      if (d.group === 7) return {x: cx + 500, y: cy + 350}; 
-      
-      return {x: cx, y: cy};
-    };
-
-    
+    const P = layoutParams();
     const simulation = d3.forceSimulation(rawData.nodes)
       .force("link", d3.forceLink(rawData.links).id(d => d.id)
         .distance(d => {
-          if (d.source.id === "Core" || d.target.id === "Core") return 150;
-          if (d.source.group === d.target.group) return 80; 
-          return 300; 
+          if (d.source.id === "Core" || d.target.id === "Core") return P.dCore;
+          if (d.source.group === d.target.group) return P.dSame;
+          return P.dCross;
         })
         .strength(d => {
           if (d.source.id === "Core" || d.target.id === "Core") return 0.5;
           if (d.source.id === "Academic" || d.target.id === "Academic") return 0.4;
           if (d.source.id === "Hobby" || d.target.id === "Hobby") return 0.4;
-          if (d.source.group === d.target.group) return 0.8; 
-          return 0.05; 
+          if (d.source.group === d.target.group) return 0.8;
+          return 0.05;
         })
       )
-      
-      .force("charge", d3.forceManyBody().strength(-1200).distanceMax(800))
-      
-      .force("x", d3.forceX(d => getFocus(d).x).strength(0.15))
-      .force("y", d3.forceY(d => getFocus(d).y).strength(0.15))
-      
-      .force("collision", d3.forceCollide().radius(d => d.radius + 40).iterations(3));
+      .force("charge", d3.forceManyBody().strength(P.charge).distanceMax(P.distMax))
+      .force("x", d3.forceX(d => getFocus(d).x).strength(P.xy))
+      .force("y", d3.forceY(d => getFocus(d).y).strength(P.xy))
+      .force("collision", d3.forceCollide().radius(d => d.radius + P.collidePad).iterations(P.collideIter));
 
-    
     const link = g.append("g")
       .selectAll("line")
       .data(rawData.links)
       .join("line")
-      .attr("class", "link")
-      .attr("stroke", "#333");
+      .attr("class", "link");
+
+    const nodeById = new Map(rawData.nodes.map(n => [n.id, n]));
+    const neighborsOf = (id) => {
+      const set = new Set([id]);
+      rawData.links.forEach(l => {
+        const s = typeof l.source === 'object' ? l.source.id : l.source;
+        const t = typeof l.target === 'object' ? l.target.id : l.target;
+        if (s === id) set.add(t);
+        if (t === id) set.add(s);
+      });
+      return set;
+    };
 
     const node = g.append("g")
       .selectAll("g")
       .data(rawData.nodes)
       .join("g")
-      .attr("class", "node")
-      .call(d3.drag()
+      .attr("class", "node");
+
+     
+    node.append("circle")
+      .attr("class", "hit")
+      .attr("r", d => Math.max(d.radius + 12, 26));
+    node.append("circle")
+      .attr("class", "body")
+      .attr("r", d => d.radius)
+      .attr("fill", "#000")
+      .attr("stroke", d => d.color)
+      .style("color", d => d.color);
+
+     
+    const labelNode = g.append("g")
+      .attr("class", "label-layer")
+      .selectAll("g")
+      .data(rawData.nodes)
+      .join("g")
+      .attr("class", "labels")
+      .attr("pointer-events", "none");
+    labelNode.append("text").attr("class", "node-label").attr("text-anchor", "middle")
+      .attr("y", d => d.radius + 18).text(d => d.jp);
+    labelNode.append("text").attr("class", "node-label node-label-en").attr("text-anchor", "middle")
+      .attr("y", d => d.radius + 31).text(d => d.en);
+
+    function tierOf(d) {
+      if (d.group === 0 || d.radius >= 20) return 0;
+      if (d.radius >= 13) return 1;
+      return 2;
+    }
+
+    function updateLabels() {
+      const k = currentK;
+      const jpSize = isMobile() ? clamp(12 / Math.pow(k, 0.6), 10.5, 17) : 11;
+      const enSize = isMobile() ? clamp(9.5 / Math.pow(k, 0.6), 8.5, 13) : 9;
+      labelNode.selectAll(".node-label").style("font-size", jpSize + "px");
+      labelNode.selectAll(".node-label-en").style("font-size", enSize + "px");
+      labelNode.each(function(d) {
+        let show = true;
+        if (isMobile()) {
+          if (selectedId && neighborSet.has(d.id)) show = true;
+          else if (k < 0.72) show = tierOf(d) === 0;
+          else if (k < 1.25) show = tierOf(d) <= 1;
+        }
+         
+        if (selectedId && !neighborSet.has(d.id)) show = false;
+        d3.select(this).style("opacity", show ? 1 : 0);
+         
+        const enShow = !isMobile() || k >= 1.0 || (selectedId && neighborSet.has(d.id)) || tierOf(d) === 0;
+        d3.select(this).select(".node-label-en").style("opacity", enShow ? 1 : 0);
+      });
+    }
+
+     
+    const sheet = document.getElementById('nodeSheet');
+    const nsJp = document.getElementById('nsJp');
+    const nsEn = document.getElementById('nsEn');
+    const nsDesc = document.getElementById('nsDesc');
+    const nsNeighbors = document.getElementById('nsNeighbors');
+    const nsAccess = document.getElementById('nsAccess');
+
+    function focusCamera(d, k) {
+      const targetK = k || Math.max(currentK, 1.15);
+      const ty = isMobile() ? h * 0.36 : h / 2;
+      svg.transition().duration(550).call(
+        zoom.transform,
+        d3.zoomIdentity.translate(w / 2, ty).scale(targetK).translate(-d.x, -d.y)
+      );
+    }
+
+    function selectNode(d, moveCamera) {
+      selectedId = d.id;
+      neighborSet = neighborsOf(d.id);
+      node.style("opacity", n => neighborSet.has(n.id) ? 1 : 0.12);
+      node.classed("focused", n => n.id === d.id);
+      labelNode.classed("focused", n => n.id === d.id);
+      link.classed("highlight", l => {
+        const s = typeof l.source === 'object' ? l.source.id : l.source;
+        const t = typeof l.target === 'object' ? l.target.id : l.target;
+        return s === d.id || t === d.id;
+      });
+      addLog(`FOCUS: ${d.id.toUpperCase()}`);
+      updateLabels();
+      if (isMobile()) {
+        nsJp.textContent = d.jp;
+        nsEn.textContent = d.en;
+        nsDesc.textContent = d.desc || "";
+        nsDesc.style.display = d.desc ? "block" : "none";
+        nsNeighbors.innerHTML = "";
+        neighborSet.forEach(id => {
+          if (id === d.id) return;
+          const nd = nodeById.get(id);
+          if (!nd) return;
+          const b = document.createElement('button');
+          b.className = "ns-chip";
+          b.type = "button";
+          b.textContent = nd.jp;
+          b.style.borderColor = nd.color + "99";
+          b.addEventListener('click', () => selectNode(nd, true));
+          nsNeighbors.appendChild(b);
+        });
+        if (d.url) { nsAccess.href = d.url; nsAccess.style.display = "flex"; }
+        else { nsAccess.style.display = "none"; }
+        sheet.classList.add("open");
+        sheet.setAttribute("aria-hidden", "false");
+        if (moveCamera) focusCamera(d);
+      }
+    }
+
+    function clearSelection() {
+      selectedId = null;
+      neighborSet = new Set();
+      node.style("opacity", 1).classed("focused", false);
+      labelNode.classed("focused", false);
+      link.classed("highlight", false);
+      sheet.classList.remove("open");
+      sheet.setAttribute("aria-hidden", "true");
+      updateLabels();
+    }
+
+    document.getElementById('nsClose').addEventListener('click', clearSelection);
+
+    if (!isMobile()) {
+      node.call(d3.drag()
         .on("start", (event, d) => {
           if (!event.active) simulation.alphaTarget(0.3).restart();
           d.fx = d.x; d.fy = d.y;
@@ -1053,82 +1380,135 @@
         .on("drag", (event, d) => { d.fx = event.x; d.fy = event.y; })
         .on("end", (event, d) => {
           if (!event.active) simulation.alphaTarget(0);
-          
-          if (d.id !== "Core") {
-            d.fx = null; d.fy = null;
-          }
-        }))
-      .on("click", (event, d) => {
-        const neighbors = new Set([d.id]);
-        rawData.links.forEach(l => {
-          const s = typeof l.source === 'object' ? l.source.id : l.source;
-          const t = typeof l.target === 'object' ? l.target.id : l.target;
-          if (s === d.id) neighbors.add(t);
-          if (t === d.id) neighbors.add(s);
-        });
-        node.style("opacity", n => neighbors.has(n.id) ? 1 : 0.1);
-        node.classed("focused", n => n.id === d.id);
-        link.classed("highlight", l => {
-          const s = typeof l.source === 'object' ? l.source.id : l.source;
-          const t = typeof l.target === 'object' ? l.target.id : l.target;
-          return s === d.id || t === d.id;
-        });
-        addLog(`FOCUS: ${d.id.toUpperCase()}`);
-        event.stopPropagation();
-      })
-      .on("dblclick", (event, d) => {
-        if(d.url) {
+          if (d.id === "Core") { d.fx = w / 2; d.fy = h / 2; }
+          else { d.fx = null; d.fy = null; }
+        }));
+    }
+
+    node.on("click", (event, d) => {
+      selectNode(d, isMobile());
+      event.stopPropagation();
+    });
+
+    if (!isMobile()) {
+      node.on("dblclick", (event, d) => {
+        if (d.url) {
           addLog(`ACCESS_GRANTED: ${d.id}`);
           setTimeout(() => window.location.href = d.url, 400);
         }
       });
+      node.on("mouseover", (event, d) => {
+        tooltip.transition().duration(50).style("opacity", 1);
+        tooltip.html(`
+          <div style="font-family:Orbitron; font-size:0.55rem; color:#ff0055;">>> DATA_CHIP</div>
+          <div style="font-size:1rem; font-weight:bold; margin:4px 0;">${d.jp}</div>
+          <div style="color:#00f3ff; font-size:0.65rem; margin-bottom:8px;">${d.en}</div>
+          ${d.desc ? `<div style="border-top:1px solid #333; padding-top:8px; font-size:0.7rem; opacity:0.8;">${d.desc}</div>` : ''}
+        `)
+        .style("left", (event.offsetX + 20) + "px")
+        .style("top", (event.offsetY - 20) + "px");
+      }).on("mouseout", () => {
+        tooltip.transition().duration(200).style("opacity", 0);
+      });
+    }
 
-    node.append("circle")
-      .attr("r", d => d.radius)
-      .attr("fill", "#000")
-      .attr("stroke", d => d.color)
-      .style("color", d => d.color);
+    svg.on("click", () => clearSelection());
 
-    const labels = node.append("g").attr("transform", d => `translate(0, ${d.radius + 18})`);
-    labels.append("text").attr("class", "node-label").attr("text-anchor", "middle").text(d => d.jp);
-    labels.append("text").attr("class", "node-label node-label-en").attr("text-anchor", "middle").attr("dy", 12).text(d => d.en);
-
-    node.on("mouseover", (event, d) => {
-      tooltip.transition().duration(50).style("opacity", 1);
-      tooltip.html(`
-        <div style="font-family:Orbitron; font-size:0.55rem; color:#ff0055;">>> DATA_CHIP</div>
-        <div style="font-size:1rem; font-weight:bold; margin:4px 0;">${d.jp}</div>
-        <div style="color:#00f3ff; font-size:0.65rem; margin-bottom:8px;">${d.en}</div>
-        ${d.desc ? `<div style="border-top:1px solid #333; padding-top:8px; font-size:0.7rem; opacity:0.8;">${d.desc}</div>` : ''}
-      `)
-      .style("left", (event.clientX + 20) + "px")
-      .style("top", (event.clientY - 20) + "px");
-    }).on("mouseout", () => {
-      tooltip.transition().duration(200).style("opacity", 0);
+     
+    document.getElementById('kgBackBtn').addEventListener('click', () => history.back());
+    document.getElementById('kgResetBtn').addEventListener('click', () => {
+      clearSelection();
+      if (isMobile()) fitView(true);
+      else svg.transition().duration(500).call(zoom.transform, initialTransform());
+      addLog("VIEW_RESET");
     });
 
-    svg.on("click", () => {
-      node.style("opacity", 1).classed("focused", false);
-      link.classed("highlight", false);
-    });
+    const listSheet = document.getElementById('listSheet');
+    const lsBody = document.getElementById('lsBody');
+    const lsSearch = document.getElementById('lsSearch');
+    const GROUP_NAMES = { 0: "CORE / HUB", 1: "数学", 2: "物理学", 3: "情報科学", 4: "生体・植物", 5: "文学・言語", 6: "サブカル・音楽", 7: "ゲーム" };
+
+    function renderList(filter) {
+      const q = (filter || "").trim().toLowerCase();
+      lsBody.innerHTML = "";
+      const groups = [...new Set(rawData.nodes.map(n => n.group))].sort((a, b) => a - b);
+      groups.forEach(gr => {
+        const items = rawData.nodes.filter(n => n.group === gr &&
+          (!q || n.jp.toLowerCase().includes(q) || (n.en || "").toLowerCase().includes(q)));
+        if (!items.length) return;
+        const head = document.createElement('div');
+        head.className = "ls-group";
+        head.textContent = GROUP_NAMES[gr] || ("GROUP " + gr);
+        lsBody.appendChild(head);
+        items.forEach(n => {
+          const b = document.createElement('button');
+          b.className = "ls-item"; b.type = "button";
+          b.innerHTML = `<span class="ls-dot" style="background:${n.color}"></span><span class="ls-jp"></span>${n.url ? '<span class="ls-portal">LINK</span>' : ''}<span class="ls-en"></span>`;
+          b.querySelector('.ls-jp').textContent = n.jp;
+          b.querySelector('.ls-en').textContent = n.en || "";
+          b.addEventListener('click', () => {
+            closeList();
+            selectNode(n, false);
+            focusCamera(n, 1.35);
+          });
+          lsBody.appendChild(b);
+        });
+      });
+    }
+    function openList() { renderList(lsSearch.value); listSheet.classList.add("open"); listSheet.setAttribute("aria-hidden", "false"); }
+    function closeList() { listSheet.classList.remove("open"); listSheet.setAttribute("aria-hidden", "true"); }
+    document.getElementById('kgListBtn').addEventListener('click', openList);
+    document.getElementById('lsClose').addEventListener('click', closeList);
+    lsSearch.addEventListener('input', () => renderList(lsSearch.value));
 
     simulation.on("tick", () => {
       link.attr("x1", d => d.source.x).attr("y1", d => d.source.y)
           .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
       node.attr("transform", d => `translate(${d.x},${d.y})`);
+      labelNode.attr("transform", d => `translate(${d.x},${d.y})`);
     });
 
-    
-    window.addEventListener('resize', () => {
-      const size = updateSize();
-      rawData.nodes.forEach(n => {
-        if (n.id === "Core") {
-          n.fx = size.w / 2;
-          n.fy = size.h / 2;
-        }
-      });
-      simulation.alpha(0.3).restart();
+    svg.call(zoom.transform, initialTransform());
+    updateLabels();
+
+     
+    const hint = document.getElementById('kgHint');
+    if (hint && isMobile()) {
+      const dismiss = () => hint.classList.add('gone');
+      setTimeout(dismiss, 5200);
+      svg.on("mousedown.hint touchstart.hint", dismiss);
+    }
+
+     
+    simulation.on("end", () => {
+      if (isMobile() && !userMovedView && !selectedId) fitView(true);
     });
+
+     
+    let resizeTimer = null;
+    function onResize() {
+      const size = { w: viewport.clientWidth, h: viewport.clientHeight };
+      if (size.w === w && size.h === h) return;
+      w = size.w; h = size.h;
+      rawData.nodes.forEach(n => {
+        if (n.id === "Core") { n.fx = w / 2; n.fy = h / 2; }
+      });
+      const p = layoutParams();
+      simulation.force("x", d3.forceX(d => getFocus(d).x).strength(p.xy));
+      simulation.force("y", d3.forceY(d => getFocus(d).y).strength(p.xy));
+      simulation.force("charge", d3.forceManyBody().strength(p.charge).distanceMax(p.distMax));
+      simulation.force("collision", d3.forceCollide().radius(d => d.radius + p.collidePad).iterations(p.collideIter));
+      simulation.alpha(0.35).restart();
+      updateLabels();
+    }
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(onResize, 150);
+    });
+    if (window.ResizeObserver) new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(onResize, 150);
+    }).observe(viewport);
   });
 })();
 </script>
